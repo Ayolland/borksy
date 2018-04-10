@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<meta name="author" content="name">
+		<meta name="description" content="description here">
+		<meta name="keywords" content="keywords,here">
+		<link rel="shortcut icon" href="favicon.gif">
+		<link rel="stylesheet" href="stle.css" type="text/css">
+		<style>
+			form *{
+				display: block;
+			}
+		</style>
+		<title>title</title>
+	</head>
+	<body>
+		<form>
+			<label>
+				<str>Title:</str>
+				This is what the title of your page (not game) will be:
+				<textarea rows="4" cols="50" wrap="hard" id="input_TITLE">My Bitsy Game By Me</textarea>
+			</label>
+			<label>
+				<str>Game-Data:</str>
+				This is the gamedata from Bitsy:
+				<textarea rows="4" cols="50" wrap="hard" id="input_GAMEDATA"></textarea>
+			</label>
+			<label>
+				<str>CSS:</str>
+				This is the CSS for your page:
+				<textarea rows="4" cols="50" wrap="hard" id="input_CSS"></textarea>
+			</label>
+
+			<label>
+				<str>Font-Data:</str>
+				This is the data for your game's font:
+				<textarea rows="4" cols="50" wrap="hard" id="input_FONTDATA"></textarea>
+			</label>
+
+			<label>
+				<str>Markup:</str>
+				This is the HTML content of your game's body tag:
+				<textarea rows="4" cols="50" wrap="hard" id="input_MARKUP"></textarea>
+			</label>
+
+			<label>
+				<str>Hacks:</str>
+				This is the HTML content of your game's body tag:
+				<textarea rows="4" cols="50" wrap="hard" id="input_HACKS"></textarea>
+			</label>
+
+		</form>
+
+		<button id="download-button">Download File</button>
+	
+		<script>
+			var testString = "";
+
+			var XMLclient = new XMLHttpRequest();
+
+			function fillDefaultFormValues(){
+				XMLclient.open('GET', 'defaults/gamedata.txt');
+
+				function onLoadGameData(){
+					document.getElementById('input_GAMEDATA').value = XMLclient.response;
+					XMLclient.open('GET', 'defaults/style.css')
+					XMLclient.onreadystatechange = onLoadCSS;
+					XMLclient.send();
+				}
+
+				function onLoadCSS(){
+					document.getElementById('input_CSS').value = XMLclient.response;
+					XMLclient.open('GET', 'defaults/fontdata.txt')
+					XMLclient.onreadystatechange = onLoadFontData;
+					XMLclient.send();
+				}
+
+				function onLoadFontData(){
+					document.getElementById('input_CSS').value = XMLclient.response;
+					XMLclient.open('GET', 'defaults/body.html')
+					XMLclient.onreadystatechange = onLoadMarkup;
+					XMLclient.send();
+				}
+
+				function onLoadMarkup(){
+					document.getElementById('input_MARKUP').value = XMLclient.response;
+				}
+
+				XMLclient.onreadystatechange = onLoadGameData;
+				XMLclient.send();
+			}
+
+			function download(filename, text) {
+			    var element = document.createElement('a');
+			    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+			    element.setAttribute('download', filename);
+			
+			    element.style.display = 'none';
+			    document.body.appendChild(element);
+			
+			    element.click();
+			
+			    document.body.removeChild(element);
+			}
+			
+			// Start file download.
+			document.getElementById("download-button").addEventListener("click", function(){
+			    // Generate download of hello.txt file with some content
+			    var text = testString;
+			    var filename = "pangram.txt";
+			    
+			    download(filename, text);
+			}, false);
+		</script>
+	</body>
+</html>
