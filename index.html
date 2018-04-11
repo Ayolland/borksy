@@ -20,29 +20,29 @@
 			<label>
 				<str>Title:</str>
 				This is what the title of your page (not game) will be:
-				<textarea data-cookie data-borksy-replace-single="TITLE" rows="4" cols="50" wrap="hard" name="title" id="title">My Bitsy Game By Me</textarea>
+				<textarea data-cookie data-borksy-replace-single="TITLE" data-default-type="string" data-default="My Bitsy Game By Me" rows="4" cols="50" wrap="hard" name="title" id="title"></textarea>
 			</label>
 			<label>
 				<str>Game-Data:</str>
 				This is the gamedata from Bitsy:
-				<textarea data-cookie data-borksy-replace-single="GAMEDATA" data-default="gamedata.txt" rows="4" cols="50" wrap="hard" name="gamedata" id="gamedata"></textarea>
+				<textarea data-cookie data-borksy-replace-single="GAMEDATA" data-default-type="file" data-default="gamedata.txt" rows="4" cols="50" wrap="hard" name="gamedata" id="gamedata"></textarea>
 			</label>
 			<label>
 				<str>CSS:</str>
 				This is the CSS for your page:
-				<textarea data-cookie data-borksy-replace-single="CSS" data-default="style.css" rows="4" cols="50" wrap="hard" name="css" id="css"></textarea>
+				<textarea data-cookie data-borksy-replace-single="CSS" data-default-type="file" data-default="style.css" rows="4" cols="50" wrap="hard" name="css" id="css"></textarea>
 			</label>
 
 			<label>
 				<str>Font-Data:</str>
 				This is the data for your game's font:
-				<textarea data-cookie data-borksy-replace-single="FONTDATA" data-default="fontdata.txt" rows="4" cols="50" wrap="hard" name="fontdata" id="fontdata"></textarea>
+				<textarea data-cookie data-borksy-replace-single="FONTDATA" data-default-type="file" data-default="fontdata.txt" rows="4" cols="50" wrap="hard" name="fontdata" id="fontdata"></textarea>
 			</label>
 
 			<label>
 				<str>Markup:</str>
 				This is the HTML content of your game's body tag:
-				<textarea data-cookie data-borksy-replace-single="MARKUP" data-default="body.html" rows="4" cols="50" wrap="hard" name="markup" id="markup"></textarea>
+				<textarea data-cookie data-borksy-replace-single="MARKUP" data-default-type="file" data-default="body.html" rows="4" cols="50" wrap="hard" name="markup" id="markup"></textarea>
 			</label>
 
 			<label>
@@ -52,6 +52,7 @@
 			</label>
 
 		</form>
+		<button id="restore-button">Restore Defaults</button>
 
 		<button id="download-button">Download File</button>
 	

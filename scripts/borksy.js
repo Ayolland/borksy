@@ -1,27 +1,69 @@
 var loadedFiles ={};
 
-function loadCookies(){
-	$('[data-cookie]').each(function(){
-		
+function setCookieTrigger($this){
+	$this.change(function(){
+		setThisCookie($this);
 	});
 }
 
-function loadDefaults(){
-	$('[data-default]').each(function(){
-		var $this = $(this);
-		var filename = $this.data('default');
-		var path = 'defaults/' + filename;
-		var $ajax = $.ajax(path)
-		$ajax.done(function(){
-			var response = $ajax.responseText
-			$this.val(response);
-			loadedFiles[filename] = response;
-		});
-		$ajax.fail(function(){
-			$this.val('failed to load default!');
-			console.log($ajax.error);
-		})
+function loadDefaults(checkCookies = true){
+	$('[data-cookie]').each(function(){
+		var $thisField = $(this);
+		var thisCookie = Cookies.get($thisField.attr('name'));
+		var hasDefault = typeof($thisField.data('default')) == 'string';
+		var hasCookie = typeof(thisCookie) == 'string';
+
+		if( hasDefault && (!hasCookie || !checkCookies) ){
+
+			var defaultType = $thisField.data('default-type');
+
+			switch(defaultType){
+				case "string":
+					$thisField.val($thisField.data('default'));
+					setCookieTrigger($thisField);
+				break;
+				case "file":
+					var filename = $thisField.data('default');
+					var path = 'defaults/' + filename;
+					var $ajax = $.ajax(path);
+					$ajax.done(function(){
+						var response = $ajax.responseText;
+						$thisField.val(response);
+						loadedFiles[filename] = response;
+						setCookieTrigger($thisField);
+					});
+					$ajax.fail(function(){
+						$thisField.val('failed to load default!');
+						console.log($ajax.error);
+						setCookieTrigger($thisField);
+					});
+				break;
+			}
+
+		} else {
+			if( hasCookie ){
+				$thisField.val(thisCookie);
+			} else {
+				$thisField.val("");
+			}
+			setCookieTrigger($thisField);
+		}
 	});
+	console.log("Defaults loaded. Forced? " + !checkCookies);
+}
+
+function restoreDefaults(){
+	$fields = $('[data-cookie]');
+	totalFields = $fields.length;
+	if ( confirm('Are you sure you want to erase all data and restore defaults?') ){
+		$fields.each(function(){
+			Cookies.remove($(this).attr('name'));
+			if(!--totalFields){
+				console.log('Cookies removed');
+				loadDefaults(false);
+			}
+		});
+	}
 }
 
 function loadTemplate(){
@@ -57,12 +99,16 @@ function download(filename, text) {
     document.body.removeChild(element);
 }
 
-function setThisCookie(){
-
+function setThisCookie($this){
+	var name = $this.attr('name');
+	var value = $this.val();
+	Cookies.set(name, value);
+	console.log("Cookie '" + name + "' saved");
 }
 			
 $(document).ready(function(){
 	loadTemplate();
 	loadDefaults();
 	$('#download-button').click(assembleAndDownloadFile);
+	$('#restore-button').click(restoreDefaults);
 });
