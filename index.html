@@ -6,8 +6,8 @@
 		<meta name="author" content="name">
 		<meta name="description" content="description here">
 		<meta name="keywords" content="keywords,here">
-		<link rel="shortcut icon" href="favicon.gif">
-		<link rel="stylesheet" href="stle.css" type="text/css">
+		<!-- <link rel="shortcut icon" href="favicon.gif"> -->
+		<!-- <link rel="stylesheet" href="style.css" type="text/css"> -->
 		<style>
 			form *{
 				display: block;
@@ -20,76 +20,82 @@
 			<label>
 				<str>Title:</str>
 				This is what the title of your page (not game) will be:
-				<textarea rows="4" cols="50" wrap="hard" id="input_TITLE">My Bitsy Game By Me</textarea>
+				<textarea data-cookie data-borksy-replace-single="TITLE" rows="4" cols="50" wrap="hard" name="title" id="title">My Bitsy Game By Me</textarea>
 			</label>
 			<label>
 				<str>Game-Data:</str>
 				This is the gamedata from Bitsy:
-				<textarea rows="4" cols="50" wrap="hard" id="input_GAMEDATA"></textarea>
+				<textarea data-cookie data-borksy-replace-single="GAMEDATA" data-default="gamedata.txt" rows="4" cols="50" wrap="hard" name="gamedata" id="gamedata"></textarea>
 			</label>
 			<label>
 				<str>CSS:</str>
 				This is the CSS for your page:
-				<textarea rows="4" cols="50" wrap="hard" id="input_CSS"></textarea>
+				<textarea data-cookie data-borksy-replace-single="CSS" data-default="style.css" rows="4" cols="50" wrap="hard" name="css" id="css"></textarea>
 			</label>
 
 			<label>
 				<str>Font-Data:</str>
 				This is the data for your game's font:
-				<textarea rows="4" cols="50" wrap="hard" id="input_FONTDATA"></textarea>
+				<textarea data-cookie data-borksy-replace-single="FONTDATA" data-default="fontdata.txt" rows="4" cols="50" wrap="hard" name="fontdata" id="fontdata"></textarea>
 			</label>
 
 			<label>
 				<str>Markup:</str>
 				This is the HTML content of your game's body tag:
-				<textarea rows="4" cols="50" wrap="hard" id="input_MARKUP"></textarea>
+				<textarea data-cookie data-borksy-replace-single="MARKUP" data-default="body.html" rows="4" cols="50" wrap="hard" name="markup" id="markup"></textarea>
 			</label>
 
 			<label>
 				<str>Hacks:</str>
-				This is the HTML content of your game's body tag:
-				<textarea rows="4" cols="50" wrap="hard" id="input_HACKS"></textarea>
+				This is JS loaded into a script tag after all Bitsy code
+				<textarea data-cookie data-borksy-replace-single="HACKS" rows="4" cols="50" wrap="hard" name="hacks" id="hacks"></textarea>
 			</label>
 
 		</form>
 
 		<button id="download-button">Download File</button>
 	
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+
 		<script>
-			var testString = "";
+			var loadedFiles ={};
 
-			var XMLclient = new XMLHttpRequest();
+			function loadDefaults(){
+				$('[data-default]').each(function(){
+					var $this = $(this);
+					var filename = $this.data('default');
+					var path = 'defaults/' + filename;
+					var $ajax = $.ajax(path)
+					$ajax.done(function(){
+						var response = $ajax.responseText
+						$this.val(response);
+						loadedFiles[filename] = response;
+					});
+					$ajax.fail(function(){
+						$this.val('failed to load default!');
+						console.log($ajax.error);
+					})
+				});
+			}
 
-			function fillDefaultFormValues(){
-				XMLclient.open('GET', 'defaults/gamedata.txt');
+			function loadTemplate(){
+				var $ajax = $.ajax('template/template.html');
+				$ajax.done(function(){
+					loadedFiles['template.html'] = $ajax.responseText;
+				})
+			}
 
-				function onLoadGameData(){
-					document.getElementById('input_GAMEDATA').value = XMLclient.response;
-					XMLclient.open('GET', 'defaults/style.css')
-					XMLclient.onreadystatechange = onLoadCSS;
-					XMLclient.send();
-				}
-
-				function onLoadCSS(){
-					document.getElementById('input_CSS').value = XMLclient.response;
-					XMLclient.open('GET', 'defaults/fontdata.txt')
-					XMLclient.onreadystatechange = onLoadFontData;
-					XMLclient.send();
-				}
-
-				function onLoadFontData(){
-					document.getElementById('input_CSS').value = XMLclient.response;
-					XMLclient.open('GET', 'defaults/body.html')
-					XMLclient.onreadystatechange = onLoadMarkup;
-					XMLclient.send();
-				}
-
-				function onLoadMarkup(){
-					document.getElementById('input_MARKUP').value = XMLclient.response;
-				}
-
-				XMLclient.onreadystatechange = onLoadGameData;
-				XMLclient.send();
+			function assembleAndDownloadFile(){
+				var modifiedTemplate = loadedFiles['template.html'].repeat(1);
+				$('[data-borksy-replace-single]').each(function(){
+					var $this = $(this);
+					var valueToReplace = 'BORKSY-' + $this.data('borksy-replace-single');
+					var formValue = $this.val();
+					modifiedTemplate = modifiedTemplate.replace(valueToReplace, formValue)
+				});
+				$('[data-borksy-replace-single]').promise().done(function(){
+					download('myBORKSYgame.html', modifiedTemplate);
+				});
 			}
 
 			function download(filename, text) {
@@ -104,15 +110,34 @@
 			
 			    document.body.removeChild(element);
 			}
+
+			function getCookie(name){
+  				var re = new RegExp(name + "=([^;]+)");
+  				var value = re.exec(document.cookie);
+  				return (value != null) ? unescape(value[1]) : null;
+  			}
+
+  			function setCookie(name, value){
+  				var today = new Date();
+				var expiry = new Date(today.getTime() + 30 * 24 * 3600 * 1000); // plus 30 days
+  				document.cookie=name + "=" + escape(value) + "; path=/; expires=" + expiry.toGMTString();
+			}
+
+  			function deleteCookie(name){
+  				var expired = new Date(today.getTime() - 24 * 3600 * 1000); // less 24 hours
+  				document.cookie=name + "=null; path=/; expires=" + expired.toGMTString();
+  			}
+
+			function assembleCookie(){
+
+			}
 			
-			// Start file download.
-			document.getElementById("download-button").addEventListener("click", function(){
-			    // Generate download of hello.txt file with some content
-			    var text = testString;
-			    var filename = "pangram.txt";
-			    
-			    download(filename, text);
-			}, false);
+			$(document).ready(function(){
+				loadTemplate();
+				loadDefaults();
+				$('#download-button').click(assembleAndDownloadFile);
+			});
+
 		</script>
 	</body>
 </html>
