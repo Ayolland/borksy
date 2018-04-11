@@ -1,26 +1,26 @@
 var loadedFiles ={};
 
-function setCookieTrigger($this){
+function setSaveTrigger($this){
 	$this.change(function(){
-		setThisCookie($this);
+		saveThisData($this);
 	});
 }
 
-function loadDefaults(checkCookies = true){
-	$('[data-cookie]').each(function(){
+function loadDefaults(checkSaveData = true){
+	$('[data-save]').each(function(){
 		var $thisField = $(this);
-		var thisCookie = Cookies.get($thisField.attr('name'));
+		var thisSaveData = localStorage.getItem($thisField.attr('name'));
 		var hasDefault = typeof($thisField.data('default')) == 'string';
-		var hasCookie = typeof(thisCookie) == 'string';
+		var hasSaveData = thisSaveData != null;
 
-		if( hasDefault && (!hasCookie || !checkCookies) ){
+		if( hasDefault && (!hasSaveData || !checkSaveData) ){
 
 			var defaultType = $thisField.data('default-type');
 
 			switch(defaultType){
 				case "string":
 					$thisField.val($thisField.data('default'));
-					setCookieTrigger($thisField);
+					setSaveTrigger($thisField);
 				break;
 				case "file":
 					var filename = $thisField.data('default');
@@ -30,34 +30,34 @@ function loadDefaults(checkCookies = true){
 						var response = $ajax.responseText;
 						$thisField.val(response);
 						loadedFiles[filename] = response;
-						setCookieTrigger($thisField);
+						setSaveTrigger($thisField);
 					});
 					$ajax.fail(function(){
 						$thisField.val('failed to load default!');
 						console.log($ajax.error);
-						setCookieTrigger($thisField);
+						setSaveTrigger($thisField);
 					});
 				break;
 			}
 
 		} else {
-			if( hasCookie ){
-				$thisField.val(thisCookie);
+			if( hasSaveData ){
+				loadThisData($thisField);
 			} else {
 				$thisField.val("");
 			}
-			setCookieTrigger($thisField);
+			setSaveTrigger($thisField);
 		}
 	});
-	console.log("Defaults loaded. Forced? " + !checkCookies);
+	console.log("Defaults loaded. Forced? " + !checkSaveData);
 }
 
 function restoreDefaults(){
-	$fields = $('[data-cookie]');
+	$fields = $('[data-save]');
 	totalFields = $fields.length;
 	if ( confirm('Are you sure you want to erase all data and restore defaults?') ){
 		$fields.each(function(){
-			Cookies.remove($(this).attr('name'));
+			localStorage.removeItem($(this).attr('name'));
 			if(!--totalFields){
 				console.log('Cookies removed');
 				loadDefaults(false);
@@ -74,6 +74,10 @@ function loadTemplate(){
 }
 
 function assembleAndDownloadFile(){
+	$('[data-save]').each(function(){
+		saveThisData($(this));
+	});
+
 	var modifiedTemplate = loadedFiles['template.html'].repeat(1);
 	$('[data-borksy-replace-single]').each(function(){
 		var $this = $(this);
@@ -97,13 +101,21 @@ function download(filename, text) {
     element.click();
 
     document.body.removeChild(element);
+    console.log("File '" + filename + "' downloaded")
 }
 
-function setThisCookie($this){
+function saveThisData($this){
 	var name = $this.attr('name');
 	var value = $this.val();
-	Cookies.set(name, value);
-	console.log("Cookie '" + name + "' saved");
+	localStorage.setItem(name, value);
+	console.log("Key: '" + name + "' saved to localStorage");
+}
+
+function loadThisData($this){
+	var name = $this.attr('name');
+	var value = localStorage.getItem(name);
+	$this.val(value);
+	console.log(" Got key: " + name + " from localStorage");
 }
 			
 $(document).ready(function(){
