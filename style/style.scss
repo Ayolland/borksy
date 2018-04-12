@@ -1,0 +1,155 @@
+$light-gray: #ccc;
+$dark-glass: fade-out(#000,0.9);
+$extra-dark-glass: fade-out(#000,0.5);
+$light-glass: fade-out(#fff,0.7);
+
+$red-ish: HSL(0, 80%, 70%);
+$orange-ish: HSL(0, 80%, 70%);
+$yellow-ish: HSL(50, 80%, 70%);
+$green-ish: HSL(106, 80%, 70%);
+$blue-ish: HSL(229, 80%, 70%);
+$indigo-ish: HSL(260, 80%, 70%);
+$violet-ish: HSL(285, 80%, 70%);
+
+$breakpoint: 40em;
+
+body{
+	font-family: sans-serif;
+	box-sizing: border-box;
+	margin: 0;
+	background-color: $light-gray;
+
+
+	&.party{
+		animation-duration: 30s;
+  		animation-name: partyMode;
+  		animation-iteration-count: infinite;
+	}
+}
+
+img{
+	image-rendering: pixelated;
+}
+
+a{
+	color: initial;
+}
+
+#wrapper{
+	max-width: $breakpoint;
+	overflow: auto;
+	padding: 1em;
+	margin: 0 auto;
+	background-color: $dark-glass;
+}
+
+header, section{
+	clear: both;
+	margin-bottom: 1em;
+}
+
+header{
+
+	display: flex;
+
+	#mascot{
+		width: 19vw;
+		height: 19vw;
+		padding: 0 3vw;
+	}
+
+	h1{
+		margin: 0;
+		font-size: 6.3vw;
+		line-height: 0.8;
+
+		strong{
+			font-size: 3em;
+    		display: block;
+    		line-height: 0.75;
+    		margin-left: -0.08em;
+		}
+	}
+
+}
+
+#about {
+    padding: 0 0.75em;
+}
+
+form{
+
+	font-weight: 300;
+
+	label{
+		display: block;
+		background: $light-glass;
+    	padding: 0.75em;
+    	margin-bottom: 0.75em;
+	}
+
+	code{
+		display: block;
+		padding: 0 1em;
+		margin: 0;
+    	line-height: 2;
+    	color: $extra-dark-glass;
+	}
+
+	input,textarea{
+		box-sizing: border-box;
+		width: calc(100% + 2em);
+		max-width: calc(100% + 2em);
+    	margin: 0 -1em 0 -1em;
+    	padding: 0.25em 1em;
+    	font-size: 1em;
+    	font-family: monospace;
+		background-color: $light-glass;
+		border: 0;
+	}
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+button {
+    background: $extra-dark-glass;
+    color: white;
+    font-size: 1.25em;
+    font-weight: 100;
+    border: 0;
+    padding: 0.25em 0.75em;
+    cursor: pointer !important;
+
+    &:hover{
+    	background-color: black;
+    }
+}
+
+@keyframes partyMode {
+	0%{ background-color: $red-ish;}
+	14%{ background-color: $orange-ish;}
+	28%{ background-color: $yellow-ish;}
+	42%{ background-color: $green-ish;}
+	56%{ background-color: $blue-ish;}
+	70%{ background-color: $indigo-ish;}
+	84%{ background-color: $violet-ish;}
+	100%{ background-color: $red-ish;}
+}
+
+@media only screen and (min-width: $breakpoint) {
+
+	header{
+		#mascot{
+			height: 128px;
+			width: 128px;
+		}
+
+		h1{
+			font-size: 2.7em;
+		}
+	}
+
+}

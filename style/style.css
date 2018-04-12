@@ -1,0 +1,109 @@
+body {
+  font-family: sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  background-color: #ccc; }
+  body.party {
+    animation-duration: 30s;
+    animation-name: partyMode;
+    animation-iteration-count: infinite; }
+
+img {
+  image-rendering: pixelated; }
+
+a {
+  color: initial; }
+
+#wrapper {
+  max-width: 40em;
+  overflow: auto;
+  padding: 1em;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.1); }
+
+header, section {
+  clear: both;
+  margin-bottom: 1em; }
+
+header {
+  display: flex; }
+  header #mascot {
+    width: 19vw;
+    height: 19vw;
+    padding: 0 3vw; }
+  header h1 {
+    margin: 0;
+    font-size: 6.3vw;
+    line-height: 0.8; }
+    header h1 strong {
+      font-size: 3em;
+      display: block;
+      line-height: 0.75;
+      margin-left: -0.08em; }
+
+#about {
+  padding: 0 0.75em; }
+
+form {
+  font-weight: 300; }
+  form label {
+    display: block;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 0.75em;
+    margin-bottom: 0.75em; }
+  form code {
+    display: block;
+    padding: 0 1em;
+    margin: 0;
+    line-height: 2;
+    color: rgba(0, 0, 0, 0.5); }
+  form input, form textarea {
+    box-sizing: border-box;
+    width: calc(100% + 2em);
+    max-width: calc(100% + 2em);
+    margin: 0 -1em 0 -1em;
+    padding: 0.25em 1em;
+    font-size: 1em;
+    font-family: monospace;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 0; }
+
+.button-group {
+  display: flex;
+  justify-content: space-between; }
+
+button {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 1.25em;
+  font-weight: 100;
+  border: 0;
+  padding: 0.25em 0.75em;
+  cursor: pointer !important; }
+  button:hover {
+    background-color: black; }
+
+@keyframes partyMode {
+  0% {
+    background-color: HSL(0, 80%, 70%); }
+  14% {
+    background-color: HSL(0, 80%, 70%); }
+  28% {
+    background-color: HSL(50, 80%, 70%); }
+  42% {
+    background-color: HSL(106, 80%, 70%); }
+  56% {
+    background-color: HSL(229, 80%, 70%); }
+  70% {
+    background-color: HSL(260, 80%, 70%); }
+  84% {
+    background-color: HSL(285, 80%, 70%); }
+  100% {
+    background-color: HSL(0, 80%, 70%); } }
+
+@media only screen and (min-width: 40em) {
+  header #mascot {
+    height: 128px;
+    width: 128px; }
+  header h1 {
+    font-size: 2.7em; } }

@@ -53,8 +53,8 @@ function loadDefaults(checkSaveData = true){
 }
 
 function restoreDefaults(){
-	$fields = $('[data-save]');
-	totalFields = $fields.length;
+	var $fields = $('[data-save]');
+	var totalFields = $fields.length;
 	if ( confirm('Are you sure you want to erase all data and restore defaults?') ){
 		$fields.each(function(){
 			localStorage.removeItem($(this).attr('name'));
@@ -70,7 +70,7 @@ function loadTemplate(){
 	var $ajax = $.ajax('template/template.html');
 	$ajax.done(function(){
 		loadedFiles['template.html'] = $ajax.responseText;
-	})
+	});
 }
 
 function assembleAndDownloadFile(){
@@ -83,7 +83,7 @@ function assembleAndDownloadFile(){
 		var $this = $(this);
 		var valueToReplace = 'BORKSY-' + $this.data('borksy-replace-single');
 		var formValue = $this.val();
-		modifiedTemplate = modifiedTemplate.replace(valueToReplace, formValue)
+		modifiedTemplate = modifiedTemplate.replace(valueToReplace, formValue);
 	});
 	$('[data-borksy-replace-single]').promise().done(function(){
 		download('myBORKSYgame.html', modifiedTemplate);
@@ -117,10 +117,15 @@ function loadThisData($this){
 	$this.val(value);
 	console.log(" Got key: " + name + " from localStorage");
 }
+
+function togglePartyMode(){
+	$('body').toggleClass('party');
+}
 			
 $(document).ready(function(){
 	loadTemplate();
 	loadDefaults();
 	$('#download-button').click(assembleAndDownloadFile);
 	$('#restore-button').click(restoreDefaults);
+	$('#mascot').click(togglePartyMode);
 });
