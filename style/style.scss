@@ -31,6 +31,10 @@ img{
 	image-rendering: pixelated;
 }
 
+p,span{
+	font-weight: 300;
+}
+
 a{
 	color: initial;
 }
@@ -43,9 +47,56 @@ a{
 	background-color: $dark-glass;
 }
 
-header, section{
+header, section, footer{
 	clear: both;
 	margin-bottom: 1em;
+}
+
+label, section{
+	display: block;
+	background: $light-glass;
+   	padding: 0.75em;
+   	margin-bottom: 0.75em;
+}
+
+.collapsible{
+	position: relative;
+	max-height: 1em;
+	overflow: hidden;
+	transition: max-height 0.5s;
+
+	&.open{
+		max-height: 100vh;
+	}
+}
+
+.collapsible_header {
+	display: block;
+    background: $light-glass;
+    margin: -0.5em -0.5em 0 -0.5em;
+    padding: 0.25em 0.5em;
+    height: 1.75rem;
+    font-size: 1.5em;
+}
+
+.collapsible_closer{
+	position: absolute;
+    display: block;
+    width: 1.75em;
+    height: 1.75em;
+    top: 0.35em;
+    right: 0.5em;
+
+    &::after{
+    	content: "\25bc";
+    	color: $dark-glass;
+    	line-height: 1;
+    	font-size: 1.75em;
+    }
+
+    .open &::after{
+    	content: "\25b2";
+    }
 }
 
 header{
@@ -74,19 +125,12 @@ header{
 }
 
 #about {
-    padding: 0 0.75em;
+    //padding: 0 0.75em;
 }
 
 form{
 
 	font-weight: 300;
-
-	label{
-		display: block;
-		background: $light-glass;
-    	padding: 0.75em;
-    	margin-bottom: 0.75em;
-	}
 
 	code{
 		display: block;
@@ -97,9 +141,13 @@ form{
 	}
 
 	input,textarea{
+		display: block;
 		box-sizing: border-box;
+		min-width: 100%;
+		min-height: 2em;
 		width: calc(100% + 2em);
 		max-width: calc(100% + 2em);
+		max-height: 80vh;
     	margin: 0 -1em 0 -1em;
     	padding: 0.25em 1em;
     	font-size: 1em;
@@ -126,6 +174,12 @@ button {
     &:hover{
     	background-color: black;
     }
+}
+
+footer{
+	p{
+		font-size: 0.75em;
+	}
 }
 
 @keyframes partyMode {

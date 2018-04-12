@@ -3,12 +3,12 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1">
-		<meta name="author" content="name">
-		<meta name="description" content="description here">
-		<meta name="keywords" content="keywords,here">
+		<meta name="author" content="Andrew Yolland">
+		<meta name="description" content="A tool for extending Bitsy games">
+		<meta name="keywords" content="borksy,bitsy,game,games">
 		<link rel="shortcut icon" href="borksy.gif">
 		<link rel="stylesheet" href="style/style.css" type="text/css">
-		<title>title</title>
+		<title>Borksy Game Hacker</title>
 	</head>
 	<body>
 		<div id="wrapper">
@@ -17,7 +17,7 @@
 				<h1><strong>Borksy</strong> Game Hacker</h1>
 			</header>
 
-			<section id="about">
+			<section id="about" data-collapsible data-header="About Borksy" class="collapsible open">
 				<p>Borksy v 0.1</p>
 				<p>Borksy is a hacking tool to be used in conjuction with <a href="https://ledoux.itch.io/bitsy">Bitsy Game Maker</a>! Use it to customize your games and add hacks without needing to spin up a web server or any manual cut-and-paste work.</p>
 				<p>If you're not familiar with how Bitsy can be extended, check out <a href="https://github.com/seleb/bitsy-hacks/">this great collection of hacks</a>.</p>
@@ -25,47 +25,47 @@
 				
 			</section>
 
-			<section id="form">
-				<form>
-					<label>
-						<strong>Title:</strong>
-						<p>This is what the title of your page (not game) will be:</p>
-						<code>&lt;title&gt;<textarea data-save data-borksy-replace-single="TITLE" data-default-type="string" data-default="My Bitsy Game By Me" rows="1" cols="50" wrap="hard" name="title" id="title"></textarea>&lt;&#47;title&gt;</code>
-					</label>
-					<label>
-						<strong>Game-Data:</strong>
-						<p>This is the gamedata from Bitsy:</p>
-						<code>&lt;script type="bitsyGameData" id="exportedGameData"&gt;<textarea data-save data-borksy-replace-single="GAMEDATA" data-default-type="file" data-default="gamedata.txt" rows="4" cols="50" wrap="hard" name="gamedata" id="gamedata"></textarea>&lt;&#47;script&gt;</code>
-					</label>
-					<label>
-						<strong>CSS:</strong>
-						<p>This is the CSS for your page:</p>
-						<code>&lt;style type="text/css"&gt;<textarea data-save data-borksy-replace-single="CSS" data-default-type="file" data-default="style.css" rows="4" cols="50" wrap="hard" name="css" id="css"></textarea>&lt;&#47;style&gt;</code>
-					</label>
-		
-					<label>
-						<strong>Font-Data:</strong>
-						<p>This is the data for your game's font:<br>This can be acquired <a href="https://seleb.github.io/bitsy-hacks/custom%20font/custom%20font%20-%20converter.html">using this tool.</a> Borksy accepts the array of fontdata ONLY. Look for the 1s and 0s contained in brackets.</p>
-						<code>var fontdata = <textarea data-save data-borksy-replace-single="FONTDATA" data-default-type="file" data-default="fontdata.txt" rows="4" cols="50" wrap="hard" name="fontdata" id="fontdata"></textarea>;</code>
-					</label>
-		
-					<label>
-						<strong>Markup:</strong>
-						<p>This is the HTML content of your game's body tag:<br>NOTE: the canvas#game tag is crucial for Bitsy to work.</p>
-						<code>&lt;body&gt;<textarea data-save data-borksy-replace-single="MARKUP" data-default-type="file" data-default="body.html" rows="4" cols="50" wrap="hard" name="markup" id="markup"></textarea>&lt;&#47;body&gt;</code>
-					</label>
-		
-					<label>
-						<strong>Hacks:</strong>
-						<p>This is JavaScript loaded into a script tag after all Bitsy code.<br>Hacks go here.</p>
-						<code>&lt;script type="text/javascript" id="borksyHacks"&gt;<textarea data-save data-borksy-replace-single="HACKS" rows="4" cols="50" wrap="hard" name="hacks" id="hacks"></textarea>&lt;&#47;script&gt;</code>
-					</label>
-				</form>
+			<form>
+				
+				<label data-collapsible data-header="Title" class="collapsible open">
+					<p>This is what the title of your page (not game) will be:</p>
+					<code>&lt;title&gt;<textarea data-save data-borksy-replace-single="TITLE" data-default-type="string" data-default="My Bitsy Game By Me" rows="1" cols="50" wrap="hard" name="title" id="title"></textarea>&lt;&#47;title&gt;</code>
+				</label>
+				<label data-collapsible data-header="Game Data" class="collapsible open">
+					<p>This is the gamedata from Bitsy:</p>
+					<code>&lt;script type="bitsyGameData" id="exportedGameData"&gt;<textarea data-save data-borksy-replace-single="GAMEDATA" data-default-type="file" data-default="gamedata.txt" rows="4" cols="50" wrap="hard" name="gamedata" id="gamedata"></textarea>&lt;&#47;script&gt;</code>
+				</label>
+				<label data-collapsible data-header="CSS"  class="collapsible">
+					<p>This is the CSS for your page:</p>
+					<code>&lt;style type="text/css"&gt;<textarea data-save data-borksy-replace-single="CSS" data-default-type="file" data-default="style.css" rows="4" cols="50" wrap="hard" name="css" id="css"></textarea>&lt;&#47;style&gt;</code>
+				</label>
+	
+				<label data-collapsible data-header="Font Data" class="collapsible">
+					<p>This is the data for your game's font:<br>This can be acquired <a href="https://seleb.github.io/bitsy-hacks/custom%20font/custom%20font%20-%20converter.html">using this tool.</a> Borksy accepts the array of fontdata ONLY. Look for the 1s and 0s contained in brackets.</p>
+					<code>var fontdata = <textarea data-save data-borksy-replace-single="FONTDATA" data-default-type="file" data-default="fontdata.txt" rows="4" cols="50" wrap="hard" name="fontdata" id="fontdata"></textarea>;</code>
+				</label>
+	
+				<label data-collapsible data-header="HTML Markup" class="collapsible">
+					<p>This is the HTML content of your game's body tag:<br>NOTE: the canvas#game tag is crucial for Bitsy to work.</p>
+					<code>&lt;body&gt;<textarea data-save data-borksy-replace-single="MARKUP" data-default-type="file" data-default="body.html" rows="4" cols="50" wrap="hard" name="markup" id="markup"></textarea>&lt;&#47;body&gt;</code>
+				</label>
+	
+				<label data-collapsible data-header="Hacks" class="collapsible">
+					<p>This is JavaScript loaded into a script tag after all Bitsy code.<br>Hacks go here.</p>
+					<code>&lt;script type="text/javascript" id="borksyHacks"&gt;<textarea data-save data-borksy-replace-single="HACKS" rows="4" cols="50" wrap="hard" name="hacks" id="hacks"></textarea>&lt;&#47;script&gt;</code>
+				</label>
+				
 				<div class="button-group">
 					<button id="restore-button">Restore Defaults</button>
 					<button id="download-button">Download File</button>
 				</div>
-			</section>
+			</form>
+
+			<footer>
+				<p>Borksy is built by AYolland: <a href="https://twitter.com/ayolland">Twitter</a> <a href="https://github.com/Ayolland">Github</a> <a href="https://ayolland.itch.io/">Itch.io</a></p>
+				<p>Bitsy is built by Adam Le Doux: <a href="https://twitter.com/adamledoux">Twitter</a> <a href="https://github.com/le-doux">Github</a> <a href="https://ledoux.itch.io/">Itch.io</a></p>
+				<p>Bitsy Hacks Collection is curated by Sean S LeBanc: <a href="https://twitter.com/SeanSLeBlanc">Twitter</a> <a href="https://github.com/seleb">Github</a> <a href="https://seansleblanc.itch.io/">Itch.io</a></p>
+			</footer>
 
 		</div>
 
