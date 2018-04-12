@@ -28,16 +28,14 @@ header, section, footer {
   clear: both;
   margin-bottom: 1em; }
 
-label, section {
-  display: block;
-  background: rgba(255, 255, 255, 0.3);
-  padding: 0.75em;
-  margin-bottom: 0.75em; }
-
 .collapsible {
+  display: block;
   position: relative;
-  max-height: 1em;
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.3);
+  max-height: 1em;
+  padding: 0.75em;
+  margin-bottom: 0.75em;
   transition: max-height 0.5s; }
   .collapsible.open {
     max-height: 100vh; }
@@ -83,26 +81,27 @@ header {
 
 form {
   font-weight: 300; }
-  form code {
+  form label {
     display: block;
     padding: 0 1em;
     margin: 0;
+    font-family: monospace;
     line-height: 2;
     color: rgba(0, 0, 0, 0.5); }
-  form input, form textarea {
-    display: block;
-    box-sizing: border-box;
-    min-width: 100%;
-    min-height: 2em;
-    width: calc(100% + 2em);
-    max-width: calc(100% + 2em);
-    max-height: 80vh;
-    margin: 0 -1em 0 -1em;
-    padding: 0.25em 1em;
-    font-size: 1em;
-    font-family: monospace;
-    background-color: rgba(255, 255, 255, 0.3);
-    border: 0; }
+    form label input, form label textarea {
+      display: block;
+      box-sizing: border-box;
+      min-width: 100%;
+      min-height: 2em;
+      width: calc(100% + 2em);
+      max-width: calc(100% + 2em);
+      max-height: 80vh;
+      margin: 0 -1em 0 -1em;
+      padding: 0.25em 1em;
+      font-size: 1em;
+      font-family: monospace;
+      background-color: rgba(255, 255, 255, 0.3);
+      border: 0; }
 
 .button-group {
   display: flex;

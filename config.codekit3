@@ -17,6 +17,13 @@
 		"oF": 0,
 		"opt": 1
 		},
+	"\/borksy.zip": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/borksy.zip",
+		"oF": 0
+		},
 	"\/defaults\/body.html": {
 		"cB": 0,
 		"ft": 8192,
@@ -47,6 +54,83 @@
 		"oAP": "\/defaults\/style-min.css",
 		"oF": 0,
 		"oS": 3
+		},
+	"\/fonts\/beeblebrox.png": {
+		"ft": 32768,
+		"iS": 4116,
+		"oA": 0,
+		"oAP": "\/fonts\/beeblebrox.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/fonts\/beggars.png": {
+		"ft": 32768,
+		"iS": 4132,
+		"oA": 0,
+		"oAP": "\/fonts\/beggars.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/fonts\/blacksphinx.png": {
+		"ft": 32768,
+		"iS": 4976,
+		"oA": 0,
+		"oAP": "\/fonts\/blacksphinx.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/fonts\/default.png": {
+		"ft": 32768,
+		"iS": 4266,
+		"oA": 0,
+		"oAP": "\/fonts\/default.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/fonts\/greengable.png": {
+		"ft": 32768,
+		"iS": 4219,
+		"oA": 0,
+		"oAP": "\/fonts\/greengable.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/fonts\/hotcaps.png": {
+		"ft": 32768,
+		"iS": 4106,
+		"oA": 0,
+		"oAP": "\/fonts\/hotcaps.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/fonts\/monogram.png": {
+		"ft": 32768,
+		"iS": 4071,
+		"oA": 0,
+		"oAP": "\/fonts\/monogram.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
 		},
 	"\/index.html": {
 		"cB": 0,
@@ -90,6 +174,16 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"\/scripts\/font-converter.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/scripts\/min\/font-converter-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"\/scripts\/jquery.min.js": {
 		"ft": 64,
 		"ma": 0,
@@ -106,6 +200,16 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "\/scripts\/min\/js.cookie-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/scripts\/min\/font-converter-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/scripts\/min\/min\/font-converter-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
