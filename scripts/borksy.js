@@ -207,7 +207,7 @@ function readFontFile(eventOrFilename) {
 	if( typeof(eventOrFilename) === 'object' ){
 		src = eventOrFilename.target.result;
 	} else {
-		src = '/fonts/' + eventOrFilename;
+		src = 'fonts/' + eventOrFilename;
 		changeFontFilename(eventOrFilename);
 	}
 	// load image
@@ -310,13 +310,13 @@ function activateCollapsibles(){
 		var $thisCollapsible = $(this);
 		var $closer = $('<span>', {
 			class: "collapsible_closer",
-			click: function(){
-				$thisCollapsible.toggleClass('open');
-			}
 		});
 		var $header = $('<span>', {
 			class: "collapsible_header",
-			text: $thisCollapsible.data('header')
+			text: $thisCollapsible.data('header'),
+			click: function(){
+				$thisCollapsible.toggleClass('open');
+			}
 		});
 		$thisCollapsible.prepend($closer);
 		$thisCollapsible.prepend($header);
