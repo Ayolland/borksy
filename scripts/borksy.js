@@ -310,6 +310,9 @@ function activateCollapsibles(){
 		var $thisCollapsible = $(this);
 		var $closer = $('<span>', {
 			class: "collapsible_closer",
+			click: function(){
+				$thisCollapsible.toggleClass('open');
+			}
 		});
 		var $header = $('<span>', {
 			class: "collapsible_header",
