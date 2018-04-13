@@ -1,4 +1,11 @@
 var loadedFiles ={};
+var fonts = {
+	"default" : "Default Bitsy Font by Adam LeDoux",
+	"beeblebrox" : "Beeblebrox by AYolland",
+	"blacksphinx" : "Blacksphinx by AYolland",
+	"greengable" : "Greengable by AYolland",
+	"hotcaps" : "Hotcaps by AYolland"
+};
 
 function loadTemplate(){
 	var $ajax = $.ajax('template/template.html');
@@ -142,8 +149,6 @@ function restoreDefaults(){
 	}
 }
 
-var hoistedFontFileName = "";
-
 function onFontImageLoaded() {
 	var fontsize = {
 		x: 6,
@@ -181,22 +186,26 @@ function onFontImageLoaded() {
 	//console.log(fontdata.toString());
 	// display output
 	//document.getElementById('fontdata').value = "[" + fontdata.toString() + "]";
-	saveThisData($('#fontdata'), "[/*" + hoistedFontFileName + "*/" + fontdata.toString() + "]");
+	saveThisData($('#fontdata'), "[/*" + $('#fontfilename').val() + "*/" + fontdata.toString() + "]");
 
 }
-function readFontFile(eventOrFilePath) {
+
+function readFontFile(eventOrFilename) {
 	var src;
-	if( typeof(eventOrFilePath) === 'object' ){
-		src = eventOrFilePath.target.result;
+	if( typeof(eventOrFilename) === 'object' ){
+		src = eventOrFilename.target.result;
 	} else {
-		src = '/fonts/' + eventOrFilePath;
-		hoistedFontFileName = eventOrFilePath;
+		src = '/fonts/' + eventOrFilename;
+		changeFontFilename(eventOrFilename);
 	}
 	// load image
 	var img = new Image();
 	img.onload = onFontImageLoaded;
 	img.src = src;
+	// if possible, change preview
+	changeFontPreview();
 }
+
 function loadFontImage(input) {
 	if (!input.files || !input.files[0]) {
 		// do nothing
@@ -205,8 +214,77 @@ function loadFontImage(input) {
 	// read image
 	var reader = new FileReader();
 	reader.onload = readFontFile;
-	hoistedFontFileName = input.files[0].name;
+	changeFontFilename(input.files[0].name);
 	reader.readAsDataURL(input.files[0]);
+}
+
+function changeFontFilename(filename){
+	var $field = $('#fontfilename');
+	if( $field.val() != filename ){
+		$field.val(filename);
+		saveThisData($field);
+	}
+}
+
+function replaceElements(){
+	$('[data-replace-element]').each(function(){
+		replaceThisElement($(this));
+	});
+}
+
+function replaceThisElement($elementToReplace){
+	var functionName = $elementToReplace.data('replace-element');
+	var $replacement = window[functionName]();
+	$elementToReplace.replaceWith($replacement);
+}
+
+function createFontSelect(){
+	var $select = $('<select>',{
+		id: 'fontSelect'
+	});
+	var $option1 = $('<option>',{
+		text: "Select Font",
+		value: 0
+	});
+	$option1.attr({
+		selected: true,
+		disabled: true
+	});
+	$select.append($option1);
+	$.each(fonts, function( name, description){
+		var $newOption = $('<option>',{
+			text: description,
+			value: name
+		}); 
+		$select.append($newOption)
+	});
+	$select.change(selectFont);
+	return $select;
+}
+
+function createFontPreview(){
+	var $newElement;
+	var fontFilename = $('#fontfilename').val();
+	var nameNoExtension = fontFilename.slice(0, -4);
+	if( typeof(fonts[nameNoExtension]) !== "undefined"){
+		$newElement = $('<img>',{
+			class: nameNoExtension + " font-preview",
+			src: "fonts/previews/" + fontFilename
+		});
+	} else {
+		$newElement = $('<span>');
+	}
+	$newElement.attr('data-replace-element','createFontPreview');
+	return $newElement;
+}
+
+function changeFontPreview(){
+	replaceThisElement($('[data-replace-element=createFontPreview]'));
+}
+
+function selectFont(){
+	var filename = this.value + ".png";
+	readFontFile(filename);
 }
 
 function activateCollapsibles(){
@@ -229,8 +307,9 @@ function activateCollapsibles(){
 			
 $(document).ready(function(){
 	activateCollapsibles();
-	loadTemplate();
 	loadDefaults();
+	replaceElements();
+	loadTemplate();
 	$('#download-button').click(assembleAndDownloadFile);
 	$('#restore-button').click(restoreDefaults);
 	$('#mascot').click(togglePartyMode);

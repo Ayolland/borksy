@@ -27,39 +27,48 @@
 
 			<form>
 				
-				<label data-collapsible data-header="Title" class="collapsible open">
+				<section data-collapsible data-header="Title" class="collapsible open">
 					<p>This is what the title of your page (not game) will be:</p>
-					<code>&lt;title&gt;<textarea data-save data-borksy-replace-single="TITLE" data-default-type="string" data-default="My Bitsy Game By Me" rows="1" cols="50" wrap="hard" name="title" id="title"></textarea>&lt;&#47;title&gt;</code>
-				</label>
-				<label data-collapsible data-header="Game Data" class="collapsible open">
+					<label>&lt;title&gt;<textarea data-save data-borksy-replace-single="TITLE" data-default-type="string" data-default="My Bitsy Game By Me" rows="1" cols="50" wrap="hard" name="title" id="title"></textarea>&lt;&#47;title&gt;</label>
+				</section>
+
+				<section data-collapsible data-header="Game Data" class="collapsible open">
 					<p>This is the gamedata from Bitsy:</p>
-					<code>&lt;script type="bitsyGameData" id="exportedGameData"&gt;<textarea data-save data-borksy-replace-single="GAMEDATA" data-default-type="file" data-default="gamedata.txt" rows="4" cols="50" wrap="hard" name="gamedata" id="gamedata"></textarea>&lt;&#47;script&gt;</code>
-				</label>
-				<label data-collapsible data-header="CSS"  class="collapsible">
-					<p>This is the CSS for your page:</p>
-					<code>&lt;style type="text/css"&gt;<textarea data-save data-borksy-replace-single="CSS" data-default-type="file" data-default="style.css" rows="4" cols="50" wrap="hard" name="css" id="css"></textarea>&lt;&#47;style&gt;</code>
-				</label>
+					<label>&lt;script type="bitsyGameData" id="exportedGameData"&gt;<textarea data-save data-borksy-replace-single="GAMEDATA" data-default-type="textfile" data-default="gamedata.txt" rows="4" cols="50" wrap="hard" name="gamedata" id="gamedata"></textarea>&lt;&#47;script&gt;</label>
+				</section>
+
+				<section data-collapsible data-header="Font Data" class="collapsible">
+					<p>This is the data for your game's font.<br>Either select a pre-loaded font or convert an image.</p>
+
+					<section data-collapsible data-header="More Info On Font Images" class="collapsible">
+						<p>This is the data for your game's font.<br>Either select a pre-loaded font or convert an image.</p>
+					</section>
+
+					<label>Select Font:&nbsp;<span data-replace-element="createFontSelect"></span></label>
+					<span data-replace-element="createFontPreview"></span>
+					<label>Or Import Image File: <input type="file" id="font-file-input" accept="image/*" onchange="loadFontImage(this);"/></label>
+					<label>var fontdata = <textarea data-save data-borksy-replace-single="FONTDATA" data-default-type="font" data-default="default.png" rows="4" cols="50" wrap="hard" name="fontdata" id="fontdata"></textarea>;</label>
+					<input type="hidden" data-save data-default-type="string" data-default="default.png" value="" name="fontfilename" id="fontfilename">
+				</section>
 	
-				<label data-collapsible data-header="Font Data" class="collapsible">
-					<p>This is the data for your game's font:<br>This can be acquired <a href="https://seleb.github.io/bitsy-hacks/custom%20font/custom%20font%20-%20converter.html">using this tool.</a> Borksy accepts the array of fontdata ONLY. Look for the 1s and 0s contained in brackets.</p>
-					<code>var fontdata = <textarea data-save data-borksy-replace-single="FONTDATA" data-default-type="file" data-default="fontdata.txt" rows="4" cols="50" wrap="hard" name="fontdata" id="fontdata"></textarea>;</code>
-				</label>
-	
-				<label data-collapsible data-header="HTML Markup" class="collapsible">
+				<section data-collapsible data-header="HTML / CSS Theme" class="collapsible">
 					<p>This is the HTML content of your game's body tag:<br>NOTE: the canvas#game tag is crucial for Bitsy to work.</p>
-					<code>&lt;body&gt;<textarea data-save data-borksy-replace-single="MARKUP" data-default-type="file" data-default="body.html" rows="4" cols="50" wrap="hard" name="markup" id="markup"></textarea>&lt;&#47;body&gt;</code>
-				</label>
+					<label>&lt;body&gt;<textarea data-save data-borksy-replace-single="MARKUP" data-default-type="textfile" data-default="body.html" rows="4" cols="50" wrap="hard" name="markup" id="markup"></textarea>&lt;&#47;body&gt;</label>
+					<p>This is the CSS for your page:</p>
+					<label>&lt;style type="text/css"&gt;<textarea data-save data-borksy-replace-single="CSS" data-default-type="textfile" data-default="style.css" rows="4" cols="50" wrap="hard" name="css" id="css"></textarea>&lt;&#47;style&gt;</label>
+				</section>
 	
-				<label data-collapsible data-header="Hacks" class="collapsible">
+				<section data-collapsible data-header="Hacks" class="collapsible">
 					<p>This is JavaScript loaded into a script tag after all Bitsy code.<br>Hacks go here.</p>
-					<code>&lt;script type="text/javascript" id="borksyHacks"&gt;<textarea data-save data-borksy-replace-single="HACKS" rows="4" cols="50" wrap="hard" name="hacks" id="hacks"></textarea>&lt;&#47;script&gt;</code>
-				</label>
+					<label>&lt;script type="text/javascript" id="borksyHacks"&gt;<textarea data-save data-borksy-replace-single="HACKS" rows="4" cols="50" wrap="hard" name="hacks" id="hacks"></textarea>&lt;&#47;script&gt;</label>
+				</section>
 				
-				<div class="button-group">
-					<button id="restore-button">Restore Defaults</button>
-					<button id="download-button">Download File</button>
-				</div>
 			</form>
+
+			<div class="button-group">
+				<button id="restore-button">Restore Defaults</button>
+				<button id="download-button">Download File</button>
+			</div>
 
 			<footer>
 				<p>Borksy is built by AYolland: <a href="https://twitter.com/ayolland">Twitter</a> <a href="https://github.com/Ayolland">Github</a> <a href="https://ayolland.itch.io/">Itch.io</a></p>

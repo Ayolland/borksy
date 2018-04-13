@@ -161,6 +161,12 @@ form{
 	}
 }
 
+img.font-preview {
+    display: block;
+    width: 100%;
+    max-width: 416px;
+}
+
 .button-group {
     display: flex;
     justify-content: space-between;

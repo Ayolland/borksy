@@ -103,6 +103,11 @@ form {
       background-color: rgba(255, 255, 255, 0.3);
       border: 0; }
 
+img.font-preview {
+  display: block;
+  width: 100%;
+  max-width: 416px; }
+
 .button-group {
   display: flex;
   justify-content: space-between; }
