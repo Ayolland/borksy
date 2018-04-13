@@ -226,13 +226,6 @@
 		"oAP": "\/plugins\/pangram.txt",
 		"oF": 0
 		},
-	"\/README.html": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 0,
-		"oAP": "\/README.html",
-		"oF": 0
-		},
 	"\/README.md": {
 		"cB": 0,
 		"cS": 0,
@@ -261,16 +254,6 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/scripts\/font-converter.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/scripts\/min\/font-converter-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
 	"\/scripts\/jquery.min.js": {
 		"ft": 64,
 		"ma": 0,
@@ -287,16 +270,6 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "\/scripts\/min\/js.cookie-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/scripts\/min\/font-converter-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/scripts\/min\/min\/font-converter-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
