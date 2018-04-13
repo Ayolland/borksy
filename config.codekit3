@@ -132,6 +132,61 @@
 		"oT": 1,
 		"q": 100
 		},
+	"\/fonts\/previews\/beeblebrox.png": {
+		"ft": 32768,
+		"iS": 513,
+		"oA": 0,
+		"oAP": "\/fonts\/previews\/beeblebrox.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/fonts\/previews\/blacksphinx.png": {
+		"ft": 32768,
+		"iS": 561,
+		"oA": 0,
+		"oAP": "\/fonts\/previews\/blacksphinx.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/fonts\/previews\/default.png": {
+		"ft": 32768,
+		"iS": 507,
+		"oA": 0,
+		"oAP": "\/fonts\/previews\/default.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/fonts\/previews\/greengable.png": {
+		"ft": 32768,
+		"iS": 576,
+		"oA": 0,
+		"oAP": "\/fonts\/previews\/greengable.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
+	"\/fonts\/previews\/hotcaps.png": {
+		"ft": 32768,
+		"iS": 479,
+		"oA": 0,
+		"oAP": "\/fonts\/previews\/hotcaps.png",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"oT": 1,
+		"q": 100
+		},
 	"\/index.html": {
 		"cB": 0,
 		"ft": 8192,
