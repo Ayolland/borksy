@@ -7,7 +7,7 @@ body {
 	margin:0px;
 	padding:0px;
 	overflow:hidden;
-	background:#ffffff;
+	background:#000;
 }
 
 #game {
@@ -16,4 +16,5 @@ body {
 	max-width:100vh;
 	margin:auto;
 	display:block;
+	image-rendering: pixelated;
 }

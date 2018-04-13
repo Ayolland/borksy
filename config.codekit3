@@ -75,9 +75,9 @@
 		"bl": 0,
 		"ft": 16,
 		"ma": 0,
-		"oA": 0,
+		"oA": 1,
 		"oAP": "\/defaults\/style-min.css",
-		"oF": 0,
+		"oF": 1,
 		"oS": 3
 		},
 	"\/fonts\/beeblebrox.png": {
