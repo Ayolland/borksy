@@ -18,21 +18,17 @@
 			</header>
 
 			<section id="about" data-collapsible data-header="About Borksy" class="collapsible open">
-				<p>Borksy v 0.1</p>
-				<p>Borksy is a hacking tool to be used in conjuction with <a href="https://ledoux.itch.io/bitsy">Bitsy Game Maker</a>! Use it to customize your games and add hacks without needing to spin up a web server or any manual cut-and-paste work.</p>
-				<p>If you're not familiar with how Bitsy can be extended, check out <a href="https://github.com/seleb/bitsy-hacks/">this great collection of hacks</a>.</p>
-				<p>More features to come!</p>
-				
+				<div id="about_content"></div>
 			</section>
 
 			<form>
 				
-				<section data-collapsible data-header="Title" class="collapsible open">
+				<section data-collapsible data-header="Page Title" class="collapsible">
 					<p>This is what the title of your page (not game) will be:</p>
 					<label>&lt;title&gt;<textarea data-save data-borksy-replace-single="TITLE" data-default-type="string" data-default="My Bitsy Game By Me" rows="1" cols="50" wrap="hard" name="title" id="title"></textarea>&lt;&#47;title&gt;</label>
 				</section>
 
-				<section data-collapsible data-header="Game Data" class="collapsible open">
+				<section data-collapsible data-header="Game Data" class="collapsible">
 					<p>This is the gamedata from Bitsy:</p>
 					<label>&lt;script type="bitsyGameData" id="exportedGameData"&gt;<textarea data-save data-borksy-replace-single="GAMEDATA" data-default-type="textfile" data-default="gamedata.txt" rows="4" cols="50" wrap="hard" name="gamedata" id="gamedata"></textarea>&lt;&#47;script&gt;</label>
 				</section>
@@ -40,8 +36,8 @@
 				<section data-collapsible data-header="Font Data" class="collapsible">
 					<p>This is the data for your game's font.<br>Either select a pre-loaded font or convert an image.</p>
 
-					<section data-collapsible data-header="More Info On Font Images" class="collapsible">
-						<p>This is the data for your game's font.<br>Either select a pre-loaded font or convert an image.</p>
+					<section data-collapsible data-header="Need More Info On Font Images?" class="collapsible">
+						<p>Bitsy uses its own pixelfont format. You can create your own Bitsy font by <a href="fonts/default.png" target="_blank" rel="noopener noreferrer">saving and modifying this image</a> with image-editing software. All characters must be black and white, all other colors will be ignored. The red lines are only for reference. Afterwards, use this tool to convert your image into fontdata Bitsy can understand.</p>
 					</section>
 
 					<label>Select Font:&nbsp;<span data-replace-element="createFontSelect"></span></label>
@@ -54,13 +50,13 @@
 				<section data-collapsible data-header="HTML / CSS Theme" class="collapsible">
 					<p>This is the HTML content of your game's body tag:<br>NOTE: the canvas#game tag is crucial for Bitsy to work.</p>
 					<label>&lt;body&gt;<textarea data-save data-borksy-replace-single="MARKUP" data-default-type="textfile" data-default="body.html" rows="4" cols="50" wrap="hard" name="markup" id="markup"></textarea>&lt;&#47;body&gt;</label>
-					<p>This is the CSS for your page:</p>
+					<p>This is the CSS style for your page:</p>
 					<label>&lt;style type="text/css"&gt;<textarea data-save data-borksy-replace-single="CSS" data-default-type="textfile" data-default="style.css" rows="4" cols="50" wrap="hard" name="css" id="css"></textarea>&lt;&#47;style&gt;</label>
 				</section>
 	
-				<section data-collapsible data-header="Hacks" class="collapsible">
-					<p>This is JavaScript loaded into a script tag after all Bitsy code.<br>Hacks go here.</p>
-					<label>&lt;script type="text/javascript" id="borksyHacks"&gt;<textarea data-save data-borksy-replace-single="HACKS" rows="4" cols="50" wrap="hard" name="hacks" id="hacks"></textarea>&lt;&#47;script&gt;</label>
+				<section data-collapsible data-header="Additional JavaScript" class="collapsible">
+					<p>This is JavaScript loaded into a script tag after all Bitsy code.<br>Hacks go in here.</p>
+					<label>&lt;script type="text/javascript" id="borksyAdditionalJS"&gt;<textarea data-save data-borksy-replace-single="ADDITIONALJS" rows="4" cols="50" wrap="hard" name="additionalJS" id="additionalJS"></textarea>&lt;&#47;script&gt;</label>
 				</section>
 				
 			</form>
@@ -73,7 +69,7 @@
 			<footer>
 				<p>Borksy is built by AYolland: <a href="https://twitter.com/ayolland">Twitter</a> <a href="https://github.com/Ayolland">Github</a> <a href="https://ayolland.itch.io/">Itch.io</a></p>
 				<p>Bitsy is built by Adam Le Doux: <a href="https://twitter.com/adamledoux">Twitter</a> <a href="https://github.com/le-doux">Github</a> <a href="https://ledoux.itch.io/">Itch.io</a></p>
-				<p>Bitsy Hacks Collection is curated by Sean S LeBanc: <a href="https://twitter.com/SeanSLeBlanc">Twitter</a> <a href="https://github.com/seleb">Github</a> <a href="https://seansleblanc.itch.io/">Itch.io</a></p>
+				<p>Bitsy Font Converter is built by Sean S LeBanc: <a href="https://twitter.com/SeanSLeBlanc">Twitter</a> <a href="https://github.com/seleb">Github</a> <a href="https://seansleblanc.itch.io/">Itch.io</a></p>
 			</footer>
 
 		</div>

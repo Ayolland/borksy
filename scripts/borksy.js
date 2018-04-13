@@ -73,6 +73,18 @@ function togglePartyMode(){
 	$('body').toggleClass('party');
 }
 
+function loadAboutInfo(){
+	var $aboutContent = $('#about_content');
+	var $ajax = $.ajax('about/about.html');
+	$ajax.done(function(){
+		var response = $ajax.responseText;
+		$aboutContent.html(response);
+	});
+	$ajax.fail(function(){
+		$aboutContent.html('<p>Whoa, Something went wrong!</p>');
+	});
+}
+
 function loadDefaultString($thisField){
 	$thisField.val($thisField.data('default'));
 	setSaveTrigger($thisField);
@@ -239,6 +251,8 @@ function replaceThisElement($elementToReplace){
 }
 
 function createFontSelect(){
+	var currentFontName = $('#fontfilename').val().slice(0, -4);
+	var usingCustomFont = true;
 	var $select = $('<select>',{
 		id: 'fontSelect'
 	});
@@ -246,18 +260,22 @@ function createFontSelect(){
 		text: "Select Font",
 		value: 0
 	});
-	$option1.attr({
-		selected: true,
-		disabled: true
-	});
+	$option1.attr('disabled', true);
 	$select.append($option1);
 	$.each(fonts, function( name, description){
 		var $newOption = $('<option>',{
 			text: description,
 			value: name
 		}); 
-		$select.append($newOption)
+		if( name == currentFontName ){
+			$newOption.attr('selected', true);
+			usingCustomFont = false;
+		}
+		$select.append($newOption);
 	});
+	if(usingCustomFont){
+		$option1.attr('selected', true);
+	}
 	$select.change(selectFont);
 	return $select;
 }
@@ -272,7 +290,7 @@ function createFontPreview(){
 			src: "fonts/previews/" + fontFilename
 		});
 	} else {
-		$newElement = $('<span>');
+		$newElement = $('<label>',{text: "(Sorry, Preview Unavailable for Custom Fonts)"});
 	}
 	$newElement.attr('data-replace-element','createFontPreview');
 	return $newElement;
@@ -307,6 +325,7 @@ function activateCollapsibles(){
 			
 $(document).ready(function(){
 	activateCollapsibles();
+	loadAboutInfo();
 	loadDefaults();
 	replaceElements();
 	loadTemplate();
