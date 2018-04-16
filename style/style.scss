@@ -67,10 +67,9 @@ header, section, footer{
 	max-height: 1em;
 	padding: 0.75em;
 	margin-bottom: 0.75em;
-	transition: max-height 0.5s;
 
 	&.open{
-		max-height: 100vh;
+		max-height: none;
 
 		&> .collapsible_closer::after{
 			content: "\25b2";
@@ -184,7 +183,18 @@ form{
 			background-color: $light-glass;
 			border: 0;
 		}
+
+		input[type="checkbox"] {
+		    float: left;
+		    width: auto;
+		    margin: 0.5em 1em 0 0;
+		}
 	}
+}
+
+pre{
+	overflow: scroll;
+	color: $extra-dark-glass;
 }
 
 img.font-preview {

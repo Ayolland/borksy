@@ -1,0 +1,1 @@
+function palWrap(a){var r=bitsy[a];bitsy[a]=function(){var a,t;try{a=bitsy.curPal()}catch(r){a=null}r&&(r.apply(void 0,arguments),t=bitsy.curPal(),a!==t&&(document.body.style.background="rgb("+bitsy.getPal(bitsy.curPal())[0].toString()+")"))}}palWrap("moveSprites"),palWrap("movePlayer"),palWrap("parseWorld");

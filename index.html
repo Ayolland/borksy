@@ -53,9 +53,14 @@
 					<p>This is the CSS style for your page:</p>
 					<label>&lt;style type="text/css"&gt;<textarea data-save data-borksy-replace-single="CSS" data-default-type="textfile" data-default="style.css" rows="4" cols="50" wrap="hard" name="css" id="css"></textarea>&lt;&#47;style&gt;</label>
 				</section>
+
+				<section data-collapsible data-header="Hacks" class="collapsible" id="hacks-section">
+					<p>These are pre-made hacks that modify and extend Bitsy's behavior.</p>
+					<input type="hidden" data-save data-default-type="boolean" data-hack data-hack-type="simple" data-hack-file="kitsy.js" data-default="false" value="" name="includekitsy" id="includekitsy">
+				</section>
 	
 				<section data-collapsible data-header="Additional JavaScript" class="collapsible">
-					<p>This is JavaScript loaded into a script tag after all Bitsy code.<br>Hacks go in here.</p>
+					<p>This is JavaScript loaded into a script tag after all Bitsy code.<br>Other hacks can go in here (among other things).</p>
 					<label>&lt;script type="text/javascript" id="borksyAdditionalJS"&gt;<textarea data-save data-borksy-replace-single="ADDITIONALJS" rows="4" cols="50" wrap="hard" name="additionalJS" id="additionalJS"></textarea>&lt;&#47;script&gt;</label>
 				</section>
 				

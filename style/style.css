@@ -36,10 +36,9 @@ header, section, footer {
   background: rgba(255, 255, 255, 0.3);
   max-height: 1em;
   padding: 0.75em;
-  margin-bottom: 0.75em;
-  transition: max-height 0.5s; }
+  margin-bottom: 0.75em; }
   .collapsible.open {
-    max-height: 100vh; }
+    max-height: none; }
     .collapsible.open > .collapsible_closer::after {
       content: "\25b2"; }
   .collapsible .collapsible_header {
@@ -117,6 +116,14 @@ form {
       font-family: monospace;
       background-color: rgba(255, 255, 255, 0.3);
       border: 0; }
+    form label input[type="checkbox"] {
+      float: left;
+      width: auto;
+      margin: 0.5em 1em 0 0; }
+
+pre {
+  overflow: scroll;
+  color: rgba(0, 0, 0, 0.5); }
 
 img.font-preview {
   display: block;

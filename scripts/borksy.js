@@ -6,12 +6,50 @@ var fonts = {
 	"greengable" : "Greengable by AYolland",
 	"hotcaps" : "Hotcaps by AYolland"
 };
+var hacks = [{
+		name: "dynamic-background-color",
+		title: "Dynamic Background Color",
+		description: "Changes the color of the BODY tag to the background color of the current room.",
+		author: "Sean S LeBlanc",
+		readme: false,
+		type: "simple",
+		requiresKitsy: false
+	},{
+		name: "exit-from-dialog",
+		title: "Exit From Dialog",
+		description: "Adds (Exit) and (ExitNow) to the the scripting language.",
+		author: "@mildmojo",
+		readme: true,
+		type: "simple",
+		requiresKitsy: true
+	},{
+		name: "end-from-dialog",
+		title: "End From Dialog",
+		description: "Adds (End) and (EndNow) to the the scripting language.",
+		author: "@mildmojo",
+		readme: true,
+		type: "simple",
+		requiresKitsy: true
+	}
+
+];
+
+function loadFileFromPath(filename, pathToDir,callback){
+	callback = callback || function(response){};
+	var $ajax = $.ajax( pathToDir + filename );
+	$ajax.done(function(){
+		loadedFiles[filename] = $ajax.responseText;
+		console.log('Loaded ' + filename + ' via AJAX');
+		callback($ajax.responseText);
+	});
+	$ajax.fail(function(){
+		loadedFiles[filename] = "";
+		console.log('Error loading ' + filename + ' via AJAX');
+	});
+}
 
 function loadTemplate(){
-	var $ajax = $.ajax('template/template.html');
-	$ajax.done(function(){
-		loadedFiles['template.html'] = $ajax.responseText;
-	});
+	loadFileFromPath('template.html','template/');
 }
 
 function download(filename, text) {
@@ -125,6 +163,7 @@ function loadDefaults(checkSaveData){
 
 			switch(defaultType){
 				case "string":
+				case "boolean":
 					loadDefaultString($thisField);
 				break;
 				case "textfile":
@@ -305,25 +344,92 @@ function selectFont(){
 	readFontFile(filename);
 }
 
+function makeNewCollapsible(header){
+	var $collapse = $('<div>',{
+		class: "collapsible"
+	});
+	$collapse.data('collapse','');
+	$collapse.data('header', header);
+	activateThisCollapsible($collapse);
+	return $collapse;
+}
+
 function activateCollapsibles(){
 	$('[data-collapsible]').each( function(){
 		var $thisCollapsible = $(this);
-		var $closer = $('<span>', {
-			class: "collapsible_closer",
-			click: function(){
-				$thisCollapsible.toggleClass('open');
-			}
-		});
-		var $header = $('<span>', {
-			class: "collapsible_header",
-			text: $thisCollapsible.data('header'),
-			click: function(){
-				$thisCollapsible.toggleClass('open');
-			}
-		});
-		$thisCollapsible.prepend($closer);
-		$thisCollapsible.prepend($header);
+		activateThisCollapsible($thisCollapsible);
+		if( $thisCollapsible.attr('id') === "hacks-section" ){
+			console.log('HACK IT UP YO');
+			createHackMenus($thisCollapsible);
+		}
 	});
+}
+
+function activateThisCollapsible($thisCollapsible){
+	var $closer = $('<span>', {
+		class: "collapsible_closer",
+		click: function(){
+			$thisCollapsible.toggleClass('open');
+		}
+	});
+	var $header = $('<span>', {
+		class: "collapsible_header",
+		text: $thisCollapsible.data('header'),
+		click: function(){
+			$thisCollapsible.toggleClass('open');
+		}
+	});
+	$thisCollapsible.prepend($closer);
+	$thisCollapsible.prepend($header);
+}
+
+function createHackMenus($here){
+	$.each(hacks,function(name,hackInfo){
+		var $menu = createThisHackMenu(hackInfo);
+		$here.append($menu);
+	});
+}
+
+function createThisHackMenu(hackInfo){
+	var $collapse = makeNewCollapsible(hackInfo.title + " (By " + hackInfo.author + ")");
+
+	var pathToDir = "";
+	var filename = "";
+	if(hackInfo.type === "simple"){
+		filename = hackInfo.name + '-min.js';
+		pathToDir = "hacks/min/";
+	} else {
+		filename = hackInfo.name + '.js';
+		pathToDir = "hacks/js/";
+	}
+	loadFileFromPath(filename,pathToDir);
+
+
+	var $description = $('<p>',{
+		text: hackInfo.description
+	});
+	$collapse.append($description);
+
+	var $label = $('<label>',{
+		text: "Include " + hackInfo.title
+	});
+	$label.append($('<input>',{
+		type: 'checkbox'
+	}));
+	$collapse.append($label);
+
+	if(hackInfo.readme === true){
+		var $readme = makeNewCollapsible(hackInfo.title + " README:");
+		loadFileFromPath(hackInfo.name + '.txt','hacks/info/',function(responseText){
+			var $pre = $('<pre>',{
+				text: responseText
+			});
+			$readme.append($pre);
+			$collapse.append($readme);
+		});
+	}
+
+	return $collapse;
 }
 			
 $(document).ready(function(){
