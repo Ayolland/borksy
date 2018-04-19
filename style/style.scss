@@ -106,6 +106,8 @@ header, section, footer{
 	.collapsible{
 		background-color: transparent;
 		padding: 0.5em;
+		margin-bottom: 0;
+		margin-top: 0.5em;
 		border: 1px solid $dark-glass;
 
 		.collapsible_header{

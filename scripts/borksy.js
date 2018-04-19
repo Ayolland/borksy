@@ -66,22 +66,38 @@ function download(filename, text) {
     console.log("File '" + filename + "' downloaded");
 }
 
+function shortenString(value,length){
+	length = length || 10;
+	var string = value.toString();
+	var ending = string.length > length ? "..." : "";
+	return string.substring(0,length) + ending;
+}
+
 function saveThisData($this, value){
 	if (typeof(value) === "undefined"){
 		value = $this.val();
-	} else {
-		$this.val(value);
+	}
+	if ( $this.prop('type') === "checkbox"){
+		value = $this.prop('checked');
 	}
 	var name = $this.attr('name');
 	localStorage.setItem(name, value);
-	console.log("Key: '" + name + "' saved to localStorage");
+	console.log("Key: '" + name + "' saved to localStorage: " + shortenString(value) );
 }
 
 function loadThisData($this){
 	var name = $this.attr('name');
 	var value = localStorage.getItem(name);
-	$this.val(value);
-	console.log(" Got key: " + name + " from localStorage");
+	if ( value === null ){
+		console.log(" Attempted to get key: " + name + " from localStorage, but nothing was found.");
+		return;
+	} else if ( $this.prop('type') === "checkbox" ){
+		var booleanVal = ( value === 'true');
+		$this.prop('checked',booleanVal);
+	} else {
+		$this.val(value);
+	}
+	console.log(" Got key: " + name + " from localStorage: " + shortenString(value) );
 }
 
 function setSaveTrigger($this){
@@ -128,6 +144,17 @@ function loadDefaultString($thisField){
 	setSaveTrigger($thisField);
 }
 
+function loadDefaultBoolean($thisField){
+	var defaultVal = $thisField.data('default');
+	defaultVal = ( defaultVal === 'true' );
+	if ($thisField.prop('type') === 'checkbox'){
+		$thisField.prop('checked', defaultVal );
+	} else {
+		$thisField.val(defaultVal);
+	}
+	setSaveTrigger($thisField);
+}
+
 function loadDefaultTextfile($thisField){
 	var filename = $thisField.data('default');
 	var path = 'defaults/' + filename;
@@ -154,7 +181,7 @@ function loadDefaults(checkSaveData){
 	$('[data-save]').each(function(){
 		var $thisField = $(this);
 		var thisSaveData = localStorage.getItem($thisField.attr('name'));
-		var hasDefault = typeof($thisField.data('default')) === 'string';
+		var hasDefault = typeof($thisField.data('default')) !== 'undefined';
 		var hasSaveData = thisSaveData !== null;
 
 		if( hasDefault && (!hasSaveData || !checkSaveData) ){
@@ -163,8 +190,10 @@ function loadDefaults(checkSaveData){
 
 			switch(defaultType){
 				case "string":
-				case "boolean":
 					loadDefaultString($thisField);
+				break;
+				case "boolean":
+					loadDefaultBoolean($thisField);
 				break;
 				case "textfile":
 					loadDefaultTextfile($thisField);
@@ -413,9 +442,17 @@ function createThisHackMenu(hackInfo){
 	var $label = $('<label>',{
 		text: "Include " + hackInfo.title
 	});
-	$label.append($('<input>',{
-		type: 'checkbox'
-	}));
+	var $checkbox = $('<input>',{
+		type: 'checkbox',
+		name: hackInfo.name,
+		id: hackInfo.name
+	})
+	$checkbox.attr('data-save',true);
+	$checkbox.attr('data-default',false);
+	$checkbox.attr('data-default-type',"boolean");
+	loadThisData($checkbox);
+	setSaveTrigger($checkbox);
+	$label.append($checkbox);
 	$collapse.append($label);
 
 	if(hackInfo.readme === true){

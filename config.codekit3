@@ -212,6 +212,107 @@
 		"oT": 1,
 		"q": 100
 		},
+	"\/hacks\/info\/dynamic-background.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/info\/dynamic-background.txt",
+		"oF": 0
+		},
+	"\/hacks\/info\/end-from-dialog.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/info\/end-from-dialog.txt",
+		"oF": 0
+		},
+	"\/hacks\/info\/exit-from-dialog.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/info\/exit-from-dialog.txt",
+		"oF": 0
+		},
+	"\/hacks\/js\/dynamic-background.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/dynamic-background-min.js",
+		"oF": 2,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/end-from-dialog.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/end-from-dialog-min.js",
+		"oF": 2,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/exit-from-dialog.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/exit-from-dialog-min.js",
+		"oF": 2,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/kitsy.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/kitsy.min.js",
+		"oF": 2,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/min\/dynamic-background-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/min\/dynamic-background-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/min\/end-from-dialog-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/min\/end-from-dialog-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/min\/exit-from-dialog-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/min\/exit-from-dialog-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/min\/kitsy.min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/min\/kitsy.min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"\/index.html": {
 		"cB": 0,
 		"ft": 8192,
