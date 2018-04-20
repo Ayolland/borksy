@@ -111,7 +111,7 @@ header, section, footer{
 		border: 1px solid $dark-glass;
 
 		.collapsible_header{
-			background-color: transparent;;
+			background-color: transparent;
 			font-size: 1em;
 			margin: 0;
 			padding: 0;
@@ -124,6 +124,19 @@ header, section, footer{
 
 			&::after{
 				font-size: 1em;
+			}
+		}
+
+		&.included .collapsible_header::after{
+			content: " \02705";
+			white-space: pre;
+			vertical-align: middle;
+		}
+
+		.collapsible{
+
+			.collapsible_header{
+				background-color: transparent;
 			}
 		}
 	}

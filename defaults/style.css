@@ -16,5 +16,9 @@ body {
 	max-width:100vh;
 	margin:auto;
 	display:block;
-	image-rendering: pixelated;
+	/* https://caniuse.com/#search=image-render */
+  	-ms-interpolation-mode: nearest-neighbor;   /* IE                            */
+  	image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
+  	image-rendering: pixelated;                 /* Awesome future-browsers       */
+}
 }

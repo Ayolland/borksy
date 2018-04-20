@@ -78,6 +78,12 @@ header, section, footer {
       top: 0.35em; }
       .collapsible .collapsible .collapsible_closer::after {
         font-size: 1em; }
+    .collapsible .collapsible.included .collapsible_header::after {
+      content: " \02705";
+      white-space: pre;
+      vertical-align: middle; }
+    .collapsible .collapsible .collapsible .collapsible_header {
+      background-color: transparent; }
 
 header {
   display: flex; }

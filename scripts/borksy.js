@@ -6,45 +6,45 @@ var fonts = {
 	"greengable" : "Greengable by AYolland",
 	"hotcaps" : "Hotcaps by AYolland"
 };
-var hacks = [{
-		name: "kitsy",
+var hacks = {
+	"kitsy": {
 		title: "Kitsy",
 		description: "Utilities needed for many hacks",
-		author: "",
+		author: "@mildmojo",
 		readme: false,
 		type: "simple",
-		requiresKitsy: false,
+		requires: false,
 		hidden: true
-	},{
-		name: "dynamic-background",
+	},
+	"dynamic-background": {
 		title: "Dynamic Background Color",
 		description: "Changes the color of the BODY tag to the background color of the current room.",
 		author: "Sean S LeBlanc",
 		readme: false,
 		type: "simple",
-		requiresKitsy: false,
+		requires: false,
 		hidden: false
-	},{
-		name: "exit-from-dialog",
+	},
+	"exit-from-dialog": {
 		title: "Exit From Dialog",
 		description: "Adds (Exit) and (ExitNow) to the the scripting language.",
 		author: "@mildmojo",
 		readme: true,
 		type: "simple",
-		requiresKitsy: true,
+		requires: "kitsy",
 		hidden: false
-	},{
-		name: "end-from-dialog",
+	},
+	"end-from-dialog": {
 		title: "End From Dialog",
 		description: "Adds (End) and (EndNow) to the the scripting language.",
 		author: "@mildmojo",
 		readme: true,
 		type: "simple",
-		requiresKitsy: true,
+		requires: "kitsy",
 		hidden: false
 	}
 
-];
+};
 
 function loadFileFromPath(filename, pathToDir,callback){
 	callback = callback || function(){};
@@ -122,6 +122,46 @@ function setSaveTrigger($this){
 	});
 }
 
+function checkHacksRequiring($thisHack){
+	var $includedHacksRequiringThis = $('[data-requires=' + $thisHack.attr('id') + ']:checked');
+	if( $includedHacksRequiringThis.length > 0 ){
+		//no logic yet for hacks that can be both required AND user-selected
+		//$thisHack.prop('checked', true);
+		$thisHack.val(true);
+	} else {
+		//$thisHack.prop('checked', false);
+		$thisHack.val(false);
+	}
+	saveThisHack($thisHack);
+}
+
+function toggleIncludedDisplay($collapsible,$thisHack){
+	if ( $thisHack.prop('checked') === true ){
+		$collapsible.addClass('included');
+	} else {
+		$collapsible.removeClass('included');
+	}
+}
+
+function saveThisHack($thisHack){
+	saveThisData($thisHack);
+	var $collapsible = $('[data-associated-hack=' + $thisHack.data('hack') + ']');
+	if( $collapsible.length > 0 ){
+		toggleIncludedDisplay($collapsible,$thisHack);
+	}
+	var thisRequires = hacks[$thisHack.data('hack')].requires;
+	if( thisRequires !== false){
+		var $requiredHack = $('#' + thisRequires);
+		checkHacksRequiring($requiredHack);
+	}
+}
+
+function hackIncludeTrigger($this){
+	$this.change(function(){
+		saveThisHack($this);
+	});
+}
+
 function assembleSingles(modifiedTemplate){
 	$('[data-borksy-replace-single]').each(function(){
 		var $this = $(this);
@@ -133,10 +173,9 @@ function assembleSingles(modifiedTemplate){
 }
 
 function assembleHacks(hackBundle){
-	$.each(hacks,function(index, value){
-		var hackObj = value;
-		var filename = hackObj.type === "simple" ? hackObj.name + "-min.js" : hackObj.name + ".js";
-		var isIncluded = $('#' + hackObj.name ).prop('checked');
+	$.each(hacks,function(hackName, hackObj){
+		var filename = hackObj.type === "simple" ? hackName + "-min.js" : hackName + ".js";
+		var isIncluded = $('#' + hackName ).prop('checked');
 		if (isIncluded){
 			hackBundle += loadedFiles[filename] + escape('\n');
 		}
@@ -415,6 +454,90 @@ function selectFont(){
 	readFontFile(filename);
 }
 
+function loadThisHack(hackName,hackInfo){
+	var pathToDir = "";
+	var filename = "";
+	if(hackInfo.type === "simple"){
+		filename = hackName + '-min.js';
+		pathToDir = "hacks/min/";
+	} else {
+		filename = hackName + '.js';
+		pathToDir = "hacks/js/";
+	}
+	loadFileFromPath(filename,pathToDir);
+}
+
+function bakeHackData($element,hackName,hackInfo){
+	$element.attr({
+		'data-save':true,
+		'data-default':false,
+		'data-default-type':"boolean",
+		'data-requires': hackInfo.requires,
+		'data-hack': hackName,
+		'data-hack-type': hackInfo.type
+	});
+}
+
+function createThisHackMenu(hackName,hackInfo){
+	var $collapse = makeNewCollapsible(hackInfo.title + " (By " + hackInfo.author + ")");
+	$collapse.attr('data-associated-hack',hackName);
+	var $description = $('<p>',{
+		text: hackInfo.description
+	});
+	$collapse.append($description);
+	var $label = $('<label>',{
+		text: "Include " + hackInfo.title
+	});
+	var $checkbox = $('<input>',{
+		type: 'checkbox',
+		name: hackName,
+		id: hackName
+	});
+	bakeHackData($checkbox,hackName,hackInfo);
+	loadThisData($checkbox);
+	toggleIncludedDisplay($collapse,$checkbox);
+	hackIncludeTrigger($checkbox);
+	$label.append($checkbox);
+	$collapse.append($label);
+
+	if(hackInfo.readme === true){
+		var $readme = makeNewCollapsible(hackInfo.title + " README:");
+		loadFileFromPath(hackName + '.txt','hacks/info/',function(responseText){
+			var $pre = $('<pre>',{
+				text: responseText
+			});
+			$readme.append($pre);
+			$collapse.append($readme);
+		});
+	}
+
+	return $collapse;
+}
+
+function createHiddenHack(hackName,hackObj){
+	var $hidden = $('<input>',{
+		type: "hidden",
+		name: hackName,
+		id: hackName
+	});
+	bakeHackData($hidden,hackName,hackObj);
+	loadThisData($hidden);
+
+	return $hidden;
+}
+
+function createHackMenus($here){
+	$.each(hacks,function(hackName,hackObj){
+		loadThisHack(hackName,hackObj);
+		if (hackObj.hidden === true){
+			$here.append(createHiddenHack(hackName,hackObj));
+		} else {
+			$here.append(createThisHackMenu(hackName,hackObj));
+		}
+		
+	});
+}
+
 function makeNewCollapsible(header){
 	var $collapse = $('<div>',{
 		class: "collapsible"
@@ -452,69 +575,6 @@ function activateThisCollapsible($thisCollapsible){
 	});
 	$thisCollapsible.prepend($closer);
 	$thisCollapsible.prepend($header);
-}
-
-function createHackMenus($here){
-	$.each(hacks,function(name,hackInfo){
-		var $menu = createThisHackMenu(hackInfo);
-		$here.append($menu);
-	});
-}
-
-function createThisHackMenu(hackInfo){
-	var $collapse = makeNewCollapsible(hackInfo.title + " (By " + hackInfo.author + ")");
-
-	var pathToDir = "";
-	var filename = "";
-	if(hackInfo.type === "simple"){
-		filename = hackInfo.name + '-min.js';
-		pathToDir = "hacks/min/";
-	} else {
-		filename = hackInfo.name + '.js';
-		pathToDir = "hacks/js/";
-	}
-	loadFileFromPath(filename,pathToDir);
-
-
-	var $description = $('<p>',{
-		text: hackInfo.description
-	});
-	$collapse.append($description);
-
-	var $label = $('<label>',{
-		text: "Include " + hackInfo.title
-	});
-	var $checkbox = $('<input>',{
-		type: 'checkbox',
-		name: hackInfo.name,
-		id: hackInfo.name
-	});
-	$checkbox.attr({
-		'data-save':true,
-		'data-default':false,
-		'data-default-type':"boolean",
-		'data-requires-kitsy': hackInfo.requiresKitsy,
-		'data-hack': hackInfo.name,
-		'data-hack-type': hackInfo.type,
-	});
-	
-	loadThisData($checkbox);
-	setSaveTrigger($checkbox);
-	$label.append($checkbox);
-	$collapse.append($label);
-
-	if(hackInfo.readme === true){
-		var $readme = makeNewCollapsible(hackInfo.title + " README:");
-		loadFileFromPath(hackInfo.name + '.txt','hacks/info/',function(responseText){
-			var $pre = $('<pre>',{
-				text: responseText
-			});
-			$readme.append($pre);
-			$collapse.append($readme);
-		});
-	}
-
-	return $collapse;
 }
 			
 $(document).ready(function(){
