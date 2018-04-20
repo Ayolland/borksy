@@ -1,0 +1,8 @@
+/**
+@file transparent sprites
+@summary makes all sprites have transparent backgrounds
+@license MIT
+@version 1.0.0
+@author Sean S. LeBlanc
+*/
+var transparentSpritesOptions={scaling:!0},_imageDataFromImageSource=bitsy.imageDataFromImageSource;bitsy.imageDataFromImageSource=function(t,a){var i;return function(t){if(i)return i;var e=_imageDataFromImageSource.apply(void 0,t),s=bitsy.getPal(a)[0],r;if(transparentSpritesOptions.scaling){for(var n=bitsy.ctx.createImageData(e.width/bitsy.scale,e.height/bitsy.scale),l=0;l<n.height;++l)for(var c=0;c<n.width;++c){var b=4*(l*n.width+c),y=4*(l*bitsy.scale*e.width+c*bitsy.scale);n.data[b+0]=e.data[y+0],n.data[b+1]=e.data[y+1],n.data[b+2]=e.data[y+2],n.data[b+3]=e.data[y+3]}e=n}for(r=0;r<e.data.length;r+=4)e.data[r+0]===s[0]&&e.data[r+1]===s[1]&&e.data[r+2]===s[2]&&(e.data[r+3]=0);var d=document.createElement("canvas");d.width=bitsy.tilesize*(transparentSpritesOptions.scaling?1:bitsy.scale),d.height=bitsy.tilesize*(transparentSpritesOptions.scaling?1:bitsy.scale);var g=d.getContext("2d");return g.clearRect(0,0,bitsy.tilesize,bitsy.tilesize),transparentSpritesOptions.scaling?g.putImageData(e,0,0,0,0,bitsy.tilesize,bitsy.tilesize):g.putImageData(e,0,0),i=d}.bind(void 0,arguments)},bitsy.drawTile=function(t,a,i,e){e||(e=bitsy.ctx),transparentSpritesOptions.scaling?e.drawImage(t(),a*bitsy.tilesize*bitsy.scale,i*bitsy.tilesize*bitsy.scale,bitsy.tilesize*bitsy.scale,bitsy.tilesize*bitsy.scale):e.drawImage(t(),a*bitsy.tilesize*bitsy.scale,i*bitsy.tilesize*bitsy.scale)};

@@ -6,45 +6,6 @@ var fonts = {
 	"greengable" : "Greengable by AYolland",
 	"hotcaps" : "Hotcaps by AYolland"
 };
-var hacks = {
-	"kitsy": {
-		title: "Kitsy",
-		description: "Utilities needed for many hacks",
-		author: "@mildmojo",
-		readme: false,
-		type: "simple",
-		requires: false,
-		hidden: true
-	},
-	"dynamic-background": {
-		title: "Dynamic Background Color",
-		description: "Changes the color of the BODY tag to the background color of the current room.",
-		author: "Sean S LeBlanc",
-		readme: false,
-		type: "simple",
-		requires: false,
-		hidden: false
-	},
-	"exit-from-dialog": {
-		title: "Exit From Dialog",
-		description: "Adds (Exit) and (ExitNow) to the the scripting language.",
-		author: "@mildmojo",
-		readme: true,
-		type: "simple",
-		requires: "kitsy",
-		hidden: false
-	},
-	"end-from-dialog": {
-		title: "End From Dialog",
-		description: "Adds (End) and (EndNow) to the the scripting language.",
-		author: "@mildmojo",
-		readme: true,
-		type: "simple",
-		requires: "kitsy",
-		hidden: false
-	}
-
-};
 
 function loadFileFromPath(filename, pathToDir,callback){
 	callback = callback || function(){};
@@ -152,7 +113,7 @@ function toggleIncludedDisplay($collapsible,$thisHack){
 
 function saveThisHack($thisHack){
 	saveThisData($thisHack);
-	checkAndToggleIncludedDisplay($thisHack)
+	checkAndToggleIncludedDisplay($thisHack);
 	var thisRequires = hacks[$thisHack.data('hack')].requires;
 	if( thisRequires !== false){
 		var $requiredHack = $('#' + thisRequires);
@@ -498,7 +459,7 @@ function createThisHackMenu(hackName,hackInfo){
 	});
 	$collapse.append($description);
 	var $label = $('<label>',{
-		text: "Include " + hackInfo.title
+		text: "Include " + hackInfo.title.replace(/[^\w\s]/gi, '')
 	});
 	var $checkbox = $('<input>',{
 		type: 'checkbox',
@@ -513,7 +474,7 @@ function createThisHackMenu(hackName,hackInfo){
 	$collapse.append($label);
 
 	if(hackInfo.readme === true){
-		var $readme = makeNewCollapsible(hackInfo.title + " README:");
+		var $readme = makeNewCollapsible(hackInfo.title.replace(/[^\w\s]/gi, '') + " README:");
 		loadFileFromPath(hackName + '.txt','hacks/info/',function(responseText){
 			var $pre = $('<pre>',{
 				text: responseText

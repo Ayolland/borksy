@@ -1,0 +1,6 @@
+Prevents certain items from being picked up, but allows 
+them to be walked over and triggers their dialog.
+
+HOW TO USE:
+In the Bitsy editor, add the word 'PERMANENT' to the name 
+of every item you need to be permanent.

@@ -212,6 +212,16 @@
 		"oT": 1,
 		"q": 100
 		},
+	"\/hacks\/hack-listing.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 1,
+		"oAP": "\/hacks\/min\/hack-listing-min.js",
+		"oF": 1,
+		"sC": 1,
+		"tS": 0
+		},
 	"\/hacks\/info\/dynamic-background.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -233,12 +243,67 @@
 		"oAP": "\/hacks\/info\/exit-from-dialog.txt",
 		"oF": 0
 		},
+	"\/hacks\/info\/javascript-dialog.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/info\/javascript-dialog.txt",
+		"oF": 0
+		},
+	"\/hacks\/info\/logic-operators-extended.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/info\/logic-operators-extended.txt",
+		"oF": 0
+		},
+	"\/hacks\/info\/permanent-items.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/info\/permanent-items.txt",
+		"oF": 0
+		},
+	"\/hacks\/info\/solid-items.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/info\/solid-items.txt",
+		"oF": 0
+		},
+	"\/hacks\/info\/unique-items.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/info\/unique-items.txt",
+		"oF": 0
+		},
+	"\/hacks\/js\/directional-avatar.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/directional-avatar-min.js",
+		"oF": 2,
+		"sC": 1,
+		"tS": 0
+		},
 	"\/hacks\/js\/dynamic-background.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
 		"oAP": "\/hacks\/min\/dynamic-background-min.js",
+		"oF": 2,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/edit-image-at-runtime.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/edit-image-at-runtime-min.js",
 		"oF": 2,
 		"sC": 1,
 		"tS": 0
@@ -263,12 +328,72 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"\/hacks\/js\/javascript-dialog.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/javascript dialog-min.js",
+		"oF": 2,
+		"sC": 1,
+		"tS": 0
+		},
 	"\/hacks\/js\/kitsy.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
 		"oAP": "\/hacks\/min\/kitsy.min.js",
+		"oF": 2,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/logic-operators-extended.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/logic-operators-extended-min.js",
+		"oF": 2,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/permanent-items.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/permanent-items-min.js",
+		"oF": 2,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/solid-items.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/solid-items-min.js",
+		"oF": 2,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/transparent-sprites.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/transparent-sprites-min.js",
+		"oF": 2,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/unique-items.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/unique-items-min.js",
 		"oF": 2,
 		"sC": 1,
 		"tS": 0
@@ -303,12 +428,62 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"\/hacks\/min\/javascript dialog-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/min\/javascript dialog-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"\/hacks\/min\/kitsy-min.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
 		"oAP": "\/hacks\/min\/min\/kitsy-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/min\/logic-operators-extended-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/min\/logic-operators-extended-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/min\/permanent-items-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/min\/permanent-items-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/min\/solid-items-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/min\/solid-items-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/min\/transparent-sprites-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/min\/transparent-sprites-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
