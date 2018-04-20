@@ -209,7 +209,14 @@ function assembleAndDownloadFile(){
 }
 
 function togglePartyMode(){
-	$('body').toggleClass('party');
+	var $body = $('body');
+	if( $body.hasClass('party') ){
+		$body.removeClass('party');
+		alert('😾 Party Mode Deactivated. Everyone out. 😾');
+	} else {
+		$body.addClass('party');
+		alert('✨🌈 Party Mode Activated! 🌈✨');
+	}
 }
 
 function loadAboutInfo(){
@@ -581,6 +588,27 @@ function activateThisCollapsible($thisCollapsible){
 	$thisCollapsible.prepend($closer);
 	$thisCollapsible.prepend($header);
 }
+
+function setHotKeys(){
+	$(window).bind('keydown', function(event) {
+		if (event.ctrlKey || event.metaKey) {
+			switch (String.fromCharCode(event.which).toLowerCase()) {
+			case 's':
+				event.preventDefault();
+				assembleAndDownloadFile();
+			break;
+			case 'd':
+				event.preventDefault();
+				restoreDefaults();
+			break;
+			case 'p':
+				event.preventDefault();
+				togglePartyMode();
+			break;
+			}
+		}
+	});
+}
 			
 $(document).ready(function(){
 	activateCollapsibles();
@@ -590,5 +618,6 @@ $(document).ready(function(){
 	loadTemplate();
 	$('#download-button').click(assembleAndDownloadFile);
 	$('#restore-button').click(restoreDefaults);
+	setHotKeys();
 	$('#mascot').click(togglePartyMode);
 });

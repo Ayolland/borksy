@@ -68,17 +68,18 @@ header, section, footer {
     margin-top: 0.5em;
     border: 1px solid rgba(0, 0, 0, 0.1); }
     .collapsible .collapsible .collapsible_header {
-      background-color: transparent;
+      background-color: rgba(0, 0, 0, 0.1);
       font-size: 1em;
-      margin: 0;
-      padding: 0; }
+      height: 1em;
+      margin: -0.5em;
+      padding: 0.5em; }
     .collapsible .collapsible .collapsible_closer {
       width: 1em;
       height: 1em;
       top: 0.35em; }
       .collapsible .collapsible .collapsible_closer::after {
         font-size: 1em; }
-    .collapsible .collapsible.included .collapsible_header::after {
+    .collapsible .collapsible.included > .collapsible_header::after {
       content: " \02705";
       white-space: pre;
       vertical-align: middle; }
@@ -141,6 +142,13 @@ img.font-preview {
 .button-group {
   display: flex;
   justify-content: space-between; }
+  .button-group label {
+    display: flex;
+    flex-direction: column;
+    align-items: center; }
+    .button-group label span {
+      font-size: 0.8em;
+      line-height: 1.5; }
 
 button {
   background: rgba(0, 0, 0, 0.5);

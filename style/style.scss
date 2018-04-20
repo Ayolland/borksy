@@ -111,10 +111,11 @@ header, section, footer{
 		border: 1px solid $dark-glass;
 
 		.collapsible_header{
-			background-color: transparent;
+			background-color: $dark-glass;
 			font-size: 1em;
-			margin: 0;
-			padding: 0;
+    		height: 1em;
+    		margin: -0.5em;
+    		padding: 0.5em;
 		}
 
 		.collapsible_closer{
@@ -127,7 +128,7 @@ header, section, footer{
 			}
 		}
 
-		&.included .collapsible_header::after{
+		&.included > .collapsible_header::after{
 			content: " \02705";
 			white-space: pre;
 			vertical-align: middle;
@@ -221,6 +222,17 @@ img.font-preview {
 .button-group {
     display: flex;
     justify-content: space-between;
+
+    label{
+    	display: flex;
+    	flex-direction: column;
+    	align-items: center;
+
+    	span{
+    		font-size: 0.8em;
+    		line-height: 1.5;
+    	}
+    }
 }
 
 button {
