@@ -4253,6 +4253,15 @@ var scriptUtils = scriptModule.CreateUtils(); // TODO: move to editor.js?
 <!-- BITSY HACKS -->
 <script type="text/javascript" id="borksyHacks">
 
+(function (bitsy) {
+'use strict';
+
+bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+
+//BORKSY-HACKS
+
+}(window));
+
 </script>
 
 <script type="text/javascript" id="borksyAdditionalJS">

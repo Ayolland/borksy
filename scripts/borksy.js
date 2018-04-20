@@ -7,7 +7,7 @@ var fonts = {
 	"hotcaps" : "Hotcaps by AYolland"
 };
 var hacks = [{
-		name: "dynamic-background-color",
+		name: "dynamic-background",
 		title: "Dynamic Background Color",
 		description: "Changes the color of the BODY tag to the background color of the current room.",
 		author: "Sean S LeBlanc",
@@ -35,10 +35,10 @@ var hacks = [{
 ];
 
 function loadFileFromPath(filename, pathToDir,callback){
-	callback = callback || function(response){};
+	callback = callback || function(){};
 	var $ajax = $.ajax( pathToDir + filename );
 	$ajax.done(function(){
-		loadedFiles[filename] = $ajax.responseText;
+		loadedFiles[filename] = escape($ajax.responseText);
 		console.log('Loaded ' + filename + ' via AJAX');
 		callback($ajax.responseText);
 	});
@@ -54,7 +54,7 @@ function loadTemplate(){
 
 function download(filename, text) {
     var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent( unescape(text) ) );
     element.setAttribute('download', filename);
 
     element.style.display = 'none';
