@@ -303,12 +303,12 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/min\/kitsy.min.js": {
+	"\/hacks\/min\/kitsy-min.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/min\/min\/kitsy.min-min.js",
+		"oAP": "\/hacks\/min\/min\/kitsy-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0

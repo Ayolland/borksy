@@ -7,13 +7,23 @@ var fonts = {
 	"hotcaps" : "Hotcaps by AYolland"
 };
 var hacks = [{
+		name: "kitsy",
+		title: "Kitsy",
+		description: "Utilities needed for many hacks",
+		author: "",
+		readme: false,
+		type: "simple",
+		requiresKitsy: false,
+		hidden: true
+	},{
 		name: "dynamic-background",
 		title: "Dynamic Background Color",
 		description: "Changes the color of the BODY tag to the background color of the current room.",
 		author: "Sean S LeBlanc",
 		readme: false,
 		type: "simple",
-		requiresKitsy: false
+		requiresKitsy: false,
+		hidden: false
 	},{
 		name: "exit-from-dialog",
 		title: "Exit From Dialog",
@@ -21,7 +31,8 @@ var hacks = [{
 		author: "@mildmojo",
 		readme: true,
 		type: "simple",
-		requiresKitsy: true
+		requiresKitsy: true,
+		hidden: false
 	},{
 		name: "end-from-dialog",
 		title: "End From Dialog",
@@ -29,7 +40,8 @@ var hacks = [{
 		author: "@mildmojo",
 		readme: true,
 		type: "simple",
-		requiresKitsy: true
+		requiresKitsy: true,
+		hidden: false
 	}
 
 ];
@@ -73,6 +85,10 @@ function shortenString(value,length){
 	return string.substring(0,length) + ending;
 }
 
+function dashesToCamelCase(string){
+	return string.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+}
+
 function saveThisData($this, value){
 	if (typeof(value) === "undefined"){
 		value = $this.val();
@@ -106,19 +122,45 @@ function setSaveTrigger($this){
 	});
 }
 
-function assembleAndDownloadFile(){
-	$('[data-save]').each(function(){
-		saveThisData($(this));
-	});
-
-	var modifiedTemplate = loadedFiles['template.html'].repeat(1);
+function assembleSingles(modifiedTemplate){
 	$('[data-borksy-replace-single]').each(function(){
 		var $this = $(this);
 		var valueToReplace = 'BORKSY-' + $this.data('borksy-replace-single');
 		var formValue = $this.val();
 		modifiedTemplate = modifiedTemplate.replace(valueToReplace, formValue);
 	});
+	return	modifiedTemplate;
+}
+
+function assembleHacks(hackBundle){
+	$.each(hacks,function(index, value){
+		var hackObj = value;
+		var filename = hackObj.type === "simple" ? hackObj.name + "-min.js" : hackObj.name + ".js";
+		var isIncluded = $('#' + hackObj.name ).prop('checked');
+		if (isIncluded){
+			hackBundle += loadedFiles[filename] + escape('\n');
+		}
+		
+	});
+	return hackBundle;
+}
+
+function assembleAndDownloadFile(){
+	$('[data-save]').each(function(){
+		saveThisData($(this));
+	});
+
+	var modifiedTemplate = loadedFiles['template.html'].repeat(1);
+	var hackBundle = "";
+
+	modifiedTemplate = assembleSingles(modifiedTemplate);
+
 	$('[data-borksy-replace-single]').promise().done(function(){
+		hackBundle = assembleHacks(hackBundle);
+	});
+
+	$('[data-hack]').promise().done(function(){
+		modifiedTemplate = modifiedTemplate.replace('BORKSY-HACKS', hackBundle);
 		download('myBORKSYgame.html', modifiedTemplate);
 	});
 }
@@ -300,7 +342,7 @@ function loadFontImage(input) {
 
 function changeFontFilename(filename){
 	var $field = $('#fontfilename');
-	if( $field.val() != filename ){
+	if( $field.val() !== filename ){
 		$field.val(filename);
 		saveThisData($field);
 	}
@@ -335,7 +377,7 @@ function createFontSelect(){
 			text: description,
 			value: name
 		}); 
-		if( name == currentFontName ){
+		if( name === currentFontName ){
 			$newOption.attr('selected', true);
 			usingCustomFont = false;
 		}
@@ -446,10 +488,16 @@ function createThisHackMenu(hackInfo){
 		type: 'checkbox',
 		name: hackInfo.name,
 		id: hackInfo.name
-	})
-	$checkbox.attr('data-save',true);
-	$checkbox.attr('data-default',false);
-	$checkbox.attr('data-default-type',"boolean");
+	});
+	$checkbox.attr({
+		'data-save':true,
+		'data-default':false,
+		'data-default-type':"boolean",
+		'data-requires-kitsy': hackInfo.requiresKitsy,
+		'data-hack': hackInfo.name,
+		'data-hack-type': hackInfo.type,
+	});
+	
 	loadThisData($checkbox);
 	setSaveTrigger($checkbox);
 	$label.append($checkbox);
