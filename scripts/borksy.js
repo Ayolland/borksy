@@ -135,6 +135,13 @@ function checkHacksRequiring($thisHack){
 	saveThisHack($thisHack);
 }
 
+function checkAndToggleIncludedDisplay($thisField){
+	var $collapsible = $('[data-associated-hack=' + $thisField.data('hack') + ']');
+	if( $collapsible.length > 0 ){
+		toggleIncludedDisplay($collapsible,$thisField);
+	}
+}
+
 function toggleIncludedDisplay($collapsible,$thisHack){
 	if ( $thisHack.prop('checked') === true ){
 		$collapsible.addClass('included');
@@ -145,10 +152,7 @@ function toggleIncludedDisplay($collapsible,$thisHack){
 
 function saveThisHack($thisHack){
 	saveThisData($thisHack);
-	var $collapsible = $('[data-associated-hack=' + $thisHack.data('hack') + ']');
-	if( $collapsible.length > 0 ){
-		toggleIncludedDisplay($collapsible,$thisHack);
-	}
+	checkAndToggleIncludedDisplay($thisHack)
 	var thisRequires = hacks[$thisHack.data('hack')].requires;
 	if( thisRequires !== false){
 		var $requiredHack = $('#' + thisRequires);
@@ -292,6 +296,7 @@ function loadDefaults(checkSaveData){
 			}
 			setSaveTrigger($thisField);
 		}
+		checkAndToggleIncludedDisplay($thisField);
 	});
 	console.log("Defaults loaded. Forced? " + !checkSaveData);
 }
