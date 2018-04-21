@@ -1,12 +1,4 @@
-/**
-❄
-@file unique items
-@summary items which, when picked up, remove all other instances of that item from the game
-@license MIT
-@version 1.0.0
-@author Sean S. LeBlanc
-
-*/
+//file unique items
 
 var uniqueItemsOptions = {
 	itemIsUnique: function (item) {

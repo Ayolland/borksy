@@ -139,8 +139,9 @@ function assembleSingles(modifiedTemplate){
 
 function assembleHacks(hackBundle){
 	$.each(hacks,function(hackName, hackObj){
-		var filename = hackObj.type === "simple" ? hackName + "-min.js" : hackName + ".js";
-		var isIncluded = $('#' + hackName ).prop('checked');
+		var filename = hackObj.type === "simple" && false ? hackName + "-min.js" : hackName + ".js";
+		var $hackField = $('#' + hackName );
+		var isIncluded = ( $hackField.prop('checked') || ($hackField.val() === 'true') );
 		if (isIncluded){
 			hackBundle += loadedFiles[filename] + escape('\n');
 		}
@@ -430,7 +431,7 @@ function selectFont(){
 function loadThisHack(hackName,hackInfo){
 	var pathToDir = "";
 	var filename = "";
-	if(hackInfo.type === "simple"){
+	if(hackInfo.type === "simple" && false){
 		filename = hackName + '-min.js';
 		pathToDir = "hacks/min/";
 	} else {

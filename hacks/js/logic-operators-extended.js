@@ -1,10 +1,4 @@
-/**
-🔀
-@file logic-operators-extended
-@summary adds conditional logic operators
-@version 1.0.1
-@author @mildmojo
-*/
+//logic-operators-extended
 
 inject('operatorMap.set("-", subExp);',
 	'operatorMap.set("&&", andExp);',

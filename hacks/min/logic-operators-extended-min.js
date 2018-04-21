@@ -1,1 +1,52 @@
-inject('operatorMap.set("-", subExp);','operatorMap.set("&&", andExp);','operatorMap.set("||", orExp);','operatorMap.set("&&!", andNotExp);','operatorMap.set("||!", orNotExp);','operatorMap.set("!==", notEqExp);'),inject('var operatorSymbols = ["-", "+", "/", "*", "<=", ">=", "<", ">", "=="];','operatorSymbols.unshift("!==", "&&", "||", "&&!", "||!");'),bitsy.andExp=function o(t,n,a,p){a.Eval(t,function(o){n.Eval(t,function(t){p(t&&o)})})},bitsy.orExp=function o(t,n,a,p){a.Eval(t,function(o){n.Eval(t,function(t){p(t||o)})})},bitsy.notEqExp=function o(t,n,a,p){a.Eval(t,function(o){n.Eval(t,function(t){p(t!==o)})})},bitsy.andNotExp=function o(t,n,a,p){a.Eval(t,function(o){n.Eval(t,function(t){p(t&&!o)})})},bitsy.orNotExp=function o(t,n,a,p){a.Eval(t,function(o){n.Eval(t,function(t){p(t||!o)})})};
+//logic-operators-extended
+
+inject('operatorMap.set("-", subExp);',
+	'operatorMap.set("&&", andExp);',
+	'operatorMap.set("||", orExp);',
+	'operatorMap.set("&&!", andNotExp);',
+	'operatorMap.set("||!", orNotExp);',
+	'operatorMap.set("!==", notEqExp);');
+inject('var operatorSymbols = ["-", "+", "/", "*", "<=", ">=", "<", ">", "=="];',
+	'operatorSymbols.unshift("!==", "&&", "||", "&&!", "||!");');
+
+bitsy.andExp = function andExp(environment, left, right, onReturn) {
+	right.Eval(environment, function (rVal) {
+		left.Eval(environment, function (lVal) {
+			onReturn(lVal && rVal);
+		});
+	});
+};
+
+bitsy.orExp = function orExp(environment, left, right, onReturn) {
+	right.Eval(environment, function (rVal) {
+		left.Eval(environment, function (lVal) {
+			onReturn(lVal || rVal);
+		});
+	});
+};
+
+bitsy.notEqExp = function notEqExp(environment, left, right, onReturn) {
+	right.Eval(environment, function (rVal) {
+		left.Eval(environment, function (lVal) {
+			onReturn(lVal !== rVal);
+		});
+	});
+};
+
+bitsy.andNotExp = function andNotExp(environment, left, right, onReturn) {
+	right.Eval(environment, function (rVal) {
+		left.Eval(environment, function (lVal) {
+			onReturn(lVal && !rVal);
+		});
+	});
+};
+
+bitsy.orNotExp = function orNotExp(environment, left, right, onReturn) {
+	right.Eval(environment, function (rVal) {
+		left.Eval(environment, function (lVal) {
+			onReturn(lVal || !rVal);
+		});
+	});
+};
+// End of logic operators mod
+

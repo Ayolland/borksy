@@ -1,4 +1,4 @@
-// (end) dialog function mod
+// end-from-dialog
 
 var queuedEndingNarration = null;
 
@@ -46,4 +46,3 @@ inject(
 	'functionMap.set("end", endFunc);',
 	'functionMap.set("endNow", endNowFunc);'
 );
-// End of (end) dialog function mod

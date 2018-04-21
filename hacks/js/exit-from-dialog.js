@@ -1,4 +1,4 @@
-// (exit) dialog function mod
+// exit-from-dialog
 
 var queuedDialogExit = null;
 

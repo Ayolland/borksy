@@ -1,4 +1,4 @@
-// dynamic background mod
+// dynamic background
 
 // helper function which detects when the palette has changed,
 // and updates the background to match
@@ -36,5 +36,3 @@ function palWrap(f) {
 palWrap('moveSprites');
 palWrap('movePlayer');
 palWrap('parseWorld');
-
-// End dynamic background mod

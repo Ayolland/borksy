@@ -1,11 +1,4 @@
-/**
-🛑
-@file solid items
-@summary treat some items like sprites that can be placed multiple times
-@license MIT
-@version 1.0.0
-@author Sean S. LeBlanc
-*/
+//solid items
 
 var solidItemsOptions = {
 	itemIsSolid: function (item) {

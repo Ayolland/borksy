@@ -1,11 +1,4 @@
-/**
-⏳
-@file permanent items
-@summary prevent some items from being picked up
-@license MIT
-@version 1.0.0
-@author Sean S. LeBlanc
-*/
+//permanent items
 
 var permanentItemsOptions = {
 	itemIsPermanent: function (item) {

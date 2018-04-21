@@ -1,9 +1,57 @@
-/**
-🛑
-@file solid items
-@summary treat some items like sprites that can be placed multiple times
-@license MIT
-@version 1.0.0
-@author Sean S. LeBlanc
-*/
-function getSolidItemFromIndex(t){if(-1!==t){var i=bitsy.room[bitsy.curRoom].items[t].id,e=bitsy.item[i];return solidItemsOptions.itemIsSolid(e)?e:void 0}}var solidItemsOptions={itemIsSolid:function(t){return-1!==t.name.indexOf("SOLID")}},_getItemIndex=bitsy.getItemIndex;bitsy.getItemIndex=function(){var t=_getItemIndex.apply(this,arguments);return getSolidItemFromIndex(t)?-1:t};var _getSpriteAt=bitsy.getSpriteAt;bitsy.getSpriteAt=function(t,i){var e=_getSpriteAt.apply(this,arguments);if(e)return e;var r=_getItemIndex(bitsy.curRoom,t,i),o=getSolidItemFromIndex(r);return o?o.dlg:void 0};var _startSpriteDialog=bitsy.startSpriteDialog;bitsy.startSpriteDialog=function(t){var i=t.split("ITM_")[1];if(i)return bitsy.startItemDialog(i);_startSpriteDialog.apply(this,arguments)};
+//solid items
+
+var solidItemsOptions = {
+	itemIsSolid: function (item) {
+		//return item.name == 'tea'; // specific solid item
+		//return ['tea', 'flower', 'hat'].indexOf(item.name) !== -1; // specific solid item list
+		return item.name.indexOf('SOLID') !== -1; // solid item flag in name
+		//return true; // all items are solid
+	}
+};
+
+// true if item should be treated as sprite
+// false if item should be treated normally
+function getSolidItemFromIndex(itemIndex) {
+	if (itemIndex === -1) {
+		return;
+	}
+	var itemId = bitsy.room[bitsy.curRoom].items[itemIndex].id;
+	var item = bitsy.item[itemId];
+	if (solidItemsOptions.itemIsSolid(item)) {
+		return item;
+	}
+	return;
+}
+
+var _getItemIndex = bitsy.getItemIndex;
+bitsy.getItemIndex = function () {
+	var itemIndex = _getItemIndex.apply(this, arguments);
+	var sprItem = getSolidItemFromIndex(itemIndex);
+	if (sprItem) {
+		return -1;
+	}
+	return itemIndex;
+};
+
+var _getSpriteAt = bitsy.getSpriteAt;
+bitsy.getSpriteAt = function (x, y) {
+	var spr = _getSpriteAt.apply(this, arguments);
+	if (spr) {
+		return spr;
+	}
+	var itemIndex = _getItemIndex(bitsy.curRoom, x, y);
+	var item = getSolidItemFromIndex(itemIndex);
+	if (item) {
+		return item.dlg;
+	}
+};
+
+var _startSpriteDialog = bitsy.startSpriteDialog;
+bitsy.startSpriteDialog = function (spriteId) {
+	var item = spriteId.split("ITM_")[1];
+	if (item) {
+		return bitsy.startItemDialog(item);
+	}
+	_startSpriteDialog.apply(this, arguments);
+}
+

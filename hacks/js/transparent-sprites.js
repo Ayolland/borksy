@@ -1,15 +1,9 @@
-/**
-@file transparent sprites
-@summary makes all sprites have transparent backgrounds
-@license MIT
-@version 1.0.0
-@author Sean S. LeBlanc
-*/
+//transparent sprites
 
 var transparentSpritesOptions = {
 	// if true, overrides scaling behaviour to reduce the setup time + memory use,
 	// but the game will be blurry unless you've added pixelated image CSS
-	scaling: true
+	scaling: false
 };
 
 // override imageDataFromImageSource to use transparency for background pixels

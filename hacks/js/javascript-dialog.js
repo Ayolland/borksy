@@ -1,12 +1,4 @@
-/**
-☕
-@file javascript dialog
-@summary execute arbitrary javascript from dialog
-@license MIT
-@version 1.0.0
-@requires Bitsy Version: 4.5, 4.6
-@author Sean S. LeBlanc
-*/
+//javascript dialog
 
 // Hook into game load and rewrite custom functions in game data to Bitsy format.
 before("load_game", function (game_data, startWithTitle) {

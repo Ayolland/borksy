@@ -1,8 +1,97 @@
-/**
-@file transparent sprites
-@summary makes all sprites have transparent backgrounds
-@license MIT
-@version 1.0.0
-@author Sean S. LeBlanc
-*/
-var transparentSpritesOptions={scaling:!0},_imageDataFromImageSource=bitsy.imageDataFromImageSource;bitsy.imageDataFromImageSource=function(t,a){var i;return function(t){if(i)return i;var e=_imageDataFromImageSource.apply(void 0,t),s=bitsy.getPal(a)[0],r;if(transparentSpritesOptions.scaling){for(var n=bitsy.ctx.createImageData(e.width/bitsy.scale,e.height/bitsy.scale),l=0;l<n.height;++l)for(var c=0;c<n.width;++c){var b=4*(l*n.width+c),y=4*(l*bitsy.scale*e.width+c*bitsy.scale);n.data[b+0]=e.data[y+0],n.data[b+1]=e.data[y+1],n.data[b+2]=e.data[y+2],n.data[b+3]=e.data[y+3]}e=n}for(r=0;r<e.data.length;r+=4)e.data[r+0]===s[0]&&e.data[r+1]===s[1]&&e.data[r+2]===s[2]&&(e.data[r+3]=0);var d=document.createElement("canvas");d.width=bitsy.tilesize*(transparentSpritesOptions.scaling?1:bitsy.scale),d.height=bitsy.tilesize*(transparentSpritesOptions.scaling?1:bitsy.scale);var g=d.getContext("2d");return g.clearRect(0,0,bitsy.tilesize,bitsy.tilesize),transparentSpritesOptions.scaling?g.putImageData(e,0,0,0,0,bitsy.tilesize,bitsy.tilesize):g.putImageData(e,0,0),i=d}.bind(void 0,arguments)},bitsy.drawTile=function(t,a,i,e){e||(e=bitsy.ctx),transparentSpritesOptions.scaling?e.drawImage(t(),a*bitsy.tilesize*bitsy.scale,i*bitsy.tilesize*bitsy.scale,bitsy.tilesize*bitsy.scale,bitsy.tilesize*bitsy.scale):e.drawImage(t(),a*bitsy.tilesize*bitsy.scale,i*bitsy.tilesize*bitsy.scale)};
+//transparent sprites
+
+var transparentSpritesOptions = {
+	// if true, overrides scaling behaviour to reduce the setup time + memory use,
+	// but the game will be blurry unless you've added pixelated image CSS
+	scaling: false
+};
+
+// override imageDataFromImageSource to use transparency for background pixels
+// and save the results to a custom image cache
+var _imageDataFromImageSource = bitsy.imageDataFromImageSource;
+bitsy.imageDataFromImageSource = function (imageSource, pal) {
+	var cache;
+	return function (args) {
+		if (cache) {
+			return cache;
+		}
+
+		// get the bitsy image data
+		var img = _imageDataFromImageSource.apply(undefined, args);
+
+		// make background pixels transparent
+		var bg = bitsy.getPal(pal)[0];
+		var i;
+		// discard unnecessary pixels
+		if (transparentSpritesOptions.scaling) {
+			var scaledImg = bitsy.ctx.createImageData(img.width / bitsy.scale, img.height / bitsy.scale);
+			for (var y = 0; y < scaledImg.height; ++y) {
+				for (var x = 0; x < scaledImg.width; ++x) {
+					var idx = (y * scaledImg.width + x) * 4;
+					var idx2 = (y * bitsy.scale * img.width + x * bitsy.scale) * 4;
+					scaledImg.data[idx + 0] = img.data[idx2 + 0];
+					scaledImg.data[idx + 1] = img.data[idx2 + 1];
+					scaledImg.data[idx + 2] = img.data[idx2 + 2];
+					scaledImg.data[idx + 3] = img.data[idx2 + 3];
+				}
+			}
+			img = scaledImg;
+		}
+
+		// set background pixels to transparent
+		for (i = 0; i < img.data.length; i += 4) {
+			if (
+				img.data[i + 0] === bg[0] &&
+				img.data[i + 1] === bg[1] &&
+				img.data[i + 2] === bg[2]
+			) {
+				img.data[i + 3] = 0;
+			}
+		}
+
+		// give ourselves a little canvas + context to work with
+		var spriteCanvas = document.createElement("canvas");
+		spriteCanvas.width = bitsy.tilesize * (transparentSpritesOptions.scaling ? 1 : bitsy.scale);
+		spriteCanvas.height = bitsy.tilesize * (transparentSpritesOptions.scaling ? 1 : bitsy.scale);
+		var spriteContext = spriteCanvas.getContext("2d");
+
+		// put bitsy data to our canvas
+		spriteContext.clearRect(0, 0, bitsy.tilesize, bitsy.tilesize);
+		if (transparentSpritesOptions.scaling) {
+			spriteContext.putImageData(img, 0, 0, 0, 0, bitsy.tilesize, bitsy.tilesize);
+		} else {
+			spriteContext.putImageData(img, 0, 0);
+		}
+
+		// save it in our cache
+		cache = spriteCanvas;
+
+		// return our image	
+		return cache;
+	}.bind(undefined, arguments)
+};
+
+// override drawTile to draw from our custom image cache
+// instead of putting image data directly
+bitsy.drawTile = function (img, x, y, context) {
+	if (!context) { //optional pass in context; otherwise, use default
+		context = bitsy.ctx;
+	}
+
+	if (transparentSpritesOptions.scaling) {
+		context.drawImage(
+			img(),
+			x * bitsy.tilesize * bitsy.scale,
+			y * bitsy.tilesize * bitsy.scale,
+			bitsy.tilesize * bitsy.scale,
+			bitsy.tilesize * bitsy.scale
+		);
+	} else {
+		context.drawImage(
+			img(),
+			x * bitsy.tilesize * bitsy.scale,
+			y * bitsy.tilesize * bitsy.scale
+		);
+	}
+};
+
