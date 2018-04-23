@@ -40,6 +40,23 @@ a{
 	color: initial;
 }
 
+div#preloader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    flex-direction: column;
+    background: white;
+    z-index: 100;
+}
+
+img.preloader_animation {
+    width: 32px;
+    height: auto;
+}
+
 #wrapper{
 	max-width: $breakpoint;
 	overflow: auto;
@@ -141,6 +158,11 @@ header, section, footer{
 			}
 		}
 	}
+}
+
+.conflict-warning {
+    font-weight: bold;
+    font-style: italic;
 }
 
 header{

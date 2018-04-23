@@ -63,11 +63,12 @@ function arrayToSentenceFrag(arr){
 }
 
 function saveThisData($this, value){
-	if (typeof(value) === "undefined"){
-		value = $this.val();
-	}
 	if ( $this.prop('type') === "checkbox"){
 		value = $this.prop('checked');
+	} else if (typeof(value) === "undefined"){
+		value = $this.val();
+	} else {
+		$this.val(value);
 	}
 	var name = $this.attr('name');
 	localStorage.setItem(name, value);
@@ -515,15 +516,15 @@ function createThisHackMenu(hackName,hackInfo){
 
 	if (hackInfo.conflicts.length > 0){
 		var conflictTitlesArr = []
-		$.each(hackInfo.conflicts,function(index,conflictName){
-			conflictTitlesArr.push( removeExtraChars(hacks[conflictName].title) );
-		});
-		var sentenceFrag = arrayToSentenceFrag(conflictTitlesArr);
-		var $warning = $('<p>',{
-			text: 'This hack conflicts with ' + sentenceFrag + '.',
-			class: 'conflict-warning'
-		});
-		$collapse.append($warning);
+	$.each(hackInfo.conflicts,function(index,conflictName){
+		conflictTitlesArr.push( removeExtraChars(hacks[conflictName].title) );
+	});
+	var sentenceFrag = arrayToSentenceFrag(conflictTitlesArr);
+	var $warning = $('<p>',{
+		text: 'This hack conflicts with ' + sentenceFrag + '.',
+		class: 'conflict-warning'
+	});
+	$collapse.append($warning);
 	}
 
 	var $label = $('<label>',{
@@ -590,12 +591,18 @@ function makeNewCollapsible(header){
 }
 
 function activateCollapsibles(){
-	$('[data-collapsible]').each( function(){
+	$collapsibles = $('[data-collapsible]');
+	var counter = 0;
+	$collapsibles.each( function(){
 		var $thisCollapsible = $(this);
 		activateThisCollapsible($thisCollapsible);
 		if( $thisCollapsible.attr('id') === "hacks-section" ){
 			console.log('HACK IT UP YO');
 			createHackMenus($thisCollapsible);
+		}
+		counter++;
+		if (counter === $collapsibles.length){
+			$('#preloader').fadeOut();
 		}
 	});
 }
