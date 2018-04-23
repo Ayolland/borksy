@@ -22,7 +22,7 @@ function loadFileFromPath(filename, pathToDir,callback){
 }
 
 function loadTemplate(){
-	loadFileFromPath('template.html','template/');
+	loadFileFromPath('1.0.template.html','template/');
 }
 
 function download(filename, text) {
@@ -48,6 +48,18 @@ function shortenString(value,length){
 
 function dashesToCamelCase(string){
 	return string.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+}
+
+function removeExtraChars(string){
+	return string.replace(/[^\w\s]/gi, '');
+}
+
+function arrayToSentenceFrag(arr){
+	if (arr.length > 1){
+		return arr.slice(0, arr.length - 1).join(', ') + ", and " + arr.slice(-1);
+	} else {
+		return arr[0];
+	}
 }
 
 function saveThisData($this, value){
@@ -96,6 +108,20 @@ function checkHacksRequiring($thisHack){
 	saveThisHack($thisHack);
 }
 
+function removeConflictingHacks(conflictsArr){
+	$.each(conflictsArr,function(index,hackName){
+		var $conflictingHack = $('#' + hackName);
+		var hiddenAndNotIncluded = $conflictingHack.prop('type') === 'hidden' && $conflictingHack.val() === false;
+		var checkboxAndNotIncluded = $conflictingHack.prop('type') === 'checkbox' && $conflictingHack.prop('checked') === false;
+		if( hiddenAndNotIncluded || checkboxAndNotIncluded ){
+			return;
+		}
+		$conflictingHack.val(false);
+		$conflictingHack.prop('checked',false);
+		saveThisHack($conflictingHack, false);
+	});
+}
+
 function checkAndToggleIncludedDisplay($thisField){
 	var $collapsible = $('[data-associated-hack=' + $thisField.data('hack') + ']');
 	if( $collapsible.length > 0 ){
@@ -111,13 +137,20 @@ function toggleIncludedDisplay($collapsible,$thisHack){
 	}
 }
 
-function saveThisHack($thisHack){
+function saveThisHack($thisHack,checkConflicts){
+	if( typeof(checkConflicts) === 'undefined' ){
+		checkConflicts = true;
+	}
 	saveThisData($thisHack);
 	checkAndToggleIncludedDisplay($thisHack);
 	var thisRequires = hacks[$thisHack.data('hack')].requires;
 	if( thisRequires !== false){
 		var $requiredHack = $('#' + thisRequires);
 		checkHacksRequiring($requiredHack);
+	}
+	var thisConflicts = hacks[$thisHack.data('hack')].conflicts;
+	if( thisConflicts.length > 0 && checkConflicts){
+		removeConflictingHacks(thisConflicts);
 	}
 }
 
@@ -137,8 +170,27 @@ function assembleSingles(modifiedTemplate){
 	return	modifiedTemplate;
 }
 
-function assembleHacks(hackBundle){
+function reOrderHacks(){
+	var hackArray = [];
 	$.each(hacks,function(hackName, hackObj){
+		hackArray.push(Object.assign({name: hackName},hackObj))
+	});
+	hackArray.sort(function(obj1,obj2){
+		if(obj1.order > obj2.order){
+			return 1
+		} else if (obj1.order === obj2.order){
+			return 0
+		} else {
+			return -1;
+		}
+	});
+	return hackArray;
+}
+
+function assembleHacks(hackBundle){
+	var orderedHacks = reOrderHacks();
+	$.each(orderedHacks,function(index, hackObj){
+		var hackName = hackObj.name;
 		var filename = hackObj.type === "simple" && false ? hackName + "-min.js" : hackName + ".js";
 		var $hackField = $('#' + hackName );
 		var isIncluded = ( $hackField.prop('checked') || ($hackField.val() === 'true') );
@@ -155,7 +207,7 @@ function assembleAndDownloadFile(){
 		saveThisData($(this));
 	});
 
-	var modifiedTemplate = loadedFiles['template.html'].repeat(1);
+	var modifiedTemplate = loadedFiles['1.0.template.html'].repeat(1);
 	var hackBundle = "";
 
 	modifiedTemplate = assembleSingles(modifiedTemplate);
@@ -455,12 +507,27 @@ function bakeHackData($element,hackName,hackInfo){
 function createThisHackMenu(hackName,hackInfo){
 	var $collapse = makeNewCollapsible(hackInfo.title + " (By " + hackInfo.author + ")");
 	$collapse.attr('data-associated-hack',hackName);
+
 	var $description = $('<p>',{
 		text: hackInfo.description
 	});
 	$collapse.append($description);
+
+	if (hackInfo.conflicts.length > 0){
+		var conflictTitlesArr = []
+		$.each(hackInfo.conflicts,function(index,conflictName){
+			conflictTitlesArr.push( removeExtraChars(hacks[conflictName].title) );
+		});
+		var sentenceFrag = arrayToSentenceFrag(conflictTitlesArr);
+		var $warning = $('<p>',{
+			text: 'This hack conflicts with ' + sentenceFrag + '.',
+			class: 'conflict-warning'
+		});
+		$collapse.append($warning);
+	}
+
 	var $label = $('<label>',{
-		text: "Include " + hackInfo.title.replace(/[^\w\s]/gi, '')
+		text: "Include " + removeExtraChars(hackInfo.title)
 	});
 	var $checkbox = $('<input>',{
 		type: 'checkbox',
@@ -475,7 +542,7 @@ function createThisHackMenu(hackName,hackInfo){
 	$collapse.append($label);
 
 	if(hackInfo.readme === true){
-		var $readme = makeNewCollapsible(hackInfo.title.replace(/[^\w\s]/gi, '') + " README:");
+		var $readme = makeNewCollapsible( removeExtraChars(hackInfo.title) + " README:");
 		loadFileFromPath(hackName + '.txt','hacks/info/',function(responseText){
 			var $pre = $('<pre>',{
 				text: responseText

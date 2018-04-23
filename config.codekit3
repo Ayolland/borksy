@@ -468,6 +468,16 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"\/hacks\/min\/kitsy.min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/min\/kitsy.min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"\/hacks\/min\/logic-operators-extended-min.js": {
 		"ft": 64,
 		"ma": 0,
@@ -523,13 +533,6 @@
 		"ft": 8192,
 		"oA": 0,
 		"oAP": "\/index.html",
-		"oF": 0
-		},
-	"\/mygame.html": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 0,
-		"oAP": "\/mygame.html",
 		"oF": 0
 		},
 	"\/plugins\/pangram.txt": {
@@ -610,11 +613,25 @@
 		"oS": 0,
 		"uL": 1
 		},
-	"\/template\/template.html": {
+	"\/template\/1.0.template.html": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/template\/template.html",
+		"oAP": "\/template\/1.0.template.html",
+		"oF": 0
+		},
+	"\/template\/test.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/template\/test.html",
+		"oF": 0
+		},
+	"\/testgame.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/testgame.html",
 		"oF": 0
 		}
 	},

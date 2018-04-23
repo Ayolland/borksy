@@ -8,7 +8,8 @@ hacks = {
 		type: "simple",
 		requires: false,
 		hidden: true,
-		order: 1
+		order: 1,
+		conflicts: []
 	},
 
 	"dynamic-background": {
@@ -19,7 +20,8 @@ hacks = {
 		type: "simple",
 		requires: false,
 		hidden: false,
-		order: 10
+		order: 10,
+		conflicts: []
 	},
 
 	"exit-from-dialog": {
@@ -30,7 +32,8 @@ hacks = {
 		type: "simple",
 		requires: "kitsy",
 		hidden: false,
-		order: 5
+		order: 5,
+		conflicts: []
 	},
 
 	"end-from-dialog": {
@@ -41,7 +44,8 @@ hacks = {
 		type: "simple",
 		requires: "kitsy",
 		hidden: false,
-		order: 5
+		order: 5,
+		conflicts: []
 	},
 
 	"javascript-dialog": {
@@ -52,7 +56,8 @@ hacks = {
 		type: "simple",
 		requires: "kitsy",
 		hidden: false,
-		order: 2
+		order: 2,
+		conflicts: []
 	},
 
 	"transparent-sprites": {
@@ -63,7 +68,8 @@ hacks = {
 		type: "simple",
 		requires: false,
 		hidden: false,
-		order: 10
+		order: 10,
+		conflicts: []
 	},
 
 	"logic-operators-extended": {
@@ -74,7 +80,8 @@ hacks = {
 		type: "simple",
 		requires: 'kitsy',
 		hidden: false,
-		order: 2
+		order: 2,
+		conflicts: []
 	},
 
 	"permanent-items": {
@@ -85,7 +92,8 @@ hacks = {
 		type: "simple",
 		requires: false,
 		hidden: false,
-		order: 5
+		order: 4,
+		conflicts: ["unique-items"]
 	},
 
 	"solid-items": {
@@ -96,7 +104,8 @@ hacks = {
 		type: "simple",
 		requires: false,
 		hidden: false,
-		order: 5
+		order: 5,
+		conflicts: []
 	},
 
 	"unique-items": {
@@ -107,7 +116,8 @@ hacks = {
 		type: "simple",
 		requires: false,
 		hidden: false,
-		order: 5
+		order: 5,
+		conflicts: ["permanent-items"]
 	}
 
 };

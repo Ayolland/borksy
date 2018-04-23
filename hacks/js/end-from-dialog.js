@@ -41,7 +41,7 @@ bitsy.endNowFunc = function (environment, parameters, onReturn) {
 }
 
 // Rewrite the Bitsy script tag, making these new functions callable from dialog.
-inject(
+utilsInject(
 	'var functionMap = new Map();',
 	'functionMap.set("end", endFunc);',
 	'functionMap.set("endNow", endNowFunc);'
