@@ -26,7 +26,7 @@ div#preloader {
   width: 100vw;
   height: 100vh;
   flex-direction: column;
-  background: white;
+  background: #ccc;
   z-index: 100; }
 
 img.preloader_animation {
