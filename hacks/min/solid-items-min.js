@@ -42,7 +42,7 @@ bitsy.getSpriteAt = function (x, y) {
 	var itemIndex = _getItemIndex(bitsy.curRoom, x, y);
 	var item = getSolidItemFromIndex(itemIndex);
 	if (item) {
-		return item.dlg;
+		return item.drw;
 	}
 };
 
