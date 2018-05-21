@@ -9,11 +9,11 @@ var uniqueItemsOptions = {
 	}
 };
 
-var _onInventoryChanged = bitsy.onInventoryChanged;
+var uniqueItems_onInventoryChanged = bitsy.onInventoryChanged;
 bitsy.onInventoryChanged = function (id) {
 	var r;
-	if (_onInventoryChanged) {
-		_onInventoryChanged(id);
+	if (uniqueItems_onInventoryChanged) {
+		uniqueItems_onInventoryChanged(id);
 	}
 	if (uniqueItemsOptions.itemIsUnique(bitsy.item[id])) {
 		for (r in bitsy.room) {

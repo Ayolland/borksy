@@ -93,7 +93,7 @@ hacks = {
 		requires: false,
 		hidden: false,
 		order: 4,
-		conflicts: ["unique-items"]
+		conflicts: []
 	},
 
 	"solid-items": {
@@ -117,7 +117,7 @@ hacks = {
 		requires: false,
 		hidden: false,
 		order: 5,
-		conflicts: ["permanent-items"]
+		conflicts: []
 	}
 
 };

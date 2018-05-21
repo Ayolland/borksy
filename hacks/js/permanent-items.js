@@ -9,10 +9,10 @@ var permanentItemsOptions = {
 	}
 };
 
-var _onInventoryChanged = bitsy.onInventoryChanged;
+var permanentItems_onInventoryChanged = bitsy.onInventoryChanged;
 bitsy.onInventoryChanged = function(itemId) {
-	if(_onInventoryChanged){
-		_onInventoryChanged.apply(this, arguments);
+	if(permanentItems_onInventoryChanged){
+		permanentItems_onInventoryChanged.apply(this, arguments);
 	}
 	// if a permanent item is picked up, immediately add another instance
 	// to replace the one that was just picked up
