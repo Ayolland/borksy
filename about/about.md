@@ -1,4 +1,4 @@
-Borksy v 2.1
+Borksy v 2.2
 
 Borksy is a hacking tool to be used in conjunction with [Bitsy Game Maker](https://ledoux.itch.io/bitsy)! Use it to customize your games and add hacks without needing a web server or any manual cut-and-paste work.
 
@@ -6,8 +6,9 @@ Borksy currently uses Bitsy 4.8 to create files.
 
 If you're not familiar with how Bitsy can be extended, check out [Sean's great collection of Bitsy hacks](https://github.com/seleb/bitsy-hacks/).
 
-What's new in 2.1:
-* Updated to Bitsy 4.8
+What's new in 2.2:
+* Actually really updated to Bitsy 4.8 this time
+* Fixed conflict between Unique Items and Permanent Items
 * Fixed Bug in Solid Items Hack
 
 Other Borksy Features:
