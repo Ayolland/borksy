@@ -1,4 +1,4 @@
-hacks = {
+var hacks = {
 
 	"kitsy": {
 		title: "🛠 Kitsy",
@@ -89,7 +89,7 @@ hacks = {
 		description: "Prevents certain items from being picked up, but allows them to be walked over and triggers their dialog.",
 		author: "Sean S. LeBlanc",
 		readme: true,
-		type: "simple",
+		type: "options",
 		requires: false,
 		hidden: false,
 		order: 4,

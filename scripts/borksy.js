@@ -47,7 +47,9 @@ function shortenString(value,length){
 }
 
 function dashesToCamelCase(string){
-	return string.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+	return string.toLowerCase().replace(/-(.)/g, function(match, group1) {
+        return group1.toUpperCase();
+    });
 }
 
 function removeExtraChars(string){
@@ -253,6 +255,11 @@ function loadDefaultString($thisField){
 	setSaveTrigger($thisField);
 }
 
+function loadDefaultHackOptions($thisField){
+	$thisField.val(loadedFiles[$thisField.attr("name") + '.txt']);
+	setSaveTrigger($thisField);
+}
+
 function loadDefaultBoolean($thisField){
 	var defaultVal = $thisField.data('default');
 	defaultVal = ( defaultVal === 'true' );
@@ -309,6 +316,9 @@ function loadDefaults(checkSaveData){
 				break;
 				case "font":
 					loadDefaultFont($thisField);
+				break;
+				case "hackOptions":
+					loadDefaultHackOptions($thisField);
 				break;
 			}
 
@@ -543,6 +553,33 @@ function createThisHackMenu(hackName,hackInfo){
 	hackIncludeTrigger($checkbox);
 	$label.append($checkbox);
 	$collapse.append($label);
+
+	if(hackInfo.type === "options"){
+		var $options = makeNewCollapsible( removeExtraChars(hackInfo.title) + " Options:");
+		var $optionsLabel = $('<label>',{
+			text: "var " + dashesToCamelCase(hackName) + "Options = {"
+		});
+		loadFileFromPath(hackName + '.options.txt','hacks/options/',function(responseText){
+			var $optionsField = $('<textarea>',{
+				rows: 5,
+				cols: 50,
+				text: responseText,
+				name: hackName + '.options',
+				id: hackName + '-options'
+			});
+			$optionsField.attr({
+				'data-save':true,
+				'data-default-type':"hackOptions",
+				'data-default': hackName + '.options.txt'
+			});
+			loadThisData($optionsField);
+			setSaveTrigger($optionsField);
+			$optionsLabel.append($optionsField);
+			$optionsLabel.append(document.createTextNode("};"));
+			$options.append($optionsLabel);
+			$collapse.append($options);
+		});
+	}
 
 	if(hackInfo.readme === true){
 		var $readme = makeNewCollapsible( removeExtraChars(hackInfo.title) + " README:");
