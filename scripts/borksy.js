@@ -197,12 +197,14 @@ function assembleHacks(hackBundle){
 		var filename = hackObj.type === "simple" && false ? hackName + "-min.js" : hackName + ".js";
 		var $hackField = $('#' + hackName );
 		var isIncluded = ( $hackField.prop('checked') || ($hackField.val() === 'true') );
-		//var hackWithIIFE = "(function (bitsy) {\n'use strict';\nbitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;" + loadedFiles[filename] +"\n}(window));";
-		if (isIncluded){
-			//hackBundle += hackWithIIFE + escape('\n');
-			hackBundle += loadedFiles[filename] + escape('\n');
+		var hackFile = loadedFiles[filename];
+		if (hackObj.type === "options"){
+			var hackOptionsFile = loadedFiles[hackName + '.options.txt'];
+			hackFile = hackFile.replace('BORKSY-OPTIONS',hackOptionsFile);
 		}
-		
+		if (isIncluded){
+			hackBundle += hackFile + escape('\n');
+		}
 	});
 	return hackBundle;
 }
@@ -583,7 +585,7 @@ function createThisHackMenu(hackName,hackInfo){
 
 	if(hackInfo.readme === true){
 		var $readme = makeNewCollapsible( removeExtraChars(hackInfo.title) + " README:");
-		loadFileFromPath(hackName + '.txt','hacks/info/',function(responseText){
+		loadFileFromPath(hackName + '.readme.txt','hacks/info/',function(responseText){
 			var $pre = $('<pre>',{
 				text: responseText
 			});

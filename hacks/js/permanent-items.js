@@ -1,12 +1,7 @@
 //permanent items
 
 var permanentItemsOptions = {
-	itemIsPermanent: function (item) {
-		//return item.name == 'tea'; // specific permanent item
-		//return ['tea', 'flower', 'hat'].indexOf(item.name) !== -1; // specific permanent item list
-		return item.name.indexOf('PERMANENT') !== -1; // permanent item flag in name
-		//return true; // all items are permanent
-	}
+	BORKSY-OPTIONS
 };
 
 var permanentItems_onInventoryChanged = bitsy.onInventoryChanged;
