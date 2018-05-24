@@ -9,7 +9,43 @@ var hacks = {
 		requires: false,
 		hidden: true,
 		order: 1,
-		conflicts: []
+		conflicts: false
+	},
+
+	"utils": {
+		title: "🛠 Utils",
+		description: "Utilities needed for many hacks",
+		author: "Sean S LeBlanc",
+		readme: false,
+		type: "simple",
+		requires: false,
+		hidden: true,
+		order: 1,
+		conflicts: false
+	},
+
+	"edit-image-at-runtime": {
+		title: "🛠 Edit Image At Runtime",
+		description: "Utilities for changing drawings in-game",
+		author: "Sean S LeBlanc",
+		readme: false,
+		type: "simple",
+		requires: "utils",
+		hidden: true,
+		order: 1,
+		conflicts: false
+	},
+
+	"directional-avatar": {
+		title: "↔ Directional Avatar",
+		description: "Flips the player's sprite based on directional movement",
+		author: "Sean S LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "edit-image-at-runtime",
+		hidden: false,
+		order: 10,
+		conflicts: false
 	},
 
 	"dynamic-background": {
@@ -21,7 +57,7 @@ var hacks = {
 		requires: false,
 		hidden: false,
 		order: 10,
-		conflicts: []
+		conflicts: false
 	},
 
 	"exit-from-dialog": {
@@ -33,7 +69,7 @@ var hacks = {
 		requires: "kitsy",
 		hidden: false,
 		order: 5,
-		conflicts: []
+		conflicts: false
 	},
 
 	"end-from-dialog": {
@@ -45,7 +81,7 @@ var hacks = {
 		requires: "kitsy",
 		hidden: false,
 		order: 5,
-		conflicts: []
+		conflicts: false
 	},
 
 	"javascript-dialog": {
@@ -57,7 +93,7 @@ var hacks = {
 		requires: "kitsy",
 		hidden: false,
 		order: 2,
-		conflicts: []
+		conflicts: false
 	},
 
 	"transparent-sprites": {
@@ -69,7 +105,7 @@ var hacks = {
 		requires: false,
 		hidden: false,
 		order: 10,
-		conflicts: []
+		conflicts: false
 	},
 
 	"logic-operators-extended": {
@@ -81,7 +117,7 @@ var hacks = {
 		requires: 'kitsy',
 		hidden: false,
 		order: 2,
-		conflicts: []
+		conflicts: false
 	},
 
 	"permanent-items": {
@@ -93,7 +129,7 @@ var hacks = {
 		requires: false,
 		hidden: false,
 		order: 4,
-		conflicts: []
+		conflicts: false
 	},
 
 	"solid-items": {
@@ -105,7 +141,7 @@ var hacks = {
 		requires: false,
 		hidden: false,
 		order: 5,
-		conflicts: []
+		conflicts: false
 	},
 
 	"unique-items": {
@@ -117,7 +153,7 @@ var hacks = {
 		requires: false,
 		hidden: false,
 		order: 5,
-		conflicts: []
+		conflicts: false
 	}
 
 };

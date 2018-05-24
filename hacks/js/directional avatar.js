@@ -1,14 +1,40 @@
-//directional avatar
+/**
+↔
+@file directional avatar
+@summary flips the player's sprite based on directional movement
+@license MIT
+@version 1.0.0
+@author Sean S. LeBlanc
 
-var directionAvatarOptions = {
-	BORKSY-OPTIONS
+@description
+Flips the player's sprite based on directional movement.
+
+HOW TO USE:
+1. Copy-paste into a script tag after the bitsy source
+2. Edit `horizontalFlipAllowed` and `verticalFlipAllowed` below as needed
+*/
+import bitsy from "bitsy";
+import {
+	getSpriteData,
+	setSpriteData
+} from "./edit image at runtime.js";
+
+var hackOptions = {
+	// If `horizontalFlipAllowed` is true:
+	// 	pressing left will make the player's sprite face backwards
+	// 	pressing right will make the player's sprite face forwards
+	horizontalFlipAllowed: true,
+	// If `verticalFlipAllowed` is true:
+	// 	pressing down will make the player's sprite upside-down
+	// 	pressing up will make the player's sprite right-side up
+	verticalFlipAllowed: false
 };
 
 // helper function to flip sprite data
 function flip(spriteData, v, h) {
 	var x, y, x2, y2, col, tmp;
 	var s = spriteData.slice();
-	if (v && directionAvatarOptions.verticalFlipAllowed) {
+	if (v && hackOptions.verticalFlipAllowed) {
 		for (y = 0; y < s.length / 2; ++y) {
 			y2 = s.length - y - 1;
 			tmp = s[y];
@@ -16,7 +42,7 @@ function flip(spriteData, v, h) {
 			s[y2] = tmp;
 		}
 	}
-	if (h && directionAvatarOptions.horizontalFlipAllowed) {
+	if (h && hackOptions.horizontalFlipAllowed) {
 		for (y = 0; y < s.length; ++y) {
 			col = s[y] = s[y].slice();
 			for (x = 0; x < col.length / 2; ++x) {
@@ -72,4 +98,3 @@ bitsy.onPlayerMoved = function () {
 		setSpriteData(bitsy.playerId, i, flip(originalAnimation[i], vflip, hflip));
 	}
 };
-

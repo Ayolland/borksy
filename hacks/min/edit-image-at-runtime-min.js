@@ -18,14 +18,6 @@ e.g. the default player is:
 	[0,0,1,0,0,1,0,0]
 ]
 */
-import bitsy from "bitsy";
-import {
-	getImage
-} from "./utils.js";
-
-export {
-	getImage
-};
 
 /*
 Args:
@@ -35,19 +27,19 @@ Args:
 
 Returns: a single frame of a image data
 */
-export function getImageData(id, frame, map) {
+function getImageData(id, frame, map) {
 	return bitsy.imageStore.source[getImage(id, map).drw][frame];
 }
 
-export function getSpriteData(id, frame) {
+function getSpriteData(id, frame) {
 	return getImageData(id, frame, bitsy.sprite);
 }
 
-export function getTileData(id, frame) {
+function getTileData(id, frame) {
 	return getImageData(id, frame, bitsy.tile);
 }
 
-export function getItemData(id, frame) {
+function getItemData(id, frame) {
 	return getImageData(id, frame, bitsy.item);
 }
 
@@ -60,7 +52,7 @@ Args:
 	    map: map of images (e.g. `sprite`, `tile`, `item`)
 	newData: new data to write to the image data
 */
-export function setImageData(id, frame, map, newData) {
+function setImageData(id, frame, map, newData) {
 	var drawing = getImage(id, map);
 	var drw = drawing.drw;
 	bitsy.imageStore.source[drw][frame] = newData;
@@ -76,15 +68,15 @@ export function setImageData(id, frame, map, newData) {
 	}
 }
 
-export function setSpriteData(id, frame, newData) {
+function setSpriteData(id, frame, newData) {
 	setImageData(id, frame, bitsy.sprite, newData);
 }
 
-export function setTileData(id, frame, newData) {
+function setTileData(id, frame, newData) {
 	setImageData(id, frame, bitsy.tile, newData);
 }
 
-export function setItemData(id, frame, newData) {
+function setItemData(id, frame, newData) {
 	setImageData(id, frame, bitsy.item, newData);
 }
 

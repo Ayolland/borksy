@@ -99,7 +99,16 @@ function setSaveTrigger($this){
 }
 
 function checkHacksRequiring($thisHack){
-	var $includedHacksRequiringThis = $('[data-requires=' + $thisHack.attr('id') + ']:checked');
+	var $hacksWithRequires = $('[data-requires]');
+	var $includedHacksRequiringThis = $();
+	$hacksWithRequires.each(function(index){
+		var $currentHack = $(this);
+		var hackIsIncluded = $currentHack.val() === 'true' || $currentHack.prop('checked') === true;
+		var hackRequiresThis = $currentHack.data('requires') === $thisHack.attr('id') || false;
+		if (hackIsIncluded && hackRequiresThis){
+			$includedHacksRequiringThis = $includedHacksRequiringThis.add($currentHack)
+		}
+	});
 	if( $includedHacksRequiringThis.length > 0 ){
 		//no logic yet for hacks that can be both required AND user-selected
 		//$thisHack.prop('checked', true);
@@ -147,13 +156,19 @@ function saveThisHack($thisHack,checkConflicts){
 	saveThisData($thisHack);
 	checkAndToggleIncludedDisplay($thisHack);
 	var thisRequires = hacks[$thisHack.data('hack')].requires;
-	if( thisRequires !== false){
+
+	if( thisRequires && !thisRequires.includes(',') ){
 		var $requiredHack = $('#' + thisRequires);
 		checkHacksRequiring($requiredHack);
+	} else if ( thisRequires ) {
+		$.each(thisRequires.split(','),function(index,requiredHackName){
+			var $requiredHack = $('#' + requiredHackName);
+			checkHacksRequiring($requiredHack);
+		});
 	}
 	var thisConflicts = hacks[$thisHack.data('hack')].conflicts;
-	if( thisConflicts.length > 0 && checkConflicts){
-		removeConflictingHacks(thisConflicts);
+	if( thisConflicts && checkConflicts){
+		removeConflictingHacks(thisConflicts.split(','));
 	}
 }
 
@@ -199,8 +214,8 @@ function assembleHacks(hackBundle){
 		var isIncluded = ( $hackField.prop('checked') || ($hackField.val() === 'true') );
 		var hackFile = loadedFiles[filename];
 		if (hackObj.type === "options"){
-			var hackOptionsFile = loadedFiles[hackName + '.options.txt'];
-			hackFile = hackFile.replace('BORKSY-OPTIONS',hackOptionsFile);
+			var hackOptions = $('#' + hackName + '-options').val();
+			hackFile = hackFile.replace('BORKSY-OPTIONS',hackOptions);
 		}
 		if (isIncluded){
 			hackBundle += hackFile + escape('\n');
@@ -513,10 +528,12 @@ function bakeHackData($element,hackName,hackInfo){
 		'data-save':true,
 		'data-default':false,
 		'data-default-type':"boolean",
-		'data-requires': hackInfo.requires,
 		'data-hack': hackName,
 		'data-hack-type': hackInfo.type
 	});
+	if (hackInfo.requires){
+		$element.attr('data-requires',hackInfo.requires);
+	}
 }
 
 function createThisHackMenu(hackName,hackInfo){
@@ -528,9 +545,9 @@ function createThisHackMenu(hackName,hackInfo){
 	});
 	$collapse.append($description);
 
-	if (hackInfo.conflicts.length > 0){
+	if (hackInfo.conflicts){
 		var conflictTitlesArr = []
-	$.each(hackInfo.conflicts,function(index,conflictName){
+	$.each(hackInfo.conflicts.split(','),function(index,conflictName){
 		conflictTitlesArr.push( removeExtraChars(hacks[conflictName].title) );
 	});
 	var sentenceFrag = arrayToSentenceFrag(conflictTitlesArr);
