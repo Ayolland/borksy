@@ -1,0 +1,13 @@
+itemIsSolid: function (item) {
+  // specific solid item
+  //return item.name == 'tea';
+
+  // specific solid item list
+  //return ['tea', 'flower', 'hat'].indexOf(item.name) !== -1;
+  
+  // solid item flag in name
+  return item.name.indexOf('SOLID') !== -1;
+
+  // all items are solid
+  //return true;
+}

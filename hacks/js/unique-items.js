@@ -1,12 +1,7 @@
-//file unique items
+//unique items
 
 var uniqueItemsOptions = {
-	itemIsUnique: function (item) {
-		//return item.name == 'tea'; // specific unique item
-		//return ['tea', 'flower', 'hat'].indexOf(item.name) !== -1; // specific unique item list
-		return item.name.indexOf('UNIQUE') !== -1; // unique item flag in name
-		//return true; // all items are unique
-	}
+	BORKSY-OPTIONS
 };
 
 var uniqueItems_onInventoryChanged = bitsy.onInventoryChanged;

@@ -2,5 +2,7 @@ Adds support for items which, when picked up,
 remove all other instances of that item from the game.
 
 HOW TO USE:
-In the Bitsy editor, add the word 'UNIQUE' to the name 
-of every item you need to be unique.
+By default, add the word 'UNIQUE' to the name 
+of every item you need to be unique in the Bitsy editor.
+
+The `itemIsUnique` function may also be customized in the options field above.

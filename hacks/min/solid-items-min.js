@@ -1,12 +1,7 @@
 //solid items
 
 var solidItemsOptions = {
-	itemIsSolid: function (item) {
-		//return item.name == 'tea'; // specific solid item
-		//return ['tea', 'flower', 'hat'].indexOf(item.name) !== -1; // specific solid item list
-		return item.name.indexOf('SOLID') !== -1; // solid item flag in name
-		//return true; // all items are solid
-	}
+	BORKSY-OPTIONS
 };
 
 // true if item should be treated as sprite

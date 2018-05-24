@@ -2,5 +2,7 @@ Prevents certain items from being picked up or walked over, but still triggers t
 This allows them to be treated like sprites that can be placed multiple times.
 
 HOW TO USE:
-In the Bitsy editor, add the word 'SOLID' to the name 
-of every item you need to be solid.
+By default, add the word 'SOLID' to the name 
+of every item you need to be solid in the Bitsy editor.
+
+The `itemIsSoild` function may also be customized in the options field above.
