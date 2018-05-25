@@ -44,6 +44,10 @@
 						<p>Bitsy uses its own pixelfont format. You can create your own Bitsy font by <a href="fonts/default.png" target="_blank" rel="noopener noreferrer">saving and modifying this image</a> with image-editing software. All characters must be black and white, all other colors will be ignored. The red lines are only for reference. Afterwards, use this tool to convert your image into fontdata Bitsy can understand.</p>
 					</section>
 
+					<section data-collapsible data-header="Custom Font Bitspy Friendliness:" class="collapsible python green">
+						<p>Using a custom font does not interfere with <a href='https://github.com/Ragzouken/bitspy'>the Python Player for Bitsy</a> (IE: <a href='https://candle.itch.io/bitsy-boutique'>The Bitsy Boutique</a>). Custom fonts will not appear, and the default font will be used, but your game will otherwise function normally.</p>
+					</section>
+
 					<label>Select Font:&nbsp;<span data-replace-element="createFontSelect"></span></label>
 					<span data-replace-element="createFontPreview"></span>
 					<label>Or Import Image File: <input type="file" id="font-file-input" accept="image/*" onchange="loadFontImage(this);"/></label>

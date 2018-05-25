@@ -536,6 +536,87 @@ function bakeHackData($element,hackName,hackInfo){
 	}
 }
 
+function hackMenuConflicts(hackName,hackInfo,$parentCollapse){
+	var conflictTitlesArr = []
+	$.each(hackInfo.conflicts.split(','),function(index,conflictName){
+		conflictTitlesArr.push( removeExtraChars(hacks[conflictName].title) );
+	});
+	var sentenceFrag = arrayToSentenceFrag(conflictTitlesArr);
+	var $warning = $('<p>',{
+		text: 'This hack conflicts with ' + sentenceFrag + '.',
+		class: 'conflict-warning'
+	});
+	$parentCollapse.append($warning);
+}
+
+function hackMenuPython(hackName,hackInfo,$parentCollapse){
+	var $friendliness = makeNewCollapsible( removeExtraChars(hackInfo.title) + " Bitspy Friendliness:");
+	var sentenceStart = "Use of this Hack ";
+	var sentenceEnd = "";
+	var bitspyLink = "<a href='https://github.com/Ragzouken/bitspy'>the Python Player for Bitsy</a> ";
+	bitspyLink += "(IE: <a href='https://candle.itch.io/bitsy-boutique'>The Bitsy Boutique</a>)";
+	var fine = "The features in this hack will not be available, but your game should otherwise function normally."
+	var notfine = "Your game will likely appear broken."
+	switch (hackInfo.python){
+		case "green":
+			sentenceStart += "does not interfere with ";
+			sentenceEnd = ". " + fine;
+		break;
+		case "yellow":
+			sentenceStart += "is possible with ";
+			sentenceEnd = " if and only if there is no script reference to it in dialog. " + fine;
+		break;
+		case "red":
+		default:
+			sentenceStart += "is not compatible with ";
+			sentenceEnd += ". " + notfine;
+		break;
+	}
+	var $text = $('<p>',{
+		html: sentenceStart + bitspyLink + sentenceEnd
+	});
+	$friendliness.addClass('python').addClass(hackInfo.python).append($text);
+	$parentCollapse.append($friendliness);
+}
+
+function hackMenuOptions(hackName,hackInfo,$parentCollapse){
+	var $options = makeNewCollapsible( removeExtraChars(hackInfo.title) + " Options:");
+	var $optionsLabel = $('<label>',{
+		text: "var " + dashesToCamelCase(hackName) + "Options = {"
+	});
+	loadFileFromPath(hackName + '.options.txt','hacks/options/',function(responseText){
+		var $optionsField = $('<textarea>',{
+			rows: 5,
+			cols: 50,
+			text: responseText,
+			name: hackName + '.options',
+			id: hackName + '-options'
+		});
+		$optionsField.attr({
+			'data-save':true,
+			'data-default-type':"hackOptions",
+			'data-default': hackName + '.options.txt'
+		});
+		loadThisData($optionsField);
+		setSaveTrigger($optionsField);
+		$optionsLabel.append($optionsField);
+		$optionsLabel.append(document.createTextNode("};"));
+		$options.append($optionsLabel);
+		$parentCollapse.append($options);
+	});
+}
+
+function hackMenuReadme(hackName,hackInfo,$parentCollapse){
+	var $readme = makeNewCollapsible( removeExtraChars(hackInfo.title) + " README:");
+	loadFileFromPath(hackName + '.readme.txt','hacks/info/',function(responseText){
+		var $pre = $('<pre>',{
+			text: responseText
+		});
+		$readme.append($pre);
+		$parentCollapse.append($readme);
+	});
+}
+
 function createThisHackMenu(hackName,hackInfo){
 	var $collapse = makeNewCollapsible(hackInfo.title + " (By " + hackInfo.author + ")");
 	$collapse.attr('data-associated-hack',hackName);
@@ -546,16 +627,7 @@ function createThisHackMenu(hackName,hackInfo){
 	$collapse.append($description);
 
 	if (hackInfo.conflicts){
-		var conflictTitlesArr = []
-	$.each(hackInfo.conflicts.split(','),function(index,conflictName){
-		conflictTitlesArr.push( removeExtraChars(hacks[conflictName].title) );
-	});
-	var sentenceFrag = arrayToSentenceFrag(conflictTitlesArr);
-	var $warning = $('<p>',{
-		text: 'This hack conflicts with ' + sentenceFrag + '.',
-		class: 'conflict-warning'
-	});
-	$collapse.append($warning);
+		hackMenuConflicts(hackName,hackInfo,$collapse);
 	}
 
 	var $label = $('<label>',{
@@ -574,42 +646,14 @@ function createThisHackMenu(hackName,hackInfo){
 	$collapse.append($label);
 
 	if(hackInfo.type === "options"){
-		var $options = makeNewCollapsible( removeExtraChars(hackInfo.title) + " Options:");
-		var $optionsLabel = $('<label>',{
-			text: "var " + dashesToCamelCase(hackName) + "Options = {"
-		});
-		loadFileFromPath(hackName + '.options.txt','hacks/options/',function(responseText){
-			var $optionsField = $('<textarea>',{
-				rows: 5,
-				cols: 50,
-				text: responseText,
-				name: hackName + '.options',
-				id: hackName + '-options'
-			});
-			$optionsField.attr({
-				'data-save':true,
-				'data-default-type':"hackOptions",
-				'data-default': hackName + '.options.txt'
-			});
-			loadThisData($optionsField);
-			setSaveTrigger($optionsField);
-			$optionsLabel.append($optionsField);
-			$optionsLabel.append(document.createTextNode("};"));
-			$options.append($optionsLabel);
-			$collapse.append($options);
-		});
+		hackMenuOptions(hackName,hackInfo,$collapse);
 	}
 
 	if(hackInfo.readme === true){
-		var $readme = makeNewCollapsible( removeExtraChars(hackInfo.title) + " README:");
-		loadFileFromPath(hackName + '.readme.txt','hacks/info/',function(responseText){
-			var $pre = $('<pre>',{
-				text: responseText
-			});
-			$readme.append($pre);
-			$collapse.append($readme);
-		});
+		hackMenuReadme(hackName,hackInfo,$collapse);
 	}
+
+	hackMenuPython(hackName,hackInfo,$collapse);
 
 	return $collapse;
 }

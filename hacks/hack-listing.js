@@ -9,7 +9,8 @@ var hacks = {
 		requires: false,
 		hidden: true,
 		order: 1,
-		conflicts: false
+		conflicts: false,
+		python: 'yellow'
 	},
 
 	"utils": {
@@ -21,7 +22,8 @@ var hacks = {
 		requires: false,
 		hidden: true,
 		order: 1,
-		conflicts: false
+		conflicts: false,
+		python: 'yellow'
 	},
 
 	"edit-image-at-runtime": {
@@ -33,7 +35,8 @@ var hacks = {
 		requires: "utils",
 		hidden: true,
 		order: 1,
-		conflicts: false
+		conflicts: false,
+		python: 'red'
 	},
 
 	"directional-avatar": {
@@ -45,7 +48,8 @@ var hacks = {
 		requires: "edit-image-at-runtime",
 		hidden: false,
 		order: 10,
-		conflicts: false
+		conflicts: false,
+		python: 'green'
 	},
 
 	"dynamic-background": {
@@ -57,7 +61,8 @@ var hacks = {
 		requires: false,
 		hidden: false,
 		order: 10,
-		conflicts: false
+		conflicts: false,
+		python: 'green'
 	},
 
 	"exit-from-dialog": {
@@ -69,7 +74,8 @@ var hacks = {
 		requires: "kitsy",
 		hidden: false,
 		order: 5,
-		conflicts: false
+		conflicts: false,
+		python: 'red'
 	},
 
 	"end-from-dialog": {
@@ -81,7 +87,8 @@ var hacks = {
 		requires: "kitsy",
 		hidden: false,
 		order: 5,
-		conflicts: false
+		conflicts: false,
+		python: 'red'
 	},
 
 	"javascript-dialog": {
@@ -93,7 +100,8 @@ var hacks = {
 		requires: "kitsy",
 		hidden: false,
 		order: 2,
-		conflicts: false
+		conflicts: false,
+		python: 'red'
 	},
 
 	"transparent-sprites": {
@@ -105,7 +113,8 @@ var hacks = {
 		requires: false,
 		hidden: false,
 		order: 10,
-		conflicts: false
+		conflicts: false,
+		python: 'green'
 	},
 
 	"logic-operators-extended": {
@@ -117,7 +126,8 @@ var hacks = {
 		requires: 'kitsy',
 		hidden: false,
 		order: 2,
-		conflicts: false
+		conflicts: false,
+		python: 'red'
 	},
 
 	"permanent-items": {
@@ -129,7 +139,8 @@ var hacks = {
 		requires: false,
 		hidden: false,
 		order: 4,
-		conflicts: false
+		conflicts: false,
+		python: 'red'
 	},
 
 	"solid-items": {
@@ -141,7 +152,8 @@ var hacks = {
 		requires: false,
 		hidden: false,
 		order: 5,
-		conflicts: false
+		conflicts: false,
+		python: 'red'
 	},
 
 	"unique-items": {
@@ -153,7 +165,8 @@ var hacks = {
 		requires: false,
 		hidden: false,
 		order: 5,
-		conflicts: false
+		conflicts: false,
+		python: 'red'
 	}
 
 };
