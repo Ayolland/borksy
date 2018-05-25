@@ -86,7 +86,7 @@ header, section, footer {
       background-color: rgba(0, 0, 0, 0.1);
       font-size: 1em;
       height: 1em;
-      margin: -0.5em;
+      margin: -0.5em -0.5em 0;
       padding: 0.5em; }
     .collapsible .collapsible .collapsible_closer {
       width: 1em;
