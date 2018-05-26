@@ -151,6 +151,14 @@ form {
       font-family: monospace;
       background-color: rgba(255, 255, 255, 0.3);
       border: 0; }
+      form label input.half, form label textarea.half {
+        min-width: 50%;
+        width: 50%; }
+      form label input.inline, form label textarea.inline {
+        display: inline-block;
+        margin-right: 0.5em; }
+      form label input.right, form label textarea.right {
+        text-align: right; }
     form label input[type="checkbox"] {
       float: left;
       width: auto;

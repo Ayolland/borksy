@@ -64,7 +64,15 @@ function arrayToSentenceFrag(arr){
 	}
 }
 
+function cleanUsingRegEx($this,regExStr){
+	var regex = new RegExp(regExStr,"g");
+	$this.val($this.val().replace(regex,""));
+};
+
 function saveThisData($this, value){
+	if ( $this.data('clean-regex') ){
+		cleanUsingRegEx($this, $this.data('clean-regex'));
+	}
 	if ( $this.prop('type') === "checkbox"){
 		value = $this.prop('checked');
 	} else if (typeof(value) === "undefined"){
@@ -239,8 +247,9 @@ function assembleAndDownloadFile(){
 	});
 
 	$('[data-hack]').promise().done(function(){
+		var filename = $('#filename').val();
 		modifiedTemplate = modifiedTemplate.replace('BORKSY-HACKS', hackBundle);
-		download('myBORKSYgame.html', modifiedTemplate);
+		download( filename + '.html', modifiedTemplate);
 	});
 }
 

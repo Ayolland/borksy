@@ -241,6 +241,20 @@ form{
     		font-family: monospace;
 			background-color: $light-glass;
 			border: 0;
+
+			&.half{
+				min-width: 50%;
+				width: 50%;
+			}
+
+			&.inline{
+				display: inline-block;
+				margin-right: 0.5em;
+			}
+
+			&.right{
+				text-align: right;
+			}
 		}
 
 		input[type="checkbox"] {
