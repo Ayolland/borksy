@@ -267,12 +267,19 @@ function togglePartyMode(){
 function loadAboutInfo(){
 	var $aboutContent = $('#about_content');
 	var $ajax = $.ajax('about/about.html');
+	var error = '<p>Whoa, Something went wrong!</p>';
 	$ajax.done(function(){
 		var response = $ajax.responseText;
 		$aboutContent.html(response);
+		var $ajax2 = $.ajax('about/other-tools.html');
+		$ajax2.done(function(){
+			var $tools = makeNewCollapsible( "Other Bitsy Tools" );
+			$tools.append($ajax2.responseText);
+			$aboutContent.append($tools);
+		});
 	});
 	$ajax.fail(function(){
-		$aboutContent.html('<p>Whoa, Something went wrong!</p>');
+		$aboutContent.html(error);
 	});
 }
 

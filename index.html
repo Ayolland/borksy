@@ -30,7 +30,7 @@
 				<section data-collapsible data-header="Page Title / Filename" class="collapsible">
 					<p>This is what the title of your page (not game) will be:</p>
 					<label>&lt;title&gt;<textarea data-save data-borksy-replace-single="TITLE" data-default-type="string" data-default="My Bitsy Game By Me" rows="1" cols="50" wrap="hard" name="title" id="title"></textarea>&lt;&#47;title&gt;</label>
-					<p>This is the filename that will be downloaded: <em>(only A-z,-,_ allowed)</em></p>
+					<p>This is the filename that will be downloaded: <em>(only A-z,0-9,-,_ allowed)</em></p>
 					<label><input data-save data-borksy-replace-single="FILENAME" data-default-type="string" data-default="myBORKSYgame" data-clean-regex="^-|\W" name="filename" id="filename" class="half inline right">.html</label>
 				</section>
 
@@ -65,7 +65,7 @@
 				</section>
 
 				<section data-collapsible data-header="Hacks" class="collapsible" id="hacks-section">
-					<p>These are pre-loaded hacks that modify and extend Bitsy's behavior. Just check the box to include the hack. If you need a hack not seen here, or you need to modify the hack at all, use the Additional JavaScript field instead.</p>
+					<p>These are pre-loaded hacks that modify and extend Bitsy's behavior. Just check the box to include the hack. Hacks with options have a expandable section with a modifiable JavaScript options object. If you need a hack not seen here, use the Additional JavaScript field instead.</p>
 				</section>
 	
 				<section data-collapsible data-header="Additional JavaScript" class="collapsible">

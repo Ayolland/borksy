@@ -2,10 +2,12 @@ Borksy is a tool made to assist in hacking and extending games built with Bitsy 
 
 [**View the Demo**](http://ayolland.github.io/borksy/)
 
-Borksy uses jquery (don't even start) to assemble and compile text files and user input into a final HTML file that runs the Bitsy game.
+Borksy uses jQuery (don't even start) to assemble and compile text files and user input into a final HTML file that runs the Bitsy game.
 
 Current features:
 * Preloaded Hacks Menu
+* Editable Hack Options
+* Editable filename
 * HotKeys
 * Customize HTML/CSS
 * Font Importer and Presets
