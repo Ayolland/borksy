@@ -289,7 +289,8 @@ function loadDefaultString($thisField){
 }
 
 function loadDefaultHackOptions($thisField){
-	$thisField.val(loadedFiles[$thisField.attr("name") + '.txt']);
+	var options = unescape(loadedFiles[$thisField.attr("name") + '.txt']);
+	$thisField.val(options);
 	setSaveTrigger($thisField);
 }
 
