@@ -1,6 +1,6 @@
 var hacks = {
 
-	"kitsy": {
+	"kitsy-script-toolkit": {
 		title: "🛠 Kitsy",
 		description: "Utilities needed for many hacks",
 		author: "@mildmojo",
@@ -71,7 +71,7 @@ var hacks = {
 		author: "@mildmojo",
 		readme: true,
 		type: "simple",
-		requires: "kitsy",
+		requires: "kitsy-script-toolkit",
 		hidden: false,
 		order: 5,
 		conflicts: false,
@@ -84,7 +84,7 @@ var hacks = {
 		author: "@mildmojo",
 		readme: true,
 		type: "simple",
-		requires: "kitsy",
+		requires: "kitsy-script-toolkit",
 		hidden: false,
 		order: 5,
 		conflicts: false,
@@ -97,7 +97,7 @@ var hacks = {
 		author: "Sean S. LeBlanc",
 		readme: true,
 		type: "simple",
-		requires: "kitsy",
+		requires: "kitsy-script-toolkit",
 		hidden: false,
 		order: 2,
 		conflicts: false,
@@ -109,7 +109,7 @@ var hacks = {
 		description: "Makes all sprites have transparent backgrounds. Tiles can be seen underneath the player, sprites, and items.",
 		author: "Sean S. LeBlanc",
 		readme: false,
-		type: "simple",
+		type: "options",
 		requires: false,
 		hidden: false,
 		order: 10,
@@ -123,7 +123,7 @@ var hacks = {
 		author: "@mildmojo",
 		readme: true,
 		type: "simple",
-		requires: 'kitsy',
+		requires: 'kitsy-script-toolkit',
 		hidden: false,
 		order: 2,
 		conflicts: false,
@@ -163,6 +163,32 @@ var hacks = {
 		readme: true,
 		type: "options",
 		requires: false,
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		python: 'red'
+	},
+
+	"bitsymuse": {
+		title: "😌 Bitsymuse",
+		description: "A hack that a variety of audio controls, including music that changes as you move between rooms.",
+		author: "David Mowatt",
+		readme: true,
+		type: "options",
+		requires: "kitsy-script-toolkit,utils",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		python: 'yellow'
+	},
+
+	"multi-sprite-avatar": {
+		title: "👨‍👨‍👧‍👧 Multi-Sprite Avatar",
+		description: "Allows multiple sprites to be moved together along with the player to create the illusion of a larger avatar.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "kitsy-script-toolkit",
 		hidden: false,
 		order: 5,
 		conflicts: false,

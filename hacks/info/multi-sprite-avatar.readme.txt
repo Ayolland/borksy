@@ -1,0 +1,12 @@
+Allows multiple sprites to be moved together along with the player
+to create the illusion of a larger avatar.
+
+Notes:
+- will probably break any other hacks involving moving other sprites 
+  around (they'll probably use the player's modified collision)
+- the original avatar sprite isn't changed, but will be covered by 
+  a piece at x:0,y:0
+- this hack may have issues with exit-from-dialog
+
+HOW TO USE:
+Edit `pieces` in hack options below to customize the multi-sprite avatar.

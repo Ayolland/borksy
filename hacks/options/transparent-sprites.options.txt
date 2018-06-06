@@ -1,0 +1,3 @@
+// if true, overrides scaling behaviour to reduce the setup time + memory use,
+// but the game will be blurry unless you've added pixelated image CSS
+scaling: false

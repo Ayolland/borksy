@@ -1,0 +1,25 @@
+// You need to put an entry in this list for every room ID 
+// or name that is accessible by the player, and then specify 
+// the song ID for each room. Expand this list to as many 
+// rooms as you need.
+
+// If the player moves between rooms with the same audio ID 
+// the music keeps playing seamlessly. Undefined rooms will 
+// keep playing whatever music they were last playing.
+
+// You can set a room to stop music when you enter by using 
+// the silenceId instead of a song ID. By default, this is 
+// set to 'S'.
+
+// These values are examples, and this hack WILL NOT WORK 
+// with these values. Check the Readme for setup instructions.
+
+musicByRoom: {
+	0: 'song ID',
+	1: 'S', // This room is silent - (see `silenceId` below)
+	2: 'another song ID',
+	h: 'a song ID for a room with a non-numeric ID',
+	'my room': 'a song ID for a room with a user-defined name'
+},
+silenceId: 'S', // Use this song ID of to make a room fall silent.
+resume: false, // If true, songs will pause/resume on change; otherwise, they'll stop/play (doesn't affect sound effects)

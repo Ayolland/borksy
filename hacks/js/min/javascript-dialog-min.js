@@ -1,0 +1,1 @@
+var indirectEval=eval;addDialogTag("js",function(a,i,l){indirectEval(i[0]),l(null)});

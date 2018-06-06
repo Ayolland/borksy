@@ -1,0 +1,36 @@
+A hack that adds a variety of audio controls, 
+including music that changes as you move between rooms.
+If the same song is played as you move between rooms, 
+the audio file will continue playing.
+
+HOW TO USE:
+1. Place your audio files somewhere relative to your 
+   bitsy html file (in the zip if you're uploading to itch.io)
+2. Copy-paste `<audio id="sound ID" src="relative path to sound file"></audio>`
+   into the <body> of your document, using Borksy's HTML/CSS fields.
+   You need to do it once for each sound file you are adding, 
+   and each needs a unique sound ID. 
+   Add `loop` after the `src=""` tag if it's music that's going to loop 
+   (e.g. `<audio id="sound ID" src="./mySong.mp3" loop></audio>`)
+3. Edit bitsymuseHackOptions below to set up the TRACK LIST 
+   for rooms you move through.
+
+In addition to the track list, which will play audio based 
+on the room number/name, you have access to the following 
+commands you can add to dialogue:
+
+1. (soundeffect "<sound ID>") will play a sound without
+   interrupting the music
+2. (music "<sound ID>") will change the music as soon
+   as it is called in the dialogue
+3. (musicEnd "<sound ID>") will change the music once
+   the dialogue box closes.
+
+You can call both music and musicEnd in the same dialogue, 
+(e.g. change the music while you speak to a character)
+and then restart the regular room music once you stop speaking to them.
+You can also use a special ID ("S" by default) to Silence the music.
+
+By default, music tracks automatically restart from the 
+beginning if you go back to a previous track.
+This can also be changed in the hackOptions below.

@@ -1,0 +1,1 @@
+addDeferredDialogTag("end",function(a,n){bitsy.startNarrating(n[0]||null,!0)}),addDialogTag("endNow",function(a,n,t){t(null),bitsy.startNarrating(n[0]||null,!0)});

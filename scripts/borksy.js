@@ -112,9 +112,9 @@ function checkHacksRequiring($thisHack){
 	$hacksWithRequires.each(function(index){
 		var $currentHack = $(this);
 		var hackIsIncluded = $currentHack.val() === 'true' || $currentHack.prop('checked') === true;
-		var hackRequiresThis = $currentHack.data('requires') === $thisHack.attr('id') || false;
+		var hackRequiresThis = $currentHack.data('requires').includes($thisHack.attr('id')) || false;
 		if (hackIsIncluded && hackRequiresThis){
-			$includedHacksRequiringThis = $includedHacksRequiringThis.add($currentHack)
+			$includedHacksRequiringThis = $includedHacksRequiringThis.add($currentHack);
 		}
 	});
 	if( $includedHacksRequiringThis.length > 0 ){

@@ -1,9 +1,7 @@
-//transparent sprites
+//transparent-sprites
 
-var transparentSpritesOptions = {
-	// if true, overrides scaling behaviour to reduce the setup time + memory use,
-	// but the game will be blurry unless you've added pixelated image CSS
-	scaling: false
+var transparentSpriteHackOptions = {
+	BORKSY-OPTIONS
 };
 
 // override imageDataFromImageSource to use transparency for background pixels
@@ -23,7 +21,7 @@ bitsy.imageDataFromImageSource = function (imageSource, pal) {
 		var bg = bitsy.getPal(pal)[0];
 		var i;
 		// discard unnecessary pixels
-		if (transparentSpritesOptions.scaling) {
+		if (transparentSpriteHackOptions.scaling) {
 			var scaledImg = bitsy.ctx.createImageData(img.width / bitsy.scale, img.height / bitsy.scale);
 			for (var y = 0; y < scaledImg.height; ++y) {
 				for (var x = 0; x < scaledImg.width; ++x) {
@@ -51,13 +49,13 @@ bitsy.imageDataFromImageSource = function (imageSource, pal) {
 
 		// give ourselves a little canvas + context to work with
 		var spriteCanvas = document.createElement("canvas");
-		spriteCanvas.width = bitsy.tilesize * (transparentSpritesOptions.scaling ? 1 : bitsy.scale);
-		spriteCanvas.height = bitsy.tilesize * (transparentSpritesOptions.scaling ? 1 : bitsy.scale);
+		spriteCanvas.width = bitsy.tilesize * (transparentSpriteHackOptions.scaling ? 1 : bitsy.scale);
+		spriteCanvas.height = bitsy.tilesize * (transparentSpriteHackOptions.scaling ? 1 : bitsy.scale);
 		var spriteContext = spriteCanvas.getContext("2d");
 
 		// put bitsy data to our canvas
 		spriteContext.clearRect(0, 0, bitsy.tilesize, bitsy.tilesize);
-		if (transparentSpritesOptions.scaling) {
+		if (transparentSpriteHackOptions.scaling) {
 			spriteContext.putImageData(img, 0, 0, 0, 0, bitsy.tilesize, bitsy.tilesize);
 		} else {
 			spriteContext.putImageData(img, 0, 0);
@@ -78,7 +76,7 @@ bitsy.drawTile = function (img, x, y, context) {
 		context = bitsy.ctx;
 	}
 
-	if (transparentSpritesOptions.scaling) {
+	if (transparentSpriteHackOptions.scaling) {
 		context.drawImage(
 			img(),
 			x * bitsy.tilesize * bitsy.scale,

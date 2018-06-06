@@ -1,6 +1,5 @@
-//directional avatar
-
-var directionAvatarOptions = {
+// directional-avatar
+var directionalAvatarHackOptions = {
 	BORKSY-OPTIONS
 };
 
@@ -8,7 +7,7 @@ var directionAvatarOptions = {
 function flip(spriteData, v, h) {
 	var x, y, x2, y2, col, tmp;
 	var s = spriteData.slice();
-	if (v && directionAvatarOptions.verticalFlipAllowed) {
+	if (v && directionalAvatarHackOptions.verticalFlipAllowed) {
 		for (y = 0; y < s.length / 2; ++y) {
 			y2 = s.length - y - 1;
 			tmp = s[y];
@@ -16,7 +15,7 @@ function flip(spriteData, v, h) {
 			s[y2] = tmp;
 		}
 	}
-	if (h && directionAvatarOptions.horizontalFlipAllowed) {
+	if (h && directionalAvatarHackOptions.horizontalFlipAllowed) {
 		for (y = 0; y < s.length; ++y) {
 			col = s[y] = s[y].slice();
 			for (x = 0; x < col.length / 2; ++x) {

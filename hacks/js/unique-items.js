@@ -1,6 +1,6 @@
-//unique items
+// unique-items
 
-var uniqueItemsOptions = {
+var uniqueItemsHackOptions = {
 	BORKSY-OPTIONS
 };
 
@@ -10,7 +10,7 @@ bitsy.onInventoryChanged = function (id) {
 	if (uniqueItems_onInventoryChanged) {
 		uniqueItems_onInventoryChanged(id);
 	}
-	if (uniqueItemsOptions.itemIsUnique(bitsy.item[id])) {
+	if (uniqueItemsHackOptions.itemIsUnique(bitsy.item[id])) {
 		for (r in bitsy.room) {
 			if (bitsy.room.hasOwnProperty(r)) {
 				r = bitsy.room[r];

@@ -1,4 +1,4 @@
-// dynamic background
+// dynamic-background
 
 // helper function which detects when the palette has changed,
 // and updates the background to match

@@ -1,19 +1,16 @@
-/**
-@file utils
-@summary miscellaneous bitsy utilities
-@author Sean S. LeBlanc
-*/
+//utils
 
 /*helper used to inject code into script tags based on a search string*/
 // inject() moved into Kitsy as utilsInject()
 
 /*helper for exposing getter/setter for private vars*/
+var indirectEval = eval;
 function expose(target) {
 	var code = target.toString();
 	code = code.substring(0, code.lastIndexOf("}"));
 	code += "this.get = function(name) {return eval(name);};";
 	code += "this.set = function(name, value) {eval(name+'=value');};";
-	return eval("[" + code + "}]")[0];
+	return indirectEval("[" + code + "}]")[0];
 }
 
 /*
@@ -30,6 +27,16 @@ function getImage(name, map) {
 		return map[e].name == name;
 	});
 	return map[id];
+}
+
+/**
+ * Helper for getting room by name or id
+ * @param {string} name id or name of room to return
+ * @return {string} room, or undefined if it doesn't exist
+ */
+function getRoom(name) {
+	var id = bitsy.room.hasOwnProperty(name) ? name : bitsy.names.room.get(name);
+	return bitsy.room[id];
 }
 
 /**

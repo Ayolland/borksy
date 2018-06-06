@@ -1,21 +1,40 @@
-//permanent items
+//permanent-items
 
-var permanentItemsOptions = {
+var permanentItemsHackOptions = {
 	BORKSY-OPTIONS
 };
 
-var permanentItems_onInventoryChanged = bitsy.onInventoryChanged;
-bitsy.onInventoryChanged = function(itemId) {
-	if(permanentItems_onInventoryChanged){
-		permanentItems_onInventoryChanged.apply(this, arguments);
+var room;
+var oldItems;
+before("movePlayer", function () {
+	room = bitsy.room[bitsy.curRoom];
+	oldItems = room.items.slice();
+});
+after("movePlayer", function () {
+	var newItems = room.items;
+	if (newItems.length === oldItems.length) {
+		return; // nothing changed
 	}
-	// if a permanent item is picked up, immediately add another instance
-	// to replace the one that was just picked up
-	if(permanentItemsOptions.itemIsPermanent(bitsy.item[itemId])){
-		bitsy.room[bitsy.curRoom].items.push({
-			id: itemId,
-			x: bitsy.player().x,
-			y: bitsy.player().y
-		});
+
+	// check for changes
+	for (var i = 0; i < oldItems.length; ++i) {
+		if (!newItems[i] ||
+			oldItems[i].x !== newItems[i].x ||
+			oldItems[i].y !== newItems[i].y ||
+			oldItems[i].id !== newItems[i].id
+		) {
+			// something changed
+			if (permanentItemsHackOptions.itemIsPermanent(bitsy.item[oldItems[i].id])) {
+				// put that back!
+				newItems.splice(i, 0, oldItems[i]);
+			} else {
+				// add an empty entry for now to keep the arrays aligned
+				newItems.splice(i, 0, null);
+			}
+		}
 	}
-};
+	// clear out those empty entries
+	room.items = newItems.filter(function (item) {
+		return !!item;
+	});
+});
