@@ -22,7 +22,7 @@ function loadFileFromPath(filename, pathToDir,callback){
 }
 
 function loadTemplate(){
-	loadFileFromPath('2.1.template.html','template/');
+	loadFileFromPath('2.4.template.html','template/');
 }
 
 function download(filename, text) {
@@ -237,7 +237,7 @@ function assembleAndDownloadFile(){
 		saveThisData($(this));
 	});
 
-	var modifiedTemplate = loadedFiles['2.1.template.html'].repeat(1);
+	var modifiedTemplate = loadedFiles['2.4.template.html'].repeat(1);
 	var hackBundle = "";
 
 	modifiedTemplate = assembleSingles(modifiedTemplate);
