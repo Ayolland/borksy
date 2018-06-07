@@ -136,7 +136,7 @@ var hacks = {
 		author: "Sean S. LeBlanc",
 		readme: true,
 		type: "options",
-		requires: false,
+		requires: "kitsy-script-toolkit",
 		hidden: false,
 		order: 4,
 		conflicts: false,
