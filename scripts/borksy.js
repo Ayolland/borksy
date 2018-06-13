@@ -1,12 +1,3 @@
-var loadedFiles ={};
-var fonts = {
-	"default" : "Default Bitsy Font by Adam LeDoux",
-	"beeblebrox" : "Beeblebrox by AYolland",
-	"blacksphinx" : "Blacksphinx by AYolland",
-	"greengable" : "Greengable by AYolland",
-	"hotcaps" : "Hotcaps by AYolland"
-};
-
 function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride){
 	doneCallback = doneCallback || function(){};
 	failCallBack = failCallBack || function(){};
@@ -25,7 +16,7 @@ function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filen
 }
 
 function loadTemplate(){
-	loadFileFromPath('2.4.template.html','template/');
+	loadFileFromPath( borksyInfo.templateVersion + '.template.html','template/');
 }
 
 function download(filename, text) {
@@ -247,7 +238,7 @@ function assembleAndDownloadFile(){
 		saveThisData($(this));
 	});
 
-	var modifiedTemplate = loadedFiles['2.4.template.html'].repeat(1);
+	var modifiedTemplate = loadedFiles[ borksyInfo.templateVersion + '.template.html'].repeat(1);
 	var hackBundle = "";
 
 	modifiedTemplate = assembleSingles(modifiedTemplate);
@@ -281,6 +272,14 @@ function loadAboutInfo(){
 	$ajax.done(function(){
 		var response = $ajax.responseText;
 		$aboutContent.html(response);
+
+		var $ajax3 = $.ajax('about/how-to-use-borksy.html');
+		$ajax3.done(function(){
+			var $howto = makeNewCollapsible( "How To Use Borksy" );
+			$howto.append($ajax3.responseText);
+			$aboutContent.append($howto);
+		});
+
 		var $ajax2 = $.ajax('about/other-tools.html');
 		$ajax2.done(function(){
 			var $tools = makeNewCollapsible( "Other Bitsy Tools" );
@@ -613,7 +612,7 @@ function hackGitHubMessage(hackName,hackInfo,$parentCollapse){
 	if( hacks[hackName].usingGithub === true ){
 		msg = hackTitle + ' is using the most recent version from Github.';
 	} else {
-		msg = hackTitle + ' could not be loaded from Github, local version is being used.';
+		msg = hackTitle + ' could not be loaded from Github, local version retrieved on ' + borksyInfo.lastUpdated + ' is being used.';
 		className += " warning";
 	}
 	var $message = $('<p>',{

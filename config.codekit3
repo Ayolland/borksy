@@ -34,6 +34,24 @@
 		"rFN": 0,
 		"uCM": 0
 		},
+	"\/about\/how-to-use-borksy.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"oA": 0,
+		"oAP": "\/about\/how-to-use-borksy.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
 	"\/about\/other-tools.html": {
 		"cB": 0,
 		"ft": 8192,
@@ -467,16 +485,6 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/hack-listing.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 1,
-		"oAP": "\/hacks\/min\/hack-listing-min.js",
-		"oF": 1,
-		"sC": 1,
-		"tS": 0
-		},
 	"\/hacks\/info\/bitsymuse.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -554,17 +562,17 @@
 		"oAP": "\/hacks\/info\/unique-items.readme.txt",
 		"oF": 0
 		},
-	"\/hacks\/js\/bitsymuse.js": {
+	"\/hacks\/js-old\/bitsymuse.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/js\/min\/bitsymuse-min.js",
+		"oAP": "\/hacks\/js-old\/min\/bitsymuse-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/directional-avatar.js": {
+	"\/hacks\/js-old\/directional-avatar.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
@@ -574,7 +582,7 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/dynamic-background.js": {
+	"\/hacks\/js-old\/dynamic-background.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
@@ -584,7 +592,7 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/edit-image-at-runtime.js": {
+	"\/hacks\/js-old\/edit-image-at-runtime.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
@@ -594,7 +602,7 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/end-from-dialog.js": {
+	"\/hacks\/js-old\/end-from-dialog.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
@@ -604,7 +612,7 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/exit-from-dialog.js": {
+	"\/hacks\/js-old\/exit-from-dialog.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
@@ -614,7 +622,7 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/javascript-dialog.js": {
+	"\/hacks\/js-old\/javascript-dialog.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
@@ -624,17 +632,17 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/kitsy-script-toolkit.js": {
+	"\/hacks\/js-old\/kitsy-script-toolkit.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/js\/min\/kitsy-script-toolkit-min.js",
+		"oAP": "\/hacks\/js-old\/min\/kitsy-script-toolkit-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/logic-operators-extended.js": {
+	"\/hacks\/js-old\/logic-operators-extended.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
@@ -644,117 +652,117 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/min\/dynamic-background-min.js": {
+	"\/hacks\/js-old\/min\/dynamic-background-min.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/js\/min\/min\/dynamic-background-min-min.js",
+		"oAP": "\/hacks\/js-old\/min\/min\/dynamic-background-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/min\/edit-image-at-runtime-min.js": {
+	"\/hacks\/js-old\/min\/edit-image-at-runtime-min.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/js\/min\/min\/edit-image-at-runtime-min-min.js",
+		"oAP": "\/hacks\/js-old\/min\/min\/edit-image-at-runtime-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/min\/end-from-dialog-min.js": {
+	"\/hacks\/js-old\/min\/end-from-dialog-min.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/js\/min\/min\/end-from-dialog-min-min.js",
+		"oAP": "\/hacks\/js-old\/min\/min\/end-from-dialog-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/min\/exit-from-dialog-min.js": {
+	"\/hacks\/js-old\/min\/exit-from-dialog-min.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/js\/min\/min\/exit-from-dialog-min-min.js",
+		"oAP": "\/hacks\/js-old\/min\/min\/exit-from-dialog-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/min\/javascript-dialog-min.js": {
+	"\/hacks\/js-old\/min\/javascript-dialog-min.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/js\/min\/min\/javascript-dialog-min-min.js",
+		"oAP": "\/hacks\/js-old\/min\/min\/javascript-dialog-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/min\/kitsy-script-toolkit-min.js": {
+	"\/hacks\/js-old\/min\/kitsy-script-toolkit-min.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/js\/min\/min\/kitsy-script-toolkit-min-min.js",
+		"oAP": "\/hacks\/js-old\/min\/min\/kitsy-script-toolkit-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/min\/logic-operators-extended-min.js": {
+	"\/hacks\/js-old\/min\/logic-operators-extended-min.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/js\/min\/min\/logic-operators-extended-min-min.js",
+		"oAP": "\/hacks\/js-old\/min\/min\/logic-operators-extended-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/min\/permanent-items-min.js": {
+	"\/hacks\/js-old\/min\/permanent-items-min.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/js\/min\/min\/permanent-items-min-min.js",
+		"oAP": "\/hacks\/js-old\/min\/min\/permanent-items-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/min\/unique-items-min.js": {
+	"\/hacks\/js-old\/min\/unique-items-min.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/js\/min\/min\/unique-items-min-min.js",
+		"oAP": "\/hacks\/js-old\/min\/min\/unique-items-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/min\/utils-min.js": {
+	"\/hacks\/js-old\/min\/utils-min.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/js\/min\/min\/utils-min-min.js",
+		"oAP": "\/hacks\/js-old\/min\/min\/utils-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/multi-sprite-avatar.js": {
+	"\/hacks\/js-old\/multi-sprite-avatar.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/js\/min\/multi-sprite-avatar-min.js",
+		"oAP": "\/hacks\/js-old\/min\/multi-sprite-avatar-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/permanent-items.js": {
+	"\/hacks\/js-old\/permanent-items.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
@@ -764,7 +772,7 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/solid-items.js": {
+	"\/hacks\/js-old\/solid-items.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
@@ -774,7 +782,7 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/transparent-sprites.js": {
+	"\/hacks\/js-old\/transparent-sprites.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
@@ -784,7 +792,7 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/unique-items.js": {
+	"\/hacks\/js-old\/unique-items.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 0,
@@ -794,142 +802,12 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/utils.js": {
+	"\/hacks\/js-old\/utils.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/js\/min\/utils-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/hacks\/min\/directional-avatar-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/hacks\/min\/min\/directional-avatar-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/hacks\/min\/dynamic-background-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/hacks\/min\/min\/dynamic-background-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/hacks\/min\/edit-image-at-runtime-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/hacks\/min\/min\/edit-image-at-runtime-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/hacks\/min\/end-from-dialog-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/hacks\/min\/min\/end-from-dialog-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/hacks\/min\/exit-from-dialog-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/hacks\/min\/min\/exit-from-dialog-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/hacks\/min\/javascript dialog-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/hacks\/min\/min\/javascript dialog-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/hacks\/min\/kitsy-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/hacks\/min\/min\/kitsy-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/hacks\/min\/kitsy.min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/hacks\/min\/min\/kitsy.min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/hacks\/min\/logic-operators-extended-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/hacks\/min\/min\/logic-operators-extended-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/hacks\/min\/permanent-items-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/hacks\/min\/min\/permanent-items-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/hacks\/min\/solid-items-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/hacks\/min\/min\/solid-items-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/hacks\/min\/transparent-sprites-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/hacks\/min\/min\/transparent-sprites-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/hacks\/min\/unique-items-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/hacks\/min\/min\/unique-items-min-min.js",
+		"oAP": "\/hacks\/js-old\/min\/utils-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -1035,12 +913,12 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/scripts\/js.cookie.js": {
+	"\/scripts\/libs.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/scripts\/min\/js.cookie-min.js",
+		"oAP": "\/scripts\/min\/libs-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -1089,11 +967,11 @@
 		"oAP": "\/template\/2.4.template.html",
 		"oF": 0
 		},
-	"\/template\/test.html": {
+	"\/template\/3.0.template.html": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/template\/test.html",
+		"oAP": "\/template\/3.0.template.html",
 		"oF": 0
 		},
 	"\/testgames\/testgame.html": {
@@ -1101,6 +979,27 @@
 		"ft": 8192,
 		"oA": 0,
 		"oAP": "\/testgames\/testgame.html",
+		"oF": 0
+		},
+	"\/testgames\/w-music\/01.mp3": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/testgames\/w-music\/As_If_Pianos_Grew_on_Trees.mp3",
+		"oF": 0
+		},
+	"\/testgames\/w-music\/02.mp3": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/testgames\/w-music\/02.mp3",
+		"oF": 0
+		},
+	"\/testgames\/w-music\/myBORKSYgame (9).html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/testgames\/w-music\/myBORKSYgame (9).html",
 		"oF": 0
 		}
 	},

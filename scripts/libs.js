@@ -1,3 +1,18 @@
+var loadedFiles ={};
+
+var fonts = {
+	"default" : "Default Bitsy Font by Adam LeDoux",
+	"beeblebrox" : "Beeblebrox by AYolland",
+	"blacksphinx" : "Blacksphinx by AYolland",
+	"greengable" : "Greengable by AYolland",
+	"hotcaps" : "Hotcaps by AYolland"
+};
+
+var borksyInfo = {
+	templateVersion: '3.0',
+	lastUpdated: "June 13, 2018"
+}
+
 var hacks = {
 
 	"kitsy-script-toolkit": {

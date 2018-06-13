@@ -7,6 +7,7 @@ Borksy uses jQuery (don't even start) to assemble and compile text files and use
 **NOTE:** Font data and customizer will be soon deprecated when a future version of Bitsy is released that reworks dialog display. This feature will hopefully be back at a later date, but with new fonts.
 
 Current features:
+* Hacks are loaded from Github using AJAX
 * Preloaded Hacks Menu
 * Editable Hack Options
 * HotKeys for Save/Restore Defaults

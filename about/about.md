@@ -1,19 +1,16 @@
-Borksy v 2.4
+Borksy v 3.0
 
 Borksy is a hacking tool to be used in conjunction with [Bitsy Game Maker](https://ledoux.itch.io/bitsy)! Use it to customize your games and add hacks without needing a web server or any manual cut-and-paste work.
 
 Borksy currently uses Bitsy 4.8 to create files.
 
-If you're not familiar with how Bitsy can be extended, check out [Sean's great collection of Bitsy hacks](https://github.com/seleb/bitsy-hacks/).
+If you're not sure how to use this tool, check out the 'How To Use Borksy' section. If you're not familiar with how Bitsy can be extended, explore [Sean's great collection of Bitsy hacks](https://github.com/seleb/bitsy-hacks/).
 
 **NOTE TO BORKSY USERS:** Future Bitsy versions will change how bitsy renders text and use a new font size. Once that happens, the current custom font tool will be deprecated until a new custom font tool can be built. The current fonts will not be compatible, so if you have a project that plans to use those fonts, use them before they disappear.
 
-What's new in 2.4:
-* 🎶Bitsymuse Hack added🎶!
-* Multi-Sprite Avatar added!
-* Added link to Overworld Witchery in 'Other Tools'
-* Hacks updated to current versions.
-* Bitsy variables are exposed in JS as global variable *bitsyVariableMap*.
+What's new in 3.0:
+* Hacks are now retrieved from Github, with local backups.
+* Added the 'How To Use Borksy' section.
 
 Other Borksy Features:
 * Preloaded Hacks Menu
@@ -21,10 +18,11 @@ Other Borksy Features:
 * HotKeys
 * Customize HTML/CSS
 * Customize Page Title / Filename
-* Font Importer and Presets
+* Font Importer and Presets *(to be deprecated)*
 * Enables extended ASCII characters
 * Field for extra JS / Hacks
 * Saves work to LocalStorage for persistence
+* Bitsy variables are exposed in JS as global variable *bitsyVariableMap*.
 * Party Mode
 
 More features to come!
