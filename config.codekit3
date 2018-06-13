@@ -34,6 +34,38 @@
 		"rFN": 0,
 		"uCM": 0
 		},
+	"\/about\/other-tools.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/about\/other-tools.html",
+		"oF": 0
+		},
+	"\/about\/other-tools.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"oA": 0,
+		"oAP": "\/about\/other-tools.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"\/borksy.2.4.1.zip": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/borksy.2.4.1.zip",
+		"oF": 0
+		},
 	"\/borksy.gif": {
 		"ft": 4194304,
 		"iS": 1164,
@@ -41,13 +73,6 @@
 		"oAP": "\/borksy.gif",
 		"oF": 0,
 		"opt": 1
-		},
-	"\/borksy.zip": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 0,
-		"oAP": "\/borksy.zip",
-		"oF": 0
 		},
 	"\/defaults\/body.html": {
 		"cB": 0,
@@ -212,6 +237,236 @@
 		"oT": 1,
 		"q": 100
 		},
+	"\/hacks\/dist\/basic sfx.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/basic sfx-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/bitsymuse.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/bitsymuse-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/canvas replacement.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/canvas replacement-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/corrupt.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/corrupt-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/custom text effect.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/custom text effect-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/directional avatar.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/directional avatar-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/dynamic background.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/dynamic background-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/edit image from dialog.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/edit image from dialog-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/end-from-dialog.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/end-from-dialog-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/exit-from-dialog.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/exit-from-dialog-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/external-game-data.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/external-game-data-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/favicon-from-sprite.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/favicon-from-sprite-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/follower.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/follower-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/gamepad input.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/gamepad input-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/javascript dialog.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/javascript dialog-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/logic-operators-extended.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/logic-operators-extended-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/multi-sprite avatar.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/multi-sprite avatar-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/noclip.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/noclip-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/permanent items.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/permanent items-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/solid items.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/solid items-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/tracery processing.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/tracery processing-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/transparent sprites.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/transparent sprites-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/dist\/unique items.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/dist\/min\/unique items-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"\/hacks\/hack-listing.js": {
 		"ft": 64,
 		"ma": 0,
@@ -222,61 +477,92 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/info\/dynamic-background.txt": {
+	"\/hacks\/info\/bitsymuse.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/hacks\/info\/dynamic-background.txt",
+		"oAP": "\/hacks\/info\/bitsymuse.readme.txt",
 		"oF": 0
 		},
-	"\/hacks\/info\/end-from-dialog.txt": {
+	"\/hacks\/info\/directional-avatar.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/hacks\/info\/end-from-dialog.txt",
+		"oAP": "\/hacks\/info\/directional-avatar.readme.txt",
 		"oF": 0
 		},
-	"\/hacks\/info\/exit-from-dialog.txt": {
+	"\/hacks\/info\/dynamic-background.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/hacks\/info\/exit-from-dialog.txt",
+		"oAP": "\/hacks\/info\/dynamic-background.readme.txt",
 		"oF": 0
 		},
-	"\/hacks\/info\/javascript-dialog.txt": {
+	"\/hacks\/info\/end-from-dialog.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/hacks\/info\/javascript-dialog.txt",
+		"oAP": "\/hacks\/info\/end-from-dialog.readme.txt",
 		"oF": 0
 		},
-	"\/hacks\/info\/logic-operators-extended.txt": {
+	"\/hacks\/info\/exit-from-dialog.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/hacks\/info\/logic-operators-extended.txt",
+		"oAP": "\/hacks\/info\/exit-from-dialog.readme.txt",
 		"oF": 0
 		},
-	"\/hacks\/info\/permanent-items.txt": {
+	"\/hacks\/info\/javascript-dialog.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/hacks\/info\/permanent-items.txt",
+		"oAP": "\/hacks\/info\/javascript-dialog.readme.txt",
 		"oF": 0
 		},
-	"\/hacks\/info\/solid-items.txt": {
+	"\/hacks\/info\/logic-operators-extended.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/hacks\/info\/solid-items.txt",
+		"oAP": "\/hacks\/info\/logic-operators-extended.readme.txt",
 		"oF": 0
 		},
-	"\/hacks\/info\/unique-items.txt": {
+	"\/hacks\/info\/multi-sprite-avatar.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/hacks\/info\/unique-items.txt",
+		"oAP": "\/hacks\/info\/multi-sprite-avatar.readme.txt",
 		"oF": 0
+		},
+	"\/hacks\/info\/permanent-items.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/info\/permanent-items.readme.txt",
+		"oF": 0
+		},
+	"\/hacks\/info\/solid-items.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/info\/solid-items.readme.txt",
+		"oF": 0
+		},
+	"\/hacks\/info\/unique-items.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/info\/unique-items.readme.txt",
+		"oF": 0
+		},
+	"\/hacks\/js\/bitsymuse.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/js\/min\/bitsymuse-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
 		},
 	"\/hacks\/js\/directional-avatar.js": {
 		"ft": 64,
@@ -338,13 +624,13 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/js\/kitsy.js": {
+	"\/hacks\/js\/kitsy-script-toolkit.js": {
 		"ft": 64,
 		"ma": 0,
-		"mi": 0,
+		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/min\/kitsy.min.js",
-		"oF": 2,
+		"oAP": "\/hacks\/js\/min\/kitsy-script-toolkit-min.js",
+		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
@@ -355,6 +641,116 @@
 		"oA": 0,
 		"oAP": "\/hacks\/min\/logic-operators-extended-min.js",
 		"oF": 2,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/min\/dynamic-background-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/js\/min\/min\/dynamic-background-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/min\/edit-image-at-runtime-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/js\/min\/min\/edit-image-at-runtime-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/min\/end-from-dialog-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/js\/min\/min\/end-from-dialog-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/min\/exit-from-dialog-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/js\/min\/min\/exit-from-dialog-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/min\/javascript-dialog-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/js\/min\/min\/javascript-dialog-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/min\/kitsy-script-toolkit-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/js\/min\/min\/kitsy-script-toolkit-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/min\/logic-operators-extended-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/js\/min\/min\/logic-operators-extended-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/min\/permanent-items-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/js\/min\/min\/permanent-items-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/min\/unique-items-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/js\/min\/min\/unique-items-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/min\/utils-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/js\/min\/min\/utils-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/multi-sprite-avatar.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/js\/min\/multi-sprite-avatar-min.js",
+		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
@@ -395,6 +791,16 @@
 		"oA": 0,
 		"oAP": "\/hacks\/min\/unique-items-min.js",
 		"oF": 2,
+		"sC": 1,
+		"tS": 0
+		},
+	"\/hacks\/js\/utils.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/js\/min\/utils-min.js",
+		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
@@ -528,6 +934,55 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"\/hacks\/options\/bitsymuse.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/options\/bitsymuse.options.txt",
+		"oF": 0
+		},
+	"\/hacks\/options\/directional-avatar.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/options\/directional-avatar.options.txt",
+		"oF": 0
+		},
+	"\/hacks\/options\/multi-sprite-avatar.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/options\/multi-sprite-avatar.options.txt",
+		"oF": 0
+		},
+	"\/hacks\/options\/permanent-items.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/options\/permanent-items.options.txt",
+		"oF": 0
+		},
+	"\/hacks\/options\/solid-items.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/options\/solid-items.options.txt",
+		"oF": 0
+		},
+	"\/hacks\/options\/transparent-sprites.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/options\/transparent-sprites.options.txt",
+		"oF": 0
+		},
+	"\/hacks\/options\/unique-items.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/hacks\/options\/unique-items.options.txt",
+		"oF": 0
+		},
 	"\/index.html": {
 		"cB": 0,
 		"ft": 8192,
@@ -620,6 +1075,20 @@
 		"oAP": "\/template\/1.0.template.html",
 		"oF": 0
 		},
+	"\/template\/2.1.template.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/template\/2.1.template.html",
+		"oF": 0
+		},
+	"\/template\/2.4.template.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/template\/2.4.template.html",
+		"oF": 0
+		},
 	"\/template\/test.html": {
 		"cB": 0,
 		"ft": 8192,
@@ -627,11 +1096,11 @@
 		"oAP": "\/template\/test.html",
 		"oF": 0
 		},
-	"\/testgame.html": {
+	"\/testgames\/testgame.html": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/testgame.html",
+		"oAP": "\/testgames\/testgame.html",
 		"oF": 0
 		}
 	},

@@ -7,17 +7,20 @@ var fonts = {
 	"hotcaps" : "Hotcaps by AYolland"
 };
 
-function loadFileFromPath(filename, pathToDir,callback){
-	callback = callback || function(){};
+function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride){
+	doneCallback = doneCallback || function(){};
+	failCallBack = failCallBack || function(){};
 	var $ajax = $.ajax( pathToDir + filename );
 	$ajax.done(function(){
+		filename = filenameOverride || filename;
 		loadedFiles[filename] = escape($ajax.responseText);
 		console.log('Loaded ' + filename + ' via AJAX');
-		callback($ajax.responseText);
+		doneCallback($ajax.responseText,filenameOverride);
 	});
 	$ajax.fail(function(){
 		loadedFiles[filename] = "";
 		console.log('Error loading ' + filename + ' via AJAX');
+		failCallBack($ajax.responseText,filenameOverride);
 	});
 }
 
@@ -163,17 +166,20 @@ function saveThisHack($thisHack,checkConflicts){
 	}
 	saveThisData($thisHack);
 	checkAndToggleIncludedDisplay($thisHack);
-	var thisRequires = hacks[$thisHack.data('hack')].requires;
 
-	if( thisRequires && !thisRequires.includes(',') ){
-		var $requiredHack = $('#' + thisRequires);
-		checkHacksRequiring($requiredHack);
-	} else if ( thisRequires ) {
-		$.each(thisRequires.split(','),function(index,requiredHackName){
-			var $requiredHack = $('#' + requiredHackName);
-			checkHacksRequiring($requiredHack);
-		});
-	}
+	//requires removed currently
+	
+	// var thisRequires = hacks[$thisHack.data('hack')].requires;
+
+	// if( thisRequires && !thisRequires.includes(',') ){
+	// 	var $requiredHack = $('#' + thisRequires);
+	// 	checkHacksRequiring($requiredHack);
+	// } else if ( thisRequires ) {
+	// 	$.each(thisRequires.split(','),function(index,requiredHackName){
+	// 		var $requiredHack = $('#' + requiredHackName);
+	// 		checkHacksRequiring($requiredHack);
+	// 	});
+	// }
 	var thisConflicts = hacks[$thisHack.data('hack')].conflicts;
 	if( thisConflicts && checkConflicts){
 		removeConflictingHacks(thisConflicts.split(','));
@@ -199,13 +205,13 @@ function assembleSingles(modifiedTemplate){
 function reOrderHacks(){
 	var hackArray = [];
 	$.each(hacks,function(hackName, hackObj){
-		hackArray.push(Object.assign({name: hackName},hackObj))
+		hackArray.push(Object.assign({name: hackName},hackObj));
 	});
 	hackArray.sort(function(obj1,obj2){
 		if(obj1.order > obj2.order){
-			return 1
+			return 1;
 		} else if (obj1.order === obj2.order){
-			return 0
+			return 0;
 		} else {
 			return -1;
 		}
@@ -216,18 +222,22 @@ function reOrderHacks(){
 function assembleHacks(hackBundle){
 	var orderedHacks = reOrderHacks();
 	$.each(orderedHacks,function(index, hackObj){
+
 		var hackName = hackObj.name;
 		var filename = hackObj.type === "simple" && false ? hackName + "-min.js" : hackName + ".js";
 		var $hackField = $('#' + hackName );
 		var isIncluded = ( $hackField.prop('checked') || ($hackField.val() === 'true') );
+		if (!isIncluded){
+			return;
+		}
+		
 		var hackFile = loadedFiles[filename];
 		if (hackObj.type === "options"){
 			var hackOptions = $('#' + hackName + '-options').val();
-			hackFile = hackFile.replace('BORKSY-OPTIONS',hackOptions);
+			hackOptions = "var hackOptions = {\n" + hackOptions + "\n};"
+			hackFile = unescape(hackFile).replace(new RegExp(/^var\s+hackOptions\s?=\s?{[\s\S]*?^};$/,'gm'),hackOptions);
 		}
-		if (isIncluded){
-			hackBundle += hackFile + escape('\n');
-		}
+		hackBundle += hackFile + '\n';
 	});
 	return hackBundle;
 }
@@ -527,17 +537,47 @@ function selectFont(){
 	readFontFile(filename);
 }
 
+function localHackSuccess(response,filename){
+	var hackName = filename.substring(0,filename.length - 3);
+	$("#hacks-section").append(createThisHackMenu(hackName,hacks[hackName]));
+}
+
+function localHackFail(response,filename){
+	
+}
+
+function loadThisHackLocally(hackName,hackInfo){
+	var filenameOverride = hackName + '.js';
+	var filename = hackInfo.github;
+	var pathToDir = "hacks/dist/";
+	loadFileFromPath(filename,pathToDir,localHackSuccess,localHackFail,filenameOverride)
+}
+
+function githubHackSuccess(response,filename){
+	var hackName = filename.substring(0,filename.length - 3);
+	hacks[hackName].usingGithub = true;
+	$("#hacks-section").append(createThisHackMenu(hackName,hacks[hackName]));
+}
+
+function githubHackFail(response,filename){
+	var hackName = filename.substring(0,filename.length - 3);
+	hacks[hackName].usingGithub = false;
+	loadThisHackLocally(filename,hacks[filename]);
+}
+
+function loadThisHackFromGithub(hackName,hackInfo){
+	var filenameOverride = hackName + '.js';
+	var filename = hackInfo.github;
+	var pathToDir = "https://raw.githubusercontent.com/seleb/bitsy-hacks/master/dist/";
+	loadFileFromPath(filename,pathToDir,githubHackSuccess,githubHackFail,filenameOverride);
+}
+
 function loadThisHack(hackName,hackInfo){
-	var pathToDir = "";
-	var filename = "";
-	if(hackInfo.type === "simple" && false){
-		filename = hackName + '-min.js';
-		pathToDir = "hacks/min/";
+	if ( hackInfo.github !== false ){
+		loadThisHackFromGithub(hackName,hackInfo)
 	} else {
-		filename = hackName + '.js';
-		pathToDir = "hacks/js/";
+		// there's no dist version of kitsy/utils rn
 	}
-	loadFileFromPath(filename,pathToDir);
 }
 
 function bakeHackData($element,hackName,hackInfo){
@@ -564,6 +604,23 @@ function hackMenuConflicts(hackName,hackInfo,$parentCollapse){
 		class: 'conflict-warning'
 	});
 	$parentCollapse.append($warning);
+}
+
+function hackGitHubMessage(hackName,hackInfo,$parentCollapse){
+	var className = "github-message";
+	var msg = "";
+	var hackTitle = removeExtraChars(hackInfo.title);
+	if( hacks[hackName].usingGithub === true ){
+		msg = hackTitle + ' is using the most recent version from Github.';
+	} else {
+		msg = hackTitle + ' could not be loaded from Github, local version is being used.';
+		className += " warning";
+	}
+	var $message = $('<p>',{
+		text: msg,
+		class: className
+	});
+	$parentCollapse.append($message);
 }
 
 function hackMenuPython(hackName,hackInfo,$parentCollapse){
@@ -647,6 +704,8 @@ function createThisHackMenu(hackName,hackInfo){
 		hackMenuConflicts(hackName,hackInfo,$collapse);
 	}
 
+	hackGitHubMessage(hackName,hackInfo,$collapse);
+
 	var $label = $('<label>',{
 		text: "Include " + removeExtraChars(hackInfo.title)
 	});
@@ -690,12 +749,6 @@ function createHiddenHack(hackName,hackObj){
 function createHackMenus($here){
 	$.each(hacks,function(hackName,hackObj){
 		loadThisHack(hackName,hackObj);
-		if (hackObj.hidden === true){
-			$here.append(createHiddenHack(hackName,hackObj));
-		} else {
-			$here.append(createThisHackMenu(hackName,hackObj));
-		}
-		
 	});
 }
 

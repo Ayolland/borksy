@@ -108,7 +108,11 @@ header, section, footer {
     .collapsible .collapsible .collapsible .collapsible_header {
       background-color: transparent; }
 
-.conflict-warning {
+.github-message {
+  font-size: 0.75em;
+  font-style: italic; }
+
+.warning {
   font-weight: bold;
   font-style: italic; }
 

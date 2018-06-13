@@ -10,7 +10,8 @@ var hacks = {
 		hidden: true,
 		order: 2,
 		conflicts: false,
-		python: 'yellow'
+		python: 'yellow',
+		github: false
 	},
 
 	"utils": {
@@ -23,7 +24,8 @@ var hacks = {
 		hidden: true,
 		order: 1,
 		conflicts: false,
-		python: 'yellow'
+		python: 'yellow',
+		github: false
 	},
 
 	"edit-image-at-runtime": {
@@ -36,7 +38,8 @@ var hacks = {
 		hidden: true,
 		order: 2,
 		conflicts: false,
-		python: 'red'
+		python: 'red',
+		github: false
 	},
 
 	"directional-avatar": {
@@ -49,7 +52,8 @@ var hacks = {
 		hidden: false,
 		order: 10,
 		conflicts: false,
-		python: 'green'
+		python: 'green',
+		github: 'directional%20avatar.js'
 	},
 
 	"dynamic-background": {
@@ -62,7 +66,8 @@ var hacks = {
 		hidden: false,
 		order: 10,
 		conflicts: false,
-		python: 'green'
+		python: 'green',
+		github: 'dynamic%20background.js'
 	},
 
 	"exit-from-dialog": {
@@ -75,7 +80,8 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red'
+		python: 'red',
+		github: 'exit-from-dialog.js'
 	},
 
 	"end-from-dialog": {
@@ -88,7 +94,8 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red'
+		python: 'red',
+		github: 'end-from-dialog.js'
 	},
 
 	"javascript-dialog": {
@@ -101,7 +108,8 @@ var hacks = {
 		hidden: false,
 		order: 2,
 		conflicts: false,
-		python: 'red'
+		python: 'red',
+		github: 'javascript%20dialog.js'
 	},
 
 	"transparent-sprites": {
@@ -114,7 +122,8 @@ var hacks = {
 		hidden: false,
 		order: 10,
 		conflicts: false,
-		python: 'green'
+		python: 'green',
+		github: 'transparent%20sprites.js'
 	},
 
 	"logic-operators-extended": {
@@ -127,7 +136,8 @@ var hacks = {
 		hidden: false,
 		order: 2,
 		conflicts: false,
-		python: 'red'
+		python: 'red',
+		github: 'logic-operators-extended.js'
 	},
 
 	"permanent-items": {
@@ -140,7 +150,8 @@ var hacks = {
 		hidden: false,
 		order: 4,
 		conflicts: false,
-		python: 'red'
+		python: 'red',
+		github: 'permanent%20items.js'
 	},
 
 	"solid-items": {
@@ -153,7 +164,8 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red'
+		python: 'red',
+		github: 'solid%20items.js'
 	},
 
 	"unique-items": {
@@ -166,7 +178,8 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red'
+		python: 'red',
+		github: 'unique%20items.js'
 	},
 
 	"bitsymuse": {
@@ -179,7 +192,8 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'yellow'
+		python: 'yellow',
+		github: 'bitsymuse.js'
 	},
 
 	"multi-sprite-avatar": {
@@ -192,7 +206,8 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red'
+		python: 'red',
+		github: 'multi-sprite%20avatar.js'
 	}
 
 };
