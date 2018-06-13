@@ -168,7 +168,7 @@ function saveThisHack($thisHack,checkConflicts){
 	checkAndToggleIncludedDisplay($thisHack);
 
 	//requires removed currently
-	
+
 	// var thisRequires = hacks[$thisHack.data('hack')].requires;
 
 	// if( thisRequires && !thisRequires.includes(',') ){
@@ -547,7 +547,7 @@ function localHackFail(response,filename){
 }
 
 function loadThisHackLocally(hackName,hackInfo){
-	var filenameOverride = hackName + '.js';
+	var filenameOverride = hackName;
 	var filename = hackInfo.github;
 	var pathToDir = "hacks/dist/";
 	loadFileFromPath(filename,pathToDir,localHackSuccess,localHackFail,filenameOverride)
@@ -562,7 +562,7 @@ function githubHackSuccess(response,filename){
 function githubHackFail(response,filename){
 	var hackName = filename.substring(0,filename.length - 3);
 	hacks[hackName].usingGithub = false;
-	loadThisHackLocally(filename,hacks[filename]);
+	loadThisHackLocally(filename,hacks[hackName]);
 }
 
 function loadThisHackFromGithub(hackName,hackInfo){
