@@ -537,7 +537,8 @@ function selectFont(){
 }
 
 function localHackSuccess(response,filename){
-	var hackName = filename.substring(0,filename.length - 3);
+	var hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
+	//var hackName = filename.substring(0,filename.length - 3);
 	$("#hacks-section").append(createThisHackMenu(hackName,hacks[hackName]));
 }
 
@@ -553,7 +554,8 @@ function loadThisHackLocally(hackName,hackInfo){
 }
 
 function githubHackSuccess(response,filename){
-	var hackName = filename.substring(0,filename.length - 3);
+	var hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
+	//var hackName = filename.substring(0,filename.length - 3);
 	hacks[hackName].usingGithub = true;
 	$("#hacks-section").append(createThisHackMenu(hackName,hacks[hackName]));
 }
@@ -572,7 +574,9 @@ function loadThisHackFromGithub(hackName,hackInfo){
 }
 
 function loadThisHack(hackName,hackInfo){
-	if ( hackInfo.github !== false ){
+	if ( hackInfo.forceLocal !== false ){
+		loadThisHackLocally(hackName,hackInfo)
+	} else if ( hackInfo.github !== false ){
 		loadThisHackFromGithub(hackName,hackInfo)
 	} else {
 		// there's no dist version of kitsy/utils rn
@@ -609,7 +613,9 @@ function hackGitHubMessage(hackName,hackInfo,$parentCollapse){
 	var className = "github-message";
 	var msg = "";
 	var hackTitle = removeExtraChars(hackInfo.title);
-	if( hacks[hackName].usingGithub === true ){
+	if( hackInfo.forceLocal !== false ){
+		msg = 'Borksy is opting to use a local version of ' + hackTitle + ' from ' + hackInfo.forceLocal + '.';
+	} else if( hacks[hackName].usingGithub === true ){
 		msg = hackTitle + ' is using the most recent version from Github.';
 	} else {
 		msg = hackTitle + ' could not be loaded from Github, local version retrieved on ' + borksyInfo.lastUpdated + ' is being used.';

@@ -26,7 +26,8 @@ var hacks = {
 		order: 2,
 		conflicts: false,
 		python: 'yellow',
-		github: false
+		github: false,
+		forceLocal: false
 	},
 
 	"utils": {
@@ -40,7 +41,8 @@ var hacks = {
 		order: 1,
 		conflicts: false,
 		python: 'yellow',
-		github: false
+		github: false,
+		forceLocal: false
 	},
 
 	"edit-image-at-runtime": {
@@ -54,7 +56,8 @@ var hacks = {
 		order: 2,
 		conflicts: false,
 		python: 'red',
-		github: false
+		github: false,
+		forceLocal: false
 	},
 
 	"directional-avatar": {
@@ -68,7 +71,8 @@ var hacks = {
 		order: 10,
 		conflicts: false,
 		python: 'green',
-		github: 'directional%20avatar.js'
+		github: 'directional%20avatar.js',
+		forceLocal: false
 	},
 
 	"dynamic-background": {
@@ -82,7 +86,8 @@ var hacks = {
 		order: 10,
 		conflicts: false,
 		python: 'green',
-		github: 'dynamic%20background.js'
+		github: 'dynamic%20background.js',
+		forceLocal: false
 	},
 
 	"exit-from-dialog": {
@@ -96,7 +101,8 @@ var hacks = {
 		order: 5,
 		conflicts: false,
 		python: 'red',
-		github: 'exit-from-dialog.js'
+		github: 'exit-from-dialog.js',
+		forceLocal: false
 	},
 
 	"end-from-dialog": {
@@ -110,7 +116,8 @@ var hacks = {
 		order: 5,
 		conflicts: false,
 		python: 'red',
-		github: 'end-from-dialog.js'
+		github: 'end-from-dialog.js',
+		forceLocal: false
 	},
 
 	"javascript-dialog": {
@@ -124,7 +131,8 @@ var hacks = {
 		order: 2,
 		conflicts: false,
 		python: 'red',
-		github: 'javascript%20dialog.js'
+		github: 'javascript%20dialog.js',
+		forceLocal: "June 5th, 2018"
 	},
 
 	"transparent-sprites": {
@@ -138,7 +146,8 @@ var hacks = {
 		order: 10,
 		conflicts: false,
 		python: 'green',
-		github: 'transparent%20sprites.js'
+		github: 'transparent%20sprites.js',
+		forceLocal: false
 	},
 
 	"logic-operators-extended": {
@@ -152,7 +161,8 @@ var hacks = {
 		order: 2,
 		conflicts: false,
 		python: 'red',
-		github: 'logic-operators-extended.js'
+		github: 'logic-operators-extended.js',
+		forceLocal: false
 	},
 
 	"permanent-items": {
@@ -166,7 +176,8 @@ var hacks = {
 		order: 4,
 		conflicts: false,
 		python: 'red',
-		github: 'permanent%20items.js'
+		github: 'permanent%20items.js',
+		forceLocal: false
 	},
 
 	"solid-items": {
@@ -180,7 +191,8 @@ var hacks = {
 		order: 5,
 		conflicts: false,
 		python: 'red',
-		github: 'solid%20items.js'
+		github: 'solid%20items.js',
+		forceLocal: false
 	},
 
 	"unique-items": {
@@ -194,7 +206,8 @@ var hacks = {
 		order: 5,
 		conflicts: false,
 		python: 'red',
-		github: 'unique%20items.js'
+		github: 'unique%20items.js',
+		forceLocal: false
 	},
 
 	"bitsymuse": {
@@ -208,7 +221,8 @@ var hacks = {
 		order: 5,
 		conflicts: false,
 		python: 'yellow',
-		github: 'bitsymuse.js'
+		github: 'bitsymuse.js',
+		forceLocal: false
 	},
 
 	"multi-sprite-avatar": {
@@ -222,7 +236,8 @@ var hacks = {
 		order: 5,
 		conflicts: false,
 		python: 'red',
-		github: 'multi-sprite%20avatar.js'
+		github: 'multi-sprite%20avatar.js',
+		forceLocal: false
 	}
 
 };

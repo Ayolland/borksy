@@ -34,6 +34,13 @@
 		"rFN": 0,
 		"uCM": 0
 		},
+	"\/about\/how-to-use-borksy.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/about\/how-to-use-borksy.html",
+		"oF": 0
+		},
 	"\/about\/how-to-use-borksy.md": {
 		"cB": 0,
 		"cS": 0,
@@ -77,11 +84,11 @@
 		"rFN": 0,
 		"uCM": 0
 		},
-	"\/borksy.2.4.1.zip": {
+	"\/Borksy.3.0.zip": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/borksy.2.4.1.zip",
+		"oAP": "\/Borksy.3.0.zip",
 		"oF": 0
 		},
 	"\/borksy.gif": {
@@ -562,6 +569,16 @@
 		"oAP": "\/hacks\/info\/unique-items.readme.txt",
 		"oF": 0
 		},
+	"\/hacks\/javascript dialog.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/hacks\/min\/javascript dialog-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"\/hacks\/js-old\/bitsymuse.js": {
 		"ft": 64,
 		"ma": 0,
@@ -923,6 +940,16 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"\/scripts\/min\/libs-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/scripts\/min\/min\/libs-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"\/style\/style.css": {
 		"aP": 1,
 		"bl": 0,
@@ -979,27 +1006,6 @@
 		"ft": 8192,
 		"oA": 0,
 		"oAP": "\/testgames\/testgame.html",
-		"oF": 0
-		},
-	"\/testgames\/w-music\/01.mp3": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 0,
-		"oAP": "\/testgames\/w-music\/As_If_Pianos_Grew_on_Trees.mp3",
-		"oF": 0
-		},
-	"\/testgames\/w-music\/02.mp3": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 0,
-		"oAP": "\/testgames\/w-music\/02.mp3",
-		"oF": 0
-		},
-	"\/testgames\/w-music\/myBORKSYgame (9).html": {
-		"cB": 0,
-		"ft": 8192,
-		"oA": 0,
-		"oAP": "\/testgames\/w-music\/myBORKSYgame (9).html",
 		"oF": 0
 		}
 	},
