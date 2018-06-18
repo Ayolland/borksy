@@ -262,12 +262,12 @@
 		"oT": 1,
 		"q": 100
 		},
-	"\/hacks\/dist\/basic sfx.js": {
+	"\/hacks\/dist\/basic-sfx.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/dist\/min\/basic sfx-min.js",
+		"oAP": "\/hacks\/dist\/min\/basic-sfx-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -282,12 +282,12 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/dist\/canvas replacement.js": {
+	"\/hacks\/dist\/canvas-replacement.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/dist\/min\/canvas replacement-min.js",
+		"oAP": "\/hacks\/dist\/min\/canvas-replacement-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -302,42 +302,42 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/dist\/custom text effect.js": {
+	"\/hacks\/dist\/custom-text-effect.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/dist\/min\/custom text effect-min.js",
+		"oAP": "\/hacks\/dist\/min\/custom-text-effect-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/dist\/directional avatar.js": {
+	"\/hacks\/dist\/directional-avatar.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/dist\/min\/directional avatar-min.js",
+		"oAP": "\/hacks\/dist\/min\/directional-avatar-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/dist\/dynamic background.js": {
+	"\/hacks\/dist\/dynamic-background.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/dist\/min\/dynamic background-min.js",
+		"oAP": "\/hacks\/dist\/min\/dynamic-background-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/dist\/edit image from dialog.js": {
+	"\/hacks\/dist\/edit-image-from-dialog.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/dist\/min\/edit image from dialog-min.js",
+		"oAP": "\/hacks\/dist\/min\/edit-image-from-dialog-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -392,22 +392,22 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/dist\/gamepad input.js": {
+	"\/hacks\/dist\/gamepad-input.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/dist\/min\/gamepad input-min.js",
+		"oAP": "\/hacks\/dist\/min\/gamepad-input-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/dist\/javascript dialog.js": {
+	"\/hacks\/dist\/javascript-dialog.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/dist\/min\/javascript dialog-min.js",
+		"oAP": "\/hacks\/dist\/min\/javascript-dialog-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -422,12 +422,12 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/dist\/multi-sprite avatar.js": {
+	"\/hacks\/dist\/multi-sprite-avatar.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/dist\/min\/multi-sprite avatar-min.js",
+		"oAP": "\/hacks\/dist\/min\/multi-sprite-avatar-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -442,52 +442,52 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/dist\/permanent items.js": {
+	"\/hacks\/dist\/permanent-items.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/dist\/min\/permanent items-min.js",
+		"oAP": "\/hacks\/dist\/min\/permanent-items-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/dist\/solid items.js": {
+	"\/hacks\/dist\/solid-items.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/dist\/min\/solid items-min.js",
+		"oAP": "\/hacks\/dist\/min\/solid-items-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/dist\/tracery processing.js": {
+	"\/hacks\/dist\/tracery-processing.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/dist\/min\/tracery processing-min.js",
+		"oAP": "\/hacks\/dist\/min\/tracery-processing-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/dist\/transparent sprites.js": {
+	"\/hacks\/dist\/transparent-sprites.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/dist\/min\/transparent sprites-min.js",
+		"oAP": "\/hacks\/dist\/min\/transparent-sprites-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
 		},
-	"\/hacks\/dist\/unique items.js": {
+	"\/hacks\/dist\/unique-items.js": {
 		"ft": 64,
 		"ma": 0,
 		"mi": 1,
 		"oA": 0,
-		"oAP": "\/hacks\/dist\/min\/unique items-min.js",
+		"oAP": "\/hacks\/dist\/min\/unique-items-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -568,16 +568,6 @@
 		"oA": 0,
 		"oAP": "\/hacks\/info\/unique-items.readme.txt",
 		"oF": 0
-		},
-	"\/hacks\/javascript dialog.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/hacks\/min\/javascript dialog-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
 		},
 	"\/hacks\/js-old\/bitsymuse.js": {
 		"ft": 64,
