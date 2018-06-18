@@ -9,7 +9,7 @@ function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filen
 		doneCallback($ajax.responseText,filenameOverride);
 	});
 	$ajax.fail(function(){
-		loadedFiles[filename] = "";
+		//loadedFiles[filename] = "";
 		console.log('Error loading ' + filename + ' via AJAX');
 		failCallBack($ajax.responseText,filenameOverride);
 	});
@@ -547,21 +547,20 @@ function localHackFail(response,filename){
 }
 
 function loadThisHackLocally(hackName,hackInfo){
-	var filenameOverride = hackName;
-	var filename = hackInfo.github;
+	var hackName = hackName.substr(0, hackName.lastIndexOf('.')) || hackName;
+	var filename = hackName + ".js"
 	var pathToDir = "hacks/dist/";
-	loadFileFromPath(filename,pathToDir,localHackSuccess,localHackFail,filenameOverride)
+	loadFileFromPath(filename,pathToDir,localHackSuccess,localHackFail,filename)
 }
 
 function githubHackSuccess(response,filename){
 	var hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
-	//var hackName = filename.substring(0,filename.length - 3);
 	hacks[hackName].usingGithub = true;
 	$("#hacks-section").append(createThisHackMenu(hackName,hacks[hackName]));
 }
 
 function githubHackFail(response,filename){
-	var hackName = filename.substring(0,filename.length - 3);
+	var hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
 	hacks[hackName].usingGithub = false;
 	loadThisHackLocally(filename,hacks[hackName]);
 }

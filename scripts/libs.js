@@ -132,7 +132,7 @@ var hacks = {
 		conflicts: false,
 		python: 'red',
 		github: 'javascript%20dialog.js',
-		forceLocal: "June 5th, 2018"
+		forceLocal: false
 	},
 
 	"transparent-sprites": {
