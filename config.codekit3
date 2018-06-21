@@ -84,11 +84,11 @@
 		"rFN": 0,
 		"uCM": 0
 		},
-	"\/Borksy.3.0.zip": {
+	"\/Borksy.3.1.zip": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/Borksy.3.0.zip",
+		"oAP": "\/Borksy.3.1.zip",
 		"oF": 0
 		},
 	"\/borksy.gif": {
@@ -926,16 +926,6 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "\/scripts\/min\/libs-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"\/scripts\/min\/libs-min.js": {
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "\/scripts\/min\/min\/libs-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
