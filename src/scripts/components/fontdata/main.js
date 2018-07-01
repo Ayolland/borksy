@@ -9,6 +9,11 @@ import {
 	fonts
 } from '../../libs';
 
+var fontsByName = fonts.reduce(function(result, font){
+	result[font.name] = font;
+	return result;
+}, {});
+
 var fontsize = {
 	x: 6,
 	y: 8
@@ -84,9 +89,7 @@ function changeFontFilename(filename) {
 }
 
 function selectFont() {
-	var font = fonts.find(function (font) {
-		return font.name === $fontSelect.val();
-	});
+	var font = fontsByName[$fontSelect.val()];
 	changeFontFilename(font.name);
 	readFontFile(font.data);
 	$('.font-preview').attr('src', font.preview); // update preview
