@@ -71,8 +71,7 @@ function onFontImageLoaded() {
 	// flatten characters into fontdata
 	fontdata = [].concat.apply([], fontdata);
 	// display output
-	//document.getElementById('fontdata').value = "[" + fontdata.toString() + "]";
-	$fontdata.val("[/*" + $fileInput.val() + "*/" + fontdata.toString() + "]");
+	$fontdata.val("[\n\t/*" + $fileInput.val() + "*/\n\t" + fontdata.toString() + "\n]");
 	$fontdata.change();
 }
 
