@@ -101,13 +101,7 @@ function reOrderHacks() {
 		}, hackObj));
 	});
 	hackArray.sort(function (obj1, obj2) {
-		if (obj1.order > obj2.order) {
-			return 1;
-		} else if (obj1.order === obj2.order) {
-			return 0;
-		} else {
-			return -1;
-		}
+		return obj1.order - obj2.order;
 	});
 	return hackArray;
 }
