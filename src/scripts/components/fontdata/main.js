@@ -93,7 +93,8 @@ function selectFont() {
 }
 
 var $html = $(html);
-var $fileInput = $html.find('#fontfilename');
+var $fileInput = $('<input type="hidden" name="fontfilename" id="fontfilename" />');
+$html.append($fileInput);
 var $fontdata = $html.find('#fontdata');
 
 persist($fontdata, fontdata);
