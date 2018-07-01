@@ -542,7 +542,7 @@ import $theme from './components/theme/main';
 import $title from './components/title/main';
 import $gamedata from './components/gamedata/main';
 import $fontdata from './components/fontdata/main';
-
+import $hacks from './components/hacks/main';
 import $additionalJS from './components/additionalJS/main';
 
 $('#about-section').append($about);
@@ -550,7 +550,7 @@ $('#title-section').append($title);
 $('#gamedata-section').append($gamedata);
 $('#fontdata-section').append($fontdata);
 $('#theme-section').append($theme);
-
+$('#hacks-section').append($hacks);
 $('#additionalJS-section').append($additionalJS);
 activateCollapsibles();
 // replaceElements();
