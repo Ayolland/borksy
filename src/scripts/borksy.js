@@ -105,13 +105,26 @@ import $hacks, { assembleHacks } from './components/hacks/main';
 import $additionalJS from './components/additionalJS/main';
 import assemble from './assembler/assembler';
 
-$('#about-section').append($about);
-$('#title-section').append($title);
-$('#gamedata-section').append($gamedata);
-$('#fontdata-section').append($fontdata);
-$('#theme-section').append($theme);
-$('#hacks-section').append($hacks);
-$('#additionalJS-section').append($additionalJS);
+var $form = $('#form');
+[
+	["About Borksy", $about],
+	["Page Title / Filename", $title],
+	["Game Data", $gamedata],
+	["Font Data", $fontdata],
+	["HTML / CSS Theme", $theme],
+	["Hacks", $hacks],
+	["Additional JavaScript", $additionalJS],
+].map(function(options){
+	var name = options[0];
+	var $content = options[1];
+	var $section = $('<section id="'+name.toLowerCase().replace(/\s/g,'-')+'-section" data-collapsible data-header="'+name+'" class="collapsible"></section>');
+	$section.append($content);
+	return $section;
+}).forEach(function($section) {
+	$form.append($section);
+});
+
+$form.find('#about-borksy-section').addClass('open');
 
 activateCollapsibles();
 
