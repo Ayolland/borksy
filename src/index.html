@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<meta name="author" content="Andrew Yolland">
+		<meta name="description" content="A tool for extending Bitsy games">
+		<meta name="keywords" content="borksy,bitsy,game,games">
+		<title>Borksy Game Hacker</title>
+	</head>
+	<body>
+		<div id="preloader">
+			<div class="preloader_animation borksy"></div>
+			<p class="preloader_text">Loading...</p>
+		</div>
+		<div id="wrapper">
+			<header>
+				<div id="mascot" class="borksy"></div>
+				<h1><strong>Borksy</strong> Game Hacker</h1>
+			</header>
+
+			<section id="about-section" data-collapsible data-header="About Borksy" class="collapsible open"></section>
+
+			<form>
+				<section id="title-section" data-collapsible data-header="Page Title / Filename" class="collapsible"></section>
+				<section id="gamedata-section" data-collapsible data-header="Game Data" class="collapsible"></section>
+				<section id="fontdata-section" data-collapsible data-header="Font Data" class="collapsible"></section>
+				<section id="theme-section" data-collapsible data-header="HTML / CSS Theme" class="collapsible"></section>
+
+				<section data-collapsible data-header="Hacks" class="collapsible" id="hacks-section">
+					<p>These are pre-loaded hacks that modify and extend Bitsy's behavior. Just check the box to include the hack. Hacks with options have a expandable section with a modifiable JavaScript options object. If you need a hack not seen here, use the Additional JavaScript field instead.</p>
+				</section>
+	
+				<section id="additionalJS-section" data-collapsible data-header="Additional JavaScript" class="collapsible"></section>
+				
+			</form>
+
+			<div class="button-group">
+				<label>
+					<button id="restore-button">Restore Defaults</button>
+					<span>(Ctl/Cmd D)</span>
+				</label>
+				<label>
+					<button id="download-button">Download File</button>
+					<span>(Ctl/Cmd S)</span>
+				</label>
+			</div>
+
+			<footer>
+				<p>Borksy is built by AYolland: <a href="https://twitter.com/ayolland">Twitter</a> <a href="https://github.com/Ayolland">Github</a> <a href="https://ayolland.itch.io/">Itch.io</a></p>
+				<p>Bitsy is built by Adam Le Doux: <a href="https://twitter.com/adamledoux">Twitter</a> <a href="https://github.com/le-doux">Github</a> <a href="https://ledoux.itch.io/">Itch.io</a></p>
+				<p>Bitsy Font Converter is built by Sean S LeBanc: <a href="https://twitter.com/SeanSLeBlanc">Twitter</a> <a href="https://github.com/seleb">Github</a> <a href="https://seansleblanc.itch.io/">Itch.io</a></p>
+			</footer>
+
+		</div>
+	</body>
+</html>

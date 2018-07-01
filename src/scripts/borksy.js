@@ -1,0 +1,561 @@
+import $ from 'jquery';
+import {
+	borksyInfo,
+	hacks
+} from './libs';
+
+import { makeNewCollapsible, activateThisCollapsible } from './collapsible';
+var loadedFiles ={};
+var $collapsibles;
+
+function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride){
+	doneCallback = doneCallback || function(){};
+	failCallBack = failCallBack || function(){};
+	var $ajax = $.ajax( pathToDir + filename );
+	$ajax.done(function(){
+		filename = filenameOverride || filename;
+		loadedFiles[filename] = escape($ajax.responseText);
+		console.log('Loaded ' + filename + ' via AJAX');
+		doneCallback($ajax.responseText,filenameOverride);
+	});
+	$ajax.fail(function(){
+		//loadedFiles[filename] = "";
+		console.log('Error loading ' + filename + ' via AJAX');
+		failCallBack($ajax.responseText,filenameOverride);
+	});
+}
+
+function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent( unescape(text) ) );
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+    console.log("File '" + filename + "' downloaded");
+}
+
+function shortenString(value,length){
+	length = length || 10;
+	var string = value.toString();
+	var ending = string.length > length ? "..." : "";
+	return string.substring(0,length) + ending;
+}
+
+function dashesToCamelCase(string){
+	return string.toLowerCase().replace(/-(.)/g, function(match, group1) {
+        return group1.toUpperCase();
+    });
+}
+
+function removeExtraChars(string){
+	return string.replace(/[^\w\s]/gi, '');
+}
+
+function arrayToSentenceFrag(arr){
+	if (arr.length > 1){
+		return arr.slice(0, arr.length - 1).join(', ') + ", and " + arr.slice(-1);
+	} else {
+		return arr[0];
+	}
+}
+
+function cleanUsingRegEx($this,regExStr){
+	var regex = new RegExp(regExStr,"g");
+	$this.val($this.val().replace(regex,""));
+};
+
+function saveThisData($this, value){
+	if ( $this.data('clean-regex') ){
+		cleanUsingRegEx($this, $this.data('clean-regex'));
+	}
+	if ( $this.prop('type') === "checkbox"){
+		value = $this.prop('checked');
+	} else if (typeof(value) === "undefined"){
+		value = $this.val();
+	} else {
+		$this.val(value);
+	}
+	var name = $this.attr('name');
+	localStorage.setItem(name, value);
+	console.log("Key: '" + name + "' saved to localStorage: " + shortenString(value) );
+}
+
+function loadThisData($this){
+	var name = $this.attr('name');
+	var value = localStorage.getItem(name);
+	if ( value === null ){
+		console.log(" Attempted to get key: " + name + " from localStorage, but nothing was found.");
+		return;
+	} else if ( $this.prop('type') === "checkbox" ){
+		var booleanVal = ( value === 'true');
+		$this.prop('checked',booleanVal);
+	} else {
+		$this.val(value);
+	}
+	console.log(" Got key: " + name + " from localStorage: " + shortenString(value) );
+}
+
+function setSaveTrigger($this){
+	$this.change(function(){
+		saveThisData($this);
+	});
+}
+
+function checkHacksRequiring($thisHack){
+	var $hacksWithRequires = $('[data-requires]');
+	var $includedHacksRequiringThis = $();
+	$hacksWithRequires.each(function(index){
+		var $currentHack = $(this);
+		var hackIsIncluded = $currentHack.val() === 'true' || $currentHack.prop('checked') === true;
+		var hackRequiresThis = $currentHack.data('requires').includes($thisHack.attr('id')) || false;
+		if (hackIsIncluded && hackRequiresThis){
+			$includedHacksRequiringThis = $includedHacksRequiringThis.add($currentHack);
+		}
+	});
+	if( $includedHacksRequiringThis.length > 0 ){
+		//no logic yet for hacks that can be both required AND user-selected
+		//$thisHack.prop('checked', true);
+		$thisHack.val(true);
+	} else {
+		//$thisHack.prop('checked', false);
+		$thisHack.val(false);
+	}
+	saveThisHack($thisHack);
+}
+
+function removeConflictingHacks(conflictsArr){
+	$.each(conflictsArr,function(index,hackName){
+		var $conflictingHack = $('#' + hackName);
+		var hiddenAndNotIncluded = $conflictingHack.prop('type') === 'hidden' && $conflictingHack.val() === false;
+		var checkboxAndNotIncluded = $conflictingHack.prop('type') === 'checkbox' && $conflictingHack.prop('checked') === false;
+		if( hiddenAndNotIncluded || checkboxAndNotIncluded ){
+			return;
+		}
+		$conflictingHack.val(false);
+		$conflictingHack.prop('checked',false);
+		saveThisHack($conflictingHack, false);
+	});
+}
+
+function checkAndToggleIncludedDisplay($thisField){
+	var $collapsible = $('[data-associated-hack=' + $thisField.data('hack') + ']');
+	if( $collapsible.length > 0 ){
+		toggleIncludedDisplay($collapsible,$thisField);
+	}
+}
+
+function toggleIncludedDisplay($collapsible,$thisHack){
+	if ( $thisHack.prop('checked') === true ){
+		$collapsible.addClass('included');
+	} else {
+		$collapsible.removeClass('included');
+	}
+}
+
+function saveThisHack($thisHack,checkConflicts){
+	if( typeof(checkConflicts) === 'undefined' ){
+		checkConflicts = true;
+	}
+	saveThisData($thisHack);
+	checkAndToggleIncludedDisplay($thisHack);
+
+	//requires removed currently
+
+	// var thisRequires = hacks[$thisHack.data('hack')].requires;
+
+	// if( thisRequires && !thisRequires.includes(',') ){
+	// 	var $requiredHack = $('#' + thisRequires);
+	// 	checkHacksRequiring($requiredHack);
+	// } else if ( thisRequires ) {
+	// 	$.each(thisRequires.split(','),function(index,requiredHackName){
+	// 		var $requiredHack = $('#' + requiredHackName);
+	// 		checkHacksRequiring($requiredHack);
+	// 	});
+	// }
+	var thisConflicts = hacks[$thisHack.data('hack')].conflicts;
+	if( thisConflicts && checkConflicts){
+		removeConflictingHacks(thisConflicts.split(','));
+	}
+}
+
+function hackIncludeTrigger($this){
+	$this.change(function(){
+		saveThisHack($this);
+	});
+}
+
+function assembleSingles(modifiedTemplate){
+	$('[data-borksy-replace-single]').each(function(){
+		var $this = $(this);
+		var valueToReplace = 'BORKSY-' + $this.data('borksy-replace-single');
+		var formValue = $this.val();
+		modifiedTemplate = modifiedTemplate.replace(valueToReplace, formValue);
+	});
+	return	modifiedTemplate;
+}
+
+function reOrderHacks(){
+	var hackArray = [];
+	$.each(hacks,function(hackName, hackObj){
+		hackArray.push(Object.assign({name: hackName},hackObj));
+	});
+	hackArray.sort(function(obj1,obj2){
+		if(obj1.order > obj2.order){
+			return 1;
+		} else if (obj1.order === obj2.order){
+			return 0;
+		} else {
+			return -1;
+		}
+	});
+	return hackArray;
+}
+
+function assembleHacks(hackBundle){
+	var orderedHacks = reOrderHacks();
+	$.each(orderedHacks,function(index, hackObj){
+
+		var hackName = hackObj.name;
+		var filename = hackObj.type === "simple" && false ? hackName + "-min.js" : hackName + ".js";
+		var $hackField = $('#' + hackName );
+		var isIncluded = ( $hackField.prop('checked') || ($hackField.val() === 'true') );
+		if (!isIncluded){
+			return;
+		}
+		
+		var hackFile = loadedFiles[filename];
+		if (hackObj.type === "options"){
+			var hackOptions = $('#' + hackName + '-options').val();
+			hackOptions = "var hackOptions = {\n" + hackOptions + "\n};"
+			hackFile = unescape(hackFile).replace(new RegExp(/^var\s+hackOptions\s?=\s?{[\s\S]*?^};$/,'gm'),hackOptions);
+		}
+		hackBundle += hackFile + '\n';
+	});
+	return hackBundle;
+}
+
+function assembleAndDownloadFile(){
+	$('[data-save]').each(function(){
+		saveThisData($(this));
+	});
+
+	var modifiedTemplate = loadedFiles[ borksyInfo.templateVersion + '.template.html'].repeat(1);
+	var hackBundle = "";
+
+	modifiedTemplate = assembleSingles(modifiedTemplate);
+
+	$('[data-borksy-replace-single]').promise().done(function(){
+		hackBundle = assembleHacks(hackBundle);
+	});
+
+	$('[data-hack]').promise().done(function(){
+		var filename = $('#filename').val();
+		modifiedTemplate = modifiedTemplate.replace('BORKSY-HACKS', hackBundle);
+		download( filename + '.html', modifiedTemplate);
+	});
+}
+
+function togglePartyMode(){
+	var $body = $('body');
+	if( $body.hasClass('party') ){
+		$body.removeClass('party');
+		alert('😾 Party Mode Deactivated. Everyone out. 😾');
+	} else {
+		$body.addClass('party');
+		alert('✨🌈 Party Mode Activated! 🌈✨');
+	}
+}
+
+function onClickRestore(){
+	if ( confirm('Are you sure you want to erase all data and restore defaults?') ){
+		clear();
+		restoreDefaults();
+	}
+}
+function localHackSuccess(response,filename){
+	var hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
+	//var hackName = filename.substring(0,filename.length - 3);
+	$("#hacks-section").append(createThisHackMenu(hackName,hacks[hackName]));
+}
+
+function localHackFail(response,filename){
+	
+}
+
+function loadThisHackLocally(hackName,hackInfo){
+	var hackName = hackName.substr(0, hackName.lastIndexOf('.')) || hackName;
+	var filename = hackName + ".js"
+	var pathToDir = "hacks/dist/";
+	loadFileFromPath(filename,pathToDir,localHackSuccess,localHackFail,filename)
+}
+
+function githubHackSuccess(response,filename){
+	var hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
+	hacks[hackName].usingGithub = true;
+	$("#hacks-section").append(createThisHackMenu(hackName,hacks[hackName]));
+}
+
+function githubHackFail(response,filename){
+	var hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
+	hacks[hackName].usingGithub = false;
+	loadThisHackLocally(filename,hacks[hackName]);
+}
+
+function loadThisHackFromGithub(hackName,hackInfo){
+	var filenameOverride = hackName + '.js';
+	var filename = hackInfo.github;
+	var pathToDir = "https://raw.githubusercontent.com/seleb/bitsy-hacks/master/dist/";
+	loadFileFromPath(filename,pathToDir,githubHackSuccess,githubHackFail,filenameOverride);
+}
+
+function loadThisHack(hackName,hackInfo){
+	if ( hackInfo.forceLocal !== false ){
+		loadThisHackLocally(hackName,hackInfo)
+	} else if ( hackInfo.github !== false ){
+		loadThisHackFromGithub(hackName,hackInfo)
+	} else {
+		// there's no dist version of kitsy/utils rn
+	}
+}
+
+function bakeHackData($element,hackName,hackInfo){
+	$element.attr({
+		'data-save':true,
+		'data-default':false,
+		'data-default-type':"boolean",
+		'data-hack': hackName,
+		'data-hack-type': hackInfo.type
+	});
+	if (hackInfo.requires){
+		$element.attr('data-requires',hackInfo.requires);
+	}
+}
+
+function hackMenuConflicts(hackName,hackInfo,$parentCollapse){
+	var conflictTitlesArr = []
+	$.each(hackInfo.conflicts.split(','),function(index,conflictName){
+		conflictTitlesArr.push( removeExtraChars(hacks[conflictName].title) );
+	});
+	var sentenceFrag = arrayToSentenceFrag(conflictTitlesArr);
+	var $warning = $('<p>',{
+		text: 'This hack conflicts with ' + sentenceFrag + '.',
+		class: 'conflict-warning'
+	});
+	$parentCollapse.append($warning);
+}
+
+function hackGitHubMessage(hackName,hackInfo,$parentCollapse){
+	var className = "github-message";
+	var msg = "";
+	var hackTitle = removeExtraChars(hackInfo.title);
+	if( hackInfo.forceLocal !== false ){
+		msg = 'Borksy is opting to use a local version of ' + hackTitle + ' from ' + hackInfo.forceLocal + '.';
+	} else if( hacks[hackName].usingGithub === true ){
+		msg = hackTitle + ' is using the most recent version from Github.';
+	} else {
+		msg = hackTitle + ' could not be loaded from Github, local version retrieved on ' + borksyInfo.lastUpdated + ' is being used.';
+		className += " warning";
+	}
+	var $message = $('<p>',{
+		text: msg,
+		class: className
+	});
+	$parentCollapse.append($message);
+}
+
+function hackMenuPython(hackName,hackInfo,$parentCollapse){
+	var $friendliness = makeNewCollapsible( removeExtraChars(hackInfo.title) + " Bitspy Friendliness:");
+	var sentenceStart = "Use of this Hack ";
+	var sentenceEnd = "";
+	var bitspyLink = "<a href='https://github.com/Ragzouken/bitspy'>the Python Player for Bitsy</a> ";
+	bitspyLink += "(IE: <a href='https://candle.itch.io/bitsy-boutique'>The Bitsy Boutique</a>)";
+	var fine = "The features in this hack will not be available, but your game should otherwise function normally."
+	var notfine = "Your game will likely appear broken."
+	switch (hackInfo.python){
+		case "green":
+			sentenceStart += "does not interfere with ";
+			sentenceEnd = ". " + fine;
+		break;
+		case "yellow":
+			sentenceStart += "is possible with ";
+			sentenceEnd = " if and only if there is no script reference to it in dialog. " + fine;
+		break;
+		case "red":
+		default:
+			sentenceStart += "is not compatible with ";
+			sentenceEnd += ". " + notfine;
+		break;
+	}
+	var $text = $('<p>',{
+		html: sentenceStart + bitspyLink + sentenceEnd
+	});
+	$friendliness.addClass('python').addClass(hackInfo.python).append($text);
+	$parentCollapse.append($friendliness);
+}
+
+function hackMenuOptions(hackName,hackInfo,$parentCollapse){
+	var $options = makeNewCollapsible( removeExtraChars(hackInfo.title) + " Options:");
+	var $optionsLabel = $('<label>',{
+		text: "var " + dashesToCamelCase(hackName) + "Options = {"
+	});
+	loadFileFromPath(hackName + '.options.txt','hacks/options/',function(responseText){
+		var $optionsField = $('<textarea>',{
+			rows: 5,
+			cols: 50,
+			text: responseText,
+			name: hackName + '.options',
+			id: hackName + '-options'
+		});
+		$optionsField.attr({
+			'data-save':true,
+			'data-default-type':"hackOptions",
+			'data-default': hackName + '.options.txt'
+		});
+		loadThisData($optionsField);
+		setSaveTrigger($optionsField);
+		$optionsLabel.append($optionsField);
+		$optionsLabel.append(document.createTextNode("};"));
+		$options.append($optionsLabel);
+		$parentCollapse.append($options);
+	});
+}
+
+function hackMenuReadme(hackName,hackInfo,$parentCollapse){
+	var $readme = makeNewCollapsible( removeExtraChars(hackInfo.title) + " README:");
+	loadFileFromPath(hackName + '.readme.txt','hacks/info/',function(responseText){
+		var $pre = $('<pre>',{
+			text: responseText
+		});
+		$readme.append($pre);
+		$parentCollapse.append($readme);
+	});
+}
+
+function createThisHackMenu(hackName,hackInfo){
+	var $collapse = makeNewCollapsible(hackInfo.title + " (By " + hackInfo.author + ")");
+	$collapse.attr('data-associated-hack',hackName);
+
+	var $description = $('<p>',{
+		text: hackInfo.description
+	});
+	$collapse.append($description);
+
+	if (hackInfo.conflicts){
+		hackMenuConflicts(hackName,hackInfo,$collapse);
+	}
+
+	hackGitHubMessage(hackName,hackInfo,$collapse);
+
+	var $label = $('<label>',{
+		text: "Include " + removeExtraChars(hackInfo.title)
+	});
+	var $checkbox = $('<input>',{
+		type: 'checkbox',
+		name: hackName,
+		id: hackName
+	});
+	bakeHackData($checkbox,hackName,hackInfo);
+	loadThisData($checkbox);
+	toggleIncludedDisplay($collapse,$checkbox);
+	hackIncludeTrigger($checkbox);
+	$label.append($checkbox);
+	$collapse.append($label);
+
+	if(hackInfo.type === "options"){
+		hackMenuOptions(hackName,hackInfo,$collapse);
+	}
+
+	if(hackInfo.readme === true){
+		hackMenuReadme(hackName,hackInfo,$collapse);
+	}
+
+	hackMenuPython(hackName,hackInfo,$collapse);
+
+	return $collapse;
+}
+
+function createHiddenHack(hackName,hackObj){
+	var $hidden = $('<input>',{
+		type: "hidden",
+		name: hackName,
+		id: hackName
+	});
+	bakeHackData($hidden,hackName,hackObj);
+	loadThisData($hidden);
+
+	return $hidden;
+}
+
+function createHackMenus($here){
+	$.each(hacks,function(hackName,hackObj){
+		loadThisHack(hackName,hackObj);
+	});
+}
+
+function activateCollapsibles(){
+	$collapsibles = $('[data-collapsible]');
+	var counter = 0;
+	$collapsibles.each( function(){
+		var $thisCollapsible = $(this);
+		activateThisCollapsible($thisCollapsible);
+		if( $thisCollapsible.attr('id') === "hacks-section" ){
+			console.log('HACK IT UP YO');
+			createHackMenus($thisCollapsible);
+		}
+		counter++;
+		if (counter === $collapsibles.length){
+			$('#preloader').fadeOut();
+		}
+	});
+}
+
+function setHotKeys(){
+	$(window).bind('keydown', function(event) {
+		if (event.ctrlKey || event.metaKey) {
+			switch (String.fromCharCode(event.which).toLowerCase()) {
+			case 's':
+				event.preventDefault();
+				assembleAndDownloadFile();
+			break;
+			case 'd':
+				event.preventDefault();
+				restoreDefaults();
+			break;
+			case 'p':
+				event.preventDefault();
+				togglePartyMode();
+			break;
+			}
+		}
+	});
+}
+
+import { restoreDefaults, clear } from './persist';
+
+import $about from './components/about/main';
+import $theme from './components/theme/main';
+import $title from './components/title/main';
+import $gamedata from './components/gamedata/main';
+import $fontdata from './components/fontdata/main';
+
+import $additionalJS from './components/additionalJS/main';
+
+$('#about-section').append($about);
+$('#title-section').append($title);
+$('#gamedata-section').append($gamedata);
+$('#fontdata-section').append($fontdata);
+$('#theme-section').append($theme);
+
+$('#additionalJS-section').append($additionalJS);
+activateCollapsibles();
+// replaceElements();
+// $('#download-button').click(assembleAndDownloadFile);
+// $('#restore-button').click(restoreDefaults);
+$('#restore-button').click(onClickRestore);
+setHotKeys();
+$('#mascot').click(togglePartyMode);
