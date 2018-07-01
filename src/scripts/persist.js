@@ -30,6 +30,7 @@ export default function persist($input, defaultValue) {
 		localStorage.setItem(name, value);
 		console.log("Key: '" + name + "' saved to localStorage: " + shortenString(value));
 	});
+	$input.change();
 
 	inputs[name] = {
 		$input,
