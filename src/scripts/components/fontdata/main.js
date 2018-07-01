@@ -9,6 +9,21 @@ import {
 	fonts
 } from '../../libs';
 
+var fontsize = {
+	x: 6,
+	y: 8
+}; // bitsy font size
+var characters = {
+	x: 16,
+	y: 16
+}; // x * y must equal 256
+var padding = 1;
+// canvas context
+var canvas = document.createElement('canvas');
+canvas.width = (fontsize.x + padding) * characters.x + padding;
+canvas.height = (fontsize.y + padding) * characters.y + padding;
+var ctx = canvas.getContext('2d');
+
 function loadFontImage(event) {
 	var input = event.target;
 	if (!input.files || !input.files[0]) {
@@ -37,20 +52,6 @@ function readFontFile(eventOrFilename) {
 }
 
 function onFontImageLoaded() {
-	var fontsize = {
-		x: 6,
-		y: 8
-	}; // bitsy font size
-	var characters = {
-		x: 16,
-		y: 16
-	}; // x * y must equal 256
-	var padding = 1;
-	// canvas context
-	var canvas = document.createElement('canvas');
-	canvas.width = (fontsize.x + padding) * characters.x + padding;
-	canvas.height = (fontsize.y + padding) * characters.y + padding;
-	var ctx = canvas.getContext('2d');
 	var fontdata = [];
 	ctx.drawImage(this, 0, 0);
 	// read data from canvas
