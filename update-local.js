@@ -12,6 +12,7 @@ const rimraf = require('rimraf');
 const tempDir = './temp';
 const hackRepo = 'seleb/bitsy-hacks#master';
 const targetDir = './src/scripts/components/hacks/hacks';
+const localHacksFile = join(targetDir, 'localHacks.js');
 
 
 function download(repo, dest) {
@@ -43,6 +44,17 @@ async function main() {
 			fs.copyFileSync(join(hackDir, file), join(targetDir, basename(file)))
 		);
 		console.log(`copied ${files.length} hacks to "${targetDir}"`);
+		// create localHacks file for importing in borksy
+
+		const string = `// this is an auto-generated file!
+// you probably want to check update-local.js instead of changing it directly
+${files.map((file,idx)=>`import hack${idx} from 'raw-loader!./${file}';`).join('\n')}
+
+export default {
+${files.map((file,idx)=>`	'${encodeURIComponent(file)}': hack${idx}`).join(',\n')}
+};`;
+		fs.writeFileSync(localHacksFile, string);
+		console.log(`wrote "${localHacksFile}"`);
 	} catch (err) {
 		throw err;
 	} finally {
