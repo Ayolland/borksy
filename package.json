@@ -1,0 +1,25 @@
+{
+  "name": "borksy",
+  "version": "1.0.0",
+  "description": "Borksy Game Hacker: A tool for extending Bitsy games",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ayolland/borksy.git"
+  },
+  "keywords": [
+    "bitsy",
+    "javascript",
+    "hacks",
+    "gui"
+  ],
+  "author": "Ayolland",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ayolland/borksy/issues"
+  },
+  "homepage": "https://github.com/Ayolland/borksy#readme",
+}
