@@ -2,7 +2,7 @@ import $ from 'jquery';
 import persist from '../../persist';
 
 import html from './.html';
-import fontdata from './fontdata.txt';
+import fontdataDefault from './fontdata.txt';
 
 import $fontSelect from './fontselect';
 import {
@@ -97,7 +97,7 @@ var $fileInput = $('<input type="hidden" name="fontfilename" id="fontfilename" /
 $html.append($fileInput);
 var $fontdata = $html.find('#fontdata');
 
-persist($fontdata, fontdata);
+persist($fontdata, fontdataDefault);
 persist($fileInput);
 
 $html.find('#font-file-input').on('change', loadFontImage);
