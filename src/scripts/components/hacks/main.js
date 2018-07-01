@@ -40,37 +40,27 @@ function toggleIncludedDisplay($collapsible, $thisHack) {
 	}
 }
 
-function reOrderHacks() {
-	var hackArray = [];
-	$.each(hacks, function (hackName, hackObj) {
-		hackArray.push(Object.assign({
-			name: hackName
-		}, hackObj));
-	});
-	hackArray.sort(function (obj1, obj2) {
-		return obj1.order - obj2.order;
-	});
-	return hackArray;
+function reOrderHacks(obj1, obj2) {
+	return obj1.order - obj2.order;
 }
 
 export function assembleHacks() {
 	var hackBundle = '';
-	var orderedHacks = reOrderHacks();
+	var orderedHacks = hacksToAssemble.slice().sort(reOrderHacks);
 	$.each(orderedHacks, function (index, hackObj) {
 
-		var hackName = hackObj.name;
-		var filename = hackObj.type === "simple" && false ? hackName + "-min.js" : hackName + ".js";
+		var hackName = toCamelCase(hackObj.file);
 		var $hackField = $('#' + hackName);
 		var isIncluded = ($hackField.prop('checked') || ($hackField.val() === 'true'));
 		if (!isIncluded) {
 			return;
 		}
 
-		var hackFile = loadedFiles[filename];
+		var hackFile = hackObj.hackFile;
 		if (hackObj.type === "options") {
 			var hackOptions = $('#' + hackName + '-options').val();
 			hackOptions = "var hackOptions = {\n" + hackOptions + "\n};"
-			hackFile = unescape(hackFile).replace(new RegExp(/^var\s+hackOptions\s?=\s?{[\s\S]*?^};$/, 'gm'), hackOptions);
+			hackFile = unescape(hackFile).replace(new RegExp(/^var\s+hackOptions\s?=\s?{[\s\S]*?^};$/, 'm'), hackOptions);
 		}
 		hackBundle += hackFile + '\n';
 	});
@@ -108,7 +98,7 @@ function createThisHackMenu(options) {
 	var $checkbox = $('<input>', {
 		type: 'checkbox',
 		name: options.file,
-		id: options.file,
+		id: toCamelCase(options.file),
 	});
 	persist($checkbox, false);
 	toggleIncludedDisplay($collapse, $checkbox);
@@ -148,8 +138,8 @@ function createThisHackMenu(options) {
 		var $optionsField = $('<textarea>', {
 			rows: 5,
 			text: options.options,
-			name: options.file + '.options',
-			id: options.file + '-options'
+			name: toCamelCase(options.file) + '.options',
+			id: toCamelCase(options.file) + '-options'
 		});
 		$optionsField.prop('wrap', 'off');
 		persist($optionsField, options.options);
@@ -175,13 +165,16 @@ function createThisHackMenu(options) {
 
 var $html = $(html);
 
+var hacksToAssemble = [];
 Promise.all(
 		Object.values(hacks)
 		.map(async function (hack) {
 			try {
 				var loaded = await loadHack(hack);
 				var hackInfo = parseHack(loaded.hackFile);
-				var $hackMenu = createThisHackMenu(Object.assign({}, loaded, hack, hackInfo));
+				var hackObj = Object.assign({}, loaded, hack, hackInfo);
+				hacksToAssemble.push(hackObj);
+				var $hackMenu = createThisHackMenu(hackObj);
 				return $hackMenu;
 			} catch (error) {
 				console.error(error);
