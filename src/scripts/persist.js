@@ -3,7 +3,7 @@ var inputs = {};
 function cleanUsingRegEx($this, regExStr) {
 	var regex = new RegExp(regExStr, "g");
 	$this.val($this.val().replace(regex, ""));
-};
+}
 
 function shortenString(value, length) {
 	length = length || 10;

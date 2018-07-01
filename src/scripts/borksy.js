@@ -19,16 +19,6 @@ function download(filename, text) {
 	console.log("File '" + filename + "' downloaded");
 }
 
-function assembleSingles(modifiedTemplate) {
-	$('[data-borksy-replace-single]').each(function () {
-		var $this = $(this);
-		var valueToReplace = 'BORKSY-' + $this.data('borksy-replace-single');
-		var formValue = $this.val();
-		modifiedTemplate = modifiedTemplate.replace(valueToReplace, formValue);
-	});
-	return modifiedTemplate;
-}
-
 function assembleAndDownloadFile() {
 	saveAll();
 

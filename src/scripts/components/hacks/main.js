@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import {
-	hacks
+	hacks, borksyInfo
 } from '../../libs';
 import {
 	makeNewCollapsible
@@ -46,28 +46,6 @@ function arrayToSentenceFrag(arr) {
 	}
 }
 
-function checkHacksRequiring($thisHack) {
-	var $hacksWithRequires = $('[data-requires]');
-	var $includedHacksRequiringThis = $();
-	$hacksWithRequires.each(function (index) {
-		var $currentHack = $(this);
-		var hackIsIncluded = $currentHack.val() === 'true' || $currentHack.prop('checked') === true;
-		var hackRequiresThis = $currentHack.data('requires').includes($thisHack.attr('id')) || false;
-		if (hackIsIncluded && hackRequiresThis) {
-			$includedHacksRequiringThis = $includedHacksRequiringThis.add($currentHack);
-		}
-	});
-	if ($includedHacksRequiringThis.length > 0) {
-		//no logic yet for hacks that can be both required AND user-selected
-		//$thisHack.prop('checked', true);
-		$thisHack.val(true);
-	} else {
-		//$thisHack.prop('checked', false);
-		$thisHack.val(false);
-	}
-	saveThisHack($thisHack);
-}
-
 function removeConflictingHacks(conflictsArr) {
 	$.each(conflictsArr, function (index, hackName) {
 		var $conflictingHack = $('#' + hackName);
@@ -103,19 +81,6 @@ function saveThisHack($thisHack, checkConflicts) {
 	}
 	checkAndToggleIncludedDisplay($thisHack);
 
-	//requires removed currently
-
-	// var thisRequires = hacks[$thisHack.data('hack')].requires;
-
-	// if( thisRequires && !thisRequires.includes(',') ){
-	// 	var $requiredHack = $('#' + thisRequires);
-	// 	checkHacksRequiring($requiredHack);
-	// } else if ( thisRequires ) {
-	// 	$.each(thisRequires.split(','),function(index,requiredHackName){
-	// 		var $requiredHack = $('#' + requiredHackName);
-	// 		checkHacksRequiring($requiredHack);
-	// 	});
-	// }
 	var thisConflicts = hacks[$thisHack.data('hack')].conflicts;
 	if (thisConflicts && checkConflicts) {
 		removeConflictingHacks(thisConflicts.split(','));
@@ -178,11 +143,11 @@ function localHackSuccess(response, filename) {
 }
 
 function localHackFail(response, filename) {
-
+	console.error(response, filename);
 }
 
-function loadThisHackLocally(hackName, hackInfo) {
-	var hackName = hackName.substr(0, hackName.lastIndexOf('.')) || hackName;
+function loadThisHackLocally(hackName) {
+	hackName = hackName.substr(0, hackName.lastIndexOf('.')) || hackName;
 	var filename = hackName + ".js"
 	var pathToDir = "hacks/dist/";
 	loadFileFromPath(filename, pathToDir, localHackSuccess, localHackFail, filename)
@@ -301,7 +266,6 @@ function hackMenuOptions(hackName, hackInfo, $parentCollapse) {
 			'data-default': hackName + '.options.txt'
 		});
 		persist($optionsField);
-		setSaveTrigger($optionsField);
 		$optionsLabel.append($optionsField);
 		$optionsLabel.append(document.createTextNode("};"));
 		$options.append($optionsLabel);
@@ -371,18 +335,6 @@ function loadThisHack(hackName, hackInfo) {
 	} else {
 		// there's no dist version of kitsy/utils rn
 	}
-}
-
-function createHiddenHack(hackName, hackObj) {
-	var $hidden = $('<input>', {
-		type: "hidden",
-		name: hackName,
-		id: hackName
-	});
-	bakeHackData($hidden, hackName, hackObj);
-	persist($hidden);
-
-	return $hidden;
 }
 
 function createHackMenus() {

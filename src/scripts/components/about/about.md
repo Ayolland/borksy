@@ -9,14 +9,17 @@ If you're not sure how to use this tool, check out the 'How To Use Borksy' secti
 **NOTE TO BORKSY USERS:** Future Bitsy versions will change how bitsy renders text and use a new font size. Once that happens, the current custom font tool will be deprecated until a new custom font tool can be built. The current fonts will not be compatible, so if you have a project that plans to use those fonts, use them before they disappear.
 
 What's new in 3.1:
+
 * Fixed bugs in importing files locally.
 * Added ability to force Borksy to use a local version.
 
 New in 3.0:
+
 * Hacks are now retrieved from Github, with local backups.
 * Added the 'How To Use Borksy' section.
 
 Other Borksy Features:
+
 * Preloaded Hacks Menu
 * Editable hack Options
 * HotKeys
