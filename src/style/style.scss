@@ -19,11 +19,10 @@ body{
 	margin: 0;
 	background-color: $light-gray;
 
-
-	&.party{
+	&.party {
 		animation-duration: 30s;
-  		animation-name: partyMode;
-  		animation-iteration-count: infinite;
+		animation-name: partyMode;
+		animation-iteration-count: infinite;
 	}
 }
 
@@ -41,20 +40,20 @@ a{
 }
 
 div#preloader {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    flex-direction: column;
-    background: $light-gray;
-    z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+	flex-direction: column;
+	background: $light-gray;
+	z-index: 100;
 }
 
 .preloader_animation {
-    width: 32px;
-    height: auto;
+	width: 32px;
+	height: auto;
 }
 
 .borksy {
@@ -78,12 +77,6 @@ header, section, footer{
 	margin-bottom: 1em;
 }
 
-.collapsible, section{
-	
-	
-   	
-}
-
 .collapsible{
 	display: block;
 	position: relative;
@@ -103,28 +96,28 @@ header, section, footer{
 
 	.collapsible_header {
 		display: block;
-	    background: $light-glass;
-	    margin: -0.5em -0.5em 0 -0.5em;
-	    padding: 0.25em 0.5em;
-	    height: 1.75rem;
-	    line-height: 1;
-	    font-size: 1.5em;
+		background: $light-glass;
+		margin: -0.5em -0.5em 0 -0.5em;
+		padding: 0.25em 0.5em;
+		height: 1.75rem;
+		line-height: 1;
+		font-size: 1.5em;
 	}
-	
+
 	.collapsible_closer{
 		position: absolute;
-	    display: block;
-	    width: 1.75em;
-	    height: 1.75em;
-	    top: 0.35em;
-	    right: 0.5em;
-	
-	    &::after{
-	    	content: "\25bc";
-	    	color: $dark-glass;
-	    	line-height: 1;
-	    	font-size: 1.75em;
-	    }
+		display: block;
+		width: 1.75em;
+		height: 1.75em;
+		top: 0.35em;
+		right: 0.5em;
+
+		&::after{
+			content: "\25bc";
+			color: $dark-glass;
+			line-height: 1;
+			font-size: 1.75em;
+		}
 	
 	}
 
@@ -138,14 +131,14 @@ header, section, footer{
 		.collapsible_header{
 			background-color: $dark-glass;
 			font-size: 1em;
-    		height: 1em;
-    		margin: -0.5em -0.5em 0;
-    		padding: 0.5em;
+			height: 1em;
+			margin: -0.5em -0.5em 0;
+			padding: 0.5em;
 
-    		&::after{
-    			white-space: pre;
+			&::after{
+				white-space: pre;
 				vertical-align: middle;
-    		}
+			}
 		}
 
 		.collapsible_closer{
@@ -195,12 +188,11 @@ header, section, footer{
 }
 
 .warning {
-    font-weight: bold;
-    font-style: italic;
+	font-weight: bold;
+	font-style: italic;
 }
 
 header{
-
 	display: flex;
 
 	#mascot{
@@ -216,20 +208,14 @@ header{
 
 		strong{
 			font-size: 3em;
-    		display: block;
-    		line-height: 0.75;
-    		margin-left: -0.08em;
+			display: block;
+			line-height: 0.75;
+			margin-left: -0.08em;
 		}
 	}
-
-}
-
-#about {
-    //padding: 0 0.75em;
 }
 
 form{
-
 	font-weight: 300;
 
 	label{
@@ -237,10 +223,10 @@ form{
 		padding: 0 1em;
 		margin: 0;
 		font-family: monospace;
-    	line-height: 2;
-    	color: $extra-dark-glass;
+		line-height: 2;
+		color: $extra-dark-glass;
 
-    	input,textarea{
+		input,textarea{
 			display: block;
 			box-sizing: border-box;
 			min-width: 100%;
@@ -248,10 +234,10 @@ form{
 			width: calc(100% + 2em);
 			max-width: calc(100% + 2em);
 			max-height: 80vh;
-    		margin: 0 -1em 0 -1em;
-    		padding: 0.25em 1em;
-    		font-size: 1em;
-    		font-family: monospace;
+			margin: 0 -1em 0 -1em;
+			padding: 0.25em 1em;
+			font-size: 1em;
+			font-family: monospace;
 			background-color: $light-glass;
 			border: 0;
 
@@ -271,9 +257,9 @@ form{
 		}
 
 		input[type="checkbox"] {
-		    float: left;
-		    width: auto;
-		    margin: 0.5em 1em 0 0;
+			float: left;
+			width: auto;
+			margin: 0.5em 1em 0 0;
 		}
 	}
 }
@@ -284,39 +270,39 @@ pre{
 }
 
 img.font-preview {
-    display: block;
-    width: 100%;
-    max-width: 416px;
+	display: block;
+	width: 100%;
+	max-width: 416px;
 }
 
 .button-group {
-    display: flex;
-    justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 
-    label{
-    	display: flex;
-    	flex-direction: column;
-    	align-items: center;
+	label{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 
-    	span{
-    		font-size: 0.8em;
-    		line-height: 1.5;
-    	}
-    }
+		span{
+			font-size: 0.8em;
+			line-height: 1.5;
+		}
+	}
 }
 
 button {
-    background: $extra-dark-glass;
-    color: white;
-    font-size: 1.25em;
-    font-weight: 100;
-    border: 0;
-    padding: 0.25em 0.75em;
-    cursor: pointer !important;
+	background: $extra-dark-glass;
+	color: white;
+	font-size: 1.25em;
+	font-weight: 100;
+	border: 0;
+	padding: 0.25em 0.75em;
+	cursor: pointer !important;
 
-    &:hover{
-    	background-color: black;
-    }
+	&:hover{
+		background-color: black;
+	}
 }
 
 footer{
@@ -337,7 +323,6 @@ footer{
 }
 
 @media only screen and (min-width: $breakpoint) {
-
 	header{
 		#mascot{
 			height: 128px;
@@ -348,5 +333,4 @@ footer{
 			font-size: 2.7em;
 		}
 	}
-
 }
