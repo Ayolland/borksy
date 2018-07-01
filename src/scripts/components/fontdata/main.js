@@ -5,9 +5,7 @@ import html from './.html';
 import fontdataDefault from './fontdata.txt';
 
 import $fontSelect from './fontselect';
-import {
-	fonts
-} from '../../libs';
+import fonts from './fonts';
 
 var fontsByName = fonts.reduce(function(result, font){
 	result[font.name] = font;

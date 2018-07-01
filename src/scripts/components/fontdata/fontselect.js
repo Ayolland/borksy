@@ -1,7 +1,5 @@
 import $ from 'jquery';
-import {
-	fonts
-} from '../../libs';
+import fonts from './fonts';
 
 var currentFontName = '';//$('#fontfilename').val().slice(0, -4);
 var usingCustomFont = true;
