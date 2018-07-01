@@ -147,7 +147,8 @@ function reOrderHacks() {
 	return hackArray;
 }
 
-function assembleHacks(hackBundle) {
+export function assembleHacks() {
+	var hackBundle = '';
 	var orderedHacks = reOrderHacks();
 	$.each(orderedHacks, function (index, hackObj) {
 

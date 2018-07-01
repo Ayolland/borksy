@@ -1,9 +1,5 @@
 import $ from 'jquery';
 import {
-	borksyInfo
-} from './libs';
-
-import {
 	activateThisCollapsible
 } from './collapsible';
 
@@ -34,24 +30,22 @@ function assembleSingles(modifiedTemplate) {
 }
 
 function assembleAndDownloadFile() {
-	$('[data-save]').each(function () {
-		saveThisData($(this));
-	});
+	saveAll();
 
-	var modifiedTemplate = loadedFiles[borksyInfo.templateVersion + '.template.html'].repeat(1);
-	var hackBundle = "";
+	var assemblerOptions = {
+		title: $('#title').val(),
+		gamedata: $('#gamedata').val(),
+		css: $('#css').val(),
+		fontdata: $('#fontdata').val(),
+		hacks: assembleHacks(),
+		additionaljs: $('#additionaljs').val(),
+		markup: $('#markup').val(),
+	};
 
-	modifiedTemplate = assembleSingles(modifiedTemplate);
+	var game = assemble(assemblerOptions);
 
-	$('[data-borksy-replace-single]').promise().done(function () {
-		hackBundle = assembleHacks(hackBundle);
-	});
-
-	$('[data-hack]').promise().done(function () {
-		var filename = $('#filename').val();
-		modifiedTemplate = modifiedTemplate.replace('BORKSY-HACKS', hackBundle);
-		download(filename + '.html', modifiedTemplate);
-	});
+	var filename = $('#filename').val();
+	download(filename + '.html', game);
 }
 
 function togglePartyMode() {
@@ -108,7 +102,8 @@ function setHotKeys() {
 
 import {
 	restoreDefaults,
-	clear
+	clear,
+	saveAll
 } from './persist';
 
 import $about from './components/about/main';
@@ -116,8 +111,9 @@ import $theme from './components/theme/main';
 import $title from './components/title/main';
 import $gamedata from './components/gamedata/main';
 import $fontdata from './components/fontdata/main';
-import $hacks from './components/hacks/main';
+import $hacks, { assembleHacks } from './components/hacks/main';
 import $additionalJS from './components/additionalJS/main';
+import assemble from './assembler/assembler';
 
 $('#about-section').append($about);
 $('#title-section').append($title);
@@ -126,10 +122,11 @@ $('#fontdata-section').append($fontdata);
 $('#theme-section').append($theme);
 $('#hacks-section').append($hacks);
 $('#additionalJS-section').append($additionalJS);
+
 activateCollapsibles();
-// replaceElements();
-// $('#download-button').click(assembleAndDownloadFile);
-// $('#restore-button').click(restoreDefaults);
+
+$('#download-button').click(assembleAndDownloadFile);
 $('#restore-button').click(onClickRestore);
-setHotKeys();
 $('#mascot').click(togglePartyMode);
+
+setHotKeys();
