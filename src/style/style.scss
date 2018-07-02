@@ -16,7 +16,8 @@ $breakpoint: 40em;
 html,
 body{
 	overflow: visible;
-	height: 100%;
+	/* uncomment this to make app scroll instead of whole page */
+	/* height: 100%; */
 }
 
 body{
