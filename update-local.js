@@ -11,7 +11,7 @@ const rimraf = require('rimraf');
 
 const tempDir = './temp';
 const hackRepo = 'seleb/bitsy-hacks#master';
-const targetDir = './src/scripts/components/hacks/hacks';
+const targetDir = './src/components/hacks/hacks';
 const localHacksFile = join(targetDir, 'localHacks.js');
 
 
