@@ -50,6 +50,7 @@ export function restoreDefaults() {
 	Object.values(inputs).forEach(function (input) {
 		input.$input.val(input.defaultValue);
 	});
+	saveAll();
 }
 
 export function saveAll(){

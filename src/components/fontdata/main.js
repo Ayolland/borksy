@@ -38,7 +38,7 @@ function loadFontImage(event) {
 	reader.onload = readFontFile;
 	changeFontFilename(input.files[0].name);
 	reader.readAsDataURL(input.files[0]);
-	$('.font-preview').attr('src', null); // update preview
+	$fontPreview.attr('src', null); // update preview
 }
 
 function readFontFile(eventOrFilename) {
@@ -87,22 +87,29 @@ function changeFontFilename(filename) {
 }
 
 function selectFont() {
-	var font = fontsByName[$fontSelect.val()];
+	var font = fontsByName[$fontSelect.val()] || {};
 	changeFontFilename(font.name);
 	readFontFile(font.data);
-	$('.font-preview').attr('src', font.preview); // update preview
+	$fontPreview.attr('src', font.preview || null); // update preview
 }
 
-var $html = $(html);
+var $html = $('<div>');
+$html.html(html);
 var $fileInput = $('<input type="hidden" name="fontfilename" id="fontfilename" />');
 $html.append($fileInput);
 var $fontdata = $html.find('#fontdata');
+var $fontPreview = $html.find('.font-preview');
 
 persist($fontdata, fontdataDefault);
 persist($fileInput);
 
-$html.find('#font-file-input').on('change', loadFontImage);
+$html.find('#font-file-input').on('change', function(event){
+	$fontSelect.val($fontSelect.find('option:first-child').val());
+	$fontSelect.change();
+	loadFontImage(event);
+});
 $html.find('#font-select').replaceWith($fontSelect);
 $fontSelect.change(selectFont);
+persist($fontSelect, $fontSelect.find('option:first-child').val());
 
-export default $html;
+export default $html.children();
