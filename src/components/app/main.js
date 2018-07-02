@@ -1,8 +1,14 @@
 import $ from 'jquery';
 import {
 	activateThisCollapsible
-} from './collapsible';
+} from '../../collapsible';
 
+import html from './.html';
+
+var $html = $('<div>', {
+	id: 'wrapper'
+});
+$html.html(html);
 var $collapsibles;
 
 function download(filename, text) {
@@ -57,15 +63,10 @@ function onClickRestore() {
 }
 
 function activateCollapsibles() {
-	$collapsibles = $('[data-collapsible]');
-	var counter = 0;
+	$collapsibles = $html.find('[data-collapsible]');
 	$collapsibles.each(function () {
 		var $thisCollapsible = $(this);
 		activateThisCollapsible($thisCollapsible);
-		counter++;
-		if (counter === $collapsibles.length) {
-			$('#preloader').fadeOut();
-		}
 	});
 }
 
@@ -94,18 +95,20 @@ import {
 	restoreDefaults,
 	clear,
 	saveAll
-} from './persist';
+} from '../../persist';
 
-import $about from './components/about/main';
-import $theme from './components/theme/main';
-import $title from './components/title/main';
-import $gamedata from './components/gamedata/main';
-import $fontdata from './components/fontdata/main';
-import $hacks, { assembleHacks } from './components/hacks/main';
-import $additionalJS from './components/additionalJS/main';
-import assemble from './assembler/assembler';
+import $about from '../about/main';
+import $theme from '../theme/main';
+import $title from '../title/main';
+import $gamedata from '../gamedata/main';
+import $fontdata from '../fontdata/main';
+import $hacks, {
+	assembleHacks
+} from '../hacks/main';
+import $additionalJS from '../additionalJS/main';
+import assemble from '../../assembler/assembler';
 
-var $form = $('#form');
+var $form = $html.find('#form');
 [
 	["About Borksy", $about],
 	["Page Title / Filename", $title],
@@ -114,13 +117,13 @@ var $form = $('#form');
 	["HTML / CSS Theme", $theme],
 	["Hacks", $hacks],
 	["Additional JavaScript", $additionalJS],
-].map(function(options){
+].map(function (options) {
 	var name = options[0];
 	var $content = options[1];
-	var $section = $('<section id="'+name.toLowerCase().replace(/\s/g,'-')+'-section" data-collapsible data-header="'+name+'" class="collapsible"></section>');
+	var $section = $('<section id="' + name.toLowerCase().replace(/\s/g, '-') + '-section" data-collapsible data-header="' + name + '" class="collapsible"></section>');
 	$section.append($content);
 	return $section;
-}).forEach(function($section) {
+}).forEach(function ($section) {
 	$form.append($section);
 });
 
@@ -128,8 +131,10 @@ $form.find('#about-borksy-section').addClass('open');
 
 activateCollapsibles();
 
-$('#download-button').click(assembleAndDownloadFile);
-$('#restore-button').click(onClickRestore);
-$('#mascot').click(togglePartyMode);
+$html.find('#download-button').click(assembleAndDownloadFile);
+$html.find('#restore-button').click(onClickRestore);
+$html.find('#mascot').click(togglePartyMode);
 
 setHotKeys();
+
+export default $html;
