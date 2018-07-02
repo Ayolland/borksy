@@ -13,6 +13,12 @@ $violet-ish: HSL(285, 80%, 70%);
 
 $breakpoint: 40em;
 
+html,
+body{
+	overflow: visible;
+	height: 100%;
+}
+
 body{
 	font-family: sans-serif;
 	box-sizing: border-box;
@@ -43,12 +49,13 @@ div#preloader {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	position: absolute;
-	width: 100vw;
-	height: 100vh;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 	flex-direction: column;
 	background: $light-gray;
-	z-index: 100;
 }
 
 .preloader_animation {
@@ -70,6 +77,8 @@ div#preloader {
 	padding: 1em;
 	margin: 0 auto;
 	background-color: $dark-glass;
+	box-sizing: border-box;
+	height: 100%;
 }
 
 header, section, footer{
