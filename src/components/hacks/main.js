@@ -164,6 +164,8 @@ function createThisHackMenu(options) {
 
 
 var $html = $(html);
+var $loader = $('<div><p>Hacks Loading...</p>');
+$html.append($loader);
 
 var hacksToAssemble = [];
 Promise.all(
@@ -181,12 +183,11 @@ Promise.all(
 			}
 		}))
 	.then(function (hackMenus) {
-		hackMenus
-			.filter(function ($hackMenu) {
+		$loader.replaceWith(
+			hackMenus.filter(function ($hackMenu) {
 				return $hackMenu;
-			}).forEach(function ($hackMenu) {
-				$html.append($hackMenu);
-			});
+			})
+		);
 	});
 
 export default $html;
