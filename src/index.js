@@ -1,2 +1,2 @@
 import './style/style.scss';
-import './borksy';
+import('./borksy');
