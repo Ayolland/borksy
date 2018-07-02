@@ -91,14 +91,20 @@ header, section, footer{
 	position: relative;
 	overflow: hidden;
 	background: $light-glass;
-	max-height: 1em;
-	padding: 0.75em;
 	margin-bottom: 0.75em;
 
-	&.open{
-		max-height: none;
+	> main{
+		padding: 0.75em;
+		padding-top: 0;
+		display: none;
+	}
 
-		&> .collapsible_closer::after{
+	&.open{
+		> main {
+			display: block;
+		}
+
+		> .collapsible_closer::after{
 			content: "\25b2";
 		}
 	}
@@ -106,9 +112,7 @@ header, section, footer{
 	.collapsible_header {
 		display: block;
 		background: $light-glass;
-		margin: -0.5em -0.5em 0 -0.5em;
 		padding: 0.25em 0.5em;
-		height: 1.75rem;
 		line-height: 1;
 		font-size: 1.5em;
 	}
@@ -130,18 +134,20 @@ header, section, footer{
 	
 	}
 
-	.collapsible{
+	> main .collapsible{
 		background-color: transparent;
-		padding: 0.5em;
 		margin-bottom: 0;
 		margin-top: 0.5em;
 		border: 1px solid $dark-glass;
 
+		> main {
+			padding: 0.5em;
+			padding-top: 0;
+		}
+
 		.collapsible_header{
 			background-color: $dark-glass;
 			font-size: 1em;
-			height: 1em;
-			margin: -0.5em -0.5em 0;
 			padding: 0.5em;
 
 			&::after{
@@ -182,11 +188,8 @@ header, section, footer{
 			}
 		}
 
-		.collapsible{
-
-			.collapsible_header{
-				background-color: transparent;
-			}
+		> main .collapsible .collapsible_header{
+			background-color: transparent;
 		}
 	}
 }

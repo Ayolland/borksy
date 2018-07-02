@@ -70,12 +70,13 @@ export function assembleHacks() {
 function createThisHackMenu(options) {
 	var title = toTitleCase(options.file);
 	var $collapse = makeNewCollapsible(options.emoji + ' ' + title + ' (By ' + options.author + ')');
+	var $content = $collapse.find('main');
 	$collapse.attr('data-associated-hack', options.file);
 
 	var $summary = $('<p>', {
 		text: toSentenceCase(options.summary)
 	});
-	$collapse.append($summary);
+	$content.append($summary);
 
 	// TODO: conflicts
 
@@ -89,7 +90,7 @@ function createThisHackMenu(options) {
 		$sourceMessage.text(title + ' could not be loaded from Github, local version retrieved on ' + borksyInfo.lastUpdated + ' is being used.');
 		$sourceMessage.addClass('warning');
 	}
-	$collapse.append($sourceMessage);
+	$content.append($sourceMessage);
 
 	// checkbox
 	var $label = $('<label>', {
@@ -106,10 +107,9 @@ function createThisHackMenu(options) {
 		toggleIncludedDisplay($collapse, $checkbox);
 	});
 	$label.append($checkbox);
-	$collapse.append($label);
+	$content.append($label);
 
 	// bitspy friendliness
-	var $friendliness = makeNewCollapsible(title + " Bitspy Friendliness:");
 	var fine = 'The features in this hack will not be available, but your game should otherwise function normally.';
 	var sentence = 'Use of this Hack ' +
 		({
@@ -126,12 +126,12 @@ function createThisHackMenu(options) {
 	var $text = $('<p>', {
 		html: sentence
 	});
-	$friendliness.addClass('python').addClass(options.python).append($text);
-	$collapse.append($friendliness);
+	var $friendliness = makeNewCollapsible(title + " Bitspy Friendliness:", $text);
+	$friendliness.addClass('python').addClass(options.python);
+	$content.append($friendliness);
 
 	// options
 	if (options.options) {
-		var $options = makeNewCollapsible(title + " Options:");
 		var $optionsLabel = $('<label>', {
 			text: "var " + toCamelCase(options.file) + "Options = {"
 		});
@@ -145,18 +145,15 @@ function createThisHackMenu(options) {
 		persist($optionsField, options.options);
 		$optionsLabel.append($optionsField);
 		$optionsLabel.append(document.createTextNode("};"));
-		$options.append($optionsLabel);
-		$collapse.append($options);
+		$content.append(makeNewCollapsible(title + " Options:", $optionsLabel));
 	}
 
 	// readme
 	if (options.readme) {
-		var $readme = makeNewCollapsible(title + " README:");
 		var $pre = $('<pre>', {
 			text: options.description
 		});
-		$readme.append($pre);
-		$collapse.append($readme);
+		$content.append(makeNewCollapsible(title + " README:", $pre));
 	}
 
 	return $collapse;

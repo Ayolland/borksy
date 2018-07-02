@@ -1,9 +1,10 @@
 import $ from 'jquery';
 
-export function makeNewCollapsible(header){
+export function makeNewCollapsible(header, content){
 	var $collapse = $('<div>',{
 		class: "collapsible"
 	});
+	$collapse.html(content);
 	$collapse.data('collapse','');
 	$collapse.data('header', header);
 	activateThisCollapsible($collapse);
@@ -11,6 +12,8 @@ export function makeNewCollapsible(header){
 }
 
 export function activateThisCollapsible($thisCollapsible){
+	var $main = $('<main>');
+	$main.html($thisCollapsible.children());
 	var $closer = $('<span>', {
 		class: "collapsible_closer",
 		click: function(){
@@ -24,6 +27,7 @@ export function activateThisCollapsible($thisCollapsible){
 			$thisCollapsible.toggleClass('open');
 		}
 	});
-	$thisCollapsible.prepend($closer);
-	$thisCollapsible.prepend($header);
+	$thisCollapsible.append($header);
+	$thisCollapsible.append($closer);
+	$thisCollapsible.append($main);
 }
