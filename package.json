@@ -24,7 +24,9 @@
   },
   "homepage": "https://github.com/Ayolland/borksy#readme",
   "dependencies": {
-    "jquery": "^3.3.1"
+    "jquery": "^3.3.1",
+    "memfs": "^2.9.1",
+    "rollup": "^0.62.0"
   },
   "devDependencies": {
     "autoprefixer": "^8.6.4",

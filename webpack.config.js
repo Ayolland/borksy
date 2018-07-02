@@ -1,6 +1,14 @@
 const Html = require('html-webpack-plugin');
 
 module.exports = {
+	node: {
+		module: 'empty'
+	},
+	resolve: {
+		alias: {
+			'fs': 'memfs',
+		}
+	},
 	mode: 'development',
 	plugins: [
 		new Html({
