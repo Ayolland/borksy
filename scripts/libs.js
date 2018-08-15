@@ -9,8 +9,8 @@ var fonts = {
 };
 
 var borksyInfo = {
-	templateVersion: '3.0',
-	lastUpdated: "June 13, 2018"
+	templateVersion: '3.2',
+	lastUpdated: "August 14, 2018"
 }
 
 var hacks = {
