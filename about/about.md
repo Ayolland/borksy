@@ -12,6 +12,11 @@ Aug 14, 2018 - What's new in 3.2:
 * Moved to use Bitsy 5.1
 * Deprecated the Font Tool
 
+**USE THESE HACKS WITH CAUTION:** As of Aug 14, 2018, the following hacks are having issues and are not compatible with all other hacks. Test the hacks you want to use together before centering your project around them.
+* Solid Items
+* Unique Items
+* Multi-Sprite Avatar
+
 Other Borksy Features:
 * Preloaded Hacks Menu
 * Hacks are retrieved from Github, with local backups
