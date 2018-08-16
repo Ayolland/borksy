@@ -4,7 +4,7 @@ Borksy is a tool made to assist in hacking and extending games built with Bitsy 
 
 Borksy uses jQuery (don't even start) to assemble and compile text files and user input into a final HTML file that runs the Bitsy game.
 
-**NOTE:** Font data and customizer will be soon deprecated when a future version of Bitsy is released that reworks dialog display. This feature will hopefully be back at a later date, but with new fonts.
+**NOTE:** Font data and customizer is now deprecated as of Bitsy 5.1. Use Bitsy's font tools.
 
 Current features:
 * Hacks are loaded from Github using AJAX
@@ -13,7 +13,7 @@ Current features:
 * HotKeys for Save/Restore Defaults
 * Editable Page Title / Filename
 * Customize HTML/CSS
-* Font Importer and Presets
+* Font Importer and Presets (deprecated)
 * Enables extended ASCII characters
 * Field for extra JS / Hacks
 * Bitsy variables are exposed in JS as global variable *bitsyVariableMap*
