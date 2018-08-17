@@ -1,32 +1,33 @@
-Borksy v 3.1
+Borksy v 3.2
 
 Borksy is a hacking tool to be used in conjunction with [Bitsy Game Maker](https://ledoux.itch.io/bitsy)! Use it to customize your games and add hacks without needing a web server or any manual cut-and-paste work.
 
-Borksy currently uses Bitsy 4.8 to create files.
+Borksy currently uses Bitsy 5.1 to create files.
 
 If you're not sure how to use this tool, check out the 'How To Use Borksy' section. If you're not familiar with how Bitsy can be extended, explore [Sean's great collection of Bitsy hacks](https://github.com/seleb/bitsy-hacks/).
 
-**NOTE TO BORKSY USERS:** Future Bitsy versions will change how bitsy renders text and use a new font size. Once that happens, the current custom font tool will be deprecated until a new custom font tool can be built. The current fonts will not be compatible, so if you have a project that plans to use those fonts, use them before they disappear.
+**NOTE TO BORKSY USERS:** Custom fonts have been deprecated from Borksy, as the font conversion tool Borksy used is no longer compatible with Bitsy 5.1. Bitsy now has its own built-in font-importer, and hopefully a new font conversion tool will be coming down the road shortly.
 
-What's new in 3.1:
+Aug 14, 2018 - What's new in 3.2:
 
-* Fixed bugs in importing files locally.
-* Added ability to force Borksy to use a local version.
+* Moved to use Bitsy 5.1
+* Deprecated the Font Tool
 
-New in 3.0:
+**USE THESE HACKS WITH CAUTION:** As of Aug 14, 2018, the following hacks are having issues and are not compatible with all other hacks. Test the hacks you want to use together before centering your project around them.
 
-* Hacks are now retrieved from Github, with local backups.
-* Added the 'How To Use Borksy' section.
+* Solid Items
+* Unique Items
+* Multi-Sprite Avatar
 
 Other Borksy Features:
 
 * Preloaded Hacks Menu
+* Hacks are retrieved from Github, with local backups
 * Editable hack Options
 * HotKeys
 * Customize HTML/CSS
 * Customize Page Title / Filename
-* Font Importer and Presets *(to be deprecated)*
-* Enables extended ASCII characters
+* Font Importer and Presets *(deprecated)*
 * Field for extra JS / Hacks
 * Saves work to LocalStorage for persistence
 * Bitsy variables are exposed in JS as global variable *bitsyVariableMap*.

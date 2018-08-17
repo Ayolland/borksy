@@ -101,7 +101,7 @@ import $about from '../about/main';
 import $theme from '../theme/main';
 import $title from '../title/main';
 import $gamedata from '../gamedata/main';
-import $fontdata from '../fontdata/main';
+// import $fontdata from '../fontdata/main';
 import $hacks, {
 	assembleHacks
 } from '../hacks/main';
@@ -113,7 +113,7 @@ var $form = $html.find('#form');
 	["About Borksy", $about],
 	["Page Title / Filename", $title],
 	["Game Data", $gamedata],
-	["Font Data", $fontdata],
+	// ["Font Data", $fontdata],
 	["HTML / CSS Theme", $theme],
 	["Hacks", $hacks],
 	["Additional JavaScript", $additionalJS],
