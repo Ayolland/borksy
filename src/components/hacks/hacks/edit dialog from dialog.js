@@ -1,126 +1,31 @@
 /**
-🅰
-@file custom text effect
-@summary make {custom}text effects{custom}
+📝
+@file edit dialog from dialog
+@summary edit dialog from dialog (yes really)
 @license MIT
-@version 1.0.2
+@version 1.0.1
 @author Sean S. LeBlanc
 
 @description
-Adds support for a custom text effect
-e.g. "normal text {my-effect}custom wavy text{my-effect}"
+You can use this to edit the dialog of sprites/items through dialog.
 
-Multiple text effects can be added this way.
-Without the hack, the game will still run normally since
-bitsy just ignores text tags that aren't supported.
+(dialog "map, target, newDialog")
+Parameters:
+	map:       Type of image (SPR or ITM)
+	target:    id/name of image to edit
+	newDialog: id/name of image to edit
 
-Because the dialog system uses private variables,
-this one does some silly things with code injection.
+Note: this hack disables bitsy's script caching.
 
 HOW TO USE:
-1. Copy-paste this script into a script tag after the bitsy source
-2. Update the `hackOptions` object at the top of the script with your custom effects
+	Copy-paste this script into a new script tag after the Bitsy source code.
 
-TEXT EFFECT NOTES:
-Each effect looks like:
-    key: function() {
-        this.DoEffect = function (char, time) {
-            // effect code
-        }
-    }
-
-The key is the text you'll write inside {} in bitsy to trigger the effect
-
-`this.DoEffect` is called every frame for the characters the effect is applied to
-
-The first argument is `char`, an individual character, which has the following properties:
-	offset: offset from actual position in pixels. starts at {x:0, y:0}
-	color: color of rendered text in [0-255]. starts at {r:255, g:255, b:255, a:255}
-	char: character string
-	row: vertical position in rows (doesn't affect rendering)
-	col: horizontal position in characters (doesn't affect rendering)
-`row`, `col`, and `offset` are reset every frame
-`color`, `char`, and any custom properties are reset when the dialog page is changed
-
-The second argument is `time`, which is the time in milliseconds
-
-A number of example effects are included
+TIPS:
+	- The player avatar is always a sprite with id "A"; you can edit your gamedata to give them a name for clarity
+	- You can use the full names or shorthand of image types (e.g. "SPR" and "sprite" will both work)
 */
 (function (bitsy) {
 'use strict';
-var hackOptions = {
-	"my-effect": function () {
-		// a horizontal wavy effect with a blue tint 
-		this.DoEffect = function (char, time) {
-			char.offset.x += 5 * Math.sin(time / 100 + char.col / 3);
-			char.color.r = 255 * Math.cos(time / 100 + char.col / 3);
-		};
-	},
-	droop: function () {
-		// causes text to droop down slowly over time
-		// note that it's adding a custom property to the character if it doesn't already exist
-		this.DoEffect = function (char, time) {
-			char.start = char.start || time;
-			char.offset.y += (time - char.start) / 100 * Math.abs(Math.sin(char.col));
-		};
-	},
-	fadeout: function () {
-		// fades text to invisible after appearing
-		this.DoEffect = function (char, time) {
-			char.start = char.start || time;
-			char.color.a = Math.max(0, 255 - (time - char.start) / 2);
-		};
-	},
-	scramble: function () {
-		// animated text scrambling
-		// note that it's saving the original character so it can be referenced every frame
-		this.DoEffect = function (char, time) {
-			char.original = char.original !== undefined ? char.original : char.char;
-			if (char.original == ' ') {
-				return;
-			}
-			char.char = String.fromCharCode(char.original.codePointAt(0) + (char.col + time / 40) % 10);
-		};
-	},
-	rot13: function () {
-		// puts letters through the rot13 cipher (see www.rot13.com)
-		this.DoEffect = function (char) {
-			char.original = char.original !== undefined ? char.original : char.char;
-			char.char = char.original.replace(/[a-z]/, function (c) {
-				return String.fromCharCode((c.codePointAt(0) - 97 + 13) % 26 + 97);
-			}).replace(/[A-Z]/, function (c) {
-				return String.fromCharCode((c.codePointAt(0) - 65 + 13) % 26 + 65);
-			});
-		};
-	},
-	sponge: function () {
-		// animated alternating letter case
-		// note that it's using a locally defined function
-		function posmod(a, b) {
-			return ((a % b) + b) % b;
-		}
-		this.DoEffect = function (char, time) {
-			char.original = char.original !== undefined ? char.original : char.char;
-			char.char = char.original[['toUpperCase', 'toLowerCase'][Math.round(posmod(time / 1000 - (char.col + char.row) / 2, 1))]]();
-		};
-	},
-	flag: function () {
-		// applies a wave effect that's more intense towards the ends of words
-		// note that it's using function scope variables to track state across
-		// multiple letters in order to figure out where words begin
-		var lastSpace = 0;
-		var lastCol = -Infinity;
-		this.DoEffect = function (char, time) {
-			if (char.char == ' ') {
-				return;
-			} else if (Math.abs(char.col - lastCol) > 1) {
-				lastSpace = char.col - 1;
-			}
-			lastCol = char.col;
-			char.offset.y -= Math.pow(char.col - lastSpace, 1.5) * (Math.sin(time / 120 + char.col / 2));
-		};
-	}
-};
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
 
@@ -165,6 +70,22 @@ function inject(searchRegex, replaceString) {
 	scriptTag.remove();
 }
 
+/*
+Helper for getting image by name or id
+
+Args:
+	name: id or name of image to return
+	 map: map of images (e.g. `sprite`, `tile`, `item`)
+
+Returns: the image in the given map with the given name/id
+ */
+function getImage(name, map) {
+	var id = map.hasOwnProperty(name) ? name : Object.keys(map).find(function (e) {
+		return map[e].name == name;
+	});
+	return map[id];
+}
+
 /**
  * Helper for getting an array with unique elements 
  * @param  {Array} array Original array
@@ -207,6 +128,22 @@ function inject$1(searchRegex, replaceString) {
 		searchRegex: searchRegex,
 		replaceString: replaceString
 	});
+}
+
+// Ex: before('load_game', function run() { alert('Loading!'); });
+//     before('show_text', function run(text) { return text.toUpperCase(); });
+//     before('show_text', function run(text, done) { done(text.toUpperCase()); });
+function before(targetFuncName, beforeFn) {
+	var kitsy = kitsyInit();
+	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
+	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
+}
+
+// Ex: after('load_game', function run() { alert('Loaded!'); });
+function after(targetFuncName, afterFn) {
+	var kitsy = kitsyInit();
+	kitsy.queuedAfterScripts[targetFuncName] = kitsy.queuedAfterScripts[targetFuncName] || [];
+	kitsy.queuedAfterScripts[targetFuncName].push(afterFn);
 }
 
 function kitsyInit() {
@@ -306,22 +243,108 @@ function _reinitEngine() {
 	bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 }
 
-
-
-
-
-// generate code for each text effect
-var functionMapCode = '';
-var textEffectCode = '';
-for (var i in hackOptions) {
-	if (hackOptions.hasOwnProperty(i)) {
-		functionMapCode += 'functionMap.set("' + i + '", function (environment, parameters, onReturn) {addOrRemoveTextEffect(environment, "' + i + '");onReturn(null);});';
-		textEffectCode += 'TextEffects["' + i + '"] = new (' + hackOptions[i].toString() + ')();';
-	}
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function(match, group){
+			if(match.substr(0,1) === '\\') {
+				return '('+ group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
+			}
+			return '{'+ group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+		});
 }
 
-// inject custom text effect code
-inject$1(/(var functionMap = new Map\(\);)/, '$1' + functionMapCode);
-inject$1(/(var TextEffects = new Map\(\);)/, '$1' + textEffectCode);
+
+function addDialogFunction(tag, fn) {
+	var kitsy = kitsyInit();
+	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
+	if (kitsy.dialogFunctions[tag]) {
+		throw new Error('The dialog function "' + tag + '" already exists.');
+	}
+
+	// Hook into game load and rewrite custom functions in game data to Bitsy format.
+	before('load_game', function (game_data, startWithTitle) {
+		return [convertDialogTags(game_data, tag), startWithTitle];
+	});
+
+	kitsy.dialogFunctions[tag] = fn;
+}
+
+/**
+ * Adds a custom dialog tag which executes the provided function.
+ * For ease-of-use with the bitsy editor, tags can be written as
+ * (tagname "parameters") in addition to the standard {tagname "parameters"}
+ * 
+ * Function is executed after the dialog box.
+ *
+ * @param {string}   tag Name of tag
+ * @param {Function} fn  Function to execute, with signature `function(environment, parameters){}`
+ *                       environment: provides access to SetVariable/GetVariable (among other things, see Environment in the bitsy source for more info)
+ *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
+ */
+function addDeferredDialogTag(tag, fn) {
+	addDialogFunction(tag, fn);
+	bitsy.kitsy.deferredDialogFunctions = bitsy.kitsy.deferredDialogFunctions || {};
+	var deferred = bitsy.kitsy.deferredDialogFunctions[tag] = [];
+	inject$1(
+		/(var functionMap = new Map\(\);)/,
+		'$1functionMap.set("' + tag + '", function(e, p, o){ kitsy.deferredDialogFunctions.' + tag + '.push({e:e,p:p}); o(null); });'
+	);
+	// Hook into the dialog finish event and execute the actual function
+	after('onExitDialog', function () {
+		while (deferred.length) {
+			var args = deferred.shift();
+			bitsy.kitsy.dialogFunctions[tag](args.e, args.p, args.o);
+		}
+	});
+	// Hook into the game reset and make sure data gets cleared
+	after('clearGameData', function () {
+		deferred.length = 0;
+	});
+}
+
+
+
+// map of maps
+var maps;
+after('load_game', function () {
+	maps = {
+		spr: bitsy.sprite,
+		sprite: bitsy.sprite,
+		itm: bitsy.item,
+		item: bitsy.item,
+	};
+});
+
+function editDialog(environment, parameters) {
+	// parse parameters
+	var params = parameters[0].split(/,\s?/);
+	params[0] = (params[0] || "").toLowerCase();
+	var mapId = params[0];
+	var tgtId = params[1];
+	var newDialog = params[2] || "";
+
+	if (!mapId || !tgtId) {
+		throw new Error('Image expects three parameters: "map, target, newDialog", but received: "' + params.join(', ') + '"');
+	}
+
+	// get objects
+	var mapObj = maps[mapId];
+	if (!mapObj) {
+		throw new Error('Invalid map "' + mapId + '". Try "SPR" or "ITM" instead.');
+	}
+	var tgtObj = getImage(tgtId, mapObj);
+	if (!tgtObj) {
+		throw new Error('Target "' + tgtId + '" was not the id/name of a ' + mapId + '.');
+	}
+	bitsy.dialog[tgtObj.dlg] = newDialog;
+}
+
+// hook up the dialog tag
+addDeferredDialogTag('dialog', editDialog);
+
+// disable bitsy's dialog caching
+inject(/startDialog\(dialogStr,dialogId\);/g, 'startDialog(dialogStr);');
 
 }(window));

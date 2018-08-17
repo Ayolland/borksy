@@ -1,31 +1,34 @@
 /**
-🔀
-@file logic-operators-extended
-@summary adds conditional logic operators
-@version 1.0.4
-@author @mildmojo
+📃
+@file paragraph-break
+@summary Adds paragraph breaks to the dialogue parser
+@license WTFPL (do WTF you want)
+@version 1.0.1
+@requires Bitsy Version: 5.0, 5.1
+@author Sean S. LeBlanc, David Mowatt
 
 @description
-Adds conditional logic operators:
-  - !== (not equal to)
-  - && (and)
-  - || (or)
-  - &&! (and not)
-  - ||! (or not)
+Adds a (p) tag to the dialogue parser that forces the following text to 
+start on a fresh dialogue screen, eliminating the need to spend hours testing
+line lengths or adding multiple line breaks that then have to be reviewed
+when you make edits or change the font size.
 
-Examples: candlecount > 5 && haslighter == 1
-          candlecount > 5 && papercount > 1 && isIndoors
-          haslighter == 1 || hasmatches == 1
-          candlecount > 5 && candlecount !== 666
-          candlecount > 5 &&! droppedlighter
-          droppedlighter ||! hasmatches
+Usage: (p)
+       
+Example: I am a cat(p)and my dialogue contains multitudes
 
-NOTE: The combining operators (&&, ||, &&!, ||!) have lower precedence than
-      all other math and comparison operators, so it might be hard to write
-      tests that mix and match these new operators and have them evaluate
-      correctly. If you're using multiple `&&` and `||` operators in one
-      condition, be sure to test every possibility to make sure it behaves
-      the way you want.
+HOW TO USE:
+  1. Copy-paste this script into a new script tag after the Bitsy source code.
+     It should appear *before* any other mods that handle loading your game
+     data so it executes *after* them (last-in first-out).
+
+NOTE: This uses parentheses "()" instead of curly braces "{}" around function
+      calls because the Bitsy editor's fancy dialog window strips unrecognized
+      curly-brace functions from dialog text. To keep from losing data, write
+      these function calls with parentheses like the examples above.
+
+      For full editor integration, you'd *probably* also need to paste this
+      code at the end of the editor's `bitsy.js` file. Untested.
 */
 (function (bitsy) {
 'use strict';
@@ -115,6 +118,15 @@ function inject$1(searchRegex, replaceString) {
 		searchRegex: searchRegex,
 		replaceString: replaceString
 	});
+}
+
+// Ex: before('load_game', function run() { alert('Loading!'); });
+//     before('show_text', function run(text) { return text.toUpperCase(); });
+//     before('show_text', function run(text, done) { done(text.toUpperCase()); });
+function before(targetFuncName, beforeFn) {
+	var kitsy = kitsyInit();
+	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
+	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
 }
 
 function kitsyInit() {
@@ -214,60 +226,72 @@ function _reinitEngine() {
 	bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 }
 
-
-
-inject$1(/(operatorMap\.set\("-", subExp\);)/,[
-	'$1',
-	'operatorMap.set("&&", andExp);',
-	'operatorMap.set("||", orExp);',
-	'operatorMap.set("&&!", andNotExp);',
-	'operatorMap.set("||!", orNotExp);',
-	'operatorMap.set("!==", notEqExp);'
-].join('\n'));
-inject$1(
-	/(var operatorSymbols = \["-", "\+", "\/", "\*", "<=", ">=", "<", ">", "=="\];)/,
-	'$1operatorSymbols.unshift("!==", "&&", "||", "&&!", "||!");'
-);
-
-bitsy.andExp = function andExp(environment, left, right, onReturn) {
-	right.Eval(environment, function (rVal) {
-		left.Eval(environment, function (lVal) {
-			onReturn(lVal && rVal);
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function(match, group){
+			if(match.substr(0,1) === '\\') {
+				return '('+ group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
+			}
+			return '{'+ group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
 		});
-	});
-};
+}
 
-bitsy.orExp = function orExp(environment, left, right, onReturn) {
-	right.Eval(environment, function (rVal) {
-		left.Eval(environment, function (lVal) {
-			onReturn(lVal || rVal);
-		});
-	});
-};
 
-bitsy.notEqExp = function notEqExp(environment, left, right, onReturn) {
-	right.Eval(environment, function (rVal) {
-		left.Eval(environment, function (lVal) {
-			onReturn(lVal !== rVal);
-		});
-	});
-};
+function addDialogFunction(tag, fn) {
+	var kitsy = kitsyInit();
+	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
+	if (kitsy.dialogFunctions[tag]) {
+		throw new Error('The dialog function "' + tag + '" already exists.');
+	}
 
-bitsy.andNotExp = function andNotExp(environment, left, right, onReturn) {
-	right.Eval(environment, function (rVal) {
-		left.Eval(environment, function (lVal) {
-			onReturn(lVal && !rVal);
-		});
+	// Hook into game load and rewrite custom functions in game data to Bitsy format.
+	before('load_game', function (game_data, startWithTitle) {
+		return [convertDialogTags(game_data, tag), startWithTitle];
 	});
-};
 
-bitsy.orNotExp = function orNotExp(environment, left, right, onReturn) {
-	right.Eval(environment, function (rVal) {
-		left.Eval(environment, function (lVal) {
-			onReturn(lVal || !rVal);
-		});
-	});
-};
-// End of logic operators mod
+	kitsy.dialogFunctions[tag] = fn;
+}
+
+/**
+ * Adds a custom dialog tag which executes the provided function.
+ * For ease-of-use with the bitsy editor, tags can be written as
+ * (tagname "parameters") in addition to the standard {tagname "parameters"}
+ * 
+ * Function is executed immediately when the tag is reached.
+ *
+ * @param {string}   tag Name of tag
+ * @param {Function} fn  Function to execute, with signature `function(environment, parameters, onReturn){}`
+ *                       environment: provides access to SetVariable/GetVariable (among other things, see Environment in the bitsy source for more info)
+ *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
+ *                       onReturn: function to call with return value (just call `onReturn(null);` at the end of your function if your tag doesn't interact with the logic system)
+ */
+function addDialogTag(tag, fn) {
+	addDialogFunction(tag, fn);
+	inject$1(
+		/(var functionMap = new Map\(\);)/,
+		'$1functionMap.set("' + tag + '", kitsy.dialogFunctions.' + tag + ');'
+	);
+}
+
+
+
+
+//The actual function. Makes use of the existing AddLinebreak function within
+//the dialogue parser to automatically add an appropriate number of line breaks
+//based on the current dialogue buffer size rather than the user having to count
+
+function paragraphbreakFunc(environment, parameters, onReturn) {
+    var a = environment.GetDialogBuffer().CurRowCount();
+    for (var i = 0; i < 3 - a; ++i) {
+        environment.GetDialogBuffer().AddLinebreak();
+    }
+    onReturn(null);
+}
+
+//Adds the actual dialogue tag. No deferred version is required.
+addDialogTag('p', paragraphbreakFunc);
+// End of (p) paragraph break mod
 
 }(window));

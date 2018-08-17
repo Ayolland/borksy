@@ -3,7 +3,7 @@
 @file javascript dialog
 @summary execute arbitrary javascript from dialog
 @license MIT
-@version 3.0.2
+@version 3.1.1
 @requires Bitsy Version: 4.5, 4.6
 @author Sean S. LeBlanc
 
@@ -49,18 +49,19 @@ bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
 @author Sean S. LeBlanc
 */
 
-/*helper used to inject code into script tags based on a search string*/
-function inject(searchString, codeToInject) {
-	var args = [].slice.call(arguments);
-	codeToInject = flatten(args.slice(1)).join('');
-
+/*
+Helper used to replace code in a script tag based on a search regex
+To inject code without erasing original string, using capturing groups; e.g.
+	inject(/(some string)/,'injected before $1 injected after')
+*/
+function inject(searchRegex, replaceString) {
 	// find the relevant script tag
 	var scriptTags = document.getElementsByTagName('script');
 	var scriptTag;
 	var code;
 	for (var i = 0; i < scriptTags.length; ++i) {
 		scriptTag = scriptTags[i];
-		var matchesSearch = scriptTag.textContent.indexOf(searchString) !== -1;
+		var matchesSearch = scriptTag.textContent.search(searchRegex) !== -1;
 		var isCurrentScript = scriptTag === document.currentScript;
 		if (matchesSearch && !isCurrentScript) {
 			code = scriptTag.textContent;
@@ -70,11 +71,11 @@ function inject(searchString, codeToInject) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchString + '" in script tags';
+		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
 	}
 
 	// modify the content
-	code = code.replace(searchString, searchString + codeToInject);
+	code = code.replace(searchRegex, replaceString);
 
 	// replace the old script tag with a new one using our modified code
 	var newScriptTag = document.createElement('script');
@@ -94,22 +95,12 @@ function unique(array) {
 	});
 }
 
-function flatten(list) {
-	if (!Array.isArray(list)) {
-		return list;
-	}
-
-	return list.reduce(function (fragments, arg) {
-		return fragments.concat(flatten(arg));
-	}, []);
-}
-
 /**
 
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 2.2.2
+@version 3.2.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -119,7 +110,7 @@ HOW TO USE:
 
   before(targetFuncName, beforeFn);
   after(targetFuncName, afterFn);
-  inject(searchString, codeFragment1[, ...codefragmentN]);
+  inject(searchRegex, replaceString);
   addDialogTag(tagName, dialogFn);
   addDeferredDialogTag(tagName, dialogFn);
 
@@ -128,17 +119,12 @@ HOW TO USE:
 */
 
 
-// Examples: inject('names.sprite.set( name, id );', 'console.dir(names)');
-//           inject('names.sprite.set( name, id );', 'console.dir(names);', 'console.dir(sprite);');
-//           inject('names.sprite.set( name, id );', ['console.dir(names)', 'console.dir(sprite);']);
-function inject$1(searchString, codeFragments) {
+// Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
+function inject$1(searchRegex, replaceString) {
 	var kitsy = kitsyInit();
-	var args = [].slice.call(arguments);
-	codeFragments = flatten(args.slice(1));
-
 	kitsy.queuedInjectScripts.push({
-		searchString: searchString,
-		codeFragments: codeFragments
+		searchRegex: searchRegex,
+		replaceString: replaceString
 	});
 }
 
@@ -190,7 +176,7 @@ function kitsyInit() {
 
 function doInjects() {
 	bitsy.kitsy.queuedInjectScripts.forEach(function (injectScript) {
-		inject(injectScript.searchString, injectScript.codeFragments);
+		inject(injectScript.searchRegex, injectScript.replaceString);
 	});
 	_reinitEngine();
 }
@@ -202,12 +188,14 @@ function applyAllHooks() {
 
 function applyHook(functionName) {
 	var superFn = bitsy[functionName];
-	var superFnLength = superFn.length;
+	var superFnLength = superFn ? superFn.length : 0;
 	var functions = [];
 	// start with befores
 	functions = functions.concat(bitsy.kitsy.queuedBeforeScripts[functionName] || []);
 	// then original
-	functions.push(superFn);
+	if (superFn) {
+		functions.push(superFn);
+	}
 	// then afters
 	functions = functions.concat(bitsy.kitsy.queuedAfterScripts[functionName] || []);
 
@@ -257,7 +245,7 @@ function _reinitEngine() {
 // interpreter. Unescape escaped parentheticals, too.
 function convertDialogTags(input, tag) {
 	return input
-		.replace(new RegExp('\\\\?\\((' + tag + '\\s+(".+?"|.+?))\\\\?\\)', 'g'), function(match, group){
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function(match, group){
 			if(match.substr(0,1) === '\\') {
 				return '('+ group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
 			}
@@ -297,8 +285,8 @@ function addDialogFunction(tag, fn) {
 function addDialogTag(tag, fn) {
 	addDialogFunction(tag, fn);
 	inject$1(
-		'var functionMap = new Map();',
-		'functionMap.set("' + tag + '", kitsy.dialogFunctions.' + tag + ');'
+		/(var functionMap = new Map\(\);)/,
+		'$1functionMap.set("' + tag + '", kitsy.dialogFunctions.' + tag + ');'
 	);
 }
 
@@ -319,14 +307,14 @@ function addDeferredDialogTag(tag, fn) {
 	bitsy.kitsy.deferredDialogFunctions = bitsy.kitsy.deferredDialogFunctions || {};
 	var deferred = bitsy.kitsy.deferredDialogFunctions[tag] = [];
 	inject$1(
-		'var functionMap = new Map();',
-		'functionMap.set("' + tag + '", function(e, p, o){ kitsy.deferredDialogFunctions.' + tag + '.push({e:e,p:p}); o(null); });'
+		/(var functionMap = new Map\(\);)/,
+		'$1functionMap.set("' + tag + '", function(e, p, o){ kitsy.deferredDialogFunctions.' + tag + '.push({e:e,p:p}); o(null); });'
 	);
 	// Hook into the dialog finish event and execute the actual function
 	after('onExitDialog', function () {
 		while (deferred.length) {
 			var args = deferred.shift();
-			fn(args.e, args.p, args.o);
+			bitsy.kitsy.dialogFunctions[tag](args.e, args.p, args.o);
 		}
 	});
 	// Hook into the game reset and make sure data gets cleared

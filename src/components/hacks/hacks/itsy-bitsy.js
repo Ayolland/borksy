@@ -1,34 +1,34 @@
 /**
-🔀
-@file logic-operators-extended
-@summary adds conditional logic operators
-@version 1.0.4
-@author @mildmojo
+🕷
+@file itsy-bitsy
+@summary for when bitsy's not small enough
+@license MIT
+@version 1.0.2
+@requires Bitsy Version: 5.1
+@author Sean S. LeBlanc
 
 @description
-Adds conditional logic operators:
-  - !== (not equal to)
-  - && (and)
-  - || (or)
-  - &&! (and not)
-  - ||! (or not)
+Modifies bitsy to run at 64x64 pixels instead of 256x256.
 
-Examples: candlecount > 5 && haslighter == 1
-          candlecount > 5 && papercount > 1 && isIndoors
-          haslighter == 1 || hasmatches == 1
-          candlecount > 5 && candlecount !== 666
-          candlecount > 5 &&! droppedlighter
-          droppedlighter ||! hasmatches
+Note that this means you have significantly less space for text
+(text in regular bitsy is twice as large as the rest of the game)
+To help deal with this, a hack option is provided which lets you
+customize how many rows of text the dialog boxes will show.
 
-NOTE: The combining operators (&&, ||, &&!, ||!) have lower precedence than
-      all other math and comparison operators, so it might be hard to write
-      tests that mix and match these new operators and have them evaluate
-      correctly. If you're using multiple `&&` and `||` operators in one
-      condition, be sure to test every possibility to make sure it behaves
-      the way you want.
+HOW TO USE:
+	1. Copy-paste this script into a new script tag after the Bitsy source code.
+	2. edit hackOptions below as needed
+
+NOTE:
+The number of rows is the only provided hack option,
+but most of the numbers being replaced can be easily
+customized if you want slightly different sizes/positions.
 */
 (function (bitsy) {
 'use strict';
+var hackOptions = {
+	rows: 2, // number of rows per text box (bitsy default is 2)
+};
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
 
@@ -216,58 +216,40 @@ function _reinitEngine() {
 
 
 
-inject$1(/(operatorMap\.set\("-", subExp\);)/,[
-	'$1',
-	'operatorMap.set("&&", andExp);',
-	'operatorMap.set("||", orExp);',
-	'operatorMap.set("&&!", andNotExp);',
-	'operatorMap.set("||!", orNotExp);',
-	'operatorMap.set("!==", notEqExp);'
-].join('\n'));
-inject$1(
-	/(var operatorSymbols = \["-", "\+", "\/", "\*", "<=", ">=", "<", ">", "=="\];)/,
-	'$1operatorSymbols.unshift("!==", "&&", "||", "&&!", "||!");'
-);
 
-bitsy.andExp = function andExp(environment, left, right, onReturn) {
-	right.Eval(environment, function (rVal) {
-		left.Eval(environment, function (lVal) {
-			onReturn(lVal && rVal);
-		});
-	});
-};
 
-bitsy.orExp = function orExp(environment, left, right, onReturn) {
-	right.Eval(environment, function (rVal) {
-		left.Eval(environment, function (lVal) {
-			onReturn(lVal || rVal);
-		});
-	});
-};
+// rewrite main canvas width/height
+inject$1(/(width =) 128/, '$1 64');
+inject$1(/(height =) 128/, '$1 64');
 
-bitsy.notEqExp = function notEqExp(environment, left, right, onReturn) {
-	right.Eval(environment, function (rVal) {
-		left.Eval(environment, function (lVal) {
-			onReturn(lVal !== rVal);
-		});
-	});
-};
+inject$1(/4(; \/\/this is stupid but necessary)/, '1$1'); // rewrite canvas scale
+inject$1(/(mapsize =) 16/, '$1 8'); // rewrite mapsize
+inject$1(/(\+ 1 >=) 16/g, '$1 8'); // rewrite right/down wall checks
 
-bitsy.andNotExp = function andNotExp(environment, left, right, onReturn) {
-	right.Eval(environment, function (rVal) {
-		left.Eval(environment, function (lVal) {
-			onReturn(lVal && !rVal);
-		});
-	});
-};
+inject$1(/2(; \/\/using a different scaling factor for text feels like cheating\.\.\. but it looks better)/, '1$1'); // rewrite text scale
 
-bitsy.orNotExp = function orNotExp(environment, left, right, onReturn) {
-	right.Eval(environment, function (rVal) {
-		left.Eval(environment, function (lVal) {
-			onReturn(lVal || !rVal);
-		});
-	});
-};
-// End of logic operators mod
+// rewrite textbox info
+inject$1(/(var textboxInfo = {)[^]*?(};)/, '$1' + [
+	'img : null,',
+	'width : 62,',
+	'height : 64,',
+	'top : 1,',
+	'left : 1,',
+	'bottom : 1,',
+	'font_scale : 1,',
+	'padding_vert : 2,',
+	'arrow_height : 5'
+].join('\n') + '$2');
+inject$1(/(top = \()4/, '$1 1');
+inject$1(/(left = \()4/, '$1 1');
+
+inject$1(/(relativeFontHeight\(\) \*) 2/, '$1 ' + hackOptions.rows); // rewrite textbox height
+inject$1(/(pixelsPerRow =) 192/, '$1 62'); // rewrite hard-coded textbox wrap width
+inject$1(/(else if \(curRowIndex )== 0/g, '$1< ' + (hackOptions.rows - 1)); // rewrite hard-coded row limit
+
+// inject pixelated rendering style
+var style = document.createElement('style');
+style.innerText = '#game{ -ms-interpolation-mode: nearest-neighbor;image-rendering: -webkit-optimize-contrast;image-rendering: -moz-crisp-edges;image-rendering: -o-pixelated;image-rendering: pixelated; }';
+document.head.appendChild(style);
 
 }(window));

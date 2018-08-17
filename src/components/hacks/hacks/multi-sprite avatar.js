@@ -3,7 +3,7 @@
 @file multi-sprite avatar
 @summary make the player big
 @license MIT
-@version 1.0.0
+@version 2.0.1
 @author Sean S. LeBlanc
 
 @description
@@ -53,18 +53,19 @@ bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
 @author Sean S. LeBlanc
 */
 
-/*helper used to inject code into script tags based on a search string*/
-function inject(searchString, codeToInject) {
-	var args = [].slice.call(arguments);
-	codeToInject = flatten(args.slice(1)).join('');
-
+/*
+Helper used to replace code in a script tag based on a search regex
+To inject code without erasing original string, using capturing groups; e.g.
+	inject(/(some string)/,'injected before $1 injected after')
+*/
+function inject(searchRegex, replaceString) {
 	// find the relevant script tag
 	var scriptTags = document.getElementsByTagName('script');
 	var scriptTag;
 	var code;
 	for (var i = 0; i < scriptTags.length; ++i) {
 		scriptTag = scriptTags[i];
-		var matchesSearch = scriptTag.textContent.indexOf(searchString) !== -1;
+		var matchesSearch = scriptTag.textContent.search(searchRegex) !== -1;
 		var isCurrentScript = scriptTag === document.currentScript;
 		if (matchesSearch && !isCurrentScript) {
 			code = scriptTag.textContent;
@@ -74,17 +75,33 @@ function inject(searchString, codeToInject) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchString + '" in script tags';
+		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
 	}
 
 	// modify the content
-	code = code.replace(searchString, searchString + codeToInject);
+	code = code.replace(searchRegex, replaceString);
 
 	// replace the old script tag with a new one using our modified code
 	var newScriptTag = document.createElement('script');
 	newScriptTag.textContent = code;
 	scriptTag.insertAdjacentElement('afterend', newScriptTag);
 	scriptTag.remove();
+}
+
+/*
+Helper for getting image by name or id
+
+Args:
+	name: id or name of image to return
+	 map: map of images (e.g. `sprite`, `tile`, `item`)
+
+Returns: the image in the given map with the given name/id
+ */
+function getImage(name, map) {
+	var id = map.hasOwnProperty(name) ? name : Object.keys(map).find(function (e) {
+		return map[e].name == name;
+	});
+	return map[id];
 }
 
 /**
@@ -98,22 +115,12 @@ function unique(array) {
 	});
 }
 
-function flatten(list) {
-	if (!Array.isArray(list)) {
-		return list;
-	}
-
-	return list.reduce(function (fragments, arg) {
-		return fragments.concat(flatten(arg));
-	}, []);
-}
-
 /**
 
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 2.2.2
+@version 3.2.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -123,7 +130,7 @@ HOW TO USE:
 
   before(targetFuncName, beforeFn);
   after(targetFuncName, afterFn);
-  inject(searchString, codeFragment1[, ...codefragmentN]);
+  inject(searchRegex, replaceString);
   addDialogTag(tagName, dialogFn);
   addDeferredDialogTag(tagName, dialogFn);
 
@@ -179,7 +186,7 @@ function kitsyInit() {
 
 function doInjects() {
 	bitsy.kitsy.queuedInjectScripts.forEach(function (injectScript) {
-		inject(injectScript.searchString, injectScript.codeFragments);
+		inject(injectScript.searchRegex, injectScript.replaceString);
 	});
 	_reinitEngine();
 }
@@ -191,12 +198,14 @@ function applyAllHooks() {
 
 function applyHook(functionName) {
 	var superFn = bitsy[functionName];
-	var superFnLength = superFn.length;
+	var superFnLength = superFn ? superFn.length : 0;
 	var functions = [];
 	// start with befores
 	functions = functions.concat(bitsy.kitsy.queuedBeforeScripts[functionName] || []);
 	// then original
-	functions.push(superFn);
+	if (superFn) {
+		functions.push(superFn);
+	}
 	// then afters
 	functions = functions.concat(bitsy.kitsy.queuedAfterScripts[functionName] || []);
 
@@ -257,7 +266,7 @@ function syncPieces() {
 	var p = bitsy.player();
 	for (var i = 0; i < pieces.length; ++i) {
 		var piece = pieces[i];
-		var spr = bitsy.sprite[piece.spr];
+		var spr = getImage(piece.spr, bitsy.sprite);
 
 		spr.room = p.room;
 		spr.x = p.x + piece.x;
@@ -275,7 +284,7 @@ function enableBig(newPieces) {
 function disableBig() {
 	enabled = false;
 	for (var i = 0; i < pieces.length; ++i) {
-		bitsy.sprite[pieces[i].spr].room = null;
+		getImage(pieces[i].spr, bitsy.sprite).room = null;
 	}
 }
 
