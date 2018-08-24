@@ -8,7 +8,7 @@ If you're not sure how to use this tool, check out the 'How To Use Borksy' secti
 
 **NOTE TO BORKSY USERS:** Custom fonts have been deprecated from Borksy, as the font conversion tool Borksy used is no longer compatible with Bitsy 5.1. Bitsy now has its own built-in font-importer, and now there's [Fontsy](https://seansleblanc.itch.io/fontsy) for customizing your own fonts!
 
-Aug 14, 2018 - What's new in 3.3:
+Aug 24, 2018 - What's new in 3.3:
 * Borksy now uses a repaired/edited version of the default Bitsy font that has more consistent unicode support.
 
 Other Borksy Features:
