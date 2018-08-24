@@ -1,4 +1,4 @@
-Borksy v 3.2
+Borksy v 3.3
 
 Borksy is a hacking tool to be used in conjunction with [Bitsy Game Maker](https://ledoux.itch.io/bitsy)! Use it to customize your games and add hacks without needing a web server or any manual cut-and-paste work.
 
@@ -6,16 +6,10 @@ Borksy currently uses Bitsy 5.1 to create files.
 
 If you're not sure how to use this tool, check out the 'How To Use Borksy' section. If you're not familiar with how Bitsy can be extended, explore [Sean's great collection of Bitsy hacks](https://github.com/seleb/bitsy-hacks/).
 
-**NOTE TO BORKSY USERS:** Custom fonts have been deprecated from Borksy, as the font conversion tool Borksy used is no longer compatible with Bitsy 5.1. Bitsy now has its own built-in font-importer, and hopefully a new font conversion tool will be coming down the road shortly.
+**NOTE TO BORKSY USERS:** Custom fonts have been deprecated from Borksy, as the font conversion tool Borksy used is no longer compatible with Bitsy 5.1. Bitsy now has its own built-in font-importer, and now there's [Fontsy](https://seansleblanc.itch.io/fontsy) for customizing your own fonts!
 
-Aug 14, 2018 - What's new in 3.2:
-* Moved to use Bitsy 5.1
-* Deprecated the Font Tool
-
-**USE THESE HACKS WITH CAUTION:** As of Aug 14, 2018, the following hacks are having issues and are not compatible with all other hacks. Test the hacks you want to use together before centering your project around them.
-* Solid Items
-* Unique Items
-* Multi-Sprite Avatar
+Aug 14, 2018 - What's new in 3.3:
+* Borksy now uses a repaired/edited version of the default Bitsy font that has more consistent unicode support.
 
 Other Borksy Features:
 * Preloaded Hacks Menu

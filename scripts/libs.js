@@ -1,16 +1,16 @@
 var loadedFiles ={};
 
-var fonts = {
-	"default" : "Default Bitsy Font by Adam LeDoux",
-	"beeblebrox" : "Beeblebrox by AYolland",
-	"blacksphinx" : "Blacksphinx by AYolland",
-	"greengable" : "Greengable by AYolland",
-	"hotcaps" : "Hotcaps by AYolland"
-};
+// var fonts = {
+// 	"default" : "Default Bitsy Font by Adam LeDoux",
+// 	"beeblebrox" : "Beeblebrox by AYolland",
+// 	"blacksphinx" : "Blacksphinx by AYolland",
+// 	"greengable" : "Greengable by AYolland",
+// 	"hotcaps" : "Hotcaps by AYolland"
+// };
 
 var borksyInfo = {
-	templateVersion: '3.2',
-	lastUpdated: "August 14, 2018"
+	templateVersion: '3.3',
+	lastUpdated: "August 24, 2018"
 }
 
 var hacks = {
