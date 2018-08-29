@@ -9,7 +9,13 @@ body {
     animation-iteration-count: infinite; }
 
 img {
-  image-rendering: pixelated; }
+  /* https://caniuse.com/#search=image-render */
+  -ms-interpolation-mode: nearest-neighbor;
+  /* IE */
+  image-rendering: -moz-crisp-edges;
+  /* FF 6.0+ */
+  image-rendering: pixelated;
+  /* Chrome, Safari */ }
 
 p, span, li {
   font-weight: 300;
@@ -121,7 +127,7 @@ header {
   header #mascot {
     width: 19vw;
     height: 19vw;
-    padding: 0 3vw; }
+    padding: 0 20px; }
   header h1 {
     margin: 0;
     font-size: 6.3vw;
