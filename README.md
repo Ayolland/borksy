@@ -13,10 +13,11 @@ Current features:
 * HotKeys for Save/Restore Defaults
 * Editable Page Title / Filename
 * Customize HTML/CSS
-* Font Importer and Presets (deprecated)
+* Font Importer and Presets *(deprecated*
 * Enables extended ASCII characters
 * Field for extra JS / Hacks
 * Bitsy variables are exposed in JS as global variable *bitsyVariableMap*
+* Uses a version of the default Bitsy font with more consistent unicode support.
 * Saves work to LocalStorage for persistence
 * Party Mode
 

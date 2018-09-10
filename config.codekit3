@@ -84,11 +84,11 @@
 		"rFN": 0,
 		"uCM": 0
 		},
-	"\/Borksy.3.1.zip": {
+	"\/Borksy.3.3.1.zip": {
 		"cB": 0,
 		"ft": 8192,
 		"oA": 0,
-		"oAP": "\/Borksy.3.1.zip",
+		"oAP": "\/Borksy.3.3.1.zip",
 		"oF": 0
 		},
 	"\/borksy.gif": {
@@ -930,6 +930,16 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"\/scripts\/min\/libs-min.js": {
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "\/scripts\/min\/min\/libs-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"\/style\/style.css": {
 		"aP": 1,
 		"bl": 0,
@@ -979,6 +989,27 @@
 		"ft": 8192,
 		"oA": 0,
 		"oAP": "\/template\/3.0.template.html",
+		"oF": 0
+		},
+	"\/template\/3.2.template.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/template\/3.2.template.html",
+		"oF": 0
+		},
+	"\/template\/3.3.template.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/template\/3.3.template.html",
+		"oF": 0
+		},
+	"\/template\/3.4.template.html": {
+		"cB": 0,
+		"ft": 8192,
+		"oA": 0,
+		"oAP": "\/template\/3.4.template.html",
 		"oF": 0
 		},
 	"\/testgames\/testgame.html": {

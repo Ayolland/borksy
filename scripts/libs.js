@@ -9,8 +9,8 @@ var loadedFiles ={};
 // };
 
 var borksyInfo = {
-	templateVersion: '3.3',
-	lastUpdated: "August 24, 2018"
+	templateVersion: '3.4',
+	lastUpdated: "September 9, 2018"
 }
 
 var hacks = {
