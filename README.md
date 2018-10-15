@@ -7,6 +7,7 @@ Borksy uses jQuery (don't even start) to assemble and compile text files and use
 **NOTE:** Font data and customizer is now deprecated as of Bitsy 5.1. Use Bitsy's font tools.
 
 Current features:
+* Fixed Mobile touch controls for Itch.io embeds
 * Hacks are loaded from Github using AJAX
 * Preloaded Hacks Menu
 * Editable Hack Options

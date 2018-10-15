@@ -1,4 +1,4 @@
-Borksy v 3.4
+Borksy v 3.5
 
 Borksy is a hacking tool to be used in conjunction with [Bitsy Game Maker](https://ledoux.itch.io/bitsy)! Use it to customize your games and add hacks without needing a web server or any manual cut-and-paste work.
 
@@ -8,8 +8,8 @@ If you're not sure how to use this tool, check out the 'How To Use Borksy' secti
 
 **NOTE TO BORKSY USERS:** Custom fonts have been deprecated from Borksy. Now there's [Fontsy](https://seansleblanc.itch.io/fontsy) for customizing your own fonts!
 
-Spet 9, 2018 - What's new in 3.4:
-Updated to Bitsy 5.3
+Spet 9, 2018 - What's new in 3.5:
+* Fixed Mobile touch controls for Itch.io embeds!
 
 Other Borksy Features:
 * Preloaded Hacks Menu

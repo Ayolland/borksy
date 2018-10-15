@@ -9,7 +9,7 @@ var loadedFiles ={};
 // };
 
 var borksyInfo = {
-	templateVersion: '3.4',
+	templateVersion: '3.5',
 	lastUpdated: "September 9, 2018"
 }
 
