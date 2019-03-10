@@ -1,63 +1,59 @@
 /**
-🖌
-@file edit image from dialog
-@summary edit sprites, items, and tiles from dialog
+💾
+@file save
+@summary save/load your game
 @license MIT
-@version 1.2.1
-@requires 5.3
+@version 1.0.1
+@requires 5.4
 @author Sean S. LeBlanc
 
 @description
-You can use this to edit the image data of sprites (including the player avatar), items, and tiles through dialog.
-Image data can be replaced with data from another image, and the palette index can be set.
+Introduces save/load functionality.
 
-(image "map, target, source")
-Parameters:
-  map:    Type of image (SPR, TIL, or ITM)
-  target: id/name of image to edit
-  source: id/name of image to copy
+Includes:
+	- data that may be saved/loaded:
+		- current room/position within room
+		- inventory/items in rooms
+		- dialog variables
+		- dialog position
+	- basic autosave
+	- dialog tags:
+		- (save): saves game
+		- (load ""): loads game; parameter is text to show as title on load
+		- (clear): clears saved game
+		- (saveNow)/(loadNow)/(clearNow): instant varieties of above tags
 
-(imageNow "map, target, source")
-Same as (image), but applied immediately instead of after dialog is closed.
-
-(imagePal "map, target, palette")
-Parameters:
-  map:    Type of image (SPR, TIL, or ITM)
-  target: id/name of image to edit
-  source: palette index (0 is bg, 1 is tiles, 2 is sprites/items, anything higher requires editing your game data to include more)
-
-(imagePalNow "map, target, palette")
-Same as (imagePal), but applied immediately instead of after dialog is closed.
-
-Examples:
-  (image "SPR, A, a")
-  (imageNow "TIL, a, floor")
-  (image "ITM, a, b")
-  (imagePal "SPR, A, 1")
-  (imagePalNow "TIL, floor, 2")
+Notes:
+	- Storage is implemented through browser localStorage: https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
+	  Remember to clear storage while working on a game, otherwise loading may prevent you from seeing your changes!
+	  You can use the `clearOnStart` option to do this for you when testing.
+	- This hack only tracks state which could be modified via vanilla bitsy features,
+	  i.e. compatability with other hacks that modify state varies;
+	  you may need to modify save/load to include/exclude things for compatability.
+	  (feel free to ask for help tailoring these to your needs!)
+	- There is only one "save slot"; it would not be too difficult to implement more,
+	  but it adds a lot of complexity that most folks probably don't need.
 
 HOW TO USE:
-  1. Copy-paste this script into a new script tag after the Bitsy source code.
-     It should appear *before* any other mods that handle loading your game
-     data so it executes *after* them (last-in first-out).
-
-TIPS:
-  - The player avatar is always a sprite with id "A"; you can edit your gamedata to give them a name for clarity
-  - You can use the full names or shorthand of image types (e.g. "SPR" and "sprite" will both work)
-  - The "source" images don't have to be placed anywhere; so long as they exist in the gamedata they'll work
-  - This is a destructive operation! Unless you have a copy of an overwritten image, you won't be able to get it back during that run
-
-NOTE: This uses parentheses "()" instead of curly braces "{}" around function
-      calls because the Bitsy editor's fancy dialog window strips unrecognized
-      curly-brace functions from dialog text. To keep from losing data, write
-      these function calls with parentheses like the examples above.
-
-      For full editor integration, you'd *probably* also need to paste this
-      code at the end of the editor's `bitsy.js` file. Untested.
+1. Copy-paste this script into a script tag after the bitsy source
+2. Edit hackOptions below as needed
 */
 this.hacks = this.hacks || {};
-(function (bitsy) {
+this.hacks.save = (function (exports,bitsy) {
 'use strict';
+var hackOptions = {
+	// when to save/load
+	autosaveInterval: Infinity, // time in milliseconds between autosaves (never autosaves if Infinity)
+	loadOnStart: true, // if true, loads save when starting
+	clearOnEnd: false, // if true, deletes save when restarting after reaching an ending
+	clearOnStart: false, // if true, deletes save when page is loaded (mostly for debugging)
+	// what to save/load
+	position: true, // if true, saves which room the player is in, and where they are in the room
+	variables: true, // if true, saves dialog variables (note: does not include item counts)
+	items: true, // if true, saves player inventory (i.e. item counts) and item placement in rooms
+	dialog: true, // if true, saves dialog position (for sequences etc)
+	key: 'snapshot', // where in localStorage to save/load data
+};
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
 
@@ -100,22 +96,6 @@ function inject(searchRegex, replaceString) {
 	newScriptTag.textContent = code;
 	scriptTag.insertAdjacentElement('afterend', newScriptTag);
 	scriptTag.remove();
-}
-
-/*
-Helper for getting image by name or id
-
-Args:
-	name: id or name of image to return
-	 map: map of images (e.g. `sprite`, `tile`, `item`)
-
-Returns: the image in the given map with the given name/id
- */
-function getImage(name, map) {
-	var id = map.hasOwnProperty(name) ? name : Object.keys(map).find(function (e) {
-		return map[e].name == name;
-	});
-	return map[id];
 }
 
 /**
@@ -378,145 +358,145 @@ function addDualDialogTag(tag, fn) {
 	addDeferredDialogTag(tag, fn);
 }
 
-/**
-@file edit image at runtime
-@summary API for updating image data at runtime.
-@author Sean S. LeBlanc
-@description
-Adds API for updating sprite, tile, and item data at runtime.
 
-Individual frames of image data in bitsy are 8x8 1-bit 2D arrays in yx order
-e.g. the default player is:
-[
-	[0,0,0,1,1,0,0,0],
-	[0,0,0,1,1,0,0,0],
-	[0,0,0,1,1,0,0,0],
-	[0,0,1,1,1,1,0,0],
-	[0,1,1,1,1,1,1,0],
-	[1,0,1,1,1,1,0,1],
-	[0,0,1,0,0,1,0,0],
-	[0,0,1,0,0,1,0,0]
-]
-*/
 
-/*
-Args:
-	   id: string id or name
-	frame: animation frame (0 or 1)
-	  map: map of images (e.g. `sprite`, `tile`, `item`)
 
-Returns: a single frame of a image data
-*/
-function getImageData(id, frame, map) {
-	return bitsy.renderer.GetImageSource(getImage(id, map).drw)[frame];
+
+function save() {
+	var snapshot = {};
+	if (hackOptions.position) {
+		snapshot.room = bitsy.curRoom;
+		snapshot.x = bitsy.player().x;
+		snapshot.y = bitsy.player().y;
+	}
+	if (hackOptions.items) {
+		snapshot.inventory = bitsy.player().inventory;
+		snapshot.items = Object.entries(bitsy.room).map(function (room) {
+			return [room[0], room[1].items];
+		});
+	}
+	if (hackOptions.variables) {
+		snapshot.variables = bitsy.scriptInterpreter.GetVariableNames().map(function (variable) {
+			return [variable, bitsy.scriptInterpreter.GetVariable(variable)];
+		});
+	}
+	if (hackOptions.dialog) {
+		snapshot.sequenceIndices = bitsy.saveHack.sequenceIndices;
+	}
+	localStorage.setItem(hackOptions.key, JSON.stringify(snapshot));
 }
 
-/*
-Updates a single frame of image data
+function load() {
+	var snapshot = localStorage.getItem(hackOptions.key);
+	// if there's no save, abort load
+	if (!snapshot) {
+		return;
+	}
+	snapshot = JSON.parse(snapshot);
 
-Args:
-	     id: string id or name
-	  frame: animation frame (0 or 1)
-	    map: map of images (e.g. `sprite`, `tile`, `item`)
-	newData: new data to write to the image data
-*/
-function setImageData(id, frame, map, newData) {
-	var drawing = getImage(id, map);
-	var drw = drawing.drw;
-	var img = bitsy.renderer.GetImageSource(drw);
-	img[frame] = newData;
-	bitsy.renderer.SetImageSource(drw, img);
+	if (hackOptions.position) {
+		if (snapshot.room) {
+			bitsy.curRoom = bitsy.player().room = snapshot.room;
+		}
+		if (snapshot.x && snapshot.y) {
+			bitsy.player().x = snapshot.x;
+			bitsy.player().y = snapshot.y;
+		}
+	}
+	if (hackOptions.items) {
+		if (snapshot.inventory) {
+			bitsy.player().inventory = snapshot.inventory;
+		}
+		if (snapshot.items) {
+			snapshot.items.forEach(function (entry) {
+				bitsy.room[entry[0]].items = entry[1];
+			});
+		}
+	}
+	if (hackOptions.variables && snapshot.variables) {
+		snapshot.variables.forEach(function (variable) {
+			bitsy.scriptInterpreter.SetVariable(variable[0], variable[1]);
+		});
+	}
+	if (hackOptions.dialog && snapshot.sequenceIndices) {
+		bitsy.saveHack.sequenceIndices = snapshot.sequenceIndices;
+	}
 }
 
+function clear() {
+	localStorage.removeItem(hackOptions.key);
+}
 
+function nodeKey(node) {
+	var key = node.key = node.key || node.options.map(function (option) {
+		return option.Serialize();
+	}).join('\n');
+	return key;
+}
+// setup global needed for saving/loading dialog progress
+bitsy.saveHack = {
+	sequenceIndices: {},
+	saveSeqIdx: function (node, index) {
+		var key = nodeKey(node);
+		bitsy.saveHack.sequenceIndices[key] = index;
+	},
+	loadSeqIdx: function (node) {
+		var key = nodeKey(node);
+		return bitsy.saveHack.sequenceIndices[key];
+	}
+};
 
-// map of maps
-var maps;
-after('load_game', function () {
-	maps = {
-    spr: bitsy.sprite,
-    sprite: bitsy.sprite,
-    til: bitsy.tile,
-    tile: bitsy.tile,
-    itm: bitsy.item,
-    item: bitsy.item,
-	};
+// use saved index to eval/calc next index if available
+inject(/(ptions\[index\].Eval)/g, `ptions[window.saveHack.loadSeqIdx(this) || index].Eval`);
+inject(/var next = index \+ 1;/g, `var next = (window.saveHack.loadSeqIdx(this) || index) + 1;`);
+// save index on changes
+inject(/(index = next);/g, `$1,window.saveHack.saveSeqIdx(this, next);`);
+inject(/(\tindex = 0);/g, `$1,window.saveHack.saveSeqIdx(this, 0);`);
+
+// hook up autosave
+var autosaveInterval;
+after('onready', function () {
+	if (hackOptions.autosaveInterval < Infinity) {
+		clearInterval(autosaveInterval);
+		autosaveInterval = setInterval(save, hackOptions.autosaveInterval);
+	}
 });
 
-function editImage(environment, parameters) {
-  var i;
+// hook up autoload
+after('onready', function () {
+	if (hackOptions.loadOnStart) {
+		load();
+	}
+});
 
-  // parse parameters
-  var params = parameters[0].split(/,\s?/);
-  params[0] = (params[0] || "").toLowerCase();
-  var mapId = params[0];
-  var tgtId = params[1];
-  var srcId = params[2];
+// hook up clear on end
+after('reset_cur_game', function () {
+	if (hackOptions.clearOnEnd) {
+		if (bitsy.isEnding) {
+			clear();
+		}
+	}
+});
 
-  if (!mapId || !tgtId || !srcId) {
-    throw new Error('Image expects three parameters: "map, target, source", but received: "' + params.join(', ') + '"');
-  }
+// hook up clear on start
+before('startExportedGame', function () {
+	if (hackOptions.clearOnStart) {
+		clear();
+	}
+});
 
-  // get objects
-  var mapObj = maps[mapId];
-  if (!mapObj) {
-    throw new Error('Invalid map "' + mapId + '". Try "SPR", "TIL", or "ITM" instead.');
-  }
-  var tgtObj = getImage(tgtId, mapObj);
-  if (!tgtObj) {
-    throw new Error('Target "' + tgtId + '" was not the id/name of a ' + mapId + '.');
-  }
-  var srcObj = getImage(srcId, mapObj);
-  if (!srcObj) {
-    throw new Error('Source "' + srcId + '" was not the id/name of a ' + mapId + '.');
-  }
-
-  // copy animation from target to source
-  tgtObj.animation = {
-    frameCount: srcObj.animation.frameCount,
-    isAnimated: srcObj.animation.isAnimated,
-    frameIndex: srcObj.animation.frameIndex
-  };
-  for (i = 0; i < srcObj.animation.frameCount; ++i) {
-    setImageData(tgtId, i, mapObj, getImageData(srcId, i, mapObj));
-  }
+// hook up dialog functions
+function dialogLoad(environment, parameters) {
+	bitsy.reset_cur_game();
+	bitsy.dialogBuffer.EndDialog();
+	bitsy.startNarrating(parameters[0] || '');
 }
+addDualDialogTag('save', save);
+addDualDialogTag('load', dialogLoad);
+addDualDialogTag('clear', clear);
 
-function editPalette(environment, parameters) {
-  // parse parameters
-  var params = parameters[0].split(/,\s?/);
-  params[0] = (params[0] || "").toLowerCase();
-  var mapId = params[0];
-  var tgtId = params[1];
-  var palId = params[2];
+exports.hackOptions = hackOptions;
 
-  if (!mapId || !tgtId || !palId) {
-    throw new Error('Image expects three parameters: "map, target, palette", but received: "' + params.join(', ') + '"');
-  }
+return exports;
 
-  // get objects
-  var mapObj = maps[mapId];
-  if (!mapObj) {
-    throw new Error('Invalid map "' + mapId + '". Try "SPR", "TIL", or "ITM" instead.');
-  }
-  var tgtObj = getImage(tgtId, mapObj);
-  if (!tgtObj) {
-    throw new Error('Target "' + tgtId + '" was not the id/name of a ' + mapId + '.');
-  }
-  var palObj = parseInt(palId);
-  if (isNaN(palObj)) {
-    throw new Error('Palette "' + palId + '" was not a number.');
-  }
-
-  // set palette
-  tgtObj.col = palObj;
-
-  // update images in cache
-  bitsy.renderImageForAllPalettes(tgtObj);
-}
-
-// hook up the dialog tags
-addDualDialogTag('image', editImage);
-addDualDialogTag('imagePal', editPalette);
-
-}(window));
+}({},window));

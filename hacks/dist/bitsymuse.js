@@ -3,7 +3,7 @@
 @file bitsymuse
 @summary A variety of Bitsy sound and music handlers
 @license MIT
-@version 2.0.1
+@version 3.0.0
 @requires 4.8, 4.9
 @author David Mowatt
 
@@ -22,18 +22,20 @@ HOW TO USE:
 In addition to the track list, which will play audio based on the room number/name,
 you have access to the following commands you can add to dialogue:
 
-1. (soundeffect "<sound ID>") will play a sound without interrupting the music
-2. (music "<sound ID>") will change the music as soon as it is called in the dialogue
-3. (musicEnd "<sound ID>") will change the music once the dialogue box closes
+1. (soundeffectNow "<sound ID>") will play a sound without interrupting the music as soon as it is called in the dialogue
+2. (soundeffect "<sound ID>") will play a sound without interrupting the music once the dialogue box closes
+3. (musicNow "<sound ID>") will change the music as soon as it is called in the dialogue
+4. (music "<sound ID>") will change the music once the dialogue box closes
 
-You can call both music and musicEnd in the same dialogue, to e.g. change the music while you speak to a character
+You can call both musicNow and music in the same dialogue, to e.g. change the music while you speak to a character
 and then restart the regular room music once you stop speaking to them.
 You can also use a special ID ("S" by default) to Silence the music.
 
 By default, music tracks automatically restart from the beginning if you go back to a previous track.
 This can also be changed in the hackOptions below.
 */
-(function (bitsy) {
+this.hacks = this.hacks || {};
+this.hacks.bitsymuse = (function (exports,bitsy) {
 'use strict';
 var hackOptions = {
 	// You need to put an entry in this list for every room ID or name that is accessible by the player,
@@ -59,18 +61,19 @@ bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
 @author Sean S. LeBlanc
 */
 
-/*helper used to inject code into script tags based on a search string*/
-function inject(searchString, codeToInject) {
-	var args = [].slice.call(arguments);
-	codeToInject = flatten(args.slice(1)).join('');
-
+/*
+Helper used to replace code in a script tag based on a search regex
+To inject code without erasing original string, using capturing groups; e.g.
+	inject(/(some string)/,'injected before $1 injected after')
+*/
+function inject(searchRegex, replaceString) {
 	// find the relevant script tag
 	var scriptTags = document.getElementsByTagName('script');
 	var scriptTag;
 	var code;
 	for (var i = 0; i < scriptTags.length; ++i) {
 		scriptTag = scriptTags[i];
-		var matchesSearch = scriptTag.textContent.indexOf(searchString) !== -1;
+		var matchesSearch = scriptTag.textContent.search(searchRegex) !== -1;
 		var isCurrentScript = scriptTag === document.currentScript;
 		if (matchesSearch && !isCurrentScript) {
 			code = scriptTag.textContent;
@@ -80,11 +83,11 @@ function inject(searchString, codeToInject) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchString + '" in script tags';
+		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
 	}
 
 	// modify the content
-	code = code.replace(searchString, searchString + codeToInject);
+	code = code.replace(searchRegex, replaceString);
 
 	// replace the old script tag with a new one using our modified code
 	var newScriptTag = document.createElement('script');
@@ -114,22 +117,12 @@ function unique(array) {
 	});
 }
 
-function flatten(list) {
-	if (!Array.isArray(list)) {
-		return list;
-	}
-
-	return list.reduce(function (fragments, arg) {
-		return fragments.concat(flatten(arg));
-	}, []);
-}
-
 /**
 
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 2.1.1
+@version 3.3.0
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -139,7 +132,7 @@ HOW TO USE:
 
   before(targetFuncName, beforeFn);
   after(targetFuncName, afterFn);
-  inject(searchString, codeFragment1[, ...codefragmentN]);
+  inject(searchRegex, replaceString);
   addDialogTag(tagName, dialogFn);
   addDeferredDialogTag(tagName, dialogFn);
 
@@ -148,17 +141,12 @@ HOW TO USE:
 */
 
 
-// Examples: inject('names.sprite.set( name, id );', 'console.dir(names)');
-//           inject('names.sprite.set( name, id );', 'console.dir(names);', 'console.dir(sprite);');
-//           inject('names.sprite.set( name, id );', ['console.dir(names)', 'console.dir(sprite);']);
-function inject$1(searchString, codeFragments) {
+// Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
+function inject$1(searchRegex, replaceString) {
 	var kitsy = kitsyInit();
-	var args = [].slice.call(arguments);
-	codeFragments = flatten(args.slice(1));
-
 	kitsy.queuedInjectScripts.push({
-		searchString: searchString,
-		codeFragments: codeFragments
+		searchRegex: searchRegex,
+		replaceString: replaceString
 	});
 }
 
@@ -210,7 +198,7 @@ function kitsyInit() {
 
 function doInjects() {
 	bitsy.kitsy.queuedInjectScripts.forEach(function (injectScript) {
-		inject(injectScript.searchString, injectScript.codeFragments);
+		inject(injectScript.searchRegex, injectScript.replaceString);
 	});
 	_reinitEngine();
 }
@@ -222,12 +210,14 @@ function applyAllHooks() {
 
 function applyHook(functionName) {
 	var superFn = bitsy[functionName];
-	var superFnLength = superFn.length;
+	var superFnLength = superFn ? superFn.length : 0;
 	var functions = [];
 	// start with befores
 	functions = functions.concat(bitsy.kitsy.queuedBeforeScripts[functionName] || []);
 	// then original
-	functions.push(superFn);
+	if (superFn) {
+		functions.push(superFn);
+	}
 	// then afters
 	functions = functions.concat(bitsy.kitsy.queuedAfterScripts[functionName] || []);
 
@@ -255,7 +245,8 @@ function applyHook(functionName) {
 				functions[i++].apply(this, args.concat(runBefore.bind(this)));
 			} else {
 				// run synchronously
-				var newArgs = functions[i++].apply(this, args) || args;
+				var newArgs = functions[i++].apply(this, args);
+				newArgs = newArgs && newArgs.length ? newArgs : args;
 				runBefore.apply(this, newArgs);
 			}
 		}
@@ -273,6 +264,18 @@ function _reinitEngine() {
 	bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 }
 
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function(match, group){
+			if(match.substr(0,1) === '\\') {
+				return '('+ group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
+			}
+			return '{'+ group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+		});
+}
+
 
 function addDialogFunction(tag, fn) {
 	var kitsy = kitsyInit();
@@ -282,13 +285,8 @@ function addDialogFunction(tag, fn) {
 	}
 
 	// Hook into game load and rewrite custom functions in game data to Bitsy format.
-	before('load_game', function (game_data, startWithTitle) {
-		// Rewrite custom functions' parentheses to curly braces for Bitsy's
-		// interpreter. Unescape escaped parentheticals, too.
-		var fixedGameData = game_data
-		.replace(new RegExp("(^|[^\\\\])\\((" + tag + " \"?.+?\"?)\\)", "g"), "$1{$2}") // Rewrite (tag...) to {tag...}
-		.replace(new RegExp("\\\\\\((" + tag + " \"?.+\"?)\\\\?\\)", "g"), "($1)"); // Rewrite \(tag...\) to (tag...)
-		return [fixedGameData, startWithTitle];
+	before('parseWorld', function (game_data) {
+		return [convertDialogTags(game_data, tag)];
 	});
 
 	kitsy.dialogFunctions[tag] = fn;
@@ -310,8 +308,8 @@ function addDialogFunction(tag, fn) {
 function addDialogTag(tag, fn) {
 	addDialogFunction(tag, fn);
 	inject$1(
-		'var functionMap = new Map();',
-		'functionMap.set("' + tag + '", kitsy.dialogFunctions.' + tag + ');'
+		/(var functionMap = new Map\(\);)/,
+		'$1functionMap.set("' + tag + '", kitsy.dialogFunctions.' + tag + ');'
 	);
 }
 
@@ -332,20 +330,40 @@ function addDeferredDialogTag(tag, fn) {
 	bitsy.kitsy.deferredDialogFunctions = bitsy.kitsy.deferredDialogFunctions || {};
 	var deferred = bitsy.kitsy.deferredDialogFunctions[tag] = [];
 	inject$1(
-		'var functionMap = new Map();',
-		'functionMap.set("' + tag + '", function(e, p, o){ kitsy.deferredDialogFunctions.' + tag + '.push({e:e,p:p}); o(null); });'
+		/(var functionMap = new Map\(\);)/,
+		'$1functionMap.set("' + tag + '", function(e, p, o){ kitsy.deferredDialogFunctions.' + tag + '.push({e:e,p:p}); o(null); });'
 	);
 	// Hook into the dialog finish event and execute the actual function
 	after('onExitDialog', function () {
 		while (deferred.length) {
 			var args = deferred.shift();
-			fn(args.e, args.p, args.o);
+			bitsy.kitsy.dialogFunctions[tag](args.e, args.p, args.o);
 		}
 	});
 	// Hook into the game reset and make sure data gets cleared
 	after('clearGameData', function () {
 		deferred.length = 0;
 	});
+}
+
+/**
+ * Adds two custom dialog tags which execute the provided function,
+ * one with the provided tagname executed after the dialog box,
+ * and one suffixed with 'Now' executed immediately when the tag is reached.
+ *
+ * i.e. helper for the (exit)/(exitNow) pattern.
+ *
+ * @param {string}   tag Name of tag
+ * @param {Function} fn  Function to execute, with signature `function(environment, parameters){}`
+ *                       environment: provides access to SetVariable/GetVariable (among other things, see Environment in the bitsy source for more info)
+ *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
+ */
+function addDualDialogTag(tag, fn) {
+	addDialogTag(tag + 'Now', function(environment, parameters, onReturn) {
+		fn(environment, parameters);
+		onReturn(null);
+	});
+	addDeferredDialogTag(tag, fn);
 }
 
 
@@ -419,32 +437,24 @@ after('drawRoom', function () {
 	}
 });
 
-// Implement the {music} dialog function.
-// It changes the music track as soon as it is called.
-addDialogTag('music', function (environment, parameters, onReturn) {
+// Implement the dialog functions
+addDualDialogTag('music', function (environment, parameters) {
 	if (!parameters[0]) {
-		throw new Error('{music} was missing parameters! Usage: {music "track name"}');
-	}
-	changeMusic(parameters[0]);
-	onReturn(null);
-});
-
-// Implement the {musicEnd} dialog function.
-// It changes the music track once the dialog closes.
-addDeferredDialogTag('musicEnd', function (environment, parameters) {
-	if (!parameters[0]) {
-		throw new Error('{musicEnd} was missing parameters! Usage: {musicEnd "track name"}');
+		throw new Error('{music/musicNow} was missing parameters! Usage: {music/musicNow "track name"}');
 	}
 	changeMusic(parameters[0]);
 });
 
-addDialogTag('soundeffect', function (environment, parameters, onReturn) {
+addDualDialogTag('soundeffect', function (environment, parameters) {
 	if (!parameters[0]) {
-		throw new Error('{soundeffect} was missing parameters! Usage: {soundeffect "track name"}');
+		throw new Error('{soundeffect/soundeffectNow} was missing parameters! Usage: {soundeffect/soundeffectNow "track name"}');
 	}
 	playSound(parameters[0]);
-	onReturn(null);
 });
 // End of (music) dialog function mod
 
-}(window));
+exports.hackOptions = hackOptions;
+
+return exports;
+
+}({},window));

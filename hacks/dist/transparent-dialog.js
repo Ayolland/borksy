@@ -1,18 +1,18 @@
 /**
-🏁
-@file transparent sprites
-@summary makes all sprites have transparent backgrounds
+👁️‍🗨️
+@file transparent dialog
+@summary makes the dialog box have a transparent background
 @license MIT
-@version 2.1.0
-@requires Bitsy Version: 5.1
+@version 1.1.0
 @author Sean S. LeBlanc
 
 @description
-Makes all sprites have transparent backgrounds.
-i.e. tiles can be seen underneath the player, sprites, and items.
+Makes the dialog box have a transparent background.
+
+Note: this one's ~pretty hacky~.
 
 HOW TO USE:
-Copy-paste this script into a script tag after the bitsy source
+Copy-paste into a script tag after the bitsy source
 */
 this.hacks = this.hacks || {};
 (function (bitsy) {
@@ -205,62 +205,29 @@ function _reinitEngine() {
 
 
 
-// override imageDataFromImageSource to use transparency for background pixels
-// and save the results to a custom image cache
-inject$1(/(function imageDataFromImageSource\(imageSource, pal, col\) {)([^]*?)return img;/, [
-'$1',
-'	var cache;',
-'	return function(){',
-'		if (cache) {',
-'			return cache;',
-'		}',
-'		$2',
-'		// make background pixels transparent',
-'		var bg = getPal(pal)[0];',
-'		var i;',
-'		// set background pixels to transparent',
-'		for (i = 0; i < img.data.length; i += 4) {',
-'			if (',
-'				img.data[i + 0] === bg[0] &&',
-'				img.data[i + 1] === bg[1] &&',
-'				img.data[i + 2] === bg[2]',
-'			) {',
-'				img.data[i + 3] = 0;',
-'			}',
-'		}',
-'	',
-'		// give ourselves a little canvas + context to work with',
-'		var spriteCanvas = document.createElement("canvas");',
-'		spriteCanvas.width = tilesize * (scale);',
-'		spriteCanvas.height = tilesize * (scale);',
-'		var spriteContext = spriteCanvas.getContext("2d");',
-'	',
-'		// put bitsy data to our canvas',
-'		spriteContext.clearRect(0, 0, tilesize, tilesize);',
-'		spriteContext.putImageData(img, 0, 0);',
-'	',
-'		// save it in our cache',
-'		cache = spriteCanvas;',
-'	',
-'		// return our image	',
-'		return cache;',
-'	};',
-].join('\n'));
+bitsy.transparentDialog = {
+	canvas: document.createElement('canvas')
+};
+bitsy.transparentDialog.context = bitsy.transparentDialog.canvas.getContext('2d');
+var drawOverride = `
+if(context == null) return;
+transparentDialog.canvas.width = textboxInfo.width*scale;
+transparentDialog.canvas.height = textboxInfo.height*scale;
+transparentDialog.context.putImageData(textboxInfo.img, 0, 0);
+if (isCentered) {
+	context.drawImage(transparentDialog.canvas, textboxInfo.left*scale, ((height/2)-(textboxInfo.height/2))*scale);
+} else if (player().y < mapsize/2) {
+	context.drawImage(transparentDialog.canvas, textboxInfo.left*scale, (height-textboxInfo.bottom-textboxInfo.height)*scale);
+}
+else {
+	context.drawImage(transparentDialog.canvas, textboxInfo.left*scale, textboxInfo.top*scale);
+}
+return;`;
 
-// override drawTile to draw from our custom image cache
-// instead of putting image data directly
-inject$1(/(function drawTile\(img,x,y,context\) {)/, [
-'$1',
-'	if (!context) { //optional pass in context; otherwise, use default',
-'		context = ctx;',
-'	}',
-'',
-'	context.drawImage(',
-'		img(),',
-'		x * tilesize * scale,',
-'		y * tilesize * scale',
-'	);',
-'	return;',
-].join('\n'));
+// override textbox drawing to use draw image version from above
+inject$1(/(this\.DrawTextbox = function\(\) {)/, '$1'+drawOverride);
+
+// override textbox clearing pixels to be fully transparent
+inject$1(/(textboxInfo\.img\.data\[i\+3\]=)255/, '$10');
 
 }(window));

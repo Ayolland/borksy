@@ -1,47 +1,55 @@
 /**
-🛰
-@file external-game-data
-@summary separate Bitsy game data from your (modded) HTML for easier development
-@license WTFPL (do WTF you want)
-@version 2.1.0
-@requires Bitsy Version: 4.5, 4.6
-@author @mildmojo
+😽
+@file character portraits
+@summary high quality anime jpegs (or pngs i guess)
+@license MIT
+@version 1.1.0
+@requires Bitsy Version: 5.3
+@author Sean S. LeBlanc
 
 @description
-Load your Bitsy game data from an external file or URL, separating it from your
-(modified) Bitsy HTML.
+Adds a tag (portrait "id") which adds the ability to draw high resolution images during dialog.
 
-Usage: IMPORT <file or URL>
+Examples:
+	(portrait "cat")
+		draws the image named "cat" in the hackOptions
+	(portrait "")
+		resets the portrait to not draw
 
-Examples: IMPORT frontier.bitsydata
-          IMPORT http://my-cool-website.nz/frontier/frontier.bitsydata
-          IMPORT /games/frontier/data/frontier.bitsydata
+All portraits are drawn from the top-left corner, on top of the game and below the dialog box.
+They are scaled uniformly according to the hackOptions below,
+and are cropped to bitsy's canvas width/height.
+
+All portraits are preloaded, but their loading state is ignored.
+i.e. The game will start before they have all loaded,
+and they simply won't draw if they're not loaded or have errored out.
+
+All standard browser image formats are supported, but keep filesize in mind!
+
+Note: The hack is called "character portraits", but this can easily be used to show images of any sort
 
 HOW TO USE:
-  1. Copy-paste this script into a new script tag after the Bitsy source code.
-     Make sure this script comes *after* any other mods to guarantee that it
-     executes first.
-  2. Copy all your Bitsy game data out of the script tag at the top of your
-     HTML into another file (I recommend `game-name.bitsydata`). In the HTML
-     file, replace all game data with a single IMPORT statement that refers to
-     your new data file.
-
-NOTE: Chrome can only fetch external files when they're served from a
-      web server, so your game won't work if you just open your HTML file from
-      disk. You could use Firefox, install a web server, or, if you have
-      development tools like NodeJS, Ruby, Python, Perl, PHP, or others
-      installed, here's a big list of how to use them to serve a folder as a
-      local web server:
-      https://gist.github.com/willurd/5720255
-
-      If this mod finds an IMPORT statement anywhere in the Bitsy data
-      contained in the HTML file, it will replace all game data with the
-      IMPORTed data. It will not execute nested IMPORT statements in
-      external files.
+Copy-paste into a script tag after the bitsy source
 */
 this.hacks = this.hacks || {};
 (function (bitsy) {
 'use strict';
+var hackOptions = {
+	// influences the resolution of the drawn image
+	// `bitsy.scale` (4 by default) is the max and will match bitsy's internal scale (i.e. 512x512)
+	// 1 will match bitsy's in-game virtual scale (i.e. 128x128)
+	// it's best to decide this up-front and make portrait images that match this resolution
+	scale: bitsy.scale,
+	// a list of portrait files
+	// the format is: 'id for portrait tag': 'file path'
+	// these may be:
+	// - local files (in which case you need to include them with your html when publishing)
+	// - online urls (which are not guaranteed to work as they are network-dependent)
+	// - base64-encoded images (the most reliable but unwieldy)
+	portraits: {
+		'cat': './cat.png',
+	},
+};
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
 
@@ -120,6 +128,16 @@ HOW TO USE:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
 
+
+// Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
+function inject$1(searchRegex, replaceString) {
+	var kitsy = kitsyInit();
+	kitsy.queuedInjectScripts.push({
+		searchRegex: searchRegex,
+		replaceString: replaceString
+	});
+}
+
 // Ex: before('load_game', function run() { alert('Loading!'); });
 //     before('show_text', function run(text) { return text.toUpperCase(); });
 //     before('show_text', function run(text, done) { done(text.toUpperCase()); });
@@ -127,6 +145,13 @@ function before(targetFuncName, beforeFn) {
 	var kitsy = kitsyInit();
 	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
 	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
+}
+
+// Ex: after('load_game', function run() { alert('Loaded!'); });
+function after(targetFuncName, afterFn) {
+	var kitsy = kitsyInit();
+	kitsy.queuedAfterScripts[targetFuncName] = kitsy.queuedAfterScripts[targetFuncName] || [];
+	kitsy.queuedAfterScripts[targetFuncName].push(afterFn);
 }
 
 function kitsyInit() {
@@ -227,85 +252,96 @@ function _reinitEngine() {
 	bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 }
 
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function(match, group){
+			if(match.substr(0,1) === '\\') {
+				return '('+ group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
+			}
+			return '{'+ group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+		});
+}
 
 
-var ERR_MISSING_IMPORT = 1;
+function addDialogFunction(tag, fn) {
+	var kitsy = kitsyInit();
+	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
+	if (kitsy.dialogFunctions[tag]) {
+		throw new Error('The dialog function "' + tag + '" already exists.');
+	}
 
-before('startExportedGame', function (done) {
-	var gameDataElem = document.getElementById('exportedGameData');
-
-	tryImportGameData(gameDataElem.text, function withGameData(err, importedData) {
-		if (err && err.error === ERR_MISSING_IMPORT) {
-			console.warn(err.message);
-		} else if (err) {
-			console.warn('Make sure game data IMPORT statement refers to a valid file or URL.');
-			throw err;
-		}
-
-		gameDataElem.text = "\n" + dos2unix(importedData);
-		done();
+	// Hook into game load and rewrite custom functions in game data to Bitsy format.
+	before('parseWorld', function (game_data) {
+		return [convertDialogTags(game_data, tag)];
 	});
+
+	kitsy.dialogFunctions[tag] = fn;
+}
+
+/**
+ * Adds a custom dialog tag which executes the provided function.
+ * For ease-of-use with the bitsy editor, tags can be written as
+ * (tagname "parameters") in addition to the standard {tagname "parameters"}
+ * 
+ * Function is executed immediately when the tag is reached.
+ *
+ * @param {string}   tag Name of tag
+ * @param {Function} fn  Function to execute, with signature `function(environment, parameters, onReturn){}`
+ *                       environment: provides access to SetVariable/GetVariable (among other things, see Environment in the bitsy source for more info)
+ *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
+ *                       onReturn: function to call with return value (just call `onReturn(null);` at the end of your function if your tag doesn't interact with the logic system)
+ */
+function addDialogTag(tag, fn) {
+	addDialogFunction(tag, fn);
+	inject$1(
+		/(var functionMap = new Map\(\);)/,
+		'$1functionMap.set("' + tag + '", kitsy.dialogFunctions.' + tag + ');'
+	);
+}
+
+
+
+
+
+// preload images into a cache
+var imgs = {};
+for (var i in hackOptions.portraits) {
+	if(hackOptions.portraits.hasOwnProperty(i)) {
+		imgs[i] = new Image();
+		imgs[i].src = hackOptions.portraits[i];
+	}
+}
+
+// hook up dialog tag
+var portrait = '';
+addDialogTag('portrait', function (environment, parameters, onReturn) {
+	var newPortrait = parameters[0];
+	var image = imgs[newPortrait];
+	if (portrait === image) {
+		return;
+	}
+	portrait = image;
+	onReturn(null);
 });
 
-function tryImportGameData(gameData, done) {
-	// Make sure this game data even uses the word "IMPORT".
-	if (gameData.indexOf('IMPORT') === -1) {
-		return done({
-			error: ERR_MISSING_IMPORT,
-			message: 'No IMPORT found in Bitsy data. See instructions for external game data mod.'
-		}, gameData);
+// hook up drawing
+var context;
+after('drawRoom', function () {
+	if ((!bitsy.isDialogMode && !bitsy.isNarrating) || !portrait) {
+		return;
 	}
-
-	var trim = function (line) {
-		return line.trim();
-	};
-	var isImport = function (line) {
-		return bitsy.getType(line) === 'IMPORT';
-	};
-	var importCmd = gameData
-	.split("\n")
-	.map(trim)
-	.find(isImport);
-
-	// Make sure we found an actual IMPORT command.
-	if (!importCmd) {
-		return done({
-			error: ERR_MISSING_IMPORT,
-			message: 'No IMPORT found in Bitsy data. See instructions for external game data mod.'
-		});
+	if (!context) {
+		context = bitsy.canvas.getContext('2d');
 	}
-
-	var src = (importCmd || '').split(/\s+/)[1];
-
-	if (src) {
-		return fetchData(src, done);
-	} else {
-		return done('IMPORT missing a URL or path to a Bitsy data file!');
+	try {
+		context.drawImage(portrait, 0, 0, bitsy.width * hackOptions.scale, bitsy.height * hackOptions.scale, 0, 0, bitsy.width * bitsy.scale, bitsy.height * bitsy.scale);
+	} catch (error) {
+		// log and ignore errors
+		// so broken images don't break the game
+		console.error('Portrait error', error);
 	}
-}
-
-function fetchData(url, done) {
-	var request = new XMLHttpRequest();
-	request.open('GET', url, true);
-
-	request.onload = function () {
-		if (this.status >= 200 && this.status < 400) {
-			// Success!
-			return done(null, this.response);
-		} else {
-			return done('Failed to load game data: ' + request.statusText + ' (' + this.status + ')');
-		}
-	};
-
-	request.onerror = function () {
-		return done('Failed to load game data: ' + request.statusText);
-	};
-
-	request.send();
-}
-
-function dos2unix(text) {
-	return text.replace(/\r\n/g, "\n");
-}
+});
 
 }(window));

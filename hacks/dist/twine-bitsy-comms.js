@@ -1,63 +1,95 @@
 /**
-🖌
-@file edit image from dialog
-@summary edit sprites, items, and tiles from dialog
+💱
+@file twine bitsy comms
+@summary interprocess communication for twine and bitsy
 @license MIT
-@version 1.2.1
-@requires 5.3
+@version 1.1.1
+@requires 5.4
 @author Sean S. LeBlanc
 
 @description
-You can use this to edit the image data of sprites (including the player avatar), items, and tiles through dialog.
-Image data can be replaced with data from another image, and the palette index can be set.
+Provides a method of easily integrating bitsy games into Twine games.
+Variables are automatically shared between the two engines,
+and dialog commands are provided which allow basic Twine commands
+to be executed from inside of a bitsy game.
 
-(image "map, target, source")
-Parameters:
-  map:    Type of image (SPR, TIL, or ITM)
-  target: id/name of image to edit
-  source: id/name of image to copy
+Twine has multiple story formats which function in different ways,
+and this hack requires integration code in both engines to work properly.
+Integrations for all the default Twine story formats are provided:
+	SugarCube v2 macro: https://github.com/seleb/bitsy-hacks/blob/master/src/twine-bitsy-comms/SugarCube-v2.js
+	SugarCube v1 macro: https://github.com/seleb/bitsy-hacks/blob/master/src/twine-bitsy-comms/SugarCube-v1.js
+	Harlowe (1 and 2) script: https://github.com/seleb/bitsy-hacks/blob/master/src/twine-bitsy-comms/Harlowe.js
+	Snowman script: https://github.com/seleb/bitsy-hacks/blob/master/src/twine-bitsy-comms/Snowman.js
+	Sugarcane/Responsive macro: https://github.com/seleb/bitsy-hacks/blob/master/src/twine-bitsy-comms/Sugarcane-Responsive.js
+	Jonah macro: https://github.com/seleb/bitsy-hacks/blob/master/src/twine-bitsy-comms/Jonah.js
 
-(imageNow "map, target, source")
-Same as (image), but applied immediately instead of after dialog is closed.
+Feel free to request integrations for formats not provided here.
 
-(imagePal "map, target, palette")
-Parameters:
-  map:    Type of image (SPR, TIL, or ITM)
-  target: id/name of image to edit
-  source: palette index (0 is bg, 1 is tiles, 2 is sprites/items, anything higher requires editing your game data to include more)
+Dialog command list:
+	(twinePlay "<Twine passage title>")
+	(twinePlayNow "<Twine passage title>")
+	(twineBack)
+	(twineBackNow)
+	(twineEval "<javascript directly evaluated in macro context>")
+	(twineEvalNow "<javascript directly evaluated in macro context>")
 
-(imagePalNow "map, target, palette")
-Same as (imagePal), but applied immediately instead of after dialog is closed.
-
-Examples:
-  (image "SPR, A, a")
-  (imageNow "TIL, a, floor")
-  (image "ITM, a, b")
-  (imagePal "SPR, A, 1")
-  (imagePalNow "TIL, floor, 2")
+Notes:
+	- eval support is commented out by default in the Twine integrations
+	- Snowman's history is handled differently from other formats;
+	  see: https://twinery.org/forum/discussion/3141/adding-an-undo-button-to-snowman-1-0-2
+	- shared variables have prefixed names by default to avoid accidental overwriting;
+	  see the hackOptions below for details
 
 HOW TO USE:
-  1. Copy-paste this script into a new script tag after the Bitsy source code.
-     It should appear *before* any other mods that handle loading your game
-     data so it executes *after* them (last-in first-out).
-
-TIPS:
-  - The player avatar is always a sprite with id "A"; you can edit your gamedata to give them a name for clarity
-  - You can use the full names or shorthand of image types (e.g. "SPR" and "sprite" will both work)
-  - The "source" images don't have to be placed anywhere; so long as they exist in the gamedata they'll work
-  - This is a destructive operation! Unless you have a copy of an overwritten image, you won't be able to get it back during that run
-
-NOTE: This uses parentheses "()" instead of curly braces "{}" around function
-      calls because the Bitsy editor's fancy dialog window strips unrecognized
-      curly-brace functions from dialog text. To keep from losing data, write
-      these function calls with parentheses like the examples above.
-
-      For full editor integration, you'd *probably* also need to paste this
-      code at the end of the editor's `bitsy.js` file. Untested.
+1. Copy-paste this script into a script tag after the bitsy source
+2. Copy-paste the relevant story format integration script into the Story JavaScript section of your Twine game
+(optional)
+3. Add `.bitsy { ... }` CSS to the Story Stylesheet of your Twine game
+4. Edit the variable naming functions below as needed
 */
 this.hacks = this.hacks || {};
 (function (bitsy) {
 'use strict';
+var hackOptions = {
+	// how dialog variables will be named when they are sent out
+	// default implementation is bitsy_<name>
+	variableNameOut: function (name) {
+		return 'bitsy_' + name;
+	},
+	// how item variables will be named when they are sent out
+	// default implementation is bitsy_item_<name or id>
+	// Note: items names in bitsy don't have to be unique,
+	// so be careful of items overwriting each other if you use this!
+	itemNameOut: function (id) {
+		return 'bitsy_item_' + (bitsy.item[id].name || id);
+	},
+	// how dialog variables will be named when they are sent in
+	// default implementation is twine_<name>
+	variableNameIn: function (name) {
+		return 'twine_' + name;
+	},
+
+	// the options below are for customizing the integration;
+	// if you're using one of the provided integrations, you can safely ignore them
+
+	// how info will be posted to external process
+	// default implementation is for iframe postMessage-ing to parent page
+	send: function (type, data) {
+		window.parent.postMessage({
+			type: type,
+			data: data
+		}, '*');
+	},
+	// how info will be received from external process
+	// default implementation is for parent page postMessage-ing into iframe
+	receive: function () {
+		window.addEventListener("message", function (event) {
+			var type = event.data.type;
+			var data = event.data.data;
+			receiveMessage(type, data);
+		}, false);
+	},
+};
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
 
@@ -100,22 +132,6 @@ function inject(searchRegex, replaceString) {
 	newScriptTag.textContent = code;
 	scriptTag.insertAdjacentElement('afterend', newScriptTag);
 	scriptTag.remove();
-}
-
-/*
-Helper for getting image by name or id
-
-Args:
-	name: id or name of image to return
-	 map: map of images (e.g. `sprite`, `tile`, `item`)
-
-Returns: the image in the given map with the given name/id
- */
-function getImage(name, map) {
-	var id = map.hasOwnProperty(name) ? name : Object.keys(map).find(function (e) {
-		return map[e].name == name;
-	});
-	return map[id];
 }
 
 /**
@@ -378,145 +394,73 @@ function addDualDialogTag(tag, fn) {
 	addDeferredDialogTag(tag, fn);
 }
 
-/**
-@file edit image at runtime
-@summary API for updating image data at runtime.
-@author Sean S. LeBlanc
-@description
-Adds API for updating sprite, tile, and item data at runtime.
 
-Individual frames of image data in bitsy are 8x8 1-bit 2D arrays in yx order
-e.g. the default player is:
-[
-	[0,0,0,1,1,0,0,0],
-	[0,0,0,1,1,0,0,0],
-	[0,0,0,1,1,0,0,0],
-	[0,0,1,1,1,1,0,0],
-	[0,1,1,1,1,1,1,0],
-	[1,0,1,1,1,1,0,1],
-	[0,0,1,0,0,1,0,0],
-	[0,0,1,0,0,1,0,0]
-]
-*/
 
-/*
-Args:
-	   id: string id or name
-	frame: animation frame (0 or 1)
-	  map: map of images (e.g. `sprite`, `tile`, `item`)
 
-Returns: a single frame of a image data
-*/
-function getImageData(id, frame, map) {
-	return bitsy.renderer.GetImageSource(getImage(id, map).drw)[frame];
+
+var sending = true;
+
+// hook up incoming listener
+hackOptions.receive();
+
+function receiveMessage(type, data) {
+	switch (type) {
+		case 'variables':
+			var state = sending;
+			sending = false;
+			Object.entries(data).forEach(function (entry) {
+				var name = entry[0];
+				var value = entry[1];
+				bitsy.scriptInterpreter.SetVariable(hackOptions.variableNameIn(name), value);
+			});
+			sending = state;
+			break;
+		default:
+			console.warn('Unhandled message from outside Bitsy:', type, data);
+			break;
+	}
 }
 
-/*
-Updates a single frame of image data
-
-Args:
-	     id: string id or name
-	  frame: animation frame (0 or 1)
-	    map: map of images (e.g. `sprite`, `tile`, `item`)
-	newData: new data to write to the image data
-*/
-function setImageData(id, frame, map, newData) {
-	var drawing = getImage(id, map);
-	var drw = drawing.drw;
-	var img = bitsy.renderer.GetImageSource(drw);
-	img[frame] = newData;
-	bitsy.renderer.SetImageSource(drw, img);
+// hook up outgoing var/item change listeners
+function sendVariable(name, value) {
+	hackOptions.send('variable', {
+		name: name,
+		value: value
+	});
 }
-
-
-
-// map of maps
-var maps;
-after('load_game', function () {
-	maps = {
-    spr: bitsy.sprite,
-    sprite: bitsy.sprite,
-    til: bitsy.tile,
-    tile: bitsy.tile,
-    itm: bitsy.item,
-    item: bitsy.item,
-	};
+after('onVariableChanged', function (name) {
+	if (sending) {
+		sendVariable(hackOptions.variableNameOut(name), bitsy.scriptInterpreter.GetVariable(name));
+	}
+});
+after('onInventoryChanged', function (id) {
+	if (sending) {
+		sendVariable(hackOptions.itemNameOut(id), bitsy.player().inventory[id]);
+	}
 });
 
-function editImage(environment, parameters) {
-  var i;
+// say when bitsy has started
+// and initialize variables
+after('startExportedGame', function () {
+	bitsy.scriptInterpreter.GetVariableNames().forEach(function (name) {
+		sendVariable(hackOptions.variableNameOut(name), bitsy.scriptInterpreter.GetVariable(name));
+	});
+	Object.values(bitsy.item).forEach(function (item) {
+		sendVariable(hackOptions.itemNameOut(item.id), 0);
+	});
+	hackOptions.send('start', bitsy.title);
+});
 
-  // parse parameters
-  var params = parameters[0].split(/,\s?/);
-  params[0] = (params[0] || "").toLowerCase();
-  var mapId = params[0];
-  var tgtId = params[1];
-  var srcId = params[2];
-
-  if (!mapId || !tgtId || !srcId) {
-    throw new Error('Image expects three parameters: "map, target, source", but received: "' + params.join(', ') + '"');
-  }
-
-  // get objects
-  var mapObj = maps[mapId];
-  if (!mapObj) {
-    throw new Error('Invalid map "' + mapId + '". Try "SPR", "TIL", or "ITM" instead.');
-  }
-  var tgtObj = getImage(tgtId, mapObj);
-  if (!tgtObj) {
-    throw new Error('Target "' + tgtId + '" was not the id/name of a ' + mapId + '.');
-  }
-  var srcObj = getImage(srcId, mapObj);
-  if (!srcObj) {
-    throw new Error('Source "' + srcId + '" was not the id/name of a ' + mapId + '.');
-  }
-
-  // copy animation from target to source
-  tgtObj.animation = {
-    frameCount: srcObj.animation.frameCount,
-    isAnimated: srcObj.animation.isAnimated,
-    frameIndex: srcObj.animation.frameIndex
-  };
-  for (i = 0; i < srcObj.animation.frameCount; ++i) {
-    setImageData(tgtId, i, mapObj, getImageData(srcId, i, mapObj));
-  }
-}
-
-function editPalette(environment, parameters) {
-  // parse parameters
-  var params = parameters[0].split(/,\s?/);
-  params[0] = (params[0] || "").toLowerCase();
-  var mapId = params[0];
-  var tgtId = params[1];
-  var palId = params[2];
-
-  if (!mapId || !tgtId || !palId) {
-    throw new Error('Image expects three parameters: "map, target, palette", but received: "' + params.join(', ') + '"');
-  }
-
-  // get objects
-  var mapObj = maps[mapId];
-  if (!mapObj) {
-    throw new Error('Invalid map "' + mapId + '". Try "SPR", "TIL", or "ITM" instead.');
-  }
-  var tgtObj = getImage(tgtId, mapObj);
-  if (!tgtObj) {
-    throw new Error('Target "' + tgtId + '" was not the id/name of a ' + mapId + '.');
-  }
-  var palObj = parseInt(palId);
-  if (isNaN(palObj)) {
-    throw new Error('Palette "' + palId + '" was not a number.');
-  }
-
-  // set palette
-  tgtObj.col = palObj;
-
-  // update images in cache
-  bitsy.renderImageForAllPalettes(tgtObj);
-}
-
-// hook up the dialog tags
-addDualDialogTag('image', editImage);
-addDualDialogTag('imagePal', editPalette);
+// hook up dialog commands
+[
+	'eval',
+	'play',
+	'back'
+].forEach(function (command) {
+	function doCommand(environment, parameters) {
+		hackOptions.send(command, parameters[0]);
+	}
+	addDualDialogTag('twine' + command.substr(0, 1).toUpperCase() + command.substr(1), doCommand);
+});
 
 }(window));

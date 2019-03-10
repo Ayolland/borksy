@@ -1,59 +1,57 @@
 /**
-🖌
-@file edit image from dialog
-@summary edit sprites, items, and tiles from dialog
+🚀
+@file dialog jump
+@summary jump from one dialog entry to another
 @license MIT
-@version 1.2.1
+@version 1.1.1
 @requires 5.3
 @author Sean S. LeBlanc
 
 @description
-You can use this to edit the image data of sprites (including the player avatar), items, and tiles through dialog.
-Image data can be replaced with data from another image, and the palette index can be set.
+This can be used to simplify complex dialog
+by moving portions to self-contained dialog entries,
+and then jumping to the appropriate id when necessary.
 
-(image "map, target, source")
-Parameters:
-  map:    Type of image (SPR, TIL, or ITM)
-  target: id/name of image to edit
-  source: id/name of image to copy
+You can also provide raw dialog text instead of an id;
+Functionally this isn't much different from writing raw dialog text,
+but it has some uses for advanced cases (e.g. when combined with dialog choices)
 
-(imageNow "map, target, source")
-Same as (image), but applied immediately instead of after dialog is closed.
+Usage:
+	(jump "dialogId")
+	(jumpNow "dialogId")
+	(jump "dialog to print")
+	(jumpNow "dialog to print")
 
-(imagePal "map, target, palette")
-Parameters:
-  map:    Type of image (SPR, TIL, or ITM)
-  target: id/name of image to edit
-  source: palette index (0 is bg, 1 is tiles, 2 is sprites/items, anything higher requires editing your game data to include more)
+Note: be careful of infinite loops, e.g.
+DLG_infinite_loop
+"""
+this will print forever(jump "DLG_infinite_loop")
+"""
 
-(imagePalNow "map, target, palette")
-Same as (imagePal), but applied immediately instead of after dialog is closed.
+Lets you exit to another room from dialog (including inside conditionals). Use
+it to make an invisible sprite that acts as a conditional exit, use it to warp
+somewhere after a conversation, use it to put a guard at your gate who only
+lets you in once you're disguised, use it to require payment before the
+ferryman will take you across the river.
 
-Examples:
-  (image "SPR, A, a")
-  (imageNow "TIL, a, floor")
-  (image "ITM, a, b")
-  (imagePal "SPR, A, 1")
-  (imagePalNow "TIL, floor, 2")
+Using the (exit) function in any part of a series of dialog will make the
+game exit to the new room after the dialog is finished. Using (exitNow) will
+immediately warp to the new room, but the current dialog will continue.
+
+WARNING: In exit coordinates, the TOP LEFT tile is (0,0). In sprite coordinates,
+         the BOTTOM LEFT tile is (0,0). If you'd like to use sprite coordinates,
+         add the word "sprite" as the fourth parameter to the exit function.
+
+Usage: (exit "<room name>,<x>,<y>")
+       (exit "<room name>,<x>,<y>,sprite")
+       (exitNow "<room name>,<x>,<y>")
+       (exitNow "<room name>,<x>,<y>,sprite")
+
+Example: (exit "FinalRoom,8,4")
+         (exitNow "FinalRoom,8,11,sprite")
 
 HOW TO USE:
-  1. Copy-paste this script into a new script tag after the Bitsy source code.
-     It should appear *before* any other mods that handle loading your game
-     data so it executes *after* them (last-in first-out).
-
-TIPS:
-  - The player avatar is always a sprite with id "A"; you can edit your gamedata to give them a name for clarity
-  - You can use the full names or shorthand of image types (e.g. "SPR" and "sprite" will both work)
-  - The "source" images don't have to be placed anywhere; so long as they exist in the gamedata they'll work
-  - This is a destructive operation! Unless you have a copy of an overwritten image, you won't be able to get it back during that run
-
-NOTE: This uses parentheses "()" instead of curly braces "{}" around function
-      calls because the Bitsy editor's fancy dialog window strips unrecognized
-      curly-brace functions from dialog text. To keep from losing data, write
-      these function calls with parentheses like the examples above.
-
-      For full editor integration, you'd *probably* also need to paste this
-      code at the end of the editor's `bitsy.js` file. Untested.
+Copy-paste into a script tag after the bitsy source
 */
 this.hacks = this.hacks || {};
 (function (bitsy) {
@@ -100,22 +98,6 @@ function inject(searchRegex, replaceString) {
 	newScriptTag.textContent = code;
 	scriptTag.insertAdjacentElement('afterend', newScriptTag);
 	scriptTag.remove();
-}
-
-/*
-Helper for getting image by name or id
-
-Args:
-	name: id or name of image to return
-	 map: map of images (e.g. `sprite`, `tile`, `item`)
-
-Returns: the image in the given map with the given name/id
- */
-function getImage(name, map) {
-	var id = map.hasOwnProperty(name) ? name : Object.keys(map).find(function (e) {
-		return map[e].name == name;
-	});
-	return map[id];
 }
 
 /**
@@ -378,145 +360,23 @@ function addDualDialogTag(tag, fn) {
 	addDeferredDialogTag(tag, fn);
 }
 
-/**
-@file edit image at runtime
-@summary API for updating image data at runtime.
-@author Sean S. LeBlanc
-@description
-Adds API for updating sprite, tile, and item data at runtime.
 
-Individual frames of image data in bitsy are 8x8 1-bit 2D arrays in yx order
-e.g. the default player is:
-[
-	[0,0,0,1,1,0,0,0],
-	[0,0,0,1,1,0,0,0],
-	[0,0,0,1,1,0,0,0],
-	[0,0,1,1,1,1,0,0],
-	[0,1,1,1,1,1,1,0],
-	[1,0,1,1,1,1,0,1],
-	[0,0,1,0,0,1,0,0],
-	[0,0,1,0,0,1,0,0]
-]
-*/
 
-/*
-Args:
-	   id: string id or name
-	frame: animation frame (0 or 1)
-	  map: map of images (e.g. `sprite`, `tile`, `item`)
-
-Returns: a single frame of a image data
-*/
-function getImageData(id, frame, map) {
-	return bitsy.renderer.GetImageSource(getImage(id, map).drw)[frame];
+// jump function
+function jump(targetDialog) {
+	if (!targetDialog) {
+		console.warn('Tried to jump to dialog, but no target dialog provided');
+		return;
+	}
+	var dialogStr = bitsy.dialog[targetDialog];
+	if (!dialogStr) {
+		dialogStr = targetDialog;
+	}
+	bitsy.startDialog(dialogStr);
 }
 
-/*
-Updates a single frame of image data
-
-Args:
-	     id: string id or name
-	  frame: animation frame (0 or 1)
-	    map: map of images (e.g. `sprite`, `tile`, `item`)
-	newData: new data to write to the image data
-*/
-function setImageData(id, frame, map, newData) {
-	var drawing = getImage(id, map);
-	var drw = drawing.drw;
-	var img = bitsy.renderer.GetImageSource(drw);
-	img[frame] = newData;
-	bitsy.renderer.SetImageSource(drw, img);
-}
-
-
-
-// map of maps
-var maps;
-after('load_game', function () {
-	maps = {
-    spr: bitsy.sprite,
-    sprite: bitsy.sprite,
-    til: bitsy.tile,
-    tile: bitsy.tile,
-    itm: bitsy.item,
-    item: bitsy.item,
-	};
+addDualDialogTag('jump', function (environment, parameters) {
+	jump(parameters[0]);
 });
-
-function editImage(environment, parameters) {
-  var i;
-
-  // parse parameters
-  var params = parameters[0].split(/,\s?/);
-  params[0] = (params[0] || "").toLowerCase();
-  var mapId = params[0];
-  var tgtId = params[1];
-  var srcId = params[2];
-
-  if (!mapId || !tgtId || !srcId) {
-    throw new Error('Image expects three parameters: "map, target, source", but received: "' + params.join(', ') + '"');
-  }
-
-  // get objects
-  var mapObj = maps[mapId];
-  if (!mapObj) {
-    throw new Error('Invalid map "' + mapId + '". Try "SPR", "TIL", or "ITM" instead.');
-  }
-  var tgtObj = getImage(tgtId, mapObj);
-  if (!tgtObj) {
-    throw new Error('Target "' + tgtId + '" was not the id/name of a ' + mapId + '.');
-  }
-  var srcObj = getImage(srcId, mapObj);
-  if (!srcObj) {
-    throw new Error('Source "' + srcId + '" was not the id/name of a ' + mapId + '.');
-  }
-
-  // copy animation from target to source
-  tgtObj.animation = {
-    frameCount: srcObj.animation.frameCount,
-    isAnimated: srcObj.animation.isAnimated,
-    frameIndex: srcObj.animation.frameIndex
-  };
-  for (i = 0; i < srcObj.animation.frameCount; ++i) {
-    setImageData(tgtId, i, mapObj, getImageData(srcId, i, mapObj));
-  }
-}
-
-function editPalette(environment, parameters) {
-  // parse parameters
-  var params = parameters[0].split(/,\s?/);
-  params[0] = (params[0] || "").toLowerCase();
-  var mapId = params[0];
-  var tgtId = params[1];
-  var palId = params[2];
-
-  if (!mapId || !tgtId || !palId) {
-    throw new Error('Image expects three parameters: "map, target, palette", but received: "' + params.join(', ') + '"');
-  }
-
-  // get objects
-  var mapObj = maps[mapId];
-  if (!mapObj) {
-    throw new Error('Invalid map "' + mapId + '". Try "SPR", "TIL", or "ITM" instead.');
-  }
-  var tgtObj = getImage(tgtId, mapObj);
-  if (!tgtObj) {
-    throw new Error('Target "' + tgtId + '" was not the id/name of a ' + mapId + '.');
-  }
-  var palObj = parseInt(palId);
-  if (isNaN(palObj)) {
-    throw new Error('Palette "' + palId + '" was not a number.');
-  }
-
-  // set palette
-  tgtObj.col = palObj;
-
-  // update images in cache
-  bitsy.renderImageForAllPalettes(tgtObj);
-}
-
-// hook up the dialog tags
-addDualDialogTag('image', editImage);
-addDualDialogTag('imagePal', editPalette);
 
 }(window));

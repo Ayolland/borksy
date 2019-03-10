@@ -1,17 +1,9 @@
 var loadedFiles ={};
 
-// var fonts = {
-// 	"default" : "Default Bitsy Font by Adam LeDoux",
-// 	"beeblebrox" : "Beeblebrox by AYolland",
-// 	"blacksphinx" : "Blacksphinx by AYolland",
-// 	"greengable" : "Greengable by AYolland",
-// 	"hotcaps" : "Hotcaps by AYolland"
-// };
-
 var borksyInfo = {
-	templateVersion: '3.5',
-	lastUpdated: "September 9, 2018"
-}
+	templateVersion: '3.6',
+	lastUpdated: "March 9, 2019"
+};
 
 var hacks = {
 
@@ -25,7 +17,6 @@ var hacks = {
 		hidden: true,
 		order: 2,
 		conflicts: false,
-		python: 'yellow',
 		github: false,
 		forceLocal: false
 	},
@@ -40,7 +31,6 @@ var hacks = {
 		hidden: true,
 		order: 1,
 		conflicts: false,
-		python: 'yellow',
 		github: false,
 		forceLocal: false
 	},
@@ -55,7 +45,6 @@ var hacks = {
 		hidden: true,
 		order: 2,
 		conflicts: false,
-		python: 'red',
 		github: false,
 		forceLocal: false
 	},
@@ -70,7 +59,6 @@ var hacks = {
 		hidden: false,
 		order: 10,
 		conflicts: false,
-		python: 'green',
 		github: 'directional-avatar.js',
 		forceLocal: false
 	},
@@ -85,7 +73,6 @@ var hacks = {
 		hidden: false,
 		order: 10,
 		conflicts: false,
-		python: 'green',
 		github: 'dynamic-background.js',
 		forceLocal: false
 	},
@@ -100,7 +87,6 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red',
 		github: 'exit-from-dialog.js',
 		forceLocal: false
 	},
@@ -115,7 +101,6 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red',
 		github: 'end-from-dialog.js',
 		forceLocal: false
 	},
@@ -130,7 +115,6 @@ var hacks = {
 		hidden: false,
 		order: 2,
 		conflicts: false,
-		python: 'red',
 		github: 'javascript-dialog.js',
 		forceLocal: false
 	},
@@ -145,7 +129,6 @@ var hacks = {
 		hidden: false,
 		order: 10,
 		conflicts: false,
-		python: 'green',
 		github: 'transparent-sprites.js',
 		forceLocal: false
 	},
@@ -160,7 +143,6 @@ var hacks = {
 		hidden: false,
 		order: 2,
 		conflicts: false,
-		python: 'red',
 		github: 'logic-operators-extended.js',
 		forceLocal: false
 	},
@@ -175,7 +157,6 @@ var hacks = {
 		hidden: false,
 		order: 4,
 		conflicts: false,
-		python: 'red',
 		github: 'permanent-items.js',
 		forceLocal: false
 	},
@@ -190,7 +171,6 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red',
 		github: 'solid-items.js',
 		forceLocal: false
 	},
@@ -205,7 +185,6 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red',
 		github: 'unique-items.js',
 		forceLocal: false
 	},
@@ -220,7 +199,6 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'yellow',
 		github: 'bitsymuse.js',
 		forceLocal: false
 	},
@@ -235,8 +213,49 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red',
 		github: 'multi-sprite-avatar.js',
+		forceLocal: false
+	},
+
+	"avatar-by-room": {
+		title: "👥 Avatar By Room",
+		description: "Allows changing the avatar in certain rooms",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'avatar-by-room.js',
+		forceLocal: false
+	},
+
+	"save": {
+		title: "💾 Save",
+		description: "Save/Load Your Game",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'save.js',
+		forceLocal: false
+	},
+
+	"character-portraits": {
+		title: "😽 Character Portraits",
+		description: "High Quality Anime jJpegs (or pngs i guess)",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'character-portraits.js',
 		forceLocal: false
 	}
 
