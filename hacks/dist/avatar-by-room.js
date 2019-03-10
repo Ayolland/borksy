@@ -1,22 +1,37 @@
 /**
-🏁
-@file transparent sprites
-@summary makes all sprites have transparent backgrounds
+👥
+@file avatar by room
+@summary change the avatar in certain rooms
 @license MIT
-@version 2.1.0
-@requires Bitsy Version: 5.1
+@version 1.1.0
+@requires 5.3
 @author Sean S. LeBlanc
 
 @description
-Makes all sprites have transparent backgrounds.
-i.e. tiles can be seen underneath the player, sprites, and items.
+Simple hack for changing avatar to another sprite as you move between rooms.
 
 HOW TO USE:
-Copy-paste this script into a script tag after the bitsy source
+1. Copy-paste into a script tag after the bitsy source
+2. Edit hackOptions below to set up the avatar list for rooms you move through.
+
+By default, the avatar will reset to the default if you enter a room without a sprite defined.
+This can also be changed in the hackOptions below to instead apply avatar changes permanently.
 */
 this.hacks = this.hacks || {};
-(function (bitsy) {
+this.hacks.avatar_by_room = (function (exports,bitsy) {
 'use strict';
+var hackOptions = {
+	permanent: false, // If true, avatar changes will persist across rooms without sprites defined
+	// You need to put an entry in this list for every room ID or name that you want to change the avatar,
+	// and then specify the sprite ID or name of what to change to. Expand this list to as many rooms as you need.
+	avatarByRoom: {
+		0: 'sprite ID',
+		1: 'A', // note that 'A' is the player sprite, so this does nothing by default, but will reset the player if permanent == true
+		2: 'another sprite ID',
+		h: 'a sprite ID for a room with a non-numeric ID',
+		'my room': 'a sprite ID for a room with a user-defined name'
+	},
+};
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
 
@@ -61,6 +76,32 @@ function inject(searchRegex, replaceString) {
 	scriptTag.remove();
 }
 
+/*
+Helper for getting image by name or id
+
+Args:
+	name: id or name of image to return
+	 map: map of images (e.g. `sprite`, `tile`, `item`)
+
+Returns: the image in the given map with the given name/id
+ */
+function getImage(name, map) {
+	var id = map.hasOwnProperty(name) ? name : Object.keys(map).find(function (e) {
+		return map[e].name == name;
+	});
+	return map[id];
+}
+
+/**
+ * Helper for getting room by name or id
+ * @param {string} name id or name of room to return
+ * @return {string} room, or undefined if it doesn't exist
+ */
+function getRoom(name) {
+	var id = bitsy.room.hasOwnProperty(name) ? name : bitsy.names.room.get(name);
+	return bitsy.room[id];
+}
+
 /**
  * Helper for getting an array with unique elements 
  * @param  {Array} array Original array
@@ -95,14 +136,20 @@ HOW TO USE:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
 
-
-// Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
-function inject$1(searchRegex, replaceString) {
+// Ex: before('load_game', function run() { alert('Loading!'); });
+//     before('show_text', function run(text) { return text.toUpperCase(); });
+//     before('show_text', function run(text, done) { done(text.toUpperCase()); });
+function before(targetFuncName, beforeFn) {
 	var kitsy = kitsyInit();
-	kitsy.queuedInjectScripts.push({
-		searchRegex: searchRegex,
-		replaceString: replaceString
-	});
+	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
+	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
+}
+
+// Ex: after('load_game', function run() { alert('Loaded!'); });
+function after(targetFuncName, afterFn) {
+	var kitsy = kitsyInit();
+	kitsy.queuedAfterScripts[targetFuncName] = kitsy.queuedAfterScripts[targetFuncName] || [];
+	kitsy.queuedAfterScripts[targetFuncName].push(afterFn);
 }
 
 function kitsyInit() {
@@ -205,62 +252,50 @@ function _reinitEngine() {
 
 
 
-// override imageDataFromImageSource to use transparency for background pixels
-// and save the results to a custom image cache
-inject$1(/(function imageDataFromImageSource\(imageSource, pal, col\) {)([^]*?)return img;/, [
-'$1',
-'	var cache;',
-'	return function(){',
-'		if (cache) {',
-'			return cache;',
-'		}',
-'		$2',
-'		// make background pixels transparent',
-'		var bg = getPal(pal)[0];',
-'		var i;',
-'		// set background pixels to transparent',
-'		for (i = 0; i < img.data.length; i += 4) {',
-'			if (',
-'				img.data[i + 0] === bg[0] &&',
-'				img.data[i + 1] === bg[1] &&',
-'				img.data[i + 2] === bg[2]',
-'			) {',
-'				img.data[i + 3] = 0;',
-'			}',
-'		}',
-'	',
-'		// give ourselves a little canvas + context to work with',
-'		var spriteCanvas = document.createElement("canvas");',
-'		spriteCanvas.width = tilesize * (scale);',
-'		spriteCanvas.height = tilesize * (scale);',
-'		var spriteContext = spriteCanvas.getContext("2d");',
-'	',
-'		// put bitsy data to our canvas',
-'		spriteContext.clearRect(0, 0, tilesize, tilesize);',
-'		spriteContext.putImageData(img, 0, 0);',
-'	',
-'		// save it in our cache',
-'		cache = spriteCanvas;',
-'	',
-'		// return our image	',
-'		return cache;',
-'	};',
-].join('\n'));
 
-// override drawTile to draw from our custom image cache
-// instead of putting image data directly
-inject$1(/(function drawTile\(img,x,y,context\) {)/, [
-'$1',
-'	if (!context) { //optional pass in context; otherwise, use default',
-'		context = ctx;',
-'	}',
-'',
-'	context.drawImage(',
-'		img(),',
-'		x * tilesize * scale,',
-'		y * tilesize * scale',
-'	);',
-'	return;',
-].join('\n'));
 
-}(window));
+// expand the map to include ids of rooms listed by name
+// and store the original player sprite
+var originalAvatar;
+after('load_game', function () {
+	var room;
+	for (var i in hackOptions.avatarByRoom) {
+		if (hackOptions.avatarByRoom.hasOwnProperty(i)) {
+			room = getRoom(i);
+			if (room) {
+				hackOptions.avatarByRoom[room.id] = hackOptions.avatarByRoom[i];
+			}
+		}
+	}
+	originalAvatar = bitsy.player().drw;
+});
+
+var currentRoom;
+before('update', function () {
+	if (bitsy.curRoom !== currentRoom) {
+		currentRoom = bitsy.curRoom;
+		var newAvatarId = hackOptions.avatarByRoom[currentRoom];
+		if (
+			(!newAvatarId && !hackOptions.permanent) // if no sprite defined + not permanent, reset
+			||
+			(newAvatarId === bitsy.playerId) // manual reset
+		) {
+			bitsy.player().drw = originalAvatar;
+			return;
+		}
+		if (newAvatarId === bitsy.playerId) {
+			bitsy.player().drw;
+		}
+		var newAvatar = getImage(newAvatarId, bitsy.sprite);
+		if (!newAvatar) {
+			throw new Error('Could not find sprite "' + newAvatarId + '" for room "' + currentRoom + '"');
+		}
+		bitsy.player().drw = newAvatar.drw;
+	}
+});
+
+exports.hackOptions = hackOptions;
+
+return exports;
+
+}({},window));

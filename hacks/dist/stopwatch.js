@@ -1,51 +1,35 @@
 /**
-🖌
-@file edit image from dialog
-@summary edit sprites, items, and tiles from dialog
+⏱️
+@file stopwatch
+@summary time player actions
 @license MIT
 @version 1.2.1
-@requires 5.3
-@author Sean S. LeBlanc
+@author Lenny Magner
 
 @description
-You can use this to edit the image data of sprites (including the player avatar), items, and tiles through dialog.
-Image data can be replaced with data from another image, and the palette index can be set.
+Lets you start, stop and reset a timer from dialogue and print the resulting time as part of dialogue.
 
-(image "map, target, source")
-Parameters:
-  map:    Type of image (SPR, TIL, or ITM)
-  target: id/name of image to edit
-  source: id/name of image to copy
+Usage:
+	(startWatch "timer id"): starts a timer with provided id
+	(stopWatch "timer id"): stops a timer with provided id
+	(resumeWatch "timer id"): resumes a timer with provided id
+	(sayWatch "timer id"): prints a timer with provided id
 
-(imageNow "map, target, source")
-Same as (image), but applied immediately instead of after dialog is closed.
+There's also startWatchNow, stopWatchNow, and resumeWatchNow,
+which do the same things, but immediately instead of when dialog ends.
 
-(imagePal "map, target, palette")
-Parameters:
-  map:    Type of image (SPR, TIL, or ITM)
-  target: id/name of image to edit
-  source: palette index (0 is bg, 1 is tiles, 2 is sprites/items, anything higher requires editing your game data to include more)
-
-(imagePalNow "map, target, palette")
-Same as (imagePal), but applied immediately instead of after dialog is closed.
-
-Examples:
-  (image "SPR, A, a")
-  (imageNow "TIL, a, floor")
-  (image "ITM, a, b")
-  (imagePal "SPR, A, 1")
-  (imagePalNow "TIL, floor, 2")
+Notes on edge/error cases:
+	(startWatch "existing id"): overwrites existing timer
+	(stopWatch "non-existent id"): does nothing
+	(stopWatch "stopped id"): does nothing
+	(resumeWatch "non-existent id"): starts new timer
+	(resumeWatch "running id"): does nothing
+	(sayWatch "non-existent id"): throws error
 
 HOW TO USE:
-  1. Copy-paste this script into a new script tag after the Bitsy source code.
-     It should appear *before* any other mods that handle loading your game
-     data so it executes *after* them (last-in first-out).
-
-TIPS:
-  - The player avatar is always a sprite with id "A"; you can edit your gamedata to give them a name for clarity
-  - You can use the full names or shorthand of image types (e.g. "SPR" and "sprite" will both work)
-  - The "source" images don't have to be placed anywhere; so long as they exist in the gamedata they'll work
-  - This is a destructive operation! Unless you have a copy of an overwritten image, you won't be able to get it back during that run
+1. Copy-paste into a script tag after the bitsy source
+2. Customize `timeToString` function in hackOptions below as needed
+3. Add tags to your dialog as needed
 
 NOTE: This uses parentheses "()" instead of curly braces "{}" around function
       calls because the Bitsy editor's fancy dialog window strips unrecognized
@@ -56,8 +40,26 @@ NOTE: This uses parentheses "()" instead of curly braces "{}" around function
       code at the end of the editor's `bitsy.js` file. Untested.
 */
 this.hacks = this.hacks || {};
-(function (bitsy) {
+this.hacks.stopwatch = (function (exports,bitsy) {
 'use strict';
+var hackOptions = {
+	// function which returns the string which bitsy will print
+	// parameter is a timer object with:
+	//   start: value of Date.now() on startWatch
+	//   end: value of Date.now() on stopWatch,
+	//        or undefined if timer is running
+	// current implementation is "minutes:seconds"
+	timeToString: function (timer) {
+		var ms = getTimeDifferenceInMs(timer);
+		var time = new Date(ms);
+		var mins = time.getUTCMinutes();
+		var secs = time.getUTCSeconds();
+		if (secs < 10) {
+			secs = "0" + secs;
+		}
+		return mins + ":" + secs;
+	}
+};
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
 
@@ -102,22 +104,6 @@ function inject(searchRegex, replaceString) {
 	scriptTag.remove();
 }
 
-/*
-Helper for getting image by name or id
-
-Args:
-	name: id or name of image to return
-	 map: map of images (e.g. `sprite`, `tile`, `item`)
-
-Returns: the image in the given map with the given name/id
- */
-function getImage(name, map) {
-	var id = map.hasOwnProperty(name) ? name : Object.keys(map).find(function (e) {
-		return map[e].name == name;
-	});
-	return map[id];
-}
-
 /**
  * Helper for getting an array with unique elements 
  * @param  {Array} array Original array
@@ -126,6 +112,23 @@ function getImage(name, map) {
 function unique(array) {
 	return array.filter(function (item, idx) {
 		return array.indexOf(item) === idx;
+	});
+}
+
+/**
+ * Helper for printing dialog inside of a dialog function.
+ * Intended to be called using the environment + onReturn parameters of the original function;
+ * e.g.
+ * addDialogTag('myTag', function (environment, parameters, onReturn) {
+ * 	printDialog(environment, 'my text', onReturn);
+ * });
+ * @param {Environment} environment Bitsy environment object; first param to a dialog function
+ * @param {String} text Text to print
+ * @param {Function} onReturn Bitsy onReturn function; third param to a dialog function
+ */
+function printDialog(environment, text, onReturn) {
+	environment.GetDialogBuffer().AddText(text, function() {
+		onReturn(null);
 	});
 }
 
@@ -378,145 +381,81 @@ function addDualDialogTag(tag, fn) {
 	addDeferredDialogTag(tag, fn);
 }
 
-/**
-@file edit image at runtime
-@summary API for updating image data at runtime.
-@author Sean S. LeBlanc
-@description
-Adds API for updating sprite, tile, and item data at runtime.
 
-Individual frames of image data in bitsy are 8x8 1-bit 2D arrays in yx order
-e.g. the default player is:
-[
-	[0,0,0,1,1,0,0,0],
-	[0,0,0,1,1,0,0,0],
-	[0,0,0,1,1,0,0,0],
-	[0,0,1,1,1,1,0,0],
-	[0,1,1,1,1,1,1,0],
-	[1,0,1,1,1,1,0,1],
-	[0,0,1,0,0,1,0,0],
-	[0,0,1,0,0,1,0,0]
-]
-*/
 
-/*
-Args:
-	   id: string id or name
-	frame: animation frame (0 or 1)
-	  map: map of images (e.g. `sprite`, `tile`, `item`)
 
-Returns: a single frame of a image data
-*/
-function getImageData(id, frame, map) {
-	return bitsy.renderer.GetImageSource(getImage(id, map).drw)[frame];
+
+function getTimeDifferenceInMs(timer) {
+	return (timer.end || Date.now()) - timer.start;
 }
 
-/*
-Updates a single frame of image data
+// map of timers
+var timers;
 
-Args:
-	     id: string id or name
-	  frame: animation frame (0 or 1)
-	    map: map of images (e.g. `sprite`, `tile`, `item`)
-	newData: new data to write to the image data
-*/
-function setImageData(id, frame, map, newData) {
-	var drawing = getImage(id, map);
-	var drw = drawing.drw;
-	var img = bitsy.renderer.GetImageSource(drw);
-	img[frame] = newData;
-	bitsy.renderer.SetImageSource(drw, img);
-}
-
-
-
-// map of maps
-var maps;
-after('load_game', function () {
-	maps = {
-    spr: bitsy.sprite,
-    sprite: bitsy.sprite,
-    til: bitsy.tile,
-    tile: bitsy.tile,
-    itm: bitsy.item,
-    item: bitsy.item,
+function startWatch(environment, parameters) {
+	var id = parameters[0];
+	timers[id] = {
+		start: Date.now(),
+		end: undefined
 	};
+}
+
+// note: this updates start time directly
+function resumeWatch(environment, parameters) {
+	var id = parameters[0];
+	var timer = timers[id];
+
+	// just start the timer if there isn't one
+	if (!timer) {
+		return startWatch(environment, parameters);
+	}
+
+	// don't do anything if the timer's not running
+	if (!timer.end) {
+		return;
+	}
+
+	// resume timer
+	timer.start = Date.now() - (timer.end - timer.start);
+	timer.end = undefined;
+}
+
+function stopWatch(environment, parameters) {
+	var id = parameters[0];
+	var timer = timers[id];
+	// don't do anything if there's no timer
+	if (!timer) {
+		return;
+	}
+	// don't do anything if the timer's not running
+	if (timer.end) {
+		return;
+	}
+	// end timer
+	timer.end = Date.now();
+}
+
+// clear timers on game-load
+before('load_game', function () {
+	timers = {};
 });
 
-function editImage(environment, parameters) {
-  var i;
+// add control functions
+addDualDialogTag('startWatch', startWatch);
+addDualDialogTag('stopWatch', stopWatch);
+addDualDialogTag('resumeWatch', resumeWatch);
 
-  // parse parameters
-  var params = parameters[0].split(/,\s?/);
-  params[0] = (params[0] || "").toLowerCase();
-  var mapId = params[0];
-  var tgtId = params[1];
-  var srcId = params[2];
+// add display function
+addDialogTag('sayWatch', function (environment, parameters, onReturn) {
+	var timer = timers[parameters[0]];
+	if (!timer) {
+		throw new Error('Tried to sayWatch "' + parameters[0] + '" but it was never started');
+	}
+	printDialog(environment, hackOptions.timeToString(timer), onReturn);
+});
 
-  if (!mapId || !tgtId || !srcId) {
-    throw new Error('Image expects three parameters: "map, target, source", but received: "' + params.join(', ') + '"');
-  }
+exports.hackOptions = hackOptions;
 
-  // get objects
-  var mapObj = maps[mapId];
-  if (!mapObj) {
-    throw new Error('Invalid map "' + mapId + '". Try "SPR", "TIL", or "ITM" instead.');
-  }
-  var tgtObj = getImage(tgtId, mapObj);
-  if (!tgtObj) {
-    throw new Error('Target "' + tgtId + '" was not the id/name of a ' + mapId + '.');
-  }
-  var srcObj = getImage(srcId, mapObj);
-  if (!srcObj) {
-    throw new Error('Source "' + srcId + '" was not the id/name of a ' + mapId + '.');
-  }
+return exports;
 
-  // copy animation from target to source
-  tgtObj.animation = {
-    frameCount: srcObj.animation.frameCount,
-    isAnimated: srcObj.animation.isAnimated,
-    frameIndex: srcObj.animation.frameIndex
-  };
-  for (i = 0; i < srcObj.animation.frameCount; ++i) {
-    setImageData(tgtId, i, mapObj, getImageData(srcId, i, mapObj));
-  }
-}
-
-function editPalette(environment, parameters) {
-  // parse parameters
-  var params = parameters[0].split(/,\s?/);
-  params[0] = (params[0] || "").toLowerCase();
-  var mapId = params[0];
-  var tgtId = params[1];
-  var palId = params[2];
-
-  if (!mapId || !tgtId || !palId) {
-    throw new Error('Image expects three parameters: "map, target, palette", but received: "' + params.join(', ') + '"');
-  }
-
-  // get objects
-  var mapObj = maps[mapId];
-  if (!mapObj) {
-    throw new Error('Invalid map "' + mapId + '". Try "SPR", "TIL", or "ITM" instead.');
-  }
-  var tgtObj = getImage(tgtId, mapObj);
-  if (!tgtObj) {
-    throw new Error('Target "' + tgtId + '" was not the id/name of a ' + mapId + '.');
-  }
-  var palObj = parseInt(palId);
-  if (isNaN(palObj)) {
-    throw new Error('Palette "' + palId + '" was not a number.');
-  }
-
-  // set palette
-  tgtObj.col = palObj;
-
-  // update images in cache
-  bitsy.renderImageForAllPalettes(tgtObj);
-}
-
-// hook up the dialog tags
-addDualDialogTag('image', editImage);
-addDualDialogTag('imagePal', editPalette);
-
-}(window));
+}({},window));

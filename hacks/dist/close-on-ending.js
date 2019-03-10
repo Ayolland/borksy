@@ -1,15 +1,20 @@
 /**
-🏁
-@file transparent sprites
-@summary makes all sprites have transparent backgrounds
+⛔️
+@file close on ending
+@summary Prevents from playing past an ending
 @license MIT
-@version 2.1.0
-@requires Bitsy Version: 5.1
+@version 1.1.0
 @author Sean S. LeBlanc
 
 @description
-Makes all sprites have transparent backgrounds.
-i.e. tiles can be seen underneath the player, sprites, and items.
+Prevent from playing past an ending.
+When an ending is reached, it will prevent the game from being restarted,
+the bitsy game canvas will be removed, and it will attempt to close the window.
+Windows can't always be closed due to browser security reasons;
+rendering the game unresponsive is the best that can be done in that situation.
+
+NOTE: This hack also disables the ctrl+r restart prompt,
+but players will still be able to manually refresh or close/re-open the page to restart.
 
 HOW TO USE:
 Copy-paste this script into a script tag after the bitsy source
@@ -103,6 +108,13 @@ function inject$1(searchRegex, replaceString) {
 		searchRegex: searchRegex,
 		replaceString: replaceString
 	});
+}
+
+// Ex: after('load_game', function run() { alert('Loaded!'); });
+function after(targetFuncName, afterFn) {
+	var kitsy = kitsyInit();
+	kitsy.queuedAfterScripts[targetFuncName] = kitsy.queuedAfterScripts[targetFuncName] || [];
+	kitsy.queuedAfterScripts[targetFuncName].push(afterFn);
 }
 
 function kitsyInit() {
@@ -205,62 +217,21 @@ function _reinitEngine() {
 
 
 
-// override imageDataFromImageSource to use transparency for background pixels
-// and save the results to a custom image cache
-inject$1(/(function imageDataFromImageSource\(imageSource, pal, col\) {)([^]*?)return img;/, [
-'$1',
-'	var cache;',
-'	return function(){',
-'		if (cache) {',
-'			return cache;',
-'		}',
-'		$2',
-'		// make background pixels transparent',
-'		var bg = getPal(pal)[0];',
-'		var i;',
-'		// set background pixels to transparent',
-'		for (i = 0; i < img.data.length; i += 4) {',
-'			if (',
-'				img.data[i + 0] === bg[0] &&',
-'				img.data[i + 1] === bg[1] &&',
-'				img.data[i + 2] === bg[2]',
-'			) {',
-'				img.data[i + 3] = 0;',
-'			}',
-'		}',
-'	',
-'		// give ourselves a little canvas + context to work with',
-'		var spriteCanvas = document.createElement("canvas");',
-'		spriteCanvas.width = tilesize * (scale);',
-'		spriteCanvas.height = tilesize * (scale);',
-'		var spriteContext = spriteCanvas.getContext("2d");',
-'	',
-'		// put bitsy data to our canvas',
-'		spriteContext.clearRect(0, 0, tilesize, tilesize);',
-'		spriteContext.putImageData(img, 0, 0);',
-'	',
-'		// save it in our cache',
-'		cache = spriteCanvas;',
-'	',
-'		// return our image	',
-'		return cache;',
-'	};',
-].join('\n'));
+// prevent ctrl+r restart prompt
+inject$1(/(function tryRestartGame\(e\) {)/, '$1return;');
 
-// override drawTile to draw from our custom image cache
-// instead of putting image data directly
-inject$1(/(function drawTile\(img,x,y,context\) {)/, [
-'$1',
-'	if (!context) { //optional pass in context; otherwise, use default',
-'		context = ctx;',
-'	}',
-'',
-'	context.drawImage(',
-'		img(),',
-'		x * tilesize * scale,',
-'		y * tilesize * scale',
-'	);',
-'	return;',
-].join('\n'));
+after('onExitDialog', function () {
+	if(bitsy.isEnding) {
+		// prevent further input
+		var no = function () {
+			return false;
+		};
+		bitsy.input.isKeyDown = bitsy.input.anyKeyPressed = bitsy.input.swipeLeft = bitsy.input.swipeRight = bitsy.input.swipeUp = bitsy.input.swipeDown = bitsy.input.isTapReleased = no;
+		// remove canvas
+		bitsy.canvas.remove();
+		// attempt to close
+		window.close();
+	}
+});
 
 }(window));

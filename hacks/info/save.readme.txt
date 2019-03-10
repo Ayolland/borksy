@@ -1,0 +1,28 @@
+Introduces save/load functionality.
+
+Includes:
+  - data that may be saved/loaded:
+    - current room/position within room
+    - inventory/items in rooms
+    - dialog variables
+    - dialog position
+  - basic autosave
+  - dialog tags:
+    - (save): saves game
+    - (load ""): loads game; parameter is text to show as title on load
+    - (clear): clears saved game
+    - (saveNow)/(loadNow)/(clearNow): instant varieties of above tags
+
+Notes:
+  - Storage is implemented through browser localStorage: https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
+    Remember to clear storage while working on a game, otherwise loading may prevent you from seeing your changes!
+    You can use the `clearOnStart` option to do this for you when testing.
+  - This hack only tracks state which could be modified via vanilla bitsy features,
+    i.e. compatability with other hacks that modify state varies;
+    you may need to modify save/load to include/exclude things for compatability.
+    (feel free to ask for help tailoring these to your needs!)
+  - There is only one "save slot"; it would not be too difficult to implement more,
+    but it adds a lot of complexity that most folks probably don't need.
+
+HOW TO USE:
+Edit hackOptions as needed

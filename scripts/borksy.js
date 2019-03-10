@@ -61,7 +61,7 @@ function arrayToSentenceFrag(arr){
 function cleanUsingRegEx($this,regExStr){
 	var regex = new RegExp(regExStr,"g");
 	$this.val($this.val().replace(regex,""));
-};
+}
 
 function saveThisData($this, value){
 	if ( $this.data('clean-regex') ){
@@ -627,36 +627,6 @@ function hackGitHubMessage(hackName,hackInfo,$parentCollapse){
 	$parentCollapse.append($message);
 }
 
-function hackMenuPython(hackName,hackInfo,$parentCollapse){
-	var $friendliness = makeNewCollapsible( removeExtraChars(hackInfo.title) + " Bitspy Friendliness:");
-	var sentenceStart = "Use of this Hack ";
-	var sentenceEnd = "";
-	var bitspyLink = "<a href='https://github.com/Ragzouken/bitspy'>the Python Player for Bitsy</a> ";
-	bitspyLink += "(IE: <a href='https://candle.itch.io/bitsy-boutique'>The Bitsy Boutique</a>)";
-	var fine = "The features in this hack will not be available, but your game should otherwise function normally."
-	var notfine = "Your game will likely appear broken."
-	switch (hackInfo.python){
-		case "green":
-			sentenceStart += "does not interfere with ";
-			sentenceEnd = ". " + fine;
-		break;
-		case "yellow":
-			sentenceStart += "is possible with ";
-			sentenceEnd = " if and only if there is no script reference to it in dialog. " + fine;
-		break;
-		case "red":
-		default:
-			sentenceStart += "is not compatible with ";
-			sentenceEnd += ". " + notfine;
-		break;
-	}
-	var $text = $('<p>',{
-		html: sentenceStart + bitspyLink + sentenceEnd
-	});
-	$friendliness.addClass('python').addClass(hackInfo.python).append($text);
-	$parentCollapse.append($friendliness);
-}
-
 function hackMenuOptions(hackName,hackInfo,$parentCollapse){
 	var $options = makeNewCollapsible( removeExtraChars(hackInfo.title) + " Options:");
 	var $optionsLabel = $('<label>',{
@@ -732,8 +702,6 @@ function createThisHackMenu(hackName,hackInfo){
 	if(hackInfo.readme === true){
 		hackMenuReadme(hackName,hackInfo,$collapse);
 	}
-
-	hackMenuPython(hackName,hackInfo,$collapse);
 
 	return $collapse;
 }

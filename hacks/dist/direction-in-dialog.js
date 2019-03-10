@@ -1,18 +1,27 @@
 /**
-🏁
-@file transparent sprites
-@summary makes all sprites have transparent backgrounds
+🔝
+@file direction in dialog
+@summary provides a variable with player direction
 @license MIT
-@version 2.1.0
-@requires Bitsy Version: 5.1
+@version 1.1.0
+@requires 5.3
 @author Sean S. LeBlanc
 
 @description
-Makes all sprites have transparent backgrounds.
-i.e. tiles can be seen underneath the player, sprites, and items.
+Provides a variable "playerDirection" that can be accessed in dialog
+The value will be one of:
+	- "up"
+	- "down"
+	- "left"
+	- "right"
+Depending on the last input from the player.
+
+Note that the variable will describe the direction the player moved,
+so if they're interacting with a sprite, the opposite will be the direction from which they came
+i.e. if the player moves into a sprite from the left, the variable will be "right"
 
 HOW TO USE:
-Copy-paste this script into a script tag after the bitsy source
+Copy-paste into a script tag after the bitsy source
 */
 this.hacks = this.hacks || {};
 (function (bitsy) {
@@ -95,14 +104,13 @@ HOW TO USE:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
 
-
-// Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
-function inject$1(searchRegex, replaceString) {
+// Ex: before('load_game', function run() { alert('Loading!'); });
+//     before('show_text', function run(text) { return text.toUpperCase(); });
+//     before('show_text', function run(text, done) { done(text.toUpperCase()); });
+function before(targetFuncName, beforeFn) {
 	var kitsy = kitsyInit();
-	kitsy.queuedInjectScripts.push({
-		searchRegex: searchRegex,
-		replaceString: replaceString
-	});
+	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
+	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
 }
 
 function kitsyInit() {
@@ -205,62 +213,18 @@ function _reinitEngine() {
 
 
 
-// override imageDataFromImageSource to use transparency for background pixels
-// and save the results to a custom image cache
-inject$1(/(function imageDataFromImageSource\(imageSource, pal, col\) {)([^]*?)return img;/, [
-'$1',
-'	var cache;',
-'	return function(){',
-'		if (cache) {',
-'			return cache;',
-'		}',
-'		$2',
-'		// make background pixels transparent',
-'		var bg = getPal(pal)[0];',
-'		var i;',
-'		// set background pixels to transparent',
-'		for (i = 0; i < img.data.length; i += 4) {',
-'			if (',
-'				img.data[i + 0] === bg[0] &&',
-'				img.data[i + 1] === bg[1] &&',
-'				img.data[i + 2] === bg[2]',
-'			) {',
-'				img.data[i + 3] = 0;',
-'			}',
-'		}',
-'	',
-'		// give ourselves a little canvas + context to work with',
-'		var spriteCanvas = document.createElement("canvas");',
-'		spriteCanvas.width = tilesize * (scale);',
-'		spriteCanvas.height = tilesize * (scale);',
-'		var spriteContext = spriteCanvas.getContext("2d");',
-'	',
-'		// put bitsy data to our canvas',
-'		spriteContext.clearRect(0, 0, tilesize, tilesize);',
-'		spriteContext.putImageData(img, 0, 0);',
-'	',
-'		// save it in our cache',
-'		cache = spriteCanvas;',
-'	',
-'		// return our image	',
-'		return cache;',
-'	};',
-].join('\n'));
+var keys = {};
+keys[bitsy.Direction.Up] = "up";
+keys[bitsy.Direction.Down] = "down";
+keys[bitsy.Direction.Left] = "left";
+keys[bitsy.Direction.Right] = "right";
+keys[bitsy.Direction.None] = null;
 
-// override drawTile to draw from our custom image cache
-// instead of putting image data directly
-inject$1(/(function drawTile\(img,x,y,context\) {)/, [
-'$1',
-'	if (!context) { //optional pass in context; otherwise, use default',
-'		context = ctx;',
-'	}',
-'',
-'	context.drawImage(',
-'		img(),',
-'		x * tilesize * scale,',
-'		y * tilesize * scale',
-'	);',
-'	return;',
-].join('\n'));
+before('startDialog', function () {
+	var direction = keys[bitsy.curPlayerDirection];
+	if (direction) {
+		bitsy.scriptInterpreter.SetVariable('playerDirection', direction);
+	}
+});
 
 }(window));

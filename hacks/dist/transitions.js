@@ -1,61 +1,81 @@
 /**
-😴
-@file canvas replacement
-@summary WebGLazy bitsy integration (this one's mostly just for me)
+🎞
+@file transitions
+@summary customizable WebGL transitions
 @license MIT
-@version 3.0.0
+@version 2.1.1
 @author Sean S. LeBlanc
 
 @description
-Replaces bitsy canvas with a responsive WebGL canvas (this one's mostly just for me)
+Adds a simple system for defining fancy transitions.
+
+The transition effect is customizable as a GLSL snippet,
+and the transition trigger is customizable as a basic function
+returning either `true` or `false`.
+
+The most obvious use (and example implementation)
+is to create transitions between room changes,
+but the transition function can be defined as anything.
+e.g. you could transition every time the player moves,
+when they pick up a specific item, after an arbitrary timeout, etc.
 
 HOW TO USE:
 1. Copy-paste this script into a script tag after the bitsy source
-2. For finer scaling, edit `var text_scale = 2` and `var scale = 4` in the bitsy source to `var text_scale = 1` and `var scale = 2`
-3. Edit the hackOptions object passed to the `new WebGLazy` call as needed
+2. Edit the transition hackOptions below as needed
 
-The shader used to render the canvas can be overriden via hack options:
-e.g.
-var hackOptions = {
-	glazyOptions = {
-		fragment: `
-// uv-wave fragment shader
-precision mediump float;
-uniform sampler2D tex0;
-uniform sampler2D tex1;
-uniform float time;
-uniform vec2 resolution;
-
-void main(){
-	vec2 coord = gl_FragCoord.xy;
-	vec2 uv = coord.xy / resolution.xy;
-	uv.x += sin(uv.y * 10.0 + time / 200.0) / 60.0;
-	uv.y += cos(uv.x * 10.0 + time / 200.0) / 60.0;
-	vec3 col = texture2D(tex0,uv).rgb;
-	gl_FragColor = vec4(col, 1.0);
-}
-		`,
-	},
-};
+NOTES:
+- Includes canvas replacement hack
+- Available in shader snippet:
+	result:  vec3 - rendered output (assign to this)
+	 start:  vec3 - output at start of transition
+	   end:  vec3 - output at end of transition
+	    uv:  vec2 - uv coordinates for output
+	     t: float - transition time (0-1)
+	  rand: float(vec2) - function returning a random value (0-1) based on an input vec2
+	  tex0:   sampler2D - sampler for end
+	  tex1:   sampler2D - sampler for start
+	(see shader source below for more detail if needed)
+- Example shader snippets:
+	    fade: result = mix(start, end, t);
+	ltr wipe: result = mix(start, end, step(uv.x, t));
+	 iris in: result = mix(start, end, step(distance(uv, vec2(0.5))/sqrt(0.5), t));
+	squash up:
+		vec2 eUv = uv/vec2(1.0,t);
+		end = texture2D(tex0, eUv).rgb;
+		result = mix(start, end, step(uv.y,t));
+	noisy pixels:
+		float sPix = max(1.0, floor(256.0*pow(max(0.0, 0.5-t)*2.0,2.0)));
+		float ePix = max(1.0, floor(256.0*pow(max(0.0, t-0.5)*2.0,2.0)));
+		vec2 sUv = floor(uv*sPix + 0.5)/sPix;
+		vec2 eUv = floor(uv*ePix + 0.5)/ePix;
+		end = texture2D(tex0, eUv).rgb;
+		start = texture2D(tex1, sUv).rgb;
+		end += mix(rand(eUv+vec2(t)), 0.0, t);
+		start += mix(0.0, rand(sUv-vec2(t)), t);
+		result = mix(start, end, step(.5,t));
 */
 this.hacks = this.hacks || {};
-this.hacks.canvas_replacement = (function (exports,bitsy) {
+this.hacks.transitions = (function (exports,bitsy) {
 'use strict';
-var hackOptions = {
-	glazyOptions: {
-		background: "black",
-		scaleMode: "MULTIPLES", // use "FIT" if you prefer size to pixel accuracy
-		allowDownscaling: true,
-		disableFeedbackTexture: true, // set this to false if you want to use the feedback texture
+var hackOptions$1 = {
+	// transition duration
+	duration: 1000,
+	// whether to transition title screen
+	includeTitle: true,
+	// function which defines when a transition occured
+	// return true to indicate a transition; false otherwise
+	// example implementation is transition on room change
+	checkTransition: function () {
+		var r = bitsy.curRoom;
+		if (this.room !== r) {
+			// room changed between frames
+			this.room = r;
+			return true;
+		}
+		return false;
 	},
-	init: function(glazy) {
-		// you can set up any custom uniforms you have here if needed
-		// e.g. glazy.glLocations.myUniform = glazy.gl.getUniformLocation(glazy.shader.program, 'myUniform');
-	},
-	update: function(glazy) {
-		// you can update any custom uniforms you have here if needed
-		// e.g. glazy.gl.uniform1f(glazy.glLocations.myUniform, 0);
-	},
+	// glsl snippet which defines the rendered output of the transition
+	transition: 'result = mix(start, end, t);',
 };
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
@@ -242,9 +262,63 @@ function _reinitEngine() {
 	bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 }
 
+/**
+😴
+@file canvas replacement
+@summary WebGLazy bitsy integration (this one's mostly just for me)
+@license MIT
+@version 3.0.0
+@author Sean S. LeBlanc
 
+@description
+Replaces bitsy canvas with a responsive WebGL canvas (this one's mostly just for me)
 
+HOW TO USE:
+1. Copy-paste this script into a script tag after the bitsy source
+2. For finer scaling, edit `var text_scale = 2` and `var scale = 4` in the bitsy source to `var text_scale = 1` and `var scale = 2`
+3. Edit the hackOptions object passed to the `new WebGLazy` call as needed
 
+The shader used to render the canvas can be overriden via hack options:
+e.g.
+var hackOptions = {
+	glazyOptions = {
+		fragment: `
+// uv-wave fragment shader
+precision mediump float;
+uniform sampler2D tex0;
+uniform sampler2D tex1;
+uniform float time;
+uniform vec2 resolution;
+
+void main(){
+	vec2 coord = gl_FragCoord.xy;
+	vec2 uv = coord.xy / resolution.xy;
+	uv.x += sin(uv.y * 10.0 + time / 200.0) / 60.0;
+	uv.y += cos(uv.x * 10.0 + time / 200.0) / 60.0;
+	vec3 col = texture2D(tex0,uv).rgb;
+	gl_FragColor = vec4(col, 1.0);
+}
+		`,
+	},
+};
+*/
+
+var hackOptions = {
+	glazyOptions: {
+		background: "black",
+		scaleMode: "MULTIPLES", // use "FIT" if you prefer size to pixel accuracy
+		allowDownscaling: true,
+		disableFeedbackTexture: true, // set this to false if you want to use the feedback texture
+	},
+	init: function(glazy) {
+		// you can set up any custom uniforms you have here if needed
+		// e.g. glazy.glLocations.myUniform = glazy.gl.getUniformLocation(glazy.shader.program, 'myUniform');
+	},
+	update: function(glazy) {
+		// you can update any custom uniforms you have here if needed
+		// e.g. glazy.gl.uniform1f(glazy.glLocations.myUniform, 0);
+	},
+};
 
 var glazy;
 after('startExportedGame', function () {
@@ -256,7 +330,56 @@ after('update', function () {
 	hackOptions.update(glazy);
 });
 
-exports.hackOptions = hackOptions;
+
+
+
+
+hackOptions.glazyOptions.disableFeedbackTexture = false;
+hackOptions.init = function (glazy) {
+	glazy.glLocations.transitionTime = glazy.gl.getUniformLocation(glazy.shader.program, 'transitionTime');
+	if (!hackOptions$1.includeTitle) {
+		glazy.gl.uniform1f(glazy.glLocations.transitionTime, glazy.curTime - hackOptions$1.duration);
+	}
+
+	// hack textureFeedback update
+	// so we can update it as-needed rather than every frame
+	glazy.textureFeedback.oldUpdate = glazy.textureFeedback.update;
+	glazy.textureFeedback.update = function () {};
+};
+hackOptions.update = function (glazy) {
+	if (hackOptions$1.checkTransition()) {
+		// transition occurred; update feedback texture to capture frame
+		glazy.gl.uniform1f(glazy.glLocations.transitionTime, glazy.curTime);
+		glazy.textureFeedback.oldUpdate();
+	}
+};
+
+hackOptions.glazyOptions.fragment = `
+	precision mediump float;
+	uniform sampler2D tex0;
+	uniform sampler2D tex1;
+	uniform float time;
+	uniform float transitionTime;
+	uniform vec2 resolution;
+
+	// https://stackoverflow.com/questions/12964279/whats-the-origin-of-this-glsl-rand-one-liner
+	float rand(vec2 co){
+		return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+	}
+
+	void main(){
+		vec2 coord = gl_FragCoord.xy;
+		vec2 uv = coord.xy / resolution.xy;
+		vec3 end = texture2D(tex0,uv).rgb;
+		vec3 start = texture2D(tex1,uv).rgb;
+		vec3 result;
+		float t = clamp((time-transitionTime)/float(${hackOptions$1.duration}), 0.0, 1.0);
+		${hackOptions$1.transition}
+		gl_FragColor = vec4(result, 1.0);
+	}
+`;
+
+exports.hackOptions = hackOptions$1;
 
 return exports;
 
