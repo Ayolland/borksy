@@ -71,7 +71,7 @@ var hacks = {
 		order: 10,
 		conflicts: false,
 		python: 'green',
-		github: 'directional%20avatar.js',
+		github: 'directional-avatar.js',
 		forceLocal: false
 	},
 
@@ -86,7 +86,7 @@ var hacks = {
 		order: 10,
 		conflicts: false,
 		python: 'green',
-		github: 'dynamic%20background.js',
+		github: 'dynamic-background.js',
 		forceLocal: false
 	},
 
@@ -131,7 +131,7 @@ var hacks = {
 		order: 2,
 		conflicts: false,
 		python: 'red',
-		github: 'javascript%20dialog.js',
+		github: 'javascript-dialog.js',
 		forceLocal: false
 	},
 
@@ -146,7 +146,7 @@ var hacks = {
 		order: 10,
 		conflicts: false,
 		python: 'green',
-		github: 'transparent%20sprites.js',
+		github: 'transparent-sprites.js',
 		forceLocal: false
 	},
 
@@ -176,7 +176,7 @@ var hacks = {
 		order: 4,
 		conflicts: false,
 		python: 'red',
-		github: 'permanent%20items.js',
+		github: 'permanent-items.js',
 		forceLocal: false
 	},
 
@@ -191,7 +191,7 @@ var hacks = {
 		order: 5,
 		conflicts: false,
 		python: 'red',
-		github: 'solid%20items.js',
+		github: 'solid-items.js',
 		forceLocal: false
 	},
 
@@ -206,7 +206,7 @@ var hacks = {
 		order: 5,
 		conflicts: false,
 		python: 'red',
-		github: 'unique%20items.js',
+		github: 'unique-items.js',
 		forceLocal: false
 	},
 
@@ -236,7 +236,7 @@ var hacks = {
 		order: 5,
 		conflicts: false,
 		python: 'red',
-		github: 'multi-sprite%20avatar.js',
+		github: 'multi-sprite-avatar.js',
 		forceLocal: false
 	}
 
