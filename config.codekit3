@@ -784,6 +784,14 @@
 		"oAP": "/hacks/info/multi-sprite-avatar.readme.txt",
 		"oF": 0
 		},
+	"/hacks/info/paragraph-break.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/paragraph-break.readme.txt",
+		"oF": 0
+		},
 	"/hacks/info/permanent-items.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -806,6 +814,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/hacks/info/solid-items.readme.txt",
+		"oF": 0
+		},
+	"/hacks/info/stopwatch.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/stopwatch.readme.txt",
 		"oF": 0
 		},
 	"/hacks/info/unique-items.readme.txt": {
@@ -1153,6 +1169,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/hacks/options/solid-items.options.txt",
+		"oF": 0
+		},
+	"/hacks/options/stopwatch.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/options/stopwatch.options.txt",
 		"oF": 0
 		},
 	"/hacks/options/transparent-sprites.options.txt": {

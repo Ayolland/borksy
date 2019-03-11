@@ -247,7 +247,7 @@ var hacks = {
 
 	"character-portraits": {
 		title: "😽 Character Portraits",
-		description: "High Quality Anime jJpegs (or pngs i guess)",
+		description: "High Quality Anime Jpegs (or pngs i guess)",
 		author: "Sean S. LeBlanc",
 		readme: true,
 		type: "options",
@@ -256,6 +256,48 @@ var hacks = {
 		order: 5,
 		conflicts: false,
 		github: 'character-portraits.js',
+		forceLocal: false
+	},
+
+	"transparent-dialog": {
+		title: "👁️‍🗨️ Transparent Dialog",
+		description: "Makes the Dialog Box have a Transparent Background",
+		author: "Sean S. LeBlanc",
+		readme: false,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'transparent-dialog.js',
+		forceLocal: false
+	},
+
+	"stopwatch": {
+		title: "⏱️ Stopwatch",
+		description: "Allows Timing Player Actions",
+		author: "Lenny Magner",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'stopwatch.js',
+		forceLocal: false
+	},
+
+	"paragraph-break": {
+		title: "📃 Paragraph Break",
+		description: "Adds paragraph breaks to the dialogue parser",
+		author: "Sean S. LeBlanc and David Mowatt",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'paragraph-break.js',
 		forceLocal: false
 	}
 
