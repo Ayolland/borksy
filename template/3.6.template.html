@@ -3,6 +3,7 @@
 
 <!-- Borksy 3.6 -->
 <!-- Bitsy 5.4 -->
+<!-- TEST -->
 
 <!-- HEADER -->
 <head>
@@ -2214,7 +2215,7 @@ var DialogBuffer = function() {
 			// console.log(charCount);
 
 			var leftPos = 0;
-			console.log(textDirection);
+			//console.log(textDirection); // AAAAAAAAAAGGGGGGGGGGGHHHHHHHHHHHHHHHH
 			if (textDirection === TextDirection.RightToLeft) {
 				leftPos = 24 * 8; // hack -- I think this is correct?
 			}
@@ -3185,7 +3186,24 @@ function load_game(game_data, startWithTitle) {
 	if (!isPlayerEmbeddedInEditor) {
 		// hack to ensure default font is available
 		fontManager.AddResource(defaultFontName + fontManager.GetExtension(), document.getElementById(defaultFontName).text.slice(1));
-	}
+	} else {
+
+    //borksy modification, fixing touch controls on mobile
+
+    let existingTouchTrigger = document.querySelector('#touchTrigger');
+    if (existingTouchTrigger !== null){
+      var touchTrigger = document.createElement("div");
+      touchTrigger.setAttribute("id","touchTrigger");
+      touchTrigger.setAttribute(
+        "style","position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;"
+      );
+      document.body.appendChild(touchTrigger);
+
+      touchTrigger.addEventListener('touchstart', input.ontouchstart);
+      touchTrigger.addEventListener('touchmove', input.ontouchmove);
+      touchTrigger.addEventListener('touchend', input.ontouchend);
+    }
+  }
 
 	var font = fontManager.Get( fontName );
 	dialogBuffer.SetFont(font);
