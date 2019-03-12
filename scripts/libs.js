@@ -219,7 +219,7 @@ var hacks = {
 
 	"avatar-by-room": {
 		title: "👥 Avatar By Room",
-		description: "Allows changing the avatar in certain rooms",
+		description: "Allows changing the avatar in certain rooms.",
 		author: "Sean S. LeBlanc",
 		readme: true,
 		type: "options",
@@ -261,7 +261,7 @@ var hacks = {
 
 	"transparent-dialog": {
 		title: "👁️‍🗨️ Transparent Dialog",
-		description: "Makes the Dialog Box have a Transparent Background",
+		description: "Makes the dialog box have a transparent background.",
 		author: "Sean S. LeBlanc",
 		readme: false,
 		type: "simple",
@@ -275,7 +275,7 @@ var hacks = {
 
 	"stopwatch": {
 		title: "⏱️ Stopwatch",
-		description: "Allows Timing Player Actions",
+		description: "Allows timing player actions.",
 		author: "Lenny Magner",
 		readme: true,
 		type: "options",
@@ -289,7 +289,7 @@ var hacks = {
 
 	"paragraph-break": {
 		title: "📃 Paragraph Break",
-		description: "Adds paragraph breaks to the dialogue parser",
+		description: "Adds paragraph breaks to the dialogue parser.",
 		author: "Sean S. LeBlanc and David Mowatt",
 		readme: true,
 		type: "simple",
@@ -299,6 +299,118 @@ var hacks = {
 		conflicts: false,
 		github: 'paragraph-break.js',
 		forceLocal: false
-	}
+	},
+
+	"opaque-tiles": {
+		title: "⬛ Opaque Tiles",
+		description: "Adds tiles which hide the player.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'opaque-tiles.js',
+		forceLocal: false
+	},
+
+	"gamepad-input": {
+		title: "🎮 Gamepad Input",
+		description: "Adds HTML5 gamepad support.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 3,
+		conflicts: false,
+		github: 'gamepad-input.js',
+		forceLocal: false
+	},
+
+	"edit-image-from-dialog": {
+		title: "🖌 Edit Image from Dialog",
+		description: "Allows editing of sprites, items, and tiles from dialog.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'edit-image-from-dialog.js',
+		forceLocal: false
+	},
+
+	"edit-image-from-dialog": {
+		title: "🖌 Edit Image from Dialog",
+		description: "Allows editing of sprites, items, and tiles from dialog.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'edit-image-from-dialog.js',
+		forceLocal: false
+	},
+
+	"direction-in-dialog": {
+		title: "🔝 Direction in Dialog",
+		description: "Provides a variable with player direction.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'direction-in-dialog.js',
+		forceLocal: false
+	},
+
+	"dialog-pause": {
+		title: "💬 Dialog Pause",
+		description: "Allows adding pauses in between printing text.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'dialog-pause.js',
+		forceLocal: false
+	},
+
+	"dialog-jump": {
+		title: "🚀 Dialog Jump",
+		description: "Allows jumping from one dialog entry to another.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'dialog-jump.js',
+		forceLocal: false
+	},
+
+	"dialog-choices": {
+		title: "🔀 Dialog Choices",
+		description: "Allows binary dialog choices.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'dialog-choices.js',
+		forceLocal: false
+	},
 
 };

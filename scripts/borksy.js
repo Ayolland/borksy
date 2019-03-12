@@ -719,8 +719,9 @@ function createHiddenHack(hackName,hackObj){
 }
 
 function createHackMenus($here){
-	$.each(hacks,function(hackName,hackObj){
-		loadThisHack(hackName,hackObj);
+	let alphabetizedHacks = Object.keys(hacks).sort();
+	$.each(alphabetizedHacks,function(index,hackName){
+		loadThisHack(hackName,hacks[hackName]);
 	});
 }
 

@@ -728,6 +728,38 @@
 		"oAP": "/hacks/info/character-portraits.readme.txt",
 		"oF": 0
 		},
+	"/hacks/info/dialog-choices.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/dialog-choices.readme.txt",
+		"oF": 0
+		},
+	"/hacks/info/dialog-jump.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/dialog-jump.readme.txt",
+		"oF": 0
+		},
+	"/hacks/info/dialog-pause.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/dialog-pause.readme.txt",
+		"oF": 0
+		},
+	"/hacks/info/direction-in-dialog.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/direction-in-dialog.readme.txt",
+		"oF": 0
+		},
 	"/hacks/info/directional-avatar.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -744,6 +776,14 @@
 		"oAP": "/hacks/info/dynamic-background.readme.txt",
 		"oF": 0
 		},
+	"/hacks/info/edit-image-from-dialog.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/edit-image-from-dialog.readme.txt",
+		"oF": 0
+		},
 	"/hacks/info/end-from-dialog.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -758,6 +798,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/hacks/info/exit-from-dialog.readme.txt",
+		"oF": 0
+		},
+	"/hacks/info/gamepad-input.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/gamepad-input.readme.txt",
 		"oF": 0
 		},
 	"/hacks/info/javascript-dialog.readme.txt": {
@@ -782,6 +830,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/hacks/info/multi-sprite-avatar.readme.txt",
+		"oF": 0
+		},
+	"/hacks/info/opaque-tiles.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/opaque-tiles.readme.txt",
 		"oF": 0
 		},
 	"/hacks/info/paragraph-break.readme.txt": {
@@ -1145,6 +1201,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/hacks/options/multi-sprite-avatar.options.txt",
+		"oF": 0
+		},
+	"/hacks/options/opaque-tiles.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/options/opaque-tiles.options.txt",
 		"oF": 0
 		},
 	"/hacks/options/permanent-items.options.txt": {
