@@ -178,17 +178,6 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"/hacks/dist/basic-sfx.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/basic-sfx-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
 	"/hacks/dist/bitsymuse.js": {
 		"bF": 0,
 		"ft": 64,
@@ -200,17 +189,6 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"/hacks/dist/canvas-replacement.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/canvas-replacement-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
 	"/hacks/dist/character-portraits.js": {
 		"bF": 0,
 		"ft": 64,
@@ -218,39 +196,6 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/character-portraits-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/close-on-ending.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/close-on-ending-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/corrupt.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/corrupt-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/custom-text-effect.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/custom-text-effect-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -376,28 +321,6 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"/hacks/dist/favicon-from-sprite.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/favicon-from-sprite-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/follower.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/follower-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
 	"/hacks/dist/gamepad-input.js": {
 		"bF": 0,
 		"ft": 64,
@@ -405,17 +328,6 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/gamepad-input-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/itsy-bitsy.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/itsy-bitsy-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -449,28 +361,6 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/multi-sprite-avatar-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/noclip.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/noclip-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/online.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/online-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -541,28 +431,6 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"/hacks/dist/tracery-processing.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/tracery-processing-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/transitions.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/transitions-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
 	"/hacks/dist/transparent-dialog.js": {
 		"bF": 0,
 		"ft": 64,
@@ -581,17 +449,6 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/transparent-sprites-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/twine-bitsy-comms.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/twine-bitsy-comms-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -895,14 +752,6 @@
 		"oAP": "/index.html",
 		"oF": 0
 		},
-	"/plugins/pangram.txt": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/plugins/pangram.txt",
-		"oF": 0
-		},
 	"/README.md": {
 		"cB": 0,
 		"cS": 0,
@@ -951,17 +800,6 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/scripts/min/libs-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/scripts/min/libs-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/scripts/min/min/libs-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
