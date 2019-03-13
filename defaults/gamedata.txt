@@ -1,6 +1,6 @@
 BORK BORK BORK
 
-# BITSY VERSION 4.6
+# BITSY VERSION 5.5
 
 ! ROOM_FORMAT 1
 
@@ -106,4 +106,3 @@ You found a nice warm cup of tea
 
 VAR a
 42
-

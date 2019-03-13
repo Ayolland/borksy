@@ -1,0 +1,29 @@
+Usage:
+  (startWatch "timer id"): starts a timer with provided id
+  (stopWatch "timer id"): stops a timer with provided id
+  (resumeWatch "timer id"): resumes a timer with provided id
+  (sayWatch "timer id"): prints a timer with provided id
+
+There's also startWatchNow, stopWatchNow, and resumeWatchNow,
+which do the same things, but immediately instead of when dialog ends.
+
+Notes on edge/error cases:
+  (startWatch "existing id"): overwrites existing timer
+  (stopWatch "non-existent id"): does nothing
+  (stopWatch "stopped id"): does nothing
+  (resumeWatch "non-existent id"): starts new timer
+  (resumeWatch "running id"): does nothing
+  (sayWatch "non-existent id"): throws error
+
+HOW TO USE:
+1. Include hack using Borsky
+2. Customize `timeToString` function in hackOptions below as needed
+3. Add tags to your dialog as needed
+
+NOTE: This uses parentheses "()" instead of curly braces "{}" around function
+      calls because the Bitsy editor's fancy dialog window strips unrecognized
+      curly-brace functions from dialog text. To keep from losing data, write
+      these function calls with parentheses like the examples above.
+      For full editor integration, you'd *probably* also need to paste this
+      code at the end of the editor's `bitsy.js` file. Untested.
+*/

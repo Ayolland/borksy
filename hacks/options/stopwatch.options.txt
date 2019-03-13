@@ -1,0 +1,17 @@
+// function which returns the string which bitsy will print
+// parameter is a timer object with:
+//   start: value of Date.now() on startWatch
+//   end: value of Date.now() on stopWatch,
+//        or undefined if timer is running
+// current implementation is "minutes:seconds"
+
+timeToString: function (timer) {
+  var ms = getTimeDifferenceInMs(timer);
+  var time = new Date(ms);
+  var mins = time.getUTCMinutes();
+  var secs = time.getUTCSeconds();
+  if (secs < 10) {
+    secs = "0" + secs;
+  }
+  return mins + ":" + secs;
+}

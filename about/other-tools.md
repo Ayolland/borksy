@@ -5,4 +5,4 @@ If you haven't already, check out some of the other tools created to enhance Bit
 * [Fontsy](https://seansleblanc.itch.io/fontsy)
 * [Spritesy](https://tommakesstuff.itch.io/spritesy)
 * [Overworld Witchery](https://voec.github.io/witchery/)
-* [Bitspy (Bitsy Python Player)](https://github.com/Ragzouken/bitspy)
+* [Bitsy Audio](https://candle.itch.io/bitsy-audio)

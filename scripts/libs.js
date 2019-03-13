@@ -1,17 +1,9 @@
 var loadedFiles ={};
 
-// var fonts = {
-// 	"default" : "Default Bitsy Font by Adam LeDoux",
-// 	"beeblebrox" : "Beeblebrox by AYolland",
-// 	"blacksphinx" : "Blacksphinx by AYolland",
-// 	"greengable" : "Greengable by AYolland",
-// 	"hotcaps" : "Hotcaps by AYolland"
-// };
-
 var borksyInfo = {
-	templateVersion: '3.5',
-	lastUpdated: "September 9, 2018"
-}
+	templateVersion: '3.6',
+	lastUpdated: "March 9, 2019"
+};
 
 var hacks = {
 
@@ -25,7 +17,6 @@ var hacks = {
 		hidden: true,
 		order: 2,
 		conflicts: false,
-		python: 'yellow',
 		github: false,
 		forceLocal: false
 	},
@@ -40,7 +31,6 @@ var hacks = {
 		hidden: true,
 		order: 1,
 		conflicts: false,
-		python: 'yellow',
 		github: false,
 		forceLocal: false
 	},
@@ -55,7 +45,6 @@ var hacks = {
 		hidden: true,
 		order: 2,
 		conflicts: false,
-		python: 'red',
 		github: false,
 		forceLocal: false
 	},
@@ -70,8 +59,7 @@ var hacks = {
 		hidden: false,
 		order: 10,
 		conflicts: false,
-		python: 'green',
-		github: 'directional%20avatar.js',
+		github: 'directional-avatar.js',
 		forceLocal: false
 	},
 
@@ -85,8 +73,7 @@ var hacks = {
 		hidden: false,
 		order: 10,
 		conflicts: false,
-		python: 'green',
-		github: 'dynamic%20background.js',
+		github: 'dynamic-background.js',
 		forceLocal: false
 	},
 
@@ -100,7 +87,6 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red',
 		github: 'exit-from-dialog.js',
 		forceLocal: false
 	},
@@ -115,7 +101,6 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red',
 		github: 'end-from-dialog.js',
 		forceLocal: false
 	},
@@ -130,8 +115,7 @@ var hacks = {
 		hidden: false,
 		order: 2,
 		conflicts: false,
-		python: 'red',
-		github: 'javascript%20dialog.js',
+		github: 'javascript-dialog.js',
 		forceLocal: false
 	},
 
@@ -145,8 +129,7 @@ var hacks = {
 		hidden: false,
 		order: 10,
 		conflicts: false,
-		python: 'green',
-		github: 'transparent%20sprites.js',
+		github: 'transparent-sprites.js',
 		forceLocal: false
 	},
 
@@ -160,7 +143,6 @@ var hacks = {
 		hidden: false,
 		order: 2,
 		conflicts: false,
-		python: 'red',
 		github: 'logic-operators-extended.js',
 		forceLocal: false
 	},
@@ -175,8 +157,7 @@ var hacks = {
 		hidden: false,
 		order: 4,
 		conflicts: false,
-		python: 'red',
-		github: 'permanent%20items.js',
+		github: 'permanent-items.js',
 		forceLocal: false
 	},
 
@@ -190,8 +171,7 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red',
-		github: 'solid%20items.js',
+		github: 'solid-items.js',
 		forceLocal: false
 	},
 
@@ -205,8 +185,7 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red',
-		github: 'unique%20items.js',
+		github: 'unique-items.js',
 		forceLocal: false
 	},
 
@@ -220,7 +199,6 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'yellow',
 		github: 'bitsymuse.js',
 		forceLocal: false
 	},
@@ -235,9 +213,204 @@ var hacks = {
 		hidden: false,
 		order: 5,
 		conflicts: false,
-		python: 'red',
-		github: 'multi-sprite%20avatar.js',
+		github: 'multi-sprite-avatar.js',
 		forceLocal: false
-	}
+	},
+
+	"avatar-by-room": {
+		title: "👥 Avatar By Room",
+		description: "Allows changing the avatar in certain rooms.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'avatar-by-room.js',
+		forceLocal: false
+	},
+
+	"save": {
+		title: "💾 Save",
+		description: "Save/Load Your Game",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'save.js',
+		forceLocal: false
+	},
+
+	"character-portraits": {
+		title: "😽 Character Portraits",
+		description: "High Quality Anime Jpegs (or pngs i guess)",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'character-portraits.js',
+		forceLocal: false
+	},
+
+	"transparent-dialog": {
+		title: "👁️‍🗨️ Transparent Dialog",
+		description: "Makes the dialog box have a transparent background.",
+		author: "Sean S. LeBlanc",
+		readme: false,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'transparent-dialog.js',
+		forceLocal: false
+	},
+
+	"stopwatch": {
+		title: "⏱️ Stopwatch",
+		description: "Allows timing player actions.",
+		author: "Lenny Magner",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'stopwatch.js',
+		forceLocal: false
+	},
+
+	"paragraph-break": {
+		title: "📃 Paragraph Break",
+		description: "Adds paragraph breaks to the dialogue parser.",
+		author: "Sean S. LeBlanc and David Mowatt",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'paragraph-break.js',
+		forceLocal: false
+	},
+
+	"opaque-tiles": {
+		title: "⬛ Opaque Tiles",
+		description: "Adds tiles which hide the player.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'opaque-tiles.js',
+		forceLocal: false
+	},
+
+	"gamepad-input": {
+		title: "🎮 Gamepad Input",
+		description: "Adds HTML5 gamepad support.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 3,
+		conflicts: false,
+		github: 'gamepad-input.js',
+		forceLocal: false
+	},
+
+	"edit-image-from-dialog": {
+		title: "🖌 Edit Image from Dialog",
+		description: "Allows editing of sprites, items, and tiles from dialog.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'edit-image-from-dialog.js',
+		forceLocal: false
+	},
+
+	"edit-image-from-dialog": {
+		title: "🖌 Edit Image from Dialog",
+		description: "Allows editing of sprites, items, and tiles from dialog.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'edit-image-from-dialog.js',
+		forceLocal: false
+	},
+
+	"direction-in-dialog": {
+		title: "🔝 Direction in Dialog",
+		description: "Provides a variable with player direction.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'direction-in-dialog.js',
+		forceLocal: false
+	},
+
+	"dialog-pause": {
+		title: "💬 Dialog Pause",
+		description: "Allows adding pauses in between printing text.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'dialog-pause.js',
+		forceLocal: false
+	},
+
+	"dialog-jump": {
+		title: "🚀 Dialog Jump",
+		description: "Allows jumping from one dialog entry to another.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'dialog-jump.js',
+		forceLocal: false
+	},
+
+	"dialog-choices": {
+		title: "🔀 Dialog Choices",
+		description: "Allows binary dialog choices.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'dialog-choices.js',
+		forceLocal: false
+	},
 
 };
