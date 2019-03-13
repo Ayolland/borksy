@@ -9,6 +9,14 @@
 	],
 "creatorBuild": "29156",
 "files": {
+	"/.gitignore": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/.gitignore",
+		"oF": 0
+		},
 	"/about/about.html": {
 		"cB": 0,
 		"ft": 8192,
@@ -31,6 +39,25 @@
 		"oF": 0,
 		"oFM": 0,
 		"oS": 1,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/about/ayos-special-tips.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/about/ayos-special-tips.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
 		"pHT": 0,
 		"pME": 1,
 		"rFN": 0,

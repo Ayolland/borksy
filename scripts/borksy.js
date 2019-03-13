@@ -286,6 +286,14 @@ function loadAboutInfo(){
 			$tools.append($ajax2.responseText);
 			$aboutContent.append($tools);
 		});
+
+		var $ajax4 = $.ajax('about/ayos-special-tips.html');
+		$ajax4.done(function(){
+			var $tips = makeNewCollapsible( "AYo's Special Tips" );
+			$tips.append($ajax4.responseText);
+			$aboutContent.append($tips);
+		});
+
 	});
 	$ajax.fail(function(){
 		$aboutContent.html(error);
