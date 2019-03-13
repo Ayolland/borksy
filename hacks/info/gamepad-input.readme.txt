@@ -1,0 +1,5 @@
+Adds support for gamepad input.
+
+Directional input is mapped to the left and right analog sticks, the dpad, and the face buttons (e.g. ABXY).
+
+The same hold-to-move logic used for keyboard input is shared with the gamepad input.

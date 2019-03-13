@@ -286,6 +286,14 @@ function loadAboutInfo(){
 			$tools.append($ajax2.responseText);
 			$aboutContent.append($tools);
 		});
+
+		var $ajax4 = $.ajax('about/ayos-special-tips.html');
+		$ajax4.done(function(){
+			var $tips = makeNewCollapsible( "AYo's Special Tips" );
+			$tips.append($ajax4.responseText);
+			$aboutContent.append($tips);
+		});
+
 	});
 	$ajax.fail(function(){
 		$aboutContent.html(error);
@@ -719,8 +727,9 @@ function createHiddenHack(hackName,hackObj){
 }
 
 function createHackMenus($here){
-	$.each(hacks,function(hackName,hackObj){
-		loadThisHack(hackName,hackObj);
+	let alphabetizedHacks = Object.keys(hacks).sort();
+	$.each(alphabetizedHacks,function(index,hackName){
+		loadThisHack(hackName,hacks[hackName]);
 	});
 }
 

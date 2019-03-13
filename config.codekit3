@@ -9,6 +9,14 @@
 	],
 "creatorBuild": "29156",
 "files": {
+	"/.gitignore": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/.gitignore",
+		"oF": 0
+		},
 	"/about/about.html": {
 		"cB": 0,
 		"ft": 8192,
@@ -31,6 +39,25 @@
 		"oF": 0,
 		"oFM": 0,
 		"oS": 1,
+		"pHT": 0,
+		"pME": 1,
+		"rFN": 0,
+		"uCM": 0
+		},
+	"/about/ayos-special-tips.md": {
+		"cB": 0,
+		"cS": 0,
+		"eF": 1,
+		"eL": 1,
+		"ema": 1,
+		"eSQ": 1,
+		"ft": 4096,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/about/ayos-special-tips.html",
+		"oF": 0,
+		"oFM": 0,
+		"oS": 0,
 		"pHT": 0,
 		"pME": 1,
 		"rFN": 0,
@@ -728,6 +755,38 @@
 		"oAP": "/hacks/info/character-portraits.readme.txt",
 		"oF": 0
 		},
+	"/hacks/info/dialog-choices.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/dialog-choices.readme.txt",
+		"oF": 0
+		},
+	"/hacks/info/dialog-jump.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/dialog-jump.readme.txt",
+		"oF": 0
+		},
+	"/hacks/info/dialog-pause.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/dialog-pause.readme.txt",
+		"oF": 0
+		},
+	"/hacks/info/direction-in-dialog.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/direction-in-dialog.readme.txt",
+		"oF": 0
+		},
 	"/hacks/info/directional-avatar.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -744,6 +803,14 @@
 		"oAP": "/hacks/info/dynamic-background.readme.txt",
 		"oF": 0
 		},
+	"/hacks/info/edit-image-from-dialog.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/edit-image-from-dialog.readme.txt",
+		"oF": 0
+		},
 	"/hacks/info/end-from-dialog.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -758,6 +825,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/hacks/info/exit-from-dialog.readme.txt",
+		"oF": 0
+		},
+	"/hacks/info/gamepad-input.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/gamepad-input.readme.txt",
 		"oF": 0
 		},
 	"/hacks/info/javascript-dialog.readme.txt": {
@@ -784,6 +859,22 @@
 		"oAP": "/hacks/info/multi-sprite-avatar.readme.txt",
 		"oF": 0
 		},
+	"/hacks/info/opaque-tiles.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/opaque-tiles.readme.txt",
+		"oF": 0
+		},
+	"/hacks/info/paragraph-break.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/paragraph-break.readme.txt",
+		"oF": 0
+		},
 	"/hacks/info/permanent-items.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -806,6 +897,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/hacks/info/solid-items.readme.txt",
+		"oF": 0
+		},
+	"/hacks/info/stopwatch.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/stopwatch.readme.txt",
 		"oF": 0
 		},
 	"/hacks/info/unique-items.readme.txt": {
@@ -1131,6 +1230,14 @@
 		"oAP": "/hacks/options/multi-sprite-avatar.options.txt",
 		"oF": 0
 		},
+	"/hacks/options/opaque-tiles.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/options/opaque-tiles.options.txt",
+		"oF": 0
+		},
 	"/hacks/options/permanent-items.options.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -1153,6 +1260,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/hacks/options/solid-items.options.txt",
+		"oF": 0
+		},
+	"/hacks/options/stopwatch.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/options/stopwatch.options.txt",
 		"oF": 0
 		},
 	"/hacks/options/transparent-sprites.options.txt": {
