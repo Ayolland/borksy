@@ -44,6 +44,14 @@
 		"rFN": 0,
 		"uCM": 0
 		},
+	"/about/ayos-special-tips.html": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/about/ayos-special-tips.html",
+		"oF": 0
+		},
 	"/about/ayos-special-tips.md": {
 		"cB": 0,
 		"cS": 0,
@@ -159,138 +167,6 @@
 		"oF": 1,
 		"oS": 3
 		},
-	"/fonts/beeblebrox.png": {
-		"ft": 32768,
-		"iS": 4116,
-		"oA": 0,
-		"oAP": "/fonts/beeblebrox.png",
-		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
-		"oT": 1,
-		"q": 100
-		},
-	"/fonts/beggars.png": {
-		"ft": 32768,
-		"iS": 4132,
-		"oA": 0,
-		"oAP": "/fonts/beggars.png",
-		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
-		"oT": 1,
-		"q": 100
-		},
-	"/fonts/blacksphinx.png": {
-		"ft": 32768,
-		"iS": 4976,
-		"oA": 0,
-		"oAP": "/fonts/blacksphinx.png",
-		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
-		"oT": 1,
-		"q": 100
-		},
-	"/fonts/default.png": {
-		"ft": 32768,
-		"iS": 4266,
-		"oA": 0,
-		"oAP": "/fonts/default.png",
-		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
-		"oT": 1,
-		"q": 100
-		},
-	"/fonts/greengable.png": {
-		"ft": 32768,
-		"iS": 4219,
-		"oA": 0,
-		"oAP": "/fonts/greengable.png",
-		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
-		"oT": 1,
-		"q": 100
-		},
-	"/fonts/hotcaps.png": {
-		"ft": 32768,
-		"iS": 4106,
-		"oA": 0,
-		"oAP": "/fonts/hotcaps.png",
-		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
-		"oT": 1,
-		"q": 100
-		},
-	"/fonts/monogram.png": {
-		"ft": 32768,
-		"iS": 4071,
-		"oA": 0,
-		"oAP": "/fonts/monogram.png",
-		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
-		"oT": 1,
-		"q": 100
-		},
-	"/fonts/previews/beeblebrox.png": {
-		"ft": 32768,
-		"iS": 513,
-		"oA": 0,
-		"oAP": "/fonts/previews/beeblebrox.png",
-		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
-		"oT": 1,
-		"q": 100
-		},
-	"/fonts/previews/blacksphinx.png": {
-		"ft": 32768,
-		"iS": 561,
-		"oA": 0,
-		"oAP": "/fonts/previews/blacksphinx.png",
-		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
-		"oT": 1,
-		"q": 100
-		},
-	"/fonts/previews/default.png": {
-		"ft": 32768,
-		"iS": 507,
-		"oA": 0,
-		"oAP": "/fonts/previews/default.png",
-		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
-		"oT": 1,
-		"q": 100
-		},
-	"/fonts/previews/greengable.png": {
-		"ft": 32768,
-		"iS": 576,
-		"oA": 0,
-		"oAP": "/fonts/previews/greengable.png",
-		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
-		"oT": 1,
-		"q": 100
-		},
-	"/fonts/previews/hotcaps.png": {
-		"ft": 32768,
-		"iS": 479,
-		"oA": 0,
-		"oAP": "/fonts/previews/hotcaps.png",
-		"oF": 0,
-		"oIPL": 0,
-		"opt": 0,
-		"oT": 1,
-		"q": 100
-		},
 	"/hacks/dist/avatar-by-room.js": {
 		"bF": 0,
 		"ft": 64,
@@ -298,17 +174,6 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/avatar-by-room-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/basic-sfx.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/basic-sfx-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -324,17 +189,6 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"/hacks/dist/canvas-replacement.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/canvas-replacement-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
 	"/hacks/dist/character-portraits.js": {
 		"bF": 0,
 		"ft": 64,
@@ -342,39 +196,6 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/character-portraits-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/close-on-ending.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/close-on-ending-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/corrupt.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/corrupt-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/custom-text-effect.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/custom-text-effect-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -500,28 +321,6 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"/hacks/dist/favicon-from-sprite.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/favicon-from-sprite-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/follower.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/follower-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
 	"/hacks/dist/gamepad-input.js": {
 		"bF": 0,
 		"ft": 64,
@@ -529,17 +328,6 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/gamepad-input-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/itsy-bitsy.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/itsy-bitsy-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -573,28 +361,6 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/multi-sprite-avatar-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/noclip.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/noclip-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/online.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/online-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -665,28 +431,6 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"/hacks/dist/tracery-processing.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/tracery-processing-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/transitions.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/transitions-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
 	"/hacks/dist/transparent-dialog.js": {
 		"bF": 0,
 		"ft": 64,
@@ -705,17 +449,6 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/transparent-sprites-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/dist/twine-bitsy-comms.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/dist/min/twine-bitsy-comms-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -915,281 +648,6 @@
 		"oAP": "/hacks/info/unique-items.readme.txt",
 		"oF": 0
 		},
-	"/hacks/js-old/bitsymuse.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/js-old/min/bitsymuse-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/directional-avatar.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "/hacks/min/directional-avatar-min.js",
-		"oF": 2,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/dynamic-background.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "/hacks/min/dynamic-background-min.js",
-		"oF": 2,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/edit-image-at-runtime.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "/hacks/min/edit-image-at-runtime-min.js",
-		"oF": 2,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/end-from-dialog.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "/hacks/min/end-from-dialog-min.js",
-		"oF": 2,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/exit-from-dialog.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "/hacks/min/exit-from-dialog-min.js",
-		"oF": 2,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/javascript-dialog.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "/hacks/min/javascript dialog-min.js",
-		"oF": 2,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/kitsy-script-toolkit.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/js-old/min/kitsy-script-toolkit-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/logic-operators-extended.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "/hacks/min/logic-operators-extended-min.js",
-		"oF": 2,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/min/dynamic-background-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/js-old/min/min/dynamic-background-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/min/edit-image-at-runtime-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/js-old/min/min/edit-image-at-runtime-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/min/end-from-dialog-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/js-old/min/min/end-from-dialog-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/min/exit-from-dialog-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/js-old/min/min/exit-from-dialog-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/min/javascript-dialog-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/js-old/min/min/javascript-dialog-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/min/kitsy-script-toolkit-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/js-old/min/min/kitsy-script-toolkit-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/min/logic-operators-extended-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/js-old/min/min/logic-operators-extended-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/min/permanent-items-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/js-old/min/min/permanent-items-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/min/unique-items-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/js-old/min/min/unique-items-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/min/utils-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/js-old/min/min/utils-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/multi-sprite-avatar.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/js-old/min/multi-sprite-avatar-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/permanent-items.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "/hacks/min/permanent-items-min.js",
-		"oF": 2,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/solid-items.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "/hacks/min/solid-items-min.js",
-		"oF": 2,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/transparent-sprites.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "/hacks/min/transparent-sprites-min.js",
-		"oF": 2,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/unique-items.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 0,
-		"oA": 0,
-		"oAP": "/hacks/min/unique-items-min.js",
-		"oF": 2,
-		"sC": 1,
-		"tS": 0
-		},
-	"/hacks/js-old/utils.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/hacks/js-old/min/utils-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
 	"/hacks/options/avatar-by-room.options.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -1294,14 +752,6 @@
 		"oAP": "/index.html",
 		"oF": 0
 		},
-	"/plugins/pangram.txt": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/plugins/pangram.txt",
-		"oF": 0
-		},
 	"/README.md": {
 		"cB": 0,
 		"cS": 0,
@@ -1350,17 +800,6 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/scripts/min/libs-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
-	"/scripts/min/libs-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/scripts/min/min/libs-min-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
