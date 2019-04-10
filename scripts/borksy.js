@@ -15,8 +15,15 @@ function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filen
 	});
 }
 
-function loadTemplate(){
-	loadFileFromPath( borksyInfo.templateVersion + '.template.html','template/');
+// function loadTemplate(){
+// 	loadFileFromPath( borksyInfo.templateVersion + '.template.html','template/');
+// }
+
+function loadTemplates(){
+	for (var i = borksyInfo.templates.length - 1; i >= 0; i--) {
+		let filename = borksyInfo.templates[i] + '.html';
+		loadFileFromPath( filename,'template/');
+	}
 }
 
 function download(filename, text) {
@@ -804,7 +811,7 @@ $(document).ready(function(){
 	loadAboutInfo();
 	loadDefaults();
 	replaceElements();
-	loadTemplate();
+	loadTemplates();
 	$('#download-button').click(assembleAndDownloadFile);
 	$('#restore-button').click(restoreDefaults);
 	setHotKeys();

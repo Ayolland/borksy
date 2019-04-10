@@ -34,28 +34,17 @@
 					<label><input data-save data-borksy-replace-single="FILENAME" data-default-type="string" data-default="myBORKSYgame" data-clean-regex="^-|\W" name="filename" id="filename" class="half inline right">.html</label>
 				</section>
 
+				<section data-collapsible data-header="Bitsy Version" class="collapsible">
+					<p>This is the version of game data you wish to include with your game.</p>
+					<label id="template-label">
+						
+					</label>
+				</section>
+
 				<section data-collapsible data-header="Game Data" class="collapsible">
 					<p>This is the gamedata from Bitsy:</p>
 					<label>&lt;script type="bitsyGameData" id="exportedGameData"&gt;<textarea data-save data-borksy-replace-single="GAMEDATA" data-default-type="textfile" data-default="gamedata.txt" rows="4" cols="50" wrap="hard" name="gamedata" id="gamedata"></textarea>&lt;&#47;script&gt;</label>
 				</section>
-
-				<!-- <section data-collapsible data-header="Font Data" class="collapsible">
-					<p>This is the data for your game's font.<br>Either select a pre-loaded font or convert an image.</p>
-
-					<section data-collapsible data-header="Need More Info On Font Images?" class="collapsible">
-						<p>Bitsy uses its own pixelfont format. You can create your own Bitsy font by <a href="fonts/default.png" target="_blank" rel="noopener noreferrer">saving and modifying this image</a> with image-editing software. All characters must be black and white, all other colors will be ignored. The red lines are only for reference. Afterwards, use this tool to convert your image into fontdata Bitsy can understand.</p>
-					</section>
-
-					<section data-collapsible data-header="Custom Font Bitspy Friendliness:" class="collapsible python green">
-						<p>Using a custom font does not interfere with <a href='https://github.com/Ragzouken/bitspy'>the Python Player for Bitsy</a> (IE: <a href='https://candle.itch.io/bitsy-boutique'>The Bitsy Boutique</a>). Custom fonts will not appear, and the default font will be used, but your game will otherwise function normally.</p>
-					</section>
-
-					<label>Select Font:&nbsp;<span data-replace-element="createFontSelect"></span></label>
-					<span data-replace-element="createFontPreview"></span>
-					<label>Or Import Image File: <input type="file" id="font-file-input" accept="image/*" onchange="loadFontImage(this);"/></label>
-					<label>var fontdata = <textarea data-save data-borksy-replace-single="FONTDATA" data-default-type="font" data-default="default.png" rows="4" cols="50" wrap="hard" name="fontdata" id="fontdata"></textarea>;</label>
-					<input type="hidden" data-save data-default-type="string" data-default="default.png" value="" name="fontfilename" id="fontfilename">
-				</section> -->
 	
 				<section data-collapsible data-header="HTML / CSS Theme" class="collapsible">
 					<p>This is the HTML content of your game's body tag:<br>NOTE: the canvas#game tag is crucial for Bitsy to work.</p>

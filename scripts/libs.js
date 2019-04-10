@@ -2,7 +2,10 @@ var loadedFiles ={};
 
 var borksyInfo = {
 	templateVersion: '3.6',
-	lastUpdated: "March 9, 2019"
+	lastUpdated: "March 9, 2019",
+	templates: [
+		"3.6.template"
+	]
 };
 
 var hacks = {
