@@ -20,8 +20,14 @@ function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filen
 // }
 
 function loadTemplates(){
+	let templateSel = document.querySelector('select#template');
+	templateSel.innerHTML = "";
 	for (var i = borksyInfo.templates.length - 1; i >= 0; i--) {
-		let filename = borksyInfo.templates[i] + '.html';
+		let filename = borksyInfo.templates[i].filename + '.html';
+		let description = borksyInfo.templates[i].description;
+		let localStorageVer = localStorage.getItem('template');
+		let isDefault = borksyInfo.templates[i].isDefault;
+		templateSel.innerHTML += `<option value="${filename}" ${ isDefault ? "data-default-option" : "" }>${description}</option>`;
 		loadFileFromPath( filename,'template/');
 	}
 }
@@ -245,7 +251,8 @@ function assembleAndDownloadFile(){
 		saveThisData($(this));
 	});
 
-	var modifiedTemplate = loadedFiles[ borksyInfo.templateVersion + '.template.html'].repeat(1);
+	let templateName = localStorage.getItem('template');
+	var modifiedTemplate = loadedFiles[ templateName ].repeat(1);
 	var hackBundle = "";
 
 	modifiedTemplate = assembleSingles(modifiedTemplate);
@@ -350,6 +357,19 @@ function loadDefaultFont($thisField){
 	readFontFile($thisField.data('default'));
 }
 
+function loadDefaultOption($thisField){
+	let options = $thisField[0].options;
+	for (var i = options.length - 1; i >= 0; i--) {
+		$option = $(options[i]);
+		if ( $option.data('default-option') !== undefined ){
+			$thisField[0].selectedIndex = i;
+			break;
+		}
+	}
+	saveThisData($thisField);
+	setSaveTrigger($thisField);
+}
+
 function loadDefaults(checkSaveData){
 	checkSaveData = checkSaveData || true;
 	$('[data-save]').each(function(){
@@ -374,6 +394,9 @@ function loadDefaults(checkSaveData){
 				break;
 				case "font":
 					loadDefaultFont($thisField);
+				break;
+				case "option":
+					loadDefaultOption($thisField);
 				break;
 				case "hackOptions":
 					loadDefaultHackOptions($thisField);
@@ -809,9 +832,9 @@ function setHotKeys(){
 $(document).ready(function(){
 	activateCollapsibles();
 	loadAboutInfo();
+	loadTemplates();
 	loadDefaults();
 	replaceElements();
-	loadTemplates();
 	$('#download-button').click(assembleAndDownloadFile);
 	$('#restore-button').click(restoreDefaults);
 	setHotKeys();

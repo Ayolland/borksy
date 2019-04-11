@@ -1,10 +1,11 @@
 var loadedFiles ={};
 
 var borksyInfo = {
-	templateVersion: '3.6',
+	//templateVersion: '3.6',
 	lastUpdated: "March 9, 2019",
 	templates: [
-		"3.6.template"
+		{filename:"Bitsy.5.5", description: "Bitsy 5.5 (modified for Borksy)", isDefault: true},
+		{filename:"Test", description: "Test Template", isDefault: false}
 	]
 };
 
