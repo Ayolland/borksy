@@ -5,7 +5,7 @@ var borksyInfo = {
 	lastUpdated: "March 9, 2019",
 	templates: [
 		{filename:"Bitsy.5.5", description: "Bitsy 5.5 (modified for Borksy)", isDefault: true},
-		{filename:"Test", description: "Test Template", isDefault: false}
+		{filename:"BitsyHD.5.1", description: "Bitsy HD (modified Bitsy 5.1)", isDefault: false}
 	]
 };
 

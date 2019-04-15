@@ -105,12 +105,45 @@ function loadThisData($this){
 		$this.val(value);
 	}
 	console.log(" Got key: " + name + " from localStorage: " + shortenString(value) );
+	if (name === "template" && value.split('.')[0] === "BitsyHD"){
+		$('#mascot').addClass('borksyHD');
+		console.log("BitsyHD detected");
+	}
 }
 
 function setSaveTrigger($this){
+	let name = $this.attr('name');
+	let extraFunction = function(){};
+	switch (name){
+		case 'template':
+			loadHDGameData();
+			extraFunction = saveTemplateExtras;
+		break;
+		default:
+		break;
+	}
 	$this.change(function(){
 		saveThisData($this);
+		extraFunction($this);
 	});
+}
+
+function saveTemplateExtras($this){
+	let isHD = $this.val().split('.')[0] === "BitsyHD";
+	let noSavedGameData = localStorage.getItem('gamedate') == null;
+	let HDgamedata = loadedFiles['gamedata.HD.txt'];
+	let HDgamedataExists = HDgamedata !== undefined;
+	let $mascot = $('#mascot');
+	if (isHD){
+		$mascot.addClass('borksyHD');
+		if(noSavedGameData && HDgamedataExists){
+			let $gamedata = $('#gamedata');
+			$gamedata.val(HDgamedata);
+			saveThisData($gamedata);
+		}
+	} else {
+		$mascot.removeClass('borksyHD');
+	}
 }
 
 function checkHacksRequiring($thisHack){
@@ -251,7 +284,7 @@ function assembleAndDownloadFile(){
 		saveThisData($(this));
 	});
 
-	let templateName = localStorage.getItem('template');
+	let templateName = $('#template').val();
 	var modifiedTemplate = loadedFiles[ templateName ].repeat(1);
 	var hackBundle = "";
 
@@ -277,6 +310,15 @@ function togglePartyMode(){
 		$body.addClass('party');
 		alert('✨🌈 Party Mode Activated! 🌈✨');
 	}
+}
+
+function loadHDGameData(){
+	let filename = "gamedata.HD.txt";
+	let $ajax = $.ajax('defaults/' + filename);
+	$ajax.done(function(){
+		var response = $ajax.responseText;
+		loadedFiles[filename] = response;
+	});
 }
 
 function loadAboutInfo(){
@@ -366,7 +408,6 @@ function loadDefaultOption($thisField){
 			break;
 		}
 	}
-	saveThisData($thisField);
 	setSaveTrigger($thisField);
 }
 
@@ -427,6 +468,7 @@ function restoreDefaults(){
 				loadDefaults(false);
 			}
 		});
+		$('#mascot').removeClass('borksyHD');
 	}
 }
 

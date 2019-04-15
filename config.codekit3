@@ -133,6 +133,14 @@
 		"oF": 0,
 		"opt": 1
 		},
+	"/borksyHD.gif": {
+		"ft": 4194304,
+		"iS": 1193,
+		"oA": 0,
+		"oAP": "/borksyHD.gif",
+		"oF": 0,
+		"opt": 1
+		},
 	"/defaults/body.html": {
 		"cB": 0,
 		"ft": 8192,
@@ -147,6 +155,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/defaults/fontdata.txt",
+		"oF": 0
+		},
+	"/defaults/gamedata.HD.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/defaults/gamedata.HD.txt",
 		"oF": 0
 		},
 	"/defaults/gamedata.txt": {
@@ -804,6 +820,17 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"/scripts/min/libs-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/scripts/min/min/libs-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"/style/style.css": {
 		"aP": 1,
 		"bl": 0,
@@ -897,6 +924,30 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/template/3.6.template.html",
+		"oF": 0
+		},
+	"/template/Bitsy.5.5.html": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/template/Bitsy.5.5.html",
+		"oF": 0
+		},
+	"/template/BitsyHD.5.1.html": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/template/BitsyHD.5.1.html",
+		"oF": 0
+		},
+	"/template/Test.html": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/template/Test.html",
 		"oF": 0
 		},
 	"/testgames/testgame.html": {
