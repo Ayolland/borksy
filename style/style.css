@@ -127,7 +127,18 @@ header {
   header #mascot {
     width: 19vw;
     height: 19vw;
-    padding: 0 20px; }
+    padding: 0 20px;
+    background-image: url(../borksy.gif);
+    background-size: contain;
+    background-position: top center;
+    background-repeat: no-repeat;
+    -ms-interpolation-mode: nearest-neighbor;
+    /* IE */
+    image-rendering: -moz-crisp-edges;
+    /* FF 6.0+ */
+    image-rendering: pixelated; }
+    header #mascot.borksyHD {
+      background-image: url("../borksyHD.gif"); }
   header h1 {
     margin: 0;
     font-size: 6.3vw;

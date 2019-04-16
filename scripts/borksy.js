@@ -15,8 +15,21 @@ function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filen
 	});
 }
 
-function loadTemplate(){
-	loadFileFromPath( borksyInfo.templateVersion + '.template.html','template/');
+// function loadTemplate(){
+// 	loadFileFromPath( borksyInfo.templateVersion + '.template.html','template/');
+// }
+
+function loadTemplates(){
+	let templateSel = document.querySelector('select#template');
+	templateSel.innerHTML = "";
+	for (var i = borksyInfo.templates.length - 1; i >= 0; i--) {
+		let filename = borksyInfo.templates[i].filename + '.html';
+		let description = borksyInfo.templates[i].description;
+		let localStorageVer = localStorage.getItem('template');
+		let isDefault = borksyInfo.templates[i].isDefault;
+		templateSel.innerHTML += `<option value="${filename}" ${ isDefault ? "data-default-option" : "" }>${description}</option>`;
+		loadFileFromPath( filename,'template/');
+	}
 }
 
 function download(filename, text) {
@@ -92,12 +105,45 @@ function loadThisData($this){
 		$this.val(value);
 	}
 	console.log(" Got key: " + name + " from localStorage: " + shortenString(value) );
+	if (name === "template" && value.split('.')[0] === "BitsyHD"){
+		$('#mascot').addClass('borksyHD');
+		console.log("BitsyHD detected");
+	}
 }
 
 function setSaveTrigger($this){
+	let name = $this.attr('name');
+	let extraFunction = function(){};
+	switch (name){
+		case 'template':
+			loadHDGameData();
+			extraFunction = saveTemplateExtras;
+		break;
+		default:
+		break;
+	}
 	$this.change(function(){
 		saveThisData($this);
+		extraFunction($this);
 	});
+}
+
+function saveTemplateExtras($this){
+	let isHD = $this.val().split('.')[0] === "BitsyHD";
+	let noSavedGameData = localStorage.getItem('gamedate') == null;
+	let HDgamedata = loadedFiles['gamedata.HD.txt'];
+	let HDgamedataExists = HDgamedata !== undefined;
+	let $mascot = $('#mascot');
+	if (isHD){
+		$mascot.addClass('borksyHD');
+		if(noSavedGameData && HDgamedataExists){
+			let $gamedata = $('#gamedata');
+			$gamedata.val(HDgamedata);
+			saveThisData($gamedata);
+		}
+	} else {
+		$mascot.removeClass('borksyHD');
+	}
 }
 
 function checkHacksRequiring($thisHack){
@@ -238,7 +284,8 @@ function assembleAndDownloadFile(){
 		saveThisData($(this));
 	});
 
-	var modifiedTemplate = loadedFiles[ borksyInfo.templateVersion + '.template.html'].repeat(1);
+	let templateName = $('#template').val();
+	var modifiedTemplate = loadedFiles[ templateName ].repeat(1);
 	var hackBundle = "";
 
 	modifiedTemplate = assembleSingles(modifiedTemplate);
@@ -263,6 +310,15 @@ function togglePartyMode(){
 		$body.addClass('party');
 		alert('✨🌈 Party Mode Activated! 🌈✨');
 	}
+}
+
+function loadHDGameData(){
+	let filename = "gamedata.HD.txt";
+	let $ajax = $.ajax('defaults/' + filename);
+	$ajax.done(function(){
+		var response = $ajax.responseText;
+		loadedFiles[filename] = response;
+	});
 }
 
 function loadAboutInfo(){
@@ -343,6 +399,18 @@ function loadDefaultFont($thisField){
 	readFontFile($thisField.data('default'));
 }
 
+function loadDefaultOption($thisField){
+	let options = $thisField[0].options;
+	for (var i = options.length - 1; i >= 0; i--) {
+		$option = $(options[i]);
+		if ( $option.data('default-option') !== undefined ){
+			$thisField[0].selectedIndex = i;
+			break;
+		}
+	}
+	setSaveTrigger($thisField);
+}
+
 function loadDefaults(checkSaveData){
 	checkSaveData = checkSaveData || true;
 	$('[data-save]').each(function(){
@@ -367,6 +435,9 @@ function loadDefaults(checkSaveData){
 				break;
 				case "font":
 					loadDefaultFont($thisField);
+				break;
+				case "option":
+					loadDefaultOption($thisField);
 				break;
 				case "hackOptions":
 					loadDefaultHackOptions($thisField);
@@ -397,6 +468,7 @@ function restoreDefaults(){
 				loadDefaults(false);
 			}
 		});
+		$('#mascot').removeClass('borksyHD');
 	}
 }
 
@@ -802,9 +874,9 @@ function setHotKeys(){
 $(document).ready(function(){
 	activateCollapsibles();
 	loadAboutInfo();
+	loadTemplates();
 	loadDefaults();
 	replaceElements();
-	loadTemplate();
 	$('#download-button').click(assembleAndDownloadFile);
 	$('#restore-button').click(restoreDefaults);
 	setHotKeys();

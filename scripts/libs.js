@@ -1,8 +1,12 @@
 var loadedFiles ={};
 
 var borksyInfo = {
-	templateVersion: '3.6',
-	lastUpdated: "March 9, 2019"
+	lastUpdated: "April 16, 2019",
+	templates: [
+		{filename:"Bitsy.5.5", description: "Bitsy 5.5 (modified for Borksy)", isDefault: false},
+		{filename:"BitsyHD.5.1", description: "Bitsy HD + Borksy (modified from Bitsy 5.1)", isDefault: false},
+		{filename:"Bitsy.6.0", description: "Bitsy 6.0 (modified for Borksy)", isDefault: true}
+	]
 };
 
 var hacks = {
@@ -410,6 +414,20 @@ var hacks = {
 		order: 2,
 		conflicts: false,
 		github: 'dialog-choices.js',
+		forceLocal: false
+	},
+
+	"text-to-speech": {
+		title: "🗣 Text to Speech",
+		description: " Provides text-to-speech for bitsy dialog.",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'text-to-speech.js',
 		forceLocal: false
 	},
 

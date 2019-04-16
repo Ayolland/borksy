@@ -1,58 +1,94 @@
 /**
-💾
-@file save
-@summary save/load your game
+💱
+@file twine bitsy comms
+@summary interprocess communication for twine and bitsy
 @license MIT
-@version 1.0.2
+@version 1.1.2
 @requires 5.4
 @author Sean S. LeBlanc
 
 @description
-Introduces save/load functionality.
+Provides a method of easily integrating bitsy games into Twine games.
+Variables are automatically shared between the two engines,
+and dialog commands are provided which allow basic Twine commands
+to be executed from inside of a bitsy game.
 
-Includes:
-	- data that may be saved/loaded:
-		- current room/position within room
-		- inventory/items in rooms
-		- dialog variables
-		- dialog position
-	- basic autosave
-	- dialog tags:
-		- (save): saves game
-		- (load ""): loads game; parameter is text to show as title on load
-		- (clear): clears saved game
-		- (saveNow)/(loadNow)/(clearNow): instant varieties of above tags
+Twine has multiple story formats which function in different ways,
+and this hack requires integration code in both engines to work properly.
+Integrations for all the default Twine story formats are provided:
+	SugarCube v2 macro: https://github.com/seleb/bitsy-hacks/blob/master/src/twine-bitsy-comms/SugarCube-v2.js
+	SugarCube v1 macro: https://github.com/seleb/bitsy-hacks/blob/master/src/twine-bitsy-comms/SugarCube-v1.js
+	Harlowe (1 and 2) script: https://github.com/seleb/bitsy-hacks/blob/master/src/twine-bitsy-comms/Harlowe.js
+	Snowman script: https://github.com/seleb/bitsy-hacks/blob/master/src/twine-bitsy-comms/Snowman.js
+	Sugarcane/Responsive macro: https://github.com/seleb/bitsy-hacks/blob/master/src/twine-bitsy-comms/Sugarcane-Responsive.js
+	Jonah macro: https://github.com/seleb/bitsy-hacks/blob/master/src/twine-bitsy-comms/Jonah.js
+
+Feel free to request integrations for formats not provided here.
+
+Dialog command list:
+	(twinePlay "<Twine passage title>")
+	(twinePlayNow "<Twine passage title>")
+	(twineBack)
+	(twineBackNow)
+	(twineEval "<javascript directly evaluated in macro context>")
+	(twineEvalNow "<javascript directly evaluated in macro context>")
 
 Notes:
-	- Storage is implemented through browser localStorage: https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
-	  Remember to clear storage while working on a game, otherwise loading may prevent you from seeing your changes!
-	  You can use the `clearOnStart` option to do this for you when testing.
-	- This hack only tracks state which could be modified via vanilla bitsy features,
-	  i.e. compatability with other hacks that modify state varies;
-	  you may need to modify save/load to include/exclude things for compatability.
-	  (feel free to ask for help tailoring these to your needs!)
-	- There is only one "save slot"; it would not be too difficult to implement more,
-	  but it adds a lot of complexity that most folks probably don't need.
+	- eval support is commented out by default in the Twine integrations
+	- Snowman's history is handled differently from other formats;
+	  see: https://twinery.org/forum/discussion/3141/adding-an-undo-button-to-snowman-1-0-2
+	- shared variables have prefixed names by default to avoid accidental overwriting;
+	  see the hackOptions below for details
 
 HOW TO USE:
 1. Copy-paste this script into a script tag after the bitsy source
-2. Edit hackOptions below as needed
+2. Copy-paste the relevant story format integration script into the Story JavaScript section of your Twine game
+(optional)
+3. Add `.bitsy { ... }` CSS to the Story Stylesheet of your Twine game
+4. Edit the variable naming functions below as needed
 */
 this.hacks = this.hacks || {};
-this.hacks.save = (function (exports,bitsy) {
+(function (bitsy) {
 'use strict';
 var hackOptions = {
-	// when to save/load
-	autosaveInterval: Infinity, // time in milliseconds between autosaves (never autosaves if Infinity)
-	loadOnStart: true, // if true, loads save when starting
-	clearOnEnd: false, // if true, deletes save when restarting after reaching an ending
-	clearOnStart: false, // if true, deletes save when page is loaded (mostly for debugging)
-	// what to save/load
-	position: true, // if true, saves which room the player is in, and where they are in the room
-	variables: true, // if true, saves dialog variables (note: does not include item counts)
-	items: true, // if true, saves player inventory (i.e. item counts) and item placement in rooms
-	dialog: true, // if true, saves dialog position (for sequences etc)
-	key: 'snapshot', // where in localStorage to save/load data
+	// how dialog variables will be named when they are sent out
+	// default implementation is bitsy_<name>
+	variableNameOut: function (name) {
+		return 'bitsy_' + name;
+	},
+	// how item variables will be named when they are sent out
+	// default implementation is bitsy_item_<name or id>
+	// Note: items names in bitsy don't have to be unique,
+	// so be careful of items overwriting each other if you use this!
+	itemNameOut: function (id) {
+		return 'bitsy_item_' + (bitsy.item[id].name || id);
+	},
+	// how dialog variables will be named when they are sent in
+	// default implementation is twine_<name>
+	variableNameIn: function (name) {
+		return 'twine_' + name;
+	},
+
+	// the options below are for customizing the integration;
+	// if you're using one of the provided integrations, you can safely ignore them
+
+	// how info will be posted to external process
+	// default implementation is for iframe postMessage-ing to parent page
+	send: function (type, data) {
+		window.parent.postMessage({
+			type: type,
+			data: data
+		}, '*');
+	},
+	// how info will be received from external process
+	// default implementation is for parent page postMessage-ing into iframe
+	receive: function () {
+		window.addEventListener("message", function (event) {
+			var type = event.data.type;
+			var data = event.data.data;
+			receiveMessage(type, data);
+		}, false);
+	},
 };
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
@@ -371,141 +407,69 @@ function addDualDialogTag(tag, fn) {
 
 
 
-function save() {
-	var snapshot = {};
-	if (hackOptions.position) {
-		snapshot.room = bitsy.curRoom;
-		snapshot.x = bitsy.player().x;
-		snapshot.y = bitsy.player().y;
-	}
-	if (hackOptions.items) {
-		snapshot.inventory = bitsy.player().inventory;
-		snapshot.items = Object.entries(bitsy.room).map(function (room) {
-			return [room[0], room[1].items];
-		});
-	}
-	if (hackOptions.variables) {
-		snapshot.variables = bitsy.scriptInterpreter.GetVariableNames().map(function (variable) {
-			return [variable, bitsy.scriptInterpreter.GetVariable(variable)];
-		});
-	}
-	if (hackOptions.dialog) {
-		snapshot.sequenceIndices = bitsy.saveHack.sequenceIndices;
-	}
-	localStorage.setItem(hackOptions.key, JSON.stringify(snapshot));
-}
+var sending = true;
 
-function load() {
-	var snapshot = localStorage.getItem(hackOptions.key);
-	// if there's no save, abort load
-	if (!snapshot) {
-		return;
-	}
-	snapshot = JSON.parse(snapshot);
+// hook up incoming listener
+hackOptions.receive();
 
-	if (hackOptions.position) {
-		if (snapshot.room) {
-			bitsy.curRoom = bitsy.player().room = snapshot.room;
-		}
-		if (snapshot.x && snapshot.y) {
-			bitsy.player().x = snapshot.x;
-			bitsy.player().y = snapshot.y;
-		}
-	}
-	if (hackOptions.items) {
-		if (snapshot.inventory) {
-			bitsy.player().inventory = snapshot.inventory;
-		}
-		if (snapshot.items) {
-			snapshot.items.forEach(function (entry) {
-				bitsy.room[entry[0]].items = entry[1];
+function receiveMessage(type, data) {
+	switch (type) {
+		case 'variables':
+			var state = sending;
+			sending = false;
+			Object.entries(data).forEach(function (entry) {
+				var name = entry[0];
+				var value = entry[1];
+				bitsy.scriptInterpreter.SetVariable(hackOptions.variableNameIn(name), value);
 			});
-		}
-	}
-	if (hackOptions.variables && snapshot.variables) {
-		snapshot.variables.forEach(function (variable) {
-			bitsy.scriptInterpreter.SetVariable(variable[0], variable[1]);
-		});
-	}
-	if (hackOptions.dialog && snapshot.sequenceIndices) {
-		bitsy.saveHack.sequenceIndices = snapshot.sequenceIndices;
+			sending = state;
+			break;
+		default:
+			console.warn('Unhandled message from outside Bitsy:', type, data);
+			break;
 	}
 }
 
-function clear() {
-	localStorage.removeItem(hackOptions.key);
+// hook up outgoing var/item change listeners
+function sendVariable(name, value) {
+	hackOptions.send('variable', {
+		name: name,
+		value: value
+	});
 }
-
-function nodeKey(node) {
-	var key = node.key = node.key || node.options.map(function (option) {
-		return option.Serialize();
-	}).join('\n');
-	return key;
-}
-// setup global needed for saving/loading dialog progress
-bitsy.saveHack = {
-	sequenceIndices: {},
-	saveSeqIdx: function (node, index) {
-		var key = nodeKey(node);
-		bitsy.saveHack.sequenceIndices[key] = index;
-	},
-	loadSeqIdx: function (node) {
-		var key = nodeKey(node);
-		return bitsy.saveHack.sequenceIndices[key];
+after('onVariableChanged', function (name) {
+	if (sending) {
+		sendVariable(hackOptions.variableNameOut(name), bitsy.scriptInterpreter.GetVariable(name));
 	}
-};
-
-// use saved index to eval/calc next index if available
-inject(/(ptions\[index\].Eval)/g, `ptions[window.saveHack.loadSeqIdx(this) || index].Eval`);
-inject(/var next = index \+ 1;/g, `var next = (window.saveHack.loadSeqIdx(this) || index) + 1;`);
-// save index on changes
-inject(/(index = next);/g, `$1,window.saveHack.saveSeqIdx(this, next);`);
-inject(/(\tindex = 0);/g, `$1,window.saveHack.saveSeqIdx(this, 0);`);
-
-// hook up autosave
-var autosaveInterval;
-after('onready', function () {
-	if (hackOptions.autosaveInterval < Infinity) {
-		clearInterval(autosaveInterval);
-		autosaveInterval = setInterval(save, hackOptions.autosaveInterval);
+});
+after('onInventoryChanged', function (id) {
+	if (sending) {
+		sendVariable(hackOptions.itemNameOut(id), bitsy.player().inventory[id]);
 	}
 });
 
-// hook up autoload
-after('onready', function () {
-	if (hackOptions.loadOnStart) {
-		load();
-	}
+// say when bitsy has started
+// and initialize variables
+after('startExportedGame', function () {
+	bitsy.scriptInterpreter.GetVariableNames().forEach(function (name) {
+		sendVariable(hackOptions.variableNameOut(name), bitsy.scriptInterpreter.GetVariable(name));
+	});
+	Object.values(bitsy.item).forEach(function (item) {
+		sendVariable(hackOptions.itemNameOut(item.id), 0);
+	});
+	hackOptions.send('start', bitsy.title);
 });
 
-// hook up clear on end
-after('reset_cur_game', function () {
-	if (hackOptions.clearOnEnd) {
-		if (bitsy.isEnding) {
-			clear();
-		}
+// hook up dialog commands
+[
+	'eval',
+	'play',
+	'back'
+].forEach(function (command) {
+	function doCommand(environment, parameters) {
+		hackOptions.send(command, parameters[0]);
 	}
+	addDualDialogTag('twine' + command.substr(0, 1).toUpperCase() + command.substr(1), doCommand);
 });
 
-// hook up clear on start
-before('startExportedGame', function () {
-	if (hackOptions.clearOnStart) {
-		clear();
-	}
-});
-
-// hook up dialog functions
-function dialogLoad(environment, parameters) {
-	bitsy.reset_cur_game();
-	bitsy.dialogBuffer.EndDialog();
-	bitsy.startNarrating(parameters[0] || '');
-}
-addDualDialogTag('save', save);
-addDualDialogTag('load', dialogLoad);
-addDualDialogTag('clear', clear);
-
-exports.hackOptions = hackOptions;
-
-return exports;
-
-}({},window));
+}(window));

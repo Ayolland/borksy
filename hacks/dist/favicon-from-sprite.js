@@ -1,29 +1,33 @@
 /**
-❄
-@file unique items
-@summary items which, when picked up, remove all other instances of that item from the game
-@license MIT
-@version 2.0.0
-@author Sean S. LeBlanc
+🌐
+@file favicon-from-sprite
+@summary generate a browser favicon (tab icon) from a Bitsy sprite, including animation!
+@license WTFPL (do WTF you want)
+@version 3.0.0
+@requires Bitsy Version: 5.5
+@author @mildmojo
 
 @description
-Adds support for items which, when picked up,
-remove all other instances of that item from the game.
+Use one of your game sprites as the page favicon. It'll even animate if the
+sprite has multiple frames!
 
 HOW TO USE:
-1. Copy-paste this script into a script tag after the bitsy source
-2. Update the `itemIsUnique` function to match your needs
+  1. Copy-paste this script into a new script tag after the Bitsy source code.
+  2. Edit the configuration below to set which sprite and colors this mod
+     should use for the favicon. By default, it will render the player avatar
+     sprite in the first available palette's colors.
 */
 this.hacks = this.hacks || {};
-this.hacks.unique_items = (function (exports,bitsy) {
+this.hacks['favicon-from-sprite'] = (function (exports,bitsy) {
 'use strict';
 var hackOptions = {
-	itemIsUnique: function (item) {
-		//return item.name == 'tea'; // specific unique item
-		//return ['tea', 'flower', 'hat'].indexOf(item.name) !== -1; // specific unique item list
-		//return item.name.indexOf('UNIQUE') !== -1; // unique item flag in name
-		return true; // all items are unique
-	}
+	SPRITE_NAME: '', // Sprite name as entered in editor (not case-sensitive). Defaults to player avatar.
+	PALETTE_ID: 0, // Palette name or number to draw colors from. (Names not case-sensitive.)
+	BG_COLOR_NUM: 0, // Favicon background color in palette. 0 = BG, 1 = Tile, 2 = Sprite.
+	FG_COLOR_NUM: 2, // Favicon sprite color in palette. 0 = BG, 1 = Tile, 2 = Sprite.
+	PIXEL_PADDING: 1, // Padding around sprite, in Bitsy pixel units.
+	ROUNDED_CORNERS: true, // Should the favicon have rounded corners? (Suggest margin 2px if rounding.)
+	FRAME_DELAY: 400 // Frame change interval (ms) if sprite is animated. Use `Infinity` to disable.
 };
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
@@ -67,6 +71,22 @@ function inject(searchRegex, replaceString) {
 	newScriptTag.textContent = code;
 	scriptTag.insertAdjacentElement('afterend', newScriptTag);
 	scriptTag.remove();
+}
+
+/*
+Helper for getting image by name or id
+
+Args:
+	name: id or name of image to return
+	 map: map of images (e.g. `sprite`, `tile`, `item`)
+
+Returns: the image in the given map with the given name/id
+ */
+function getImage(name, map) {
+	var id = map.hasOwnProperty(name) ? name : Object.keys(map).find(function (e) {
+		return map[e].name == name;
+	});
+	return map[id];
 }
 
 /**
@@ -219,21 +239,116 @@ function _reinitEngine() {
 
 
 
+// CONFIGURATION FOR FAVICON
 
+// END CONFIG
 
-after('onInventoryChanged', function (id) {
-	var r;
-	if (hackOptions.itemIsUnique(bitsy.item[id])) {
-		for (r in bitsy.room) {
-			if (bitsy.room.hasOwnProperty(r)) {
-				r = bitsy.room[r];
-				r.items = r.items.filter(function (i) {
-					return i.id !== id;
-				});
+var FAVICON_SIZE = 16; // pixels
+var ONE_PIXEL_SCALED = FAVICON_SIZE / bitsy.tilesize;
+hackOptions.PIXEL_PADDING *= ONE_PIXEL_SCALED;
+var canvas = document.createElement('canvas');
+canvas.width = FAVICON_SIZE + 2 * hackOptions.PIXEL_PADDING;
+canvas.height = FAVICON_SIZE + 2 * hackOptions.PIXEL_PADDING;
+var ctx = canvas.getContext('2d');
+var faviconLinkElem;
+var faviconFrameURLs = [];
+var isStarted = false;
+
+after('load_game', function () {
+	if (isStarted) {
+		return;
+	}
+	isStarted = true;
+
+	var frameNum = 0;
+	var frames = getFrames(hackOptions.SPRITE_NAME);
+
+	faviconFrameURLs = frames.map(drawFrame);
+
+	// Only one frame? Don't even bother with the loop, just paint the icon once.
+	if (frames.length === 1) {
+		updateBrowserFavicon(faviconFrameURLs[0]);
+		return;
+	}
+
+	setInterval(function () {
+		frameNum = ++frameNum % frames.length;
+		updateBrowserFavicon(faviconFrameURLs[frameNum]);
+	}, hackOptions.FRAME_DELAY);
+});
+
+function drawFrame(frameData) {
+	var pal = getPalette(hackOptions.PALETTE_ID);
+	var bgColor = pal && pal[hackOptions.BG_COLOR_NUM] || [20, 20, 20];
+	var spriteColor = pal && pal[hackOptions.FG_COLOR_NUM] || [245, 245, 245];
+	var rounding_offset = hackOptions.ROUNDED_CORNERS ? ONE_PIXEL_SCALED : 0;
+
+	// Approximate a squircle-shaped background by drawing a fat plus sign with
+	// two overlapping rects, leaving some empty pixels in the corners.
+	var longSide = FAVICON_SIZE + 2 * hackOptions.PIXEL_PADDING;
+	var shortSide = longSide - rounding_offset * ONE_PIXEL_SCALED;
+	ctx.fillStyle = rgb(bgColor);
+	ctx.fillRect(rounding_offset,
+		0,
+		shortSide,
+		longSide);
+	ctx.fillRect(0,
+		rounding_offset,
+		longSide,
+		shortSide);
+
+	// Draw sprite foreground.
+	ctx.fillStyle = rgb(spriteColor);
+	for (var y in frameData) {
+		for (var x in frameData[y]) {
+			if (frameData[y][x] === 1) {
+				ctx.fillRect(x * ONE_PIXEL_SCALED + hackOptions.PIXEL_PADDING,
+					y * ONE_PIXEL_SCALED + hackOptions.PIXEL_PADDING,
+					ONE_PIXEL_SCALED,
+					ONE_PIXEL_SCALED);
 			}
 		}
 	}
-});
+
+	return canvas.toDataURL("image/x-icon");
+}
+
+function updateBrowserFavicon(dataURL) {
+	// Add or modify favicon link tag in document.
+	faviconLinkElem = faviconLinkElem || document.querySelector('#favicon');
+	if (!faviconLinkElem) {
+		faviconLinkElem = document.createElement('link');
+		faviconLinkElem.id = 'favicon';
+		faviconLinkElem.type = 'image/x-icon';
+		faviconLinkElem.rel = 'shortcut icon';
+		document.head.appendChild(faviconLinkElem);
+	}
+	faviconLinkElem.href = dataURL;
+}
+
+function getFrames(spriteName) {
+	var frames = bitsy.renderer.GetImageSource(getImage(spriteName || bitsy.playerId, bitsy.sprite).drw);
+	return frames;
+}
+
+function getPalette(id) {
+	var palId = id;
+
+	if (Number.isNaN(Number(palId))) {
+		// Search palettes by name. `palette` is an object with numbers as keys. Yuck.
+		// Palette names are case-insensitive to avoid Bitsydev headaches.
+		palId = Object.keys(bitsy.palette).find(function (i) {
+			return bitsy.palette[i].name && bitsy.palette[i].name.toLowerCase() === palId.toLowerCase();
+		});
+	}
+
+	return bitsy.getPal(palId);
+}
+
+// Expects values = [r, g, b]
+function rgb(values) {
+	return 'rgb(' + values.join(',') + ')';
+}
 
 exports.hackOptions = hackOptions;
 
