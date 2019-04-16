@@ -1,0 +1,2 @@
+automatic: true, // disable this to prevent TTS from playing for all dialog (i.e. you only want to use TTS via commands)
+hurried: true, // disable this to let bitsy text animations play out normally (not recommended for automatic mode)
