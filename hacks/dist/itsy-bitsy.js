@@ -1,29 +1,34 @@
 /**
-❄
-@file unique items
-@summary items which, when picked up, remove all other instances of that item from the game
+🕷
+@file itsy-bitsy
+@summary for when bitsy's not small enough
 @license MIT
-@version 2.0.0
+@version 1.1.1
+@requires Bitsy Version: 5.1
 @author Sean S. LeBlanc
 
 @description
-Adds support for items which, when picked up,
-remove all other instances of that item from the game.
+Modifies bitsy to run at 64x64 pixels instead of 256x256.
+
+Note that this means you have significantly less space for text
+(text in regular bitsy is twice as large as the rest of the game)
+To help deal with this, a hack option is provided which lets you
+customize how many rows of text the dialog boxes will show.
 
 HOW TO USE:
-1. Copy-paste this script into a script tag after the bitsy source
-2. Update the `itemIsUnique` function to match your needs
+	1. Copy-paste this script into a new script tag after the Bitsy source code.
+	2. edit hackOptions below as needed
+
+NOTE:
+The number of rows is the only provided hack option,
+but most of the numbers being replaced can be easily
+customized if you want slightly different sizes/positions.
 */
 this.hacks = this.hacks || {};
-this.hacks.unique_items = (function (exports,bitsy) {
+this.hacks['itsy-bitsy'] = (function (exports,bitsy) {
 'use strict';
 var hackOptions = {
-	itemIsUnique: function (item) {
-		//return item.name == 'tea'; // specific unique item
-		//return ['tea', 'flower', 'hat'].indexOf(item.name) !== -1; // specific unique item list
-		//return item.name.indexOf('UNIQUE') !== -1; // unique item flag in name
-		return true; // all items are unique
-	}
+	rows: 2, // number of rows per text box (bitsy default is 2)
 };
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
@@ -103,11 +108,14 @@ HOW TO USE:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
 
-// Ex: after('load_game', function run() { alert('Loaded!'); });
-function after(targetFuncName, afterFn) {
+
+// Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
+function inject$1(searchRegex, replaceString) {
 	var kitsy = kitsyInit();
-	kitsy.queuedAfterScripts[targetFuncName] = kitsy.queuedAfterScripts[targetFuncName] || [];
-	kitsy.queuedAfterScripts[targetFuncName].push(afterFn);
+	kitsy.queuedInjectScripts.push({
+		searchRegex: searchRegex,
+		replaceString: replaceString
+	});
 }
 
 function kitsyInit() {
@@ -221,19 +229,39 @@ function _reinitEngine() {
 
 
 
-after('onInventoryChanged', function (id) {
-	var r;
-	if (hackOptions.itemIsUnique(bitsy.item[id])) {
-		for (r in bitsy.room) {
-			if (bitsy.room.hasOwnProperty(r)) {
-				r = bitsy.room[r];
-				r.items = r.items.filter(function (i) {
-					return i.id !== id;
-				});
-			}
-		}
-	}
-});
+// rewrite main canvas width/height
+inject$1(/(width =) 128/, '$1 64');
+inject$1(/(height =) 128/, '$1 64');
+
+inject$1(/4(; \/\/this is stupid but necessary)/, '1$1'); // rewrite canvas scale
+inject$1(/(mapsize =) 16/, '$1 8'); // rewrite mapsize
+inject$1(/(\+ 1 >=) 16/g, '$1 8'); // rewrite right/down wall checks
+
+inject$1(/2(; \/\/using a different scaling factor for text feels like cheating\.\.\. but it looks better)/, '1$1'); // rewrite text scale
+
+// rewrite textbox info
+inject$1(/(var textboxInfo = {)[^]*?(};)/, '$1' + [
+	'img : null,',
+	'width : 62,',
+	'height : 64,',
+	'top : 1,',
+	'left : 1,',
+	'bottom : 1,',
+	'font_scale : 1,',
+	'padding_vert : 2,',
+	'arrow_height : 5'
+].join('\n') + '$2');
+inject$1(/(top = \()4/, '$1 1');
+inject$1(/(left = \()4/, '$1 1');
+
+inject$1(/(relativeFontHeight\(\) \*) 2/, '$1 ' + hackOptions.rows); // rewrite textbox height
+inject$1(/(pixelsPerRow =) 192/, '$1 62'); // rewrite hard-coded textbox wrap width
+inject$1(/(else if \(curRowIndex )== 0/g, '$1< ' + (hackOptions.rows - 1)); // rewrite hard-coded row limit
+
+// inject pixelated rendering style
+var style = document.createElement('style');
+style.innerText = '#game{ -ms-interpolation-mode: nearest-neighbor;image-rendering: -webkit-optimize-contrast;image-rendering: -moz-crisp-edges;image-rendering: -o-pixelated;image-rendering: pixelated; }';
+document.head.appendChild(style);
 
 exports.hackOptions = hackOptions;
 

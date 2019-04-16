@@ -1,29 +1,33 @@
 /**
-❄
-@file unique items
-@summary items which, when picked up, remove all other instances of that item from the game
+🔈
+@file basic sfx
+@summary "walk" and "talk" sound effect support
 @license MIT
 @version 2.0.0
 @author Sean S. LeBlanc
 
 @description
-Adds support for items which, when picked up,
-remove all other instances of that item from the game.
+Adds a basic sound effect API and hooks up "walk" and "talk" sound effects
+
+The walk sound effect plays every time the player moves.
+The talk sound effect plays every time the dialog box changes "pages" (e.g. when it opens, when the player presses a key to continue).
+
+Includes an optional feature which makes sound effect volume reduce if it was played recently.
 
 HOW TO USE:
-1. Copy-paste this script into a script tag after the bitsy source
-2. Update the `itemIsUnique` function to match your needs
+1. Place your "walk" and "talk" sound files somewhere relative to your bitsy html file
+2. Copy-paste `<audio id="walk" src="<relative path to your walk sound file>" preload="auto" volume="1.0"></audio>` into the <body> of your document
+3. Copy-paste `<audio id="talk" src="<relative path to your talk sound file>" preload="auto" volume="1.0"></audio>` into the <body> of your document
+4. Copy-paste this script into a script tag after the bitsy source
+
+Additional sounds can be added by by including more <audio> tags with different ids and calling `sounds.<sound id>()` as needed.
+If you'd like to trigger sounds from dialog, check out the bitsymuse hack!
 */
 this.hacks = this.hacks || {};
-this.hacks.unique_items = (function (exports,bitsy) {
+this.hacks.basic_sfx = (function (exports,bitsy) {
 'use strict';
 var hackOptions = {
-	itemIsUnique: function (item) {
-		//return item.name == 'tea'; // specific unique item
-		//return ['tea', 'flower', 'hat'].indexOf(item.name) !== -1; // specific unique item list
-		//return item.name.indexOf('UNIQUE') !== -1; // unique item flag in name
-		return true; // all items are unique
-	}
+	beNiceToEars: true // if `true`, reduces volume of recently played sound effects
 };
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
@@ -102,6 +106,15 @@ HOW TO USE:
   For more info, see the documentation at:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
+
+// Ex: before('load_game', function run() { alert('Loading!'); });
+//     before('show_text', function run(text) { return text.toUpperCase(); });
+//     before('show_text', function run(text, done) { done(text.toUpperCase()); });
+function before(targetFuncName, beforeFn) {
+	var kitsy = kitsyInit();
+	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
+	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
+}
 
 // Ex: after('load_game', function run() { alert('Loaded!'); });
 function after(targetFuncName, afterFn) {
@@ -221,18 +234,46 @@ function _reinitEngine() {
 
 
 
-after('onInventoryChanged', function (id) {
-	var r;
-	if (hackOptions.itemIsUnique(bitsy.item[id])) {
-		for (r in bitsy.room) {
-			if (bitsy.room.hasOwnProperty(r)) {
-				r = bitsy.room[r];
-				r.items = r.items.filter(function (i) {
-					return i.id !== id;
-				});
-			}
+var sounds = {};
+before('startExportedGame', function () {
+	function playSound(sound) {
+		if (hackOptions.beNiceToEars) {
+			// reduce volume if played recently
+			sound.volume = Math.min(1.0, Math.max(0.25, Math.pow((bitsy.prevTime - sound.lastPlayed) * .002, .5)));
+			sound.lastPlayed = bitsy.prevTime;
+		}
+
+		// play sound
+		if (sound.paused) {
+			sound.play();
+		} else {
+			sound.currentTime = 0;
 		}
 	}
+
+	// get sound elements
+	var s = document.getElementsByTagName("audio");
+	for (var i in s) {
+		if (s.hasOwnProperty(i)) {
+			i = s[i];
+			i.lastPlayed = -Infinity;
+			i.volume = 1;
+			sounds[i.id] = playSound.bind(undefined, i);
+		}
+	}
+});
+
+// walk hook
+after('onPlayerMoved', function () {
+	sounds.walk();
+});
+
+// talk hooks
+after('startDialog', function () {
+	sounds.talk();
+});
+after('dialogBuffer.FlipPage', function () {
+	sounds.talk();
 });
 
 exports.hackOptions = hackOptions;

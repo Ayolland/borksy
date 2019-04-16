@@ -1,3 +1,6 @@
-// if true, overrides scaling behaviour to reduce the setup time + memory use,
-// but the game will be blurry unless you've added pixelated image CSS
-scaling: false
+isTransparent: function (drawing) {
+	//return drawing.name == 'tea'; // specific transparent drawing
+	//return ['tea', 'flower', 'hat'].indexOf(drawing.name) !== -1; // specific transparent drawing list
+	//return drawing.name.indexOf('TRANSPARENT') !== -1; // transparent drawing flag in name
+	return true; // all drawings are transparent
+},

@@ -1,58 +1,55 @@
 /**
-💾
-@file save
-@summary save/load your game
+🗣
+@file text-to-speech
+@summary text-to-speech for bitsy dialog
 @license MIT
-@version 1.0.2
-@requires 5.4
+@version 1.0.0
+@requires 5.5
 @author Sean S. LeBlanc
 
 @description
-Introduces save/load functionality.
+Adds text-to-speech (TTS) to bitsy dialog.
 
-Includes:
-	- data that may be saved/loaded:
-		- current room/position within room
-		- inventory/items in rooms
-		- dialog variables
-		- dialog position
-	- basic autosave
-	- dialog tags:
-		- (save): saves game
-		- (load ""): loads game; parameter is text to show as title on load
-		- (clear): clears saved game
-		- (saveNow)/(loadNow)/(clearNow): instant varieties of above tags
+Support is included for both an automatic mode in which all dialog is run through TTS,
+and a manual mode in which TTS can be triggered via dialog commands.
+
+Due to how bitsy handles scripting, the automatic mode is only able to read a segment of dialog *after* it has finished printing.
+This means that normally you'd often be waiting a long time for text animation to complete before hearing the TTS.
+Players could manually skip the dialog animations to speed this up, but I've found that this is still quite stilted.
+The hackOption `hurried` is included below, which automatically skips text animation in order to help counteract this.
+
+Usage:
+	(ttsVoice "<pitch>,<rate>,<voice>")
+	(ttsVoiceNow "<pitch>,<rate>,<voice>")
+	(tts "<text queued to speak at end of dialog>")
+	(ttsNow "<text queued to speak immediately>")
+
+Example:
+	(ttsVoiceNow "0.5,0.5,Google UK English Male")
+	(ttsNow "This will be heard but not seen.")
 
 Notes:
-	- Storage is implemented through browser localStorage: https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
-	  Remember to clear storage while working on a game, otherwise loading may prevent you from seeing your changes!
-	  You can use the `clearOnStart` option to do this for you when testing.
-	- This hack only tracks state which could be modified via vanilla bitsy features,
-	  i.e. compatability with other hacks that modify state varies;
-	  you may need to modify save/load to include/exclude things for compatability.
-	  (feel free to ask for help tailoring these to your needs!)
-	- There is only one "save slot"; it would not be too difficult to implement more,
-	  but it adds a lot of complexity that most folks probably don't need.
+	- Because the TTS reads an entire page at once, voice parameters cannot be changed mid-line.
+	  If you're using multiple voices, make sure to only set voices at the start and/or end of pages.
+	- Unprovided voice parameters will default to the last value used
+	  e.g. if you lower the pitch, read a line, increase the rate, read another line,
+	  the second line will have both a lower pitch and a higher rate.
+	- Voice support varies a lot by platform!
+	  In general, you should only rely on a single voice (the locally provided synth) being available.
+	  In chrome, a number of remote synths are provided, but these will only work while online.
+	  You can use whatever voices are available, but be aware that they may fallback to default for players.
+	- To see what voices are available in your browser, run `speechSynthesis.getVoices()` in the console
 
 HOW TO USE:
 1. Copy-paste this script into a script tag after the bitsy source
 2. Edit hackOptions below as needed
 */
 this.hacks = this.hacks || {};
-this.hacks.save = (function (exports,bitsy) {
+this.hacks['text-to-speech'] = (function (exports,bitsy) {
 'use strict';
 var hackOptions = {
-	// when to save/load
-	autosaveInterval: Infinity, // time in milliseconds between autosaves (never autosaves if Infinity)
-	loadOnStart: true, // if true, loads save when starting
-	clearOnEnd: false, // if true, deletes save when restarting after reaching an ending
-	clearOnStart: false, // if true, deletes save when page is loaded (mostly for debugging)
-	// what to save/load
-	position: true, // if true, saves which room the player is in, and where they are in the room
-	variables: true, // if true, saves dialog variables (note: does not include item counts)
-	items: true, // if true, saves player inventory (i.e. item counts) and item placement in rooms
-	dialog: true, // if true, saves dialog position (for sequences etc)
-	key: 'snapshot', // where in localStorage to save/load data
+	automatic: true, // disable this to prevent TTS from playing for all dialog (i.e. you only want to use TTS via commands)
+	hurried: true, // disable this to let bitsy text animations play out normally (not recommended for automatic mode)
 };
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
@@ -371,138 +368,120 @@ function addDualDialogTag(tag, fn) {
 
 
 
-function save() {
-	var snapshot = {};
-	if (hackOptions.position) {
-		snapshot.room = bitsy.curRoom;
-		snapshot.x = bitsy.player().x;
-		snapshot.y = bitsy.player().y;
-	}
-	if (hackOptions.items) {
-		snapshot.inventory = bitsy.player().inventory;
-		snapshot.items = Object.entries(bitsy.room).map(function (room) {
-			return [room[0], room[1].items];
-		});
-	}
-	if (hackOptions.variables) {
-		snapshot.variables = bitsy.scriptInterpreter.GetVariableNames().map(function (variable) {
-			return [variable, bitsy.scriptInterpreter.GetVariable(variable)];
-		});
-	}
-	if (hackOptions.dialog) {
-		snapshot.sequenceIndices = bitsy.saveHack.sequenceIndices;
-	}
-	localStorage.setItem(hackOptions.key, JSON.stringify(snapshot));
+var speechSynthesis = window.speechSynthesis;
+if (!speechSynthesis) {
+	console.error('TTS not available!');
 }
 
-function load() {
-	var snapshot = localStorage.getItem(hackOptions.key);
-	// if there's no save, abort load
-	if (!snapshot) {
+var speaking = false;
+var toSpeak = [];
+var latestUtterance; // we need to maintain a reference to this, or a bug in the GC will prevent events from firing
+var lastPitch = 1;
+var lastRate = 1;
+var lastVoice = '';
+
+var voices = {};
+
+speechSynthesis.addEventListener('voiceschanged', function () {
+	var v = speechSynthesis.getVoices();
+	voices = v.reduce(function (result, voice) {
+		result[voice.name] = voice;
+		return result;
+	}, {});
+});
+
+function queueVoice(params) {
+	params = params || [];
+	var pitch = lastPitch = params[0] || lastPitch;
+	var rate = lastRate = params[1] || lastRate;
+	var voice = lastVoice = params[2] || lastVoice;
+	toSpeak.push({
+		pitch: pitch,
+		rate: rate,
+		voice: voice,
+		text: [],
+	});
+}
+
+function queueSpeak(text) {
+	if (!toSpeak.length) {
+		queueVoice();
+	}
+	toSpeak[toSpeak.length - 1].text.push(text);
+	if (!speaking) {
+		speak();
+	}
+}
+
+function speak() {
+	if (!toSpeak.length) {
 		return;
 	}
-	snapshot = JSON.parse(snapshot);
-
-	if (hackOptions.position) {
-		if (snapshot.room) {
-			bitsy.curRoom = bitsy.player().room = snapshot.room;
-		}
-		if (snapshot.x && snapshot.y) {
-			bitsy.player().x = snapshot.x;
-			bitsy.player().y = snapshot.y;
-		}
+	var s = toSpeak.shift();
+	speechSynthesis.cancel();
+	var text = s.text.join(' ');
+	if (!text) {
+		speak();
+		return;
 	}
-	if (hackOptions.items) {
-		if (snapshot.inventory) {
-			bitsy.player().inventory = snapshot.inventory;
-		}
-		if (snapshot.items) {
-			snapshot.items.forEach(function (entry) {
-				bitsy.room[entry[0]].items = entry[1];
-			});
-		}
-	}
-	if (hackOptions.variables && snapshot.variables) {
-		snapshot.variables.forEach(function (variable) {
-			bitsy.scriptInterpreter.SetVariable(variable[0], variable[1]);
+	console.log('TTS: ', text);
+	latestUtterance = new SpeechSynthesisUtterance(text);
+	latestUtterance.pitch = s.pitch;
+	latestUtterance.rate = s.rate;
+	latestUtterance.voice = voices[s.voice];
+	latestUtterance.onend = function () {
+		setTimeout(() => {
+			speaking = false;
+			if (toSpeak.length) {
+				speak();
+			}
 		});
-	}
-	if (hackOptions.dialog && snapshot.sequenceIndices) {
-		bitsy.saveHack.sequenceIndices = snapshot.sequenceIndices;
-	}
+	};
+	latestUtterance.onerror = function (error) {
+		speaking = false;
+		console.error(error);
+	};
+	speaking = true;
+	speechSynthesis.speak(latestUtterance);
 }
 
-function clear() {
-	localStorage.removeItem(hackOptions.key);
+// queue a newline when dialog ends in case you start a new dialog before the TTS finishes
+// this smooths out the TTS playback in cases without punctuation (which is common b/c bitsyfolk)
+after('dialogBuffer.EndDialog', function () {
+	queueVoice();
+});
+
+// save the character on dialog font characters so we can read it back post-render
+inject$1(/(function DialogFontChar\(font, char, effectList\) {)/, '$1\nthis.char = char;');
+
+// queue speaking based on whether we have finished rendering text
+var spoke = false;
+after('dialogRenderer.DrawNextArrow', function () {
+	if (hackOptions.automatic && !spoke) {
+		queueSpeak(bitsy.dialogBuffer.CurPage().map(a => a.map(i => i.char).join('')).join(' '));
+		spoke = true;
+	}
+});
+after('dialogBuffer.Continue', function () {
+	spoke = false;
+});
+
+// hook up hurried mode
+function hurry() {
+	if (hackOptions.hurried) {
+		bitsy.dialogBuffer.Skip();
+	}
 }
+after('dialogBuffer.FlipPage', hurry);
+after('startDialog', hurry);
 
-function nodeKey(node) {
-	var key = node.key = node.key || node.options.map(function (option) {
-		return option.Serialize();
-	}).join('\n');
-	return key;
-}
-// setup global needed for saving/loading dialog progress
-bitsy.saveHack = {
-	sequenceIndices: {},
-	saveSeqIdx: function (node, index) {
-		var key = nodeKey(node);
-		bitsy.saveHack.sequenceIndices[key] = index;
-	},
-	loadSeqIdx: function (node) {
-		var key = nodeKey(node);
-		return bitsy.saveHack.sequenceIndices[key];
-	}
-};
-
-// use saved index to eval/calc next index if available
-inject(/(ptions\[index\].Eval)/g, `ptions[window.saveHack.loadSeqIdx(this) || index].Eval`);
-inject(/var next = index \+ 1;/g, `var next = (window.saveHack.loadSeqIdx(this) || index) + 1;`);
-// save index on changes
-inject(/(index = next);/g, `$1,window.saveHack.saveSeqIdx(this, next);`);
-inject(/(\tindex = 0);/g, `$1,window.saveHack.saveSeqIdx(this, 0);`);
-
-// hook up autosave
-var autosaveInterval;
-after('onready', function () {
-	if (hackOptions.autosaveInterval < Infinity) {
-		clearInterval(autosaveInterval);
-		autosaveInterval = setInterval(save, hackOptions.autosaveInterval);
-	}
+// hook up dialog commands
+addDualDialogTag('ttsVoice', function (environment, parameters) {
+	queueVoice(parameters[0].split(','));
 });
-
-// hook up autoload
-after('onready', function () {
-	if (hackOptions.loadOnStart) {
-		load();
-	}
+addDualDialogTag('tts', function (environment, parameters) {
+	queueSpeak(parameters[0]);
 });
-
-// hook up clear on end
-after('reset_cur_game', function () {
-	if (hackOptions.clearOnEnd) {
-		if (bitsy.isEnding) {
-			clear();
-		}
-	}
-});
-
-// hook up clear on start
-before('startExportedGame', function () {
-	if (hackOptions.clearOnStart) {
-		clear();
-	}
-});
-
-// hook up dialog functions
-function dialogLoad(environment, parameters) {
-	bitsy.reset_cur_game();
-	bitsy.dialogBuffer.EndDialog();
-	bitsy.startNarrating(parameters[0] || '');
-}
-addDualDialogTag('save', save);
-addDualDialogTag('load', dialogLoad);
-addDualDialogTag('clear', clear);
 
 exports.hackOptions = hackOptions;
 

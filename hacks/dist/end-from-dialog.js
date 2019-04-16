@@ -3,7 +3,7 @@
 @file end-from-dialog
 @summary trigger an ending from dialog, including narration text
 @license WTFPL (do WTF you want)
-@version 3.2.1
+@version 3.2.2
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -105,7 +105,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 3.3.0
+@version 4.0.0
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -192,7 +192,13 @@ function applyAllHooks() {
 }
 
 function applyHook(functionName) {
-	var superFn = bitsy[functionName];
+	var functionNameSegments = functionName.split('.');
+	var obj = bitsy;
+	while (functionNameSegments.length > 1) {
+		obj = obj[functionNameSegments.shift()];
+	}
+	var lastSegment = functionNameSegments[0];
+	var superFn = obj[lastSegment];
 	var superFnLength = superFn ? superFn.length : 0;
 	var functions = [];
 	// start with befores
@@ -205,16 +211,15 @@ function applyHook(functionName) {
 	functions = functions.concat(bitsy.kitsy.queuedAfterScripts[functionName] || []);
 
 	// overwrite original with one which will call each in order
-	bitsy[functionName] = function () {
-		var args = [].slice.call(arguments);
+	obj[lastSegment] = function () {
+		var returnVal;
+		var args;
 		var i = 0;
-		runBefore.apply(this, arguments);
 
-		// Iterate thru sync & async functions. Run each, finally run original.
 		function runBefore() {
 			// All outta functions? Finish
 			if (i === functions.length) {
-				return;
+				return returnVal;
 			}
 
 			// Update args if provided.
@@ -225,14 +230,18 @@ function applyHook(functionName) {
 			if (functions[i].length > superFnLength) {
 				// Assume funcs that accept more args than the original are
 				// async and accept a callback as an additional argument.
-				functions[i++].apply(this, args.concat(runBefore.bind(this)));
+				return functions[i++].apply(this, args.concat(runBefore.bind(this)));
 			} else {
 				// run synchronously
-				var newArgs = functions[i++].apply(this, args);
-				newArgs = newArgs && newArgs.length ? newArgs : args;
-				runBefore.apply(this, newArgs);
+				returnVal = functions[i++].apply(this, args);
+				if (returnVal && returnVal.length) {
+					args = returnVal;
+				}
+				return runBefore.apply(this, args);
 			}
 		}
+
+		return runBefore.apply(this, arguments);
 	};
 }
 

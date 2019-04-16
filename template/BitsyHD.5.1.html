@@ -1,8 +1,13 @@
 <!DOCTYPE HTML>
 <html>
 
+<!-- Borksy 4.0 -->
+<!-- Bitsy HD ~> Bitsy 5.1 -->
+
 <!-- HEADER -->
 <head>
+
+<meta charset="UTF-8">
 
 <title>BORKSY-TITLE</title>
 
@@ -202,28 +207,191 @@ function rgbToHsl(r, g, b){
 </script>
 
 <script>
-function Font() {
+/*
+TODO:
+- untangle local & external resource use in font manager (still more to do here)
+*/
 
+function FontManager(useExternalResources) {
 
-this.getData = function() {
-	return fontdata;
+if (useExternalResources === undefined || useExternalResources === null) {
+	useExternalResources = false;
 }
 
-var charSize = 6 * 8;
-var unicodeToAsciiExtended = "\u0000\u263A\u263B\u2665\u2666\u2663\u2660\u2022\u25D8\u25CB\u25D9\u2642\u2640\u266A\u266B\u263C\u25BA\u25C4\u2195\u203C\u00B6\u00A7\u25AC\u21A8\u2191\u2193\u2192\u2190\u221F\u2194\u25B2\u25BC\u0020\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002a\u002b\u002c\u002d\u002e\u002f\u0030\u0031\u0032\u0033\u0034\u0035\u0036\u0037\u0038\u0039\u003a\u003b\u003c\u003d\u003e\u003f\u0040\u0041\u0042\u0043\u0044\u0045\u0046\u0047\u0048\u0049\u004a\u004b\u004c\u004d\u004e\u004f\u0050\u0051\u0052\u0053\u0054\u0055\u0056\u0057\u0058\u0059\u005a\u005b\u005c\u005d\u005e\u005f\u0060\u0061\u0062\u0063\u0064\u0065\u0066\u0067\u0068\u0069\u006a\u006b\u006c\u006d\u006e\u006f\u0070\u0071\u0072\u0073\u0074\u0075\u0076\u0077\u0078\u0079\u007a\u007b\u007c\u007d\u007e\u007f\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00a2\u00a3\u00a5\u20a7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u2310\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u2561\u2562\u2556\u2555\u2563\u2551\u2557\u255d\u255c\u255b\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u255e\u255f\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u2567\u2568\u2564\u2565\u2559\u2558\u2552\u2553\u256b\u256a\u2518\u250c\u2588\u2584\u258c\u2590\u2580\u03b1\u00df\u0393\u03c0\u03a3\u03c3\u00b5\u03c4\u03a6\u0398\u03a9\u03b4\u221e\u03c6\u03b5\u2229\u2261\u00b1\u2265\u2264\u2320\u2321\u00f7\u2248\u00b0\u2219\u00b7\u221a\u207f\u00b2\u25a0\u00a0".split("").reduce(function(obj, char, idx){
-    obj[char] = idx;
-    return obj;
-}, {});
+var self = this;
 
-this.getChar = function(char) {
-    var startIndex = unicodeToAsciiExtended[char] * charSize;
-    return fontdata.slice( startIndex, startIndex + charSize );
+var fontExtension = ".bitsyfont";
+this.GetExtension = function() {
+	return fontExtension;
 }
 
-var fontdata = BORKSY-FONTDATA;
+// place to store font data that is part of the local game data
+var localResources = {};
 
+// place to store font data fetched from a server (only used in editor)
+var externalResources = null;
+if (useExternalResources) {
+	externalResources = new ResourceLoader();// NOTE : this class doesn't exist in exported game
+}
 
-} // Font()
+this.LoadResources = function(filenames, onLoadAll) {
+	if (!useExternalResources)
+		return;
+
+	// TODO : is this being called too many times?
+	var onLoad = function() {
+		var count = externalResources.getResourceLoadedCount();
+
+		if (count >= filenames.length && onLoadAll != null) {
+			onLoadAll();
+		}
+	}
+
+	for (var i = 0; i < filenames.length; i++) {
+		externalResources.load("bitsyfont", filenames[i], onLoad);
+	}
+}
+
+// manually add resource
+this.AddResource = function(filename, fontdata) {
+	if (useExternalResources) {
+		externalResources.set(filename, fontdata);
+	}
+	else {
+		localResources[filename] = fontdata;
+	}
+}
+
+this.ContainsResource = function(filename) {
+	if (useExternalResources) {
+		return externalResources.contains(filename);
+	}
+	else {
+		return localResources[filename] != null;
+	}
+}
+
+function GetData(fontName) {
+	if (useExternalResources) {
+		return externalResources.get(fontName + fontExtension);
+	}
+	else {
+		return localResources[fontName + fontExtension];
+	}
+}
+this.GetData = GetData;
+
+function Create(fontData) {
+	return new Font(fontData);
+}
+this.Create = Create;
+
+this.Get = function(fontName) {
+	var fontData = self.GetData(fontName);
+	return self.Create(fontData);
+}
+
+function Font(fontData) {
+	var name = "unknown";
+	var width = 6; // default size so if you have NO font or an invalid font it displays boxes
+	var height = 8;
+	var fontdata = {};
+	var invalidCharData = [];
+
+	this.getName = function() {
+		return name;
+	}
+
+	this.getData = function() {
+		return fontdata;
+	}
+
+	this.getWidth = function() {
+		return width;
+	}
+
+	this.getHeight = function() {
+		return height;
+	}
+
+	this.hasChar = function(char) {
+		var codepoint = char.charCodeAt(0);
+		return fontdata[codepoint] != null;
+	}
+
+	this.getChar = function(char) {
+
+		var codepoint = char.charCodeAt(0);
+
+		if (fontdata[codepoint] != null) {
+			return fontdata[codepoint];
+		}
+		else {
+			return invalidCharData;
+		}
+	}
+
+	function parseFont(fontData) {
+		if (fontData == null)
+			return;
+
+		var lines = fontData.split("\n");
+
+		var isReadingChar = false;
+		var curCharLineCount = 0;
+		var curCharCode = 0;
+
+		for (var i = 0; i < lines.length; i++) {
+			var line = lines[i];
+			if (!isReadingChar) {
+				// READING NON CHARACTER DATA LINE
+				var args = line.split(" ");
+				if (args[0] == "FONT") {
+					name = args[1];
+				}
+				else if (args[0] == "SIZE") {
+					width = parseInt(args[1]);
+					height = parseInt(args[2]);
+				}
+				else if (args[0] == "CHAR") {
+					isReadingChar = true;
+					curCharLineCount = 0;
+					curCharCode = parseInt(args[1]);
+					fontdata[curCharCode] = [];
+				}
+			}
+			else {
+				// READING CHARACTER DATA LINE
+				for (var j = 0; j < width; j++)
+				{
+					fontdata[curCharCode].push( parseInt(line[j]) );
+				}
+
+				curCharLineCount++;
+				if (curCharLineCount >= height) {
+					isReadingChar = false;
+				}
+			}
+		}
+
+		// init invalid character box
+		invalidCharData = [];
+		for (var y = 0; y < height; y++) {
+			for (var x = 0; x < width; x++) {
+				if (x < width-1 && y < height-1) {
+					invalidCharData.push(1);
+				}
+				else {
+					invalidCharData.push(0);
+				}
+			}
+		}
+	}
+
+	parseFont(fontData);
+}
+
+} // FontManager
 </script>
 
 <script>
@@ -362,8 +530,13 @@ var Utils = function() {
 
 
 /* BUILT-IN FUNCTIONS */ // TODO: better way to encapsulate these?
-function sayFunc(environment,parameters,onReturn) {
-	// console.log("SAY FUNC");
+function deprecatedFunc(environment,parameters,onReturn) {
+	console.log("BITSY SCRIPT WARNING: Tried to use deprecated function");
+	onReturn(null);
+}
+
+function printFunc(environment,parameters,onReturn) {
+	// console.log("PRINT FUNC");
 	// console.log(parameters);
 	if( parameters[0] != undefined && parameters[0] != null ) {
 		// console.log(parameters[0]);
@@ -377,14 +550,43 @@ function sayFunc(environment,parameters,onReturn) {
 		}; // called when dialog is finished printing
 		environment.GetDialogBuffer().AddText( textStr, onFinishHandler );
 	}
-	else
+	else {
 		onReturn(null);
+	}
 }
 
 function linebreakFunc(environment,parameters,onReturn) {
 	// console.log("LINEBREAK FUNC");
 	environment.GetDialogBuffer().AddLinebreak();
 	onReturn(null);
+}
+
+function printDrawingFunc(environment,parameters,onReturn) {
+	var drawingId = parameters[0];
+	environment.GetDialogBuffer().AddDrawing( drawingId, function() {
+		onReturn(null);
+	});
+}
+
+function printSpriteFunc(environment,parameters,onReturn) {
+	var spriteId = parameters[0];
+	if(names.sprite.has(spriteId)) spriteId = names.sprite.get(spriteId); // id is actually a name
+	var drawingId = sprite[spriteId].drw;
+	printDrawingFunc(environment, [drawingId], onReturn);
+}
+
+function printTileFunc(environment,parameters,onReturn) {
+	var tileId = parameters[0];
+	if(names.tile.has(tileId)) tileId = names.tile.get(tileId); // id is actually a name
+	var drawingId = tile[tileId].drw;
+	printDrawingFunc(environment, [drawingId], onReturn);
+}
+
+function printItemFunc(environment,parameters,onReturn) {
+	var itemId = parameters[0];
+	if(names.item.has(itemId)) itemId = names.item.get(itemId); // id is actually a name
+	var drawingId = item[itemId].drw;
+	printDrawingFunc(environment, [drawingId], onReturn);
 }
 
 function itemFunc(environment,parameters,onReturn) {
@@ -525,7 +727,8 @@ var Environment = function() {
 	this.GetDialogBuffer = function() { return dialogBuffer; };
 
 	var functionMap = new Map();
-	functionMap.set("say", sayFunc);
+	functionMap.set("print", printFunc);
+	functionMap.set("say", deprecatedFunc);
 	functionMap.set("br", linebreakFunc);
 	functionMap.set("item", itemFunc);
 	functionMap.set("rbw", rainbowFunc);
@@ -534,6 +737,9 @@ var Environment = function() {
 	functionMap.set("clr3", color3Func);
 	functionMap.set("wvy", wavyFunc);
 	functionMap.set("shk", shakyFunc);
+	functionMap.set("printSprite", printSpriteFunc);
+	functionMap.set("printTile", printTileFunc);
+	functionMap.set("printItem", printItemFunc);
 
 	this.HasFunction = function(name) { return functionMap.has(name); };
 	this.EvalFunction = function(name,parameters,onReturn) {
@@ -543,10 +749,6 @@ var Environment = function() {
 	}
 
 	var variableMap = new Map();
-
-	// Borksy modification
-	// Makes bitsy varaibles are globally available
-	window.bitsyVariableMap = variableMap;
 
 	this.HasVariable = function(name) { return variableMap.has(name); };
 	this.GetVariable = function(name) { return variableMap.get(name); };
@@ -763,9 +965,9 @@ var FuncNode = function(name,arguments) {
 
 	this.Serialize = function(depth) {
 		var isDialogBlock = this.parent.mode && this.parent.mode === BlockMode.Dialog;
-		if(isDialogBlock && this.name === "say") {
-			// TODO this could cause problems with "real" say functions
-			return this.arguments[0].value; // first argument should be the text of the {say} func
+		if(isDialogBlock && this.name === "print") {
+			// TODO this could cause problems with "real" print functions
+			return this.arguments[0].value; // first argument should be the text of the {print} func
 		}
 		else if(isDialogBlock && this.name === "br") {
 			return "\n";
@@ -1179,7 +1381,7 @@ var Parser = function(env) {
 				// console.log("text!!");
 				// console.log([text]);
 
-				state.curNode.AddChild( new FuncNode( "say", [new LiteralNode(text)] ) );
+				state.curNode.AddChild( new FuncNode( "print", [new LiteralNode(text)] ) );
 				text = "";
 
 				hasDialog = true;
@@ -1690,16 +1892,39 @@ this.CreateBuffer = function() {
 };
 
 var DialogRenderer = function() {
+
+	// TODO : refactor this eventually? remove everything from struct.. avoid the defaults?
 	var textboxInfo = {
 		img : null,
-		width : 104,
-		height : 8+4+2+5, //8 for text, 4 for top-bottom padding, 2 for line padding, 5 for arrow
+		width : 232,
+		height : (8+4+2) +5, //8 for text, 4 for top-bottom padding, 2 for line padding, 5 for arrow,
 		top : 12,
 		left : 12,
 		bottom : 12, //for drawing it from the bottom
+		font_scale : 1, // we draw font at half-size compared to everything else
+		padding_vert : 2,
+		padding_horz : 4,
+		arrow_height : 5,
 	};
-	
-	var font = new Font();
+
+	var font = null;
+	this.SetFont = function(f) {
+		font = f;
+		textboxInfo.height = (textboxInfo.padding_vert * 3) + (relativeFontHeight() * 2) + textboxInfo.arrow_height;
+		textboxInfo.img = context.createImageData(textboxInfo.width*scale, textboxInfo.height*scale);
+	}
+
+	function textScale() {
+		return scale * textboxInfo.font_scale;
+	}
+
+	function relativeFontWidth() {
+		return Math.ceil( font.getWidth() * textboxInfo.font_scale );
+	}
+
+	function relativeFontHeight() {
+		return Math.ceil( font.getHeight() * textboxInfo.font_scale );
+	}
 
 	var context = null;
 	this.AttachContext = function(c) {
@@ -1772,16 +1997,23 @@ var DialogRenderer = function() {
 	};
 
 	var text_scale = 2; //using a different scaling factor for text feels like cheating... but it looks better
-	this.DrawChar = function(char, row, col) {
+	this.DrawChar = function(char, row, col, leftPos) {
 		char.offset = {x:0, y:0};
+
 		char.SetPosition(row,col);
 		char.ApplyEffects(effectTime);
-		var charData = font.getChar( char.char );
-		var top = (4 * scale) + (row * 2 * scale) + (row * 8 * text_scale) + Math.floor( char.offset.y );
-		var left = (4 * scale) + (col * 6 * text_scale) + Math.floor( char.offset.x );
-		for (var y = 0; y < 8; y++) {
-			for (var x = 0; x < 6; x++) {
-				var i = (y * 6) + x;
+
+		var charData = char.bitmap;
+
+		var top = (4 * scale) + (row * 2 * scale) + (row * font.getHeight() * text_scale) + Math.floor( char.offset.y );
+		var left = (4 * scale) + (leftPos * text_scale) + Math.floor( char.offset.x );
+
+		var debug_r = Math.random() * 255;
+
+		for (var y = 0; y < char.height; y++) {
+			for (var x = 0; x < char.width; x++) {
+
+				var i = (y * char.width) + x;
 				if ( charData[i] == 1 ) {
 
 					//scaling nonsense
@@ -1794,18 +2026,31 @@ var DialogRenderer = function() {
 							textboxInfo.img.data[pxl+3] = char.color.a;
 						}
 					}
-
-					
 				}
+				// else {
+				// 	// DEBUG
+
+				// 	//scaling nonsense
+				// 	for (var sy = 0; sy < text_scale; sy++) {
+				// 		for (var sx = 0; sx < text_scale; sx++) {
+				// 			var pxl = 4 * ( ((top+(y*text_scale)+sy) * (textboxInfo.width*scale)) + (left+(x*text_scale)+sx) );
+				// 			textboxInfo.img.data[pxl+0] = debug_r;
+				// 			textboxInfo.img.data[pxl+1] = 0;
+				// 			textboxInfo.img.data[pxl+2] = 0;
+				// 			textboxInfo.img.data[pxl+3] = 255;
+				// 		}
+				// 	}
+				// }
+
 			}
 		}
-		
+
 		// call printHandler for character
 		char.OnPrint();
 	};
 
 	var effectTime = 0; // TODO this variable should live somewhere better
-	this.Draw = function(buffer,dt) { // TODO move out of the buffer?? (into say a dialog box renderer)
+	this.Draw = function(buffer,dt) {
 		effectTime += dt;
 
 		this.ClearTextbox();
@@ -1831,6 +2076,10 @@ var DialogRenderer = function() {
 		effectTime = 0;
 		// TODO - anything else?
 	}
+
+	// this.CharsPerRow = function() {
+	// 	return textboxInfo.charsPerRow;
+	// }
 }
 
 
@@ -1843,7 +2092,12 @@ var DialogBuffer = function() {
 	var nextCharMaxTime = 50; // in milliseconds
 	var isDialogReadyToContinue = false;
 	var activeTextEffects = [];
-	
+	var font = null;
+
+	this.SetFont = function(f) {
+		font = f;
+	}
+
 	this.CurPage = function() { return buffer[ pageIndex ]; };
 	this.CurRow = function() { return this.CurPage()[ rowIndex ]; };
 	this.CurChar = function() { return this.CurRow()[ charIndex ]; };
@@ -1857,10 +2111,17 @@ var DialogBuffer = function() {
 			var row = this.CurPage()[i];
 			var charCount = (i == rowIndex) ? charIndex+1 : row.length;
 			// console.log(charCount);
+
+			var leftPos = 0;
+
 			for(var j = 0; j < charCount; j++) {
 				var char = row[j];
-				if(char)
-					handler( char, i /*rowIndex*/, j /*colIndex*/ );
+				if(char) {
+					// handler( char, i /*rowIndex*/, j /*colIndex*/ );
+					handler(char, i /*rowIndex*/, j /*colIndex*/, leftPos)
+
+					leftPos += char.width;
+				}
 			}
 		}
 	}
@@ -1970,22 +2231,27 @@ var DialogBuffer = function() {
 
 	this.CanContinue = function() { return isDialogReadyToContinue; };
 
-	function DialogChar(char,effectList) {
-		this.char = char;
+	function DialogChar(effectList) {
 		this.effectList = effectList.slice(); // clone effect list (since it can change between chars)
 
 		this.color = { r:255, g:255, b:255, a:255 };
 		this.offset = { x:0, y:0 }; // in pixels (screen pixels?)
-		this.row = 0;
+
 		this.col = 0;
+		this.row = 0;
+
 		this.SetPosition = function(row,col) {
+			// console.log("SET POS");
+			// console.log(this);
 			this.row = row;
 			this.col = col;
-		};
+		}
 
 		this.ApplyEffects = function(time) {
+			// console.log("APPLY EFFECTS! " + time);
 			for(var i = 0; i < this.effectList.length; i++) {
 				var effectName = this.effectList[i];
+				// console.log("FX " + effectName);
 				TextEffects[ effectName ].DoEffect( this, time );
 			}
 		}
@@ -2001,18 +2267,104 @@ var DialogBuffer = function() {
 				printHandler = null; // only call handler once (hacky)
 			}
 		}
-	};
+
+		this.bitmap = [];
+		this.width = 0;
+		this.height = 0;
+	}
+
+	function DialogFontChar(font, char, effectList) {
+		Object.assign(this, new DialogChar(effectList));
+
+		this.bitmap = font.getChar(char);
+		this.width = font.getWidth();
+		this.height = font.getHeight();
+	}
+
+	function DialogDrawingChar(drawingId, effectList) {
+		Object.assign(this, new DialogChar(effectList));
+
+		var imageData = imageStore.source[drawingId][0];
+		var imageDataFlat = [];
+		for (var i = 0; i < imageData.length; i++) {
+			// console.log(imageData[i]);
+			imageDataFlat = imageDataFlat.concat(imageData[i]);
+		}
+
+		this.bitmap = imageDataFlat;
+		this.width = 8;
+		this.height = 8;
+	}
 
 	function AddWordToCharArray(charArray,word,effectList) {
 		for(var i = 0; i < word.length; i++) {
-			charArray.push( new DialogChar( word[i], effectList ) );
+			charArray.push( new DialogFontChar( font, word[i], effectList ) );
 		}
 		return charArray;
 	}
 
-	var charsPerRow = 32;
+	function GetCharArrayWidth(charArray) {
+		var width = 0;
+		for(var i = 0; i < charArray.length; i++) {
+			width += charArray[i].width;
+		}
+		return width;
+	}
+
+	function GetStringWidth(str) {
+		var width = 0;
+		for (var i = 0; i < str.length; i++) {
+			width += font.getWidth();
+		}
+		return width;
+	}
+
+	var pixelsPerRow = 192; // hard-coded fun times!!!
+
+	this.AddDrawing = function(drawingId, onFinishHandler) {
+		// console.log("DRAWING ID " + drawingId);
+
+		var curPageIndex = buffer.length - 1;
+		var curRowIndex = buffer[curPageIndex].length - 1;
+		var curRowArr = buffer[curPageIndex][curRowIndex];
+
+		var drawingChar = new DialogDrawingChar(drawingId, activeTextEffects)
+		drawingChar.SetPrintHandler( onFinishHandler );
+
+		var rowLength = GetCharArrayWidth(curRowArr);
+
+		// TODO : clean up copy-pasted code here :/
+		if (rowLength + drawingChar.width  <= pixelsPerRow || rowLength <= 0)
+		{
+			//stay on same row
+			curRowArr.push( drawingChar );
+		}
+		else if (curRowIndex == 0)
+		{
+			//start next row
+			buffer[ curPageIndex ][ curRowIndex ] = curRowArr;
+			buffer[ curPageIndex ].push( [] );
+			curRowIndex++;
+			curRowArr = buffer[ curPageIndex ][ curRowIndex ];
+			curRowArr.push( drawingChar );
+		}
+		else {
+			//start next page
+			buffer[ curPageIndex ][ curRowIndex ] = curRowArr;
+			buffer.push( [] );
+			curPageIndex++;
+			buffer[ curPageIndex ].push( [] );
+			curRowIndex = 0;
+			curRowArr = buffer[ curPageIndex ][ curRowIndex ];
+			curRowArr.push( drawingChar );
+		}
+
+		isActive = true; // this feels like a bad way to do this???
+	}
+
+	// TODO : convert this into something that takes DialogChar arrays
 	this.AddText = function(textStr,onFinishHandler) {
-		console.log("ADD TEXT " + textStr);
+		// console.log("ADD TEXT " + textStr);
 
 		//process dialog so it's easier to display
 		var words = textStr.split(" ");
@@ -2027,10 +2379,14 @@ var DialogBuffer = function() {
 
 		for (var i = 0; i < words.length; i++) {
 			var word = words[i];
-			var wordLength = word.length + ((i == 0) ? 0 : 1);
-			if (curRowArr.length + wordLength <= charsPerRow || curRowArr.length <= 0) {
+
+			var wordWithPrecedingSpace = ((i == 0) ? "" : " ") + word;
+			var wordLength = GetStringWidth( wordWithPrecedingSpace );
+
+			var rowLength = GetCharArrayWidth(curRowArr);
+
+			if (rowLength + wordLength <= pixelsPerRow || rowLength <= 0) {
 				//stay on same row
-				var wordWithPrecedingSpace = ((i == 0) ? "" : " ") + word;
 				curRowArr = AddWordToCharArray( curRowArr, wordWithPrecedingSpace, activeTextEffects );
 			}
 			else if (curRowIndex == 0) {
@@ -2061,7 +2417,7 @@ var DialogBuffer = function() {
 		if( lastPage.length == 0 )
 			buffer.splice( buffer.length-1, 1 );
 
-		//finish up 
+		//finish up
 		lastPage = buffer[ buffer.length-1 ];
 		lastRow = lastPage[ lastPage.length-1 ];
 		if( lastRow.length > 0 ) {
@@ -2107,6 +2463,8 @@ var DialogBuffer = function() {
 
 	var didFlipPageThisFrame = false;
 	this.DidFlipPageThisFrame = function(){ return didFlipPageThisFrame; };
+
+	// this.SetCharsPerRow = function(num){ charsPerRow = num; }; // hacky
 };
 
 /* NEW TEXT EFFECTS */
@@ -2114,6 +2472,11 @@ var TextEffects = new Map();
 
 var RainbowEffect = function() { // TODO - should it be an object or just a method?
 	this.DoEffect = function(char,time) {
+		// console.log("RAINBOW!!!");
+		// console.log(char);
+		// console.log(char.color);
+		// console.log(char.col);
+
 		var h = Math.abs( Math.sin( (time / 600) - (char.col / 8) ) );
 		var rgb = hslToRgb( h, 1, 0.5 );
 		char.color.r = rgb[0];
@@ -2128,7 +2491,7 @@ var ColorEffect = function(index) {
 	this.DoEffect = function(char) {
 		var pal = getPal( curPal() );
 		var color = pal[ parseInt( index ) ];
-		console.log(color);
+		// console.log(color);
 		char.color.r = color[0];
 		char.color.g = color[1];
 		char.color.b = color[2];
@@ -2165,6 +2528,7 @@ var ShakyEffect = function() {
 TextEffects["shk"] = new ShakyEffect();
 
 } // Dialog()
+
 </script>
 
 <script>
@@ -2185,6 +2549,9 @@ var palette = {
 var ending = {};
 var variable = {}; // these are starting variable values -- they don't update (or I don't think they will)
 var playerId = "A";
+
+var defaultFontName = "ascii_small";
+var fontName = defaultFontName;
 
 var names = {
 	room : new Map(),
@@ -2227,8 +2594,8 @@ var spriteStartLocations = {};
 
 /* VERSION */
 var version = {
-	major: 4, // for file format / engine changes
-	minor: 8 // for editor changes and bugfixes
+	major: 5, // for file format / engine changes
+	minor: 1 // for editor changes and bugfixes
 };
 function getEngineVersion() {
 	return version.major + "." + version.minor;
@@ -2274,12 +2641,14 @@ function clearGameData() {
 		sprite : new Map(),
 		item : new Map()
 	};
+
+	fontName = defaultFontName; // TODO : reset font manager too?
 }
 
-var width = 128;
-var height = 128;
-var scale = 4; //this is stupid but necessary
-var tilesize = 8;
+var width = 256;
+var height = 256;
+var scale = 2; //this is stupid but necessary
+var tilesize = 16;
 var mapsize = 16;
 
 var curRoom = "0";
@@ -2295,7 +2664,11 @@ var key = {
 	a : 65,
 	s : 83,
 	d : 68,
-	r : 82
+	r : 82,
+	shift : 16,
+	ctrl : 17,
+	alt : 18,
+	cmd : 224
 };
 
 var prevTime = 0;
@@ -2328,17 +2701,29 @@ function attachCanvas(c) {
 }
 
 var curGameData = null;
-function load_game(game_data, startWithTitle) {
-	curGameData = game_data; //remember the current game (used to reset the game)
+function load_game(bitsy_x2_data, startWithTitle) {
+	curGameData = bitsy_x2_data; //remember the current game (used to reset the game)
+
 	dialogBuffer.Reset();
 	scriptInterpreter.ResetEnvironment(); // ensures variables are reset -- is this the best way?
-	// console.log(dialog);
-	parseWorld(game_data);
-	// console.log(dialog);
+
+	parseWorld(bitsy_x2_data);
+
+	if (!isPlayerEmbeddedInEditor) {
+		// hack to ensure default font is available
+		fontManager.AddResource(defaultFontName + fontManager.GetExtension(), document.getElementById(defaultFontName).text.slice(1));
+	}
+
+	var font = fontManager.Get( fontName );
+	dialogBuffer.SetFont(font);
+	dialogRenderer.SetFont(font);
+
 	setInitialVariables();
 	renderImages();
+
+	// setInterval(updateLoadingScreen, 300); // hack test
+
 	onready(startWithTitle);
-	// console.log(dialog);
 }
 
 function reset_cur_game() {
@@ -2354,12 +2739,35 @@ function onready(startWithTitle) {
 
 	clearInterval(loading_interval);
 
-	document.addEventListener('keydown', onkeydown);
-	document.addEventListener('keyup', onkeyup);
+	input = new InputManager();
 
-	canvas.addEventListener('touchstart', ontouchstart);
-	canvas.addEventListener('touchmove', ontouchmove);
-	canvas.addEventListener('touchend', ontouchend);
+	document.addEventListener('keydown', input.onkeydown);
+	document.addEventListener('keyup', input.onkeyup);
+
+	if (isPlayerEmbeddedInEditor) {
+		canvas.addEventListener('touchstart', input.ontouchstart);
+		canvas.addEventListener('touchmove', input.ontouchmove);
+		canvas.addEventListener('touchend', input.ontouchend);
+	}
+	else {
+    	//borksy modification, fixing touch controls on itch.io mobile embeds
+	
+    	let existingTouchTrigger = document.querySelector('#touchTrigger');
+    	if (existingTouchTrigger === null){
+    		var touchTrigger = document.createElement("div");
+    		touchTrigger.setAttribute("id","touchTrigger");
+    		touchTrigger.setAttribute(
+    		  "style","position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden;"
+    		);
+    		document.body.appendChild(touchTrigger);
+
+    		touchTrigger.addEventListener('touchstart', input.ontouchstart);
+    		touchTrigger.addEventListener('touchmove', input.ontouchmove);
+    		touchTrigger.addEventListener('touchend', input.ontouchend);
+    	}
+	}
+
+	window.onblur = input.onblur;
 
 	update_interval = setInterval(update,-1);
 
@@ -2384,98 +2792,6 @@ function setInitialVariables() {
 	}
 	scriptInterpreter.SetOnVariableChangeHandler( onVariableChanged );
 }
-
-// OLD VERSION: DEPRECATED
-// function onTouch(e) {
-// 	console.log("MOUSEDOWN");
-
-// 	//dialog mode
-// 	// if (isDialogMode) {
-// 	if(dialogBuffer.IsActive()) {
-
-// 		if (dialogBuffer.CanContinue()) {
-// 			var hasMoreDialog = dialogBuffer.Continue();
-// 			if(!hasMoreDialog) {
-// 				onExitDialog();
-// 			}
-// 		}
-// 		else {
-// 			dialogBuffer.Skip();
-// 		}
-
-// 		return;
-// 	}
-
-// 	if (isEnding) {
-// 		reset_cur_game();
-// 		return;
-// 	}
-
-// 	//walking mode
-// 	var off = getOffset(e);
-// 	var x = Math.floor(off.x / (tilesize*scale));
-// 	var y = Math.floor(off.y / (tilesize*scale));
-	
-// 	//abort if you touch the square you're already on
-// 	if (player().x == x && player().y == y) {
-// 		return;
-// 	}
-
-// 	//did we touch a sprite?
-// 	var touchedSprite = null;
-// 	for (id in sprite) {
-// 		var spr = sprite[id];
-// 		if (spr.room === curRoom) {
-// 			if (spr.x == x && spr.y == y) {
-// 				touchedSprite = id;
-// 			}
-// 		}
-// 	}
-
-// 	//respond to sprite touch
-// 	if (touchedSprite) {
-// 		var spr = sprite[touchedSprite];
-// 		// console.log(Math.abs(player().x - spr.x));
-// 		// console.log(Math.abs(player().y - spr.y));
-// 		if ( Math.abs(player().x - spr.x) == 0
-// 				&& Math.abs(player().y - spr.y) == 1 )
-// 		{
-// 			//touched a sprite next to you
-// 		}
-// 		else if ( Math.abs(player().y - spr.y) == 0
-// 				&& Math.abs(player().x - spr.x) == 1 )
-// 		{
-// 			//touched a sprite next to you
-// 		}
-// 		else
-// 		{
-// 			return; //oh no! touched a sprite that's out of range
-// 		}
-
-// 		startSpriteDialog( touchedSprite /*spriteId*/ );
-
-// 		return;
-// 	}
-
-// 	//did we touch an open square?
-// 	var row = room[curRoom].tilemap[y];
-// 	// console.log(row);
-// 	var til = row[x];
-// 	// console.log(til);
-// 	if ( room[curRoom].walls.indexOf(til) != -1 ) {
-// 		//touched a wall
-// 		return;
-// 	}
-
-// 	//find path to open square, if there is one
-// 	var map = collisionMap(curRoom);
-// 	var path = breadthFirstSearch( map, {x:player().x, y:player().y}, {x:x,y:y} );
-// 	path = path.slice(1); //remove player's start square
-
-// 	//console.log( pathToString(path) );
-
-// 	player().walkingPath = path;
-// }
 
 // TODO: this is likely broken
 function breadthFirstSearch(map, from, to) {
@@ -2601,12 +2917,29 @@ function getOffset(evt) {
 function stopGame() {
 	console.log("stop GAME!");
 
-	document.removeEventListener('keydown', onkeydown);
-	document.removeEventListener('keyup', onkeyup);
+	document.removeEventListener('keydown', input.onkeydown);
+	document.removeEventListener('keyup', input.onkeyup);
 
-	canvas.removeEventListener('touchstart', ontouchstart);
-	canvas.removeEventListener('touchmove', ontouchmove);
-	canvas.removeEventListener('touchend', ontouchend);
+	if (isPlayerEmbeddedInEditor) {
+		canvas.removeEventListener('touchstart', input.ontouchstart);
+		canvas.removeEventListener('touchmove', input.ontouchmove);
+		canvas.removeEventListener('touchend', input.ontouchend);
+	}
+	else {
+	
+	    //borksy modifications
+	
+    	let existingTouchTrigger = document.querySelector('#touchTrigger');
+    	if (existingTouchTrigger !== null){
+    	 	existingTouchTrigger.removeEventListener('touchstart', input.ontouchstart);
+    	 	existingTouchTrigger.removeEventListener('touchmove', input.ontouchmove);
+    	 	existingTouchTrigger.removeEventListener('touchend', input.ontouchend);
+
+    	 	existingTouchTrigger.parentElement.removeChild(existingTouchTrigger);
+    	}
+	}
+
+	window.onblur = null;
 
 	clearInterval(update_interval);
 }
@@ -2670,16 +3003,16 @@ var loading_interval = null;
 
 function loadingAnimation() {
 	//create image
-	var loadingAnimImg = ctx.createImageData(8*scale, 8*scale);
+	var loadingAnimImg = ctx.createImageData(tilesize*scale, tilesize*scale);
 	//draw image
-	for (var y = 0; y < 8; y++) {
-		for (var x = 0; x < 8; x++) {
-			var i = (y * 8) + x;
+	for (var y = 0; y < tilesize; y++) {
+		for (var x = 0; x < tilesize; x++) {
+			var i = (y * tilesize) + x;
 			if (loading_anim_data[loading_anim_frame][i] == 1) {
 				//scaling nonsense
 				for (var sy = 0; sy < scale; sy++) {
 					for (var sx = 0; sx < scale; sx++) {
-						var pxl = 4 * ( (((y*scale)+sy) * (8*scale)) + ((x*scale)+sx) );
+						var pxl = 4 * ( (((y*scale)+sy) * (tilesize*scale)) + ((x*scale)+sx) );
 						loadingAnimImg.data[pxl+0] = 255;
 						loadingAnimImg.data[pxl+1] = 255;
 						loadingAnimImg.data[pxl+2] = 255;
@@ -2690,15 +3023,26 @@ function loadingAnimation() {
 		}
 	}
 	//put image on canvas
-	ctx.putImageData(loadingAnimImg,scale*(width/2 - 4),scale*(height/2 - 4));
+	ctx.putImageData(loadingAnimImg,scale*(width/4 - 4),scale*(height/4 - 4));
 	//update frame
 	loading_anim_frame++;
 	if (loading_anim_frame >= 5) loading_anim_frame = 0;
 }
 
+function updateLoadingScreen() {
+	// TODO : in progress
+	ctx.fillStyle = "rgb(0,0,0)";
+	ctx.fillRect(0,0,canvas.width,canvas.height);
+
+	loadingAnimation();
+	drawSprite( getSpriteImage(sprite["a"],"0",0), tilesize, tilesize, ctx );
+}
+
 function update() {
 	var curTime = Date.now();
 	deltaTime = curTime - prevTime;
+
+	updateInput();
 
 	if (!isNarrating && !isEnding) {
 		updateAnimation();
@@ -2717,14 +3061,6 @@ function update() {
 	}
 	else if (!isEnding) {
 		moveSprites();
-
-		if (player().walkingPath.length > 0) {
-			var dest = player().walkingPath[ player().walkingPath.length - 1 ];
-			ctx.fillStyle = "#fff";
-			ctx.globalAlpha = 0.5;
-			ctx.fillRect( dest.x * tilesize*scale, dest.y * tilesize*scale, tilesize*scale, tilesize*scale );
-			ctx.globalAlpha = 1;
-		}
 	}
 
 	// keep moving avatar if player holds down button
@@ -2751,6 +3087,60 @@ function update() {
 	/* hacky replacement */
 	if (onDialogUpdate != null)
 		dialogRenderer.SetPageFinishHandler( onDialogUpdate );
+
+	input.resetKeyPressed();
+	input.resetTapReleased();
+}
+
+function updateInput() {
+	if( dialogBuffer.IsActive() ) {
+		if (input.anyKeyPressed() || input.isTapReleased()) {
+			/* CONTINUE DIALOG */
+			if (dialogBuffer.CanContinue()) {
+				var hasMoreDialog = dialogBuffer.Continue();
+				if(!hasMoreDialog) {
+					// ignore currently held keys UNTIL they are released (stops player from insta-moving)
+					input.ignoreHeldKeys();
+
+					onExitDialog();
+				}
+			}
+			else {
+				dialogBuffer.Skip();
+			}
+		}
+	}
+	else if ( isEnding ) {
+		if (input.anyKeyPressed() || input.isTapReleased()) {
+			/* RESTART GAME */
+			reset_cur_game();
+		}
+	}
+	else {
+		/* WALK */
+		var prevPlayerDirection = curPlayerDirection;
+
+		if ( input.isKeyDown( key.left ) || input.isKeyDown( key.a ) || input.swipeLeft() ) {
+			curPlayerDirection = Direction.Left;
+		}
+		else if ( input.isKeyDown( key.right ) || input.isKeyDown( key.d ) || input.swipeRight() ) {
+			curPlayerDirection = Direction.Right;
+		}
+		else if ( input.isKeyDown( key.up ) || input.isKeyDown( key.w ) || input.swipeUp() ) {
+			curPlayerDirection = Direction.Up;
+		}
+		else if ( input.isKeyDown( key.down ) || input.isKeyDown( key.s ) || input.swipeDown() ) {
+			curPlayerDirection = Direction.Down;
+		}
+		else {
+			curPlayerDirection = Direction.None;
+		}
+
+		if (curPlayerDirection != Direction.None && curPlayerDirection != prevPlayerDirection) {
+			movePlayer( curPlayerDirection );
+			playerHoldToMoveTimer = 500;
+		}
+	}
 }
 
 var animationCounter = 0;
@@ -2874,57 +3264,38 @@ var Direction = {
 var curPlayerDirection = Direction.None;
 var playerHoldToMoveTimer = 0;
 
-var keyDownList = [];
+var InputManager = function() {
+	var self = this;
 
-function onkeydown(e) {
-	if(e.keyCode == key.left || e.keyCode == key.right || e.keyCode == key.up || e.keyCode == key.down || !isPlayerEmbeddedInEditor)
-		e.preventDefault();
+	var pressed;
+	var ignored;
+	var newKeyPress;
+	var touchState;
 
-	if( keyDownList.indexOf( e.keyCode ) != -1 ) {
-		// key already down --- do nothing
-		return;
+	function resetAll() {
+		pressed = {};
+		ignored = {};
+		newKeyPress = false;
+
+		touchState = {
+			isDown : false,
+			startX : 0,
+			startY : 0,
+			curX : 0,
+			curY : 0,
+			swipeDistance : 30,
+			swipeDirection : Direction.None,
+			tapReleased : false
+		};
+	}
+	resetAll();
+
+	function stopWindowScrolling(e) {
+		if(e.keyCode == key.left || e.keyCode == key.right || e.keyCode == key.up || e.keyCode == key.down || !isPlayerEmbeddedInEditor)
+			e.preventDefault();
 	}
 
-	curPlayerDirection = Direction.None;
-
-	if( dialogBuffer.IsActive() ) {
-		/* CONTINUE DIALOG */
-		if (dialogBuffer.CanContinue()) {
-			var hasMoreDialog = dialogBuffer.Continue();
-			if(!hasMoreDialog) {
-				console.log("EXIT DIALOG --- onkeydown")
-				onExitDialog();
-			}
-		}
-		else {
-			dialogBuffer.Skip();
-		}
-	}
-	else if ( isEnding ) {
-		/* RESTART GAME */
-		reset_cur_game();
-	}
-	else {
-		/* WALK */
-		if ( e.keyCode == key.left || e.keyCode == key.a ) {
-			curPlayerDirection = Direction.Left;
-		}
-		else if ( e.keyCode == key.right || e.keyCode == key.d ) {
-			curPlayerDirection = Direction.Right;
-		}
-		else if ( e.keyCode == key.up || e.keyCode == key.w ) {
-			curPlayerDirection = Direction.Up;
-		}
-		else if ( e.keyCode == key.down || e.keyCode == key.s ) {
-			curPlayerDirection = Direction.Down;
-		}
-		movePlayer( curPlayerDirection );
-
-		if( curPlayerDirection != Direction.None )
-		{
-			playerHoldToMoveTimer = 500;
-		}
-
+	function tryRestartGame(e) {
 		/* RESTART GAME */
 		if ( e.keyCode === key.r && ( e.getModifierState("Control") || e.getModifierState("Meta") ) ) {
 			if ( confirm("Restart the game?") ) {
@@ -2933,12 +3304,152 @@ function onkeydown(e) {
 		}
 	}
 
-	if( keyDownList.indexOf( e.keyCode ) == -1 )
-		keyDownList.push( e.keyCode );
+	function eventIsModifier(event) {
+		return (event.keyCode == key.shift || event.keyCode == key.ctrl || event.keyCode == key.alt || event.keyCode == key.cmd);
+	}
 
-	console.log("KEY DOWN " + keyDownList.length );
-	console.log(keyDownList);
+	function isModifierKeyDown() {
+		return ( self.isKeyDown(key.shift) || self.isKeyDown(key.ctrl) || self.isKeyDown(key.alt) || self.isKeyDown(key.cmd) );
+	}
+
+	this.ignoreHeldKeys = function() {
+		for (var key in pressed) {
+			if (pressed[key]) { // only ignore keys that are actually held
+				ignored[key] = true;
+				// console.log("IGNORE -- " + key);
+			}
+		}
+	}
+
+	this.onkeydown = function(event) {
+		// console.log("KEYDOWN -- " + event.keyCode);
+
+		stopWindowScrolling(event);
+
+		tryRestartGame(event);
+
+		// Special keys being held down can interfere with keyup events and lock movement
+		// so just don't collect input when they're held
+		{
+			if (isModifierKeyDown()) {
+				return;
+			}
+
+			if (eventIsModifier(event)) {
+				resetAll();
+			}
+		}
+
+		if (ignored[event.keyCode]) {
+			return;
+		}
+
+		if (!self.isKeyDown(event.keyCode)) {
+			newKeyPress = true;
+		}
+
+		pressed[event.keyCode] = true;
+		ignored[event.keyCode] = false;
+	}
+
+	this.onkeyup = function(event) {
+		// console.log("KEYUP -- " + event.keyCode);
+		pressed[event.keyCode] = false;
+		ignored[event.keyCode] = false;
+	}
+
+	this.ontouchstart = function(event) {
+		if( event.changedTouches.length > 0 ) {
+			touchState.isDown = true;
+
+			touchState.startX = touchState.curX = event.changedTouches[0].clientX;
+			touchState.startY = touchState.curY = event.changedTouches[0].clientY;
+
+			touchState.swipeDirection = Direction.None;
+		}
+	}
+
+	this.ontouchmove = function(event) {
+		if( touchState.isDown && event.changedTouches.length > 0 ) {
+			touchState.curX = event.changedTouches[0].clientX;
+			touchState.curY = event.changedTouches[0].clientY;
+
+			var prevDirection = touchState.swipeDirection;
+
+			if( touchState.curX - touchState.startX <= -touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Left;
+			}
+			else if( touchState.curX - touchState.startX >= touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Right;
+			}
+			else if( touchState.curY - touchState.startY <= -touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Up;
+			}
+			else if( touchState.curY - touchState.startY >= touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Down;
+			}
+
+			if( touchState.swipeDirection != prevDirection ) {
+				// reset center so changing directions is easier
+				touchState.startX = touchState.curX;
+				touchState.startY = touchState.curY;
+			}
+		}
+	}
+
+	this.ontouchend = function(event) {
+		touchState.isDown = false;
+
+		if( touchState.swipeDirection == Direction.None ) {
+			// tap!
+			touchState.tapReleased = true;
+		}
+
+		touchState.swipeDirection = Direction.None;
+	}
+
+	this.isKeyDown = function(keyCode) {
+		return pressed[keyCode] != null && pressed[keyCode] == true && (ignored[keyCode] == null || ignored[keyCode] == false);
+	}
+
+	this.anyKeyPressed = function() {
+		return newKeyPress;
+	}
+
+	this.resetKeyPressed = function() {
+		newKeyPress = false;
+	}
+
+	this.swipeLeft = function() {
+		return touchState.swipeDirection == Direction.Left;
+	}
+
+	this.swipeRight = function() {
+		return touchState.swipeDirection == Direction.Right;
+	}
+
+	this.swipeUp = function() {
+		return touchState.swipeDirection == Direction.Up;
+	}
+
+	this.swipeDown = function() {
+		return touchState.swipeDirection == Direction.Down;
+	}
+
+	this.isTapReleased = function() {
+		return touchState.tapReleased;
+	}
+
+	this.resetTapReleased = function() {
+		touchState.tapReleased = false;
+	}
+
+	this.onblur = function() {
+		// console.log("~~~ BLUR ~~");
+		resetAll();
+	}
 }
+var input = null;
 
 function movePlayer(direction) {
 	var spr = null;
@@ -2959,7 +3470,7 @@ function movePlayer(direction) {
 		player().y += 1;
 		didPlayerMoveThisFrame = true;
 	}
-	
+
 	var ext = getExit( player().room, player().x, player().y );
 	var end = getEnding( player().room, player().x, player().y );
 	var itmIndex = getItemIndex( player().room, player().x, player().y );
@@ -2997,120 +3508,6 @@ function movePlayer(direction) {
 	else if (spr) {
 		startSpriteDialog( spr /*spriteId*/ );
 	}
-}
-
-function onkeyup(e) {
-
-	if(e.keyCode == key.left || e.keyCode == key.right || e.keyCode == key.up || e.keyCode == key.down || !isPlayerEmbeddedInEditor)
-		e.preventDefault();
-
-	if( keyDownList.indexOf( e.keyCode ) != -1 )
-		keyDownList.splice( keyDownList.indexOf( e.keyCode ), 1 );
-
-	// todo is this robust enough?
-	if( keyDownList.length <= 0 )
-		curPlayerDirection = Direction.None;
-
-	console.log(e.keyCode);
-	console.log("KEY UP " + keyDownList.length );
-	console.log(keyDownList);
-	console.log("_____");
-}
-
-var touchInfo = {
-	isDown : false,
-	startX : 0,
-	startY : 0,
-	curX : 0,
-	curY : 0
-};
-
-function ontouchstart(e) {
-	e.preventDefault();
-
-	if( e.changedTouches.length > 0 ) {
-		touchInfo.isDown = true;
-
-		console.log(e);
-
-		touchInfo.startX = touchInfo.curX = e.changedTouches[0].clientX;
-		touchInfo.startY = touchInfo.curY = e.changedTouches[0].clientY;
-
-		console.log("MOUSE DOWN");
-		console.log(touchInfo);
-
-		curPlayerDirection = Direction.None;
-	}
-}
-
-var swipeDistance = 30;
-function ontouchmove(e) {
-	e.preventDefault();
-
-	console.log("MOUSE MOVE");
-	console.log(touchInfo);
-
-	if( !dialogBuffer.IsActive() && touchInfo.isDown && e.changedTouches.length > 0 ) {
-		touchInfo.curX = e.changedTouches[0].clientX;
-		touchInfo.curY = e.changedTouches[0].clientY;
-
-		var prevDirection = curPlayerDirection;
-
-		console.log( touchInfo.curX - touchInfo.startX );
-
-		if( touchInfo.curX - touchInfo.startX <= -swipeDistance ) {
-			curPlayerDirection = Direction.Left;
-		}
-		else if( touchInfo.curX - touchInfo.startX >= swipeDistance ) {
-			curPlayerDirection = Direction.Right;
-		}
-		else if( touchInfo.curY - touchInfo.startY <= -swipeDistance ) {
-			curPlayerDirection = Direction.Up;
-		}
-		else if( touchInfo.curY - touchInfo.startY >= swipeDistance ) {
-			curPlayerDirection = Direction.Down;
-		}
-
-		if( curPlayerDirection != prevDirection ) {
-			movePlayer( curPlayerDirection );
-			playerHoldToMoveTimer = 300;
-			// reset center
-			touchInfo.startX = touchInfo.curX;
-			touchInfo.startY = touchInfo.curY;
-		}
-	}
-}
-
-function ontouchend(e) {
-	e.preventDefault();
-
-	console.log("MOUSE UP");
-	console.log(touchInfo);
-
-	touchInfo.isDown = false;
-
-	if( curPlayerDirection == Direction.None ) {
-		// tap!
-		if( dialogBuffer.IsActive() ) {
-			/* CONTINUE DIALOG */
-			if (dialogBuffer.CanContinue()) {
-				var hasMoreDialog = dialogBuffer.Continue();
-				if(!hasMoreDialog) {
-					console.log("EXIT DIALOG --- onkeydown")
-					onExitDialog();
-				}
-			}
-			else {
-				dialogBuffer.Skip();
-			}
-		}
-		else if ( isEnding ) {
-			/* RESTART GAME */
-			reset_cur_game();
-		}
-	}
-
-	curPlayerDirection = Direction.None;
 }
 
 function getItemIndex( roomId, x, y ) {
@@ -3229,6 +3626,8 @@ function isSpriteOffstage(id) {
 function parseWorld(file) {
 	resetFlags();
 
+	var versionNumber = 0;
+
 	var lines = file.split("\n");
 	var i = 0;
 	while (i < lines.length) {
@@ -3240,6 +3639,11 @@ function parseWorld(file) {
 			i = parseTitle(lines, i);
 		}
 		else if (curLine.length <= 0 || curLine.charAt(0) === "#") {
+			// collect version number (from a comment.. hacky I know)
+			if (curLine.indexOf("# BITSY VERSION ") != -1) {
+				versionNumber = parseFloat(curLine.replace("# BITSY VERSION ", ""));
+			}
+
 			//skip blank lines & comments
 			i++;
 		}
@@ -3270,6 +3674,12 @@ function parseWorld(file) {
 		else if (getType(curLine) === "VAR") {
 			i = parseVariable(lines, i);
 		}
+		else if (getType(curLine) === "DEFAULT_FONT") {
+			i = parseFontName(lines, i);
+		}
+		else if (getType(curLine) === "FONT") {
+			i = parseFontData(lines, i);
+		}
 		else if (getType(curLine) === "!") {
 			i = parseFlag(lines, i);
 		}
@@ -3283,10 +3693,15 @@ function parseWorld(file) {
 	}
 
 	// console.log(names);
+
+	return versionNumber;
 }
 
 //TODO this is in progress and doesn't support all features
-function serializeWorld() {
+function serializeWorld(skipFonts) {
+	if (skipFonts === undefined || skipFonts === null)
+		skipFonts = false;
+
 	var worldStr = "";
 	/* TITLE */
 	worldStr += title + "\n";
@@ -3299,6 +3714,11 @@ function serializeWorld() {
 		worldStr += "! " + f + " " + flags[f] + "\n";
 	}
 	worldStr += "\n"
+	/* FONT */
+	if (fontName != defaultFontName) {
+		worldStr += "DEFAULT_FONT " + fontName + "\n";
+		worldStr += "\n"
+	}
 	/* PALETTE */
 	for (id in palette) {
 		worldStr += "PAL " + id + "\n";
@@ -3320,7 +3740,7 @@ function serializeWorld() {
 			// old non-comma separated format
 			for (i in room[id].tilemap) {
 				for (j in room[id].tilemap[i]) {
-					worldStr += room[id].tilemap[i][j];	
+					worldStr += room[id].tilemap[i][j];
 				}
 				worldStr += "\n";
 			}
@@ -3462,6 +3882,12 @@ function serializeWorld() {
 		worldStr += variable[id] + "\n";
 		worldStr += "\n";
 	}
+	/* FONT */
+	// TODO : support multiple fonts
+	if (fontName != defaultFontName && !skipFonts) {
+		worldStr += fontManager.GetData(fontName);
+	}
+
 	return worldStr;
 }
 
@@ -3578,7 +4004,7 @@ function parseRoom(lines, i) {
 				};
 			}
 			else if ( flags.ROOM_FORMAT == 0 ) { // TODO: right now this shortcut only works w/ the old comma separate format
-				/* PLACE MULTIPLE SPRITES*/ 
+				/* PLACE MULTIPLE SPRITES*/
 				//Does find and replace in the tilemap (may be hacky, but its convenient)
 				var sprList = sprId.split(",");
 				for (row in room[id].tilemap) {
@@ -4044,6 +4470,32 @@ function parseVariable(lines, i) {
 	return i;
 }
 
+function parseFontName(lines, i) {
+	fontName = getArg(lines[i], 1);
+	i++;
+	return i;
+}
+
+function parseFontData(lines, i) {
+	// NOTE : we're not doing the actual parsing here --
+	// just grabbing the block of text that represents the font
+	// and giving it to the font manager to use later
+
+	var localFontName = getId(lines[i]);
+	var localFontData = lines[i];
+	i++;
+
+	while (i < lines.length && lines[i] != "") {
+		localFontData += "\n" + lines[i];
+		i++;
+	}
+
+	var localFontFilename = localFontName + fontManager.GetExtension();
+	fontManager.AddResource( localFontFilename, localFontData );
+
+	return i;
+}
+
 function parseFlag(lines, i) {
 	var id = getId(lines[i]);
 	var valStr = lines[i].split(" ")[2];
@@ -4188,7 +4640,7 @@ function getRoomPal(roomId) {
 			return "0";
 		}
 	}
-	return "0";	
+	return "0";
 }
 
 var isDialogMode = false;
@@ -4197,6 +4649,7 @@ var isEnding = false;
 var dialogModule = new Dialog();
 var dialogRenderer = dialogModule.CreateRenderer();
 var dialogBuffer = dialogModule.CreateBuffer();
+var fontManager = new FontManager();
 
 function onExitDialog() {
 	// var breakShit = null;
@@ -4248,6 +4701,9 @@ function startSpriteDialog(spriteId) {
 }
 
 function startDialog(dialogStr,scriptId) {
+	console.log("START DIALOG ");
+	console.log(dialogStr);
+
 	if(dialogStr.length <= 0) {
 		console.log("ON EXIT DIALOG -- startDialog 1");
 		onExitDialog();
@@ -4269,7 +4725,7 @@ function startDialog(dialogStr,scriptId) {
 	};
 
 	if(scriptId === undefined) {
-		scriptInterpreter.Interpret( dialogStr, onScriptEnd );		
+		scriptInterpreter.Interpret( dialogStr, onScriptEnd );
 	}
 	else {
 		if( !scriptInterpreter.HasScript(scriptId) )
@@ -4302,18 +4758,2181 @@ var scriptModule = new Script();
 var scriptInterpreter = scriptModule.CreateInterpreter();
 var scriptUtils = scriptModule.CreateUtils(); // TODO: move to editor.js?
 // scriptInterpreter.SetDialogBuffer( dialogBuffer );
+
 </script>
 
-<!-- BITSY HACKS TEST-->
-<script type="text/javascript" id="borksyHacks">
+<!-- store default font in separate script tag for back compat-->
+<!-- Borksy modification: uses better encoded default font. -->
+<script type="bitsyFontData" id="ascii_small">
+FONT ascii_small
+SIZE 6 8
+CHAR 0
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+CHAR 32
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+CHAR 33
+000100
+001110
+001110
+000100
+000100
+000000
+000100
+000000
+CHAR 34
+011011
+011011
+010010
+000000
+000000
+000000
+000000
+000000
+CHAR 35
+000000
+001010
+011111
+001010
+001010
+011111
+001010
+000000
+CHAR 36
+001000
+001110
+010000
+001100
+000010
+011100
+000100
+000000
+CHAR 37
+011001
+011001
+000010
+000100
+001000
+010011
+010011
+000000
+CHAR 38
+001000
+010100
+010100
+001000
+010101
+010010
+001101
+000000
+CHAR 39
+001100
+001100
+001000
+000000
+000000
+000000
+000000
+000000
+CHAR 40
+000100
+001000
+001000
+001000
+001000
+001000
+000100
+000000
+CHAR 41
+001000
+000100
+000100
+000100
+000100
+000100
+001000
+000000
+CHAR 42
+000000
+001010
+001110
+011111
+001110
+001010
+000000
+000000
+CHAR 43
+000000
+000100
+000100
+011111
+000100
+000100
+000000
+000000
+CHAR 44
+000000
+000000
+000000
+000000
+000000
+001100
+001100
+001000
+CHAR 45
+000000
+000000
+000000
+011111
+000000
+000000
+000000
+000000
+CHAR 46
+000000
+000000
+000000
+000000
+000000
+001100
+001100
+000000
+CHAR 47
+000000
+000001
+000010
+000100
+001000
+010000
+000000
+000000
+CHAR 48
+001110
+010001
+010011
+010101
+011001
+010001
+001110
+000000
+CHAR 49
+000100
+001100
+000100
+000100
+000100
+000100
+001110
+000000
+CHAR 50
+001110
+010001
+000001
+000110
+001000
+010000
+011111
+000000
+CHAR 51
+001110
+010001
+000001
+001110
+000001
+010001
+001110
+000000
+CHAR 52
+000010
+000110
+001010
+010010
+011111
+000010
+000010
+000000
+CHAR 53
+011111
+010000
+010000
+011110
+000001
+010001
+001110
+000000
+CHAR 54
+000110
+001000
+010000
+011110
+010001
+010001
+001110
+000000
+CHAR 55
+011111
+000001
+000010
+000100
+001000
+001000
+001000
+000000
+CHAR 56
+001110
+010001
+010001
+001110
+010001
+010001
+001110
+000000
+CHAR 57
+001110
+010001
+010001
+001111
+000001
+000010
+001100
+000000
+CHAR 58
+000000
+000000
+001100
+001100
+000000
+001100
+001100
+000000
+CHAR 59
+000000
+000000
+001100
+001100
+000000
+001100
+001100
+001000
+CHAR 60
+000010
+000100
+001000
+010000
+001000
+000100
+000010
+000000
+CHAR 61
+000000
+000000
+011111
+000000
+000000
+011111
+000000
+000000
+CHAR 62
+001000
+000100
+000010
+000001
+000010
+000100
+001000
+000000
+CHAR 63
+001110
+010001
+000001
+000110
+000100
+000000
+000100
+000000
+CHAR 64
+001110
+010001
+010111
+010101
+010111
+010000
+001110
+000000
+CHAR 65
+001110
+010001
+010001
+010001
+011111
+010001
+010001
+000000
+CHAR 66
+011110
+010001
+010001
+011110
+010001
+010001
+011110
+000000
+CHAR 67
+001110
+010001
+010000
+010000
+010000
+010001
+001110
+000000
+CHAR 68
+011110
+010001
+010001
+010001
+010001
+010001
+011110
+000000
+CHAR 69
+011111
+010000
+010000
+011110
+010000
+010000
+011111
+000000
+CHAR 70
+011111
+010000
+010000
+011110
+010000
+010000
+010000
+000000
+CHAR 71
+001110
+010001
+010000
+010111
+010001
+010001
+001111
+000000
+CHAR 72
+010001
+010001
+010001
+011111
+010001
+010001
+010001
+000000
+CHAR 73
+001110
+000100
+000100
+000100
+000100
+000100
+001110
+000000
+CHAR 74
+000001
+000001
+000001
+000001
+010001
+010001
+001110
+000000
+CHAR 75
+010001
+010010
+010100
+011000
+010100
+010010
+010001
+000000
+CHAR 76
+010000
+010000
+010000
+010000
+010000
+010000
+011111
+000000
+CHAR 77
+010001
+011011
+010101
+010001
+010001
+010001
+010001
+000000
+CHAR 78
+010001
+011001
+010101
+010011
+010001
+010001
+010001
+000000
+CHAR 79
+001110
+010001
+010001
+010001
+010001
+010001
+001110
+000000
+CHAR 80
+011110
+010001
+010001
+011110
+010000
+010000
+010000
+000000
+CHAR 81
+001110
+010001
+010001
+010001
+010101
+010010
+001101
+000000
+CHAR 82
+011110
+010001
+010001
+011110
+010010
+010001
+010001
+000000
+CHAR 83
+001110
+010001
+010000
+001110
+000001
+010001
+001110
+000000
+CHAR 84
+011111
+000100
+000100
+000100
+000100
+000100
+000100
+000000
+CHAR 85
+010001
+010001
+010001
+010001
+010001
+010001
+001110
+000000
+CHAR 86
+010001
+010001
+010001
+010001
+010001
+001010
+000100
+000000
+CHAR 87
+010001
+010001
+010101
+010101
+010101
+010101
+001010
+000000
+CHAR 88
+010001
+010001
+001010
+000100
+001010
+010001
+010001
+000000
+CHAR 89
+010001
+010001
+010001
+001010
+000100
+000100
+000100
+000000
+CHAR 90
+011110
+000010
+000100
+001000
+010000
+010000
+011110
+000000
+CHAR 91
+001110
+001000
+001000
+001000
+001000
+001000
+001110
+000000
+CHAR 92
+000000
+010000
+001000
+000100
+000010
+000001
+000000
+000000
+CHAR 93
+001110
+000010
+000010
+000010
+000010
+000010
+001110
+000000
+CHAR 94
+000100
+001010
+010001
+000000
+000000
+000000
+000000
+000000
+CHAR 95
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+111111
+CHAR 96
+001100
+001100
+000100
+000000
+000000
+000000
+000000
+000000
+CHAR 97
+000000
+000000
+001110
+000001
+001111
+010001
+001111
+000000
+CHAR 98
+010000
+010000
+011110
+010001
+010001
+010001
+011110
+000000
+CHAR 99
+000000
+000000
+001110
+010001
+010000
+010001
+001110
+000000
+CHAR 100
+000001
+000001
+001111
+010001
+010001
+010001
+001111
+000000
+CHAR 101
+000000
+000000
+001110
+010001
+011110
+010000
+001110
+000000
+CHAR 102
+000110
+001000
+001000
+011110
+001000
+001000
+001000
+000000
+CHAR 103
+000000
+000000
+001111
+010001
+010001
+001111
+000001
+001110
+CHAR 104
+010000
+010000
+011100
+010010
+010010
+010010
+010010
+000000
+CHAR 105
+000100
+000000
+000100
+000100
+000100
+000100
+000110
+000000
+CHAR 106
+000010
+000000
+000110
+000010
+000010
+000010
+010010
+001100
+CHAR 107
+010000
+010000
+010010
+010100
+011000
+010100
+010010
+000000
+CHAR 108
+000100
+000100
+000100
+000100
+000100
+000100
+000110
+000000
+CHAR 109
+000000
+000000
+011010
+010101
+010101
+010001
+010001
+000000
+CHAR 110
+000000
+000000
+011100
+010010
+010010
+010010
+010010
+000000
+CHAR 111
+000000
+000000
+001110
+010001
+010001
+010001
+001110
+000000
+CHAR 112
+000000
+000000
+011110
+010001
+010001
+010001
+011110
+010000
+CHAR 113
+000000
+000000
+001111
+010001
+010001
+010001
+001111
+000001
+CHAR 114
+000000
+000000
+010110
+001001
+001000
+001000
+011100
+000000
+CHAR 115
+000000
+000000
+001110
+010000
+001110
+000001
+001110
+000000
+CHAR 116
+000000
+001000
+011110
+001000
+001000
+001010
+000100
+000000
+CHAR 117
+000000
+000000
+010010
+010010
+010010
+010110
+001010
+000000
+CHAR 118
+000000
+000000
+010001
+010001
+010001
+001010
+000100
+000000
+CHAR 119
+000000
+000000
+010001
+010001
+010101
+011111
+001010
+000000
+CHAR 120
+000000
+000000
+010010
+010010
+001100
+010010
+010010
+000000
+CHAR 121
+000000
+000000
+010010
+010010
+010010
+001110
+000100
+011000
+CHAR 122
+000000
+000000
+011110
+000010
+001100
+010000
+011110
+000000
+CHAR 123
+000110
+001000
+001000
+011000
+001000
+001000
+000110
+000000
+CHAR 124
+000100
+000100
+000100
+000100
+000100
+000100
+000100
+000100
+CHAR 125
+001100
+000010
+000010
+000011
+000010
+000010
+001100
+000000
+CHAR 126
+000000
+000000
+000000
+001010
+010100
+000000
+000000
+000000
+CHAR 160
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+CHAR 161
+000100
+000000
+000100
+000100
+001110
+001110
+000100
+000000
+CHAR 162
+000000
+000100
+001110
+010000
+010000
+001110
+000100
+000000
+CHAR 163
+000110
+001001
+001000
+011110
+001000
+001001
+010111
+000000
+CHAR 165
+010001
+001010
+000100
+011111
+000100
+011111
+000100
+000000
+CHAR 167
+001110
+010001
+001100
+001010
+000110
+010001
+001110
+000000
+CHAR 171
+000000
+000000
+001001
+010010
+001001
+000000
+000000
+000000
+CHAR 172
+000000
+000000
+111111
+000001
+000001
+000000
+000000
+000000
+CHAR 177
+000000
+000100
+001110
+000100
+000000
+001110
+000000
+000000
+CHAR 178
+011000
+000100
+001000
+011100
+000000
+000000
+000000
+000000
+CHAR 181
+000000
+000000
+010010
+010010
+010010
+011100
+010000
+010000
+CHAR 182
+001111
+010101
+010101
+001101
+000101
+000101
+000101
+000000
+CHAR 187
+000000
+000000
+010010
+001001
+010010
+000000
+000000
+000000
+CHAR 188
+010000
+010010
+010100
+001011
+010101
+000111
+000001
+000000
+CHAR 189
+010000
+010010
+010100
+001110
+010001
+000010
+000111
+000000
+CHAR 191
+000100
+000000
+000100
+001100
+010000
+010001
+001110
+000000
+CHAR 196
+001010
+000000
+000100
+001010
+010001
+011111
+010001
+000000
+CHAR 197
+001110
+001010
+001110
+011011
+010001
+011111
+010001
+000000
+CHAR 198
+001111
+010100
+010100
+011111
+010100
+010100
+010111
+000000
+CHAR 199
+001110
+010001
+010000
+010000
+010001
+001110
+000100
+001100
+CHAR 201
+000011
+000000
+011111
+010000
+011110
+010000
+011111
+000000
+CHAR 209
+001010
+010100
+000000
+010010
+011010
+010110
+010010
+000000
+CHAR 214
+010010
+001100
+010010
+010010
+010010
+010010
+001100
+000000
+CHAR 220
+001010
+000000
+010010
+010010
+010010
+010010
+001100
+000000
+CHAR 223
+000000
+011100
+010010
+011100
+010010
+010010
+011100
+010000
+CHAR 224
+001100
+000000
+001110
+000001
+001111
+010001
+001111
+000000
+CHAR 225
+000110
+000000
+001110
+000001
+001111
+010001
+001111
+000000
+CHAR 226
+001110
+000000
+001110
+000001
+001111
+010001
+001111
+000000
+CHAR 228
+001010
+000000
+001110
+000001
+001111
+010001
+001111
+000000
+CHAR 229
+001110
+001010
+001110
+000001
+001111
+010001
+001111
+000000
+CHAR 230
+000000
+000000
+011110
+000101
+011111
+010100
+001111
+000000
+CHAR 231
+000000
+001110
+010001
+010000
+010001
+001110
+000100
+001100
+CHAR 232
+001100
+000000
+001110
+010001
+011110
+010000
+001110
+000000
+CHAR 233
+000011
+000000
+001110
+010001
+011110
+010000
+001110
+000000
+CHAR 234
+001110
+000000
+001110
+010001
+011110
+010000
+001110
+000000
+CHAR 235
+001010
+000000
+001110
+010001
+011110
+010000
+001110
+000000
+CHAR 236
+001000
+000000
+000100
+000100
+000100
+000100
+000110
+000000
+CHAR 237
+000110
+000000
+000100
+000100
+000100
+000100
+000110
+000000
+CHAR 238
+000100
+001010
+000000
+000100
+000100
+000100
+000110
+000000
+CHAR 239
+001010
+000000
+000100
+000100
+000100
+000100
+000110
+000000
+CHAR 241
+001010
+010100
+000000
+011100
+010010
+010010
+010010
+000000
+CHAR 242
+011000
+000000
+001100
+010010
+010010
+010010
+001100
+000000
+CHAR 243
+000110
+000000
+001100
+010010
+010010
+010010
+001100
+000000
+CHAR 244
+001110
+000000
+001100
+010010
+010010
+010010
+001100
+000000
+CHAR 246
+001010
+000000
+001100
+010010
+010010
+010010
+001100
+000000
+CHAR 247
+001010
+000000
+001110
+010001
+010001
+010001
+001110
+000000
+CHAR 249
+011000
+000000
+010010
+010010
+010010
+010110
+001010
+000000
+CHAR 250
+000110
+000000
+010010
+010010
+010010
+010110
+001010
+000000
+CHAR 251
+001110
+000000
+010010
+010010
+010010
+010110
+001010
+000000
+CHAR 252
+010010
+000000
+010010
+010010
+010010
+010110
+001010
+000000
+CHAR 255
+001010
+000000
+010010
+010010
+010010
+001110
+000100
+011000
+CHAR 402
+000010
+000101
+000100
+001110
+000100
+000100
+010100
+001000
+CHAR 915
+011110
+010010
+010000
+010000
+010000
+010000
+010000
+000000
+CHAR 920
+001100
+010010
+010010
+011110
+010010
+010010
+001100
+000000
+CHAR 931
+011111
+010000
+001000
+000100
+001000
+010000
+011111
+000000
+CHAR 934
+001110
+000100
+001110
+010001
+001110
+000100
+001110
+000000
+CHAR 937
+000000
+001110
+010001
+010001
+001010
+001010
+011011
+000000
+CHAR 948
+001100
+010000
+001000
+000100
+001110
+010010
+001100
+000000
+CHAR 949
+000000
+001110
+010000
+011110
+010000
+001110
+000000
+000000
+CHAR 960
+000000
+011111
+001010
+001010
+001010
+001010
+001010
+000000
+CHAR 963
+000000
+000000
+001111
+010010
+010010
+001100
+000000
+000000
+CHAR 964
+000000
+000000
+001010
+010100
+000100
+000100
+000100
+000000
+CHAR 966
+000000
+000100
+001110
+010101
+010101
+001110
+000100
+000000
+CHAR 8226
+000000
+000000
+000000
+001100
+001100
+000000
+000000
+000000
+CHAR 8252
+001010
+001010
+001010
+001010
+001010
+000000
+001010
+000000
+CHAR 8592
+000000
+000100
+001100
+011111
+001100
+000100
+000000
+000000
+CHAR 8593
+000100
+001110
+011111
+000100
+000100
+000100
+000100
+000000
+CHAR 8594
+000000
+000100
+000110
+011111
+000110
+000100
+000000
+000000
+CHAR 8595
+000100
+000100
+000100
+000100
+011111
+001110
+000100
+000000
+CHAR 8734
+000000
+000000
+001010
+010101
+010101
+001010
+000000
+000000
+CHAR 8735
+000000
+000000
+000000
+010000
+010000
+010000
+011111
+000000
+CHAR 8801
+000000
+011110
+000000
+011110
+000000
+011110
+000000
+000000
+CHAR 8804
+000010
+001100
+010000
+001100
+000010
+000000
+011110
+000000
+CHAR 8805
+010000
+001100
+000010
+001100
+010000
+000000
+011110
+000000
+CHAR 8962
+000100
+001110
+011011
+010001
+010001
+011111
+000000
+000000
+CHAR 8976
+000000
+000000
+011111
+010000
+010000
+010000
+000000
+000000
+CHAR 9472
+000000
+000000
+000000
+111111
+000000
+000000
+000000
+000000
+CHAR 9474
+000100
+000100
+000100
+000100
+000100
+000100
+000100
+000100
+CHAR 9488
+000000
+000000
+000000
+111100
+000100
+000100
+000100
+000100
+CHAR 9492
+000100
+000100
+000100
+000111
+000000
+000000
+000000
+000000
+CHAR 9500
+000100
+000100
+000100
+000111
+000100
+000100
+000100
+000100
+CHAR 9508
+000100
+000100
+000100
+111100
+000100
+000100
+000100
+000100
+CHAR 9516
+000000
+000000
+000000
+111111
+000100
+000100
+000100
+000100
+CHAR 9524
+000100
+000100
+000100
+111111
+000000
+000000
+000000
+000000
+CHAR 9532
+000100
+000100
+000100
+111111
+000100
+000100
+000100
+000100
+CHAR 9552
+000000
+111111
+000000
+111111
+000000
+000000
+000000
+000000
+CHAR 9553
+010100
+010100
+010100
+010100
+010100
+010100
+010100
+010100
+CHAR 9556
+000000
+011111
+010000
+010111
+010100
+010100
+010100
+010100
+CHAR 9557
+000000
+111100
+000100
+111100
+000100
+000100
+000100
+000100
+CHAR 9558
+000000
+000000
+000000
+111100
+010100
+010100
+010100
+010100
+CHAR 9559
+000000
+111100
+000100
+110100
+010100
+010100
+010100
+010100
+CHAR 9561
+010100
+010100
+010100
+011111
+000000
+000000
+000000
+000000
+CHAR 9562
+010100
+010111
+010000
+011111
+000000
+000000
+000000
+000000
+CHAR 9563
+000100
+111100
+000100
+111100
+000000
+000000
+000000
+000000
+CHAR 9564
+010100
+010100
+010100
+111100
+000000
+000000
+000000
+000000
+CHAR 9565
+010100
+110100
+000100
+111100
+000000
+000000
+000000
+000000
+CHAR 9566
+000100
+000111
+000100
+000111
+000100
+000100
+000100
+000100
+CHAR 9567
+010100
+010100
+010100
+010111
+010100
+010100
+010100
+010100
+CHAR 9568
+010100
+010111
+010000
+010111
+010100
+010100
+010100
+010100
+CHAR 9569
+000000
+000000
+010010
+010010
+010010
+011100
+010000
+010000
+CHAR 9570
+010100
+010100
+010100
+110100
+010100
+010100
+010100
+010100
+CHAR 9571
+010100
+110100
+000100
+110100
+010100
+010100
+010100
+010100
+CHAR 9572
+000000
+111111
+000000
+111111
+000100
+000100
+000100
+000100
+CHAR 9573
+000000
+000000
+000000
+111111
+010100
+010100
+010100
+010100
+CHAR 9574
+000000
+111111
+000000
+110111
+010100
+010100
+010100
+010100
+CHAR 9575
+000100
+111111
+000000
+111111
+000000
+000000
+000000
+000000
+CHAR 9576
+010100
+010100
+010100
+111111
+000000
+000000
+000000
+000000
+CHAR 9577
+010100
+110111
+000000
+111111
+000000
+000000
+000000
+000000
+CHAR 9580
+010100
+110111
+000000
+110111
+010100
+010100
+010100
+010100
+CHAR 9601
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+111111
+CHAR 9602
+000000
+000000
+000000
+000000
+000000
+000000
+111111
+111111
+CHAR 9603
+000000
+000000
+000000
+000000
+000000
+111111
+111111
+111111
+CHAR 9604
+000000
+000000
+000000
+000000
+111111
+111111
+111111
+111111
+CHAR 9605
+000000
+000000
+000000
+111111
+111111
+111111
+111111
+111111
+CHAR 9606
+000000
+000000
+111111
+111111
+111111
+111111
+111111
+111111
+CHAR 9607
+000000
+111111
+111111
+111111
+111111
+111111
+111111
+111111
+CHAR 9608
+111111
+111111
+111111
+111111
+111111
+111111
+111111
+111111
+CHAR 9609
+111100
+111100
+111100
+111100
+111100
+111100
+111100
+111100
+CHAR 9610
+111100
+111100
+111100
+111100
+111100
+111100
+111100
+111100
+CHAR 9611
+111000
+111000
+111000
+111000
+111000
+111000
+111000
+111000
+CHAR 9613
+110000
+110000
+110000
+110000
+110000
+110000
+110000
+110000
+CHAR 9615
+100000
+100000
+100000
+100000
+100000
+100000
+100000
+100000
+CHAR 9617
+010101
+000000
+101010
+000000
+010101
+000000
+101010
+000000
+CHAR 9618
+010101
+101010
+010101
+101010
+010101
+101010
+010101
+101010
+CHAR 9619
+101010
+111111
+010101
+111111
+101010
+111111
+010101
+111111
+CHAR 9644
+000000
+000000
+000000
+000000
+000000
+011110
+011110
+000000
+CHAR 9650
+000100
+000100
+001110
+001110
+011111
+011111
+000000
+000000
+CHAR 9658
+001000
+001100
+001110
+001111
+001110
+001100
+001000
+000000
+CHAR 9660
+011111
+011111
+001110
+001110
+000100
+000100
+000000
+000000
+CHAR 9668
+000010
+000110
+001110
+011110
+001110
+000110
+000010
+000000
+CHAR 9675
+000000
+000000
+011110
+010010
+010010
+011110
+000000
+000000
+CHAR 9688
+111111
+111111
+111111
+110011
+110011
+111111
+111111
+111111
+CHAR 9689
+111111
+111111
+100001
+101101
+101101
+100001
+111111
+111111
+CHAR 9786
+001110
+010001
+011011
+010001
+010101
+010001
+001110
+000000
+CHAR 9787
+001110
+011111
+010101
+011111
+010001
+011111
+001110
+000000
+CHAR 9788
+000000
+010101
+001110
+011011
+001110
+010101
+000000
+000000
+CHAR 9792
+001110
+010001
+010001
+001110
+000100
+001110
+000100
+000000
+CHAR 9794
+000000
+000111
+000011
+001101
+010010
+010010
+001100
+000000
+CHAR 9824
+000000
+000100
+001110
+011111
+011111
+000100
+001110
+000000
+CHAR 9827
+000100
+001110
+001110
+000100
+011111
+011111
+000100
+000000
+CHAR 9829
+000000
+001010
+011111
+011111
+011111
+001110
+000100
+000000
+CHAR 9830
+000000
+000100
+001110
+011111
+011111
+001110
+000100
+000000
+CHAR 9834
+000100
+000110
+000101
+000100
+001100
+011100
+011000
+000000
+CHAR 9835
+000011
+001101
+001011
+001101
+001011
+011011
+011000
+000000
+</script>
 
-(function (bitsy) {
-//'use strict';
-//bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+<!-- BORKSY HACKS -->
+<script type="text/javascript" id="borksyHacks">
+//borksy uses dist versions of hacks from the bitsy hacks repo now
 
 BORKSY-HACKS
-
-}(window));
 
 </script>
 

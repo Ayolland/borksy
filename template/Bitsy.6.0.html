@@ -1,8 +1,13 @@
 <!DOCTYPE HTML>
 <html>
 
+<!-- Borksy 4.0 -->
+<!-- Bitsy 6.0 -->
+
 <!-- HEADER -->
 <head>
+
+<meta charset="UTF-8">
 
 <title>BORKSY-TITLE</title>
 
@@ -202,28 +207,711 @@ function rgbToHsl(r, g, b){
 </script>
 
 <script>
-function Font() {
+var TransitionManager = function() {
+	var transitionStart = null;
+	var transitionEnd = null;
+	var effectImage = null;
+
+	var isTransitioning = false;
+	var transitionTime = 0; // milliseconds
+	var frameRate = 8; // cap the FPS
+	var prevStep = -1; // used to avoid running post-process effect constantly
+
+	this.BeginTransition = function(startRoom,startX,startY,endRoom,endX,endY,effectName) {
+		// console.log("--- START ROOM TRANSITION ---");
+
+		curEffect = effectName;
+
+		var tmpRoom = player().room;
+		var tmpX = player().x;
+		var tmpY = player().y;
+
+		if (transitionEffects[curEffect].showPlayerStart) {
+			player().room = startRoom;
+			player().x = startX;
+			player().y = startY;
+		}
+		else {
+			player().room = "_transition_none"; // kind of hacky!!
+		}
+
+		drawRoom(room[startRoom]);
+		var startPalette = getPal( room[startRoom].pal );
+		var startImage = new PostProcessImage( ctx.getImageData(0,0,canvas.width,canvas.height) ); // TODO : don't use global ctx?
+		transitionStart = new TransitionInfo(startImage, startPalette, startX, startY);
+
+		if (transitionEffects[curEffect].showPlayerEnd) {
+			player().room = endRoom;
+			player().x = endX;
+			player().y = endY;
+		}
+		else {
+			player().room = "_transition_none";
+		}
+
+		drawRoom(room[endRoom]);
+		var endPalette = getPal( room[endRoom].pal );
+		var endImage = new PostProcessImage( ctx.getImageData(0,0,canvas.width,canvas.height) );
+		transitionEnd = new TransitionInfo(endImage, endPalette, endX, endY);
+
+		effectImage = new PostProcessImage( ctx.createImageData(canvas.width,canvas.height) );
+
+		isTransitioning = true;
+		transitionTime = 0;
+		prevStep = -1;
+
+		player().room = tmpRoom;
+		player().x = tmpX;
+		player().y = tmpY;
+	}
+
+	this.UpdateTransition = function(dt) {
+		if (!isTransitioning) {
+			return;
+		}
+
+		transitionTime += dt;
+
+		var transitionDelta = transitionTime / transitionEffects[curEffect].duration;
+		var maxStep = Math.floor(frameRate * (transitionEffects[curEffect].duration / 1000));
+		var step = Math.floor(transitionDelta * maxStep);
+
+		if (step != prevStep) {
+			// console.log("step! " + step + " " + transitionDelta);
+			for (var y = 0; y < effectImage.Height; y++) {
+				for (var x = 0; x < effectImage.Width; x++) {
+					var color = transitionEffects[curEffect].pixelEffectFunc(transitionStart,transitionEnd,x,y,(step / maxStep));
+					effectImage.SetPixel(x,y,color);
+				}
+			}
+		}
+		prevStep = step;
+
+		ctx.putImageData(effectImage.GetData(), 0, 0);
+
+		if (transitionTime >= transitionEffects[curEffect].duration) {
+			isTransitioning = false;
+			transitionTime = 0;
+			transitionStart = null;
+			transitionEnd = null;
+			effectImage = null;
+			prevStep = -1;
+		}
+	}
+
+	this.IsTransitionActive = function() {
+		return isTransitioning;
+	}
+
+	var transitionEffects = {};
+	var curEffect = "none";
+	this.RegisterTransitionEffect = function(name, effect) {
+		transitionEffects[name] = effect;
+	}
+
+	this.RegisterTransitionEffect("none", {
+		showPlayerStart : false,
+		showPlayerEnd : false,
+		pixelEffectFunc : function() {},
+	});
+
+	this.RegisterTransitionEffect("fade_w", { // TODO : have it linger on full white briefly?
+		showPlayerStart : false,
+		showPlayerEnd : true,
+		duration : 750,
+		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+			var pixelColorA = delta < 0.5 ? start.Image.GetPixel(pixelX,pixelY) : {r:255,g:255,b:255,a:255};
+			var pixelColorB = delta < 0.5 ? {r:255,g:255,b:255,a:255} : end.Image.GetPixel(pixelX,pixelY);
+
+			delta = delta < 0.5 ? (delta / 0.5) : ((delta - 0.5) / 0.5); // hacky
+
+			return PostProcessUtilities.LerpColor(pixelColorA, pixelColorB, delta);
+		}
+	});
+
+	this.RegisterTransitionEffect("fade_b", {
+		showPlayerStart : false,
+		showPlayerEnd : true,
+		duration : 750,
+		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+			var pixelColorA = delta < 0.5 ? start.Image.GetPixel(pixelX,pixelY) : {r:0,g:0,b:0,a:255};
+			var pixelColorB = delta < 0.5 ? {r:0,g:0,b:0,a:255} : end.Image.GetPixel(pixelX,pixelY);
+
+			delta = delta < 0.5 ? (delta / 0.5) : ((delta - 0.5) / 0.5); // hacky
+
+			return PostProcessUtilities.LerpColor(pixelColorA, pixelColorB, delta);
+		}
+	});
+
+	this.RegisterTransitionEffect("wave", {
+		showPlayerStart : true,
+		showPlayerEnd : true,
+		duration : 1500,
+		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+			var waveDelta = delta < 0.5 ? delta / 0.5 : 1 - ((delta - 0.5) / 0.5);
+
+			var offset = (pixelY + (waveDelta * waveDelta * 0.2 * start.Image.Height));
+			var freq = 4;
+			var size = 2 + (14 * waveDelta);
+			pixelX += Math.floor(Math.sin(offset / freq) * size);
+
+			if (pixelX < 0) {
+				pixelX += start.Image.Width;
+			}
+			else if (pixelX >= start.Image.Width) {
+				pixelX -= start.Image.Width;
+			}
+
+			var curImage = delta < 0.5 ? start.Image : end.Image;
+			return curImage.GetPixel(pixelX,pixelY);
+		}
+	});
+
+	this.RegisterTransitionEffect("tunnel", {
+		showPlayerStart : true,
+		showPlayerEnd : true,
+		duration : 1500,
+		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+			if (delta <= 0.4) {
+				var tunnelDelta = 1 - (delta / 0.4);
+
+				var xDist = start.PlayerCenter.x - pixelX;
+				var yDist = start.PlayerCenter.y - pixelY;
+				var dist = Math.sqrt((xDist * xDist) + (yDist * yDist));
+
+				if (dist > start.Image.Width * tunnelDelta) {
+					return {r:0,g:0,b:0,a:255};
+				}
+				else {
+					return start.Image.GetPixel(pixelX,pixelY);
+				}
+			}
+			else if (delta <= 0.6)
+			{
+				return {r:0,g:0,b:0,a:255};
+			}
+			else {
+				var tunnelDelta = (delta - 0.6) / 0.4;
+
+				var xDist = end.PlayerCenter.x - pixelX;
+				var yDist = end.PlayerCenter.y - pixelY;
+				var dist = Math.sqrt((xDist * xDist) + (yDist * yDist));
+
+				if (dist > end.Image.Width * tunnelDelta) {
+					return {r:0,g:0,b:0,a:255};
+				}
+				else {
+					return end.Image.GetPixel(pixelX,pixelY);
+				}
+			}
+		}
+	});
+
+	this.RegisterTransitionEffect("slide_u", {
+		showPlayerStart : false,
+		showPlayerEnd : true,
+		duration : 1000,
+		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+			var pixelOffset = -1 * Math.floor(start.Image.Height * delta);
+			var slidePixelY = pixelY + pixelOffset;
+
+			var colorDelta = clampLerp(delta, 0.4);
+
+			if (slidePixelY >= 0) {
+				var colorA = start.Image.GetPixel(pixelX,slidePixelY);
+				var colorB = PostProcessUtilities.GetCorrespondingColorFromPal(colorA,start.Palette,end.Palette);
+				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
+				return colorLerped;
+			}
+			else {
+				slidePixelY += start.Image.Height;
+				var colorB = end.Image.GetPixel(pixelX,slidePixelY);
+				var colorA = PostProcessUtilities.GetCorrespondingColorFromPal(colorB,end.Palette,start.Palette);
+				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
+				return colorLerped;
+			}
+		}
+	});
+
+	this.RegisterTransitionEffect("slide_d", {
+		showPlayerStart : false,
+		showPlayerEnd : true,
+		duration : 1000,
+		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+			var pixelOffset = Math.floor(start.Image.Height * delta);
+			var slidePixelY = pixelY + pixelOffset;
+
+			var colorDelta = clampLerp(delta, 0.4);
+
+			if (slidePixelY < start.Image.Height) {
+				var colorA = start.Image.GetPixel(pixelX,slidePixelY);
+				var colorB = PostProcessUtilities.GetCorrespondingColorFromPal(colorA,start.Palette,end.Palette);
+				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
+				return colorLerped;
+			}
+			else {
+				slidePixelY -= start.Image.Height;
+				var colorB = end.Image.GetPixel(pixelX,slidePixelY);
+				var colorA = PostProcessUtilities.GetCorrespondingColorFromPal(colorB,end.Palette,start.Palette);
+				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
+				return colorLerped;
+			}
+		}
+	});
+
+	this.RegisterTransitionEffect("slide_l", {
+		showPlayerStart : false,
+		showPlayerEnd : true,
+		duration : 1000,
+		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+			var pixelOffset = -1 * Math.floor(start.Image.Width * delta);
+			var slidePixelX = pixelX + pixelOffset;
+
+			var colorDelta = clampLerp(delta, 0.4);
+
+			if (slidePixelX >= 0) {
+				var colorA = start.Image.GetPixel(slidePixelX,pixelY);
+				var colorB = PostProcessUtilities.GetCorrespondingColorFromPal(colorA,start.Palette,end.Palette);
+				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
+				return colorLerped;
+			}
+			else {
+				slidePixelX += start.Image.Width;
+				var colorB = end.Image.GetPixel(slidePixelX,pixelY);
+				var colorA = PostProcessUtilities.GetCorrespondingColorFromPal(colorB,end.Palette,start.Palette);
+				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
+				return colorLerped;
+			}
+		}
+	});
+
+	this.RegisterTransitionEffect("slide_r", {
+		showPlayerStart : false,
+		showPlayerEnd : true,
+		duration : 1000,
+		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+			var pixelOffset = Math.floor(start.Image.Width * delta);
+			var slidePixelX = pixelX + pixelOffset;
+
+			var colorDelta = clampLerp(delta, 0.4);
+
+			if (slidePixelX < start.Image.Width) {
+				var colorA = start.Image.GetPixel(slidePixelX,pixelY);
+				var colorB = PostProcessUtilities.GetCorrespondingColorFromPal(colorA,start.Palette,end.Palette);
+				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
+				return colorLerped;
+			}
+			else {
+				slidePixelX -= start.Image.Width;
+				var colorB = end.Image.GetPixel(slidePixelX,pixelY);
+				var colorA = PostProcessUtilities.GetCorrespondingColorFromPal(colorB,end.Palette,start.Palette);
+				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
+				return colorLerped;
+			}
+		}
+	});
+
+	function clampLerp(deltaIn, clampDuration) {
+		var clampOffset = (1.0 - clampDuration) / 2;
+		var deltaOut = Math.min(clampDuration, Math.max(0.0, deltaIn - clampOffset)) / clampDuration;
+		return deltaOut;
+	}
+
+	// TODO : WIP
+	// this.RegisterTransitionEffect("fuzz", {
+	// 	showPlayerStart : true,
+	// 	showPlayerEnd : true,
+	// 	duration : 1500,
+	// 	pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+	// 		var curImage = delta <= 0.5 ? start : end;
+	// 		var sampleSize = delta <= 0.5 ? (2 + Math.floor(14 * (delta/0.5))) : (16 - Math.floor(14 * ((delta-0.5)/0.5)));
+
+	// 		var palIndex = 0;
+
+	// 		var sampleX = Math.floor(pixelX / sampleSize) * sampleSize;
+	// 		var sampleY = Math.floor(pixelY / sampleSize) * sampleSize;
+
+	// 		var frameState = transitionEffects["fuzz"].frameState;
+
+	// 		if (frameState.time != delta) {
+	// 			frameState.time = delta;
+	// 			frameState.preCalcSampleValues = {};
+	// 		}
+
+	// 		if (frameState.preCalcSampleValues[[sampleX,sampleY]]) {
+	// 			palIndex = frameState.preCalcSampleValues[[sampleX,sampleY]];
+	// 		}
+	// 		else {
+	// 			var paletteCount = {};
+	// 			var foregroundValue = 1.0;
+	// 			var backgroundValue = 0.4;
+	// 			for (var y = sampleY; y < sampleY + sampleSize; y++) {
+	// 				for (var x = sampleX; x < sampleX + sampleSize; x++) {
+	// 					var color = curImage.Image.GetPixel(x,y)
+	// 					var palIndex = PostProcessUtilities.GetColorPalIndex(color,curImage.Palette);
+	// 					if (palIndex != -1) {
+	// 						if (paletteCount[palIndex]) {
+	// 							paletteCount[palIndex] += (palIndex != 0) ? foregroundValue : backgroundValue;
+	// 						}
+	// 						else {
+	// 							paletteCount[palIndex] = (palIndex != 0) ? foregroundValue : backgroundValue;
+	// 						}
+	// 					}
+	// 				}
+	// 			}
+
+	// 			var maxCount = 0;
+	// 			for (var i in paletteCount) {
+	// 				if (paletteCount[i] > maxCount) {
+	// 					palIndex = i;
+	// 					maxCount = paletteCount[i];
+	// 				}
+	// 			}
+
+	// 			frameState.preCalcSampleValues[[sampleX,sampleY]] = palIndex;
+	// 		}
+
+	// 		return PostProcessUtilities.GetPalColor(curImage.Palette,palIndex);
+	// 	},
+	// 	frameState : { // ok this is hacky but it's for performance ok
+	// 		time : -1,
+	// 		preCalcSampleValues : {}
+	// 	}
+	// });
+}; // TransitionManager()
 
 
-this.getData = function() {
-	return fontdata;
+// TODO : extract the scale variable so it can be changed?
+var PostProcessUtilities = {
+	SamplePixelColor : function(image,x,y) {
+		var pixelIndex = (y * scale * image.width * 4) + (x * scale * 4);
+		var r = image.data[pixelIndex + 0];
+		var g = image.data[pixelIndex + 1];
+		var b = image.data[pixelIndex + 2];
+		var a = image.data[pixelIndex + 3];
+		return { r:r, g:g, b:b, a:a };
+	},
+	SetPixelColor : function(image,x,y,colorRgba) {
+		for (var yDelta = 0; yDelta <= scale; yDelta++) {
+			for (var xDelta = 0; xDelta <= scale; xDelta++) {
+				var pixelIndex = (((y * scale) + yDelta) * image.width * 4) + (((x * scale) + xDelta) * 4);
+				image.data[pixelIndex + 0] = colorRgba.r;
+				image.data[pixelIndex + 1] = colorRgba.g;
+				image.data[pixelIndex + 2] = colorRgba.b;
+				image.data[pixelIndex + 3] = colorRgba.a;
+			}
+		}
+	},
+	LerpColor : function(colorA,colorB,t) {
+		// TODO: move to color_util.js?
+		return {
+			r : colorA.r + ((colorB.r - colorA.r) * t),
+			g : colorA.g + ((colorB.g - colorA.g) * t),
+			b : colorA.b + ((colorB.b - colorA.b) * t),
+			a : colorA.a + ((colorB.a - colorA.a) * t),
+		};
+	},
+	GetColorPalIndex : function(colorIn,curPal) {
+		var colorIndex = -1;
+
+		for (var i = 0; i < curPal.length; i++) {
+			if (colorIn.r == curPal[i][0] && colorIn.g == curPal[i][1] && colorIn.b == curPal[i][2]) {
+				colorIndex = i;
+			}
+		}
+
+		return colorIndex;
+	},
+	GetPalColor : function(palette,index) {
+		return { r: palette[index][0], g: palette[index][1], b: palette[index][2], a: 255 }
+	},
+	GetCorrespondingColorFromPal : function(colorIn,curPal,otherPal) { // this is kind of hacky!
+		var colorIndex = PostProcessUtilities.GetColorPalIndex(colorIn,curPal);
+
+		if (colorIndex >= 0 && colorIndex <= otherPal.length) {
+			return PostProcessUtilities.GetPalColor(otherPal,colorIndex);
+		}
+		else {
+			return colorIn;
+		}
+	},
+};
+
+var PostProcessImage = function(imageData) {
+	this.Width = imageData.width / scale;
+	this.Height = imageData.height / scale;
+
+	this.GetPixel = function(x,y) {
+		return PostProcessUtilities.SamplePixelColor(imageData,x,y);
+	};
+
+	this.SetPixel = function(x,y,colorRgba) {
+		PostProcessUtilities.SetPixelColor(imageData,x,y,colorRgba);
+	};
+
+	this.GetData = function() {
+		return imageData;
+	};
+};
+
+var TransitionInfo = function(image, palette, playerX, playerY) {
+	this.Image = image;
+	this.Palette = palette;
+	this.PlayerTilePos = { x: playerX, y: playerY };
+	this.PlayerCenter = { x: Math.floor((playerX * tilesize) + (tilesize / 2)), y: Math.floor((playerY * tilesize) + (tilesize / 2)) };
+};
+</script>
+
+<script>
+/*
+TODO:
+- untangle local & external resource use in font manager (still more to do here)
+*/
+
+function FontManager(useExternalResources) {
+
+if (useExternalResources === undefined || useExternalResources === null) {
+	useExternalResources = false;
 }
 
-var charSize = 6 * 8;
-var unicodeToAsciiExtended = "\u0000\u263A\u263B\u2665\u2666\u2663\u2660\u2022\u25D8\u25CB\u25D9\u2642\u2640\u266A\u266B\u263C\u25BA\u25C4\u2195\u203C\u00B6\u00A7\u25AC\u21A8\u2191\u2193\u2192\u2190\u221F\u2194\u25B2\u25BC\u0020\u0021\u0022\u0023\u0024\u0025\u0026\u0027\u0028\u0029\u002a\u002b\u002c\u002d\u002e\u002f\u0030\u0031\u0032\u0033\u0034\u0035\u0036\u0037\u0038\u0039\u003a\u003b\u003c\u003d\u003e\u003f\u0040\u0041\u0042\u0043\u0044\u0045\u0046\u0047\u0048\u0049\u004a\u004b\u004c\u004d\u004e\u004f\u0050\u0051\u0052\u0053\u0054\u0055\u0056\u0057\u0058\u0059\u005a\u005b\u005c\u005d\u005e\u005f\u0060\u0061\u0062\u0063\u0064\u0065\u0066\u0067\u0068\u0069\u006a\u006b\u006c\u006d\u006e\u006f\u0070\u0071\u0072\u0073\u0074\u0075\u0076\u0077\u0078\u0079\u007a\u007b\u007c\u007d\u007e\u007f\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00a2\u00a3\u00a5\u20a7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u2310\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u2561\u2562\u2556\u2555\u2563\u2551\u2557\u255d\u255c\u255b\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u255e\u255f\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u2567\u2568\u2564\u2565\u2559\u2558\u2552\u2553\u256b\u256a\u2518\u250c\u2588\u2584\u258c\u2590\u2580\u03b1\u00df\u0393\u03c0\u03a3\u03c3\u00b5\u03c4\u03a6\u0398\u03a9\u03b4\u221e\u03c6\u03b5\u2229\u2261\u00b1\u2265\u2264\u2320\u2321\u00f7\u2248\u00b0\u2219\u00b7\u221a\u207f\u00b2\u25a0\u00a0".split("").reduce(function(obj, char, idx){
-    obj[char] = idx;
-    return obj;
-}, {});
+var self = this;
 
-this.getChar = function(char) {
-    var startIndex = unicodeToAsciiExtended[char] * charSize;
-    return fontdata.slice( startIndex, startIndex + charSize );
+var fontExtension = ".bitsyfont";
+this.GetExtension = function() {
+	return fontExtension;
 }
 
-var fontdata = BORKSY-FONTDATA;
+// place to store font data that is part of the local game data
+var localResources = {};
 
+// place to store font data fetched from a server (only used in editor)
+var externalResources = null;
+if (useExternalResources) {
+	externalResources = new ResourceLoader();// NOTE : this class doesn't exist in exported game
+}
 
-} // Font()
+this.LoadResources = function(filenames, onLoadAll) {
+	if (!useExternalResources)
+		return;
+
+	// TODO : is this being called too many times?
+	var onLoad = function() {
+		var count = externalResources.getResourceLoadedCount();
+
+		if (count >= filenames.length && onLoadAll != null) {
+			onLoadAll();
+		}
+	}
+
+	for (var i = 0; i < filenames.length; i++) {
+		externalResources.load("bitsyfont", filenames[i], onLoad);
+	}
+}
+
+// manually add resource
+this.AddResource = function(filename, fontdata) {
+	if (useExternalResources) {
+		externalResources.set(filename, fontdata);
+	}
+	else {
+		localResources[filename] = fontdata;
+	}
+}
+
+this.ContainsResource = function(filename) {
+	if (useExternalResources) {
+		return externalResources.contains(filename);
+	}
+	else {
+		return localResources[filename] != null;
+	}
+}
+
+function GetData(fontName) {
+	if (useExternalResources) {
+		return externalResources.get(fontName + fontExtension);
+	}
+	else {
+		return localResources[fontName + fontExtension];
+	}
+}
+this.GetData = GetData;
+
+function Create(fontData) {
+	return new Font(fontData);
+}
+this.Create = Create;
+
+this.Get = function(fontName) {
+	var fontData = self.GetData(fontName);
+	return self.Create(fontData);
+}
+
+function Font(fontData) {
+	var name = "unknown";
+	var width = 6; // default size so if you have NO font or an invalid font it displays boxes
+	var height = 8;
+	var chardata = {};
+	var invalidCharData = {};
+
+	this.getName = function() {
+		return name;
+	}
+
+	this.getData = function() {
+		return chardata;
+	}
+
+	this.getWidth = function() {
+		return width;
+	}
+
+	this.getHeight = function() {
+		return height;
+	}
+
+	this.hasChar = function(char) {
+		var codepoint = char.charCodeAt(0);
+		return chardata[codepoint] != null;
+	}
+
+	this.getChar = function(char) {
+
+		var codepoint = char.charCodeAt(0);
+
+		if (chardata[codepoint] != null) {
+			return chardata[codepoint];
+		}
+		else {
+			return invalidCharData;
+		}
+	}
+
+	this.allCharCodes = function() {
+		var codeList = [];
+		for (var code in chardata) {
+			codeList.push(code);
+		}
+		return codeList;
+	}
+
+	function parseFont(fontData) {
+		if (fontData == null)
+			return;
+
+		var lines = fontData.split("\n");
+
+		var isReadingChar = false;
+		var isReadingCharProperties = false;
+		var curCharLineCount = 0;
+		var curCharCode = 0;
+
+		for (var i = 0; i < lines.length; i++) {
+			var line = lines[i];
+
+			if (line[0] === "#") {
+				continue; // skip comment lines
+			}
+
+			if (!isReadingChar) {
+				// READING NON CHARACTER DATA LINE
+				var args = line.split(" ");
+				if (args[0] == "FONT") {
+					name = args[1];
+				}
+				else if (args[0] == "SIZE") {
+					width = parseInt(args[1]);
+					height = parseInt(args[2]);
+				}
+				else if (args[0] == "CHAR") {
+					isReadingChar = true;
+					isReadingCharProperties = true;
+
+					curCharLineCount = 0;
+					curCharCode = parseInt(args[1]);
+					chardata[curCharCode] = { 
+						width: width,
+						height: height,
+						offset: {
+							x: 0,
+							y: 0
+						},
+						spacing: width,
+						data: []
+					};
+				}
+			}
+			else {
+				// CHAR PROPERTIES
+				if (isReadingCharProperties) {
+					var args = line.split(" ");
+					if (args[0].indexOf("CHAR_") == 0) { // Sub-properties start with "CHAR_"
+						if (args[0] == "CHAR_SIZE") {
+							// Custom character size - overrides the default character size for the font
+							chardata[curCharCode].width = parseInt(args[1]);
+							chardata[curCharCode].height = parseInt(args[2]);
+							chardata[curCharCode].spacing = parseInt(args[1]); // HACK : assumes CHAR_SIZE is always declared first
+						}
+						else if (args[0] == "CHAR_OFFSET") {
+							// Character offset - shift the origin of the character on the X or Y axis
+							chardata[curCharCode].offset.x = parseInt(args[1]);
+							chardata[curCharCode].offset.y = parseInt(args[2]);
+						}
+						else if (args[0] == "CHAR_SPACING") {
+							// Character spacing:
+							// specify total horizontal space taken up by the character
+							// lets chars take up more or less space on a line than its bitmap does
+							chardata[curCharCode].spacing = parseInt(args[1]);
+						}
+					}
+					else {
+						isReadingCharProperties = false;
+					}
+				}
+
+				// CHAR DATA
+				if (!isReadingCharProperties) {
+					// READING CHARACTER DATA LINE
+					for (var j = 0; j < chardata[curCharCode].width; j++)
+					{
+						chardata[curCharCode].data.push( parseInt(line[j]) );
+					}
+
+					curCharLineCount++;
+					if (curCharLineCount >= height) {
+						isReadingChar = false;
+					}
+				}
+			}
+		}
+
+		// init invalid character box
+		invalidCharData = { 
+			width: width,
+			height: height,
+			offset: {
+				x: 0,
+				y: 0
+			},
+			spacing: width, // TODO : name?
+			data: []
+		};
+		for (var y = 0; y < height; y++) {
+			for (var x = 0; x < width; x++) {
+				if (x < width-1 && y < height-1) {
+					invalidCharData.data.push(1);
+				}
+				else {
+					invalidCharData.data.push(0);
+				}
+			}
+		}
+	}
+
+	parseFont(fontData);
+}
+
+} // FontManager
 </script>
 
 <script>
@@ -251,8 +939,9 @@ var Interpreter = function() {
 	}
 	this.Run = function(scriptName, exitHandler) { // Runs pre-compiled script
 		// console.log("RUN");
+		// console.log(env.GetScript( scriptName ));
 		env.GetScript( scriptName )
-			.Eval( env, function() { if(exitHandler!=null) exitHandler(); } );
+			.Eval( env, function(result) { OnScriptReturn(result, exitHandler); } );
 
 		// console.log("SERIALIZE!!!!");
 		// console.log( env.GetScript( scriptName ).Serialize() );
@@ -260,7 +949,7 @@ var Interpreter = function() {
 	this.Interpret = function(scriptStr, exitHandler) { // Compiles and runs code immediately
 		// console.log("INTERPRET");
 		var script = parser.Parse( scriptStr );
-		script.Eval( env, function() { if(exitHandler!=null) exitHandler(); } );
+		script.Eval( env, function(result) { OnScriptReturn(result, exitHandler); } );
 	}
 	this.HasScript = function(name) { return env.HasScript(name); };
 
@@ -269,17 +958,23 @@ var Interpreter = function() {
 		parser = new Parser( env );
 	}
 
-	// TODO : move to utils?
-	// for reading in dialog from the larger file format
-	this.ReadDialogScript = function(lines, i) {
-		return parser.ReadDialogScript(lines,i);
-	}
-
 	this.Parse = function(scriptStr) { // parses a script but doesn't save it
 		return parser.Parse( scriptStr );
 	}
-	this.Eval = function(scripTree, exitHandler) { // runs a script stored externally
-		scripTree.Eval( env, function() { if(exitHandler!=null) exitHandler(); } );
+	this.Eval = function(scriptTree, exitHandler) { // runs a script stored externally
+		scriptTree.Eval( env, function(result) { OnScriptReturn(result, exitHandler); } );
+	}
+
+	function OnScriptReturn(result, exitHandler) {
+		if (isReturnObject(result)) {
+			result = result.result; // pull out the contained result
+		}
+
+		// console.log("RESULT " + result);
+
+		if (exitHandler != null) {
+			exitHandler(result);
+		}
 	}
 
 	this.CreateExpression = function(expStr) {
@@ -305,6 +1000,16 @@ var Interpreter = function() {
 	}
 	this.GetVariable = function(name) {
 		return env.GetVariable(name);
+	}
+
+	this.DebugVisualizeScriptTree = function(scriptName) {
+		var printVisitor = {
+			Visit : function(node,depth) {
+				console.log("-".repeat(depth) + "- " + node.ToString());
+			},
+		};
+
+		env.GetScript( scriptName ).VisitAll( printVisitor );
 	}
 }
 
@@ -358,12 +1063,82 @@ var Utils = function() {
 		block.AddChild( ifNode );
 		return block;
 	}
+
+	this.ReadDialogScript = function(lines, i) {
+		var scriptStr = "";
+		if (lines[i] === Sym.DialogOpen) {
+			scriptStr += lines[i] + "\n";
+			i++;
+			while(lines[i] != Sym.DialogClose) {
+				scriptStr += lines[i] + "\n";
+				i++;
+			}
+			scriptStr += lines[i];
+			i++;
+		}
+		else {
+			scriptStr += lines[i];
+		}
+		return { script:scriptStr, index:i };
+	}
+
+	// TODO this.ReadCodeScript (reads through code open and close symbols), and this.ReadScript
+
+	this.EnsureDialogBlockFormat = function(dialogStr) {
+		// TODO -- what if it's already enclosed in dialog symbols??
+		if(dialogStr.indexOf('\n') > -1) {
+			dialogStr = Sym.DialogOpen + "\n" + dialogStr + "\n" + Sym.DialogClose;
+		}
+		return dialogStr;
+	}
+
+	this.RemoveDialogBlockFormat = function(source) {
+		var sourceLines = source.split("\n");
+		var dialogStr = "";
+		if(sourceLines[0] === Sym.DialogOpen) {
+			// multi line
+			var i = 1;
+			while (i < sourceLines.length && sourceLines[i] != Sym.DialogClose) {
+				dialogStr += sourceLines[i] + (sourceLines[i+1] != Sym.DialogClose ? '\n' : '');
+				i++;
+			}
+		}
+		else {
+			// single line
+			dialogStr = source;
+		}
+		return dialogStr;
+	}
 }
 
 
 /* BUILT-IN FUNCTIONS */ // TODO: better way to encapsulate these?
-function sayFunc(environment,parameters,onReturn) {
-	// console.log("SAY FUNC");
+function deprecatedFunc(environment,parameters,onReturn) {
+	console.log("BITSY SCRIPT WARNING: Tried to use deprecated function");
+	onReturn(null);
+}
+
+// TODO : vNext
+// function returnFunc(environment,parameters,onReturn) {
+// 	var ret = { isReturn: true, result: null };
+// 	if (parameters.length > 0 && parameters[0] != undefined && parameters[0] != null) {
+// 		ret.result = parameters[0];
+// 	}
+// 	onReturn(ret);
+// }
+
+// TODO : vNext
+// // TODO : this is kind of hacky
+// // - needs to work with names too
+// function changeAvatarFunc(environment,parameters,onReturn) {
+// 	if( parameters[0] != undefined && parameters[0] != null ) {
+// 		sprite["A"].drw = "SPR_" + parameters[0];
+// 	}
+// 	onReturn(null);
+// }
+
+function printFunc(environment,parameters,onReturn) {
+	// console.log("PRINT FUNC");
 	// console.log(parameters);
 	if( parameters[0] != undefined && parameters[0] != null ) {
 		// console.log(parameters[0]);
@@ -377,14 +1152,53 @@ function sayFunc(environment,parameters,onReturn) {
 		}; // called when dialog is finished printing
 		environment.GetDialogBuffer().AddText( textStr, onFinishHandler );
 	}
-	else
+	else {
 		onReturn(null);
+	}
 }
 
 function linebreakFunc(environment,parameters,onReturn) {
 	// console.log("LINEBREAK FUNC");
 	environment.GetDialogBuffer().AddLinebreak();
 	onReturn(null);
+}
+
+function printDrawingFunc(environment,parameters,onReturn) {
+	var drawingId = parameters[0];
+	environment.GetDialogBuffer().AddDrawing( drawingId, function() {
+		onReturn(null);
+	});
+}
+
+function printSpriteFunc(environment,parameters,onReturn) {
+	var spriteId = parameters[0];
+	if(names.sprite.has(spriteId)) spriteId = names.sprite.get(spriteId); // id is actually a name
+	var drawingId = sprite[spriteId].drw;
+	printDrawingFunc(environment, [drawingId], onReturn);
+}
+
+function printTileFunc(environment,parameters,onReturn) {
+	var tileId = parameters[0];
+	if(names.tile.has(tileId)) tileId = names.tile.get(tileId); // id is actually a name
+	var drawingId = tile[tileId].drw;
+	printDrawingFunc(environment, [drawingId], onReturn);
+}
+
+function printItemFunc(environment,parameters,onReturn) {
+	var itemId = parameters[0];
+	if(names.item.has(itemId)) itemId = names.item.get(itemId); // id is actually a name
+	var drawingId = item[itemId].drw;
+	printDrawingFunc(environment, [drawingId], onReturn);
+}
+
+function printFontFunc(environment, parameters, onReturn) {
+	var allCharacters = "";
+	var font = fontManager.Get( fontName );
+	var codeList = font.allCharCodes();
+	for (var i = 0; i < codeList.length; i++) {
+		allCharacters += String.fromCharCode(codeList[i]) + " ";
+	}
+	printFunc(environment, [allCharacters], onReturn);
 }
 
 function itemFunc(environment,parameters,onReturn) {
@@ -525,7 +1339,8 @@ var Environment = function() {
 	this.GetDialogBuffer = function() { return dialogBuffer; };
 
 	var functionMap = new Map();
-	functionMap.set("say", sayFunc);
+	functionMap.set("print", printFunc);
+	functionMap.set("say", printFunc);
 	functionMap.set("br", linebreakFunc);
 	functionMap.set("item", itemFunc);
 	functionMap.set("rbw", rainbowFunc);
@@ -534,6 +1349,14 @@ var Environment = function() {
 	functionMap.set("clr3", color3Func);
 	functionMap.set("wvy", wavyFunc);
 	functionMap.set("shk", shakyFunc);
+	functionMap.set("printSprite", printSpriteFunc);
+	functionMap.set("printTile", printTileFunc);
+	functionMap.set("printItem", printItemFunc);
+	functionMap.set("debugOnlyPrintFont", printFontFunc); // DEBUG ONLY
+
+	// TODO : vNext
+	// functionMap.set("changeAvatar", changeAvatarFunc);
+	// functionMap.set("return", returnFunc);
 
 	this.HasFunction = function(name) { return functionMap.has(name); };
 	this.EvalFunction = function(name,parameters,onReturn) {
@@ -543,10 +1366,6 @@ var Environment = function() {
 	}
 
 	var variableMap = new Map();
-
-	// Borksy modification
-	// Makes bitsy varaibles are globally available
-	window.bitsyVariableMap = variableMap;
 
 	this.HasVariable = function(name) { return variableMap.has(name); };
 	this.GetVariable = function(name) { return variableMap.get(name); };
@@ -615,12 +1434,22 @@ var TreeRelationship = function() {
 		node.parent = this;
 	};
 
-	this.VisitAll = function(visitor) {
-		visitor.Visit( this );
+	this.VisitAll = function(visitor, depth) {
+		if (depth == undefined || depth == null) {
+			depth = 0;
+		}
+
+		visitor.Visit( this, depth );
 		for( var i = 0; i < this.children.length; i++ ) {
-			this.children[i].VisitAll( visitor );
+			this.children[i].VisitAll( visitor, depth + 1 );
 		}
 	};
+}
+
+function isReturnObject(val) {
+	return typeof val === "object" && val != null
+				&& val.isReturn != undefined && val.isReturn != null
+				&& val.isReturn;
 }
 
 var BlockMode = {
@@ -637,27 +1466,40 @@ var BlockNode = function(mode, doIndentFirstLine) {
 	this.Eval = function(environment,onReturn) {
 		// console.log("EVAL BLOCK " + this.children.length);
 
-		if( this.onEnter != null ) this.onEnter();
+		if( this.onEnter != null ) {
+			this.onEnter();
+		}
 
 		var lastVal = null;
 		var i = 0;
+
 		function evalChildren(children,done) {
-			if(i < children.length) {
+			if (i < children.length) {
 				// console.log(">> CHILD " + i);
 				children[i].Eval( environment, function(val) {
 					// console.log("<< CHILD " + i);
-					lastVal = val;
-					i++;
-					evalChildren(children,done);
+
+					if (isReturnObject(val)) { // early return
+						lastVal = val;
+						done();
+					}
+					else {
+						lastVal = val;
+						i++;
+						evalChildren(children,done);
+					}
 				} );
 			}
 			else {
 				done();
 			}
 		};
+
 		var self = this;
 		evalChildren( this.children, function() {
-			if( self.onExit != null ) self.onExit();
+			if( self.onExit != null ) {
+				self.onExit();
+			}
 			onReturn(lastVal);
 		} );
 	}
@@ -667,9 +1509,9 @@ var BlockNode = function(mode, doIndentFirstLine) {
 	this.Serialize = function(depth) {
 		if(depth === undefined) depth = 0;
 
-		console.log("SERIALIZE BLOCK!!!");
-		console.log(depth);
-		console.log(doIndentFirstLine);
+		// console.log("SERIALIZE BLOCK!!!");
+		// console.log(depth);
+		// console.log(doIndentFirstLine);
 
 		var str = "";
 		var lastNode = null;
@@ -691,6 +1533,10 @@ var BlockNode = function(mode, doIndentFirstLine) {
 		if (this.mode === BlockMode.Code) str += "}";
 		return str;
 	}
+
+	this.ToString = function() {
+		return this.type + " " + this.mode;
+	};
 }
 
 function isBlockWithNoNewline(node) {
@@ -763,9 +1609,9 @@ var FuncNode = function(name,arguments) {
 
 	this.Serialize = function(depth) {
 		var isDialogBlock = this.parent.mode && this.parent.mode === BlockMode.Dialog;
-		if(isDialogBlock && this.name === "say") {
-			// TODO this could cause problems with "real" say functions
-			return this.arguments[0].value; // first argument should be the text of the {say} func
+		if(isDialogBlock && this.name === "print") {
+			// TODO this could cause problems with "real" print functions
+			return this.arguments[0].value; // first argument should be the text of the {print} func
 		}
 		else if(isDialogBlock && this.name === "br") {
 			return "\n";
@@ -780,6 +1626,10 @@ var FuncNode = function(name,arguments) {
 			return str;
 		}
 	}
+
+	this.ToString = function() {
+		return this.type + " " + this.name;
+	};
 }
 
 var LiteralNode = function(value) {
@@ -804,6 +1654,10 @@ var LiteralNode = function(value) {
 
 		return str;
 	}
+
+	this.ToString = function() {
+		return this.type + " " + this.value;
+	};
 }
 
 var VarNode = function(name) {
@@ -824,6 +1678,10 @@ var VarNode = function(name) {
 		var str = "" + this.name;
 		return str;
 	}
+
+	this.ToString = function() {
+		return this.type + " " + this.name;
+	};
 }
 
 var ExpNode = function(operator, left, right) {
@@ -859,12 +1717,20 @@ var ExpNode = function(operator, left, right) {
 		}
 	}
 
-	this.VisitAll = function(visitor) {
-		visitor.Visit( this );
+	this.VisitAll = function(visitor, depth) {
+		if (depth == undefined || depth == null) {
+			depth = 0;
+		}
+
+		visitor.Visit( this, depth );
 		if(this.left != null)
-			this.left.VisitAll( visitor );
+			this.left.VisitAll( visitor, depth + 1 );
 		if(this.right != null)
-			this.right.VisitAll( visitor );
+			this.right.VisitAll( visitor, depth + 1 );
+	};
+
+	this.ToString = function() {
+		return this.type + " " + this.operator;
 	};
 }
 
@@ -881,11 +1747,19 @@ var SequenceBase = function() {
 		return str;
 	}
 
-	this.VisitAll = function(visitor) {
-		visitor.Visit( this );
-		for( var i = 0; i < this.options.length; i++ ) {
-			this.options[i].VisitAll( visitor );
+	this.VisitAll = function(visitor, depth) {
+		if (depth == undefined || depth == null) {
+			depth = 0;
 		}
+
+		visitor.Visit( this, depth );
+		for( var i = 0; i < this.options.length; i++ ) {
+			this.options[i].VisitAll( visitor, depth + 1 );
+		}
+	};
+
+	this.ToString = function() {
+		return this.type;
 	};
 }
 
@@ -1011,14 +1885,22 @@ var IfNode = function(conditions, results, isSingleLine) {
 		return isSingleLine;
 	}
 
-	this.VisitAll = function(visitor) {
-		visitor.Visit( this );
+	this.VisitAll = function(visitor, depth) {
+		if (depth == undefined || depth == null) {
+			depth = 0;
+		}
+
+		visitor.Visit( this, depth );
 		for( var i = 0; i < this.conditions.length; i++ ) {
-			this.conditions[i].VisitAll( visitor );
+			this.conditions[i].VisitAll( visitor, depth + 1 );
 		}
 		for( var i = 0; i < this.results.length; i++ ) {
-			this.results[i].VisitAll( visitor );
+			this.results[i].VisitAll( visitor, depth + 1 );
 		}
+	};
+
+	this.ToString = function() {
+		return this.type + " " + this.mode;
 	};
 }
 
@@ -1033,6 +1915,10 @@ var ElseNode = function() {
 	this.Serialize = function() {
 		return "else";
 	}
+
+	this.ToString = function() {
+		return this.type + " " + this.mode;
+	};
 }
 
 var Sym = {
@@ -1076,24 +1962,6 @@ var Parser = function(env) {
 		// console.log( state.rootNode );
 		return state.rootNode;
 	};
-
-	this.ReadDialogScript = function(lines, i) {
-		var scriptStr = "";
-		if (lines[i] === Sym.DialogOpen) {
-			scriptStr += lines[i] + "\n";
-			i++;
-			while(lines[i] != Sym.DialogClose) {
-				scriptStr += lines[i] + "\n";
-				i++;
-			}
-			scriptStr += lines[i];
-			i++;
-		}
-		else {
-			scriptStr += lines[i];
-		}
-		return { script:scriptStr, index:i };
-	}
 
 	var ParserState = function( rootNode, str ) {
 		this.rootNode = rootNode;
@@ -1157,7 +2025,8 @@ var Parser = function(env) {
 
 			return sourceStr.slice( startIndex + open.length, i - close.length );
 		}
-		this.Print = function() {console.log(sourceStr);};
+		this.Print = function() { console.log(sourceStr); };
+		this.Source = function() { return sourceStr; };
 	};
 
 	function ParseDialog(state) {
@@ -1179,7 +2048,7 @@ var Parser = function(env) {
 				// console.log("text!!");
 				// console.log([text]);
 
-				state.curNode.AddChild( new FuncNode( "say", [new LiteralNode(text)] ) );
+				state.curNode.AddChild( new FuncNode( "print", [new LiteralNode(text)] ) );
 				text = "";
 
 				hasDialog = true;
@@ -1417,14 +2286,16 @@ var Parser = function(env) {
 	}
 
 	function ParseFunction(state, funcName) {
+		console.log("~~~ PARSE FUNCTION " + funcName);
+
 		var args = [];
 
 		var curSymbol = "";
 		function OnSymbolEnd() {
 			curSymbol = curSymbol.trim();
-			console.log("PARAMTER " + curSymbol);
+			// console.log("PARAMTER " + curSymbol);
 			args.push( StringToValue(curSymbol) );
-			console.log(args);
+			// console.log(args);
 			curSymbol = "";
 		}
 
@@ -1464,7 +2335,7 @@ var Parser = function(env) {
 	function IsValidVariableName(str) {
 		var reg = /^[a-zA-Z_$][a-zA-Z_$0-9]*$/;
 		var isValid = reg.test(str);
-		console.log("VALID variable??? " + isValid);
+		// console.log("VALID variable??? " + isValid);
 		return isValid;
 	}
 
@@ -1478,14 +2349,14 @@ var Parser = function(env) {
 		}
 		else if(valStr[0] === Sym.String) {
 			// STRING!!
-			console.log("STRING");
+			// console.log("STRING");
 			var str = "";
 			var i = 1;
 			while (i < valStr.length && valStr[i] != Sym.String) {
 				str += valStr[i];
 				i++;
 			}
-			console.log(str);
+			// console.log(str);
 			return new LiteralNode( str );
 		}
 		else if(valStr === "true") {
@@ -1515,9 +2386,10 @@ var Parser = function(env) {
 	var setSymbol = "=";
 	var ifSymbol = "?";
 	var elseSymbol = ":";
-	// var operatorSymbols = ["==", ">", "<", ">=", "<=", "*", "/", "+", "-"];
-	var operatorSymbols = ["-", "+", "/", "*", "<=", ">=", "<", ">", "=="]; // operators need to be in reverse order
+	var operatorSymbols = ["==", ">", "<", ">=", "<=", "-", "+", "/", "*"]; // operators need to be in reverse order of precedence
 	function CreateExpression(expStr) {
+		console.log("CREATE EXPRESSION --- " + expStr);
+
 		expStr = expStr.trim();
 
 		function IsInsideString(index) {
@@ -1545,7 +2417,7 @@ var Parser = function(env) {
 			}
 			return false;
 		}
-	
+
 		var operator = null;
 
 		// set is special because other operator can look like it, and it has to go first in the order of operations
@@ -1613,8 +2485,33 @@ var Parser = function(env) {
 	}
 	this.CreateExpression = CreateExpression;
 
+	function IsWhitespace(str) {
+		return ( str === " " || str === "\t" || str === "\n" );
+	}
+
+	function IsExpression(str) {
+		var tempState = new ParserState(null, str); // hacky
+		var nonWhitespaceCount = 0;
+
+		while (!tempState.Done()) {
+			if( IsWhitespace(tempState.Char()) ) {
+				tempState.Step(); // consume whitespace
+			}
+			else if( tempState.MatchAhead(Sym.CodeOpen) ) {
+				tempState.ConsumeBlock( Sym.CodeOpen, Sym.CodeClose );
+			}
+			else {
+				nonWhitespaceCount++;
+				tempState.Step();
+			}
+		}
+
+		var isExpression = nonWhitespaceCount > 0;
+		return isExpression;
+	}
+
 	function ParseExpression(state) {
-		var line = state.Peak( [Sym.Linebreak] );
+		var line = state.Source(); // state.Peak( [Sym.Linebreak] ); // TODO : remove the linebreak thing
 		// console.log("EXPRESSION " + line);
 		var exp = CreateExpression( line );
 		// console.log(exp);
@@ -1624,36 +2521,45 @@ var Parser = function(env) {
 	}
 
 	function ParseCode(state) {
-		// TODO : how do I do this parsing??? one expression per block? or per line?
-		while ( !state.Done() ) {
+		console.log("PARSE CODE --- " + state.Source());
 
-			if( state.Char() === " " || state.Char() === "\t" || state.Char() === "\n" ) { // TODO: symbols? IsWhitespace func?
-				state.Step(); // consume whitespace
+		// skip leading whitespace
+		while (IsWhitespace(state.Char())) {
+			state.Step();
+		}
+
+		if( state.Char() === Sym.List && (state.Peak([]).indexOf("?") > -1) ) { // TODO : symbols? matchahead?
+			// console.log("PEAK IF " + state.Peak( ["?"] ));
+			state = ParseIf( state );
+		}
+		else if( environment.HasFunction( state.Peak( [" "] ) ) ) { // TODO --- what about newlines???
+			var funcName = state.Peak( [" "] );
+			state.Step( funcName.length );
+			state = ParseFunction( state, funcName );
+		}
+		else if( IsSequence( state.Peak( [" ", Sym.Linebreak] ) ) ) {
+			var sequenceType = state.Peak( [" ", Sym.Linebreak] );
+			state.Step( sequenceType.length );
+			state = ParseSequence( state, sequenceType );
+		}
+		else if (IsExpression(state.Source())) {
+			state = ParseExpression(state);
+		}
+		else {
+			// multi-line code block
+			while (!state.Done()) {
+				if( state.MatchAhead(Sym.CodeOpen) ) {
+					state = ParseCodeBlock( state );
+				}
+				else {
+					state.Step();
+				}
 			}
-			else if( state.MatchAhead(Sym.CodeOpen) ) {
-				state = ParseCodeBlock( state );
-			}
-			// NOTE: nested dialog blocks disabled for now
-			// else if( state.MatchAhead(Sym.DialogOpen) ) {
-			// 	state = ParseDialogBlock( state ); // These can be nested (should they though???)
-			// }
-			else if( state.Char() === Sym.List && (state.Peak([]).indexOf("?") > -1) ) { // TODO : symbols? matchahead?
-				// console.log("PEAK IF " + state.Peak( ["?"] ));
-				state = ParseIf( state );
-			}
-			else if( environment.HasFunction( state.Peak( [" "] ) ) ) { // TODO --- what about newlines???
-				var funcName = state.Peak( [" "] );
-				state.Step( funcName.length );
-				state = ParseFunction( state, funcName );
-			}
-			else if( IsSequence( state.Peak( [" ", Sym.Linebreak] ) ) ) {
-				var sequenceType = state.Peak( [" ", Sym.Linebreak] );
-				state.Step( sequenceType.length );
-				state = ParseSequence( state, sequenceType );
-			}
-			else {
-				state = ParseExpression( state );
-			}
+		}
+
+		// just go to the end now
+		while (!state.Done()) {
+			state.Step();
 		}
 
 		return state;
@@ -1690,6 +2596,8 @@ this.CreateBuffer = function() {
 };
 
 var DialogRenderer = function() {
+
+	// TODO : refactor this eventually? remove everything from struct.. avoid the defaults?
 	var textboxInfo = {
 		img : null,
 		width : 104,
@@ -1697,9 +2605,30 @@ var DialogRenderer = function() {
 		top : 12,
 		left : 12,
 		bottom : 12, //for drawing it from the bottom
+		font_scale : 0.5, // we draw font at half-size compared to everything else
+		padding_vert : 2,
+		padding_horz : 4,
+		arrow_height : 5,
 	};
-	
-	var font = new Font();
+
+	var font = null;
+	this.SetFont = function(f) {
+		font = f;
+		textboxInfo.height = (textboxInfo.padding_vert * 3) + (relativeFontHeight() * 2) + textboxInfo.arrow_height;
+		textboxInfo.img = context.createImageData(textboxInfo.width*scale, textboxInfo.height*scale);
+	}
+
+	function textScale() {
+		return scale * textboxInfo.font_scale;
+	}
+
+	function relativeFontWidth() {
+		return Math.ceil( font.getWidth() * textboxInfo.font_scale );
+	}
+
+	function relativeFontHeight() {
+		return Math.ceil( font.getHeight() * textboxInfo.font_scale );
+	}
 
 	var context = null;
 	this.AttachContext = function(c) {
@@ -1752,6 +2681,10 @@ var DialogRenderer = function() {
 		// console.log("draw arrow!");
 		var top = (textboxInfo.height-5) * scale;
 		var left = (textboxInfo.width-(5+4)) * scale;
+		if (textDirection === TextDirection.RightToLeft) { // RTL hack
+			left = 4 * scale;
+		}
+
 		for (var y = 0; y < 3; y++) {
 			for (var x = 0; x < 5; x++) {
 				var i = (y * 5) + x;
@@ -1772,16 +2705,26 @@ var DialogRenderer = function() {
 	};
 
 	var text_scale = 2; //using a different scaling factor for text feels like cheating... but it looks better
-	this.DrawChar = function(char, row, col) {
-		char.offset = {x:0, y:0};
+	this.DrawChar = function(char, row, col, leftPos) {
+		char.offset = {
+			x: char.base_offset.x,
+			y: char.base_offset.y
+		}; // compute render offset *every* frame
+
 		char.SetPosition(row,col);
 		char.ApplyEffects(effectTime);
-		var charData = font.getChar( char.char );
-		var top = (4 * scale) + (row * 2 * scale) + (row * 8 * text_scale) + Math.floor( char.offset.y );
-		var left = (4 * scale) + (col * 6 * text_scale) + Math.floor( char.offset.x );
-		for (var y = 0; y < 8; y++) {
-			for (var x = 0; x < 6; x++) {
-				var i = (y * 6) + x;
+
+		var charData = char.bitmap;
+
+		var top = (4 * scale) + (row * 2 * scale) + (row * font.getHeight() * text_scale) + Math.floor( char.offset.y );
+		var left = (4 * scale) + (leftPos * text_scale) + Math.floor( char.offset.x );
+
+		var debug_r = Math.random() * 255;
+
+		for (var y = 0; y < char.height; y++) {
+			for (var x = 0; x < char.width; x++) {
+
+				var i = (y * char.width) + x;
 				if ( charData[i] == 1 ) {
 
 					//scaling nonsense
@@ -1794,9 +2737,22 @@ var DialogRenderer = function() {
 							textboxInfo.img.data[pxl+3] = char.color.a;
 						}
 					}
-
-					
 				}
+				// else {
+				// 	// DEBUG
+
+				// 	//scaling nonsense
+				// 	for (var sy = 0; sy < text_scale; sy++) {
+				// 		for (var sx = 0; sx < text_scale; sx++) {
+				// 			var pxl = 4 * ( ((top+(y*text_scale)+sy) * (textboxInfo.width*scale)) + (left+(x*text_scale)+sx) );
+				// 			textboxInfo.img.data[pxl+0] = debug_r;
+				// 			textboxInfo.img.data[pxl+1] = 0;
+				// 			textboxInfo.img.data[pxl+2] = 0;
+				// 			textboxInfo.img.data[pxl+3] = 255;
+				// 		}
+				// 	}
+				// }
+
 			}
 		}
 		
@@ -1805,7 +2761,7 @@ var DialogRenderer = function() {
 	};
 
 	var effectTime = 0; // TODO this variable should live somewhere better
-	this.Draw = function(buffer,dt) { // TODO move out of the buffer?? (into say a dialog box renderer)
+	this.Draw = function(buffer,dt) {
 		effectTime += dt;
 
 		this.ClearTextbox();
@@ -1831,6 +2787,10 @@ var DialogRenderer = function() {
 		effectTime = 0;
 		// TODO - anything else?
 	}
+
+	// this.CharsPerRow = function() {
+	// 	return textboxInfo.charsPerRow;
+	// }
 }
 
 
@@ -1843,7 +2803,14 @@ var DialogBuffer = function() {
 	var nextCharMaxTime = 50; // in milliseconds
 	var isDialogReadyToContinue = false;
 	var activeTextEffects = [];
-	
+	var font = null;
+	var arabicHandler = new ArabicHandler();
+	var onDialogEndCallbacks = [];
+
+	this.SetFont = function(f) {
+		font = f;
+	}
+
 	this.CurPage = function() { return buffer[ pageIndex ]; };
 	this.CurRow = function() { return this.CurPage()[ rowIndex ]; };
 	this.CurChar = function() { return this.CurRow()[ charIndex ]; };
@@ -1857,10 +2824,27 @@ var DialogBuffer = function() {
 			var row = this.CurPage()[i];
 			var charCount = (i == rowIndex) ? charIndex+1 : row.length;
 			// console.log(charCount);
+
+			var leftPos = 0;
+			if (textDirection === TextDirection.RightToLeft) {
+				leftPos = 24 * 8; // hack -- I think this is correct?
+			}
+
 			for(var j = 0; j < charCount; j++) {
 				var char = row[j];
-				if(char)
-					handler( char, i /*rowIndex*/, j /*colIndex*/ );
+				if(char) {
+					if (textDirection === TextDirection.RightToLeft) {
+						leftPos -= char.spacing;
+					}
+					// console.log(j + " " + leftPos);
+
+					// handler( char, i /*rowIndex*/, j /*colIndex*/ );
+					handler(char, i /*rowIndex*/, j /*colIndex*/, leftPos)
+
+					if (textDirection === TextDirection.LeftToRight) {
+						leftPos += char.spacing;
+					}
+				}
 			}
 		}
 	}
@@ -1873,6 +2857,8 @@ var DialogBuffer = function() {
 		isDialogReadyToContinue = false;
 
 		activeTextEffects = [];
+
+		onDialogEndCallbacks = [];
 
 		isActive = false;
 	};
@@ -1947,8 +2933,11 @@ var DialogBuffer = function() {
 	}
 
 	this.EndDialog = function() {
-		console.log("END!!!!");
 		isActive = false; // no more text to show... this should be a sign to stop rendering dialog
+
+		for (var i = 0; i < onDialogEndCallbacks.length; i++) {
+			onDialogEndCallbacks[i]();
+		}
 	}
 
 	this.Continue = function() {
@@ -1968,24 +2957,38 @@ var DialogBuffer = function() {
 	var isActive = false;
 	this.IsActive = function() { return isActive; };
 
+	this.OnDialogEnd = function(callback) {
+		if (!isActive) {
+			callback();
+		}
+		else {
+			onDialogEndCallbacks.push(callback);
+		}
+	}
+
 	this.CanContinue = function() { return isDialogReadyToContinue; };
 
-	function DialogChar(char,effectList) {
-		this.char = char;
+	function DialogChar(effectList) {
 		this.effectList = effectList.slice(); // clone effect list (since it can change between chars)
 
 		this.color = { r:255, g:255, b:255, a:255 };
 		this.offset = { x:0, y:0 }; // in pixels (screen pixels?)
-		this.row = 0;
+
 		this.col = 0;
+		this.row = 0;
+
 		this.SetPosition = function(row,col) {
+			// console.log("SET POS");
+			// console.log(this);
 			this.row = row;
 			this.col = col;
-		};
+		}
 
 		this.ApplyEffects = function(time) {
+			// console.log("APPLY EFFECTS! " + time);
 			for(var i = 0; i < this.effectList.length; i++) {
 				var effectName = this.effectList[i];
+				// console.log("FX " + effectName);
 				TextEffects[ effectName ].DoEffect( this, time );
 			}
 		}
@@ -2001,18 +3004,115 @@ var DialogBuffer = function() {
 				printHandler = null; // only call handler once (hacky)
 			}
 		}
-	};
+
+		this.bitmap = [];
+		this.width = 0;
+		this.height = 0;
+		this.base_offset = { // hacky name
+ 			x: 0,
+			y: 0
+		};
+		this.spacing = 0;
+	}
+
+	function DialogFontChar(font, char, effectList) {
+		Object.assign(this, new DialogChar(effectList));
+
+		var charData = font.getChar(char);
+		this.bitmap = charData.data;
+		this.width = charData.width;
+		this.height = charData.height;
+		this.base_offset.x = charData.offset.x;
+		this.base_offset.y = charData.offset.y;
+		this.spacing = charData.spacing;
+	}
+
+	function DialogDrawingChar(drawingId, effectList) {
+		Object.assign(this, new DialogChar(effectList));
+
+		var imageData = renderer.GetImageSource(drawingId)[0];
+		var imageDataFlat = [];
+		for (var i = 0; i < imageData.length; i++) {
+			// console.log(imageData[i]);
+			imageDataFlat = imageDataFlat.concat(imageData[i]);
+		}
+
+		this.bitmap = imageDataFlat;
+		this.width = 8;
+		this.height = 8;
+		this.spacing = 8;
+	}
 
 	function AddWordToCharArray(charArray,word,effectList) {
 		for(var i = 0; i < word.length; i++) {
-			charArray.push( new DialogChar( word[i], effectList ) );
+			charArray.push( new DialogFontChar( font, word[i], effectList ) );
 		}
 		return charArray;
 	}
 
-	var charsPerRow = 32;
+	function GetCharArrayWidth(charArray) {
+		var width = 0;
+		for(var i = 0; i < charArray.length; i++) {
+			width += charArray[i].spacing;
+		}
+		return width;
+	}
+
+	function GetStringWidth(str) {
+		var width = 0;
+		for (var i = 0; i < str.length; i++) {
+			var charData = font.getChar(str[i]);
+			width += charData.spacing;
+		}
+		return width;
+	}
+
+	var pixelsPerRow = 192; // hard-coded fun times!!!
+
+	this.AddDrawing = function(drawingId, onFinishHandler) {
+		// console.log("DRAWING ID " + drawingId);
+
+		var curPageIndex = buffer.length - 1;
+		var curRowIndex = buffer[curPageIndex].length - 1;
+		var curRowArr = buffer[curPageIndex][curRowIndex];
+
+		var drawingChar = new DialogDrawingChar(drawingId, activeTextEffects)
+		drawingChar.SetPrintHandler( onFinishHandler );
+
+		var rowLength = GetCharArrayWidth(curRowArr);
+
+		// TODO : clean up copy-pasted code here :/
+		if (rowLength + drawingChar.spacing  <= pixelsPerRow || rowLength <= 0)
+		{
+			//stay on same row
+			curRowArr.push( drawingChar );
+		}
+		else if (curRowIndex == 0)
+		{
+			//start next row
+			buffer[ curPageIndex ][ curRowIndex ] = curRowArr;
+			buffer[ curPageIndex ].push( [] );
+			curRowIndex++;
+			curRowArr = buffer[ curPageIndex ][ curRowIndex ];
+			curRowArr.push( drawingChar );
+		}
+		else {
+			//start next page
+			buffer[ curPageIndex ][ curRowIndex ] = curRowArr;
+			buffer.push( [] );
+			curPageIndex++;
+			buffer[ curPageIndex ].push( [] );
+			curRowIndex = 0;
+			curRowArr = buffer[ curPageIndex ][ curRowIndex ];
+			curRowArr.push( drawingChar );
+		}
+
+		isActive = true; // this feels like a bad way to do this???
+	}
+
+	// TODO : convert this into something that takes DialogChar arrays
 	this.AddText = function(textStr,onFinishHandler) {
-		console.log("ADD TEXT " + textStr);
+		// console.log("ADD TEXT " + textStr);
 
 		//process dialog so it's easier to display
 		var words = textStr.split(" ");
@@ -2027,10 +3127,17 @@ var DialogBuffer = function() {
 
 		for (var i = 0; i < words.length; i++) {
 			var word = words[i];
-			var wordLength = word.length + ((i == 0) ? 0 : 1);
-			if (curRowArr.length + wordLength <= charsPerRow || curRowArr.length <= 0) {
+			if (arabicHandler.ContainsArabicCharacters(word)) {
+				word = arabicHandler.ShapeArabicCharacters(word);
+			}
+
+			var wordWithPrecedingSpace = ((i == 0) ? "" : " ") + word;
+			var wordLength = GetStringWidth( wordWithPrecedingSpace );
+
+			var rowLength = GetCharArrayWidth(curRowArr);
+
+			if (rowLength + wordLength <= pixelsPerRow || rowLength <= 0) {
 				//stay on same row
-				var wordWithPrecedingSpace = ((i == 0) ? "" : " ") + word;
 				curRowArr = AddWordToCharArray( curRowArr, wordWithPrecedingSpace, activeTextEffects );
 			}
 			else if (curRowIndex == 0) {
@@ -2107,13 +3214,179 @@ var DialogBuffer = function() {
 
 	var didFlipPageThisFrame = false;
 	this.DidFlipPageThisFrame = function(){ return didFlipPageThisFrame; };
+
+	// this.SetCharsPerRow = function(num){ charsPerRow = num; }; // hacky
 };
+
+/* ARABIC */
+var ArabicHandler = function() {
+
+	var arabicCharStart = 0x0621;
+	var arabicCharEnd = 0x064E;
+
+	var CharacterForm = {
+		Isolated : 0,
+		Final : 1,
+		Initial : 2,
+		Middle : 3
+	};
+
+	// map glyphs to their character forms
+	var glyphForms = {
+		/*		 Isolated, Final, Initial, Middle Forms	*/
+		0x0621: [0xFE80,0xFE80,0xFE80,0xFE80], /*  HAMZA  */ 
+		0x0622: [0xFE81,0xFE82,0xFE81,0xFE82], /*  ALEF WITH MADDA ABOVE  */ 
+		0x0623: [0xFE83,0xFE84,0xFE83,0xFE84], /*  ALEF WITH HAMZA ABOVE  */ 
+		0x0624: [0xFE85,0xFE86,0xFE85,0xFE86], /*  WAW WITH HAMZA ABOVE  */ 
+		0x0625: [0xFE87,0xFE88,0xFE87,0xFE88], /*  ALEF WITH HAMZA BELOW  */ 
+		0x0626: [0xFE89,0xFE8A,0xFE8B,0xFE8C], /*  YEH WITH HAMZA ABOVE  */ 
+		0x0627: [0xFE8D,0xFE8E,0xFE8D,0xFE8E], /*  ALEF  */ 
+		0x0628: [0xFE8F,0xFE90,0xFE91,0xFE92], /*  BEH  */ 
+		0x0629: [0xFE93,0xFE94,0xFE93,0xFE94], /*  TEH MARBUTA  */ 
+		0x062A: [0xFE95,0xFE96,0xFE97,0xFE98], /*  TEH  */ 
+		0x062B: [0xFE99,0xFE9A,0xFE9B,0xFE9C], /*  THEH  */ 
+		0x062C: [0xFE9D,0xFE9E,0xFE9F,0xFEA0], /*  JEEM  */ 
+		0x062D: [0xFEA1,0xFEA2,0xFEA3,0xFEA4], /*  HAH  */ 
+		0x062E: [0xFEA5,0xFEA6,0xFEA7,0xFEA8], /*  KHAH  */ 
+		0x062F: [0xFEA9,0xFEAA,0xFEA9,0xFEAA], /*  DAL  */ 
+		0x0630: [0xFEAB,0xFEAC,0xFEAB,0xFEAC], /*  THAL */ 
+		0x0631: [0xFEAD,0xFEAE,0xFEAD,0xFEAE], /*  RAA  */ 
+		0x0632: [0xFEAF,0xFEB0,0xFEAF,0xFEB0], /*  ZAIN  */ 
+		0x0633: [0xFEB1,0xFEB2,0xFEB3,0xFEB4], /*  SEEN  */ 
+		0x0634: [0xFEB5,0xFEB6,0xFEB7,0xFEB8], /*  SHEEN  */ 
+		0x0635: [0xFEB9,0xFEBA,0xFEBB,0xFEBC], /*  SAD  */ 
+		0x0636: [0xFEBD,0xFEBE,0xFEBF,0xFEC0], /*  DAD  */ 
+		0x0637: [0xFEC1,0xFEC2,0xFEC3,0xFEC4], /*  TAH  */ 
+		0x0638: [0xFEC5,0xFEC6,0xFEC7,0xFEC8], /*  ZAH  */ 
+		0x0639: [0xFEC9,0xFECA,0xFECB,0xFECC], /*  AIN  */ 
+		0x063A: [0xFECD,0xFECE,0xFECF,0xFED0], /*  GHAIN  */ 
+		0x063B: [0x0000,0x0000,0x0000,0x0000], /*  space */
+		0x063C: [0x0000,0x0000,0x0000,0x0000], /*  space */
+		0x063D: [0x0000,0x0000,0x0000,0x0000], /*  space */
+		0x063E: [0x0000,0x0000,0x0000,0x0000], /*  space */
+		0x063F: [0x0000,0x0000,0x0000,0x0000], /*  space */
+		0x0640: [0x0640,0x0640,0x0640,0x0640], /*  TATWEEL  */ 
+		0x0641: [0xFED1,0xFED2,0xFED3,0xFED4], /*  FAA  */ 
+		0x0642: [0xFED5,0xFED6,0xFED7,0xFED8], /*  QAF  */ 
+		0x0643: [0xFED9,0xFEDA,0xFEDB,0xFEDC], /*  KAF  */ 
+		0x0644: [0xFEDD,0xFEDE,0xFEDF,0xFEE0], /*  LAM  */ 
+		0x0645: [0xFEE1,0xFEE2,0xFEE3,0xFEE4], /*  MEEM  */ 
+		0x0646: [0xFEE5,0xFEE6,0xFEE7,0xFEE8], /*  NOON  */ 
+		0x0647: [0xFEE9,0xFEEA,0xFEEB,0xFEEC], /*  HEH  */ 
+		0x0648: [0xFEED,0xFEEE,0xFEED,0xFEEE], /*  WAW  */ 
+		0x0649: [0xFEEF,0xFEF0,0xFBE8,0xFBE9], /*  ALEF MAKSURA  */ 
+		0x064A: [0xFEF1,0xFEF2,0xFEF3,0xFEF4], /*  YEH  */ 
+		0x064B: [0xFEF5,0xFEF6,0xFEF5,0xFEF6], /*  LAM ALEF MADD*/
+		0x064C: [0xFEF7,0xFEF8,0xFEF7,0xFEF8], /*  LAM ALEF HAMZA ABOVE*/
+		0x064D: [0xFEF9,0xFEFa,0xFEF9,0xFEFa], /*  LAM ALEF HAMZA BELOW*/
+		0x064E: [0xFEFb,0xFEFc,0xFEFb,0xFEFc], /*  LAM ALEF */
+	};
+
+	var disconnectedCharacters = [0x0621,0x0622,0x0623,0x0624,0x0625,0x0627,0x062f,0x0630,0x0631,0x0632,0x0648,0x0649,0x064b,0x064c,0x064d,0x064e];
+
+	function IsArabicCharacter(char) {
+		var code = char.charCodeAt(0);
+		return (code >= arabicCharStart && code <= arabicCharEnd);
+	}
+
+	function ContainsArabicCharacters(word) {
+		for (var i = 0; i < word.length; i++) {
+			if (IsArabicCharacter(word[i])) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function IsDisconnectedCharacter(char) {
+		var code = char.charCodeAt(0);
+		return disconnectedCharacters.indexOf(code) != -1;
+	}
+
+	function ShapeArabicCharacters(word) {
+		var shapedWord = "";
+
+		for (var i = 0; i < word.length; i++) {
+			if (!IsArabicCharacter(word[i])) {
+				shapedWord += word[i];
+				continue;
+			}
+
+			var connectedToPreviousChar = i-1 >= 0 && IsArabicCharacter(word[i-1]) && !IsDisconnectedCharacter(word[i-1]);
+
+			var connectedToNextChar = i+1 < word.length && IsArabicCharacter(word[i+1]) && !IsDisconnectedCharacter(word[i]);
+
+			var form;
+			if (!connectedToPreviousChar && !connectedToNextChar) {
+				form = CharacterForm.Isolated;
+			}
+			else if (connectedToPreviousChar && !connectedToNextChar) {
+				form = CharacterForm.Final;
+			}
+			else if (!connectedToPreviousChar && connectedToNextChar) {
+				form = CharacterForm.Initial;
+			}
+			else if (connectedToPreviousChar && connectedToNextChar) {
+				form = CharacterForm.Middle;
+			}
+
+			var code = word[i].charCodeAt(0);
+
+			// handle lam alef special case
+			if (code == 0x0644 && connectedToNextChar) {
+				var nextCode = word[i+1].charCodeAt(0);
+				var specialCode = null;
+				if (nextCode == 0x0622) {
+					// alef madd
+					specialCode = glyphForms[0x064b][form];
+				}
+				else if (nextCode == 0x0623) {
+					// hamza above
+					specialCode = glyphForms[0x064c][form];
+				}
+				else if (nextCode == 0x0625) {
+					// hamza below
+					specialCode = glyphForms[0x064d][form];
+				}
+				else if (nextCode == 0x0627) {
+					// alef
+					specialCode = glyphForms[0x064e][form];
+				}
+
+				if (specialCode != null) {
+					shapedWord += String.fromCharCode(specialCode);
+					i++; // skip a step
+					continue;
+				}
+			}
+
+			// hacky?
+			if (form === CharacterForm.Isolated) {
+				shapedWord += word[i];
+				continue;
+			}
+
+			var shapedCode = glyphForms[code][form];
+			shapedWord += String.fromCharCode(shapedCode);
+		}
+
+		return shapedWord;
+	}
+
+	this.ContainsArabicCharacters = ContainsArabicCharacters;
+	this.ShapeArabicCharacters = ShapeArabicCharacters;
+}
 
 /* NEW TEXT EFFECTS */
 var TextEffects = new Map();
 
 var RainbowEffect = function() { // TODO - should it be an object or just a method?
 	this.DoEffect = function(char,time) {
+		// console.log("RAINBOW!!!");
+		// console.log(char);
+		// console.log(char.color);
+		// console.log(char.col);
+
 		var h = Math.abs( Math.sin( (time / 600) - (char.col / 8) ) );
 		var rgb = hslToRgb( h, 1, 0.5 );
 		char.color.r = rgb[0];
@@ -2128,7 +3401,7 @@ var ColorEffect = function(index) {
 	this.DoEffect = function(char) {
 		var pal = getPal( curPal() );
 		var color = pal[ parseInt( index ) ];
-		console.log(color);
+		// console.log(color);
 		char.color.r = color[0];
 		char.color.g = color[1];
 		char.color.b = color[2];
@@ -2168,9 +3441,194 @@ TextEffects["shk"] = new ShakyEffect();
 </script>
 
 <script>
-var xhr;
+/*
+TODO
+- reset renderer function
+- react to changes in: drawings, palettes
+- possible future plan: limit size of cache (remove old images)
+- change image store path from (pal > col > draw) to (draw > pal > col)
+- get rid of old getSpriteImage (etc) methods
+- get editor working again [in progress]
+- move debug timer class into core (seems useful)
+*/
+
+function Renderer(tilesize, scale) {
+
+console.log("!!!!! NEW RENDERER");
+
+var imageStore = { // TODO : rename to imageCache
+	source: {},
+	render: {}
+};
+
+var palettes = null; // TODO : need null checks?
+var context = null;
+
+function setPalettes(paletteObj) {
+	palettes = paletteObj;
+
+	// TODO : should this really clear out the render cache?
+	imageStore.render = {};
+}
+
+function getPaletteColor(paletteId, colorIndex) {
+	var palette = palettes[paletteId];
+
+	if (colorIndex > palette.colors.length) { // do I need this failure case? (seems un-reliable)
+		colorIndex = 0;
+	}
+
+	var color = palette.colors[colorIndex];
+
+	return {
+		r : color[0],
+		g : color[1],
+		b : color[2]
+	};
+}
+
+var debugRenderCount = 0;
+
+// TODO : change image store path from (pal > col > draw) to (draw > pal > col)
+function renderImage(drawing, paletteId) {
+	// debugRenderCount++;
+	// console.log("RENDER COUNT " + debugRenderCount);
+
+	var col = drawing.col;
+	var colStr = "" + col;
+	var pal = paletteId;
+	var drwId = drawing.drw;
+	var imgSrc = imageStore.source[ drawing.drw ];
+
+	// initialize render cache entry
+	if (imageStore.render[drwId] === undefined || imageStore.render[drwId] === null) {
+		imageStore.render[drwId] = {};
+	}
+
+	if (imageStore.render[drwId][pal] === undefined || imageStore.render[drwId][pal] === null) {
+		imageStore.render[drwId][pal] = {};
+	}
+
+	// create array of ImageData frames
+	imageStore.render[drwId][pal][colStr] = [];
+
+	for (var i = 0; i < imgSrc.length; i++) {
+		var frameSrc = imgSrc[i];
+		var frameData = imageDataFromImageSource( frameSrc, pal, col );
+		imageStore.render[drwId][pal][colStr].push(frameData);
+	}
+}
+
+function imageDataFromImageSource(imageSource, pal, col) {
+	//console.log(imageSource);
+
+	var img = context.createImageData(tilesize*scale,tilesize*scale);
+
+	var backgroundColor = getPaletteColor(pal,0);
+	var foregroundColor = getPaletteColor(pal,col);
+
+	for (var y = 0; y < tilesize; y++) {
+		for (var x = 0; x < tilesize; x++) {
+			var px = imageSource[y][x];
+			for (var sy = 0; sy < scale; sy++) {
+				for (var sx = 0; sx < scale; sx++) {
+					var pxl = (((y * scale) + sy) * tilesize * scale * 4) + (((x*scale) + sx) * 4);
+					if ( px === 1 ) {
+						img.data[pxl + 0] = foregroundColor.r;
+						img.data[pxl + 1] = foregroundColor.g;
+						img.data[pxl + 2] = foregroundColor.b;
+						img.data[pxl + 3] = 255;
+					}
+					else { //ch === 0
+						img.data[pxl + 0] = backgroundColor.r;
+						img.data[pxl + 1] = backgroundColor.g;
+						img.data[pxl + 2] = backgroundColor.b;
+						img.data[pxl + 3] = 255;
+					}
+				}
+			}
+		}
+	}
+
+	return img;
+}
+
+// TODO : move into core
+function undefinedOrNull(x) {
+	return x === undefined || x === null;
+}
+
+function isImageRendered(drawing, paletteId) {
+	var col = drawing.col;
+	var colStr = "" + col;
+	var pal = paletteId;
+	var drwId = drawing.drw;
+
+	if (undefinedOrNull(imageStore.render[drwId]) ||
+		undefinedOrNull(imageStore.render[drwId][pal]) ||
+		undefinedOrNull(imageStore.render[drwId][pal][colStr])) {
+			return false;
+	}
+	else {
+		return true;
+	}
+}
+
+function getImageSet(drawing, paletteId) {
+	return imageStore.render[drawing.drw][paletteId][drawing.col];
+}
+
+function getImageFrame(drawing, paletteId, frameOverride) {
+	var frameIndex = 0;
+	if (drawing.animation.isAnimated) {
+		if (frameOverride != undefined && frameOverride != null) {
+			frameIndex = frameOverride;
+		}
+		else {
+			frameIndex = drawing.animation.frameIndex;
+		}
+	}
+
+	return getImageSet(drawing, paletteId)[frameIndex];
+}
+
+function getOrRenderImage(drawing, paletteId, frameOverride) {
+	if (!isImageRendered(drawing, paletteId)) {
+		renderImage(drawing, paletteId);
+	}
+
+	return getImageFrame(drawing, paletteId, frameOverride);
+}
+
+/* PUBLIC INTERFACE */
+this.GetImage = getOrRenderImage;
+
+this.SetPalettes = setPalettes;
+
+this.SetImageSource = function(drawingId, imageSourceData) {
+	imageStore.source[drawingId] = imageSourceData;
+	imageStore.render[drawingId] = {}; // reset render cache for this image
+}
+
+this.GetImageSource = function(drawingId) {
+	return imageStore.source[drawingId];
+}
+
+this.GetFrameCount = function(drawingId) {
+	return imageStore.source[drawingId].length;
+}
+
+this.AttachContext = function(ctx) {
+	context = ctx;
+}
+
+} // Renderer()
+</script>
+
+<script>
+var xhr; // TODO : remove
 var canvas;
-var context;
+var context; // TODO : remove if safe?
 var ctx;
 
 var title = "";
@@ -2186,6 +3644,14 @@ var ending = {};
 var variable = {}; // these are starting variable values -- they don't update (or I don't think they will)
 var playerId = "A";
 
+var defaultFontName = "ascii_small";
+var fontName = defaultFontName;
+var TextDirection = {
+	LeftToRight : "LTR",
+	RightToLeft : "RTL"
+};
+var textDirection = TextDirection.LeftToRight;
+
 var names = {
 	room : new Map(),
 	tile : new Map(), // Note: Not currently enabled in the UI
@@ -2197,38 +3663,36 @@ var names = {
 function updateNamesFromCurData() {
 	names.room = new Map();
 	for(id in room) {
-		if(room[id].name != undefined && room[id].name != null)
+		if(room[id].name != undefined && room[id].name != null) {
 			names.room.set( room[id].name, id );
+		}
 	}
 	names.tile = new Map();
 	for(id in tile) {
-		if(tile[id].name != undefined && tile[id].name != null)
+		if(tile[id].name != undefined && tile[id].name != null) {
 			names.tile.set( tile[id].name, id );
+		}
 	}
 	names.sprite = new Map();
 	for(id in sprite) {
-		if(sprite[id].name != undefined && sprite[id].name != null)
+		if(sprite[id].name != undefined && sprite[id].name != null) {
 			names.sprite.set( sprite[id].name, id );
+		}
 	}
 	names.item = new Map();
 	for(id in item) {
-		if(item[id].name != undefined && item[id].name != null)
+		if(item[id].name != undefined && item[id].name != null) {
 			names.item.set( item[id].name, id );
+		}
 	}
 }
-
-//stores all image data for tiles, sprites, drawings
-var imageStore = {
-	source: {},
-	render: {}
-};
 
 var spriteStartLocations = {};
 
 /* VERSION */
 var version = {
-	major: 4, // for file format / engine changes
-	minor: 8 // for editor changes and bugfixes
+	major: 6, // major changes
+	minor: 0 // smaller changes
 };
 function getEngineVersion() {
 	return version.major + "." + version.minor;
@@ -2242,6 +3706,11 @@ function resetFlags() {
 	};
 }
 resetFlags(); //init flags on load script
+
+// SUPER hacky location... :/
+var editorDevFlags = {
+	// NONE right now!
+};
 
 function clearGameData() {
 	title = "";
@@ -2260,11 +3729,7 @@ function clearGameData() {
 	isEnding = false; //todo - correct place for this?
 	variable = {};
 
-	//stores all image data for tiles, sprites, drawings
-	imageStore = {
-		source: {},
-		render: {}
-	};
+	// TODO RENDERER : clear data?
 
 	spriteStartLocations = {};
 
@@ -2274,6 +3739,9 @@ function clearGameData() {
 		sprite : new Map(),
 		item : new Map()
 	};
+
+	fontName = defaultFontName; // TODO : reset font manager too?
+	textDirection = TextDirection.LeftToRight;
 }
 
 var width = 128;
@@ -2295,7 +3763,11 @@ var key = {
 	a : 65,
 	s : 83,
 	d : 68,
-	r : 82
+	r : 82,
+	shift : 16,
+	ctrl : 17,
+	alt : 18,
+	cmd : 224
 };
 
 var prevTime = 0;
@@ -2313,6 +3785,8 @@ var onVariableChanged = null;
 
 var isPlayerEmbeddedInEditor = false;
 
+var renderer = new Renderer(tilesize, scale);
+
 function getGameNameFromURL() {
 	var game = window.location.hash.substring(1);
 	// console.log("game name --- " + game);
@@ -2325,20 +3799,32 @@ function attachCanvas(c) {
 	canvas.height = width * scale;
 	ctx = canvas.getContext("2d");
 	dialogRenderer.AttachContext(ctx);
+	renderer.AttachContext(ctx);
 }
 
 var curGameData = null;
 function load_game(game_data, startWithTitle) {
 	curGameData = game_data; //remember the current game (used to reset the game)
+
 	dialogBuffer.Reset();
 	scriptInterpreter.ResetEnvironment(); // ensures variables are reset -- is this the best way?
-	// console.log(dialog);
+
 	parseWorld(game_data);
-	// console.log(dialog);
+
+	if (!isPlayerEmbeddedInEditor) {
+		// hack to ensure default font is available
+		fontManager.AddResource(defaultFontName + fontManager.GetExtension(), document.getElementById(defaultFontName).text.slice(1));
+	}
+
+	var font = fontManager.Get( fontName );
+	dialogBuffer.SetFont(font);
+	dialogRenderer.SetFont(font);
+
 	setInitialVariables();
-	renderImages();
+
+	// setInterval(updateLoadingScreen, 300); // hack test
+
 	onready(startWithTitle);
-	// console.log(dialog);
 }
 
 function reset_cur_game() {
@@ -2354,12 +3840,35 @@ function onready(startWithTitle) {
 
 	clearInterval(loading_interval);
 
-	document.addEventListener('keydown', onkeydown);
-	document.addEventListener('keyup', onkeyup);
+	input = new InputManager();
 
-	canvas.addEventListener('touchstart', ontouchstart);
-	canvas.addEventListener('touchmove', ontouchmove);
-	canvas.addEventListener('touchend', ontouchend);
+	document.addEventListener('keydown', input.onkeydown);
+	document.addEventListener('keyup', input.onkeyup);
+
+	if (isPlayerEmbeddedInEditor) {
+		canvas.addEventListener('touchstart', input.ontouchstart);
+		canvas.addEventListener('touchmove', input.ontouchmove);
+		canvas.addEventListener('touchend', input.ontouchend);
+	}
+	else {
+		//borksy modification, fixing touch controls on itch.io mobile embeds
+
+	  	let existingTouchTrigger = document.querySelector('#touchTrigger');
+	  	if (existingTouchTrigger === null){
+	  	  var touchTrigger = document.createElement("div");
+	  	  touchTrigger.setAttribute("id","touchTrigger");
+	  	  touchTrigger.setAttribute(
+	  	    "style","position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden;"
+	  	  );
+	  	  document.body.appendChild(touchTrigger);
+
+	  	  touchTrigger.addEventListener('touchstart', input.ontouchstart);
+	  	  touchTrigger.addEventListener('touchmove', input.ontouchmove);
+	  	  touchTrigger.addEventListener('touchend', input.ontouchend);
+	  	}
+	}
+
+	window.onblur = input.onblur;
 
 	update_interval = setInterval(update,-1);
 
@@ -2384,98 +3893,6 @@ function setInitialVariables() {
 	}
 	scriptInterpreter.SetOnVariableChangeHandler( onVariableChanged );
 }
-
-// OLD VERSION: DEPRECATED
-// function onTouch(e) {
-// 	console.log("MOUSEDOWN");
-
-// 	//dialog mode
-// 	// if (isDialogMode) {
-// 	if(dialogBuffer.IsActive()) {
-
-// 		if (dialogBuffer.CanContinue()) {
-// 			var hasMoreDialog = dialogBuffer.Continue();
-// 			if(!hasMoreDialog) {
-// 				onExitDialog();
-// 			}
-// 		}
-// 		else {
-// 			dialogBuffer.Skip();
-// 		}
-
-// 		return;
-// 	}
-
-// 	if (isEnding) {
-// 		reset_cur_game();
-// 		return;
-// 	}
-
-// 	//walking mode
-// 	var off = getOffset(e);
-// 	var x = Math.floor(off.x / (tilesize*scale));
-// 	var y = Math.floor(off.y / (tilesize*scale));
-	
-// 	//abort if you touch the square you're already on
-// 	if (player().x == x && player().y == y) {
-// 		return;
-// 	}
-
-// 	//did we touch a sprite?
-// 	var touchedSprite = null;
-// 	for (id in sprite) {
-// 		var spr = sprite[id];
-// 		if (spr.room === curRoom) {
-// 			if (spr.x == x && spr.y == y) {
-// 				touchedSprite = id;
-// 			}
-// 		}
-// 	}
-
-// 	//respond to sprite touch
-// 	if (touchedSprite) {
-// 		var spr = sprite[touchedSprite];
-// 		// console.log(Math.abs(player().x - spr.x));
-// 		// console.log(Math.abs(player().y - spr.y));
-// 		if ( Math.abs(player().x - spr.x) == 0
-// 				&& Math.abs(player().y - spr.y) == 1 )
-// 		{
-// 			//touched a sprite next to you
-// 		}
-// 		else if ( Math.abs(player().y - spr.y) == 0
-// 				&& Math.abs(player().x - spr.x) == 1 )
-// 		{
-// 			//touched a sprite next to you
-// 		}
-// 		else
-// 		{
-// 			return; //oh no! touched a sprite that's out of range
-// 		}
-
-// 		startSpriteDialog( touchedSprite /*spriteId*/ );
-
-// 		return;
-// 	}
-
-// 	//did we touch an open square?
-// 	var row = room[curRoom].tilemap[y];
-// 	// console.log(row);
-// 	var til = row[x];
-// 	// console.log(til);
-// 	if ( room[curRoom].walls.indexOf(til) != -1 ) {
-// 		//touched a wall
-// 		return;
-// 	}
-
-// 	//find path to open square, if there is one
-// 	var map = collisionMap(curRoom);
-// 	var path = breadthFirstSearch( map, {x:player().x, y:player().y}, {x:x,y:y} );
-// 	path = path.slice(1); //remove player's start square
-
-// 	//console.log( pathToString(path) );
-
-// 	player().walkingPath = path;
-// }
 
 // TODO: this is likely broken
 function breadthFirstSearch(map, from, to) {
@@ -2601,12 +4018,28 @@ function getOffset(evt) {
 function stopGame() {
 	console.log("stop GAME!");
 
-	document.removeEventListener('keydown', onkeydown);
-	document.removeEventListener('keyup', onkeyup);
+	document.removeEventListener('keydown', input.onkeydown);
+	document.removeEventListener('keyup', input.onkeyup);
 
-	canvas.removeEventListener('touchstart', ontouchstart);
-	canvas.removeEventListener('touchmove', ontouchmove);
-	canvas.removeEventListener('touchend', ontouchend);
+	if (isPlayerEmbeddedInEditor) {
+		canvas.removeEventListener('touchstart', input.ontouchstart);
+		canvas.removeEventListener('touchmove', input.ontouchmove);
+		canvas.removeEventListener('touchend', input.ontouchend);
+	}
+	else {
+		//borksy modifications
+
+    	let existingTouchTrigger = document.querySelector('#touchTrigger');
+    	if (existingTouchTrigger !== null){
+    		existingTouchTrigger.removeEventListener('touchstart', input.ontouchstart);
+    		existingTouchTrigger.removeEventListener('touchmove', input.ontouchmove);
+    		existingTouchTrigger.removeEventListener('touchend', input.ontouchend);
+
+    	  existingTouchTrigger.parentElement.removeChild(existingTouchTrigger);
+    	}
+	}
+
+	window.onblur = null;
 
 	clearInterval(update_interval);
 }
@@ -2696,47 +4129,58 @@ function loadingAnimation() {
 	if (loading_anim_frame >= 5) loading_anim_frame = 0;
 }
 
+function updateLoadingScreen() {
+	// TODO : in progress
+	ctx.fillStyle = "rgb(0,0,0)";
+	ctx.fillRect(0,0,canvas.width,canvas.height);
+
+	loadingAnimation();
+	drawSprite( getSpriteImage(sprite["a"],"0",0), 8, 8, ctx );
+}
+
 function update() {
 	var curTime = Date.now();
 	deltaTime = curTime - prevTime;
 
-	if (!isNarrating && !isEnding) {
-		updateAnimation();
-		drawRoom( room[curRoom] ); // draw world if game has begun
+	if (!transition.IsTransitionActive()) {
+		updateInput();
+	}
+
+	if (transition.IsTransitionActive()) {
+		// transition animation takes over everything!
+		transition.UpdateTransition(deltaTime);
 	}
 	else {
-		//make sure to still clear screen
-		ctx.fillStyle = "rgb(" + getPal(curPal())[0][0] + "," + getPal(curPal())[0][1] + "," + getPal(curPal())[0][2] + ")";
-		ctx.fillRect(0,0,canvas.width,canvas.height);
-	}
-
-	// if (isDialogMode) { // dialog mode
-	if(dialogBuffer.IsActive()) {
-		dialogRenderer.Draw( dialogBuffer, deltaTime );
-		dialogBuffer.Update( deltaTime );
-	}
-	else if (!isEnding) {
-		moveSprites();
-
-		if (player().walkingPath.length > 0) {
-			var dest = player().walkingPath[ player().walkingPath.length - 1 ];
-			ctx.fillStyle = "#fff";
-			ctx.globalAlpha = 0.5;
-			ctx.fillRect( dest.x * tilesize*scale, dest.y * tilesize*scale, tilesize*scale, tilesize*scale );
-			ctx.globalAlpha = 1;
+		if (!isNarrating && !isEnding) {
+			updateAnimation();
+			drawRoom( room[curRoom] ); // draw world if game has begun
 		}
-	}
+		else {
+			//make sure to still clear screen
+			ctx.fillStyle = "rgb(" + getPal(curPal())[0][0] + "," + getPal(curPal())[0][1] + "," + getPal(curPal())[0][2] + ")";
+			ctx.fillRect(0,0,canvas.width,canvas.height);
+		}
 
-	// keep moving avatar if player holds down button
-	if( !dialogBuffer.IsActive() && !isEnding )
-	{
-		if( curPlayerDirection != Direction.None ) {
-			playerHoldToMoveTimer -= deltaTime;
+		// if (isDialogMode) { // dialog mode
+		if(dialogBuffer.IsActive()) {
+			dialogRenderer.Draw( dialogBuffer, deltaTime );
+			dialogBuffer.Update( deltaTime );
+		}
+		else if (!isEnding) {
+			moveSprites(); // TODO : I probably need to remove this..
+		}
 
-			if( playerHoldToMoveTimer <= 0 )
-			{
-				movePlayer( curPlayerDirection );
-				playerHoldToMoveTimer = 150;
+		// keep moving avatar if player holds down button
+		if( !dialogBuffer.IsActive() && !isEnding )
+		{
+			if( curPlayerDirection != Direction.None ) {
+				playerHoldToMoveTimer -= deltaTime;
+
+				if( playerHoldToMoveTimer <= 0 )
+				{
+					movePlayer( curPlayerDirection );
+					playerHoldToMoveTimer = 150;
+				}
 			}
 		}
 	}
@@ -2744,13 +4188,67 @@ function update() {
 	prevTime = curTime;
 
 	//for gif recording
-	if (didPlayerMoveThisFrame && onPlayerMoved != null) onPlayerMoved();
+	if (didPlayerMoveThisFrame && onPlayerMoved != null) {
+		onPlayerMoved();
+	}
 	didPlayerMoveThisFrame = false;
-	// if (didDialogUpdateThisFrame && onDialogUpdate != null) onDialogUpdate();
-	// didDialogUpdateThisFrame = false;
+
 	/* hacky replacement */
-	if (onDialogUpdate != null)
+	if (onDialogUpdate != null) {
 		dialogRenderer.SetPageFinishHandler( onDialogUpdate );
+	}
+
+	input.resetKeyPressed();
+	input.resetTapReleased();
+}
+
+function updateInput() {
+	if( dialogBuffer.IsActive() ) {
+		if (input.anyKeyPressed() || input.isTapReleased()) {
+			/* CONTINUE DIALOG */
+			if (dialogBuffer.CanContinue()) {
+				var hasMoreDialog = dialogBuffer.Continue();
+				if(!hasMoreDialog) {
+					// ignore currently held keys UNTIL they are released (stops player from insta-moving)
+					input.ignoreHeldKeys();
+				}
+			}
+			else {
+				dialogBuffer.Skip();
+			}
+		}
+	}
+	else if ( isEnding ) {
+		if (input.anyKeyPressed() || input.isTapReleased()) {
+			/* RESTART GAME */
+			reset_cur_game();
+		}
+	}
+	else {
+		/* WALK */
+		var prevPlayerDirection = curPlayerDirection;
+
+		if ( input.isKeyDown( key.left ) || input.isKeyDown( key.a ) || input.swipeLeft() ) {
+			curPlayerDirection = Direction.Left;
+		}
+		else if ( input.isKeyDown( key.right ) || input.isKeyDown( key.d ) || input.swipeRight() ) {
+			curPlayerDirection = Direction.Right;
+		}
+		else if ( input.isKeyDown( key.up ) || input.isKeyDown( key.w ) || input.swipeUp() ) {
+			curPlayerDirection = Direction.Up;
+		}
+		else if ( input.isKeyDown( key.down ) || input.isKeyDown( key.s ) || input.swipeDown() ) {
+			curPlayerDirection = Direction.Down;
+		}
+		else {
+			curPlayerDirection = Direction.None;
+		}
+
+		if (curPlayerDirection != Direction.None && curPlayerDirection != prevPlayerDirection) {
+			movePlayer( curPlayerDirection );
+			playerHoldToMoveTimer = 500;
+		}
+	}
 }
 
 var animationCounter = 0;
@@ -2874,57 +4372,38 @@ var Direction = {
 var curPlayerDirection = Direction.None;
 var playerHoldToMoveTimer = 0;
 
-var keyDownList = [];
+var InputManager = function() {
+	var self = this;
 
-function onkeydown(e) {
-	if(e.keyCode == key.left || e.keyCode == key.right || e.keyCode == key.up || e.keyCode == key.down || !isPlayerEmbeddedInEditor)
-		e.preventDefault();
+	var pressed;
+	var ignored;
+	var newKeyPress;
+	var touchState;
 
-	if( keyDownList.indexOf( e.keyCode ) != -1 ) {
-		// key already down --- do nothing
-		return;
+	function resetAll() {
+		pressed = {};
+		ignored = {};
+		newKeyPress = false;
+
+		touchState = {
+			isDown : false,
+			startX : 0,
+			startY : 0,
+			curX : 0,
+			curY : 0,
+			swipeDistance : 30,
+			swipeDirection : Direction.None,
+			tapReleased : false
+		};
+	}
+	resetAll();
+
+	function stopWindowScrolling(e) {
+		if(e.keyCode == key.left || e.keyCode == key.right || e.keyCode == key.up || e.keyCode == key.down || !isPlayerEmbeddedInEditor)
+			e.preventDefault();
 	}
 
-	curPlayerDirection = Direction.None;
-
-	if( dialogBuffer.IsActive() ) {
-		/* CONTINUE DIALOG */
-		if (dialogBuffer.CanContinue()) {
-			var hasMoreDialog = dialogBuffer.Continue();
-			if(!hasMoreDialog) {
-				console.log("EXIT DIALOG --- onkeydown")
-				onExitDialog();
-			}
-		}
-		else {
-			dialogBuffer.Skip();
-		}
-	}
-	else if ( isEnding ) {
-		/* RESTART GAME */
-		reset_cur_game();
-	}
-	else {
-		/* WALK */
-		if ( e.keyCode == key.left || e.keyCode == key.a ) {
-			curPlayerDirection = Direction.Left;
-		}
-		else if ( e.keyCode == key.right || e.keyCode == key.d ) {
-			curPlayerDirection = Direction.Right;
-		}
-		else if ( e.keyCode == key.up || e.keyCode == key.w ) {
-			curPlayerDirection = Direction.Up;
-		}
-		else if ( e.keyCode == key.down || e.keyCode == key.s ) {
-			curPlayerDirection = Direction.Down;
-		}
-		movePlayer( curPlayerDirection );
-
-		if( curPlayerDirection != Direction.None )
-		{
-			playerHoldToMoveTimer = 500;
-		}
-
+	function tryRestartGame(e) {
 		/* RESTART GAME */
 		if ( e.keyCode === key.r && ( e.getModifierState("Control") || e.getModifierState("Meta") ) ) {
 			if ( confirm("Restart the game?") ) {
@@ -2933,12 +4412,158 @@ function onkeydown(e) {
 		}
 	}
 
-	if( keyDownList.indexOf( e.keyCode ) == -1 )
-		keyDownList.push( e.keyCode );
+	function eventIsModifier(event) {
+		return (event.keyCode == key.shift || event.keyCode == key.ctrl || event.keyCode == key.alt || event.keyCode == key.cmd);
+	}
 
-	console.log("KEY DOWN " + keyDownList.length );
-	console.log(keyDownList);
+	function isModifierKeyDown() {
+		return ( self.isKeyDown(key.shift) || self.isKeyDown(key.ctrl) || self.isKeyDown(key.alt) || self.isKeyDown(key.cmd) );
+	}
+
+	this.ignoreHeldKeys = function() {
+		for (var key in pressed) {
+			if (pressed[key]) { // only ignore keys that are actually held
+				ignored[key] = true;
+				// console.log("IGNORE -- " + key);
+			}
+		}
+	}
+
+	this.onkeydown = function(event) {
+		// console.log("KEYDOWN -- " + event.keyCode);
+
+		stopWindowScrolling(event);
+
+		tryRestartGame(event);
+
+		// Special keys being held down can interfere with keyup events and lock movement
+		// so just don't collect input when they're held
+		{
+			if (isModifierKeyDown()) {
+				return;
+			}
+
+			if (eventIsModifier(event)) {
+				resetAll();
+			}
+		}
+
+		if (ignored[event.keyCode]) {
+			return;
+		}
+
+		if (!self.isKeyDown(event.keyCode)) {
+			newKeyPress = true;
+		}
+
+		pressed[event.keyCode] = true;
+		ignored[event.keyCode] = false;
+	}
+
+	this.onkeyup = function(event) {
+		// console.log("KEYUP -- " + event.keyCode);
+		pressed[event.keyCode] = false;
+		ignored[event.keyCode] = false;
+	}
+
+	this.ontouchstart = function(event) {
+		event.preventDefault();
+
+		if( event.changedTouches.length > 0 ) {
+			touchState.isDown = true;
+
+			touchState.startX = touchState.curX = event.changedTouches[0].clientX;
+			touchState.startY = touchState.curY = event.changedTouches[0].clientY;
+
+			touchState.swipeDirection = Direction.None;
+		}
+	}
+
+	this.ontouchmove = function(event) {
+		event.preventDefault();
+
+		if( touchState.isDown && event.changedTouches.length > 0 ) {
+			touchState.curX = event.changedTouches[0].clientX;
+			touchState.curY = event.changedTouches[0].clientY;
+
+			var prevDirection = touchState.swipeDirection;
+
+			if( touchState.curX - touchState.startX <= -touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Left;
+			}
+			else if( touchState.curX - touchState.startX >= touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Right;
+			}
+			else if( touchState.curY - touchState.startY <= -touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Up;
+			}
+			else if( touchState.curY - touchState.startY >= touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Down;
+			}
+
+			if( touchState.swipeDirection != prevDirection ) {
+				// reset center so changing directions is easier
+				touchState.startX = touchState.curX;
+				touchState.startY = touchState.curY;
+			}
+		}
+	}
+
+	this.ontouchend = function(event) {
+		event.preventDefault();
+
+		touchState.isDown = false;
+
+		if( touchState.swipeDirection == Direction.None ) {
+			// tap!
+			touchState.tapReleased = true;
+		}
+
+		touchState.swipeDirection = Direction.None;
+	}
+
+	this.isKeyDown = function(keyCode) {
+		return pressed[keyCode] != null && pressed[keyCode] == true && (ignored[keyCode] == null || ignored[keyCode] == false);
+	}
+
+	this.anyKeyPressed = function() {
+		return newKeyPress;
+	}
+
+	this.resetKeyPressed = function() {
+		newKeyPress = false;
+	}
+
+	this.swipeLeft = function() {
+		return touchState.swipeDirection == Direction.Left;
+	}
+
+	this.swipeRight = function() {
+		return touchState.swipeDirection == Direction.Right;
+	}
+
+	this.swipeUp = function() {
+		return touchState.swipeDirection == Direction.Up;
+	}
+
+	this.swipeDown = function() {
+		return touchState.swipeDirection == Direction.Down;
+	}
+
+	this.isTapReleased = function() {
+		return touchState.tapReleased;
+	}
+
+	this.resetTapReleased = function() {
+		touchState.tapReleased = false;
+	}
+
+	this.onblur = function() {
+		// console.log("~~~ BLUR ~~");
+		resetAll();
+	}
 }
+var input = null;
 
 function movePlayer(direction) {
 	var spr = null;
@@ -2962,6 +4587,8 @@ function movePlayer(direction) {
 	
 	var ext = getExit( player().room, player().x, player().y );
 	var end = getEnding( player().room, player().x, player().y );
+	// TODO : vNext
+	// var eff = getEffect( player().room, player().x, player().y );
 	var itmIndex = getItemIndex( player().room, player().x, player().y );
 
 	// do items first, because you can pick up an item AND go through a door
@@ -2989,128 +4616,46 @@ function movePlayer(direction) {
 		startNarrating( ending[end.id], true /*isEnding*/ );
 	}
 	else if (ext) {
-		player().room = ext.dest.room;
-		player().x = ext.dest.x;
-		player().y = ext.dest.y;
-		curRoom = ext.dest.room;
+		movePlayerThroughExit(ext);
 	}
+	// TODO : vNext
+	// else if (eff) {
+	// 	startDialog( script[eff.id].source, eff.id );
+	// }
 	else if (spr) {
 		startSpriteDialog( spr /*spriteId*/ );
 	}
 }
 
-function onkeyup(e) {
+var transition = new TransitionManager();
 
-	if(e.keyCode == key.left || e.keyCode == key.right || e.keyCode == key.up || e.keyCode == key.down || !isPlayerEmbeddedInEditor)
-		e.preventDefault();
-
-	if( keyDownList.indexOf( e.keyCode ) != -1 )
-		keyDownList.splice( keyDownList.indexOf( e.keyCode ), 1 );
-
-	// todo is this robust enough?
-	if( keyDownList.length <= 0 )
-		curPlayerDirection = Direction.None;
-
-	console.log(e.keyCode);
-	console.log("KEY UP " + keyDownList.length );
-	console.log(keyDownList);
-	console.log("_____");
-}
-
-var touchInfo = {
-	isDown : false,
-	startX : 0,
-	startY : 0,
-	curX : 0,
-	curY : 0
-};
-
-function ontouchstart(e) {
-	e.preventDefault();
-
-	if( e.changedTouches.length > 0 ) {
-		touchInfo.isDown = true;
-
-		console.log(e);
-
-		touchInfo.startX = touchInfo.curX = e.changedTouches[0].clientX;
-		touchInfo.startY = touchInfo.curY = e.changedTouches[0].clientY;
-
-		console.log("MOUSE DOWN");
-		console.log(touchInfo);
-
-		curPlayerDirection = Direction.None;
-	}
-}
-
-var swipeDistance = 30;
-function ontouchmove(e) {
-	e.preventDefault();
-
-	console.log("MOUSE MOVE");
-	console.log(touchInfo);
-
-	if( !dialogBuffer.IsActive() && touchInfo.isDown && e.changedTouches.length > 0 ) {
-		touchInfo.curX = e.changedTouches[0].clientX;
-		touchInfo.curY = e.changedTouches[0].clientY;
-
-		var prevDirection = curPlayerDirection;
-
-		console.log( touchInfo.curX - touchInfo.startX );
-
-		if( touchInfo.curX - touchInfo.startX <= -swipeDistance ) {
-			curPlayerDirection = Direction.Left;
-		}
-		else if( touchInfo.curX - touchInfo.startX >= swipeDistance ) {
-			curPlayerDirection = Direction.Right;
-		}
-		else if( touchInfo.curY - touchInfo.startY <= -swipeDistance ) {
-			curPlayerDirection = Direction.Up;
-		}
-		else if( touchInfo.curY - touchInfo.startY >= swipeDistance ) {
-			curPlayerDirection = Direction.Down;
+function movePlayerThroughExit(ext) {
+	var GoToDest = function() {
+		if (ext.transition_effect != null) {
+			transition.BeginTransition(player().room, player().x, player().y, ext.dest.room, ext.dest.x, ext.dest.y, ext.transition_effect);
+			transition.UpdateTransition(0);
 		}
 
-		if( curPlayerDirection != prevDirection ) {
-			movePlayer( curPlayerDirection );
-			playerHoldToMoveTimer = 300;
-			// reset center
-			touchInfo.startX = touchInfo.curX;
-			touchInfo.startY = touchInfo.curY;
-		}
-	}
-}
+		player().room = ext.dest.room;
+		player().x = ext.dest.x;
+		player().y = ext.dest.y;
+		curRoom = ext.dest.room;
+	};
 
-function ontouchend(e) {
-	e.preventDefault();
+	// TODO : vNext
+	// if(ext.script_id != null && script[ext.script_id]){
+	// 	var scriptSourceStr = script[ext.script_id].source;
+	// 	startDialog(scriptSourceStr, ext.script_id, function(isExitUnlocked) {
+	// 		if (isExitUnlocked == true) {
+	// 			GoToDest();
+	// 		}
+	// 	});
+	// }
+	// else {
+	// 	GoToDest();
+	// }
 
-	console.log("MOUSE UP");
-	console.log(touchInfo);
-
-	touchInfo.isDown = false;
-
-	if( curPlayerDirection == Direction.None ) {
-		// tap!
-		if( dialogBuffer.IsActive() ) {
-			/* CONTINUE DIALOG */
-			if (dialogBuffer.CanContinue()) {
-				var hasMoreDialog = dialogBuffer.Continue();
-				if(!hasMoreDialog) {
-					console.log("EXIT DIALOG --- onkeydown")
-					onExitDialog();
-				}
-			}
-			else {
-				dialogBuffer.Skip();
-			}
-		}
-		else if ( isEnding ) {
-			/* RESTART GAME */
-			reset_cur_game();
-		}
-	}
-
-	curPlayerDirection = Direction.None;
+	GoToDest();
 }
 
 function getItemIndex( roomId, x, y ) {
@@ -3203,6 +4748,17 @@ function getEnding(roomId,x,y) {
 	return null;
 }
 
+// TODO : vNext
+// function getEffect(roomId,x,y) {
+// 	for (i in room[roomId].effects) {
+// 		var e = room[roomId].effects[i];
+// 		if (x == e.x && y == e.y) {
+// 			return e;
+// 		}
+// 	}
+// 	return null;
+// }
+
 function getTile(x,y) {
 	// console.log(x + " " + y);
 	var t = getRoom().tilemap[y][x];
@@ -3227,7 +4783,14 @@ function isSpriteOffstage(id) {
 }
 
 function parseWorld(file) {
+	// console.log("~~~ PARSE WORLD ~~~");
+	// console.log(file);
+
+	// var parseTimer = new Timer();
+
 	resetFlags();
+
+	var versionNumber = 0;
 
 	var lines = file.split("\n");
 	var i = 0;
@@ -3240,6 +4803,11 @@ function parseWorld(file) {
 			i = parseTitle(lines, i);
 		}
 		else if (curLine.length <= 0 || curLine.charAt(0) === "#") {
+			// collect version number (from a comment.. hacky I know)
+			if (curLine.indexOf("# BITSY VERSION ") != -1) {
+				versionNumber = parseFloat(curLine.replace("# BITSY VERSION ", ""));
+			}
+
 			//skip blank lines & comments
 			i++;
 		}
@@ -3267,8 +4835,21 @@ function parseWorld(file) {
 		else if (getType(curLine) === "END") {
 			i = parseEnding(lines, i);
 		}
+		// TODO: vNext
+		// else if (getType(curLine) === "PRG") {
+		// 	i = parseScript(lines, i);
+		// }
 		else if (getType(curLine) === "VAR") {
 			i = parseVariable(lines, i);
+		}
+		else if (getType(curLine) === "DEFAULT_FONT") {
+			i = parseFontName(lines, i);
+		}
+		else if (getType(curLine) === "TEXT_DIRECTION") {
+			i = parseTextDirection(lines, i);
+		}
+		else if (getType(curLine) === "FONT") {
+			i = parseFontData(lines, i);
 		}
 		else if (getType(curLine) === "!") {
 			i = parseFlag(lines, i);
@@ -3282,11 +4863,20 @@ function parseWorld(file) {
 		curRoom = player().room;
 	}
 
+	renderer.SetPalettes(palette);
+
 	// console.log(names);
+
+	// console.log("~~~~~ PARSE TIME " + parseTimer.Milliseconds());
+
+	return versionNumber;
 }
 
 //TODO this is in progress and doesn't support all features
-function serializeWorld() {
+function serializeWorld(skipFonts) {
+	if (skipFonts === undefined || skipFonts === null)
+		skipFonts = false;
+
 	var worldStr = "";
 	/* TITLE */
 	worldStr += title + "\n";
@@ -3299,6 +4889,15 @@ function serializeWorld() {
 		worldStr += "! " + f + " " + flags[f] + "\n";
 	}
 	worldStr += "\n"
+	/* FONT */
+	if (fontName != defaultFontName) {
+		worldStr += "DEFAULT_FONT " + fontName + "\n";
+		worldStr += "\n"
+	}
+	if (textDirection != TextDirection.LeftToRight) {
+		worldStr += "TEXT_DIRECTION " + textDirection + "\n";
+		worldStr += "\n"
+	}
 	/* PALETTE */
 	for (id in palette) {
 		worldStr += "PAL " + id + "\n";
@@ -3364,6 +4963,13 @@ function serializeWorld() {
 				var e = room[id].exits[j];
 				if ( isExitValid(e) ) {
 					worldStr += "EXT " + e.x + "," + e.y + " " + e.dest.room + " " + e.dest.x + "," + e.dest.y;
+					if (e.transition_effect != undefined && e.transition_effect != null) {
+						worldStr += " FX " + e.transition_effect;
+					}
+					// TODO : vNext
+					// if (e.script_id != undefined && e.script_id != null) {
+					// 	worldStr += " PRG " + e.script_id;
+					// }
 					worldStr += "\n";
 				}
 			}
@@ -3377,6 +4983,15 @@ function serializeWorld() {
 				worldStr += "\n";
 			}
 		}
+		// TODO : vNext
+		// if (room[id].effects.length > 0) {
+		// 	/* EFFECTS */
+		// 	for (j in room[id].effects) {
+		// 		var e = room[id].effects[j];
+		// 		worldStr += "EFF " + e.id + " " + e.x + "," + e.y;
+		// 		worldStr += "\n";
+		// 	}
+		// }
 		if (room[id].pal != null) {
 			/* PALETTE */
 			worldStr += "PAL " + room[id].pal + "\n";
@@ -3456,26 +5071,48 @@ function serializeWorld() {
 		worldStr += ending[id] + "\n";
 		worldStr += "\n";
 	}
+	// TODO : vNext
+	// /* SCRIPTS */
+	// for (id in script) {
+	// 	if (script[id].type == ScriptType.Dialogue) {
+	// 		worldStr += "DLG " + id + "\n";
+	// 	}
+	// 	else if (script[id].type == ScriptType.Ending) {
+	// 		worldStr += "END " + id + "\n";
+	// 	}
+	// 	else {
+	// 		worldStr += "PRG " + id + "\n";
+	// 	}
+	// 	worldStr += script[id].source + "\n";
+	// 	worldStr += "\n";
+	// }
 	/* VARIABLES */
 	for (id in variable) {
 		worldStr += "VAR " + id + "\n";
 		worldStr += variable[id] + "\n";
 		worldStr += "\n";
 	}
+	/* FONT */
+	// TODO : support multiple fonts
+	if (fontName != defaultFontName && !skipFonts) {
+		worldStr += fontManager.GetData(fontName);
+	}
+
 	return worldStr;
 }
 
 function serializeDrawing(drwId) {
+	var imageSource = renderer.GetImageSource(drwId);
 	var drwStr = "";
-	for (f in imageStore.source[drwId]) {
-		for (y in imageStore.source[drwId][f]) {
+	for (f in imageSource) {
+		for (y in imageSource[f]) {
 			var rowStr = "";
-			for (x in imageStore.source[drwId][f][y]) {
-				rowStr += imageStore.source[drwId][f][y][x];
+			for (x in imageSource[f][y]) {
+				rowStr += imageSource[f][y][x];
 			}
 			drwStr += rowStr + "\n";
 		}
-		if (f < (imageStore.source[drwId].length-1)) drwStr += ">\n";
+		if (f < (imageSource.length-1)) drwStr += ">\n";
 	}
 	return drwStr;
 }
@@ -3530,6 +5167,7 @@ function parseRoom(lines, i) {
 		walls : [],
 		exits : [],
 		endings : [],
+		// effects : [], // TODO vNext
 		items : [],
 		pal : null,
 		name : null
@@ -3625,8 +5263,29 @@ function parseRoom(lines, i) {
 					room : destName,
 					x : parseInt(destCoords[0]),
 					y : parseInt(destCoords[1])
-				}
+				},
+				transition_effect : null,
+				// TODO : vNext
+				// script_id : null,
 			};
+
+			// optional arguments
+			var exitArgIndex = 4;
+			while (exitArgIndex < exitArgs.length) {
+				if (exitArgs[exitArgIndex] == "FX") {
+					ext.transition_effect = exitArgs[exitArgIndex+1];
+					exitArgIndex += 2;
+				}
+				// TODO : vNext
+				// else if (exitArgs[exitArgIndex] == "PRG") {
+				// 	ext.script_id = exitArgs[exitArgIndex+1];
+				// 	exitArgIndex += 2;
+				// }
+				else {
+					exitArgIndex += 1;
+				}
+			}
+
 			room[id].exits.push(ext);
 		}
 		else if (getType(lines[i]) === "END") {
@@ -3640,6 +5299,18 @@ function parseRoom(lines, i) {
 			};
 			room[id].endings.push(end);
 		}
+		// TODO : vNext
+		// else if (getType(lines[i]) === "EFF") {
+		// 	/* ADD EFFECT */
+		// 	var effectId = getId( lines[i] );
+		// 	var effectCoords = getCoord( lines[i], 2 );
+		// 	var effect = {
+		// 		id : effectId,
+		// 		x : parseInt( effectCoords[0] ),
+		// 		y : parseInt( effectCoords[1] ),
+		// 	};
+		// 	room[id].effects.push(effect);
+		// }
 		else if (getType(lines[i]) === "PAL") {
 			/* CHOOSE PALETTE (that's not default) */
 			room[id].pal = getId(lines[i]);
@@ -3674,6 +5345,7 @@ function parsePalette(lines,i) { //todo this has to go first right now :(
 		i++;
 	}
 	palette[id] = {
+		id : id,
 		name : name,
 		colors : colors
 	};
@@ -3723,12 +5395,13 @@ function parseTile(lines, i) {
 
 	//tile data
 	tile[id] = {
+		id : id,
 		drw : drwId, //drawing id
 		col : colorIndex,
 		animation : {
-			isAnimated : (imageStore.source[drwId].length > 1),
+			isAnimated : (renderer.GetFrameCount(drwId) > 1),
 			frameIndex : 0,
-			frameCount : imageStore.source[drwId].length
+			frameCount : renderer.GetFrameCount(drwId)
 		},
 		name : name,
 		isWall : isWall
@@ -3793,6 +5466,7 @@ function parseSprite(lines, i) {
 
 	//sprite data
 	sprite[id] = {
+		id : id,
 		drw : drwId, //drawing id
 		col : colorIndex,
 		dlg : dialogId,
@@ -3801,9 +5475,9 @@ function parseSprite(lines, i) {
 		y : -1,
 		walkingPath : [], //tile by tile movement path (isn't saved)
 		animation : {
-			isAnimated : (imageStore.source[drwId].length > 1),
+			isAnimated : (renderer.GetFrameCount(drwId) > 1),
 			frameIndex : 0,
-			frameCount : imageStore.source[drwId].length
+			frameCount : renderer.GetFrameCount(drwId)
 		},
 		inventory : startingInventory,
 		name : name
@@ -3860,6 +5534,7 @@ function parseItem(lines, i) {
 
 	//item data
 	item[id] = {
+		id : id,
 		drw : drwId, //drawing id
 		col : colorIndex,
 		dlg : dialogId,
@@ -3867,9 +5542,9 @@ function parseItem(lines, i) {
 		// x : -1,
 		// y : -1,
 		animation : {
-			isAnimated : (imageStore.source[drwId].length > 1),
+			isAnimated : (renderer.GetFrameCount(drwId) > 1),
 			frameIndex : 0,
-			frameCount : imageStore.source[drwId].length
+			frameCount : renderer.GetFrameCount(drwId)
 		},
 		name : name
 	};
@@ -3887,8 +5562,8 @@ function parseDrawing(lines, i) {
 }
 
 function parseDrawingCore(lines, i, drwId) {
-	imageStore.source[drwId] = []; //init list of frames
-	imageStore.source[drwId].push( [] ); //init first frame
+	var frameList = []; //init list of frames
+	frameList.push( [] ); //init first frame
 	var frameIndex = 0;
 	var y = 0;
 	while ( y < tilesize ) {
@@ -3897,14 +5572,14 @@ function parseDrawingCore(lines, i, drwId) {
 		for (x = 0; x < tilesize; x++) {
 			row.push( parseInt( l.charAt(x) ) );
 		}
-		imageStore.source[drwId][frameIndex].push( row );
+		frameList[frameIndex].push( row );
 		y++;
 
 		if (y === tilesize) {
 			i = i + y;
 			if ( lines[i] != undefined && lines[i].charAt(0) === ">" ) {
 				// start next frame!
-				imageStore.source[drwId].push( [] );
+				frameList.push( [] );
 				frameIndex++;
 				//start the count over again for the next frame
 				i++;
@@ -3913,126 +5588,48 @@ function parseDrawingCore(lines, i, drwId) {
 		}
 	}
 
-	//console.log(imageStore.source[drwId]);
+	renderer.SetImageSource(drwId, frameList);
+
 	return i;
 }
 
-function renderImages() {
-	// console.log(" -- RENDER IMAGES -- ");
+// TODO : vNext
+// var ScriptType = {
+// 	Script : 0,
+// 	Dialogue : 1, // TODO : move everything to this spelling?
+// 	Ending : 2,
+// };
 
-	//init image store
-	for (pal in palette) {
-		imageStore.render[pal] = {
-			"1" : {}, //images with primary color index 1 (usually tiles)
-			"2" : {}  //images with primary color index 2 (usually sprites)
-		};
-	}
+function parseScript(lines, i, objectStore) {
+	// TODO : vNext
+	// if (scriptType === undefined || scriptType === null) {
+	// 	scriptType = ScriptType.Script;
+	// }
 
-	//render images required by sprites
-	for (s in sprite) {
-		var spr = sprite[s];
-		renderImageForAllPalettes( spr );
-	}
-	//render images required by tiles
-	for (t in tile) {
-		var til = tile[t];
-		renderImageForAllPalettes( til );
-	}
-	//render images required by tiles
-	for (i in item) {
-		var itm = item[i];
-		renderImageForAllPalettes( itm );
-	}
-}
-
-function renderImageForAllPalettes(drawing) {
-	// console.log("RENDER IMAGE");
-	for (pal in palette) {
-		// console.log(pal);
-
-		var col = drawing.col;
-		var colStr = "" + col;
-
-		// slightly hacky initialization of image store for palettes with more than 3 colors ~~~ SECRET FEATURE DO NOT USE :P ~~~
-		if(imageStore.render[pal][colStr] === undefined || imageStore.render[pal][colStr] === null) {
-			// console.log("UNDEFINED " + colStr);
-			imageStore.render[pal][colStr] = {};
-		}
-
-		// console.log(drawing);
-		// console.log(drawing.drw);
-		// console.log(imageStore);
-
-		var imgSrc = imageStore.source[ drawing.drw ];
-
-		if ( imgSrc.length <= 1 ) {
-			// non-animated drawing
-			var frameSrc = imgSrc[0];
-			// console.log(drawing);
-			// console.log(imageStore);
-			imageStore.render[pal][colStr][drawing.drw] = imageDataFromImageSource( frameSrc, pal, col );
-		}
-		else {
-			// animated drawing
-			var frameCount = 0;
-			for (f in imgSrc) {
-				var frameSrc = imgSrc[f];
-				var frameId = drawing.drw + "_" + frameCount;
-				imageStore.render[pal][colStr][frameId] = imageDataFromImageSource( frameSrc, pal, col );
-				frameCount++;
-			}
-		}
-	}
-}
-
-function imageDataFromImageSource(imageSource, pal, col) {
-	//console.log(imageSource);
-
-	var img = ctx.createImageData(tilesize*scale,tilesize*scale);
-	for (var y = 0; y < tilesize; y++) {
-		for (var x = 0; x < tilesize; x++) {
-			var px = imageSource[y][x];
-			for (var sy = 0; sy < scale; sy++) {
-				for (var sx = 0; sx < scale; sx++) {
-					var pxl = (((y * scale) + sy) * tilesize * scale * 4) + (((x*scale) + sx) * 4);
-					if ( px === 1 && getPal(pal).length > col ) {
-						img.data[pxl + 0] = getPal(pal)[col][0]; //ugly
-						img.data[pxl + 1] = getPal(pal)[col][1];
-						img.data[pxl + 2] = getPal(pal)[col][2];
-						img.data[pxl + 3] = 255;
-					}
-					else { //ch === 0
-						img.data[pxl + 0] = getPal(pal)[0][0];
-						img.data[pxl + 1] = getPal(pal)[0][1];
-						img.data[pxl + 2] = getPal(pal)[0][2];
-						img.data[pxl + 3] = 255;
-					}
-				}
-			}
-		}
-	}
-	return img;
-}
-
-function parseDialog(lines, i) {
 	var id = getId(lines[i]);
 	i++;
 
-	// TODO : use this for titles & endings too
-	var results = scriptInterpreter.ReadDialogScript(lines,i);
-	dialog[id] = results.script;
+	var results = scriptUtils.ReadDialogScript(lines,i);
+
+	// TODO : vNext
+	// script[id] = {
+	// 	source: results.script,
+	// 	type: scriptType,
+	// };
+
+	objectStore[id] = results.script;
+
 	i = results.index;
 
 	return i;
 }
 
+function parseDialog(lines, i) {
+	return parseScript(lines, i, dialog);
+}
+
 function parseEnding(lines, i) {
-	var id = getId(lines[i]);
-	i++;
-	var text = lines[i];
-	i++;
-	ending[id] = text;
-	return i;
+	return parseScript(lines, i, ending);
 }
 
 function parseVariable(lines, i) {
@@ -4041,6 +5638,38 @@ function parseVariable(lines, i) {
 	var value = lines[i];
 	i++;
 	variable[id] = value;
+	return i;
+}
+
+function parseFontName(lines, i) {
+	fontName = getArg(lines[i], 1);
+	i++;
+	return i;
+}
+
+function parseTextDirection(lines, i) {
+	textDirection = getArg(lines[i], 1);
+	i++;
+	return i;
+}
+
+function parseFontData(lines, i) {
+	// NOTE : we're not doing the actual parsing here --
+	// just grabbing the block of text that represents the font
+	// and giving it to the font manager to use later
+
+	var localFontName = getId(lines[i]);
+	var localFontData = lines[i];
+	i++;
+
+	while (i < lines.length && lines[i] != "") {
+		localFontData += "\n" + lines[i];
+		i++;
+	}
+
+	var localFontFilename = localFontName + fontManager.GetExtension();
+	fontManager.AddResource( localFontFilename, localFontData );
+
 	return i;
 }
 
@@ -4067,13 +5696,20 @@ function drawItem(img,x,y,context) {
 	drawTile(img,x,y,context); //TODO these methods are dumb and repetitive
 }
 
+// var debugLastRoomDrawn = "0";
+
 function drawRoom(room,context,frameIndex) { // context & frameIndex are optional
 	if (!context) { //optional pass in context; otherwise, use default (ok this is REAL hacky isn't it)
 		context = ctx;
 	}
 
+	// if (room.id != debugLastRoomDrawn) {
+	// 	debugLastRoomDrawn = room.id;
+	// 	console.log("DRAW ROOM " + debugLastRoomDrawn);
+	// }
+
 	//clear screen
-	context.fillStyle = "rgb(" + getPal(curPal())[0][0] + "," + getPal(curPal())[0][1] + "," + getPal(curPal())[0][2] + ")";
+	context.fillStyle = "rgb(" + getPal(room.pal)[0][0] + "," + getPal(room.pal)[0][1] + "," + getPal(room.pal)[0][2] + ")";
 	context.fillRect(0,0,canvas.width,canvas.height);
 
 	//draw tiles
@@ -4109,64 +5745,17 @@ function drawRoom(room,context,frameIndex) { // context & frameIndex are optiona
 	}
 }
 
+// TODO : remove these get*Image methods
 function getTileImage(t,palId,frameIndex) {
-	if( frameIndex === undefined ) frameIndex = null; // no default parameter support on iOS
-
-	var drwId = t.drw;
-
-	if (!palId) palId = curPal(); // TODO : will this break on iOS?
-
-	if ( t.animation.isAnimated ) {
-		if (frameIndex != null) { // use optional provided frame index
-			// console.log("GET TILE " + frameIndex);
-			drwId += "_" + frameIndex;
-		}
-		else { // or the one bundled with the tile
-			drwId += "_" + t.animation.frameIndex;
-		}
-	}
-	return imageStore.render[ palId ][ t.col ][ drwId ];
+	return renderer.GetImage(t,palId,frameIndex);
 }
 
 function getSpriteImage(s,palId,frameIndex) {
-	if( frameIndex === undefined ) frameIndex = null; // no default parameter support on iOS
-
-	var drwId = s.drw;
-
-	if (!palId) palId = curPal();
-
-	if ( s.animation.isAnimated ) {
-		if (frameIndex != null) {
-			drwId += "_" + frameIndex;
-		}
-		else {
-			drwId += "_" + s.animation.frameIndex;
-		}
-	}
-
-	return imageStore.render[ palId ][ s.col ][ drwId ];
+	return renderer.GetImage(s,palId,frameIndex);
 }
 
-function getItemImage(itm,palId,frameIndex) { //aren't these all the same????
-	if( frameIndex === undefined ) frameIndex = null; // no default parameter support on iOS
-
-	var drwId = itm.drw;
-	// console.log(drwId);
-
-	if (!palId) palId = curPal();
-
-	if ( itm.animation.isAnimated ) {
-		if (frameIndex != null) {
-			drwId += "_" + frameIndex;
-		}
-		else {
-			drwId += "_" + itm.animation.frameIndex;
-		}
-	}
-
-	// console.log(imageStore.render[ palId ][ itm.col ]);
-	// console.log(imageStore.render[ palId ][ itm.col ][ drwId ]);
-	return imageStore.render[ palId ][ itm.col ][ drwId ];
+function getItemImage(itm,palId,frameIndex) {
+	return renderer.GetImage(itm,palId,frameIndex);
 }
 
 function curPal() {
@@ -4197,17 +5786,19 @@ var isEnding = false;
 var dialogModule = new Dialog();
 var dialogRenderer = dialogModule.CreateRenderer();
 var dialogBuffer = dialogModule.CreateBuffer();
+var fontManager = new FontManager();
 
-function onExitDialog() {
-	// var breakShit = null;
-	// breakShit();
-	console.log("EXIT DIALOG");
+function onExitDialog(scriptResult, dialogCallback) {
 	isDialogMode = false;
 	if (isNarrating) isNarrating = false;
 	if (isDialogPreview) {
 		isDialogPreview = false;
 		if (onDialogPreviewEnd != null)
 			onDialogPreviewEnd();
+	}
+
+	if (dialogCallback != undefined && dialogCallback != null) {
+		dialogCallback(scriptResult);
 	}
 }
 
@@ -4247,10 +5838,11 @@ function startSpriteDialog(spriteId) {
 	}
 }
 
-function startDialog(dialogStr,scriptId) {
+function startDialog(dialogStr,scriptId,dialogCallback) {
+	// console.log("START DIALOG ");
 	if(dialogStr.length <= 0) {
-		console.log("ON EXIT DIALOG -- startDialog 1");
-		onExitDialog();
+		// console.log("ON EXIT DIALOG -- startDialog 1");
+		onExitDialog(dialogCallback);
 		return;
 	}
 
@@ -4261,19 +5853,20 @@ function startDialog(dialogStr,scriptId) {
 	dialogBuffer.Reset();
 	scriptInterpreter.SetDialogBuffer( dialogBuffer );
 
-	var onScriptEnd = function() {
-		if(!dialogBuffer.IsActive()){
-			console.log("ON EXIT DIALOG -- startDialog 2");
-			onExitDialog();
-		}
+	var onScriptEnd = function(scriptResult) {
+		dialogBuffer.OnDialogEnd(function() {
+			onExitDialog(scriptResult, dialogCallback);
+		});
 	};
 
 	if(scriptId === undefined) {
-		scriptInterpreter.Interpret( dialogStr, onScriptEnd );		
+		scriptInterpreter.Interpret( dialogStr, onScriptEnd );
 	}
 	else {
-		if( !scriptInterpreter.HasScript(scriptId) )
+		if( !scriptInterpreter.HasScript(scriptId) ) {
 			scriptInterpreter.Compile( scriptId, dialogStr );
+		}
+		scriptInterpreter.DebugVisualizeScriptTree(scriptId);
 		scriptInterpreter.Run( scriptId, onScriptEnd );
 	}
 
@@ -4304,9 +5897,2176 @@ var scriptUtils = scriptModule.CreateUtils(); // TODO: move to editor.js?
 // scriptInterpreter.SetDialogBuffer( dialogBuffer );
 </script>
 
-<!-- BITSY HACKS TEST-->
+<!-- store default font in separate script tag for back compat-->
+<!-- Borksy modification: uses better encoded default font. -->
+<script type="bitsyFontData" id="ascii_small">
+FONT ascii_small
+SIZE 6 8
+CHAR 0
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+CHAR 32
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+CHAR 33
+000100
+001110
+001110
+000100
+000100
+000000
+000100
+000000
+CHAR 34
+011011
+011011
+010010
+000000
+000000
+000000
+000000
+000000
+CHAR 35
+000000
+001010
+011111
+001010
+001010
+011111
+001010
+000000
+CHAR 36
+001000
+001110
+010000
+001100
+000010
+011100
+000100
+000000
+CHAR 37
+011001
+011001
+000010
+000100
+001000
+010011
+010011
+000000
+CHAR 38
+001000
+010100
+010100
+001000
+010101
+010010
+001101
+000000
+CHAR 39
+001100
+001100
+001000
+000000
+000000
+000000
+000000
+000000
+CHAR 40
+000100
+001000
+001000
+001000
+001000
+001000
+000100
+000000
+CHAR 41
+001000
+000100
+000100
+000100
+000100
+000100
+001000
+000000
+CHAR 42
+000000
+001010
+001110
+011111
+001110
+001010
+000000
+000000
+CHAR 43
+000000
+000100
+000100
+011111
+000100
+000100
+000000
+000000
+CHAR 44
+000000
+000000
+000000
+000000
+000000
+001100
+001100
+001000
+CHAR 45
+000000
+000000
+000000
+011111
+000000
+000000
+000000
+000000
+CHAR 46
+000000
+000000
+000000
+000000
+000000
+001100
+001100
+000000
+CHAR 47
+000000
+000001
+000010
+000100
+001000
+010000
+000000
+000000
+CHAR 48
+001110
+010001
+010011
+010101
+011001
+010001
+001110
+000000
+CHAR 49
+000100
+001100
+000100
+000100
+000100
+000100
+001110
+000000
+CHAR 50
+001110
+010001
+000001
+000110
+001000
+010000
+011111
+000000
+CHAR 51
+001110
+010001
+000001
+001110
+000001
+010001
+001110
+000000
+CHAR 52
+000010
+000110
+001010
+010010
+011111
+000010
+000010
+000000
+CHAR 53
+011111
+010000
+010000
+011110
+000001
+010001
+001110
+000000
+CHAR 54
+000110
+001000
+010000
+011110
+010001
+010001
+001110
+000000
+CHAR 55
+011111
+000001
+000010
+000100
+001000
+001000
+001000
+000000
+CHAR 56
+001110
+010001
+010001
+001110
+010001
+010001
+001110
+000000
+CHAR 57
+001110
+010001
+010001
+001111
+000001
+000010
+001100
+000000
+CHAR 58
+000000
+000000
+001100
+001100
+000000
+001100
+001100
+000000
+CHAR 59
+000000
+000000
+001100
+001100
+000000
+001100
+001100
+001000
+CHAR 60
+000010
+000100
+001000
+010000
+001000
+000100
+000010
+000000
+CHAR 61
+000000
+000000
+011111
+000000
+000000
+011111
+000000
+000000
+CHAR 62
+001000
+000100
+000010
+000001
+000010
+000100
+001000
+000000
+CHAR 63
+001110
+010001
+000001
+000110
+000100
+000000
+000100
+000000
+CHAR 64
+001110
+010001
+010111
+010101
+010111
+010000
+001110
+000000
+CHAR 65
+001110
+010001
+010001
+010001
+011111
+010001
+010001
+000000
+CHAR 66
+011110
+010001
+010001
+011110
+010001
+010001
+011110
+000000
+CHAR 67
+001110
+010001
+010000
+010000
+010000
+010001
+001110
+000000
+CHAR 68
+011110
+010001
+010001
+010001
+010001
+010001
+011110
+000000
+CHAR 69
+011111
+010000
+010000
+011110
+010000
+010000
+011111
+000000
+CHAR 70
+011111
+010000
+010000
+011110
+010000
+010000
+010000
+000000
+CHAR 71
+001110
+010001
+010000
+010111
+010001
+010001
+001111
+000000
+CHAR 72
+010001
+010001
+010001
+011111
+010001
+010001
+010001
+000000
+CHAR 73
+001110
+000100
+000100
+000100
+000100
+000100
+001110
+000000
+CHAR 74
+000001
+000001
+000001
+000001
+010001
+010001
+001110
+000000
+CHAR 75
+010001
+010010
+010100
+011000
+010100
+010010
+010001
+000000
+CHAR 76
+010000
+010000
+010000
+010000
+010000
+010000
+011111
+000000
+CHAR 77
+010001
+011011
+010101
+010001
+010001
+010001
+010001
+000000
+CHAR 78
+010001
+011001
+010101
+010011
+010001
+010001
+010001
+000000
+CHAR 79
+001110
+010001
+010001
+010001
+010001
+010001
+001110
+000000
+CHAR 80
+011110
+010001
+010001
+011110
+010000
+010000
+010000
+000000
+CHAR 81
+001110
+010001
+010001
+010001
+010101
+010010
+001101
+000000
+CHAR 82
+011110
+010001
+010001
+011110
+010010
+010001
+010001
+000000
+CHAR 83
+001110
+010001
+010000
+001110
+000001
+010001
+001110
+000000
+CHAR 84
+011111
+000100
+000100
+000100
+000100
+000100
+000100
+000000
+CHAR 85
+010001
+010001
+010001
+010001
+010001
+010001
+001110
+000000
+CHAR 86
+010001
+010001
+010001
+010001
+010001
+001010
+000100
+000000
+CHAR 87
+010001
+010001
+010101
+010101
+010101
+010101
+001010
+000000
+CHAR 88
+010001
+010001
+001010
+000100
+001010
+010001
+010001
+000000
+CHAR 89
+010001
+010001
+010001
+001010
+000100
+000100
+000100
+000000
+CHAR 90
+011110
+000010
+000100
+001000
+010000
+010000
+011110
+000000
+CHAR 91
+001110
+001000
+001000
+001000
+001000
+001000
+001110
+000000
+CHAR 92
+000000
+010000
+001000
+000100
+000010
+000001
+000000
+000000
+CHAR 93
+001110
+000010
+000010
+000010
+000010
+000010
+001110
+000000
+CHAR 94
+000100
+001010
+010001
+000000
+000000
+000000
+000000
+000000
+CHAR 95
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+111111
+CHAR 96
+001100
+001100
+000100
+000000
+000000
+000000
+000000
+000000
+CHAR 97
+000000
+000000
+001110
+000001
+001111
+010001
+001111
+000000
+CHAR 98
+010000
+010000
+011110
+010001
+010001
+010001
+011110
+000000
+CHAR 99
+000000
+000000
+001110
+010001
+010000
+010001
+001110
+000000
+CHAR 100
+000001
+000001
+001111
+010001
+010001
+010001
+001111
+000000
+CHAR 101
+000000
+000000
+001110
+010001
+011110
+010000
+001110
+000000
+CHAR 102
+000110
+001000
+001000
+011110
+001000
+001000
+001000
+000000
+CHAR 103
+000000
+000000
+001111
+010001
+010001
+001111
+000001
+001110
+CHAR 104
+010000
+010000
+011100
+010010
+010010
+010010
+010010
+000000
+CHAR 105
+000100
+000000
+000100
+000100
+000100
+000100
+000110
+000000
+CHAR 106
+000010
+000000
+000110
+000010
+000010
+000010
+010010
+001100
+CHAR 107
+010000
+010000
+010010
+010100
+011000
+010100
+010010
+000000
+CHAR 108
+000100
+000100
+000100
+000100
+000100
+000100
+000110
+000000
+CHAR 109
+000000
+000000
+011010
+010101
+010101
+010001
+010001
+000000
+CHAR 110
+000000
+000000
+011100
+010010
+010010
+010010
+010010
+000000
+CHAR 111
+000000
+000000
+001110
+010001
+010001
+010001
+001110
+000000
+CHAR 112
+000000
+000000
+011110
+010001
+010001
+010001
+011110
+010000
+CHAR 113
+000000
+000000
+001111
+010001
+010001
+010001
+001111
+000001
+CHAR 114
+000000
+000000
+010110
+001001
+001000
+001000
+011100
+000000
+CHAR 115
+000000
+000000
+001110
+010000
+001110
+000001
+001110
+000000
+CHAR 116
+000000
+001000
+011110
+001000
+001000
+001010
+000100
+000000
+CHAR 117
+000000
+000000
+010010
+010010
+010010
+010110
+001010
+000000
+CHAR 118
+000000
+000000
+010001
+010001
+010001
+001010
+000100
+000000
+CHAR 119
+000000
+000000
+010001
+010001
+010101
+011111
+001010
+000000
+CHAR 120
+000000
+000000
+010010
+010010
+001100
+010010
+010010
+000000
+CHAR 121
+000000
+000000
+010010
+010010
+010010
+001110
+000100
+011000
+CHAR 122
+000000
+000000
+011110
+000010
+001100
+010000
+011110
+000000
+CHAR 123
+000110
+001000
+001000
+011000
+001000
+001000
+000110
+000000
+CHAR 124
+000100
+000100
+000100
+000100
+000100
+000100
+000100
+000100
+CHAR 125
+001100
+000010
+000010
+000011
+000010
+000010
+001100
+000000
+CHAR 126
+000000
+000000
+000000
+001010
+010100
+000000
+000000
+000000
+CHAR 160
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+CHAR 161
+000100
+000000
+000100
+000100
+001110
+001110
+000100
+000000
+CHAR 162
+000000
+000100
+001110
+010000
+010000
+001110
+000100
+000000
+CHAR 163
+000110
+001001
+001000
+011110
+001000
+001001
+010111
+000000
+CHAR 165
+010001
+001010
+000100
+011111
+000100
+011111
+000100
+000000
+CHAR 167
+001110
+010001
+001100
+001010
+000110
+010001
+001110
+000000
+CHAR 171
+000000
+000000
+001001
+010010
+001001
+000000
+000000
+000000
+CHAR 172
+000000
+000000
+111111
+000001
+000001
+000000
+000000
+000000
+CHAR 177
+000000
+000100
+001110
+000100
+000000
+001110
+000000
+000000
+CHAR 178
+011000
+000100
+001000
+011100
+000000
+000000
+000000
+000000
+CHAR 181
+000000
+000000
+010010
+010010
+010010
+011100
+010000
+010000
+CHAR 182
+001111
+010101
+010101
+001101
+000101
+000101
+000101
+000000
+CHAR 187
+000000
+000000
+010010
+001001
+010010
+000000
+000000
+000000
+CHAR 188
+010000
+010010
+010100
+001011
+010101
+000111
+000001
+000000
+CHAR 189
+010000
+010010
+010100
+001110
+010001
+000010
+000111
+000000
+CHAR 191
+000100
+000000
+000100
+001100
+010000
+010001
+001110
+000000
+CHAR 196
+001010
+000000
+000100
+001010
+010001
+011111
+010001
+000000
+CHAR 197
+001110
+001010
+001110
+011011
+010001
+011111
+010001
+000000
+CHAR 198
+001111
+010100
+010100
+011111
+010100
+010100
+010111
+000000
+CHAR 199
+001110
+010001
+010000
+010000
+010001
+001110
+000100
+001100
+CHAR 201
+000011
+000000
+011111
+010000
+011110
+010000
+011111
+000000
+CHAR 209
+001010
+010100
+000000
+010010
+011010
+010110
+010010
+000000
+CHAR 214
+010010
+001100
+010010
+010010
+010010
+010010
+001100
+000000
+CHAR 220
+001010
+000000
+010010
+010010
+010010
+010010
+001100
+000000
+CHAR 223
+000000
+011100
+010010
+011100
+010010
+010010
+011100
+010000
+CHAR 224
+001100
+000000
+001110
+000001
+001111
+010001
+001111
+000000
+CHAR 225
+000110
+000000
+001110
+000001
+001111
+010001
+001111
+000000
+CHAR 226
+001110
+000000
+001110
+000001
+001111
+010001
+001111
+000000
+CHAR 228
+001010
+000000
+001110
+000001
+001111
+010001
+001111
+000000
+CHAR 229
+001110
+001010
+001110
+000001
+001111
+010001
+001111
+000000
+CHAR 230
+000000
+000000
+011110
+000101
+011111
+010100
+001111
+000000
+CHAR 231
+000000
+001110
+010001
+010000
+010001
+001110
+000100
+001100
+CHAR 232
+001100
+000000
+001110
+010001
+011110
+010000
+001110
+000000
+CHAR 233
+000011
+000000
+001110
+010001
+011110
+010000
+001110
+000000
+CHAR 234
+001110
+000000
+001110
+010001
+011110
+010000
+001110
+000000
+CHAR 235
+001010
+000000
+001110
+010001
+011110
+010000
+001110
+000000
+CHAR 236
+001000
+000000
+000100
+000100
+000100
+000100
+000110
+000000
+CHAR 237
+000110
+000000
+000100
+000100
+000100
+000100
+000110
+000000
+CHAR 238
+000100
+001010
+000000
+000100
+000100
+000100
+000110
+000000
+CHAR 239
+001010
+000000
+000100
+000100
+000100
+000100
+000110
+000000
+CHAR 241
+001010
+010100
+000000
+011100
+010010
+010010
+010010
+000000
+CHAR 242
+011000
+000000
+001100
+010010
+010010
+010010
+001100
+000000
+CHAR 243
+000110
+000000
+001100
+010010
+010010
+010010
+001100
+000000
+CHAR 244
+001110
+000000
+001100
+010010
+010010
+010010
+001100
+000000
+CHAR 246
+001010
+000000
+001100
+010010
+010010
+010010
+001100
+000000
+CHAR 247
+001010
+000000
+001110
+010001
+010001
+010001
+001110
+000000
+CHAR 249
+011000
+000000
+010010
+010010
+010010
+010110
+001010
+000000
+CHAR 250
+000110
+000000
+010010
+010010
+010010
+010110
+001010
+000000
+CHAR 251
+001110
+000000
+010010
+010010
+010010
+010110
+001010
+000000
+CHAR 252
+010010
+000000
+010010
+010010
+010010
+010110
+001010
+000000
+CHAR 255
+001010
+000000
+010010
+010010
+010010
+001110
+000100
+011000
+CHAR 402
+000010
+000101
+000100
+001110
+000100
+000100
+010100
+001000
+CHAR 915
+011110
+010010
+010000
+010000
+010000
+010000
+010000
+000000
+CHAR 920
+001100
+010010
+010010
+011110
+010010
+010010
+001100
+000000
+CHAR 931
+011111
+010000
+001000
+000100
+001000
+010000
+011111
+000000
+CHAR 934
+001110
+000100
+001110
+010001
+001110
+000100
+001110
+000000
+CHAR 937
+000000
+001110
+010001
+010001
+001010
+001010
+011011
+000000
+CHAR 948
+001100
+010000
+001000
+000100
+001110
+010010
+001100
+000000
+CHAR 949
+000000
+001110
+010000
+011110
+010000
+001110
+000000
+000000
+CHAR 960
+000000
+011111
+001010
+001010
+001010
+001010
+001010
+000000
+CHAR 963
+000000
+000000
+001111
+010010
+010010
+001100
+000000
+000000
+CHAR 964
+000000
+000000
+001010
+010100
+000100
+000100
+000100
+000000
+CHAR 966
+000000
+000100
+001110
+010101
+010101
+001110
+000100
+000000
+CHAR 8226
+000000
+000000
+000000
+001100
+001100
+000000
+000000
+000000
+CHAR 8252
+001010
+001010
+001010
+001010
+001010
+000000
+001010
+000000
+CHAR 8592
+000000
+000100
+001100
+011111
+001100
+000100
+000000
+000000
+CHAR 8593
+000100
+001110
+011111
+000100
+000100
+000100
+000100
+000000
+CHAR 8594
+000000
+000100
+000110
+011111
+000110
+000100
+000000
+000000
+CHAR 8595
+000100
+000100
+000100
+000100
+011111
+001110
+000100
+000000
+CHAR 8734
+000000
+000000
+001010
+010101
+010101
+001010
+000000
+000000
+CHAR 8735
+000000
+000000
+000000
+010000
+010000
+010000
+011111
+000000
+CHAR 8801
+000000
+011110
+000000
+011110
+000000
+011110
+000000
+000000
+CHAR 8804
+000010
+001100
+010000
+001100
+000010
+000000
+011110
+000000
+CHAR 8805
+010000
+001100
+000010
+001100
+010000
+000000
+011110
+000000
+CHAR 8962
+000100
+001110
+011011
+010001
+010001
+011111
+000000
+000000
+CHAR 8976
+000000
+000000
+011111
+010000
+010000
+010000
+000000
+000000
+CHAR 9472
+000000
+000000
+000000
+111111
+000000
+000000
+000000
+000000
+CHAR 9474
+000100
+000100
+000100
+000100
+000100
+000100
+000100
+000100
+CHAR 9488
+000000
+000000
+000000
+111100
+000100
+000100
+000100
+000100
+CHAR 9492
+000100
+000100
+000100
+000111
+000000
+000000
+000000
+000000
+CHAR 9500
+000100
+000100
+000100
+000111
+000100
+000100
+000100
+000100
+CHAR 9508
+000100
+000100
+000100
+111100
+000100
+000100
+000100
+000100
+CHAR 9516
+000000
+000000
+000000
+111111
+000100
+000100
+000100
+000100
+CHAR 9524
+000100
+000100
+000100
+111111
+000000
+000000
+000000
+000000
+CHAR 9532
+000100
+000100
+000100
+111111
+000100
+000100
+000100
+000100
+CHAR 9552
+000000
+111111
+000000
+111111
+000000
+000000
+000000
+000000
+CHAR 9553
+010100
+010100
+010100
+010100
+010100
+010100
+010100
+010100
+CHAR 9556
+000000
+011111
+010000
+010111
+010100
+010100
+010100
+010100
+CHAR 9557
+000000
+111100
+000100
+111100
+000100
+000100
+000100
+000100
+CHAR 9558
+000000
+000000
+000000
+111100
+010100
+010100
+010100
+010100
+CHAR 9559
+000000
+111100
+000100
+110100
+010100
+010100
+010100
+010100
+CHAR 9561
+010100
+010100
+010100
+011111
+000000
+000000
+000000
+000000
+CHAR 9562
+010100
+010111
+010000
+011111
+000000
+000000
+000000
+000000
+CHAR 9563
+000100
+111100
+000100
+111100
+000000
+000000
+000000
+000000
+CHAR 9564
+010100
+010100
+010100
+111100
+000000
+000000
+000000
+000000
+CHAR 9565
+010100
+110100
+000100
+111100
+000000
+000000
+000000
+000000
+CHAR 9566
+000100
+000111
+000100
+000111
+000100
+000100
+000100
+000100
+CHAR 9567
+010100
+010100
+010100
+010111
+010100
+010100
+010100
+010100
+CHAR 9568
+010100
+010111
+010000
+010111
+010100
+010100
+010100
+010100
+CHAR 9569
+000000
+000000
+010010
+010010
+010010
+011100
+010000
+010000
+CHAR 9570
+010100
+010100
+010100
+110100
+010100
+010100
+010100
+010100
+CHAR 9571
+010100
+110100
+000100
+110100
+010100
+010100
+010100
+010100
+CHAR 9572
+000000
+111111
+000000
+111111
+000100
+000100
+000100
+000100
+CHAR 9573
+000000
+000000
+000000
+111111
+010100
+010100
+010100
+010100
+CHAR 9574
+000000
+111111
+000000
+110111
+010100
+010100
+010100
+010100
+CHAR 9575
+000100
+111111
+000000
+111111
+000000
+000000
+000000
+000000
+CHAR 9576
+010100
+010100
+010100
+111111
+000000
+000000
+000000
+000000
+CHAR 9577
+010100
+110111
+000000
+111111
+000000
+000000
+000000
+000000
+CHAR 9580
+010100
+110111
+000000
+110111
+010100
+010100
+010100
+010100
+CHAR 9601
+000000
+000000
+000000
+000000
+000000
+000000
+000000
+111111
+CHAR 9602
+000000
+000000
+000000
+000000
+000000
+000000
+111111
+111111
+CHAR 9603
+000000
+000000
+000000
+000000
+000000
+111111
+111111
+111111
+CHAR 9604
+000000
+000000
+000000
+000000
+111111
+111111
+111111
+111111
+CHAR 9605
+000000
+000000
+000000
+111111
+111111
+111111
+111111
+111111
+CHAR 9606
+000000
+000000
+111111
+111111
+111111
+111111
+111111
+111111
+CHAR 9607
+000000
+111111
+111111
+111111
+111111
+111111
+111111
+111111
+CHAR 9608
+111111
+111111
+111111
+111111
+111111
+111111
+111111
+111111
+CHAR 9609
+111100
+111100
+111100
+111100
+111100
+111100
+111100
+111100
+CHAR 9610
+111100
+111100
+111100
+111100
+111100
+111100
+111100
+111100
+CHAR 9611
+111000
+111000
+111000
+111000
+111000
+111000
+111000
+111000
+CHAR 9613
+110000
+110000
+110000
+110000
+110000
+110000
+110000
+110000
+CHAR 9615
+100000
+100000
+100000
+100000
+100000
+100000
+100000
+100000
+CHAR 9617
+010101
+000000
+101010
+000000
+010101
+000000
+101010
+000000
+CHAR 9618
+010101
+101010
+010101
+101010
+010101
+101010
+010101
+101010
+CHAR 9619
+101010
+111111
+010101
+111111
+101010
+111111
+010101
+111111
+CHAR 9644
+000000
+000000
+000000
+000000
+000000
+011110
+011110
+000000
+CHAR 9650
+000100
+000100
+001110
+001110
+011111
+011111
+000000
+000000
+CHAR 9658
+001000
+001100
+001110
+001111
+001110
+001100
+001000
+000000
+CHAR 9660
+011111
+011111
+001110
+001110
+000100
+000100
+000000
+000000
+CHAR 9668
+000010
+000110
+001110
+011110
+001110
+000110
+000010
+000000
+CHAR 9675
+000000
+000000
+011110
+010010
+010010
+011110
+000000
+000000
+CHAR 9688
+111111
+111111
+111111
+110011
+110011
+111111
+111111
+111111
+CHAR 9689
+111111
+111111
+100001
+101101
+101101
+100001
+111111
+111111
+CHAR 9786
+001110
+010001
+011011
+010001
+010101
+010001
+001110
+000000
+CHAR 9787
+001110
+011111
+010101
+011111
+010001
+011111
+001110
+000000
+CHAR 9788
+000000
+010101
+001110
+011011
+001110
+010101
+000000
+000000
+CHAR 9792
+001110
+010001
+010001
+001110
+000100
+001110
+000100
+000000
+CHAR 9794
+000000
+000111
+000011
+001101
+010010
+010010
+001100
+000000
+CHAR 9824
+000000
+000100
+001110
+011111
+011111
+000100
+001110
+000000
+CHAR 9827
+000100
+001110
+001110
+000100
+011111
+011111
+000100
+000000
+CHAR 9829
+000000
+001010
+011111
+011111
+011111
+001110
+000100
+000000
+CHAR 9830
+000000
+000100
+001110
+011111
+011111
+001110
+000100
+000000
+CHAR 9834
+000100
+000110
+000101
+000100
+001100
+011100
+011000
+000000
+CHAR 9835
+000011
+001101
+001011
+001101
+001011
+011011
+011000
+000000
+</script>
+
+<!-- BORKSY HACKS -->
 <script type="text/javascript" id="borksyHacks">
-//borksy use dist versions of hacks from the bitsy hacks repo now
+//borksy uses dist versions of hacks from the bitsy hacks repo now
 
 BORKSY-HACKS
 

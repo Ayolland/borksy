@@ -1,29 +1,68 @@
 /**
-❄
-@file unique items
-@summary items which, when picked up, remove all other instances of that item from the game
+🎞
+@file custom-exit-effects
+@summary make custom exit transition effects
 @license MIT
-@version 2.0.0
+@version 1.0.0
+@requires 6.0
 @author Sean S. LeBlanc
 
 @description
-Adds support for items which, when picked up,
-remove all other instances of that item from the game.
+Adds support for custom exit transition effects.
+Multiple effects can be added this way.
+This can be combined with exit-from-dialog for custom dialog transitions too.
+Effects are limited to a relatively low framerate;
+for fancier effects it may be better to try the GL transitions hack.
+
+EFFECT NOTES:
+Each effect looks like:
+	key: {
+		showPlayerStart: <true or false>,
+		showPlayerEnd: <true or false>,
+		duration: <duration in ms>,
+		pixelEffectFunc: function(start, end, pixelX, pixelY, delta) {
+			...
+		}
+	}
+
+To use the custom effects, you'll need to modify your exit in the gamedata, e.g.
+	EXT 1,1 0 13,13
+would become
+	EXT 1,1 0 13,13 FX key
+
+Manipulating pixel data inside the pixel effect function directly is relatively complex,
+but bitsy provides a number of helpers that are used to simplify its own effects.
+A quick reference guide:
+	- start.Image.GetPixel(x,y)
+		returns the pixel for a given position at the start of the transition
+	- end.Image.GetPixel(x,y)
+		returns the pixel for a given position at the end of the transition
+	- bitsy.PostProcessUtilities.GetCorrespondingColorFromPal(color,start.Palette,end.Palette)
+		converts a pixel from one palette to the other
+	- bitsy.PostProcessUtilities.LerpColor(colorA, colorB, delta)
+		returns an interpolated pixel
+
+A single example effect is included, but more can be found in the original effect source by looking for `RegisterTransitionEffect`.
 
 HOW TO USE:
 1. Copy-paste this script into a script tag after the bitsy source
-2. Update the `itemIsUnique` function to match your needs
+2. Update the `hackOptions` object at the top of the script with your custom effects
 */
 this.hacks = this.hacks || {};
-this.hacks.unique_items = (function (exports,bitsy) {
+this.hacks['custom-exit-effects'] = (function (exports,bitsy) {
 'use strict';
 var hackOptions = {
-	itemIsUnique: function (item) {
-		//return item.name == 'tea'; // specific unique item
-		//return ['tea', 'flower', 'hat'].indexOf(item.name) !== -1; // specific unique item list
-		//return item.name.indexOf('UNIQUE') !== -1; // unique item flag in name
-		return true; // all items are unique
-	}
+	// a simple crossfade example effect
+	'my-effect': {
+		showPlayerStart: true,
+		showPlayerEnd: true,
+		duration: 500,
+		pixelEffectFunc: function (start, end, pixelX, pixelY, delta) {
+			var a = start.Image.GetPixel(pixelX, pixelY);
+			var b = end.Image.GetPixel(pixelX, pixelY);
+			return bitsy.PostProcessUtilities.LerpColor(a, b, delta);
+		}
+	},
 };
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
@@ -103,11 +142,13 @@ HOW TO USE:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
 
-// Ex: after('load_game', function run() { alert('Loaded!'); });
-function after(targetFuncName, afterFn) {
+// Ex: before('load_game', function run() { alert('Loading!'); });
+//     before('show_text', function run(text) { return text.toUpperCase(); });
+//     before('show_text', function run(text, done) { done(text.toUpperCase()); });
+function before(targetFuncName, beforeFn) {
 	var kitsy = kitsyInit();
-	kitsy.queuedAfterScripts[targetFuncName] = kitsy.queuedAfterScripts[targetFuncName] || [];
-	kitsy.queuedAfterScripts[targetFuncName].push(afterFn);
+	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
+	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
 }
 
 function kitsyInit() {
@@ -221,18 +262,10 @@ function _reinitEngine() {
 
 
 
-after('onInventoryChanged', function (id) {
-	var r;
-	if (hackOptions.itemIsUnique(bitsy.item[id])) {
-		for (r in bitsy.room) {
-			if (bitsy.room.hasOwnProperty(r)) {
-				r = bitsy.room[r];
-				r.items = r.items.filter(function (i) {
-					return i.id !== id;
-				});
-			}
-		}
-	}
+before('startExportedGame', function () {
+	Object.entries(hackOptions).forEach(function (entry) {
+		bitsy.transition.RegisterTransitionEffect(entry[0], entry[1]);
+	});
 });
 
 exports.hackOptions = hackOptions;

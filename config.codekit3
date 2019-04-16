@@ -133,6 +133,14 @@
 		"oF": 0,
 		"opt": 1
 		},
+	"/borksyHD.gif": {
+		"ft": 4194304,
+		"iS": 1193,
+		"oA": 0,
+		"oAP": "/borksyHD.gif",
+		"oF": 0,
+		"opt": 1
+		},
 	"/defaults/body.html": {
 		"cB": 0,
 		"ft": 8192,
@@ -147,6 +155,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/defaults/fontdata.txt",
+		"oF": 0
+		},
+	"/defaults/gamedata.HD.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/defaults/gamedata.HD.txt",
 		"oF": 0
 		},
 	"/defaults/gamedata.txt": {
@@ -178,6 +194,17 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"/hacks/dist/basic-sfx.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/basic-sfx-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"/hacks/dist/bitsymuse.js": {
 		"bF": 0,
 		"ft": 64,
@@ -189,6 +216,17 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"/hacks/dist/canvas-replacement.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/canvas-replacement-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"/hacks/dist/character-portraits.js": {
 		"bF": 0,
 		"ft": 64,
@@ -196,6 +234,61 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/character-portraits-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/close-on-ending.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/close-on-ending-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/corrupt.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/corrupt-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/custom-exit-effects.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/custom-exit-effects-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/custom-text-effect.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/custom-text-effect-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/dialog-box-transition.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/dialog-box-transition-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -321,6 +414,28 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"/hacks/dist/favicon-from-sprite.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/favicon-from-sprite-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/follower.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/follower-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"/hacks/dist/gamepad-input.js": {
 		"bF": 0,
 		"ft": 64,
@@ -328,6 +443,17 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/gamepad-input-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/itsy-bitsy.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/itsy-bitsy-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -361,6 +487,28 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/multi-sprite-avatar-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/noclip.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/noclip-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/online.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/online-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -431,6 +579,39 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"/hacks/dist/text-to-speech.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/text-to-speech-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/tracery-processing.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/tracery-processing-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/transitions.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/transitions-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"/hacks/dist/transparent-dialog.js": {
 		"bF": 0,
 		"ft": 64,
@@ -449,6 +630,17 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/transparent-sprites-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/twine-bitsy-comms.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/twine-bitsy-comms-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -640,6 +832,14 @@
 		"oAP": "/hacks/info/stopwatch.readme.txt",
 		"oF": 0
 		},
+	"/hacks/info/text-to-speech.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/text-to-speech.readme.txt",
+		"oF": 0
+		},
 	"/hacks/info/unique-items.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -728,6 +928,14 @@
 		"oAP": "/hacks/options/stopwatch.options.txt",
 		"oF": 0
 		},
+	"/hacks/options/text-to-speech.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/options/text-to-speech.options.txt",
+		"oF": 0
+		},
 	"/hacks/options/transparent-sprites.options.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -804,6 +1012,17 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"/scripts/min/libs-min.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/scripts/min/min/libs-min-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"/style/style.css": {
 		"aP": 1,
 		"bl": 0,
@@ -827,76 +1046,28 @@
 		"oS": 0,
 		"uL": 1
 		},
-	"/template/1.0.template.html": {
+	"/template/Bitsy.5.5.html": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/template/1.0.template.html",
+		"oAP": "/template/Bitsy.5.5.html",
 		"oF": 0
 		},
-	"/template/2.1.template.html": {
+	"/template/Bitsy.6.0.html": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/template/2.1.template.html",
+		"oAP": "/template/Bitsy.6.0.html",
 		"oF": 0
 		},
-	"/template/2.4.template.html": {
+	"/template/BitsyHD.5.1.html": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/template/2.4.template.html",
-		"oF": 0
-		},
-	"/template/3.0.template.html": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/template/3.0.template.html",
-		"oF": 0
-		},
-	"/template/3.2.template.html": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/template/3.2.template.html",
-		"oF": 0
-		},
-	"/template/3.3.template.html": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/template/3.3.template.html",
-		"oF": 0
-		},
-	"/template/3.4.template.html": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/template/3.4.template.html",
-		"oF": 0
-		},
-	"/template/3.5.template.html": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/template/3.5.template.html",
-		"oF": 0
-		},
-	"/template/3.6.template.html": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/template/3.6.template.html",
+		"oAP": "/template/BitsyHD.5.1.html",
 		"oF": 0
 		},
 	"/testgames/testgame.html": {

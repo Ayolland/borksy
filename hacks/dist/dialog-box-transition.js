@@ -1,29 +1,23 @@
 /**
-❄
-@file unique items
-@summary items which, when picked up, remove all other instances of that item from the game
+🔁
+@file dialog box transition
+@summary adds an easing transition animation to display the dialog box text
 @license MIT
-@version 2.0.0
-@author Sean S. LeBlanc
+@version 1.0.0
+@requires 4.8, 4.9
+@author Delacannon
 
 @description
-Adds support for items which, when picked up,
-remove all other instances of that item from the game.
+A hack that adds an easing transition animation to display the dialog box text
 
 HOW TO USE:
-1. Copy-paste this script into a script tag after the bitsy source
-2. Update the `itemIsUnique` function to match your needs
+1. Copy-paste this script into a script tag after the bitsy source.
 */
 this.hacks = this.hacks || {};
-this.hacks.unique_items = (function (exports,bitsy) {
+this.hacks.dialog_box_transition = (function (exports,bitsy) {
 'use strict';
 var hackOptions = {
-	itemIsUnique: function (item) {
-		//return item.name == 'tea'; // specific unique item
-		//return ['tea', 'flower', 'hat'].indexOf(item.name) !== -1; // specific unique item list
-		//return item.name.indexOf('UNIQUE') !== -1; // unique item flag in name
-		return true; // all items are unique
-	}
+	easing: 0.025 //  easing speed
 };
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
@@ -103,11 +97,14 @@ HOW TO USE:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
 
-// Ex: after('load_game', function run() { alert('Loaded!'); });
-function after(targetFuncName, afterFn) {
+
+// Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
+function inject$1(searchRegex, replaceString) {
 	var kitsy = kitsyInit();
-	kitsy.queuedAfterScripts[targetFuncName] = kitsy.queuedAfterScripts[targetFuncName] || [];
-	kitsy.queuedAfterScripts[targetFuncName].push(afterFn);
+	kitsy.queuedInjectScripts.push({
+		searchRegex: searchRegex,
+		replaceString: replaceString
+	});
 }
 
 function kitsyInit() {
@@ -221,19 +218,53 @@ function _reinitEngine() {
 
 
 
-after('onInventoryChanged', function (id) {
-	var r;
-	if (hackOptions.itemIsUnique(bitsy.item[id])) {
-		for (r in bitsy.room) {
-			if (bitsy.room.hasOwnProperty(r)) {
-				r = bitsy.room[r];
-				r.items = r.items.filter(function (i) {
-					return i.id !== id;
-				});
-			}
+var drawOverride = `
+if(context == null) return;
+		if (isCentered) {
+			context.putImageData(textboxInfo.img, textboxInfo.left*scale, ((height/2)-(textboxInfo.height/2))*scale);
+			this.onExit = ((height/2)-(textboxInfo.height/2))*scale === ((height/2)-(textboxInfo.height/2))*scale
 		}
+		else if (player().y < mapsize/2) {
+			easingDialog(textboxInfo, ${hackOptions.easing}, 
+				!this.onClose ? (height-textboxInfo.bottom-textboxInfo.height)*scale
+				: (height+textboxInfo.bottom+textboxInfo.height)*scale
+				 ) 
+			this.onExit = this.onClose && textboxInfo.y >= (height+textboxInfo.height)*scale
+		}
+		else {
+			easingDialog(textboxInfo, ${
+				hackOptions.easing
+			}, !this.onClose ? textboxInfo.top*scale : 
+				-textboxInfo.top-textboxInfo.height*scale) 
+			 this.onExit = this.onClose && textboxInfo.y <= -textboxInfo.height*scale
+		}
+return;`;
+
+var functionEasing = `
+	function easingDialog(tbox, easing, targetY) {
+		var vy = (targetY - tbox.y) * easing;
+		tbox.y += vy;
+		context.putImageData(tbox.img,tbox.left*scale,tbox.y);
 	}
-});
+	this.onClose = false;
+	this.onExit = false;
+`;
+
+inject$1(
+	/(this\.DrawTextbox\(\))/,
+	`$1\nif(this.onExit && this.onClose){dialogBuffer.EndDialog()}`
+);
+inject$1(/(this\.EndDialog\(\))/, `dialogRenderer.onClose=true`);
+inject$1(/(var DialogRenderer = function\(\) {)/, `$1${functionEasing}`);
+inject$1(/(var textboxInfo = {)/, `$1y:0,`);
+inject$1(
+	/(this\.Reset = function\(\) {)/,
+	`$1 this.onClose=false;
+		this.onExit=false;
+		textboxInfo.y = player().y < mapsize/2 ? (height+textboxInfo.bottom+textboxInfo.height)*scale : -(textboxInfo.height) * scale;`
+);
+
+inject$1(/(this\.DrawTextbox = function\(\) {)/, `$1${drawOverride}`);
 
 exports.hackOptions = hackOptions;
 

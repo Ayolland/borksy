@@ -1,30 +1,27 @@
 /**
-❄
-@file unique items
-@summary items which, when picked up, remove all other instances of that item from the game
+⛔️
+@file close on ending
+@summary Prevents from playing past an ending
 @license MIT
-@version 2.0.0
+@version 1.1.1
 @author Sean S. LeBlanc
 
 @description
-Adds support for items which, when picked up,
-remove all other instances of that item from the game.
+Prevent from playing past an ending.
+When an ending is reached, it will prevent the game from being restarted,
+the bitsy game canvas will be removed, and it will attempt to close the window.
+Windows can't always be closed due to browser security reasons;
+rendering the game unresponsive is the best that can be done in that situation.
+
+NOTE: This hack also disables the ctrl+r restart prompt,
+but players will still be able to manually refresh or close/re-open the page to restart.
 
 HOW TO USE:
-1. Copy-paste this script into a script tag after the bitsy source
-2. Update the `itemIsUnique` function to match your needs
+Copy-paste this script into a script tag after the bitsy source
 */
 this.hacks = this.hacks || {};
-this.hacks.unique_items = (function (exports,bitsy) {
+(function (bitsy) {
 'use strict';
-var hackOptions = {
-	itemIsUnique: function (item) {
-		//return item.name == 'tea'; // specific unique item
-		//return ['tea', 'flower', 'hat'].indexOf(item.name) !== -1; // specific unique item list
-		//return item.name.indexOf('UNIQUE') !== -1; // unique item flag in name
-		return true; // all items are unique
-	}
-};
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
 
@@ -102,6 +99,16 @@ HOW TO USE:
   For more info, see the documentation at:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
+
+
+// Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
+function inject$1(searchRegex, replaceString) {
+	var kitsy = kitsyInit();
+	kitsy.queuedInjectScripts.push({
+		searchRegex: searchRegex,
+		replaceString: replaceString
+	});
+}
 
 // Ex: after('load_game', function run() { alert('Loaded!'); });
 function after(targetFuncName, afterFn) {
@@ -219,24 +226,21 @@ function _reinitEngine() {
 
 
 
+// prevent ctrl+r restart prompt
+inject$1(/(function tryRestartGame\(e\) {)/, '$1return;');
 
-
-after('onInventoryChanged', function (id) {
-	var r;
-	if (hackOptions.itemIsUnique(bitsy.item[id])) {
-		for (r in bitsy.room) {
-			if (bitsy.room.hasOwnProperty(r)) {
-				r = bitsy.room[r];
-				r.items = r.items.filter(function (i) {
-					return i.id !== id;
-				});
-			}
-		}
+after('onExitDialog', function () {
+	if(bitsy.isEnding) {
+		// prevent further input
+		var no = function () {
+			return false;
+		};
+		bitsy.input.isKeyDown = bitsy.input.anyKeyPressed = bitsy.input.swipeLeft = bitsy.input.swipeRight = bitsy.input.swipeUp = bitsy.input.swipeDown = bitsy.input.isTapReleased = no;
+		// remove canvas
+		bitsy.canvas.remove();
+		// attempt to close
+		window.close();
 	}
 });
 
-exports.hackOptions = hackOptions;
-
-return exports;
-
-}({},window));
+}(window));
