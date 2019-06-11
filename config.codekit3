@@ -227,6 +227,17 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"/hacks/dist/character-portraits-animated.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/character-portraits-animated-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"/hacks/dist/character-portraits.js": {
 		"bF": 0,
 		"ft": 64,
@@ -480,6 +491,17 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"/hacks/dist/long-dialog.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/long-dialog-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"/hacks/dist/multi-sprite-avatar.js": {
 		"bF": 0,
 		"ft": 64,
@@ -672,6 +694,14 @@
 		"oAP": "/hacks/info/bitsymuse.readme.txt",
 		"oF": 0
 		},
+	"/hacks/info/character-portraits-animated.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/character-portraits-animated.readme.txt",
+		"oF": 0
+		},
 	"/hacks/info/character-portraits.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -776,6 +806,14 @@
 		"oAP": "/hacks/info/logic-operators-extended.readme.txt",
 		"oF": 0
 		},
+	"/hacks/info/long-dialog.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/long-dialog.readme.txt",
+		"oF": 0
+		},
 	"/hacks/info/multi-sprite-avatar.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -864,6 +902,14 @@
 		"oAP": "/hacks/options/bitsymuse.options.txt",
 		"oF": 0
 		},
+	"/hacks/options/character-portraits-animated.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/options/character-portraits-animated.options.txt",
+		"oF": 0
+		},
 	"/hacks/options/character-portraits.options.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -878,6 +924,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/hacks/options/directional-avatar.options.txt",
+		"oF": 0
+		},
+	"/hacks/options/long-dialog.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/options/long-dialog.options.txt",
 		"oF": 0
 		},
 	"/hacks/options/multi-sprite-avatar.options.txt": {
@@ -1060,6 +1114,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/template/Bitsy.6.0.html",
+		"oF": 0
+		},
+	"/template/Bitsy.6.3.html": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/template/Bitsy.6.3.html",
 		"oF": 0
 		},
 	"/template/BitsyHD.5.1.html": {
