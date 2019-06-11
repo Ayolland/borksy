@@ -3,7 +3,7 @@
 @file paragraph-break
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
-@version 1.1.1
+@version 1.1.2
 @requires Bitsy Version: 5.0, 5.1
 @author Sean S. LeBlanc, David Mowatt
 
@@ -86,25 +86,6 @@ function unique(array) {
 	return array.filter(function (item, idx) {
 		return array.indexOf(item) === idx;
 	});
-}
-
-/**
- * Helper for printing a paragraph break inside of a dialog function.
- * automatically add an appropriate number of line breaks
- * based on the current dialogue buffer size rather than the user having to count;
- * Intended to be called using the environment parameters of the original function;
- * e.g.
- * addDialogTag('myTag', function (environment, parameters, onReturn) {
- * 	addParagraphBreak(environment);
- * 	onReturn(null);
- * });
- * @param {Environment} environment Bitsy environment object; first param to a dialog function
- */
-function addParagraphBreak(environment) {
-    var a = environment.GetDialogBuffer().CurRowCount();
-    for (var i = 0; i < 3 - a; ++i) {
-        environment.GetDialogBuffer().AddLinebreak();
-    }
 }
 
 /**
@@ -305,11 +286,18 @@ function addDialogTag(tag, fn) {
 	);
 }
 
+/**
+ * Helper for printing a paragraph break inside of a dialog function.
+ * Adds the function `AddParagraphBreak` to `DialogBuffer`
+ */
+
+inject$1(/(this\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer.push( [[]] ); isActive = true; };\n$1');
+
 
 
 //Adds the actual dialogue tag. No deferred version is required.
 addDialogTag('p', function(environment, parameters, onReturn){
-    addParagraphBreak(environment);
+    environment.GetDialogBuffer().AddParagraphBreak();
     onReturn(null);
 });
 // End of (p) paragraph break mod

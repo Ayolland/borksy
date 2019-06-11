@@ -1,59 +1,37 @@
 /**
-😽
-@file character portraits
-@summary high quality anime jpegs (or pngs i guess)
+📜
+@file long dialog
+@summary put more words onscreen
 @license MIT
-@version 2.0.0
-@requires Bitsy Version: 5.3
+@version 1.1.0
+@requires Bitsy Version: 6.1
 @author Sean S. LeBlanc
 
 @description
-Adds a tag (portrait "id") which adds the ability to draw high resolution images during dialog.
+Makes the dialog box variable in height, allowing it to expand as needed.
 
-Examples:
-	(portrait "cat")
-		draws the image named "cat" in the hackOptions
-	(portrait "")
-		resets the portrait to not draw
+Minimum and maximum size are configurable.
+Cheat sheet:
+	2: bitsy default
+	8: reaches just below the halfway mark
+	16: roughly the max of the original bitsy margins
+	19: max before cutting off text
 
-By default, the portrait will clear when dialog is exited,
-but this can be customized in the hackOptions below.
-
-All portraits are drawn from the top-left corner, on top of the game and below the dialog box.
-They are scaled uniformly according to the hackOptions below,
-and are cropped to bitsy's canvas width/height.
-
-All portraits are preloaded, but their loading state is ignored.
-i.e. The game will start before they have all loaded,
-and they simply won't draw if they're not loaded or have errored out.
-
-All standard browser image formats are supported, but keep filesize in mind!
-
-Note: The hack is called "character portraits", but this can easily be used to show images of any sort
+Note: this hack also includes the paragraph break hack
+A common pattern in bitsy is using intentional whitespace to force new dialog pages,
+but the long dialog hack makes that look awkward since the text box expands.
+The paragraph break hack lets you get around this by using a (p) tag to immediately end the current page.
 
 HOW TO USE:
-1. Copy-paste this script into a script tag after the bitsy source
-2. Edit the hackOptions object as needed
+	1. Copy-paste this script into a new script tag after the Bitsy source code.
+	2. edit hackOptions below as needed
 */
 this.hacks = this.hacks || {};
-this.hacks.character_portraits = (function (exports,bitsy) {
+this.hacks.long_dialog = (function (exports,bitsy) {
 'use strict';
 var hackOptions = {
-	// influences the resolution of the drawn image
-	// `bitsy.scale` (4 by default) is the max and will match bitsy's internal scale (i.e. 512x512)
-	// 1 will match bitsy's in-game virtual scale (i.e. 128x128)
-	// it's best to decide this up-front and make portrait images that match this resolution
-	scale: bitsy.scale,
-	// a list of portrait files
-	// the format is: 'id for portrait tag': 'file path'
-	// these may be:
-	// - local files (in which case you need to include them with your html when publishing)
-	// - online urls (which are not guaranteed to work as they are network-dependent)
-	// - base64-encoded images (the most reliable but unwieldy)
-	portraits: {
-		'cat': './cat.png',
-	},
-	autoReset: true, // if true, automatically resets the portrait to blank when dialog is exited
+	minRows: 2,
+	maxRows: 4,
 };
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
@@ -150,13 +128,6 @@ function before(targetFuncName, beforeFn) {
 	var kitsy = kitsyInit();
 	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
 	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
-}
-
-// Ex: after('load_game', function run() { alert('Loaded!'); });
-function after(targetFuncName, afterFn) {
-	var kitsy = kitsyInit();
-	kitsy.queuedAfterScripts[targetFuncName] = kitsy.queuedAfterScripts[targetFuncName] || [];
-	kitsy.queuedAfterScripts[targetFuncName].push(afterFn);
 }
 
 function kitsyInit() {
@@ -315,63 +286,69 @@ function addDialogTag(tag, fn) {
 	);
 }
 
+/**
+ * Helper for printing a paragraph break inside of a dialog function.
+ * Adds the function `AddParagraphBreak` to `DialogBuffer`
+ */
 
+inject$1(/(this\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer.push( [[]] ); isActive = true; };\n$1');
 
+/**
+📃
+@file paragraph-break
+@summary Adds paragraph breaks to the dialogue parser
+@license WTFPL (do WTF you want)
+@version 1.1.2
+@requires Bitsy Version: 5.0, 5.1
+@author Sean S. LeBlanc, David Mowatt
 
+@description
+Adds a (p) tag to the dialogue parser that forces the following text to 
+start on a fresh dialogue screen, eliminating the need to spend hours testing
+line lengths or adding multiple line breaks that then have to be reviewed
+when you make edits or change the font size.
 
-var state = {
-	portraits: {},
-	portrait: null,
-};
+Usage: (p)
+       
+Example: I am a cat(p)and my dialogue contains multitudes
 
-// preload images into a cache
-after('startExportedGame', function() {
-	for (var i in hackOptions.portraits) {
-		if(hackOptions.portraits.hasOwnProperty(i)) {
-			state.portraits[i] = new Image();
-			state.portraits[i].src = hackOptions.portraits[i];
-		}
-	}
+HOW TO USE:
+  1. Copy-paste this script into a new script tag after the Bitsy source code.
+     It should appear *before* any other mods that handle loading your game
+     data so it executes *after* them (last-in first-out).
+
+NOTE: This uses parentheses "()" instead of curly braces "{}" around function
+      calls because the Bitsy editor's fancy dialog window strips unrecognized
+      curly-brace functions from dialog text. To keep from losing data, write
+      these function calls with parentheses like the examples above.
+
+      For full editor integration, you'd *probably* also need to paste this
+      code at the end of the editor's `bitsy.js` file. Untested.
+*/
+
+//Adds the actual dialogue tag. No deferred version is required.
+addDialogTag('p', function(environment, parameters, onReturn){
+    environment.GetDialogBuffer().AddParagraphBreak();
+    onReturn(null);
 });
+// End of (p) paragraph break mod
 
-// hook up dialog tag
-addDialogTag('portrait', function (environment, parameters, onReturn) {
-	var newPortrait = parameters[0];
-	var image = state.portraits[newPortrait];
-	if (state.portrait === image) {
-		return;
-	}
-	state.portrait = image;
-	onReturn(null);
-});
 
-// hook up drawing
-var context;
-after('drawRoom', function () {
-	if ((!bitsy.isDialogMode && !bitsy.isNarrating) || !state.portrait) {
-		return;
-	}
-	if (!context) {
-		context = bitsy.canvas.getContext('2d');
-		context.imageSmoothingEnabled = false;
-	}
-	try {
-		context.drawImage(state.portrait, 0, 0, bitsy.width * hackOptions.scale, bitsy.height * hackOptions.scale, 0, 0, bitsy.width * bitsy.scale, bitsy.height * bitsy.scale);
-	} catch (error) {
-		// log and ignore errors
-		// so broken images don't break the game
-		console.error('Portrait error', error);
-	}
-});
 
-after('onExitDialog', function() {
-	if (hackOptions.autoReset) {
-		state.portrait = '';
-	}
-});
+
+
+// override textbox height
+inject$1(/textboxInfo\.height = .+;/,
+`Object.defineProperty(textboxInfo, 'height', {
+	get() { return textboxInfo.padding_vert + (textboxInfo.padding_vert + relativeFontHeight()) * Math.max(${hackOptions.minRows}, dialogBuffer.CurPage().indexOf(dialogBuffer.CurRow())+Math.sign(dialogBuffer.CurCharCount())) + textboxInfo.arrow_height; }
+})`);
+// prevent textbox from caching
+inject$1(/(if\(textboxInfo\.img == null\))/, '// $1');
+// rewrite hard-coded row limit
+inject$1(/(else if \(curRowIndex )== 0/g, '$1< ' + hackOptions.maxRows + ' - 1');
+inject$1(/(if\( lastPage\.length) <= 1( \) {)/, '$1 < ' + hackOptions.maxRows + ' $2');
 
 exports.hackOptions = hackOptions;
-exports.state = state;
 
 return exports;
 

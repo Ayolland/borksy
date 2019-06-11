@@ -3,12 +3,13 @@
 @file dialog choices
 @summary binary dialog choices
 @license MIT
-@version 1.1.1
+@version 2.1.2
 @requires 5.3
 @author Sean S. LeBlanc
 
 @description
 Adds a dialog tag which allows you to present the player with binary dialog choices.
+Uses as an arrow cursor by default, but this can be changed in the hackOptions to use a custom bitsy sprite instead.
 
 Usage:
 {choice
@@ -77,11 +78,28 @@ e.g.
 """
 
 HOW TO USE:
-Copy-paste into a script tag after the bitsy source
+1. Copy-paste into a script tag after the bitsy source
+2. Edit hackOptions below as needed
 */
 this.hacks = this.hacks || {};
 (function (bitsy) {
 'use strict';
+var hackOptions = {
+	// if defined, the cursor is drawn as the sprite with the given id
+	// e.g. use 'A' to use the player's avatar as a cursor
+	// if not defined, uses an arrow graphic similar to the continue arrow
+	cursor: undefined,
+	// modifies the scale/position of the cursor
+	// recommended combinations:
+	// 	- scale: 4, y: 1, x: 0
+	// 	- scale: 2, y: 3, x: 1
+	// 	- scale: 2, y: 4, x: 0 + custom cursor
+	transform: {
+		scale: bitsy.scale,
+		y: 1,
+		x: 0,
+	}
+};
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
 
@@ -135,25 +153,6 @@ function unique(array) {
 	return array.filter(function (item, idx) {
 		return array.indexOf(item) === idx;
 	});
-}
-
-/**
- * Helper for printing a paragraph break inside of a dialog function.
- * automatically add an appropriate number of line breaks
- * based on the current dialogue buffer size rather than the user having to count;
- * Intended to be called using the environment parameters of the original function;
- * e.g.
- * addDialogTag('myTag', function (environment, parameters, onReturn) {
- * 	addParagraphBreak(environment);
- * 	onReturn(null);
- * });
- * @param {Environment} environment Bitsy environment object; first param to a dialog function
- */
-function addParagraphBreak(environment) {
-    var a = environment.GetDialogBuffer().CurRowCount();
-    for (var i = 0; i < 3 - a; ++i) {
-        environment.GetDialogBuffer().AddLinebreak();
-    }
 }
 
 /**
@@ -296,36 +295,63 @@ function _reinitEngine() {
 	bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 }
 
+/**
+ * Helper for printing a paragraph break inside of a dialog function.
+ * Adds the function `AddParagraphBreak` to `DialogBuffer`
+ */
+
+inject$1(/(this\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer.push( [[]] ); isActive = true; };\n$1');
+
+
+
 
 
 var dialogChoices = {
 	choice: 0,
 	choices: [],
 	choicesActive: false,
-	addParagraphBreak: addParagraphBreak,
+	swiped: false,
 	handleInput: function (dialogBuffer) {
+		if (!this.choicesActive) {
+			this.swiped = false;
+			return false;
+		}
+		var pswiped = this.swiped;
+		var swiped = !pswiped && (bitsy.input.swipeUp() || bitsy.input.swipeDown() || bitsy.input.swipeRight());
+		if (swiped) {
+			this.swiped = true;
+		} else if (!bitsy.input.swipeUp() && !bitsy.input.swipeDown() && !bitsy.input.swipeRight()) {
+			this.swiped = false;
+		}
+		var l = Math.max(this.choices.length, 1);
 		// navigate
 		if (
-			bitsy.input.isKeyDown(bitsy.key.up) ||
-			bitsy.input.isKeyDown(bitsy.key.w) ||
-			bitsy.input.swipeUp() ||
-			bitsy.input.isKeyDown(bitsy.key.down) ||
-			bitsy.input.isKeyDown(bitsy.key.s) ||
-			bitsy.input.swipeDown()
+			(bitsy.input.anyKeyPressed() && (bitsy.input.isKeyDown(bitsy.key.up) || bitsy.input.isKeyDown(bitsy.key.w))) ||
+			(swiped && bitsy.input.swipeUp())
 		) {
-			this.choice = this.choice ? 0 : 1;
+			this.choice -= 1;
+			if (this.choice < 0) {
+				this.choice += l;
+			}
+			return false;
+		}
+		if (
+			(bitsy.input.anyKeyPressed() && (bitsy.input.isKeyDown(bitsy.key.down) || bitsy.input.isKeyDown(bitsy.key.s))) ||
+			(swiped && bitsy.input.swipeDown())
+		) {
+			this.choice = (this.choice + 1) % l;
 			return false;
 		}
 		// select
 		if (
-			this.choicesActive &&
-			(
-				bitsy.input.isKeyDown(bitsy.key.right) ||
-				bitsy.input.isKeyDown(bitsy.key.d) ||
-				bitsy.input.isKeyDown(bitsy.key.enter) ||
-				bitsy.input.isKeyDown(bitsy.key.space) ||
-				bitsy.input.swipeRight()
-			)
+			((bitsy.input.anyKeyPressed() && (
+					bitsy.input.isKeyDown(bitsy.key.right) ||
+					bitsy.input.isKeyDown(bitsy.key.d) ||
+					bitsy.input.isKeyDown(bitsy.key.enter) ||
+					bitsy.input.isKeyDown(bitsy.key.space)
+				)
+			) ||
+			(swiped && bitsy.input.swipeRight()))
 		) {
 			// evaluate choice
 			this.choices[this.choice]();
@@ -348,6 +374,17 @@ var dialogChoices = {
 	}
 };
 
+var choiceCursorDefault = `[
+	[0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 1, 0, 0, 0, 0, 0, 0],
+	[0, 1, 1, 0, 0, 0, 0, 0],
+	[0, 1, 1, 1, 0, 0, 0, 0],
+	[0, 1, 1, 0, 0, 0, 0, 0],
+	[0, 1, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0]
+]`;
+
 bitsy.dialogChoices = dialogChoices;
 
 // parsing
@@ -358,7 +395,7 @@ else if(sequenceType === "choice")
 	state.curNode.AddChild( new ChoiceNode( options ) );
 `);
 
-inject$1(/(var ShuffleNode = )/,`
+inject$1(/(var ShuffleNode = )/, `
 var ChoiceNode = function(options) {
 	Object.assign( this, new TreeRelationship() );
 	Object.assign( this, new SequenceBase() );
@@ -389,6 +426,7 @@ var ChoiceNode = function(options) {
 			}
 			else {
 				done();
+				window.dialogChoices.choicesActive = true;
 			}
 		}
 		window.dialogChoices.choices = this.options.map(function(option){
@@ -398,10 +436,12 @@ var ChoiceNode = function(options) {
 				});
 			};
 		});
-		window.dialogChoices.addParagraphBreak(environment);
+		if (environment.GetDialogBuffer().CurCharCount() > 0) {
+			environment.GetDialogBuffer().AddParagraphBreak();
+		}
 		evalChildren(this.options, function() {
+			environment.GetDialogBuffer().AddParagraphBreak();
 			onReturn(lastVal);
-			window.dialogChoices.choicesActive = true;
 		});
 	}
 }
@@ -413,16 +453,17 @@ $1`);
 // but draws rotated to point at text)
 inject$1(/(this\.DrawNextArrow = )/, `
 this.DrawChoiceArrow = function() {
-	var top = (3 + window.dialogChoices.choice * 6) * scale;
-	var left = 1 * scale;
-	for (var y = 0; y < 3; y++) {
-		for (var x = 0; x < 5; x++) {
-			var i = (y * 5) + x;
-			if (arrowdata[i] == 1) {
+	var rows = ${hackOptions.cursor ? `renderer.GetImageSource(sprite['${hackOptions.cursor}'].drw)[sprite['${hackOptions.cursor}'].animation.frameIndex]` : choiceCursorDefault};
+	var top = (${hackOptions.transform.y} + window.dialogChoices.choice * (textboxInfo.padding_vert + relativeFontHeight())) * scale;
+	var left = ${hackOptions.transform.x}*scale;
+	for (var y = 0; y < rows.length; y++) {
+		var cols = rows[y];
+		for (var x = 0; x < cols.length; x++) {
+			if (cols[x]) {
 				//scaling nonsense
-				for (var sy = 0; sy < scale; sy++) {
-					for (var sx = 0; sx < scale; sx++) {
-						var pxl = 4 * ( ((top+(x*scale)+sy) * (textboxInfo.width*scale)) + (left+(y*scale)+sx) );
+				for (var sy = 0; sy < ${hackOptions.transform.scale}; sy++) {
+					for (var sx = 0; sx < ${hackOptions.transform.scale}; sx++) {
+						var pxl = 4 * ( ((top+(y*${hackOptions.transform.scale})+sy) * (textboxInfo.width*scale)) + (left+(x*${hackOptions.transform.scale})+sx) );
 						textboxInfo.img.data[pxl+0] = 255;
 						textboxInfo.img.data[pxl+1] = 255;
 						textboxInfo.img.data[pxl+2] = 255;
@@ -442,13 +483,14 @@ $1`);
 
 // interaction
 // (overrides the dialog skip/page flip)
-inject$1(/(\/\* CONTINUE DIALOG \*\/)/, `$1
+inject$1(/(if\( dialogBuffer\.IsActive\(\) \) {)/, `$1
 if(window.dialogChoices.handleInput(dialogBuffer)) {
 	return;
 } else `);
 inject$1(/(this\.CanContinue = function\(\) {)/, `$1
 if(window.dialogChoices.choicesActive){
 	return false;
-}`);
+}
+`);
 
 }(window));
