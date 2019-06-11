@@ -1,0 +1,2 @@
+minRows: 2,
+maxRows: 4,

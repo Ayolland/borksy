@@ -1,11 +1,12 @@
 var loadedFiles ={};
 
 var borksyInfo = {
-	lastUpdated: "April 16, 2019",
+	lastUpdated: "June 10, 2019",
 	templates: [
 		{filename:"Bitsy.5.5", description: "Bitsy 5.5 (modified for Borksy)", isDefault: false},
 		{filename:"BitsyHD.5.1", description: "Bitsy HD + Borksy (modified from Bitsy 5.1)", isDefault: false},
-		{filename:"Bitsy.6.0", description: "Bitsy 6.0 (modified for Borksy)", isDefault: true}
+		{filename:"Bitsy.6.0", description: "Bitsy 6.0 (modified for Borksy)", isDefault: false},
+		{filename:"Bitsy.6.3", description: "Bitsy 6.3 (modified for Borksy)", isDefault: true},
 	]
 };
 
@@ -291,19 +292,19 @@ var hacks = {
 		forceLocal: false
 	},
 
-	"paragraph-break": {
-		title: "📃 Paragraph Break",
-		description: "Adds paragraph breaks to the dialogue parser.",
-		author: "Sean S. LeBlanc and David Mowatt",
-		readme: true,
-		type: "simple",
-		requires: "",
-		hidden: false,
-		order: 2,
-		conflicts: false,
-		github: 'paragraph-break.js',
-		forceLocal: false
-	},
+	// "paragraph-break": {
+	// 	title: "📃 Paragraph Break",
+	// 	description: "Adds paragraph breaks to the dialogue parser.",
+	// 	author: "Sean S. LeBlanc and David Mowatt",
+	// 	readme: true,
+	// 	type: "simple",
+	// 	requires: "",
+	// 	hidden: false,
+	// 	order: 2,
+	// 	conflicts: false,
+	// 	github: 'paragraph-break.js',
+	// 	forceLocal: false
+	// },
 
 	"opaque-tiles": {
 		title: "⬛ Opaque Tiles",
@@ -405,7 +406,7 @@ var hacks = {
 
 	"dialog-choices": {
 		title: "🔀 Dialog Choices",
-		description: "Allows binary dialog choices.",
+		description: "Allows binary(?) dialog choices.",
 		author: "Sean S. LeBlanc",
 		readme: true,
 		type: "simple",
@@ -428,6 +429,34 @@ var hacks = {
 		order: 2,
 		conflicts: false,
 		github: 'text-to-speech.js',
+		forceLocal: false
+	},
+
+	"character-portraits-animated": {
+		title: "🙀 Character Portraits Animated",
+		description: "high quality anime gifs",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'character-portraits-animated.js',
+		forceLocal: false
+	},
+
+	"long-dialog": {
+		title: "📜 Long Dialog",
+		description: "put more words onscreen",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 3,
+		conflicts: false,
+		github: 'long-dialog.js',
 		forceLocal: false
 	},
 
