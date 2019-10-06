@@ -3,7 +3,7 @@
 @file unique items
 @summary items which, when picked up, remove all other instances of that item from the game
 @license MIT
-@version 2.0.0
+@version 2.0.3
 @author Sean S. LeBlanc
 
 @description
@@ -15,7 +15,7 @@ HOW TO USE:
 2. Update the `itemIsUnique` function to match your needs
 */
 this.hacks = this.hacks || {};
-this.hacks.unique_items = (function (exports,bitsy) {
+(function (exports, bitsy) {
 'use strict';
 var hackOptions = {
 	itemIsUnique: function (item) {
@@ -85,7 +85,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -174,7 +174,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {
@@ -225,7 +225,7 @@ after('onInventoryChanged', function (id) {
 	var r;
 	if (hackOptions.itemIsUnique(bitsy.item[id])) {
 		for (r in bitsy.room) {
-			if (bitsy.room.hasOwnProperty(r)) {
+			if (Object.prototype.hasOwnProperty.call(bitsy.room, r)) {
 				r = bitsy.room[r];
 				r.items = r.items.filter(function (i) {
 					return i.id !== id;
@@ -237,6 +237,4 @@ after('onInventoryChanged', function (id) {
 
 exports.hackOptions = hackOptions;
 
-return exports;
-
-}({},window));
+}(this.hacks.unique_items = this.hacks.unique_items || {}, window));

@@ -3,7 +3,7 @@
 @file long dialog
 @summary put more words onscreen
 @license MIT
-@version 1.1.0
+@version 1.1.2
 @requires Bitsy Version: 6.1
 @author Sean S. LeBlanc
 
@@ -27,7 +27,7 @@ HOW TO USE:
 	2. edit hackOptions below as needed
 */
 this.hacks = this.hacks || {};
-this.hacks.long_dialog = (function (exports,bitsy) {
+(function (exports, bitsy) {
 'use strict';
 var hackOptions = {
 	minRows: 2,
@@ -93,7 +93,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -194,7 +194,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {
@@ -298,7 +298,7 @@ inject$1(/(this\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffe
 @file paragraph-break
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
-@version 1.1.2
+@version 1.1.4
 @requires Bitsy Version: 5.0, 5.1
 @author Sean S. LeBlanc, David Mowatt
 
@@ -350,6 +350,4 @@ inject$1(/(if\( lastPage\.length) <= 1( \) {)/, '$1 < ' + hackOptions.maxRows + 
 
 exports.hackOptions = hackOptions;
 
-return exports;
-
-}({},window));
+}(this.hacks.long_dialog = this.hacks.long_dialog || {}, window));

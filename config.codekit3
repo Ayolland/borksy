@@ -7,7 +7,7 @@
 		"uuidString": "6EA8FD9D-E868-4680-B8AB-3EFF9CD05421"
 		}
 	],
-"creatorBuild": "29156",
+"creatorBuild": "31491",
 "files": {
 	"/.gitignore": {
 		"cB": 0,
@@ -182,6 +182,17 @@
 		"oAP": "/defaults/style-min.css",
 		"oF": 1,
 		"oS": 3
+		},
+	"/hacks/dist/3d.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/3d-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
 		},
 	"/hacks/dist/avatar-by-room.js": {
 		"bF": 0,
@@ -568,6 +579,17 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"/hacks/dist/replace-drawing.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/replace-drawing-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"/hacks/dist/save.js": {
 		"bF": 0,
 		"ft": 64,
@@ -575,6 +597,17 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/save-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/smooth-moves.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/smooth-moves-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -677,6 +710,14 @@
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
+		},
+	"/hacks/info/3d.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/3d.readme.txt",
+		"oF": 0
 		},
 	"/hacks/info/avatar-by-room.readme.txt": {
 		"cB": 0,
@@ -846,6 +887,14 @@
 		"oAP": "/hacks/info/permanent-items.readme.txt",
 		"oF": 0
 		},
+	"/hacks/info/replace-drawing.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/replace-drawing.readme.txt",
+		"oF": 0
+		},
 	"/hacks/info/save.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
@@ -878,12 +927,28 @@
 		"oAP": "/hacks/info/text-to-speech.readme.txt",
 		"oF": 0
 		},
+	"/hacks/info/tracery-processing.readme.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/info/tracery-processing.readme.txt",
+		"oF": 0
+		},
 	"/hacks/info/unique-items.readme.txt": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/hacks/info/unique-items.readme.txt",
+		"oF": 0
+		},
+	"/hacks/options/3d.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/options/3d.options.txt",
 		"oF": 0
 		},
 	"/hacks/options/avatar-by-room.options.txt": {
@@ -988,6 +1053,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/hacks/options/text-to-speech.options.txt",
+		"oF": 0
+		},
+	"/hacks/options/tracery-processing.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/options/tracery-processing.options.txt",
 		"oF": 0
 		},
 	"/hacks/options/transparent-sprites.options.txt": {
@@ -1124,6 +1197,14 @@
 		"oAP": "/template/Bitsy.6.3.html",
 		"oF": 0
 		},
+	"/template/Bitsy.6.4.html": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/template/Bitsy.6.4.html",
+		"oF": 0
+		},
 	"/template/BitsyHD.5.1.html": {
 		"cB": 0,
 		"ft": 8192,
@@ -1154,6 +1235,7 @@
 	},
 "projectSettings": {
 	"abortBuildOnError": 1,
+	"allowInjectionReloads": 1,
 	"alwaysUseExternalServer": 0,
 	"animateCSSInjections": 1,
 	"autoBuildNewItems": 1,
@@ -1165,6 +1247,7 @@
 	"babelConfigType": 0,
 	"babelCustomPluginsList": "",
 	"babelCustomPresetsList": "",
+	"babelExcludeString": "/\\/node_modules\\//, /\\/core-js\\//, /\\/bower_components\\//",
 	"babelInsertModuleIDs": 0,
 	"babelModuleID": "",
 	"babelNoComments": 0,
@@ -1304,6 +1387,9 @@
 		"modules-umd": {
 			"active": 0
 			},
+		"named-capturing-groups-regex": {
+			"active": 0
+			},
 		"new-target": {
 			"active": 0
 			},
@@ -1335,6 +1421,9 @@
 			"active": 0
 			},
 		"parameters": {
+			"active": 0
+			},
+		"partial-application": {
 			"active": 0
 			},
 		"pipeline-operator": {
@@ -1429,11 +1518,10 @@
 			}
 		},
 	"babelRetainLines": 0,
+	"babelUseBuiltInsType": 0,
 	"bowerAbbreviatedPath": "bower_components",
-	"bowerAutoCreateInfoFile": 1,
-	"bowerInstallDevDependencies": 0,
-	"bowerSaveDependencies": 1,
-	"bowerSaveDevDependencies": 0,
+	"bowerForceLatestOnConflict": 1,
+	"bowerTargetDependencyListType": 1,
 	"bowerUseExactVersion": 0,
 	"browserRefreshDelay": 0,
 	"browserslistString": ">0.2%, last 2 versions, Firefox ESR, not dead",
@@ -2438,6 +2526,10 @@
 			"active": 0,
 			"optionString": "{'array': true, 'object': true}, {'enforceForRenamedProperties': false}"
 			},
+		"prefer-named-capture-group": {
+			"active": 0,
+			"optionString": ""
+			},
 		"prefer-numeric-literals": {
 			"active": 0,
 			"optionString": ""
@@ -3191,6 +3283,11 @@
 		},
 	"languageDefaultsUserDefined": [
 		],
+	"npmAbbreviatedPath": "",
+	"npmCreatePackageLock": 1,
+	"npmInstallOptionalDependencies": 0,
+	"npmSaveExactVersion": 0,
+	"npmTargetDependencyListType": 1,
 	"overrideExternalServerCSS": 0,
 	"previewPathAddition": "",
 	"skippedFoldersString": "log, _logs, logs, _cache, cache, .idea, /storage/framework/sessions, node_modules",

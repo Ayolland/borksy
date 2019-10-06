@@ -3,7 +3,7 @@
 @file itsy-bitsy
 @summary for when bitsy's not small enough
 @license MIT
-@version 1.1.1
+@version 1.1.3
 @requires Bitsy Version: 5.1
 @author Sean S. LeBlanc
 
@@ -25,7 +25,7 @@ but most of the numbers being replaced can be easily
 customized if you want slightly different sizes/positions.
 */
 this.hacks = this.hacks || {};
-this.hacks['itsy-bitsy'] = (function (exports,bitsy) {
+(function (exports, bitsy) {
 'use strict';
 var hackOptions = {
 	rows: 2, // number of rows per text box (bitsy default is 2)
@@ -90,7 +90,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -182,7 +182,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {
@@ -265,6 +265,4 @@ document.head.appendChild(style);
 
 exports.hackOptions = hackOptions;
 
-return exports;
-
-}({},window));
+}(this.hacks['itsy-bitsy'] = this.hacks['itsy-bitsy'] || {}, window));

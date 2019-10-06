@@ -1,0 +1,8 @@
+// put your grammar entries here
+
+// these are examples:
+// thing: ['#animal#', '#adjective# #animal#']
+// animal: ['cat', 'dog', 'mouse'],
+// adjective: ['good', 'nice', 'powerful']
+
+// See http://www.crystalcodepalace.com/traceryTut.html for more on how to use tracery.

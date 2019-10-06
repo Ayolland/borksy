@@ -1,0 +1,76 @@
+The 3D rendering is done through babylonjs, a 3D WebGL rendering engine.
+
+Notes:
+- The smooth moves hack is included to avoid jerky camera motion when the player moves
+- The transparent sprites hack is included with this since most 3D games would need it
+  if wanted, you can prevent it from making things transparent by making the isTransparent
+  function in the options always return false
+- Exit transition effects aren't implemented
+- The scene variable is exported, which means it's available at `window.hacks['3d'].scene`
+  this is useful for debugging, or in combination with the JS dialog hack
+- No camera/mesh collision is included
+- The 3D library included is very large by hack filesize standards
+
+The Biggest Note: If you try this out and think "this would be great if only it did X instead of Y",
+it probably can with a bit of customization!
+Naturally there are dozens of potential ways bitsy could be translated to 3D,
+so I focused on covering what I imagined to be some of the most common use cases.
+If you need help customizing the hack to achieve a different style, feel free to reach out.
+
+The hackOptions below have relatively thorough documentation,
+but make sure to check out https://github.com/seleb/bitsy-hacks/wiki/3D-Hack-Examples 
+for examples of different setups if you're new to 3D.
+
+additional features to help make more fancy 3d scenes from bitsy editor:
+* make arcs, bridges, ceilings, multiple floors, and such by layering
+bitsy rooms on top of each other. add tag-function '#stack(stackId,position)'
+to the names of the rooms you want to render together
+for example you can have rooms named 'theater #stack(a,0)', 'stage #stack(a,1)' and
+'catwalks #stack(a,4)' and they will be displayd at the same time, the 'stage'
+right on top of the 'theater', and 'catwalks' three tiles higher than the
+'stage'
+'stackId' should only include letters (no numbers and special characters
+please), it specifies the room stack.
+rooms in the same stack will be rendered on top of each others, in layers.
+'position' is the hight at which you want to display a
+specific room. you can use negative numbers and floating points too, like
+'#stack(fjk,-3.5)'
+note that two rooms in the same stack can be positioned at the same height
+(useful for layering drawings themselves right on top of each other to make
+use of more colors and other nifty workarounds)
+
+* specify the mesh to use for a specific drawing by appending its name with '#mesh(type)'
+there are following mesh types available:
+	- plane: plane standing up straight
+	- billboard: like plane, but turns to look at the camera
+	- box: standard cube
+	- floor: plane flat on the ground
+	- tower1, tower2, up to tower16: box variations that are taller and tiled
+	- wedge: base mesh for wedges, facing left with its slanted side
+	- empty: use this one to make the drawings invisible
+you can have drawings with the names like this using this tag:
+'sign #mesh(plane)', 'water #mesh(floor)'
+don't forget that you can combine '#mesh(type)' with transform tags
+
+* transform tags: translate (move), rotate and scale by adding tags to the drawing's name
+useful for making more complex shapes and more organic silhouettes by shifting
+models a bit off the grid, and configuring plane-type meshes to face a specific direction
+#t(x,y,z) for translation, #r(x,y,z) for rotation (in degrees), #s(x,y,z) for scaling.
+#t(1,0,0.5') and '#t(1,,.5)' are both examples of valid input
+omiting the number is the same as writing 0. note that this won't change anything on the given axis
+for rotation and translation, but it will for scaling
+
+* add #transparent(true)/#transparent(false) tag to the drawing's name to set
+transparency manually. sprites and items are transparent by defualt, and tiles are not
+
+check this out to learn how to work with wedges conveniently in the bitsy editor:
+https://github.com/aloelazoe/bitsy-hacks/wiki/how-to-use-wedges-with-3d-hack-and-replace-drawing-hack
+
+here is a template with 12 pre-configured wedge drawings you can use with 3d hack and replace drawing hack:
+https://gist.github.com/aloelazoe/9d02711a649d241d1e78f8d5e4beb9d7
+
+if you have questions, suggestions or constructive feedback about additional features
+introduced in my fork, feel free to reach out on bitsy discord or twitter (aloelazoe)
+
+enjoy have fun with verticality triangularity and whatnot!!!
+✧*[๑⌒ ᴗ ⌒๑]✧*

@@ -3,7 +3,7 @@
 @file bitsymuse
 @summary A variety of Bitsy sound and music handlers
 @license MIT
-@version 3.0.2
+@version 3.0.5
 @requires 4.8, 4.9
 @author David Mowatt
 
@@ -35,7 +35,7 @@ By default, music tracks automatically restart from the beginning if you go back
 This can also be changed in the hackOptions below.
 */
 this.hacks = this.hacks || {};
-this.hacks.bitsymuse = (function (exports,bitsy) {
+(function (exports, bitsy) {
 'use strict';
 var hackOptions = {
 	// You need to put an entry in this list for every room ID or name that is accessible by the player,
@@ -103,7 +103,7 @@ function inject(searchRegex, replaceString) {
  * @return {string} room, or undefined if it doesn't exist
  */
 function getRoom(name) {
-	var id = bitsy.room.hasOwnProperty(name) ? name : bitsy.names.room.get(name);
+	var id = Object.prototype.hasOwnProperty.call(bitsy.room, name) ? name : bitsy.names.room.get(name);
 	return bitsy.room[id];
 }
 
@@ -123,7 +123,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -231,7 +231,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {
@@ -387,7 +387,7 @@ var roomMusicFlag = null;
 after('load_game', function () {
 	var room;
 	for (var i in hackOptions.musicByRoom) {
-		if (hackOptions.musicByRoom.hasOwnProperty(i)) {
+		if (Object.prototype.hasOwnProperty.call(hackOptions.musicByRoom, i)) {
 			room = getRoom(i);
 			if (room) {
 				hackOptions.musicByRoom[room.id] = hackOptions.musicByRoom[i];
@@ -465,6 +465,4 @@ addDualDialogTag('soundeffect', function (environment, parameters) {
 
 exports.hackOptions = hackOptions;
 
-return exports;
-
-}({},window));
+}(this.hacks.bitsymuse = this.hacks.bitsymuse || {}, window));

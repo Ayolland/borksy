@@ -3,7 +3,7 @@
 @file basic sfx
 @summary "walk" and "talk" sound effect support
 @license MIT
-@version 2.0.0
+@version 2.0.3
 @author Sean S. LeBlanc
 
 @description
@@ -24,7 +24,7 @@ Additional sounds can be added by by including more <audio> tags with different 
 If you'd like to trigger sounds from dialog, check out the bitsymuse hack!
 */
 this.hacks = this.hacks || {};
-this.hacks.basic_sfx = (function (exports,bitsy) {
+(function (exports, bitsy) {
 'use strict';
 var hackOptions = {
 	beNiceToEars: true // if `true`, reduces volume of recently played sound effects
@@ -89,7 +89,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -187,7 +187,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {
@@ -254,7 +254,7 @@ before('startExportedGame', function () {
 	// get sound elements
 	var s = document.getElementsByTagName("audio");
 	for (var i in s) {
-		if (s.hasOwnProperty(i)) {
+		if (Object.prototype.hasOwnProperty.call(s, i)) {
 			i = s[i];
 			i.lastPlayed = -Infinity;
 			i.volume = 1;
@@ -278,6 +278,4 @@ after('dialogBuffer.FlipPage', function () {
 
 exports.hackOptions = hackOptions;
 
-return exports;
-
-}({},window));
+}(this.hacks.basic_sfx = this.hacks.basic_sfx || {}, window));
