@@ -336,6 +336,13 @@ function loadAboutInfo(){
 			$aboutContent.append($howto);
 		});
 
+		var $ajax5 = $.ajax('about/troubleshooting-faqs.html');
+		$ajax5.done(function(){
+			var $faqs = makeNewCollapsible( "Troubleshooting / FAQs" );
+			$faqs.append($ajax5.responseText);
+			$aboutContent.append($faqs);
+		});
+
 		var $ajax2 = $.ajax('about/other-tools.html');
 		$ajax2.done(function(){
 			var $tools = makeNewCollapsible( "Other Bitsy Tools" );

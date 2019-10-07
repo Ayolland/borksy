@@ -3,7 +3,7 @@
 @file edit image from dialog
 @summary edit sprites, items, and tiles from dialog
 @license MIT
-@version 1.2.3
+@version 1.2.6
 @requires 5.3
 @author Sean S. LeBlanc
 
@@ -55,7 +55,6 @@ NOTE: This uses parentheses "()" instead of curly braces "{}" around function
       For full editor integration, you'd *probably* also need to paste this
       code at the end of the editor's `bitsy.js` file. Untested.
 */
-this.hacks = this.hacks || {};
 (function (bitsy) {
 'use strict';
 
@@ -112,7 +111,7 @@ Args:
 Returns: the image in the given map with the given name/id
  */
 function getImage(name, map) {
-	var id = map.hasOwnProperty(name) ? name : Object.keys(map).find(function (e) {
+	var id = Object.prototype.hasOwnProperty.call(map, name) ? name : Object.keys(map).find(function (e) {
 		return map[e].name == name;
 	});
 	return map[id];
@@ -134,7 +133,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -242,7 +241,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {

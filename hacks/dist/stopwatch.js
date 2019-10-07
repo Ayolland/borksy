@@ -3,7 +3,7 @@
 @file stopwatch
 @summary time player actions
 @license MIT
-@version 1.2.2
+@version 1.2.4
 @author Lenny Magner
 
 @description
@@ -40,7 +40,7 @@ NOTE: This uses parentheses "()" instead of curly braces "{}" around function
       code at the end of the editor's `bitsy.js` file. Untested.
 */
 this.hacks = this.hacks || {};
-this.hacks.stopwatch = (function (exports,bitsy) {
+(function (exports, bitsy) {
 'use strict';
 var hackOptions = {
 	// function which returns the string which bitsy will print
@@ -137,7 +137,7 @@ function printDialog(environment, text, onReturn) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -245,7 +245,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {
@@ -465,6 +465,4 @@ addDialogTag('sayWatch', function (environment, parameters, onReturn) {
 
 exports.hackOptions = hackOptions;
 
-return exports;
-
-}({},window));
+}(this.hacks.stopwatch = this.hacks.stopwatch || {}, window));

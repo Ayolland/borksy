@@ -4,9 +4,18 @@ body {
   margin: 0;
   background-color: #ccc; }
   body.party {
+    background-image: url("../borksy_bg.gif");
     animation-duration: 30s;
     animation-name: partyMode;
-    animation-iteration-count: infinite; }
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    -ms-interpolation-mode: nearest-neighbor;
+    /* IE */
+    image-rendering: -moz-crisp-edges;
+    /* FF 6.0+ */
+    image-rendering: pixelated; }
+    body.party .collapsible {
+      background-color: #bbb; }
 
 img {
   /* https://caniuse.com/#search=image-render */
@@ -221,7 +230,8 @@ footer p {
 
 @keyframes partyMode {
   0% {
-    background-color: HSL(0, 80%, 70%); }
+    background-color: HSL(0, 80%, 70%);
+    background-position: 0 0; }
   14% {
     background-color: HSL(0, 80%, 70%); }
   28% {
@@ -229,13 +239,15 @@ footer p {
   42% {
     background-color: HSL(106, 80%, 70%); }
   56% {
-    background-color: HSL(229, 80%, 70%); }
+    background-color: HSL(229, 80%, 70%);
+    background-position: 256px 128px; }
   70% {
     background-color: HSL(260, 80%, 70%); }
   84% {
     background-color: HSL(285, 80%, 70%); }
   100% {
-    background-color: HSL(0, 80%, 70%); } }
+    background-color: HSL(0, 80%, 70%);
+    background-position: 0px 256px; } }
 
 @media only screen and (min-width: 40em) {
   header #mascot {

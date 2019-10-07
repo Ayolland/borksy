@@ -2,7 +2,7 @@
 🔀
 @file logic-operators-extended
 @summary adds conditional logic operators
-@version 1.1.1
+@version 1.1.4
 @author @mildmojo
 
 @description
@@ -27,7 +27,6 @@ NOTE: The combining operators (&&, ||, &&!, ||!) have lower precedence than
       condition, be sure to test every possibility to make sure it behaves
       the way you want.
 */
-this.hacks = this.hacks || {};
 (function (bitsy) {
 'use strict';
 
@@ -90,7 +89,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -182,7 +181,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {
@@ -227,58 +226,58 @@ function _reinitEngine() {
 
 
 
-inject$1(/(operatorMap\.set\("-", subExp\);)/,[
-	'$1',
-	'operatorMap.set("&&", andExp);',
-	'operatorMap.set("||", orExp);',
-	'operatorMap.set("&&!", andNotExp);',
-	'operatorMap.set("||!", orNotExp);',
-	'operatorMap.set("!==", notEqExp);'
-].join('\n'));
-inject$1(
-	/(var operatorSymbols = \["-", "\+", "\/", "\*", "<=", ">=", "<", ">", "=="\];)/,
-	'$1operatorSymbols.unshift("!==", "&&", "||", "&&!", "||!");'
-);
-
-bitsy.andExp = function andExp(environment, left, right, onReturn) {
+function andExp(environment, left, right, onReturn) {
 	right.Eval(environment, function (rVal) {
 		left.Eval(environment, function (lVal) {
 			onReturn(lVal && rVal);
 		});
 	});
-};
+}
 
-bitsy.orExp = function orExp(environment, left, right, onReturn) {
+function orExp(environment, left, right, onReturn) {
 	right.Eval(environment, function (rVal) {
 		left.Eval(environment, function (lVal) {
 			onReturn(lVal || rVal);
 		});
 	});
-};
+}
 
-bitsy.notEqExp = function notEqExp(environment, left, right, onReturn) {
+function notEqExp(environment, left, right, onReturn) {
 	right.Eval(environment, function (rVal) {
 		left.Eval(environment, function (lVal) {
 			onReturn(lVal !== rVal);
 		});
 	});
-};
+}
 
-bitsy.andNotExp = function andNotExp(environment, left, right, onReturn) {
+function andNotExp(environment, left, right, onReturn) {
 	right.Eval(environment, function (rVal) {
 		left.Eval(environment, function (lVal) {
 			onReturn(lVal && !rVal);
 		});
 	});
-};
+}
 
-bitsy.orNotExp = function orNotExp(environment, left, right, onReturn) {
+function orNotExp(environment, left, right, onReturn) {
 	right.Eval(environment, function (rVal) {
 		left.Eval(environment, function (lVal) {
 			onReturn(lVal || !rVal);
 		});
 	});
-};
+}
+
+inject$1(/(operatorMap\.set\("-", subExp\);)/,`
+	$1
+	operatorMap.set("&&", ${andExp.toString()});
+	operatorMap.set("||", ${orExp.toString()});
+	operatorMap.set("&&!", ${andNotExp.toString()});
+	operatorMap.set("||!", ${orNotExp.toString()});
+	operatorMap.set("!==", ${notEqExp.toString()});
+`);
+inject$1(
+	/(var operatorSymbols = \[.+\];)/,
+	'$1operatorSymbols.unshift("!==", "&&", "||", "&&!", "||!");'
+);
 // End of logic operators mod
 
 }(window));

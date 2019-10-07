@@ -1,12 +1,13 @@
 var loadedFiles ={};
 
 var borksyInfo = {
-	lastUpdated: "June 10, 2019",
+	lastUpdated: "October 5, 2019",
 	templates: [
 		{filename:"Bitsy.5.5", description: "Bitsy 5.5 (modified for Borksy)", isDefault: false},
 		{filename:"BitsyHD.5.1", description: "Bitsy HD + Borksy (modified from Bitsy 5.1)", isDefault: false},
 		{filename:"Bitsy.6.0", description: "Bitsy 6.0 (modified for Borksy)", isDefault: false},
-		{filename:"Bitsy.6.3", description: "Bitsy 6.3 (modified for Borksy)", isDefault: true},
+		{filename:"Bitsy.6.3", description: "Bitsy 6.3 (modified for Borksy)", isDefault: false},
+		{filename:"Bitsy.6.4", description: "Bitsy 6.4 (modified for Borksy)", isDefault: true},
 	]
 };
 
@@ -457,6 +458,48 @@ var hacks = {
 		order: 3,
 		conflicts: false,
 		github: 'long-dialog.js',
+		forceLocal: false
+	},
+
+	"tracery-processing": {
+		title: "🏰 Tracery Processing",
+		description: "process all dialog text with a tracery grammar",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 3,
+		conflicts: false,
+		github: 'tracery-processing.js',
+		forceLocal: false
+	},
+
+	"3d": {
+		title: "📦 3d",
+		description: "bitsy in three dee",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 3,
+		conflicts: false,
+		github: '3d.js',
+		forceLocal: false
+	},
+
+	"replace-drawing": {
+		title: "🎭 Replace Drawing",
+		description: "Add name-tags to replace drawings when the game is loading",
+		author: "Sean S. LeBlanc",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 3,
+		conflicts: false,
+		github: 'replace-drawing.js',
 		forceLocal: false
 	},
 

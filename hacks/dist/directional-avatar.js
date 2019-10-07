@@ -3,7 +3,7 @@
 @file directional avatar
 @summary flips the player's sprite based on directional movement
 @license MIT
-@version 1.1.2
+@version 1.1.6
 @requires 5.3
 @author Sean S. LeBlanc
 
@@ -15,7 +15,7 @@ HOW TO USE:
 2. Edit `horizontalFlipAllowed` and `verticalFlipAllowed` below as needed
 */
 this.hacks = this.hacks || {};
-this.hacks.directional_avatar = (function (exports,bitsy) {
+(function (exports, bitsy) {
 'use strict';
 var hackOptions = {
 	// If `horizontalFlipAllowed` is true:
@@ -81,7 +81,7 @@ Args:
 Returns: the image in the given map with the given name/id
  */
 function getImage(name, map) {
-	var id = map.hasOwnProperty(name) ? name : Object.keys(map).find(function (e) {
+	var id = Object.prototype.hasOwnProperty.call(map, name) ? name : Object.keys(map).find(function (e) {
 		return map[e].name == name;
 	});
 	return map[id];
@@ -103,7 +103,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -192,7 +192,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {
@@ -327,7 +327,7 @@ var hflip = false;
 var vflip = false;
 var originalAnimation;
 
-after('onPlayerMoved', function () {
+after('updateInput', function () {
 	var i;
 	// save the original frames
 	if (!originalAnimation || originalAnimation.referenceFrame !== getSpriteData(bitsy.playerId, 0)) {
@@ -366,6 +366,4 @@ after('onPlayerMoved', function () {
 
 exports.hackOptions = hackOptions;
 
-return exports;
-
-}({},window));
+}(this.hacks.directional_avatar = this.hacks.directional_avatar || {}, window));

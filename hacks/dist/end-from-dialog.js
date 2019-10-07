@@ -3,7 +3,7 @@
 @file end-from-dialog
 @summary trigger an ending from dialog, including narration text
 @license WTFPL (do WTF you want)
-@version 3.3.0
+@version 3.3.3
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -48,7 +48,6 @@ NOTE: This uses parentheses "()" instead of curly braces "{}" around function
       For full editor integration, you'd *probably* also need to paste this
       code at the end of the editor's `bitsy.js` file. Untested.
 */
-this.hacks = this.hacks || {};
 (function (bitsy) {
 'use strict';
 
@@ -111,7 +110,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -219,7 +218,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {
@@ -369,7 +368,7 @@ function addDualDialogTag(tag, fn) {
 // Implement the dialog functions
 addDualDialogTag('end', function (environment, parameters) {
   bitsy.dialogBuffer.EndDialog();
-	bitsy.startNarrating(bitsy.ending[parameters[0]] || parameters[0] || null, true);
+	bitsy.startNarrating(bitsy.ending[parameters[0]] || parameters[0] || '', true);
 });
 // End of (end) dialog function mod
 

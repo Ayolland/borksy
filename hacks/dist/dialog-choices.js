@@ -3,7 +3,7 @@
 @file dialog choices
 @summary binary dialog choices
 @license MIT
-@version 2.1.2
+@version 3.0.0
 @requires 5.3
 @author Sean S. LeBlanc
 
@@ -81,14 +81,13 @@ HOW TO USE:
 1. Copy-paste into a script tag after the bitsy source
 2. Edit hackOptions below as needed
 */
-this.hacks = this.hacks || {};
 (function (bitsy) {
 'use strict';
 var hackOptions = {
 	// if defined, the cursor is drawn as the sprite with the given id
-	// e.g. use 'A' to use the player's avatar as a cursor
+	// e.g. replace with `getCursorSprite('A')` to use the player's avatar as a cursor
 	// if not defined, uses an arrow graphic similar to the continue arrow
-	cursor: undefined,
+	cursor: getCursorSprite(),
 	// modifies the scale/position of the cursor
 	// recommended combinations:
 	// 	- scale: 4, y: 1, x: 0
@@ -160,7 +159,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -252,7 +251,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {
@@ -374,18 +373,20 @@ var dialogChoices = {
 	}
 };
 
-var choiceCursorDefault = `[
-	[0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 1, 0, 0, 0, 0, 0, 0],
-	[0, 1, 1, 0, 0, 0, 0, 0],
-	[0, 1, 1, 1, 0, 0, 0, 0],
-	[0, 1, 1, 0, 0, 0, 0, 0],
-	[0, 1, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0]
-]`;
-
 bitsy.dialogChoices = dialogChoices;
+
+function getCursorSprite(cursor) {
+	return cursor ? `renderer.GetImageSource(sprite['${cursor}'].drw)[sprite['${cursor}'].animation.frameIndex]` : `[
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 1, 0, 0, 0, 0, 0, 0],
+		[0, 1, 1, 0, 0, 0, 0, 0],
+		[0, 1, 1, 1, 0, 0, 0, 0],
+		[0, 1, 1, 0, 0, 0, 0, 0],
+		[0, 1, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0]
+	]`;
+}
 
 // parsing
 // (adds a new sequence node type)
@@ -453,7 +454,7 @@ $1`);
 // but draws rotated to point at text)
 inject$1(/(this\.DrawNextArrow = )/, `
 this.DrawChoiceArrow = function() {
-	var rows = ${hackOptions.cursor ? `renderer.GetImageSource(sprite['${hackOptions.cursor}'].drw)[sprite['${hackOptions.cursor}'].animation.frameIndex]` : choiceCursorDefault};
+	var rows = ${hackOptions.cursor};
 	var top = (${hackOptions.transform.y} + window.dialogChoices.choice * (textboxInfo.padding_vert + relativeFontHeight())) * scale;
 	var left = ${hackOptions.transform.x}*scale;
 	for (var y = 0; y < rows.length; y++) {
