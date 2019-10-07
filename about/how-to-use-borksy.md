@@ -4,10 +4,4 @@ Borksy accepts the game data from Bitsy and combines that with a Bitsy template 
 
 Hacks are not guaranteed to work with each other, and particular hacks are not guaranteed to work with particular templates. Make sure you test the particular load-out of hacks you plan to use before developing with them.
 
-If you're using a custom font, make sure that the font data is included when you paste your game data into Borksy. In Bitsy, the font data is hidden by default, even if you're using a custom font. In order for it be able to be copied, you'll need to click the 'font data' button on the button of the 'game data' window in Bitsy before copy your game data.
-
-If you're using Bitsy HD, you'll need to select the Bitsy HD template from the 'Bitsy Version' tool. If you don't do this, your HD gamedata will be chopped up by regular Bitsy and look very strange.
-
-Loading a Borksy file with the Bitsy editor will load the Bitsy game data, but will strip away any hacks/modifications added with Borksy. (Bitsy doesn't know anything about Borksy, and can't read/store the changes Borksy makes.)
-
 While Borksy uses your browser data to save your work, it is a good idea to save any modifications (hackOptions, additional JS, HTML modifications) you make on your computer somewhere separately, as there is no way for Borksy to load these from a saved Borksy game.

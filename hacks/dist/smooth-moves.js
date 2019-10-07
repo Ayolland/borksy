@@ -1,67 +1,32 @@
 /**
-🎞
-@file custom-exit-effects
-@summary make custom exit transition effects
+🏃
+@file smooth moves
+@summary ease the player's movement
 @license MIT
-@version 1.0.2
-@requires 6.0
+@version 2.0.0
+@requires Bitsy Version: 6.3
 @author Sean S. LeBlanc
 
 @description
-Adds support for custom exit transition effects.
-Multiple effects can be added this way.
-This can be combined with exit-from-dialog for custom dialog transitions too.
-Effects are limited to a relatively low framerate;
-for fancier effects it may be better to try the GL transitions hack.
-
-EFFECT NOTES:
-Each effect looks like:
-	key: {
-		showPlayerStart: <true or false>,
-		showPlayerEnd: <true or false>,
-		duration: <duration in ms>,
-		pixelEffectFunc: function(start, end, pixelX, pixelY, delta) {
-			...
-		}
-	}
-
-To use the custom effects, you'll need to modify your exit in the gamedata, e.g.
-	EXT 1,1 0 13,13
-would become
-	EXT 1,1 0 13,13 FX key
-
-Manipulating pixel data inside the pixel effect function directly is relatively complex,
-but bitsy provides a number of helpers that are used to simplify its own effects.
-A quick reference guide:
-	- start.Image.GetPixel(x,y)
-		returns the pixel for a given position at the start of the transition
-	- end.Image.GetPixel(x,y)
-		returns the pixel for a given position at the end of the transition
-	- bitsy.PostProcessUtilities.GetCorrespondingColorFromPal(color,start.Palette,end.Palette)
-		converts a pixel from one palette to the other
-	- bitsy.PostProcessUtilities.LerpColor(colorA, colorB, delta)
-		returns an interpolated pixel
-
-A single example effect is included, but more can be found in the original effect source by looking for `RegisterTransitionEffect`.
+Makes the player avatar ease in between positions instead of moving immediately.
+Speed and easing function are configurable.
 
 HOW TO USE:
 1. Copy-paste this script into a script tag after the bitsy source
-2. Update the `hackOptions` object at the top of the script with your custom effects
+2. Edit hackOptions below as needed
 */
 this.hacks = this.hacks || {};
 (function (exports, bitsy) {
 'use strict';
 var hackOptions = {
-	// a simple crossfade example effect
-	'my-effect': {
-		showPlayerStart: true,
-		showPlayerEnd: true,
-		duration: 500,
-		pixelEffectFunc: function (start, end, pixelX, pixelY, delta) {
-			var a = start.Image.GetPixel(pixelX, pixelY);
-			var b = end.Image.GetPixel(pixelX, pixelY);
-			return bitsy.PostProcessUtilities.LerpColor(a, b, delta);
-		}
+	// duration of ease in ms
+	duration: 100,
+	// max distance to allow tweens
+	delta: 1.5,
+	// easing function
+	ease: function(t) {
+		t = 1 - Math.pow(1 - t, 2);
+		return t;
 	},
 };
 
@@ -149,6 +114,13 @@ function before(targetFuncName, beforeFn) {
 	var kitsy = kitsyInit();
 	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
 	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
+}
+
+// Ex: after('load_game', function run() { alert('Loaded!'); });
+function after(targetFuncName, afterFn) {
+	var kitsy = kitsyInit();
+	kitsy.queuedAfterScripts[targetFuncName] = kitsy.queuedAfterScripts[targetFuncName] || [];
+	kitsy.queuedAfterScripts[targetFuncName].push(afterFn);
 }
 
 function kitsyInit() {
@@ -262,12 +234,69 @@ function _reinitEngine() {
 
 
 
-before('startExportedGame', function () {
-	Object.entries(hackOptions).forEach(function (entry) {
-		bitsy.transition.RegisterTransitionEffect(entry[0], entry[1]);
+// smooth move
+var tweens = {};
+var sprites = {};
+function addTween(spr, fromX, fromY, toX, toY) {
+	if (Math.abs(toX - fromX) + Math.abs(toY - fromY) > hackOptions.delta) {
+		delete tweens[spr];
+	} else {
+		var t = tweens[spr] = tweens[spr] || {};
+		t.fromX = fromX;
+		t.fromY = fromY;
+		t.toX = toX;
+		t.toY = toY;
+		t.start = bitsy.prevTime;
+	}
+}
+before('onready', function() {
+	tweens = {};
+	sprites = {};
+});
+
+// listen for changes in sprite positions to add tweens
+before('update', function() {
+	Object.values(bitsy.sprite).forEach(spr => {
+		if (spr.room === bitsy.curRoom) {
+			var s = sprites[spr.id] = sprites[spr.id] || {};
+			s.x = spr.x;
+			s.y = spr.y;
+		} else {
+			delete sprites[spr.id];
+		}
+	});
+});
+function addTweens() {
+	Object.entries(sprites).forEach(function (entry) {
+		var spr = bitsy.sprite[entry[0]];
+		var pos = entry[1];
+		if (pos.x !== spr.x || pos.y !== spr.y) {
+			addTween(spr.id, pos.x, pos.y, spr.x, spr.y);
+		}
+	});
+}
+after('updateInput', addTweens);
+after('update', addTweens);
+// before drawing, update sprite positions to tweened values
+before('drawRoom', function () {
+	Object.entries(tweens).forEach(function (entry) {
+		var tween = entry[1];
+		var t = hackOptions.ease(Math.min(1, (bitsy.prevTime - tween.start) / hackOptions.duration));
+		var sprite = bitsy.sprite[entry[0]];
+		sprite.x = tween.fromX + (tween.toX - tween.fromX) * t;
+		sprite.y = tween.fromY + (tween.toY - tween.fromY) * t;
+	});
+});
+// after drawing, update sprite positions back to normal
+after('drawRoom', function () {
+	Object.entries(tweens).forEach(function (entry) {
+		var tween = entry[1];
+		var sprite = bitsy.sprite[entry[0]];
+		sprite.x = tween.toX;
+		sprite.y = tween.toY;
 	});
 });
 
 exports.hackOptions = hackOptions;
 
-}(this.hacks['custom-exit-effects'] = this.hacks['custom-exit-effects'] || {}, window));
+}(this.hacks.smooth_moves = this.hacks.smooth_moves || {}, window));

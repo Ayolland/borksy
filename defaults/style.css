@@ -16,7 +16,9 @@ body {
 	max-width:100vh;
 	margin:auto;
 	display:block;
+	touch-action: none; /* fixing touch-input errors in chrome */
 
+	/* sharp pixel edges */
 	/* https://caniuse.com/#search=image-render */
   	-ms-interpolation-mode: nearest-neighbor; /* IE */
   	image-rendering: -moz-crisp-edges; /* FF 6.0+ */

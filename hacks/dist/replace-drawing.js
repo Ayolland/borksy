@@ -1,69 +1,41 @@
 /**
-🎞
-@file custom-exit-effects
-@summary make custom exit transition effects
+🎭
+@file replace drawing
+@summary add name-tags to replace drawings when the game is loading
 @license MIT
-@version 1.0.2
-@requires 6.0
-@author Sean S. LeBlanc
+@version 1.0.1
+@requires 6.3
+@author Elkie Nova
 
 @description
-Adds support for custom exit transition effects.
-Multiple effects can be added this way.
-This can be combined with exit-from-dialog for custom dialog transitions too.
-Effects are limited to a relatively low framerate;
-for fancier effects it may be better to try the GL transitions hack.
+add this tag to the name of the drawing you want to replace:
+'#draw(TYPE,id)'
+where 'TYPE' is TIL/SPR/ITM as displayed in bitsy data, and 'id' is what follows
+said type right after, e.g. avatar's type is 'SPR', and avatar's id is 'A'
+so if you would want to replace some drawing with the drawing of the avatar,
+you would use '#draw(SPR,A)'
 
-EFFECT NOTES:
-Each effect looks like:
-	key: {
-		showPlayerStart: <true or false>,
-		showPlayerEnd: <true or false>,
-		duration: <duration in ms>,
-		pixelEffectFunc: function(start, end, pixelX, pixelY, delta) {
-			...
-		}
-	}
+the point is to make it possible to have more convenient visuals when working
+in the bitsy editor, then let the hack replace them with what you want
+to show up in the actual game.
+this hack is useful for working with stuff like invisible items, sprites, and walls,
+and for creating helpful editor gizmos in 3d hack bitsies where you can have objects
+whose visual properties in 3d are not fully reflected by their drawings in bitsy editor.
+with this hack you can give them illustrative drawings to help you work in
+the editor, while making them use the right drawings when rendered.
 
-To use the custom effects, you'll need to modify your exit in the gamedata, e.g.
-	EXT 1,1 0 13,13
-would become
-	EXT 1,1 0 13,13 FX key
-
-Manipulating pixel data inside the pixel effect function directly is relatively complex,
-but bitsy provides a number of helpers that are used to simplify its own effects.
-A quick reference guide:
-	- start.Image.GetPixel(x,y)
-		returns the pixel for a given position at the start of the transition
-	- end.Image.GetPixel(x,y)
-		returns the pixel for a given position at the end of the transition
-	- bitsy.PostProcessUtilities.GetCorrespondingColorFromPal(color,start.Palette,end.Palette)
-		converts a pixel from one palette to the other
-	- bitsy.PostProcessUtilities.LerpColor(colorA, colorB, delta)
-		returns an interpolated pixel
-
-A single example effect is included, but more can be found in the original effect source by looking for `RegisterTransitionEffect`.
+note, that this hack only replaces visuals, it doesn't change the behavior.
+for example, this is what would happen if you added '#draw(ITM,0)' to bitsy cat's name:
+after you have exported the game, added the hack and run it, bitsy cat would appear
+as a cup of tea, but would say it's a cat, and you wouldn't be able to pick it up
+like an item, because it would still function as a sprite!
 
 HOW TO USE:
-1. Copy-paste this script into a script tag after the bitsy source
-2. Update the `hackOptions` object at the top of the script with your custom effects
+1. add '#draw(TYPE,id)' tag to the names of the drawings you want to replace when the game loads
+2. copy-paste this script into a script tag after the bitsy source
 */
-this.hacks = this.hacks || {};
-(function (exports, bitsy) {
+(function (bitsy) {
 'use strict';
-var hackOptions = {
-	// a simple crossfade example effect
-	'my-effect': {
-		showPlayerStart: true,
-		showPlayerEnd: true,
-		duration: 500,
-		pixelEffectFunc: function (start, end, pixelX, pixelY, delta) {
-			var a = start.Image.GetPixel(pixelX, pixelY);
-			var b = end.Image.GetPixel(pixelX, pixelY);
-			return bitsy.PostProcessUtilities.LerpColor(a, b, delta);
-		}
-	},
-};
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
 
@@ -142,13 +114,11 @@ HOW TO USE:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
 
-// Ex: before('load_game', function run() { alert('Loading!'); });
-//     before('show_text', function run(text) { return text.toUpperCase(); });
-//     before('show_text', function run(text, done) { done(text.toUpperCase()); });
-function before(targetFuncName, beforeFn) {
+// Ex: after('load_game', function run() { alert('Loaded!'); });
+function after(targetFuncName, afterFn) {
 	var kitsy = kitsyInit();
-	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
-	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
+	kitsy.queuedAfterScripts[targetFuncName] = kitsy.queuedAfterScripts[targetFuncName] || [];
+	kitsy.queuedAfterScripts[targetFuncName].push(afterFn);
 }
 
 function kitsyInit() {
@@ -260,14 +230,40 @@ function _reinitEngine() {
 
 
 
-
-
-before('startExportedGame', function () {
-	Object.entries(hackOptions).forEach(function (entry) {
-		bitsy.transition.RegisterTransitionEffect(entry[0], entry[1]);
+after('parseWorld', function () {
+	[].concat(Object.values(bitsy.item), Object.values(bitsy.tile), Object.values(bitsy.sprite)).forEach(function (drawing) {
+		// replace drawings marked with the #draw(TYPE,id) tag
+		var name = drawing.name || '';
+		var tag = name.match(/#draw\((TIL|SPR|ITM),([a-zA-Z0-9]+)\)/);
+		if (tag) {
+			var map;
+			// tag[1] is the first capturing group, it can be either TIL, SPR, or ITM
+			switch (tag[1]) {
+				case 'TIL':
+					map = bitsy.tile;
+					break;
+				case 'SPR':
+					map = bitsy.sprite;
+					break;
+				case 'ITM':
+					map = bitsy.item;
+					break;
+				default:
+					break;
+			}
+			// tag[2] is the second capturing group which returns drawing id
+			var id = tag[2];
+			var newDrawing = map[id];
+			if (newDrawing) {
+				drawing.drw = newDrawing.drw;
+				drawing.animation.frameCount = newDrawing.animation.frameCount;
+				drawing.animation.isAnimated = newDrawing.animation.isAnimated;
+				drawing.col = newDrawing.col;
+			} else {
+				console.error(`couldn't replace ${drawing.name}! there is no '${tag[1]} ${id}'`);
+			}
+		}
 	});
 });
 
-exports.hackOptions = hackOptions;
-
-}(this.hacks['custom-exit-effects'] = this.hacks['custom-exit-effects'] || {}, window));
+}(window));

@@ -21,9 +21,19 @@ body{
 
 
 	&.party{
+		background-image:url('../borksy_bg.gif');
 		animation-duration: 30s;
   		animation-name: partyMode;
   		animation-iteration-count: infinite;
+  		animation-timing-function: ease-in-out;
+
+  		-ms-interpolation-mode: nearest-neighbor; /* IE */
+  		image-rendering: -moz-crisp-edges; /* FF 6.0+ */
+    	image-rendering: pixelated;
+
+    	.collapsible{
+    		background-color: #bbb;
+    	}
 	}
 }
 
@@ -333,14 +343,14 @@ footer{
 }
 
 @keyframes partyMode {
-	0%{ background-color: $red-ish;}
+	0%{ background-color: $red-ish; background-position: 0 0;}
 	14%{ background-color: $orange-ish;}
 	28%{ background-color: $yellow-ish;}
 	42%{ background-color: $green-ish;}
-	56%{ background-color: $blue-ish;}
+	56%{ background-color: $blue-ish; background-position: 256px 128px;}
 	70%{ background-color: $indigo-ish;}
 	84%{ background-color: $violet-ish;}
-	100%{ background-color: $red-ish;}
+	100%{ background-color: $red-ish; background-position: 0px 256px;}
 }
 
 @media only screen and (min-width: $breakpoint) {

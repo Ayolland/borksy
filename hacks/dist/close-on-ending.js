@@ -3,7 +3,7 @@
 @file close on ending
 @summary Prevents from playing past an ending
 @license MIT
-@version 1.1.1
+@version 1.1.3
 @author Sean S. LeBlanc
 
 @description
@@ -19,7 +19,6 @@ but players will still be able to manually refresh or close/re-open the page to 
 HOW TO USE:
 Copy-paste this script into a script tag after the bitsy source
 */
-this.hacks = this.hacks || {};
 (function (bitsy) {
 'use strict';
 
@@ -82,7 +81,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -181,7 +180,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {

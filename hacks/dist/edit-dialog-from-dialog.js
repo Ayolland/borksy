@@ -3,7 +3,7 @@
 @file edit dialog from dialog
 @summary edit dialog from dialog (yes really)
 @license MIT
-@version 1.1.1
+@version 1.1.4
 @author Sean S. LeBlanc
 
 @description
@@ -24,7 +24,6 @@ TIPS:
 	- The player avatar is always a sprite with id "A"; you can edit your gamedata to give them a name for clarity
 	- You can use the full names or shorthand of image types (e.g. "SPR" and "sprite" will both work)
 */
-this.hacks = this.hacks || {};
 (function (bitsy) {
 'use strict';
 
@@ -81,7 +80,7 @@ Args:
 Returns: the image in the given map with the given name/id
  */
 function getImage(name, map) {
-	var id = map.hasOwnProperty(name) ? name : Object.keys(map).find(function (e) {
+	var id = Object.prototype.hasOwnProperty.call(map, name) ? name : Object.keys(map).find(function (e) {
 		return map[e].name == name;
 	});
 	return map[id];
@@ -103,7 +102,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -211,7 +210,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {

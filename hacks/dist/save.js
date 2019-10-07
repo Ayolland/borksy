@@ -3,7 +3,7 @@
 @file save
 @summary save/load your game
 @license MIT
-@version 1.0.3
+@version 1.0.5
 @requires 5.4
 @author Sean S. LeBlanc
 
@@ -39,7 +39,7 @@ HOW TO USE:
 2. Edit hackOptions below as needed
 */
 this.hacks = this.hacks || {};
-this.hacks.save = (function (exports,bitsy) {
+(function (exports, bitsy) {
 'use strict';
 var hackOptions = {
 	// when to save/load
@@ -114,7 +114,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -222,7 +222,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {
@@ -506,6 +506,4 @@ addDualDialogTag('clear', clear);
 
 exports.hackOptions = hackOptions;
 
-return exports;
-
-}({},window));
+}(this.hacks.save = this.hacks.save || {}, window));

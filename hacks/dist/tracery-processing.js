@@ -3,7 +3,7 @@
 @file tracery processing
 @summary process all dialog text with a tracery grammar
 @license MIT
-@version 2.0.0
+@version 2.0.2
 @author Sean S. LeBlanc
 
 @description
@@ -40,7 +40,7 @@ can create
 See http://www.crystalcodepalace.com/traceryTut.html for more on how to use tracery
 */
 this.hacks = this.hacks || {};
-this.hacks.tracery_processing = (function (exports,bitsy) {
+(function (exports, bitsy) {
 'use strict';
 var hackOptions = {
 	// put your grammar entries here
@@ -199,8 +199,7 @@ var tracery = function() {
 
                         // Todo: ignore any escaped commas.  For now, commas always split
                         var results = regExp.exec(this.modifiers[i]);
-                        if (!results || results.length < 2) {
-                        } else {
+                        if (!results || results.length < 2) ; else {
                             var modParams = results[1].split(",");
                             modName = this.modifiers[i].substring(0, modName.indexOf("("));
                         }
@@ -238,8 +237,6 @@ var tracery = function() {
 
             }
 
-        } else {
-            //console.warn("Already expanded " + this);
         }
 
     };
@@ -349,8 +346,6 @@ var tracery = function() {
             this.defaultRules = raw;
         } else if ( typeof raw === 'string' || raw instanceof String) {
             this.defaultRules = [raw];
-        } else if (raw === 'object') {
-            // TODO: support for conditional and hierarchical rule sets
         }
 
     }
@@ -647,9 +642,7 @@ var tracery = function() {
                 }
             }
 
-            if (symbolSection === undefined) {
-                //   throw ("no main section in " + tagContents);
-            } else {
+            if (symbolSection === undefined) ; else {
                 var components = symbolSection.split(".");
                 parsed.symbol = components[0];
                 parsed.modifiers = components.slice(1);
@@ -962,7 +955,7 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.0
+@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -1053,7 +1046,7 @@ function applyHook(functionName) {
 	// overwrite original with one which will call each in order
 	obj[lastSegment] = function () {
 		var returnVal;
-		var args;
+		var args = [].slice.call(arguments);
 		var i = 0;
 
 		function runBefore() {
@@ -1107,6 +1100,4 @@ before('startDialog', function (dialogStr) {
 
 exports.hackOptions = hackOptions;
 
-return exports;
-
-}({},window));
+}(this.hacks.tracery_processing = this.hacks.tracery_processing || {}, window));
