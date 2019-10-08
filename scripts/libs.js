@@ -478,7 +478,7 @@ var hacks = {
 	"3d": {
 		title: "📦 3d",
 		description: "bitsy in three dee",
-		author: "Sean S. LeBlanc",
+		author: "Sean S. LeBlanc & Elkie Nova",
 		readme: true,
 		type: "options",
 		requires: "",
@@ -492,7 +492,7 @@ var hacks = {
 	"replace-drawing": {
 		title: "🎭 Replace Drawing",
 		description: "Add name-tags to replace drawings when the game is loading",
-		author: "Sean S. LeBlanc",
+		author: "Elkie Nova",
 		readme: true,
 		type: "simple",
 		requires: "",
