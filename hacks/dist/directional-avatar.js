@@ -3,7 +3,7 @@
 @file directional avatar
 @summary flips the player's sprite based on directional movement
 @license MIT
-@version 1.1.6
+@version 1.1.8
 @requires 5.3
 @author Sean S. LeBlanc
 
@@ -25,7 +25,7 @@ var hackOptions = {
 	// If `verticalFlipAllowed` is true:
 	// 	pressing down will make the player's sprite upside-down
 	// 	pressing up will make the player's sprite right-side up
-	verticalFlipAllowed: false
+	verticalFlipAllowed: false,
 };
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
@@ -236,6 +236,56 @@ function _reinitEngine() {
 }
 
 /**
+@file transform sprite data
+@summary Helpers for flipping and rotating sprite data
+*/
+
+// copied from https://stackoverflow.com/a/46805290
+function transpose(matrix) {
+	const rows = matrix.length,
+		cols = matrix[0].length;
+	const grid = [];
+	for (let j = 0; j < cols; j++) {
+		grid[j] = Array(rows);
+	}
+	for (let i = 0; i < rows; i++) {
+		for (let j = 0; j < cols; j++) {
+			grid[j][i] = matrix[i][j];
+		}
+	}
+	return grid;
+}
+
+// helper function to flip sprite data
+function transformSpriteData(spriteData, v, h, rot) {
+	var x, y, x2, y2, col, tmp;
+	var s = spriteData.slice();
+	if (v) {
+		for (y = 0; y < s.length / 2; ++y) {
+			y2 = s.length - y - 1;
+			tmp = s[y];
+			s[y] = s[y2];
+			s[y2] = tmp;
+		}
+	}
+	if (h) {
+		for (y = 0; y < s.length; ++y) {
+			col = s[y] = s[y].slice();
+			for (x = 0; x < col.length / 2; ++x) {
+				x2 = col.length - x - 1;
+				tmp = col[x];
+				col[x] = col[x2];
+				col[x2] = tmp;
+			}
+		}
+	}
+	if (rot) {
+		s = transpose(s);
+	}
+	return s;
+}
+
+/**
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
@@ -297,32 +347,6 @@ function setSpriteData(id, frame, newData) {
 
 
 
-// helper function to flip sprite data
-function flip(spriteData, v, h) {
-	var x, y, x2, y2, col, tmp;
-	var s = spriteData.slice();
-	if (v && hackOptions.verticalFlipAllowed) {
-		for (y = 0; y < s.length / 2; ++y) {
-			y2 = s.length - y - 1;
-			tmp = s[y];
-			s[y] = s[y2];
-			s[y2] = tmp;
-		}
-	}
-	if (h && hackOptions.horizontalFlipAllowed) {
-		for (y = 0; y < s.length; ++y) {
-			col = s[y] = s[y].slice();
-			for (x = 0; x < col.length / 2; ++x) {
-				x2 = col.length - x - 1;
-				tmp = col[x];
-				col[x] = col[x2];
-				col[x2] = tmp;
-			}
-		}
-	}
-	return s;
-}
-
 var hflip = false;
 var vflip = false;
 var originalAnimation;
@@ -332,7 +356,7 @@ after('updateInput', function () {
 	// save the original frames
 	if (!originalAnimation || originalAnimation.referenceFrame !== getSpriteData(bitsy.playerId, 0)) {
 		originalAnimation = {
-			frames: []
+			frames: [],
 		};
 		for (i = 0; i < bitsy.player().animation.frameCount; ++i) {
 			originalAnimation.frames.push(getSpriteData(bitsy.playerId, i));
@@ -345,21 +369,19 @@ after('updateInput', function () {
 		vflip = false;
 		break;
 	case bitsy.Direction.Down:
-		vflip = true;
+		vflip = hackOptions.verticalFlipAllowed;
 		break;
 	case bitsy.Direction.Left:
-		hflip = true;
+		hflip = hackOptions.horizontalFlipAllowed;
 		break;
 	case bitsy.Direction.Right:
 		hflip = false;
-		break;
-	default:
 		break;
 	}
 
 	// update sprite with flipped frames
 	for (i = 0; i < originalAnimation.frames.length; ++i) {
-		setSpriteData(bitsy.playerId, i, flip(originalAnimation.frames[i], vflip, hflip));
+		setSpriteData(bitsy.playerId, i, transformSpriteData(originalAnimation.frames[i], vflip, hflip));
 	}
 	originalAnimation.referenceFrame = getSpriteData(bitsy.playerId, 0);
 });

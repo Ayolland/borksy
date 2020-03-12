@@ -3,7 +3,7 @@
 @file basic sfx
 @summary "walk" and "talk" sound effect support
 @license MIT
-@version 2.0.3
+@version 2.0.5
 @author Sean S. LeBlanc
 
 @description
@@ -27,7 +27,7 @@ this.hacks = this.hacks || {};
 (function (exports, bitsy) {
 'use strict';
 var hackOptions = {
-	beNiceToEars: true // if `true`, reduces volume of recently played sound effects
+	beNiceToEars: true, // if `true`, reduces volume of recently played sound effects
 };
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
@@ -239,7 +239,7 @@ before('startExportedGame', function () {
 	function playSound(sound) {
 		if (hackOptions.beNiceToEars) {
 			// reduce volume if played recently
-			sound.volume = Math.min(1.0, Math.max(0.25, Math.pow((bitsy.prevTime - sound.lastPlayed) * .002, .5)));
+			sound.volume = Math.min(1.0, Math.max(0.25, ((bitsy.prevTime - sound.lastPlayed) * 0.002 ** 0.5)));
 			sound.lastPlayed = bitsy.prevTime;
 		}
 
@@ -252,15 +252,11 @@ before('startExportedGame', function () {
 	}
 
 	// get sound elements
-	var s = document.getElementsByTagName("audio");
-	for (var i in s) {
-		if (Object.prototype.hasOwnProperty.call(s, i)) {
-			i = s[i];
-			i.lastPlayed = -Infinity;
-			i.volume = 1;
-			sounds[i.id] = playSound.bind(undefined, i);
-		}
-	}
+	Array.from(document.getElementsByTagName('audio')).forEach(function (i) {
+		i.lastPlayed = -Infinity;
+		i.volume = 1;
+		sounds[i.id] = playSound.bind(undefined, i);
+	});
 });
 
 // walk hook

@@ -3,7 +3,7 @@
 @file character portraits
 @summary high quality anime jpegs (or pngs i guess)
 @license MIT
-@version 2.0.3
+@version 2.0.5
 @requires Bitsy Version: 5.3
 @author Sean S. LeBlanc
 
@@ -51,7 +51,7 @@ var hackOptions = {
 	// - online urls (which are not guaranteed to work as they are network-dependent)
 	// - base64-encoded images (the most reliable but unwieldy)
 	portraits: {
-		'cat': './cat.png',
+		cat: './cat.png',
 	},
 	autoReset: true, // if true, automatically resets the portrait to blank when dialog is exited
 };
@@ -270,11 +270,11 @@ function _reinitEngine() {
 // interpreter. Unescape escaped parentheticals, too.
 function convertDialogTags(input, tag) {
 	return input
-		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function(match, group){
-			if(match.substr(0,1) === '\\') {
-				return '('+ group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
+			if (match.substr(0, 1) === '\\') {
+				return '(' + group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
 			}
-			return '{'+ group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+			return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
 		});
 }
 
@@ -325,13 +325,11 @@ var state = {
 };
 
 // preload images into a cache
-after('startExportedGame', function() {
-	for (var i in hackOptions.portraits) {
-		if(Object.prototype.hasOwnProperty.call(hackOptions.portraits, i)) {
-			state.portraits[i] = new Image();
-			state.portraits[i].src = hackOptions.portraits[i];
-		}
-	}
+after('startExportedGame', function () {
+	Object.keys(hackOptions.portraits).forEach(function (i) {
+		state.portraits[i] = new Image();
+		state.portraits[i].src = hackOptions.portraits[i];
+	});
 });
 
 // hook up dialog tag
@@ -364,7 +362,7 @@ after('drawRoom', function () {
 	}
 });
 
-after('onExitDialog', function() {
+after('onExitDialog', function () {
 	if (hackOptions.autoReset) {
 		state.portrait = '';
 	}

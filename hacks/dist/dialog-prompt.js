@@ -1,55 +1,60 @@
 /**
-🗣
-@file text-to-speech
-@summary text-to-speech for bitsy dialog
+⌨
+@file dialog prompt
+@summary prompt the user for text input in dialog
 @license MIT
-@version 1.0.4
-@requires 5.5
+@version 1.0.0
+@requires 6.4
 @author Sean S. LeBlanc
 
 @description
-Adds text-to-speech (TTS) to bitsy dialog.
+Adds a dialog command which prompts the user for input,
+and stores the result in a variable.
 
-Support is included for both an automatic mode in which all dialog is run through TTS,
-and a manual mode in which TTS can be triggered via dialog commands.
-
-Due to how bitsy handles scripting, the automatic mode is only able to read a segment of dialog *after* it has finished printing.
-This means that normally you'd often be waiting a long time for text animation to complete before hearing the TTS.
-Players could manually skip the dialog animations to speed this up, but I've found that this is still quite stilted.
-The hackOption `hurried` is included below, which automatically skips text animation in order to help counteract this.
+Note: This hack also includes the paragraph break hack;
+this is because text after a dialog prompt won't show up unless
+there is a paragraph break in between them.
 
 Usage:
-	(ttsVoice "<pitch>,<rate>,<voice>")
-	(ttsVoiceNow "<pitch>,<rate>,<voice>")
-	(tts "<text queued to speak at end of dialog>")
-	(ttsNow "<text queued to speak immediately>")
+	(prompt "variableName")
+	(prompt "variableName,defaultValue")
+
+Examples:
+	Set name: (prompt "name")
+	Set name with default: (prompt "name,Adam")
+	Set name using current as default: {temp="name,"+name}(prompt temp)
+	Set name with text after: (prompt "name")(p)Name is now {print name}
+
+By default, no validation or transformation is applied to the user input;
+whatever they submit (even a blank input) is used as the variable value.
+This can be adjusted in the hackOptions to create prompts which are constrained.
 
 Example:
-	(ttsVoiceNow "0.5,0.5,Google UK English Male")
-	(ttsNow "This will be heard but not seen.")
-
-Notes:
-	- Because the TTS reads an entire page at once, voice parameters cannot be changed mid-line.
-	  If you're using multiple voices, make sure to only set voices at the start and/or end of pages.
-	- Unprovided voice parameters will default to the last value used
-	  e.g. if you lower the pitch, read a line, increase the rate, read another line,
-	  the second line will have both a lower pitch and a higher rate.
-	- Voice support varies a lot by platform!
-	  In general, you should only rely on a single voice (the locally provided synth) being available.
-	  In chrome, a number of remote synths are provided, but these will only work while online.
-	  You can use whatever voices are available, but be aware that they may fallback to default for players.
-	- To see what voices are available in your browser, run `speechSynthesis.getVoices()` in the console
 
 HOW TO USE:
-1. Copy-paste this script into a script tag after the bitsy source
+1. Copy-paste into a script tag after the bitsy source
 2. Edit hackOptions below as needed
 */
 this.hacks = this.hacks || {};
 (function (exports, bitsy) {
 'use strict';
 var hackOptions = {
-	automatic: true, // disable this to prevent TTS from playing for all dialog (i.e. you only want to use TTS via commands)
-	hurried: true, // disable this to let bitsy text animations play out normally (not recommended for automatic mode)
+	// character used to indicate caret
+	caret: '_',
+	// character used to indicate highlighted text
+	highlight: '█',
+	// function run when the prompt is submitted
+	// whatever is returned from this function will be saved as the variable value
+	// if an error is thrown, the prompt will not submit
+	// (this can be used for validation, but keep in mind there's no user feedback)
+	// `variable` can be used to apply different behaviour for different variable prompts
+	// `value` is the current value of the text field
+	onSubmit: function (variable, value) {
+		return value; // allow any input
+		// return value.toLowerCase(); // convert input to lowercase
+		// if (value.length === 0) { throw new Error(); } return value; // require non-blank input
+		// if (variable === 'name' && value.length === 0) { throw new Error(); } return value; // require non-blank input for 'name' only
+	},
 };
 
 bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
@@ -146,13 +151,6 @@ function before(targetFuncName, beforeFn) {
 	var kitsy = kitsyInit();
 	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
 	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
-}
-
-// Ex: after('load_game', function run() { alert('Loaded!'); });
-function after(targetFuncName, afterFn) {
-	var kitsy = kitsyInit();
-	kitsy.queuedAfterScripts[targetFuncName] = kitsy.queuedAfterScripts[targetFuncName] || [];
-	kitsy.queuedAfterScripts[targetFuncName].push(afterFn);
 }
 
 function kitsyInit() {
@@ -312,181 +310,165 @@ function addDialogTag(tag, fn) {
 }
 
 /**
- * Adds a custom dialog tag which executes the provided function.
- * For ease-of-use with the bitsy editor, tags can be written as
- * (tagname "parameters") in addition to the standard {tagname "parameters"}
- * 
- * Function is executed after the dialog box.
- *
- * @param {string}   tag Name of tag
- * @param {Function} fn  Function to execute, with signature `function(environment, parameters){}`
- *                       environment: provides access to SetVariable/GetVariable (among other things, see Environment in the bitsy source for more info)
- *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
+ * Helper for printing a paragraph break inside of a dialog function.
+ * Adds the function `AddParagraphBreak` to `DialogBuffer`
  */
-function addDeferredDialogTag(tag, fn) {
-	addDialogFunction(tag, fn);
-	bitsy.kitsy.deferredDialogFunctions = bitsy.kitsy.deferredDialogFunctions || {};
-	var deferred = bitsy.kitsy.deferredDialogFunctions[tag] = [];
-	inject$1(
-		/(var functionMap = new Map\(\);)/,
-		'$1functionMap.set("' + tag + '", function(e, p, o){ kitsy.deferredDialogFunctions.' + tag + '.push({e:e,p:p}); o(null); });'
-	);
-	// Hook into the dialog finish event and execute the actual function
-	after('onExitDialog', function () {
-		while (deferred.length) {
-			var args = deferred.shift();
-			bitsy.kitsy.dialogFunctions[tag](args.e, args.p, args.o);
-		}
-	});
-	// Hook into the game reset and make sure data gets cleared
-	after('clearGameData', function () {
-		deferred.length = 0;
-	});
-}
+
+inject$1(/(this\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer.push( [[]] ); isActive = true; };\n$1');
 
 /**
- * Adds two custom dialog tags which execute the provided function,
- * one with the provided tagname executed after the dialog box,
- * and one suffixed with 'Now' executed immediately when the tag is reached.
- *
- * i.e. helper for the (exit)/(exitNow) pattern.
- *
- * @param {string}   tag Name of tag
- * @param {Function} fn  Function to execute, with signature `function(environment, parameters){}`
- *                       environment: provides access to SetVariable/GetVariable (among other things, see Environment in the bitsy source for more info)
- *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
- */
-function addDualDialogTag(tag, fn) {
-	addDialogTag(tag + 'Now', function (environment, parameters, onReturn) {
-		fn(environment, parameters);
-		onReturn(null);
-	});
-	addDeferredDialogTag(tag, fn);
-}
+📃
+@file paragraph-break
+@summary Adds paragraph breaks to the dialogue parser
+@license WTFPL (do WTF you want)
+@version 1.1.5
+@requires Bitsy Version: 5.0, 5.1
+@author Sean S. LeBlanc, David Mowatt
+
+@description
+Adds a (p) tag to the dialogue parser that forces the following text to
+start on a fresh dialogue screen, eliminating the need to spend hours testing
+line lengths or adding multiple line breaks that then have to be reviewed
+when you make edits or change the font size.
+
+Usage: (p)
+
+Example: I am a cat(p)and my dialogue contains multitudes
+
+HOW TO USE:
+  1. Copy-paste this script into a new script tag after the Bitsy source code.
+     It should appear *before* any other mods that handle loading your game
+     data so it executes *after* them (last-in first-out).
+
+NOTE: This uses parentheses "()" instead of curly braces "{}" around function
+      calls because the Bitsy editor's fancy dialog window strips unrecognized
+      curly-brace functions from dialog text. To keep from losing data, write
+      these function calls with parentheses like the examples above.
+
+      For full editor integration, you'd *probably* also need to paste this
+      code at the end of the editor's `bitsy.js` file. Untested.
+*/
+
+// Adds the actual dialogue tag. No deferred version is required.
+addDialogTag('p', function (environment, parameters, onReturn) {
+	environment.GetDialogBuffer().AddParagraphBreak();
+	onReturn(null);
+});
+// End of (p) paragraph break mod
 
 
 
 
 
-var speaking = false;
-var toSpeak = [];
-var latestUtterance; // we need to maintain a reference to this, or a bug in the GC will prevent events from firing
-var lastPitch = 1;
-var lastRate = 1;
-var lastVoice = '';
+var cachedBuffer;
+var prompted = false;
 
-var voices = {};
-
-var speechSynthesis = window.speechSynthesis;
-if (!speechSynthesis) {
-	console.error('TTS not available!');
-} else {
-	speechSynthesis.onvoiceschanged = function () {
-		var v = speechSynthesis.getVoices();
-		voices = v.reduce(function (result, voice) {
-			result[voice.name] = voice;
-			return result;
-		}, {});
-	};
-}
-
-
-function queueVoice(params) {
-	params = params || [];
-	var pitch = lastPitch = params[0] || lastPitch;
-	var rate = lastRate = params[1] || lastRate;
-	var voice = lastVoice = params[2] || lastVoice;
-	toSpeak.push({
-		pitch: pitch,
-		rate: rate,
-		voice: voice,
-		text: [],
-	});
-}
-
-function queueSpeak(text) {
-	if (!toSpeak.length) {
-		queueVoice();
-	}
-	toSpeak[toSpeak.length - 1].text.push(text);
-	if (!speaking) {
-		speak();
-	}
-}
-
-function speak() {
-	if (!speechSynthesis) {
-		return;
-	}
-	if (!toSpeak.length) {
-		return;
-	}
-	var s = toSpeak.shift();
-	speechSynthesis.cancel();
-	var text = s.text.join(' ');
-	if (!text) {
-		speak();
-		return;
-	}
-	console.log('TTS: ', text);
-	latestUtterance = new SpeechSynthesisUtterance(text);
-	latestUtterance.pitch = s.pitch;
-	latestUtterance.rate = s.rate;
-	latestUtterance.voice = voices[s.voice];
-	latestUtterance.onend = function () {
-		setTimeout(() => {
-			speaking = false;
-			if (toSpeak.length) {
-				speak();
-			}
+// helper for making a deep copy of dialog buffer
+function bufferCopy(buffer) {
+	return buffer.map(function (page) {
+		return page.map(function (row) {
+			return row.slice();
 		});
-	};
-	latestUtterance.onerror = function (error) {
-		speaking = false;
-		console.error(error);
-	};
-	speaking = true;
-	speechSynthesis.speak(latestUtterance);
+	});
 }
 
-// queue a newline when dialog ends in case you start a new dialog before the TTS finishes
-// this smooths out the TTS playback in cases without punctuation (which is common b/c bitsyfolk)
-after('dialogBuffer.EndDialog', function () {
-	queueVoice();
-});
+// manipulates dialog buffer to show the state of the form input in bitsy
+function updateInputDisplay() {
+	// reset to state at start of prompt
+	bitsy.dialogBuffer.SetBuffer(bufferCopy(cachedBuffer));
+	var highlight = promptInput.selectionEnd - promptInput.selectionStart;
+	var str = promptInput.value;
+	// insert caret/replace highlighted text
+	str = str.substring(0, promptInput.selectionStart) + (highlight > 0 ? hackOptions.highlight.repeat(highlight) : hackOptions.caret) + str.substr(promptInput.selectionEnd);
 
-// save the character on dialog font characters so we can read it back post-render
-inject$1(/(function DialogFontChar\(font, char, effectList\) {)/, '$1\nthis.char = char;');
-
-// queue speaking based on whether we have finished rendering text
-var spoke = false;
-after('dialogRenderer.DrawNextArrow', function () {
-	if (hackOptions.automatic && !spoke) {
-		queueSpeak(bitsy.dialogBuffer.CurPage().map((a) => a.map((i) => i.char).join('')).join(' '));
-		spoke = true;
-	}
-});
-after('dialogBuffer.Continue', function () {
-	spoke = false;
-});
-
-// hook up hurried mode
-function hurry() {
-	if (hackOptions.hurried) {
-		bitsy.dialogBuffer.Skip();
-	}
+	// show text
+	bitsy.dialogBuffer.AddText(str);
+	bitsy.dialogBuffer.Skip();
 }
-after('dialogBuffer.FlipPage', hurry);
-after('startDialog', hurry);
 
-// hook up dialog commands
-addDualDialogTag('ttsVoice', function (environment, parameters) {
-	queueVoice(parameters[0].split(','));
+var promptForm = document.createElement('form');
+// prevent form from affecting layout
+promptForm.style.position = 'absolute';
+promptForm.style.top = '50%';
+promptForm.style.left = '50%';
+promptForm.style.maxWidth = '25vh';
+promptForm.style.maxHeight = '25vh';
+promptForm.style.zIndex = '-1';
+
+var promptInput = document.createElement('input');
+promptInput.type = 'text';
+promptInput.oninput = promptInput.onkeyup = updateInputDisplay;
+promptInput.onblur = function () {
+	if (prompted) {
+		this.focus();
+	}
+};
+// prevent zoom on focus
+promptInput.style.fontSize = '200%';
+// hide element without preventing input
+promptInput.style.maxWidth = '100%';
+promptInput.style.maxHeight = '100%';
+promptInput.style.padding = '0';
+promptInput.style.margin = '0';
+promptInput.style.border = 'none';
+promptInput.style.outline = 'none';
+
+promptForm.appendChild(promptInput);
+before('onready', function () {
+	document.body.appendChild(promptForm);
 });
-addDualDialogTag('tts', function (environment, parameters) {
-	queueSpeak(parameters[0]);
+
+
+addDialogTag('prompt', function (environment, parameters, onReturn) {
+	prompted = true;
+
+	// parse parameters
+	var params = parameters[0].split(/,\s?/);
+	var variableName = params[0];
+	var defaultValue = params[1] || '';
+
+	// prevent bitsy from handling input
+	var key = bitsy.key;
+	var isPlayerEmbeddedInEditor = bitsy.isPlayerEmbeddedInEditor;
+	var anyKeyPressed = bitsy.input.anyKeyPressed;
+	var isTapReleased = bitsy.input.isTapReleased;
+	var CanContinue = environment.GetDialogBuffer().CanContinue;
+	bitsy.key = {};
+	bitsy.input.anyKeyPressed = bitsy.input.isTapReleased = environment.GetDialogBuffer().CanContinue = function () { return false; };
+	bitsy.isPlayerEmbeddedInEditor = true;
+
+	promptInput.value = defaultValue;
+	promptInput.focus();
+	promptForm.onsubmit = function (event) {
+		event.preventDefault();
+		try {
+			var value = hackOptions.onSubmit(variableName, promptInput.value);
+			environment.SetVariable(variableName, value);
+		} catch (error) {
+			return;
+		}
+
+		prompted = false;
+		promptInput.blur();
+
+		// allow bitsy to start handling input again
+		bitsy.key = key;
+		bitsy.isPlayerEmbeddedInEditor = isPlayerEmbeddedInEditor;
+		bitsy.input.anyKeyPressed = anyKeyPressed;
+		bitsy.input.isTapReleased = isTapReleased;
+		environment.GetDialogBuffer().CanContinue = CanContinue;
+
+		onReturn(null);
+	};
+	// save a copy of the current buffer state for display purposes
+	cachedBuffer = bufferCopy(environment.GetDialogBuffer().GetBuffer());
+	// add a caret character immediately (otherwise it won't show up till a key is pressed)
+	environment.GetDialogBuffer().AddText(hackOptions.caret);
 });
+
+// expose a setter/getter for private buffer in DialogBuffer class
+inject$1(/(this\.CurPage =)/, 'this.GetBuffer = function(){ return buffer; };this.SetBuffer = function(b){ buffer = b; };\n$1');
 
 exports.hackOptions = hackOptions;
 
-}(this.hacks['text-to-speech'] = this.hacks['text-to-speech'] || {}, window));
+}(this.hacks.dialog_prompt = this.hacks.dialog_prompt || {}, window));

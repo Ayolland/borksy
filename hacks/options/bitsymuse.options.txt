@@ -1,25 +1,29 @@
-// You need to put an entry in this list for every room ID 
-// or name that is accessible by the player, and then specify 
-// the song ID for each room. Expand this list to as many 
-// rooms as you need.
+// Put entries in this list for each audio file you want to use.
+// The key will be the id needed to play it in dialog tags and 
+// the musicByRoom options below, and the value will be the 
+// properties of the corresponding <audio> tag (e.g. src, loop, volume)
+// Note: you can add <audio> tags to the html manually if you prefer
 
-// If the player moves between rooms with the same audio ID 
-// the music keeps playing seamlessly. Undefined rooms will 
-// keep playing whatever music they were last playing.
+audio: {
+	// Note: the entries below are examples that should be removed and replaced with your own audio files
+	'example song ID': { src: './example song filepath.mp3', loop: true },
+	'example sfx ID': { src: './example sfx filepath.mp3', volume: 0.5 },
+},
+	
+// Put entries in this list for every room ID or name that will 
+// change the music. If the player moves between rooms with the 
+// same audio ID, the music keeps playing seamlessly.
 
-// You can set a room to stop music when you enter by using 
-// the silenceId instead of a song ID. By default, this is 
-// set to 'S'.
-
-// These values are examples, and this hack WILL NOT WORK 
-// with these values. Check the Readme for setup instructions.
+// Undefined rooms will keep playing whatever music they were last playing.
 
 musicByRoom: {
-	0: 'song ID',
-	1: 'S', // This room is silent - (see `silenceId` below)
+	// Note: the entries below are examples that should be removed and replaced with your own room -> audio id mappings
+	0: 'example song ID',
+	1: 'S', // This room is silent - it will stop music when you enter (see `silenceId` below)
 	2: 'another song ID',
 	h: 'a song ID for a room with a non-numeric ID',
-	'my room': 'a song ID for a room with a user-defined name'
+	'my room': 'a song ID for a room with a user-defined name',
 },
-silenceId: 'S', // Use this song ID of to make a room fall silent.
-resume: false, // If true, songs will pause/resume on change; otherwise, they'll stop/play (doesn't affect sound effects)
+
+silenceId: 'S', // Use this song ID to make a room fall silent.
+resume: false, // If true, songs will pause/resume on change; otherwise, they'll stop/play (doesn't affect sound effect
