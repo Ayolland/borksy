@@ -139,19 +139,19 @@ var hacks = {
 		forceLocal: false
 	},
 
-	"logic-operators-extended": {
-		title: "🔀 Extended Logic Operators",
-		description: "Adds conditional logic operators.",
-		author: "@mildmojo",
-		readme: true,
-		type: "simple",
-		requires: 'kitsy-script-toolkit',
-		hidden: true,
-		order: 2,
-		conflicts: false,
-		github: 'logic-operators-extended.js',
-		forceLocal: false
-	},
+	// "logic-operators-extended": {
+	// 	title: "🔀 Extended Logic Operators",
+	// 	description: "Adds conditional logic operators.",
+	// 	author: "@mildmojo",
+	// 	readme: true,
+	// 	type: "simple",
+	// 	requires: 'kitsy-script-toolkit',
+	// 	hidden: true,
+	// 	order: 2,
+	// 	conflicts: false,
+	// 	github: 'logic-operators-extended.js',
+	// 	forceLocal: false
+	// },
 
 	"permanent-items": {
 		title: "⏳ Permanent Items",
@@ -410,7 +410,7 @@ var hacks = {
 		description: "Allows binary(?) dialog choices.",
 		author: "Sean S. LeBlanc",
 		readme: true,
-		type: "simple",
+		type: "options",
 		requires: "",
 		hidden: false,
 		order: 2,
@@ -440,7 +440,7 @@ var hacks = {
 		readme: true,
 		type: "options",
 		requires: "",
-		hidden: false,
+		hidden: true,
 		order: 5,
 		conflicts: false,
 		github: 'character-portraits-animated.js',

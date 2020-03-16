@@ -7,4 +7,5 @@ HOW TO USE:
 1. Include hack
 2. Update the `tileIsOpaque` function below to match your needs
 
-(All tiles are opaque by default!)
+By default, add the word 'OPAQUE' to the name 
+of every tile you need to be opaque in the Bitsy editor.

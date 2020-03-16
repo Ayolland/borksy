@@ -1081,6 +1081,14 @@
 		"oAP": "/hacks/options/character-portraits.options.txt",
 		"oF": 0
 		},
+	"/hacks/options/dialog-choices.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/options/dialog-choices.options.txt",
+		"oF": 0
+		},
 	"/hacks/options/directional-avatar.options.txt": {
 		"cB": 0,
 		"ft": 8192,
