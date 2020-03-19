@@ -482,7 +482,7 @@ var hacks = {
 		readme: true,
 		type: "options",
 		requires: "",
-		hidden: false,
+		hidden: true,
 		order: 3,
 		conflicts: false,
 		github: '3d.js',
