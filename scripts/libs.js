@@ -1,13 +1,15 @@
 var loadedFiles ={};
 
 var borksyInfo = {
-	lastUpdated: "October 5, 2019",
+	lastUpdated: "April 15, 2020",
 	templates: [
 		{filename:"Bitsy.5.5", description: "Bitsy 5.5 (modified for Borksy)", isDefault: false},
 		{filename:"BitsyHD.5.1", description: "Bitsy HD + Borksy (modified from Bitsy 5.1)", isDefault: false},
 		{filename:"Bitsy.6.0", description: "Bitsy 6.0 (modified for Borksy)", isDefault: false},
 		{filename:"Bitsy.6.3", description: "Bitsy 6.3 (modified for Borksy)", isDefault: false},
-		{filename:"Bitsy.6.4", description: "Bitsy 6.4 (modified for Borksy)", isDefault: true},
+		{filename:"Bitsy.6.4", description: "Bitsy 6.4 (modified for Borksy)", isDefault: false},
+		{filename:"Bitsy.6.5", description: "Bitsy 6.5", isDefault: false},
+		{filename:"Bitsy.7.0", description: "Bitsy 7.0", isDefault: true},
 	]
 };
 
@@ -469,7 +471,7 @@ var hacks = {
 		type: "options",
 		requires: false,
 		hidden: false,
-		order: 10,
+		order: 30,
 		conflicts: false,
 		github: 'transparent-sprites.js',
 		forceLocal: false
