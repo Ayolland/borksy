@@ -1,5 +1,3 @@
-(Ayo's note: Please remember you can resize the infobox you're reading this in.)
-
 Edit hackOptions below, to define the default textbox style.
 Optionally, add additional alternate styles to the dialogStyles section.
 

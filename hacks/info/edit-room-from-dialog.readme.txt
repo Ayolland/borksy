@@ -1,6 +1,3 @@
-(Ayo's note: HOLD ONTO YOUR BUTTS, KIDS)
-(Please remember you can resize the infobox you're reading this in.)
-
 Use the following dialog tags to edit a room's tiles, sprites, or items
 
 -- DRAW DIALOG TAG REFERENCE -----------------------------------

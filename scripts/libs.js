@@ -241,8 +241,8 @@ var hacks = {
 
 	"edit-image-from-dialog": {
 		title: "🖌 Edit Image from Dialog",
-		description: "Allows editing the content of a room from dialog.",
-		author: "Dana Holdampf",
+		description: "Allows editing of sprites, items, and tiles from dialog.",
+		author: "Sean S LeBlanc",
 		readme: true,
 		type: "simple",
 		requires: "",
@@ -255,13 +255,13 @@ var hacks = {
 
 	"edit-room-from-dialog": {
 		title: "🏠 Edit Room from Dialog",
-		description: "Allows editing of sprites, items, and tiles from dialog.",
-		author: "Sean S. LeBlanc",
+		description: "Allows editing the content of a room from dialog.",
+		author: "Dana Holdampf",
 		readme: true,
 		type: "simple",
 		requires: "",
 		hidden: false,
-		order: 2,
+		order: 5,
 		conflicts: false,
 		github: 'edit-room-from-dialog.js',
 		forceLocal: false
