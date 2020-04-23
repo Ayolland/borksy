@@ -1,0 +1,115 @@
+(Ayo's note: Please remember you can resize the infobox you're reading this in.)
+
+Edit hackOptions below, to define the default textbox style.
+Optionally, add additional alternate styles to the dialogStyles section.
+
+You can define custom style properties for the textbox in the hackOptions below.
+
+- The topmost options are the default style properties, which are applied to the textbox initially.
+- The dialogStyles section is used for defining alternate styles you can switch between.
+- Use the dialog commands below to switch between styles, or change individual properties.
+
+The Dialog Tags for switching textbox styles are as follows:
+============================================================
+
+-- SWITCH TEXTBOX STYLE, WITH UNDEFINED PROPERTIES BEING IGNORED ---------------
+
+{textStyle "dialogStyle"}
+{textStyleNow "dialogStyle"}
+
+Information:
+---------------
+- Replaces current textbox style with a new set of style properties, as defined in the dialogStyles below.
+- Only changes style properties that are defined in the dialogStyle. Undefined properties are left unchanged.
+
+Parameters:
+---------------
+- dialogStyle:	id/name of a dialogStyle, as defined in the hackOptions below. (ex. "vanilla", "centered", "inverted", etc.)
+
+-- SWITCH TEXTBOX STYLE, WITH UNDEFINED PROPERTIES REVERTING TO DEFAULTS -------
+
+{setTextStyle "dialogStyle"}
+{setTextStyleNow "dialogStyle"}
+
+Information:
+---------------
+- As above, but any undefined style properties in the new dialogStyle revert to the default style properties.
+
+Parameters:
+---------------
+- dialogStyle:	id/name of a dialog style, as defined in the hackOptions below. (ex. "vanilla", "centered", "inverted", etc.)
+
+-- CHANGE AN INDIVIDUAL TEXTBOX STYLE PROPERTY ---------------------------------
+
+{textProperty "styleProperty, styleValue"}
+{textPropertyNow "styleProperty, styleValue"}
+
+Information:
+---------------
+- Sets an individual textbox style property, to a given value. See the hackOptions below for valid properties and values.
+
+Parameters:
+---------------
+
+- styleProperty:	id/name of a style property, as defined in the hackOptions below. (ex. "borderColor", "textboxWidth", "textSpeed", etc.)
+- styleValue:		value to assign to the styleProperty, as defined in the hackOptions below. (ex. "[128,128,128,256]", "140", etc.)
+
+-- REVERT TEXTBOX STYLE TO THE DEFAULT STYLE -----------------------------------
+
+{resetTextStyle}
+{resetTextStyleNow}
+
+Information:
+---------------
+- Resets all style properties to the values in the default dialog style, as defined in the hackOptions below.
+
+-- REVERT AN INDIVIDUAL TEXTBOX STYLE PROPERTY TO IT'S DEFAULT VALUE -----------
+
+{resetProperty "styleProperty"}
+{resetPropertyNow "styleProperty"}
+
+Information:
+---------------
+- Resets an individual style property to it's default value, as defined in the hackOptions below.
+
+Parameters:
+---------------
+- styleProperty:	id/name of a style property, as defined in the hackOptions below. (ex. "borderColor", "textboxWidth", "textSpeed", etc.)
+
+-- SET OR MODIFY THE POSITION AND SIZE OF THE TEXTBOX TO AN ABSOLUTE VALUE -----
+
+{textPosition "x, y, width, minLines, maxLines"}
+{textPositionNow "x, y, width, minLines, maxLines"}
+
+Information:
+---------------
+- Repositions and resizes the textbox, at an absolute position based on parameters.
+- Calculates the necessary style properties and spacing for the textbox automatically.
+
+Parameters:
+---------------
+- x, y:			The x and y coordinates of the top left corner. Measured in bitsy-scale pixels (0-128).
+- width:		The width of the textbox. Measured in bitsy-scale pixels (0-128).
+- minLines: 	The minimum number of lines to display on the textbox. Height resizes automatically.
+- maxLines: 	The maximum number of lines to display on the textbox. Height resizes automatically.
+				If any parameter is left blank, the textbox will use it's current values.
+				If given a +/- value (+8, -40, etc) that value is adjusted relative to it's current value.
+
+----------------------------------------------------------------
+
+DIALOG TAG NOTES:
+
+- Add "Now" to the end of these dialog tags to make the tag trigger mid-dialog, rather than after the current dialog is concluded.
+- To reset a property or style to default values, you can also set a style or style property value to "default".
+- NOTE: Changing the style after some text is already printed can break existing text.
+- Colors are defined as 4 values, [red,green,blue,alpha], each ranging from 0-255.
+- Alpha is opacity; colors can be translucent by reducing Alpha below 255. 0 is fully transparent.
+
+Examples:
+---------------
+- {textStyleNow "center"} immediately applies a style defined below, which centers the textbox, without overriding other existing style properties.
+- {setTextStyle "vertical"} after the current dialog ends, switches to a vertical textbox style, defined in dialogStyles.
+- {textPropertyNow "textSpeed, 25"} immediately reduces the time to print each character to 25ms.
+- {resetTextStyle} Once this text is finished, will reset the textbox to the default style.
+- {resetPropertyNow "textScale"} Immediately restores the text scale property to the default setting.
+- {textPosition "8, 8, 120"} Resizes the textbox to cover the entire screen, with 8 pixels of padding on every side.

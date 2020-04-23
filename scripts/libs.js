@@ -1,7 +1,7 @@
 var loadedFiles ={};
 
 var borksyInfo = {
-	lastUpdated: "April 15, 2020",
+	lastUpdated: "April 22, 2020",
 	templates: [
 		{filename:"Bitsy.5.5", description: "Bitsy 5.5 (modified for Borksy)", isDefault: false},
 		{filename:"BitsyHD.5.1", description: "Bitsy HD + Borksy (modified from Bitsy 5.1)", isDefault: false},
@@ -217,7 +217,7 @@ var hacks = {
 		author: "Sean S LeBlanc",
 		readme: true,
 		type: "options",
-		requires: "edit-image-at-runtime",
+		requires: false,
 		hidden: false,
 		order: 10,
 		conflicts: false,
@@ -241,6 +241,20 @@ var hacks = {
 
 	"edit-image-from-dialog": {
 		title: "🖌 Edit Image from Dialog",
+		description: "Allows editing the content of a room from dialog.",
+		author: "Dana Holdampf",
+		readme: true,
+		type: "simple",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'edit-image-from-dialog.js',
+		forceLocal: false
+	},
+
+	"edit-room-from-dialog": {
+		title: "🏠 Edit Room from Dialog",
 		description: "Allows editing of sprites, items, and tiles from dialog.",
 		author: "Sean S. LeBlanc",
 		readme: true,
@@ -249,7 +263,7 @@ var hacks = {
 		hidden: false,
 		order: 2,
 		conflicts: false,
-		github: 'edit-image-from-dialog.js',
+		github: 'edit-room-from-dialog.js',
 		forceLocal: false
 	},
 
@@ -292,6 +306,20 @@ var hacks = {
 		order: 3,
 		conflicts: false,
 		github: 'gamepad-input.js',
+		forceLocal: false
+	},
+
+	"gravity": {
+		title: "🍂 Gravity",
+		description: "Adds pseudo-platforming/gravity/physics.",
+		author: "Cole Sea",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 10,
+		conflicts: false,
+		github: 'gravity.js',
 		forceLocal: false
 	},
 
@@ -432,6 +460,20 @@ var hacks = {
 		order: 2,
 		conflicts: false,
 		github: 'text-to-speech.js',
+		forceLocal: false
+	},
+
+	"textbox-styler": {
+		title: "📐 Textbox Styler",
+		description: " Customize the style and properties of the textbox.",
+		author: "Dana Holdampf & Sean S. LeBlanc",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 2,
+		conflicts: false,
+		github: 'textbox-styler.js',
 		forceLocal: false
 	},
 
