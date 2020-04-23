@@ -3,12 +3,16 @@
 @file exit-from-dialog
 @summary exit to another room from dialog, including conditionals
 @license WTFPL (do WTF you want)
-@version 7.0.3
-@requires Bitsy Version: 6.0
+@version 8.0.1
+@requires Bitsy Version: 7.0
 @author @mildmojo
 
 @description
 Lets you exit to another room from dialog (including inside conditionals).
+
+Note: Bitsy has a built-in implementation of exit-from-dialog as of 7.0;
+before using this, you may want to check if it fulfills your needs.
+
 Use it to make an invisible sprite that acts as a conditional exit, use it to warp
 somewhere after a conversation, use it to put a guard at your gate who only
 lets you in once you're disguised, use it to require payment before the
@@ -80,7 +84,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -104,7 +108,7 @@ function getRoom(name) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -112,6 +116,25 @@ function unique(array) {
 	return array.filter(function (item, idx) {
 		return array.indexOf(item) === idx;
 	});
+}
+
+/**
+ * Helper for parsing parameters that may be relative to another value
+ * e.g.
+ * - getRelativeNumber('1', 5) -> 1
+ * - getRelativeNumber('+1', 5) -> 6
+ * - getRelativeNumber('-1', 5) -> 4
+ * - getRelativeNumber('', 5) -> 5
+ * @param {string} value absolute or relative string to parse
+ * @param {number} relativeTo value to use as fallback if none is provided, and as base for relative value
+ * @return {number} resulting absolute or relative number
+ */
+function getRelativeNumber(value, relativeTo) {
+	var v = (value || value === 0 ? value : relativeTo);
+	if (typeof v === 'string' && (v.startsWith('+') || v.startsWith('-'))) {
+		return relativeTo + Number(v);
+	}
+	return Number(v);
 }
 
 /**
@@ -298,6 +321,13 @@ function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions[tag] = fn;
 }
 
+function injectDialogTag(tag, code) {
+	inject$1(
+		/(var functionMap = new Map\(\);[^]*?)(this.HasFunction)/m,
+		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2'
+	);
+}
+
 /**
  * Adds a custom dialog tag which executes the provided function.
  * For ease-of-use with the bitsy editor, tags can be written as
@@ -313,10 +343,7 @@ function addDialogFunction(tag, fn) {
  */
 function addDialogTag(tag, fn) {
 	addDialogFunction(tag, fn);
-	inject$1(
-		/(var functionMap = new Map\(\);)/,
-		'$1functionMap.set("' + tag + '", kitsy.dialogFunctions.' + tag + ');'
-	);
+	injectDialogTag(tag, 'kitsy.dialogFunctions["' + tag + '"]');
 }
 
 /**
@@ -335,10 +362,7 @@ function addDeferredDialogTag(tag, fn) {
 	addDialogFunction(tag, fn);
 	bitsy.kitsy.deferredDialogFunctions = bitsy.kitsy.deferredDialogFunctions || {};
 	var deferred = bitsy.kitsy.deferredDialogFunctions[tag] = [];
-	inject$1(
-		/(var functionMap = new Map\(\);)/,
-		'$1functionMap.set("' + tag + '", function(e, p, o){ kitsy.deferredDialogFunctions.' + tag + '.push({e:e,p:p}); o(null); });'
-	);
+	injectDialogTag(tag, 'function(e, p, o){ kitsy.deferredDialogFunctions["' + tag + '"].push({e:e,p:p}); o(null); }');
 	// Hook into the dialog finish event and execute the actual function
 	after('onExitDialog', function () {
 		while (deferred.length) {
@@ -396,21 +420,8 @@ function getExitParams(parameters) {
 		room = bitsy.room[p.room];
 	}
 
-	if (!x) {
-		x = p.x;
-	} else if (x.startsWith('+') || x.startsWith('-')) {
-		x = p.x + Number(x);
-	} else {
-		x = Number(x);
-	}
-
-	if (!y) {
-		y = p.y;
-	} else if (y.startsWith('+') || y.startsWith('-')) {
-		y = p.y + Number(y);
-	} else {
-		y = Number(y);
-	}
+	x = getRelativeNumber(x, p.x);
+	y = getRelativeNumber(y, p.y);
 
 	return {
 		dest: {

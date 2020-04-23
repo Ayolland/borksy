@@ -1,50 +1,51 @@
 /**
-👨‍👨‍👧‍👧
-@file multi-sprite avatar
-@summary make the player big
+⌨
+@file custom-keyhandlers
+@summary run custom code on key inputs
 @license MIT
-@version 2.1.7
+@version 1.0.1
+@requires Bitsy Version: 7.0
 @author Sean S. LeBlanc
 
 @description
-Allows multiple sprites to be moved together along with the player
-to create the illusion of a larger avatar.
+Adds an extra layer of key handlers to bitsy's input handling
+that allow custom functions to be run when a key is pressed, held, or released.
 
-Provided example is a 2x2 square for simplicity,
-but multi-sprite avatar's shape can be arbitrary.
-
-Notes:
-- will probably break any other hacks involving moving other sprites around (they'll probably use the player's modified collision)
-- the original avatar sprite isn't changed, but will be covered by a piece at x:0,y:0
-- make sure not to include the original avatar sprite in the pieces list (this will cause the syncing to remove the player from the game)
+Some simple example functions:
+	bitsy.scriptInterpreter.SetVariable('myvar', 10); // sets a variable that can be accessed in bitsy scripts
+	bitsy.startDialog('a dialog string'); // starts a bitsy dialog script
+	bitsy.startDialog(bitsy.dialog['script-id'], 'script-id'); // starts a bitsy dialog script by id
+	bitsy.room[bitsy.curRoom].items.push({ id: 0, x: bitsy.player().x, y: bitsy.player().y }); // adds an item at the player's current position
 
 HOW TO USE:
-1. Copy-paste into a script tag after the bitsy source
-2. Edit `pieces` below to customize the multi-sprite avatar
-	Pieces must have an x,y offset and a sprite id
+1. Copy-paste this script into a script tag after the bitsy source
+2. Edit the hackOptions object as needed
 */
 this.hacks = this.hacks || {};
 (function (exports, bitsy) {
 'use strict';
 var hackOptions = {
-	pieces: [{
-		x: 0,
-		y: 0,
-		spr: 'c',
-	}, {
-		x: 1,
-		y: 0,
-		spr: 'd',
-	}, {
-		x: 0,
-		y: 1,
-		spr: 'e',
-	}, {
-		x: 1,
-		y: 1,
-		spr: 'f',
-	}],
-	enabledOnStart: true,
+	// each object below is a map of key -> handler
+	// ondown is called when key is first pressed
+	ondown: {
+		z: function () {
+			console.log('pressed z');
+		},
+	},
+	// onheld is called every frame key is held
+	// it includes a single parameter,
+	// which is the number of frames the key has been held
+	onheld: {
+		z: function (f) {
+			console.log('held z for ' + f + ' frames');
+		},
+	},
+	// onup is called when key is released
+	onup: {
+		z: function () {
+			console.log('released z');
+		},
+	},
 };
 
 bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
@@ -90,22 +91,6 @@ function inject(searchRegex, replaceString) {
 	scriptTag.remove();
 }
 
-/*
-Helper for getting image by name or id
-
-Args:
-	name: id or name of image to return
-	 map: map of images (e.g. `sprite`, `tile`, `item`)
-
-Returns: the image in the given map with the given name/id
- */
-function getImage(name, map) {
-	var id = Object.prototype.hasOwnProperty.call(map, name) ? name : Object.keys(map).find(function (e) {
-		return map[e].name === name;
-	});
-	return map[id];
-}
-
 /**
  * Helper for getting an array with unique elements
  * @param  {Array} array Original array
@@ -139,15 +124,6 @@ HOW TO USE:
   For more info, see the documentation at:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
-
-// Ex: before('load_game', function run() { alert('Loading!'); });
-//     before('show_text', function run(text) { return text.toUpperCase(); });
-//     before('show_text', function run(text, done) { done(text.toUpperCase()); });
-function before(targetFuncName, beforeFn) {
-	var kitsy = kitsyInit();
-	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
-	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
-}
 
 // Ex: after('load_game', function run() { alert('Loaded!'); });
 function after(targetFuncName, afterFn) {
@@ -267,142 +243,36 @@ function _reinitEngine() {
 
 
 
-if (hackOptions.enabledOnStart) {
-	after('onready', enableBig);
-}
+var allHandlers = [];
+var held = {};
 
-var enabled = false;
-var pieces = [];
-
-function syncPieces() {
-	var p = bitsy.player();
-	for (var i = 0; i < pieces.length; ++i) {
-		var piece = pieces[i];
-		var spr = getImage(piece.spr, bitsy.sprite);
-
-		spr.room = p.room;
-		spr.x = p.x + piece.x;
-		spr.y = p.y + piece.y;
-	}
-}
-
-function enableBig(newPieces) {
-	disableBig();
-	pieces = newPieces || hackOptions.pieces;
-	enabled = true;
-	syncPieces();
-}
-
-function disableBig() {
-	enabled = false;
-	for (var i = 0; i < pieces.length; ++i) {
-		getImage(pieces[i].spr, bitsy.sprite).room = null;
-	}
-}
-
-// handle item/ending/exit collision
-var originalGetItemIndex = bitsy.getItemIndex;
-var originalGetEnding = bitsy.getEnding;
-var originalGetExit = bitsy.getExit;
-var getItemIndexOverride = function (roomId, x, y) {
-	for (var i = 0; i < pieces.length; ++i) {
-		var piece = pieces[i];
-		var idx = originalGetItemIndex(roomId, x + piece.x, y + piece.y);
-		if (idx !== -1) {
-			return idx;
-		}
-	}
-	return -1;
-};
-var getEndingOverride = function (roomId, x, y) {
-	for (var i = 0; i < pieces.length; ++i) {
-		var piece = pieces[i];
-		var e = originalGetEnding(roomId, x + piece.x, y + piece.y);
-		if (e) {
-			return e;
-		}
-	}
-	return undefined;
-};
-var getExitOverride = function (roomId, x, y) {
-	for (var i = 0; i < pieces.length; ++i) {
-		var piece = pieces[i];
-		var e = originalGetExit(roomId, x + piece.x, y + piece.y);
-		if (e) {
-			return e;
-		}
-	}
-	return undefined;
-};
-before('movePlayer', function () {
-	if (enabled) {
-		bitsy.getItemIndex = getItemIndexOverride;
-		bitsy.getEnding = getEndingOverride;
-		bitsy.getExit = getExitOverride;
-	}
-});
-after('movePlayer', function () {
-	bitsy.getItemIndex = originalGetItemIndex;
-	bitsy.getEnding = originalGetEnding;
-	bitsy.getExit = originalGetExit;
-	if (enabled) {
-		syncPieces();
-	}
+after('onready', function () {
+	held = {};
+	allHandlers = Object.keys(hackOptions.ondown).concat(Object.keys(hackOptions.onheld), Object.keys(hackOptions.onup));
 });
 
-
-// handle wall/sprite collision
-function repeat(fn) {
-	var p = bitsy.player();
-	var x = p.x;
-	var y = p.y;
-	var r;
-	for (var i = 0; i < pieces.length; ++i) {
-		var piece = pieces[i];
-		p.x = x + piece.x;
-		p.y = y + piece.y;
-		r = r || fn();
-	}
-	p.x = x;
-	p.y = y;
-	return r;
-}
-var repeats = [
-	'getSpriteLeft',
-	'getSpriteRight',
-	'getSpriteUp',
-	'getSpriteDown',
-	'isWallLeft',
-	'isWallRight',
-	'isWallUp',
-	'isWallDown',
-];
-
-// prevent player from colliding with their own pieces
-function filterPieces(id) {
-	for (var i = 0; i < pieces.length; ++i) {
-		if (id === pieces[i].spr) {
-			return null;
+after('updateInput', function () {
+	allHandlers.forEach(function (key) {
+		var ondown = hackOptions.ondown[key];
+		var onheld = hackOptions.onheld[key];
+		var onup = hackOptions.onup[key];
+		if (bitsy.input.isKeyDown(key.toUpperCase().codePointAt(0))) {
+			var f = held[key] = (held[key] || 0) + 1;
+			if (f === 1 && ondown) {
+				ondown();
+			}
+			if (onheld) {
+				onheld(f);
+			}
+		} else {
+			if (held[key] > 0 && onup) {
+				onup();
+			}
+			held[key] = 0;
 		}
-	}
-	return id;
-}
-
-after('startExportedGame', function () {
-	for (var i = 0; i < repeats.length; ++i) {
-		var r = repeats[i];
-		var originalFn = bitsy[r];
-		// eslint-disable-next-line no-loop-func
-		bitsy[r] = function (fn) {
-			return enabled ? repeat(fn) : fn();
-		}.bind(undefined, originalFn);
-	}
-	var originalGetSpriteAt = bitsy.getSpriteAt;
-	bitsy.getSpriteAt = function () {
-		return filterPieces(originalGetSpriteAt.apply(this, arguments));
-	};
+	});
 });
 
 exports.hackOptions = hackOptions;
 
-}(this.hacks['multi-sprite_avatar'] = this.hacks['multi-sprite_avatar'] || {}, window));
+}(this.hacks['custom-keyhandlers'] = this.hacks['custom-keyhandlers'] || {}, window));

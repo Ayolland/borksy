@@ -3,7 +3,8 @@
 @file follower
 @summary makes a single sprite follow the player
 @license MIT
-@version 3.1.0
+@version 4.0.1
+@requires 7.0
 @author Sean S. LeBlanc
 
 @description
@@ -83,7 +84,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -107,13 +108,13 @@ Returns: the image in the given map with the given name/id
  */
 function getImage(name, map) {
 	var id = Object.prototype.hasOwnProperty.call(map, name) ? name : Object.keys(map).find(function (e) {
-		return map[e].name == name;
+		return map[e].name === name;
 	});
 	return map[id];
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -307,6 +308,13 @@ function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions[tag] = fn;
 }
 
+function injectDialogTag(tag, code) {
+	inject$1(
+		/(var functionMap = new Map\(\);[^]*?)(this.HasFunction)/m,
+		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2'
+	);
+}
+
 /**
  * Adds a custom dialog tag which executes the provided function.
  * For ease-of-use with the bitsy editor, tags can be written as
@@ -322,10 +330,7 @@ function addDialogFunction(tag, fn) {
  */
 function addDialogTag(tag, fn) {
 	addDialogFunction(tag, fn);
-	inject$1(
-		/(var functionMap = new Map\(\);)/,
-		'$1functionMap.set("' + tag + '", kitsy.dialogFunctions.' + tag + ');'
-	);
+	injectDialogTag(tag, 'kitsy.dialogFunctions["' + tag + '"]');
 }
 
 /**
@@ -344,10 +349,7 @@ function addDeferredDialogTag(tag, fn) {
 	addDialogFunction(tag, fn);
 	bitsy.kitsy.deferredDialogFunctions = bitsy.kitsy.deferredDialogFunctions || {};
 	var deferred = bitsy.kitsy.deferredDialogFunctions[tag] = [];
-	inject$1(
-		/(var functionMap = new Map\(\);)/,
-		'$1functionMap.set("' + tag + '", function(e, p, o){ kitsy.deferredDialogFunctions.' + tag + '.push({e:e,p:p}); o(null); });'
-	);
+	injectDialogTag(tag, 'function(e, p, o){ kitsy.deferredDialogFunctions["' + tag + '"].push({e:e,p:p}); o(null); }');
 	// Hook into the dialog finish event and execute the actual function
 	after('onExitDialog', function () {
 		while (deferred.length) {
@@ -384,9 +386,34 @@ function addDualDialogTag(tag, fn) {
 
 
 
+var paths = {};
 
 function setFollower(followerName) {
 	exports.follower = followerName && getImage(followerName, bitsy.sprite);
+	paths[exports.follower.id] = paths[exports.follower.id] || [];
+	takeStep();
+}
+
+var walking = false;
+
+function takeStep() {
+	if (walking) {
+		return;
+	}
+	walking = true;
+	setTimeout(() => {
+		var path = paths[exports.follower.id];
+		var point = path.shift();
+		if (point) {
+			exports.follower.x = point.x;
+			exports.follower.y = point.y;
+			exports.follower.room = point.room;
+		}
+		walking = false;
+		if (path.length) {
+			takeStep();
+		}
+	}, hackOptions.delay);
 }
 
 after('startExportedGame', function () {
@@ -431,24 +458,22 @@ after('onPlayerMoved', function () {
 		step.x -= 1;
 		break;
 	}
-	exports.follower.walkingPath.push(step);
+	paths[exports.follower.id].push(step);
+	takeStep();
 });
 
 // make follower walk "through" exits
 before('movePlayerThroughExit', function (exit) {
 	if (exports.follower) {
 		movedFollower = true;
-		exports.follower.walkingPath.push({
+		paths[exports.follower.id].push({
 			x: exit.dest.x,
 			y: exit.dest.y,
 			room: exit.dest.room,
 		});
+		takeStep();
 	}
 });
-
-// bitsy only uses the walking path for position by default;
-// update it to also move through rooms
-inject$1(/(spr\.y = nextPos\.y;)/, '$1\nspr.room = nextPos.room || spr.room;');
 
 function filterFollowing(id) {
 	return exports.follower === bitsy.sprite[id] ? null : id;
@@ -498,7 +523,7 @@ addDualDialogTag('followerSync', function () {
 		exports.follower.room = player.room;
 		exports.follower.x = player.x;
 		exports.follower.y = player.y;
-		exports.follower.walkingPath.length = 0;
+		paths[exports.follower.id].length = 0;
 	}
 });
 

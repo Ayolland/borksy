@@ -3,7 +3,8 @@
 @file tracery processing
 @summary process all dialog text with a tracery grammar
 @license MIT
-@version 3.0.2
+@version 4.0.1
+@requires 7.0
 @author Sean S. LeBlanc
 
 @description
@@ -921,7 +922,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -935,7 +936,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -967,6 +968,16 @@ HOW TO USE:
   For more info, see the documentation at:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
+
+
+// Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
+function inject$1(searchRegex, replaceString) {
+	var kitsy = kitsyInit();
+	kitsy.queuedInjectScripts.push({
+		searchRegex: searchRegex,
+		replaceString: replaceString
+	});
+}
 
 // Ex: before('load_game', function run() { alert('Loading!'); });
 //     before('show_text', function run(text) { return text.toUpperCase(); });
@@ -1093,11 +1104,11 @@ var bitsyGrammar;
 before('onready', function () {
 	bitsyGrammar = tracery_1.createGrammar(hackOptions.grammar);
 	bitsyGrammar.addModifiers(hackOptions.modifiers || tracery_1.baseEngModifiers);
+	window.tracery = window.tracery || bitsyGrammar.flatten.bind(bitsyGrammar);
 });
 
-before('startDialog', function (dialogStr, dialogId) {
-	return [bitsyGrammar.flatten(dialogStr), dialogId];
-});
+// pre-process LiteralNode values with tracery grammar
+inject$1(/onReturn\(this\.value\)/, 'onReturn(window.tracery(this.value))');
 
 exports.hackOptions = hackOptions;
 

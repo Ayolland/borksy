@@ -3,7 +3,7 @@
 @file custom text effect
 @summary make {custom}text effects{custom}
 @license MIT
-@version 2.2.0
+@version 2.2.1
 @requires 5.3
 @author Sean S. LeBlanc
 
@@ -169,7 +169,7 @@ var hackOptions = {
 			var h = font.getHeight();
 			window.customTextEffects.editBitmapCopy(char, function (bitmap) {
 				for (var y = 0; y < h; ++y) {
-					var o = Math.floor(y / h * steps - steps / 2) + 1;
+					var o = Math.floor((y / h) * steps - steps / 2) + 1;
 					for (var x = 0; x < w; ++x) {
 						bitmap[x + y * w] = x + o < 0 || x + 0 >= w ? 0 : char.originalBitmap[x + o + y * w];
 					}
@@ -245,7 +245,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -259,7 +259,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
