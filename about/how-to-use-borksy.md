@@ -4,4 +4,4 @@ Borksy accepts the game data from Bitsy and combines that with a Bitsy template 
 
 Hacks are not guaranteed to work with each other, and particular hacks are not guaranteed to work with particular templates. Make sure you test the particular load-out of hacks you plan to use before developing with them.
 
-While Borksy uses your browser data to save your work, it is a good idea to save any modifications (hackOptions, additional JS, HTML modifications) you make on your computer somewhere separately, as there is no way for Borksy to load these from a saved Borksy game.
+While Borksy uses your browser data to save your work, it is a good idea to save any modifications (hackOptions, additional JS, HTML modifications) somewhere on your computer separately, as there is no way for Borksy to load these from a saved Borksy game.

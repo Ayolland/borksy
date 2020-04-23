@@ -1,0 +1,18 @@
+// if defined, the cursor is drawn as the sprite with the given id
+// e.g. replace with `getCursorSprite('A')` to use the player's avatar as a cursor
+// if not defined, uses an arrow graphic similar to the continue arrow
+
+cursor: getCursorSprite(),
+
+// modifies the scale/position of the cursor
+// recommended combinations:
+
+// 	- scale: 4, y: 1, x: 0
+// 	- scale: 2, y: 3, x: 1
+// 	- scale: 2, y: 4, x: 0 + custom cursor
+
+transform: {
+	scale: bitsy.scale,
+	y: 1,
+	x: 0,
+},

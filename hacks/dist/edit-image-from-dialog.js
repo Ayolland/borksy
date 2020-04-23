@@ -3,7 +3,7 @@
 @file edit image from dialog
 @summary edit sprites, items, and tiles from dialog
 @license MIT
-@version 1.2.6
+@version 1.2.10
 @requires 5.3
 @author Sean S. LeBlanc
 
@@ -58,7 +58,7 @@ NOTE: This uses parentheses "()" instead of curly braces "{}" around function
 (function (bitsy) {
 'use strict';
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -88,7 +88,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -112,13 +112,13 @@ Returns: the image in the given map with the given name/id
  */
 function getImage(name, map) {
 	var id = Object.prototype.hasOwnProperty.call(map, name) ? name : Object.keys(map).find(function (e) {
-		return map[e].name == name;
+		return map[e].name === name;
 	});
 	return map[id];
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -288,11 +288,11 @@ function _reinitEngine() {
 // interpreter. Unescape escaped parentheticals, too.
 function convertDialogTags(input, tag) {
 	return input
-		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function(match, group){
-			if(match.substr(0,1) === '\\') {
-				return '('+ group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
+			if (match.substr(0, 1) === '\\') {
+				return '(' + group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
 			}
-			return '{'+ group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+			return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
 		});
 }
 
@@ -312,6 +312,13 @@ function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions[tag] = fn;
 }
 
+function injectDialogTag(tag, code) {
+	inject$1(
+		/(var functionMap = new Map\(\);[^]*?)(this.HasFunction)/m,
+		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2'
+	);
+}
+
 /**
  * Adds a custom dialog tag which executes the provided function.
  * For ease-of-use with the bitsy editor, tags can be written as
@@ -327,10 +334,7 @@ function addDialogFunction(tag, fn) {
  */
 function addDialogTag(tag, fn) {
 	addDialogFunction(tag, fn);
-	inject$1(
-		/(var functionMap = new Map\(\);)/,
-		'$1functionMap.set("' + tag + '", kitsy.dialogFunctions.' + tag + ');'
-	);
+	injectDialogTag(tag, 'kitsy.dialogFunctions["' + tag + '"]');
 }
 
 /**
@@ -349,10 +353,7 @@ function addDeferredDialogTag(tag, fn) {
 	addDialogFunction(tag, fn);
 	bitsy.kitsy.deferredDialogFunctions = bitsy.kitsy.deferredDialogFunctions || {};
 	var deferred = bitsy.kitsy.deferredDialogFunctions[tag] = [];
-	inject$1(
-		/(var functionMap = new Map\(\);)/,
-		'$1functionMap.set("' + tag + '", function(e, p, o){ kitsy.deferredDialogFunctions.' + tag + '.push({e:e,p:p}); o(null); });'
-	);
+	injectDialogTag(tag, 'function(e, p, o){ kitsy.deferredDialogFunctions["' + tag + '"].push({e:e,p:p}); o(null); }');
 	// Hook into the dialog finish event and execute the actual function
 	after('onExitDialog', function () {
 		while (deferred.length) {
@@ -379,7 +380,7 @@ function addDeferredDialogTag(tag, fn) {
  *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
  */
 function addDualDialogTag(tag, fn) {
-	addDialogTag(tag + 'Now', function(environment, parameters, onReturn) {
+	addDialogTag(tag + 'Now', function (environment, parameters, onReturn) {
 		fn(environment, parameters);
 		onReturn(null);
 	});
@@ -442,85 +443,82 @@ function setImageData(id, frame, map, newData) {
 var maps;
 after('load_game', function () {
 	maps = {
-    spr: bitsy.sprite,
-    sprite: bitsy.sprite,
-    til: bitsy.tile,
-    tile: bitsy.tile,
-    itm: bitsy.item,
-    item: bitsy.item,
+		spr: bitsy.sprite,
+		sprite: bitsy.sprite,
+		til: bitsy.tile,
+		tile: bitsy.tile,
+		itm: bitsy.item,
+		item: bitsy.item,
 	};
 });
 
 function editImage(environment, parameters) {
-  var i;
+	var i;
 
-  // parse parameters
-  var params = parameters[0].split(/,\s?/);
-  params[0] = (params[0] || "").toLowerCase();
-  var mapId = params[0];
-  var tgtId = params[1];
-  var srcId = params[2];
+	// parse parameters
+	var params = parameters[0].split(/,\s?/);
+	params[0] = (params[0] || '').toLowerCase();
+	var mapId = params[0];
+	var tgtId = params[1];
+	var srcId = params[2];
 
-  if (!mapId || !tgtId || !srcId) {
-    throw new Error('Image expects three parameters: "map, target, source", but received: "' + params.join(', ') + '"');
-  }
+	if (!mapId || !tgtId || !srcId) {
+		throw new Error('Image expects three parameters: "map, target, source", but received: "' + params.join(', ') + '"');
+	}
 
-  // get objects
-  var mapObj = maps[mapId];
-  if (!mapObj) {
-    throw new Error('Invalid map "' + mapId + '". Try "SPR", "TIL", or "ITM" instead.');
-  }
-  var tgtObj = getImage(tgtId, mapObj);
-  if (!tgtObj) {
-    throw new Error('Target "' + tgtId + '" was not the id/name of a ' + mapId + '.');
-  }
-  var srcObj = getImage(srcId, mapObj);
-  if (!srcObj) {
-    throw new Error('Source "' + srcId + '" was not the id/name of a ' + mapId + '.');
-  }
+	// get objects
+	var mapObj = maps[mapId];
+	if (!mapObj) {
+		throw new Error('Invalid map "' + mapId + '". Try "SPR", "TIL", or "ITM" instead.');
+	}
+	var tgtObj = getImage(tgtId, mapObj);
+	if (!tgtObj) {
+		throw new Error('Target "' + tgtId + '" was not the id/name of a ' + mapId + '.');
+	}
+	var srcObj = getImage(srcId, mapObj);
+	if (!srcObj) {
+		throw new Error('Source "' + srcId + '" was not the id/name of a ' + mapId + '.');
+	}
 
-  // copy animation from target to source
-  tgtObj.animation = {
-    frameCount: srcObj.animation.frameCount,
-    isAnimated: srcObj.animation.isAnimated,
-    frameIndex: srcObj.animation.frameIndex
-  };
-  for (i = 0; i < srcObj.animation.frameCount; ++i) {
-    setImageData(tgtId, i, mapObj, getImageData(srcId, i, mapObj));
-  }
+	// copy animation from target to source
+	tgtObj.animation = {
+		frameCount: srcObj.animation.frameCount,
+		isAnimated: srcObj.animation.isAnimated,
+		frameIndex: srcObj.animation.frameIndex,
+	};
+	for (i = 0; i < srcObj.animation.frameCount; ++i) {
+		setImageData(tgtId, i, mapObj, getImageData(srcId, i, mapObj));
+	}
 }
 
 function editPalette(environment, parameters) {
-  // parse parameters
-  var params = parameters[0].split(/,\s?/);
-  params[0] = (params[0] || "").toLowerCase();
-  var mapId = params[0];
-  var tgtId = params[1];
-  var palId = params[2];
+	// parse parameters
+	var params = parameters[0].split(/,\s?/);
+	params[0] = (params[0] || '').toLowerCase();
+	var mapId = params[0];
+	var tgtId = params[1];
+	var palId = params[2];
 
-  if (!mapId || !tgtId || !palId) {
-    throw new Error('Image expects three parameters: "map, target, palette", but received: "' + params.join(', ') + '"');
-  }
+	if (!mapId || !tgtId || !palId) {
+		throw new Error('Image expects three parameters: "map, target, palette", but received: "' + params.join(', ') + '"');
+	}
 
-  // get objects
-  var mapObj = maps[mapId];
-  if (!mapObj) {
-    throw new Error('Invalid map "' + mapId + '". Try "SPR", "TIL", or "ITM" instead.');
-  }
-  var tgtObj = getImage(tgtId, mapObj);
-  if (!tgtObj) {
-    throw new Error('Target "' + tgtId + '" was not the id/name of a ' + mapId + '.');
-  }
-  var palObj = parseInt(palId);
-  if (isNaN(palObj)) {
-    throw new Error('Palette "' + palId + '" was not a number.');
-  }
+	// get objects
+	var mapObj = maps[mapId];
+	if (!mapObj) {
+		throw new Error('Invalid map "' + mapId + '". Try "SPR", "TIL", or "ITM" instead.');
+	}
+	var tgtObj = getImage(tgtId, mapObj);
+	if (!tgtObj) {
+		throw new Error('Target "' + tgtId + '" was not the id/name of a ' + mapId + '.');
+	}
+	var palObj = parseInt(palId, 10);
+	if (Number.isNaN(Number(palObj))) {
+		throw new Error('Palette "' + palId + '" was not a number.');
+	}
 
-  // set palette
-  tgtObj.col = palObj;
-
-  // update images in cache
-  bitsy.renderImageForAllPalettes(tgtObj);
+	// set palette
+	tgtObj.col = palObj;
 }
 
 // hook up the dialog tags

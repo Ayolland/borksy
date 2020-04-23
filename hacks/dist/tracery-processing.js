@@ -3,7 +3,8 @@
 @file tracery processing
 @summary process all dialog text with a tracery grammar
 @license MIT
-@version 2.0.2
+@version 4.0.1
+@requires 7.0
 @author Sean S. LeBlanc
 
 @description
@@ -43,10 +44,14 @@ this.hacks = this.hacks || {};
 (function (exports, bitsy) {
 'use strict';
 var hackOptions = {
-	// put your grammar entries here
+	grammar: {
+		// put your grammar entries here
+	},
+	// modifiers to include (if this is not provided, the default tracery-provided modifiers like `.capitalize` are used)
+	modifiers: undefined,
 };
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
  * @author Kate
@@ -843,19 +848,15 @@ var tracery = function() {
             switch (s.charAt(s.length -1)) {
             case 's':
                 return s + "es";
-                break;
             case 'h':
                 return s + "es";
-                break;
             case 'x':
                 return s + "es";
-                break;
             case 'y':
                 if (!isVowel(s.charAt(s.length - 2)))
                     return s.substring(0, s.length - 1) + "ies";
                 else
                     return s + "s";
-                break;
             default:
                 return s + "s";
             }
@@ -864,22 +865,17 @@ var tracery = function() {
             switch (s.charAt(s.length -1)) {
             case 's':
                 return s + "ed";
-                break;
             case 'e':
                 return s + "d";
-                break;
             case 'h':
                 return s + "ed";
-                break;
             case 'x':
                 return s + "ed";
-                break;
             case 'y':
                 if (!isVowel(s.charAt(s.length - 2)))
                     return s.substring(0, s.length - 1) + "ied";
                 else
                     return s + "d";
-                break;
             default:
                 return s + "ed";
             }
@@ -926,7 +922,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -940,7 +936,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -972,6 +968,16 @@ HOW TO USE:
   For more info, see the documentation at:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
+
+
+// Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
+function inject$1(searchRegex, replaceString) {
+	var kitsy = kitsyInit();
+	kitsy.queuedInjectScripts.push({
+		searchRegex: searchRegex,
+		replaceString: replaceString
+	});
+}
 
 // Ex: before('load_game', function run() { alert('Loading!'); });
 //     before('show_text', function run(text) { return text.toUpperCase(); });
@@ -1093,10 +1099,16 @@ function _reinitEngine() {
 
 
 
-var bitsyGrammar = tracery_1.createGrammar(hackOptions);
-before('startDialog', function (dialogStr) {
-	return [bitsyGrammar.flatten(dialogStr)];
+var bitsyGrammar;
+
+before('onready', function () {
+	bitsyGrammar = tracery_1.createGrammar(hackOptions.grammar);
+	bitsyGrammar.addModifiers(hackOptions.modifiers || tracery_1.baseEngModifiers);
+	window.tracery = window.tracery || bitsyGrammar.flatten.bind(bitsyGrammar);
 });
+
+// pre-process LiteralNode values with tracery grammar
+inject$1(/onReturn\(this\.value\)/, 'onReturn(window.tracery(this.value))');
 
 exports.hackOptions = hackOptions;
 

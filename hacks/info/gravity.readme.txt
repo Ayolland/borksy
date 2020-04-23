@@ -1,0 +1,27 @@
+Overrides Bitsy movement logic to simulate "gravity".
+
+Features
+-----------------
+- Treats walls and sprites as "solid" objects that can be stood on
+- Does not allow player to move upwards unless they are on a climbable tile or
+jump/jetpack/force are activated
+- Does not allow player to move horizontally unless they are standing on a
+wall or sprite or climbable/standable tile
+- Forces player to "fall" any time they are not on a wall or sprite
+- Restricts how much the player can move horizontally while falling
+- Calculates fall damage any time the player lands on a wall or sprite
+- All invalid movement inputs (i.e, moving into a wall, pressing up while falling)
+are converted into down presses
+
+Dialog Tags
+-----------------
+- (toggleGravity) Toggle gravity on/off
+- (setJumpPower NUM) Sets how many tiles the player can move/jump straight up.
+Replace NUM with a whole number (setJumpPower 1). JumpPower is refreshed every time
+the player lands on the ground.
+- (toggleJetpack) Allows player to "jetpack"/jump upwards while already in the air.
+Moving upwards still consumes JumpPower, which is only refreshed upon landing.
+- (setGravityDirection "DIRECTION") Makes gravity flow in DIRECTION.
+Replace DIRECTION with "up", "down", "left", or "right".
+- (forceGravity "DIRECTION") Forces the player to move in the given DIRECTION until
+they hit something. Replace DIRECTION with "up", "down", "left", or "right".

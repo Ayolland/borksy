@@ -700,7 +700,7 @@ function hackGitHubMessage(hackName,hackInfo,$parentCollapse){
 	var msg = "";
 	var hackTitle = removeExtraChars(hackInfo.title);
 	if( hackInfo.forceLocal !== false ){
-		msg = 'Borksy is opting to use a local version of ' + hackTitle + ' from ' + hackInfo.forceLocal + '.';
+		msg = 'Borksy is opting to use a local version of ' + hackTitle + ' from ' + borksyInfo.lastUpdated + '.';
 	} else if( hacks[hackName].usingGithub === true ){
 		msg = hackTitle + ' is using the most recent version from Github.';
 	} else {

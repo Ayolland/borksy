@@ -3,33 +3,58 @@
 @file follower
 @summary makes a single sprite follow the player
 @license MIT
-@version 2.1.4
+@version 4.0.1
+@requires 7.0
 @author Sean S. LeBlanc
 
 @description
 Makes a single sprite follow the player.
-Bitsy has a "walkingPath" built into the sprite system (I think this is a hold-over from the old pathfinding mouse controls).
-Paths can be assigned to any sprite to create different AI behaviours. 
+The follower can optionally collide with the player,
+and can be changed at runtime with dialog commands.
 
-Includes an optional feature which filters the follower out of collisions.
+Usage:
+	(follower "followerNameOrId")
+	(followerNow "followerNameOrId")
+	(followerCollision "true/false")
+	(followerDelay "frames")
+	(followerDelayNow "frames")
+	(followerSync)
+	(followerSyncNow)
+
+Examples:
+	(follower "a") - the sprite with the id "a" starts following
+	(follower "my follower") - the sprite with the name "my follower" starts following
+	(follower) - stops a current follower
+	(followerCollision "true") - enables follower collision
+	(followerCollision "false") - disables follower collision
+	(followerDelay "0") - sets follower to move immediately after player
+	(followerDelay "200") - sets follower to move at normal speed
+	(followerDelay "1000") - sets follower to move once per second
+	(followerSync) - moves the follower on top of the player
+
 
 Known issues:
-- if the player uses an exit that puts them on top of another exit, the follower walks through the second exit.
-- the follower will warp to the player on the first movement. This can be avoided by placing them next to the player in bitsy.
+- Followers will warp to the player on their first movement.
+  This can be avoided by placing them next to or on the same tile as the player.
+- When collision is enabled, it's possible for the player to get stuck
+  between walls and their follower. Make sure to avoid single-tile width
+  spaces when using this (or design with that restriction in mind!)
 
 HOW TO USE:
 1. Copy-paste this script into a script tag after the bitsy source
-2. Edit `follower` to your intended sprite
+2. Edit hackOptions below to set up an initial follower
+3. Use dialog commands as needed
 */
 this.hacks = this.hacks || {};
 (function (exports, bitsy) {
 'use strict';
 var hackOptions = {
 	allowFollowerCollision: false, // if true, the player can walk into the follower and talk to them (possible to get stuck this way)
-	follower: 'a' // id or name of sprite to be the follower
+	follower: 'a', // id or name of sprite to be the follower; use '' to start without a follower
+	delay: 200, // delay between each follower step (0 is immediate, 400 is twice as slow as normal)
 };
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -59,7 +84,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -83,13 +108,13 @@ Returns: the image in the given map with the given name/id
  */
 function getImage(name, map) {
 	var id = Object.prototype.hasOwnProperty.call(map, name) ? name : Object.keys(map).find(function (e) {
-		return map[e].name == name;
+		return map[e].name === name;
 	});
 	return map[id];
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -121,6 +146,25 @@ HOW TO USE:
   For more info, see the documentation at:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
+
+
+// Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
+function inject$1(searchRegex, replaceString) {
+	var kitsy = kitsyInit();
+	kitsy.queuedInjectScripts.push({
+		searchRegex: searchRegex,
+		replaceString: replaceString
+	});
+}
+
+// Ex: before('load_game', function run() { alert('Loading!'); });
+//     before('show_text', function run(text) { return text.toUpperCase(); });
+//     before('show_text', function run(text, done) { done(text.toUpperCase()); });
+function before(targetFuncName, beforeFn) {
+	var kitsy = kitsyInit();
+	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
+	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
+}
 
 // Ex: after('load_game', function run() { alert('Loaded!'); });
 function after(targetFuncName, afterFn) {
@@ -236,78 +280,257 @@ function _reinitEngine() {
 	bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 }
 
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
+			if (match.substr(0, 1) === '\\') {
+				return '(' + group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
+			}
+			return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+		});
+}
+
+
+function addDialogFunction(tag, fn) {
+	var kitsy = kitsyInit();
+	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
+	if (kitsy.dialogFunctions[tag]) {
+		throw new Error('The dialog function "' + tag + '" already exists.');
+	}
+
+	// Hook into game load and rewrite custom functions in game data to Bitsy format.
+	before('parseWorld', function (game_data) {
+		return [convertDialogTags(game_data, tag)];
+	});
+
+	kitsy.dialogFunctions[tag] = fn;
+}
+
+function injectDialogTag(tag, code) {
+	inject$1(
+		/(var functionMap = new Map\(\);[^]*?)(this.HasFunction)/m,
+		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2'
+	);
+}
+
+/**
+ * Adds a custom dialog tag which executes the provided function.
+ * For ease-of-use with the bitsy editor, tags can be written as
+ * (tagname "parameters") in addition to the standard {tagname "parameters"}
+ * 
+ * Function is executed immediately when the tag is reached.
+ *
+ * @param {string}   tag Name of tag
+ * @param {Function} fn  Function to execute, with signature `function(environment, parameters, onReturn){}`
+ *                       environment: provides access to SetVariable/GetVariable (among other things, see Environment in the bitsy source for more info)
+ *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
+ *                       onReturn: function to call with return value (just call `onReturn(null);` at the end of your function if your tag doesn't interact with the logic system)
+ */
+function addDialogTag(tag, fn) {
+	addDialogFunction(tag, fn);
+	injectDialogTag(tag, 'kitsy.dialogFunctions["' + tag + '"]');
+}
+
+/**
+ * Adds a custom dialog tag which executes the provided function.
+ * For ease-of-use with the bitsy editor, tags can be written as
+ * (tagname "parameters") in addition to the standard {tagname "parameters"}
+ * 
+ * Function is executed after the dialog box.
+ *
+ * @param {string}   tag Name of tag
+ * @param {Function} fn  Function to execute, with signature `function(environment, parameters){}`
+ *                       environment: provides access to SetVariable/GetVariable (among other things, see Environment in the bitsy source for more info)
+ *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
+ */
+function addDeferredDialogTag(tag, fn) {
+	addDialogFunction(tag, fn);
+	bitsy.kitsy.deferredDialogFunctions = bitsy.kitsy.deferredDialogFunctions || {};
+	var deferred = bitsy.kitsy.deferredDialogFunctions[tag] = [];
+	injectDialogTag(tag, 'function(e, p, o){ kitsy.deferredDialogFunctions["' + tag + '"].push({e:e,p:p}); o(null); }');
+	// Hook into the dialog finish event and execute the actual function
+	after('onExitDialog', function () {
+		while (deferred.length) {
+			var args = deferred.shift();
+			bitsy.kitsy.dialogFunctions[tag](args.e, args.p, args.o);
+		}
+	});
+	// Hook into the game reset and make sure data gets cleared
+	after('clearGameData', function () {
+		deferred.length = 0;
+	});
+}
+
+/**
+ * Adds two custom dialog tags which execute the provided function,
+ * one with the provided tagname executed after the dialog box,
+ * and one suffixed with 'Now' executed immediately when the tag is reached.
+ *
+ * i.e. helper for the (exit)/(exitNow) pattern.
+ *
+ * @param {string}   tag Name of tag
+ * @param {Function} fn  Function to execute, with signature `function(environment, parameters){}`
+ *                       environment: provides access to SetVariable/GetVariable (among other things, see Environment in the bitsy source for more info)
+ *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
+ */
+function addDualDialogTag(tag, fn) {
+	addDialogTag(tag + 'Now', function (environment, parameters, onReturn) {
+		fn(environment, parameters);
+		onReturn(null);
+	});
+	addDeferredDialogTag(tag, fn);
+}
 
 
 
 
-var follower;
+var paths = {};
+
+function setFollower(followerName) {
+	exports.follower = followerName && getImage(followerName, bitsy.sprite);
+	paths[exports.follower.id] = paths[exports.follower.id] || [];
+	takeStep();
+}
+
+var walking = false;
+
+function takeStep() {
+	if (walking) {
+		return;
+	}
+	walking = true;
+	setTimeout(() => {
+		var path = paths[exports.follower.id];
+		var point = path.shift();
+		if (point) {
+			exports.follower.x = point.x;
+			exports.follower.y = point.y;
+			exports.follower.room = point.room;
+		}
+		walking = false;
+		if (path.length) {
+			takeStep();
+		}
+	}, hackOptions.delay);
+}
+
 after('startExportedGame', function () {
-	follower = getImage(hackOptions.follower, bitsy.sprite);
+	setFollower(hackOptions.follower);
 
 	// remove + add player to sprite list to force rendering them on top of follower
 	var p = bitsy.sprite[bitsy.playerId];
 	delete bitsy.sprite[bitsy.playerId];
 	bitsy.sprite[bitsy.playerId] = p;
-
-	lastRoom = bitsy.player().room;
 });
 
-var lastRoom;
+let movedFollower = false;
 after('onPlayerMoved', function () {
-	// detect room change
-	if (lastRoom !== bitsy.player().room) {
-		// on room change, warp to player
-		lastRoom = follower.room = bitsy.player().room;
-		follower.x = bitsy.player().x;
-		follower.y = bitsy.player().y;
-		follower.walkingPath.length = 0;
-	} else {
-		var step = {
-			x: bitsy.player().x,
-			y: bitsy.player().y
-		};
-		switch (bitsy.curPlayerDirection) {
-		case bitsy.Direction.Up:
-			step.y += 1;
-			break;
-		case bitsy.Direction.Down:
-			step.y -= 1;
-			break;
-		case bitsy.Direction.Left:
-			step.x += 1;
-			break;
-		case bitsy.Direction.Right:
-			step.x -= 1;
-			break;
-		default:
-			break;
-		}
-		follower.walkingPath.push(step);
+	// skip walking if already moved due to exits
+	if (movedFollower) {
+		movedFollower = false;
+		return;
+	}
+
+	if (!exports.follower) {
+		return;
+	}
+
+	// start at the player's current position (they have already moved)
+	var step = {
+		x: bitsy.player().x,
+		y: bitsy.player().y,
+		room: bitsy.player().room,
+	};
+	// adjust follower to be one step back
+	switch (bitsy.curPlayerDirection) {
+	case bitsy.Direction.Up:
+		step.y += 1;
+		break;
+	case bitsy.Direction.Down:
+		step.y -= 1;
+		break;
+	case bitsy.Direction.Left:
+		step.x += 1;
+		break;
+	case bitsy.Direction.Right:
+		step.x -= 1;
+		break;
+	}
+	paths[exports.follower.id].push(step);
+	takeStep();
+});
+
+// make follower walk "through" exits
+before('movePlayerThroughExit', function (exit) {
+	if (exports.follower) {
+		movedFollower = true;
+		paths[exports.follower.id].push({
+			x: exit.dest.x,
+			y: exit.dest.y,
+			room: exit.dest.room,
+		});
+		takeStep();
 	}
 });
 
 function filterFollowing(id) {
-	return follower === bitsy.sprite[id] ? null : id;
+	return exports.follower === bitsy.sprite[id] ? null : id;
 }
-if (!hackOptions.allowFollowerCollision) {
-	// filter follower out of collisions
-	var _getSpriteLeft = bitsy.getSpriteLeft;
-	bitsy.getSpriteLeft = function () {
-		return filterFollowing(_getSpriteLeft());
-	};
-	var _getSpriteRight = bitsy.getSpriteRight;
-	bitsy.getSpriteRight = function () {
-		return filterFollowing(_getSpriteRight());
-	};
-	var _getSpriteUp = bitsy.getSpriteUp;
-	bitsy.getSpriteUp = function () {
-		return filterFollowing(_getSpriteUp());
-	};
-	var _getSpriteDown = bitsy.getSpriteDown;
-	bitsy.getSpriteDown = function () {
-		return filterFollowing(_getSpriteDown());
-	};
-}
+// filter follower out of collisions
+var originalGetSpriteLeft = bitsy.getSpriteLeft;
+bitsy.getSpriteLeft = function () {
+	if (!hackOptions.allowFollowerCollision) {
+		return filterFollowing(originalGetSpriteLeft());
+	}
+	return originalGetSpriteLeft();
+};
+var originalGetSpriteRight = bitsy.getSpriteRight;
+bitsy.getSpriteRight = function () {
+	if (!hackOptions.allowFollowerCollision) {
+		return filterFollowing(originalGetSpriteRight());
+	}
+	return originalGetSpriteRight();
+};
+var originalGetSpriteUp = bitsy.getSpriteUp;
+bitsy.getSpriteUp = function () {
+	if (!hackOptions.allowFollowerCollision) {
+		return filterFollowing(originalGetSpriteUp());
+	}
+	return originalGetSpriteUp();
+};
+var originalGetSpriteDown = bitsy.getSpriteDown;
+bitsy.getSpriteDown = function () {
+	if (!hackOptions.allowFollowerCollision) {
+		return filterFollowing(originalGetSpriteDown());
+	}
+	return originalGetSpriteDown();
+};
+
+addDualDialogTag('follower', function (environment, parameters) {
+	setFollower(parameters[0]);
+});
+addDialogTag('followerCollision', function (environment, parameters) {
+	hackOptions.allowFollowerCollision = parameters[0] !== 'false';
+});
+addDualDialogTag('followerDelay', function (environment, parameters) {
+	hackOptions.delay = parseInt(parameters[0], 10);
+});
+addDualDialogTag('followerSync', function () {
+	if (exports.follower) {
+		var player = bitsy.player();
+		exports.follower.room = player.room;
+		exports.follower.x = player.x;
+		exports.follower.y = player.y;
+		paths[exports.follower.id].length = 0;
+	}
+});
+
+before('moveSprites', function () {
+	bitsy.moveCounter -= bitsy.deltaTime; // cancel out default movement delay
+	bitsy.moveCounter += bitsy.deltaTime * (200 / hackOptions.delay); // apply movement delay from options
+});
 
 exports.hackOptions = hackOptions;
 

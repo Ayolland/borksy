@@ -3,7 +3,7 @@
 @file avatar by room
 @summary change the avatar in certain rooms
 @license MIT
-@version 1.1.5
+@version 1.1.10
 @requires 5.3
 @author Sean S. LeBlanc
 
@@ -30,11 +30,11 @@ var hackOptions = {
 		1: 'A', // note that 'A' is the player sprite, so this does nothing by default, but will reset the player if permanent == true
 		2: 'another sprite ID',
 		h: 'a sprite ID for a room with a non-numeric ID',
-		'my room': 'a sprite ID for a room with a user-defined name'
+		'my room': 'a sprite ID for a room with a user-defined name',
 	},
 };
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -64,7 +64,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -88,7 +88,7 @@ Returns: the image in the given map with the given name/id
  */
 function getImage(name, map) {
 	var id = Object.prototype.hasOwnProperty.call(map, name) ? name : Object.keys(map).find(function (e) {
-		return map[e].name == name;
+		return map[e].name === name;
 	});
 	return map[id];
 }
@@ -104,7 +104,7 @@ function getRoom(name) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -266,42 +266,42 @@ function _reinitEngine() {
 
 // expand the map to include ids of rooms listed by name
 // and store the original player sprite
-var originalAvatar;
+var originalDrw;
+var originalAnimation;
 after('load_game', function () {
 	var room;
-	for (var i in hackOptions.avatarByRoom) {
-		if (Object.prototype.hasOwnProperty.call(hackOptions.avatarByRoom, i)) {
-			room = getRoom(i);
-			if (room) {
-				hackOptions.avatarByRoom[room.id] = hackOptions.avatarByRoom[i];
-			}
+	Object.keys(hackOptions.avatarByRoom).forEach(function (i) {
+		room = getRoom(i);
+		if (room) {
+			hackOptions.avatarByRoom[room.id] = hackOptions.avatarByRoom[i];
 		}
-	}
-	originalAvatar = bitsy.player().drw;
+	});
+	originalDrw = bitsy.player().drw;
+	originalAnimation = bitsy.player().animation;
 });
 
 var currentRoom;
-before('update', function () {
-	if (bitsy.curRoom !== currentRoom) {
-		currentRoom = bitsy.curRoom;
-		var newAvatarId = hackOptions.avatarByRoom[currentRoom];
-		if (
-			(!newAvatarId && !hackOptions.permanent) // if no sprite defined + not permanent, reset
-			||
-			(newAvatarId === bitsy.playerId) // manual reset
-		) {
-			bitsy.player().drw = originalAvatar;
-			return;
-		}
-		if (newAvatarId === bitsy.playerId) {
-			bitsy.player().drw;
-		}
-		var newAvatar = getImage(newAvatarId, bitsy.sprite);
-		if (!newAvatar) {
-			throw new Error('Could not find sprite "' + newAvatarId + '" for room "' + currentRoom + '"');
-		}
-		bitsy.player().drw = newAvatar.drw;
+before('drawRoom', function () {
+	var player = bitsy.player();
+	if (bitsy.player().room === currentRoom) {
+		return;
 	}
+	currentRoom = player.room;
+	var newAvatarId = hackOptions.avatarByRoom[currentRoom];
+	if (
+		(!newAvatarId && !hackOptions.permanent) // if no sprite defined + not permanent, reset
+		|| (newAvatarId === player.id) // manual reset
+	) {
+		player.drw = originalDrw;
+		player.animation = originalAnimation;
+		return;
+	}
+	var newAvatar = getImage(newAvatarId, bitsy.sprite);
+	if (!newAvatar) {
+		throw new Error('Could not find sprite "' + newAvatarId + '" for room "' + currentRoom + '"');
+	}
+	player.drw = newAvatar.drw;
+	player.animation = Object.assign({}, newAvatar.animation);
 });
 
 exports.hackOptions = hackOptions;

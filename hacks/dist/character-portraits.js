@@ -3,7 +3,7 @@
 @file character portraits
 @summary high quality anime jpegs (or pngs i guess)
 @license MIT
-@version 2.0.3
+@version 2.0.7
 @requires Bitsy Version: 5.3
 @author Sean S. LeBlanc
 
@@ -51,12 +51,12 @@ var hackOptions = {
 	// - online urls (which are not guaranteed to work as they are network-dependent)
 	// - base64-encoded images (the most reliable but unwieldy)
 	portraits: {
-		'cat': './cat.png',
+		cat: './cat.png',
 	},
 	autoReset: true, // if true, automatically resets the portrait to blank when dialog is exited
 };
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -86,7 +86,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -100,7 +100,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -270,11 +270,11 @@ function _reinitEngine() {
 // interpreter. Unescape escaped parentheticals, too.
 function convertDialogTags(input, tag) {
 	return input
-		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function(match, group){
-			if(match.substr(0,1) === '\\') {
-				return '('+ group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
+			if (match.substr(0, 1) === '\\') {
+				return '(' + group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
 			}
-			return '{'+ group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+			return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
 		});
 }
 
@@ -294,6 +294,13 @@ function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions[tag] = fn;
 }
 
+function injectDialogTag(tag, code) {
+	inject$1(
+		/(var functionMap = new Map\(\);[^]*?)(this.HasFunction)/m,
+		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2'
+	);
+}
+
 /**
  * Adds a custom dialog tag which executes the provided function.
  * For ease-of-use with the bitsy editor, tags can be written as
@@ -309,10 +316,7 @@ function addDialogFunction(tag, fn) {
  */
 function addDialogTag(tag, fn) {
 	addDialogFunction(tag, fn);
-	inject$1(
-		/(var functionMap = new Map\(\);)/,
-		'$1functionMap.set("' + tag + '", kitsy.dialogFunctions.' + tag + ');'
-	);
+	injectDialogTag(tag, 'kitsy.dialogFunctions["' + tag + '"]');
 }
 
 
@@ -325,13 +329,11 @@ var state = {
 };
 
 // preload images into a cache
-after('startExportedGame', function() {
-	for (var i in hackOptions.portraits) {
-		if(Object.prototype.hasOwnProperty.call(hackOptions.portraits, i)) {
-			state.portraits[i] = new Image();
-			state.portraits[i].src = hackOptions.portraits[i];
-		}
-	}
+after('startExportedGame', function () {
+	Object.keys(hackOptions.portraits).forEach(function (i) {
+		state.portraits[i] = new Image();
+		state.portraits[i].src = hackOptions.portraits[i];
+	});
 });
 
 // hook up dialog tag
@@ -364,7 +366,7 @@ after('drawRoom', function () {
 	}
 });
 
-after('onExitDialog', function() {
+after('onExitDialog', function () {
 	if (hackOptions.autoReset) {
 		state.portrait = '';
 	}

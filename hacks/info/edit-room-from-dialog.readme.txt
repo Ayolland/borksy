@@ -1,0 +1,142 @@
+Use the following dialog tags to edit a room's tiles, sprites, or items
+
+-- DRAW DIALOG TAG REFERENCE -----------------------------------
+
+{draw "type, source, x, y, room"}
+{drawNow "type, source, x, y, room"}
+{drawBox "type, source, x1, y1, x2, y2 room"}
+{drawBoxNow "type, source, x1, y1, x2, y2 room"}
+{drawAll "type, source, room"}
+{drawAllNow "type, source, room"}
+
+Information:
+-----------------------------------
+- "draw" creates a tile, item, or sprite at a location in a room. Can be a fixed position, or relative to the player.
+- "drawBox" is as above, but draws tiles, items, or sprites in a box/line, defined by a top left and bottom right corner.
+- "drawAll" is as above, but affects an entire room.
+- Adding "Now" causes it to draw immediately, rather than waiting until the dialog ends.
+
+Parameters:
+-----------------------------------
+- type:		Type of room contents to draw (TIL, ITM, or SPR)
+			Tile (TIL): Each location can have only one Tile. Drawing over an existing tile replaces it.
+			Item (ITM): Multiple items can exist in one spot, but only the most recent item is picked up.
+			Sprite (SPR): Only one copy of each Sprite can exist at a time; redrawing a sprite moves it.
+- source:	The ID (number/letter) of the tile, item, or sprite to draw.
+- x, y:		The x and y coordinates you want to draw at, from 0-15.
+- x1, y1:	(For drawBox only) The x and y coordinates of the top left tile you want to draw on, from 0-15.
+- x2, y2:	(For drawBox only) The x and y coordinates of the bottom right tile you want to draw on, from 0-15.
+			Put + or - before any coordinate to draw relative to the player's current position. (ex. +10, -2, etc.).
+			Leave any coordinate blank (or use +0) to use the player's current X (or Y) position. (If blank, still add commas)
+- room:		The ID (number/letter) of the room you're drawing in. (Refer to Game Data tab for Room IDs)
+			Leave blank to default to modifying the room the player is currently in.
+
+-- ERASE DIALOG TAG REFERENCE ----------------------------------
+
+{erase "type, target, x, y, room"}
+{eraseNow "type, target, x, y, room"}
+{eraseBox "type, target, x1, y1, x2, y2 room"}
+{eraseBoxNow "type, target, x1, y1, x2, y2 room"}
+{eraseAll "type, target, room"}
+{eraseAllNow "type, target, room"}
+
+Information:
+-----------------------------------
+- "erase" Removes tiles, items, or sprites at a location in a room. Can be a fixed position, or relative to the player.
+- "eraseBox" is as above, but erases tiles, items, or sprites in a box/line, defined by a top left and bottom right corner.
+- "eraseAll" is as above, but affects an entire room.
+- Adding "Now" causes it to erase immediately, rather than waiting until the dialog ends.
+
+Parameters:
+-----------------------------------
+- type:		Type of room contents to erase (ANY, TIL, ITM, or SPR)
+			Anything (ANY): Erasing anything will target all valid Tiles, Items, and Sprites.
+			Tile (TIL): Erasing a Tile causes that location to be empty and walkable.
+			Item (ITM): Erasing an Item affects all valid target items, even if there are more than one.
+			Sprite (SPR): Erasing a Sprite removes it from a room, but it will remember dialog progress, etc.
+			Leaving this blank will default to targeting ANY. (If blank, still include commas)
+- target:	The ID (number/letter) of the tile, item, or sprite to erase. Other objects will not be erased.
+			Leave this blank, or set this to "ANY", to target all tiles, items, and/or sprites. (If blank, still include commas)
+- x, y:		The x and y coordinates you want to erase at, from 0-15.
+- x1, y1:	(For eraseBox only) The x and y coordinates of the top left tile you want to erase at, from 0-15.
+- x2, y2:	(For eraseBox only) The x and y coordinates of the bottom right tile you want to erase at, from 0-15.
+			Leave X (or Y) blank to use the player's current X (or Y) position. (If blank, still include commas)
+			Put + or - before the number to erase relative to the player's current position. (ex. +10, -2, etc.).
+- room:		The ID (number/letter) of the room you're erasing in. (Refer to Game Data tab for Room IDs)
+			Leave blank to default to modifying the room the player is currently in.
+
+-- REPLACE DIALOG TAG REFERENCE --------------------------------
+
+{replace "targetType, targetId, newType, newId, x, y, room"}
+{replaceNow "targetType, targetId, newType, newId, x, y, room"}
+{replaceBox "targetType, targetId, newType, newId, x1, y1, x2, y2 room"}
+{replaceBoxNow "targetType, targetId, newType, newId, x1, y1, x2, y2 room"}
+{replaceAll "targetType, targetId, newType, newId, room"}
+{replaceAllNow "targetType, targetId, newType, newId, room"}
+
+Information:
+-----------------------------------
+- "replace" Combines erase and draw. Removes tiles, items, or sprites at a location in a room, and replaces each with something new.
+- "replaceBox" is as above, but replaces tiles, items, or sprites in a box/line, defined by a top left and bottom right corner.
+- "replaceAll" is as above, but affects an entire room.
+- Adding "Now" causes it to erase immediately, rather than waiting until the dialog ends.
+
+Parameters:
+-----------------------------------
+- targetType:	Type of room contents to target for replacing (ANY, TIL, ITM, or SPR).
+				Anything (ANY): Targeting anything will target all valid Tiles, Items, and Sprites.
+				Tile (TIL): Replacing a Tile will remove it, leaving behind walkable space.
+				Item (ITM): Replacing an Item affects all valid items, even if there are more than one.
+				Sprite (SPR): Replacing a Sprite removes it from a room, but it will remember dialog progress, etc.
+				Leaving this blank will default to targeting ANY. (If blank, still include commas)
+- targetId:		The ID (number/letter) of the tile, item, or sprite to replace. Other objects will not be replaced.
+				Leave this blank, or set this to "ANY", to target all tiles, items, and/or sprites. (If blank, still include commas)
+- newType:		As above, but defines the type of room contents to replace the target with (TIL, ITM, or SPR).
+				Note: This must be defined, and cannot be left blank.
+- newId:		As above, but defines the ID (number/letter) of the tile, item, or sprite to replace the target with.
+				Note: This must be defined, and cannot be left blank.
+- x, y:			The x and y coordinates you want to replace at, from 0-15.
+- x1, y1:		(For replaceBox only) The x and y coordinates of the top left tile you want to replace at, from 0-15.
+- x2, y2:		(For replaceBox only) The x and y coordinates of the bottom right tile you want to replace at, from 0-15.
+				Leave X (or Y) blank to use the player's current X (or Y) position. (If blank, still include commas)
+				Put + or - before the number to replace relative to the player's current position. (ex. +10, -2, etc.).
+- room:			The ID (number/letter) of the room you're replacing in. (Refer to Game Data tab for Room IDs)
+				Leave blank to default to modifying the room the player is currently in.
+
+-- COPY DIALOG TAG REFERENCE -----------------------------------
+
+{copy "type, target, copyX, copyY, copyRoom, pasteX, pasteY, pasteRoom"}
+{copyNow "type, target, copyX, copyY, copyRoom, pasteX, pasteY, pasteRoom"}
+{copyBox "type, target, copyX1, copyY1, copyX2, copyY2, copyRoom, pasteX, pasteY, pasteRoom"}
+{copyBoxNow "type, target, copyX1, copyY1, copyX2, copyY2, copyRoom, pasteX, pasteY, pasteRoom"}
+{copyAll "type, target, copyRoom, pasteRoom"}
+{copyAllNow "type, target, copyRoom, pasteRoom"}
+
+Information:
+-----------------------------------
+- "copy" find tiles, items, or sprites at a location in a room, and duplicates each at a new location (may be in a different room).
+- "copyBox" is as above, but copies tiles, items, or sprites in a box/line, defined by a top left and bottom right corner.
+- "copyAll" is as above, but affects an entire room.
+- Adding "Now" causes it to copy immediately, rather than waiting until the dialog ends.
+
+Parameters:
+-----------------------------------
+- type:				Type of room contents to target for copying (ANY, TIL, ITM, or SPR).
+					Anything (ANY): Targeting anything will copy all valid Tiles, Items, and Sprites.
+					Tile (TIL): Each location can have only one Tile. Copying over an existing tile replaces it.
+					Item (ITM): Multiple items can exist in one spot, and all valid items will be copied.
+					Sprite (SPR): Only one copy of each Sprite can exist at a time; copying a sprite moves it.
+					Leaving this blank will default to targeting ANY. (If blank, still include commas)
+- target:			The ID (number/letter) of the tile, item, or sprite to copy. Other objects will not be copied.
+					Leave this blank, or set this to "ANY", to target all tiles, items, and/or sprites. (If blank, still include commas)
+- copyX, copyY:		The x and y coordinates you want to copy from, from 0-15.
+- copyX1, copyY1:	(For copyBox only) The x and y coordinates of the top left tile you want to copy from, from 0-15.
+- copyX2, copyY2:	(For copyBox only) The x and y coordinates of the bottom right tile you want to copy from, from 0-15.
+					Leave X (or Y) blank to use the player's current X (or Y) position. (If blank, still include commas)
+					Put + or - before the number to replace relative to the player's current position. (ex. +10, -2, etc.).
+- copyRoom:			The ID (number/letter) of the room you're copying from. (Refer to Game Data tab for Room IDs)
+					Leave blank to default to copy from the room the player is currently in.
+- pasteX, pasteY:	The x and y coordinates you want to paste copied tiles too, from 0-15.
+					For copyBox, this position marks the upper-left corner of the pasted box.
+- pasteRoom:		As above, but marks the ID (number/letter) of the room you're pasting into.
+					Leave blank to default to paste to the room the player is currently in.

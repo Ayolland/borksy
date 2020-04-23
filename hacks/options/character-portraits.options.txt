@@ -15,3 +15,5 @@ scale: bitsy.scale,
 portraits: {
   'cat': './cat.png',
 },
+
+autoReset: true, // if true, automatically resets the portrait to blank when dialog is exited

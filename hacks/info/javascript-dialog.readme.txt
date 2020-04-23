@@ -1,10 +1,10 @@
-
-@description
 Lets you execute arbitrary JavaScript from dialog (including inside conditionals).
 If you're familiar with the Bitsy source, this will let you write one-shot hacks
 for a wide variety of situations.
 
-Usage: (js "<JavaScript code to evaluate>")
+Usage:
+	(js "<JavaScript code to evaluate after dialog is closed>")
+	(jsNow "<JavaScript code to evaluate immediately>")
 
 Examples:
 	move a sprite:
@@ -15,9 +15,6 @@ Examples:
 	(js "room[curRoom].items.push({id:'0',x:player().x+1,y:player().y});")
 	verbose facimile of exit-from-dialog:
 	(js "var _onExitDialog=onExitDialog;onExitDialog=function(){player().room=curRoom='3';_onExitDialog.apply(this,arguments);onExitDialog=_onExitDialog;};")
-
-HOW TO USE:
-Add (js "<code>") to your dialog as needed
 
 NOTE: This uses parentheses "()" instead of curly braces "{}" around function
       calls because the Bitsy editor's fancy dialog window strips unrecognized

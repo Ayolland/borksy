@@ -3,7 +3,7 @@
 @file dialog choices
 @summary binary dialog choices
 @license MIT
-@version 3.0.0
+@version 3.0.2
 @requires 5.3
 @author Sean S. LeBlanc
 
@@ -97,10 +97,10 @@ var hackOptions = {
 		scale: bitsy.scale,
 		y: 1,
 		x: 0,
-	}
+	},
 };
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -130,7 +130,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -144,7 +144,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -325,8 +325,8 @@ var dialogChoices = {
 		var l = Math.max(this.choices.length, 1);
 		// navigate
 		if (
-			(bitsy.input.anyKeyPressed() && (bitsy.input.isKeyDown(bitsy.key.up) || bitsy.input.isKeyDown(bitsy.key.w))) ||
-			(swiped && bitsy.input.swipeUp())
+			(bitsy.input.anyKeyPressed() && (bitsy.input.isKeyDown(bitsy.key.up) || bitsy.input.isKeyDown(bitsy.key.w)))
+			|| (swiped && bitsy.input.swipeUp())
 		) {
 			this.choice -= 1;
 			if (this.choice < 0) {
@@ -335,8 +335,8 @@ var dialogChoices = {
 			return false;
 		}
 		if (
-			(bitsy.input.anyKeyPressed() && (bitsy.input.isKeyDown(bitsy.key.down) || bitsy.input.isKeyDown(bitsy.key.s))) ||
-			(swiped && bitsy.input.swipeDown())
+			(bitsy.input.anyKeyPressed() && (bitsy.input.isKeyDown(bitsy.key.down) || bitsy.input.isKeyDown(bitsy.key.s)))
+			|| (swiped && bitsy.input.swipeDown())
 		) {
 			this.choice = (this.choice + 1) % l;
 			return false;
@@ -344,13 +344,12 @@ var dialogChoices = {
 		// select
 		if (
 			((bitsy.input.anyKeyPressed() && (
-					bitsy.input.isKeyDown(bitsy.key.right) ||
-					bitsy.input.isKeyDown(bitsy.key.d) ||
-					bitsy.input.isKeyDown(bitsy.key.enter) ||
-					bitsy.input.isKeyDown(bitsy.key.space)
-				)
-			) ||
-			(swiped && bitsy.input.swipeRight()))
+				bitsy.input.isKeyDown(bitsy.key.right)
+					|| bitsy.input.isKeyDown(bitsy.key.d)
+					|| bitsy.input.isKeyDown(bitsy.key.enter)
+					|| bitsy.input.isKeyDown(bitsy.key.space)
+			))
+				|| (swiped && bitsy.input.swipeRight()))
 		) {
 			// evaluate choice
 			this.choices[this.choice]();
@@ -370,7 +369,7 @@ var dialogChoices = {
 			return true;
 		}
 		return false;
-	}
+	},
 };
 
 bitsy.dialogChoices = dialogChoices;

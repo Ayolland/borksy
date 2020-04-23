@@ -3,7 +3,7 @@
 @file dynamic background
 @summary HTML background matching bitsy background
 @license MIT
-@version 2.1.3
+@version 2.1.6
 @author Sean S. LeBlanc
 
 @description
@@ -15,7 +15,7 @@ Copy-paste this script into a script tag after the bitsy source
 (function (bitsy) {
 'use strict';
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -45,7 +45,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -59,7 +59,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -217,7 +217,8 @@ function _reinitEngine() {
 
 
 
-var p1, p2;
+var p1;
+var p2;
 
 function getBg() {
 	try {
@@ -243,8 +244,10 @@ function updateBg() {
 before('moveSprites', getBg);
 before('movePlayer', getBg);
 before('parseWorld', getBg);
+before('movePlayerThroughExit', getBg);
 after('moveSprites', updateBg);
 after('movePlayer', updateBg);
 after('parseWorld', updateBg);
+after('movePlayerThroughExit', updateBg);
 
 }(window));
