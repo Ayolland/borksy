@@ -3,7 +3,7 @@
 @file save
 @summary save/load your game
 @license MIT
-@version 1.0.5
+@version 2.0.0
 @requires 5.4
 @author Sean S. LeBlanc
 
@@ -55,7 +55,7 @@ var hackOptions = {
 	key: 'snapshot', // where in localStorage to save/load data
 };
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -85,7 +85,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -99,7 +99,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -269,11 +269,11 @@ function _reinitEngine() {
 // interpreter. Unescape escaped parentheticals, too.
 function convertDialogTags(input, tag) {
 	return input
-		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function(match, group){
-			if(match.substr(0,1) === '\\') {
-				return '('+ group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
+			if (match.substr(0, 1) === '\\') {
+				return '(' + group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
 			}
-			return '{'+ group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+			return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
 		});
 }
 
@@ -293,6 +293,13 @@ function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions[tag] = fn;
 }
 
+function injectDialogTag(tag, code) {
+	inject$1(
+		/(var functionMap = new Map\(\);[^]*?)(this.HasFunction)/m,
+		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2'
+	);
+}
+
 /**
  * Adds a custom dialog tag which executes the provided function.
  * For ease-of-use with the bitsy editor, tags can be written as
@@ -308,10 +315,7 @@ function addDialogFunction(tag, fn) {
  */
 function addDialogTag(tag, fn) {
 	addDialogFunction(tag, fn);
-	inject$1(
-		/(var functionMap = new Map\(\);)/,
-		'$1functionMap.set("' + tag + '", kitsy.dialogFunctions.' + tag + ');'
-	);
+	injectDialogTag(tag, 'kitsy.dialogFunctions["' + tag + '"]');
 }
 
 /**
@@ -330,10 +334,7 @@ function addDeferredDialogTag(tag, fn) {
 	addDialogFunction(tag, fn);
 	bitsy.kitsy.deferredDialogFunctions = bitsy.kitsy.deferredDialogFunctions || {};
 	var deferred = bitsy.kitsy.deferredDialogFunctions[tag] = [];
-	inject$1(
-		/(var functionMap = new Map\(\);)/,
-		'$1functionMap.set("' + tag + '", function(e, p, o){ kitsy.deferredDialogFunctions.' + tag + '.push({e:e,p:p}); o(null); });'
-	);
+	injectDialogTag(tag, 'function(e, p, o){ kitsy.deferredDialogFunctions["' + tag + '"].push({e:e,p:p}); o(null); }');
 	// Hook into the dialog finish event and execute the actual function
 	after('onExitDialog', function () {
 		while (deferred.length) {
@@ -360,7 +361,7 @@ function addDeferredDialogTag(tag, fn) {
  *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
  */
 function addDualDialogTag(tag, fn) {
-	addDialogTag(tag + 'Now', function(environment, parameters, onReturn) {
+	addDialogTag(tag + 'Now', function (environment, parameters, onReturn) {
 		fn(environment, parameters);
 		onReturn(null);
 	});
@@ -452,15 +453,15 @@ bitsy.saveHack = {
 	loadSeqIdx: function (node) {
 		var key = nodeKey(node);
 		return bitsy.saveHack.sequenceIndices[key];
-	}
+	},
 };
 
 // use saved index to eval/calc next index if available
-inject(/(ptions\[index\].Eval)/g, `ptions[window.saveHack.loadSeqIdx(this) || index].Eval`);
-inject(/var next = index \+ 1;/g, `var next = (window.saveHack.loadSeqIdx(this) || index) + 1;`);
+inject(/(ptionsShuffled\[index\].Eval)/g, 'ptionsShuffled[window.saveHack.loadSeqIdx(this) || index].Eval');
+inject(/var next = index \+ 1;/g, 'var next = (window.saveHack.loadSeqIdx(this) || index) + 1;');
 // save index on changes
-inject(/(index = next);/g, `$1,window.saveHack.saveSeqIdx(this, next);`);
-inject(/(\tindex = 0);/g, `$1,window.saveHack.saveSeqIdx(this, 0);`);
+inject(/(index = next);/g, '$1,window.saveHack.saveSeqIdx(this, next);');
+inject(/(\tindex = 0);/g, '$1,window.saveHack.saveSeqIdx(this, 0);');
 
 // hook up autosave
 var autosaveInterval;

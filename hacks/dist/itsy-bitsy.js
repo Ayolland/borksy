@@ -3,7 +3,7 @@
 @file itsy-bitsy
 @summary for when bitsy's not small enough
 @license MIT
-@version 1.1.3
+@version 1.1.5
 @requires Bitsy Version: 5.1
 @author Sean S. LeBlanc
 
@@ -31,7 +31,7 @@ var hackOptions = {
 	rows: 2, // number of rows per text box (bitsy default is 2)
 };
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -61,7 +61,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -75,7 +75,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -249,7 +249,7 @@ inject$1(/(var textboxInfo = {)[^]*?(};)/, '$1' + [
 	'bottom : 1,',
 	'font_scale : 1,',
 	'padding_vert : 2,',
-	'arrow_height : 5'
+	'arrow_height : 5',
 ].join('\n') + '$2');
 inject$1(/(top = \()4/, '$1 1');
 inject$1(/(left = \()4/, '$1 1');

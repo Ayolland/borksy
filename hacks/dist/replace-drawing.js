@@ -3,7 +3,7 @@
 @file replace drawing
 @summary add name-tags to replace drawings when the game is loading
 @license MIT
-@version 1.0.1
+@version 1.0.3
 @requires 6.3
 @author Elkie Nova
 
@@ -37,7 +37,7 @@ HOW TO USE:
 (function (bitsy) {
 'use strict';
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -67,7 +67,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -81,7 +81,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -239,17 +239,15 @@ after('parseWorld', function () {
 			var map;
 			// tag[1] is the first capturing group, it can be either TIL, SPR, or ITM
 			switch (tag[1]) {
-				case 'TIL':
-					map = bitsy.tile;
-					break;
-				case 'SPR':
-					map = bitsy.sprite;
-					break;
-				case 'ITM':
-					map = bitsy.item;
-					break;
-				default:
-					break;
+			case 'TIL':
+				map = bitsy.tile;
+				break;
+			case 'SPR':
+				map = bitsy.sprite;
+				break;
+			case 'ITM':
+				map = bitsy.item;
+				break;
 			}
 			// tag[2] is the second capturing group which returns drawing id
 			var id = tag[2];

@@ -3,7 +3,7 @@
 @file transparent dialog
 @summary makes the dialog box have a transparent background
 @license MIT
-@version 1.1.3
+@version 1.1.5
 @author Sean S. LeBlanc
 
 @description
@@ -17,7 +17,7 @@ Copy-paste into a script tag after the bitsy source
 (function (bitsy) {
 'use strict';
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -47,7 +47,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -61,7 +61,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -214,7 +214,7 @@ function _reinitEngine() {
 
 
 bitsy.transparentDialog = {
-	canvas: document.createElement('canvas')
+	canvas: document.createElement('canvas'),
 };
 bitsy.transparentDialog.context = bitsy.transparentDialog.canvas.getContext('2d');
 var drawOverride = `
@@ -233,7 +233,7 @@ else {
 return;`;
 
 // override textbox drawing to use draw image version from above
-inject$1(/(this\.DrawTextbox = function\(\) {)/, '$1'+drawOverride);
+inject$1(/(this\.DrawTextbox = function\(\) {)/, '$1' + drawOverride);
 
 // override textbox clearing pixels to be fully transparent
 inject$1(/(textboxInfo\.img\.data\[i\+3\]=)255/, '$10');

@@ -13,7 +13,9 @@ scale: bitsy.scale,
 // - base64-encoded images (the most reliable but unwieldy)
 
 portraits: {
-	'cat': './cat.png',
+	earth: './GIF.gif',
+	cat: './test-export.gif',
+	png: './test.gif',
 },
 
 autoReset: true, // if true, automatically resets the portrait to blank when dialog is exited

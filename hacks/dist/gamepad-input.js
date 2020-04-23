@@ -3,7 +3,7 @@
 @file gamepad input
 @summary HTML5 gamepad support
 @license MIT
-@version 2.1.4
+@version 2.1.6
 @requires Bitsy Version: 5.1
 @author Sean S. LeBlanc
 
@@ -19,7 +19,7 @@ Copy-paste this script into a script tag after the bitsy source
 (function (bitsy) {
 'use strict';
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 const nullGamepad = {
   connected: false,
@@ -424,7 +424,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -438,7 +438,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -602,44 +602,44 @@ var empty = function () {};
 var move = function (dpad, face, axis, axis2, axispast, axisdir, key) {
 	// keydown
 	if (
-		gamepads.isJustDown(dpad) ||
-		gamepads.isJustDown(face) ||
-		gamepads.axisJustPast(axis, axispast, axisdir) ||
-		(
+		gamepads.isJustDown(dpad)
+		|| gamepads.isJustDown(face)
+		|| gamepads.axisJustPast(axis, axispast, axisdir)
+		|| (
 			bitsy.playerHoldToMoveTimer <= 0 && (
-				gamepads.isDown(dpad) ||
-				gamepads.isDown(face) ||
-				gamepads.axisPast(axis, axispast, axisdir)
+				gamepads.isDown(dpad)
+				|| gamepads.isDown(face)
+				|| gamepads.axisPast(axis, axispast, axisdir)
 			)
 		)
 	) {
 		bitsy.curPlayerDirection = bitsy.Direction.None;
 		bitsy.input.onkeydown({
 			keyCode: key,
-			preventDefault: empty
+			preventDefault: empty,
 		});
 	}
 
 	// keyup
 	if (
-		gamepads.isJustUp(dpad) ||
-		gamepads.isJustUp(face) ||
-		gamepads.axisJustPast(axis, axispast, -axisdir)
+		gamepads.isJustUp(dpad)
+		|| gamepads.isJustUp(face)
+		|| gamepads.axisJustPast(axis, axispast, -axisdir)
 	) {
 		bitsy.input.onkeyup({
 			keyCode: key,
-			preventDefault: empty
+			preventDefault: empty,
 		});
 	}
 };
 
-before('update', function(){
+before('update', function () {
 	move(gamepads.DPAD_LEFT, gamepads.X, gamepads.LSTICK_H, gamepads.RSTICK_H, -0.5, -1, bitsy.key.left);
 	move(gamepads.DPAD_RIGHT, gamepads.B, gamepads.LSTICK_H, gamepads.RSTICK_H, 0.5, 1, bitsy.key.right);
 	move(gamepads.DPAD_UP, gamepads.Y, gamepads.LSTICK_V, gamepads.RSTICK_V, -0.5, -1, bitsy.key.up);
 	move(gamepads.DPAD_DOWN, gamepads.A, gamepads.LSTICK_V, gamepads.RSTICK_V, 0.5, 1, bitsy.key.down);
 });
-after('update', function(){
+after('update', function () {
 	gamepads.update();
 });
 

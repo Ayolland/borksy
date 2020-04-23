@@ -3,7 +3,7 @@
 @file direction in dialog
 @summary provides a variable with player direction
 @license MIT
-@version 1.1.3
+@version 1.1.5
 @requires 5.3
 @author Sean S. LeBlanc
 
@@ -26,7 +26,7 @@ Copy-paste into a script tag after the bitsy source
 (function (bitsy) {
 'use strict';
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -56,7 +56,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -70,7 +70,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -222,10 +222,10 @@ function _reinitEngine() {
 
 
 var keys = {};
-keys[bitsy.Direction.Up] = "up";
-keys[bitsy.Direction.Down] = "down";
-keys[bitsy.Direction.Left] = "left";
-keys[bitsy.Direction.Right] = "right";
+keys[bitsy.Direction.Up] = 'up';
+keys[bitsy.Direction.Down] = 'down';
+keys[bitsy.Direction.Left] = 'left';
+keys[bitsy.Direction.Right] = 'right';
 keys[bitsy.Direction.None] = null;
 
 before('startDialog', function () {

@@ -3,7 +3,7 @@
 @file opaque tiles
 @summary tiles which hide the player
 @license MIT
-@version 1.1.3
+@version 1.1.5
 @author Sean S. LeBlanc
 
 @description
@@ -25,10 +25,10 @@ var hackOptions = {
 		// return ['wall', 'column', 'door'].indexOf(tile.name) !== -1; // specific opaque tile list
 		// return tile.name && tile.name.indexOf('OPAQUE') !== -1; // opaque tile flag in name
 		return true; // all tiles are opaque
-	}
+	},
 };
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -58,7 +58,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -72,7 +72,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -244,7 +244,7 @@ function _reinitEngine() {
 
 // track whether opaque
 var opaque = false;
-after("movePlayer", function () {
+after('movePlayer', function () {
 	// check for changes
 	var player = bitsy.player();
 	var tile = bitsy.tile[bitsy.getTile(player.x, player.y)];
@@ -257,12 +257,12 @@ after("movePlayer", function () {
 
 // prevent player from drawing on top of opaque tiles
 var room;
-before("drawRoom", function () {
+before('drawRoom', function () {
 	var player = bitsy.player();
 	room = player.room;
 	player.room = opaque ? null : room;
 });
-after("drawRoom", function () {
+after('drawRoom', function () {
 	bitsy.player().room = room;
 });
 

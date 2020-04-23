@@ -3,7 +3,7 @@
 @file transparent sprites
 @summary makes all sprites have transparent backgrounds
 @license MIT
-@version 4.0.4
+@version 4.0.6
 @requires Bitsy Version: 6.1
 @author Sean S. LeBlanc
 
@@ -20,14 +20,14 @@ this.hacks = this.hacks || {};
 'use strict';
 var hackOptions = {
 	isTransparent: function (drawing) {
-		//return drawing.name == 'tea'; // specific transparent drawing
-		//return ['tea', 'flower', 'hat'].indexOf(drawing.name) !== -1; // specific transparent drawing list
-		//return drawing.name && drawing.name.indexOf('TRANSPARENT') !== -1; // transparent drawing flag in name
+		// return drawing.name == 'tea'; // specific transparent drawing
+		// return ['tea', 'flower', 'hat'].indexOf(drawing.name) !== -1; // specific transparent drawing list
+		// return drawing.name && drawing.name.indexOf('TRANSPARENT') !== -1; // transparent drawing flag in name
 		return true; // all drawings are transparent
 	},
 };
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -57,7 +57,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -71,7 +71,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -226,7 +226,7 @@ function _reinitEngine() {
 
 var madeTransparent;
 var makeTransparent;
-before('onready', function() {
+before('onready', function () {
 	madeTransparent = {};
 	makeTransparent = false;
 });

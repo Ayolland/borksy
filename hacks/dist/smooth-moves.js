@@ -3,7 +3,7 @@
 @file smooth moves
 @summary ease the player's movement
 @license MIT
-@version 2.0.0
+@version 2.0.2
 @requires Bitsy Version: 6.3
 @author Sean S. LeBlanc
 
@@ -24,13 +24,13 @@ var hackOptions = {
 	// max distance to allow tweens
 	delta: 1.5,
 	// easing function
-	ease: function(t) {
-		t = 1 - Math.pow(1 - t, 2);
+	ease: function (t) {
+		t = 1 - ((1 - t) ** 2);
 		return t;
 	},
 };
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -60,7 +60,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -74,7 +74,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -237,6 +237,7 @@ function _reinitEngine() {
 // smooth move
 var tweens = {};
 var sprites = {};
+
 function addTween(spr, fromX, fromY, toX, toY) {
 	if (Math.abs(toX - fromX) + Math.abs(toY - fromY) > hackOptions.delta) {
 		delete tweens[spr];
@@ -249,14 +250,14 @@ function addTween(spr, fromX, fromY, toX, toY) {
 		t.start = bitsy.prevTime;
 	}
 }
-before('onready', function() {
+before('onready', function () {
 	tweens = {};
 	sprites = {};
 });
 
 // listen for changes in sprite positions to add tweens
-before('update', function() {
-	Object.values(bitsy.sprite).forEach(spr => {
+before('update', function () {
+	Object.values(bitsy.sprite).forEach((spr) => {
 		if (spr.room === bitsy.curRoom) {
 			var s = sprites[spr.id] = sprites[spr.id] || {};
 			s.x = spr.x;
@@ -266,6 +267,7 @@ before('update', function() {
 		}
 	});
 });
+
 function addTweens() {
 	Object.entries(sprites).forEach(function (entry) {
 		var spr = bitsy.sprite[entry[0]];

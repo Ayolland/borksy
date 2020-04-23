@@ -2,7 +2,7 @@
 🔀
 @file logic-operators-extended
 @summary adds conditional logic operators
-@version 1.1.4
+@version 1.1.6
 @author @mildmojo
 
 @description
@@ -30,7 +30,7 @@ NOTE: The combining operators (&&, ||, &&!, ||!) have lower precedence than
 (function (bitsy) {
 'use strict';
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -60,7 +60,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -74,7 +74,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -266,7 +266,7 @@ function orNotExp(environment, left, right, onReturn) {
 	});
 }
 
-inject$1(/(operatorMap\.set\("-", subExp\);)/,`
+inject$1(/(operatorMap\.set\("-", subExp\);)/, `
 	$1
 	operatorMap.set("&&", ${andExp.toString()});
 	operatorMap.set("||", ${orExp.toString()});
@@ -276,7 +276,7 @@ inject$1(/(operatorMap\.set\("-", subExp\);)/,`
 `);
 inject$1(
 	/(var operatorSymbols = \[.+\];)/,
-	'$1operatorSymbols.unshift("!==", "&&", "||", "&&!", "||!");'
+	'$1operatorSymbols.unshift("!==", "&&", "||", "&&!", "||!");',
 );
 // End of logic operators mod
 

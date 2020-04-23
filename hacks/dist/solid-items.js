@@ -3,7 +3,7 @@
 @file solid items
 @summary treat some items like sprites that can be placed multiple times
 @license MIT
-@version 2.1.3
+@version 2.1.6
 @author Sean S. LeBlanc
 
 @description
@@ -19,14 +19,14 @@ this.hacks = this.hacks || {};
 'use strict';
 var hackOptions = {
 	itemIsSolid: function (item) {
-		//return item.name == 'tea'; // specific solid item
-		//return ['tea', 'flower', 'hat'].indexOf(item.name) !== -1; // specific solid item list
-		//return item.name.indexOf('SOLID') !== -1; // solid item flag in name
+		// return item.name && item.name == 'tea'; // specific solid item
+		// return ['tea', 'flower', 'hat'].indexOf(item.name) !== -1; // specific solid item list
+		// return item.name && item.name.indexOf('SOLID') !== -1; // solid item flag in name
 		return true; // all items are solid
-	}
+	},
 };
 
-bitsy = bitsy && bitsy.hasOwnProperty('default') ? bitsy['default'] : bitsy;
+bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
 
 /**
 @file utils
@@ -56,7 +56,7 @@ function inject(searchRegex, replaceString) {
 
 	// error-handling
 	if (!code) {
-		throw 'Couldn\'t find "' + searchRegex + '" in script tags';
+		throw new Error('Couldn\'t find "' + searchRegex + '" in script tags');
 	}
 
 	// modify the content
@@ -70,7 +70,7 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
- * Helper for getting an array with unique elements 
+ * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
  */
@@ -232,14 +232,15 @@ function _reinitEngine() {
 
 var room;
 var oldItems;
-var x,y;
-before("movePlayer", function () {
+var x;
+var y;
+before('movePlayer', function () {
 	x = bitsy.player().x;
 	y = bitsy.player().y;
 	room = bitsy.room[bitsy.curRoom];
 	oldItems = room.items.slice();
 });
-after("movePlayer", function () {
+after('movePlayer', function () {
 	var newItems = room.items;
 	if (newItems.length === oldItems.length) {
 		return; // nothing changed
@@ -247,10 +248,10 @@ after("movePlayer", function () {
 
 	// check for changes
 	for (var i = 0; i < oldItems.length; ++i) {
-		if (!newItems[i] ||
-			oldItems[i].x !== newItems[i].x ||
-			oldItems[i].y !== newItems[i].y ||
-			oldItems[i].id !== newItems[i].id
+		if (!newItems[i]
+			|| oldItems[i].x !== newItems[i].x
+			|| oldItems[i].y !== newItems[i].y
+			|| oldItems[i].id !== newItems[i].id
 		) {
 			// something changed
 			if (hackOptions.itemIsSolid(bitsy.item[oldItems[i].id])) {
