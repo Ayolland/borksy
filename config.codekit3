@@ -1408,12 +1408,12 @@
 		"oAP": "/template/BitsyHD.5.1.html",
 		"oF": 0
 		},
-	"/testgames/borksy_test_game.html": {
+	"/testgames/borksy_test_game.bitsy": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/testgames/borksy_test_game.html",
+		"oAP": "/testgames/borksy_test_game.bitsy",
 		"oF": 0
 		}
 	},
