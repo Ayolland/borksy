@@ -1,5 +1,3 @@
-* In some cases (usually smaller games), adding the 'Transparent Sprites' hack can actually improve the performance of your Bitsy game.
-
 * Looking for the 'Paragraph Break' hack? Use 'Long Dialog' instead. It has all the same functionality and more!
 
 * If you're still using the exit-from-dialog or end-from-dialog hacks, make sure to check out and new the new locked exits functionality in Bitsy 7.0! (These hacks are likely to be deprecated in the future.)

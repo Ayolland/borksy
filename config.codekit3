@@ -7,7 +7,7 @@
 		"uuidString": "6EA8FD9D-E868-4680-B8AB-3EFF9CD05421"
 		}
 	],
-"creatorBuild": "32001",
+"creatorBuild": "32147",
 "files": {
 	"/.gitignore": {
 		"cB": 0,
@@ -1329,17 +1329,6 @@
 		"sC": 1,
 		"tS": 0
 		},
-	"/scripts/min/libs-min.js": {
-		"bF": 0,
-		"ft": 64,
-		"ma": 0,
-		"mi": 1,
-		"oA": 0,
-		"oAP": "/scripts/min/min/libs-min-min.js",
-		"oF": 0,
-		"sC": 1,
-		"tS": 0
-		},
 	"/style/style.css": {
 		"aP": 1,
 		"bl": 0,
@@ -1354,14 +1343,14 @@
 		"aP": 0,
 		"bl": 0,
 		"dP": 10,
-		"dS": 0,
+		"ec": 1,
 		"ft": 4,
 		"ma": 0,
 		"oA": 0,
 		"oAP": "/style/style.css",
 		"oF": 2,
 		"oS": 0,
-		"uL": 1
+		"sct": 1
 		},
 	"/template/Bitsy.5.5.html": {
 		"cB": 0,
@@ -1419,12 +1408,12 @@
 		"oAP": "/template/BitsyHD.5.1.html",
 		"oF": 0
 		},
-	"/testgames/testgame.html": {
+	"/testgames/borksy_test_game.bitsy": {
 		"cB": 0,
 		"ft": 8192,
 		"hM": 0,
 		"oA": 0,
-		"oAP": "/testgames/testgame.html",
+		"oAP": "/testgames/borksy_test_game.bitsy",
 		"oF": 0
 		}
 	},
@@ -3457,13 +3446,13 @@
 		"autoOutputPathReplace1": "sass",
 		"autoOutputPathReplace2": "css",
 		"autoOutputPathStyle": 2,
+		"compilerType": 1,
 		"createSourceMap": 0,
-		"debugStyle": 0,
 		"decimalPrecision": 10,
+		"emitCharset": 1,
 		"outputStyle": 0,
 		"shouldRunAutoprefixer": 0,
-		"shouldRunBless": 0,
-		"useLibsass": 1
+		"shouldRunBless": 0
 		},
 	"languageDefaultsSLIM": {
 		"autoOutputAction": 0,
