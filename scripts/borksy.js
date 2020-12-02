@@ -655,7 +655,7 @@ function githubHackFail(response,filename){
 function loadThisHackFromGithub(hackName,hackInfo){
 	var filenameOverride = hackName + '.js';
 	var filename = hackInfo.github;
-	var pathToDir = "https://raw.githubusercontent.com/seleb/bitsy-hacks/master/dist/";
+	var pathToDir = "https://raw.githubusercontent.com/seleb/bitsy-hacks/main/dist/";
 	loadFileFromPath(filename,pathToDir,githubHackSuccess,githubHackFail,filenameOverride);
 }
 
