@@ -3,7 +3,7 @@
 @file push sprites
 @summary sokoban-style sprite pushing
 @license MIT
-@version 1.0.2
+@version 15.4.1
 @requires 6.4
 @author jan0sc
 
@@ -74,7 +74,6 @@ var hackOptions = {
 		// return true; // all tiles are stopping
 	},
 
-
 	// EXIT HANDLING
 
 	spriteCanExit: function (spr, ext) {
@@ -86,7 +85,6 @@ var hackOptions = {
 		// return ['10','11'].indexOf(ext.dest.room) !== -1; // specific destination room list
 		return true; // all sprites can use all exits
 	},
-
 
 	// TARGET STATES
 
@@ -158,7 +156,6 @@ var hackOptions = {
 		},
 	},
 
-
 	// SPRITE FLIPPING
 
 	// If `horizontalFlipsAllowed` is true:
@@ -171,10 +168,11 @@ var hackOptions = {
 	// 	pushing up will make a sprite right-side up
 	verticalFlipsAllowed: false,
 
-
 };
 
-bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
 /**
 @file utils
@@ -249,7 +247,6 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -293,7 +290,7 @@ function kitsyInit() {
 	bitsy.kitsy = {
 		queuedInjectScripts: [],
 		queuedBeforeScripts: {},
-		queuedAfterScripts: {}
+		queuedAfterScripts: {},
 	};
 
 	var oldStartFunc = bitsy.startExportedGame;
@@ -312,12 +309,11 @@ function kitsyInit() {
 	return bitsy.kitsy;
 }
 
-
 function doInjects() {
 	bitsy.kitsy.queuedInjectScripts.forEach(function (injectScript) {
 		inject(injectScript.searchRegex, injectScript.replaceString);
 	});
-	_reinitEngine();
+	reinitEngine();
 }
 
 function applyAllHooks() {
@@ -365,21 +361,20 @@ function applyHook(functionName) {
 				// Assume funcs that accept more args than the original are
 				// async and accept a callback as an additional argument.
 				return functions[i++].apply(this, args.concat(runBefore.bind(this)));
-			} else {
-				// run synchronously
-				returnVal = functions[i++].apply(this, args);
-				if (returnVal && returnVal.length) {
-					args = returnVal;
-				}
-				return runBefore.apply(this, args);
 			}
+			// run synchronously
+			returnVal = functions[i++].apply(this, args);
+			if (returnVal && returnVal.length) {
+				args = returnVal;
+			}
+			return runBefore.apply(this, args);
 		}
 
 		return runBefore.apply(this, arguments);
 	};
 }
 
-function _reinitEngine() {
+function reinitEngine() {
 	// recreate the script and dialog objects so that they'll be
 	// referencing the code with injections instead of the original
 	bitsy.scriptModule = new bitsy.Script();
@@ -397,8 +392,8 @@ function _reinitEngine() {
 
 // copied from https://stackoverflow.com/a/46805290
 function transpose(matrix) {
-	const rows = matrix.length,
-		cols = matrix[0].length;
+	const rows = matrix.length;
+	const cols = matrix[0].length;
 	const grid = [];
 	for (let j = 0; j < cols; j++) {
 		grid[j] = Array(rows);
@@ -413,7 +408,12 @@ function transpose(matrix) {
 
 // helper function to flip sprite data
 function transformSpriteData(spriteData, v, h, rot) {
-	var x, y, x2, y2, col, tmp;
+	var x;
+	var y;
+	var x2;
+	var y2;
+	var col;
+	var tmp;
 	var s = spriteData.slice();
 	if (v) {
 		for (y = 0; y < s.length / 2; ++y) {
@@ -502,7 +502,6 @@ function setSpriteData(id, frame, newData) {
 
 
 
-
 before('movePlayer', function (direction) {
 	var spriteId = null;
 
@@ -529,7 +528,6 @@ before('movePlayer', function (direction) {
 		}
 	}
 });
-
 
 //
 // push handling
@@ -572,7 +570,6 @@ function pushSprite(spr, direction) {
 	return false;
 }
 
-
 function moveOK(spr, newx, newy, direction) {
 	var next = getFirstSpriteAt(spr.room, newx, newy);
 	// either there is a space or the next sprite moves
@@ -613,7 +610,6 @@ function getAllSpritesAt(r, x, y) {
 		return spr.room === r && spr.x === x && spr.y === y;
 	});
 }
-
 
 //
 // exit handling
@@ -737,7 +733,6 @@ function isCompatible(p, q) {
 	return q.includes(p);
 }
 
-
 //
 // sprite flipping
 //
@@ -745,7 +740,6 @@ function isCompatible(p, q) {
 var originalAnimations = [];
 var hflips = [];
 var vflips = [];
-
 
 before('onready', function () {
 	var i;
@@ -765,7 +759,6 @@ before('onready', function () {
 		}
 	}
 });
-
 
 function updateImage(spr) {
 	// determine which directions need flipping
@@ -791,5 +784,7 @@ function updateImage(spr) {
 }
 
 exports.hackOptions = hackOptions;
+
+Object.defineProperty(exports, '__esModule', { value: true });
 
 }(this.hacks['push-sprites'] = this.hacks['push-sprites'] || {}, window));

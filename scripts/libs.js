@@ -128,6 +128,20 @@ var hacks = {
 		forceLocal: false
 	},
 
+	"backdrops": {
+		title: "🖼 Backdrops",
+		description: "Gives the game a backdrop",
+		author: "Cephalopodunk",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'backdrops.js',
+		forceLocal: false
+	},
+
 	"bitsymuse": {
 		title: "😌 Bitsymuse",
 		description: "A hack that a variety of audio controls, including music that changes as you move between rooms.",

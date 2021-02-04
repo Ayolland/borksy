@@ -1,63 +1,78 @@
 /**
-😽
-@file character portraits
-@summary high quality anime jpegs (or pngs i guess)
+💃
+@file sprite effects
+@summary like text effects, but for sprites
 @license MIT
 @version 15.4.1
-@requires Bitsy Version: 5.3
+@requires 7.1
 @author Sean S. LeBlanc
 
 @description
-Adds a tag (portrait "id") which adds the ability to draw high resolution images during dialog.
+Adds support for applying effects to sprites, items, and tiles.
 
-Examples:
-	(portrait "cat")
-		draws the image named "cat" in the hackOptions
-	(portrait "")
-		resets the portrait to not draw
+Usage:
+	{spriteEffect "SPR,A,wvy"}
+	{spriteEffectNow "TIL,a,shk"}
 
-By default, the portrait will clear when dialog is exited,
-but this can be customized in the hackOptions below.
+To disable a text effect, call the dialog command again with the same parameters.
 
-All portraits are drawn from the top-left corner, on top of the game and below the dialog box.
-They are scaled uniformly according to the hackOptions below,
-and are cropped to bitsy's canvas width/height.
-
-All portraits are preloaded, but their loading state is ignored.
-i.e. The game will start before they have all loaded,
-and they simply won't draw if they're not loaded or have errored out.
-
-All standard browser image formats are supported, but keep filesize in mind!
-
-Notes:
-- The hack is called "character portraits", but this can easily be used to show images of any sort
-- Images drawn with this hack may taint bitsy's canvas, preventing exit transitions from working.
-  You can avoid this by only using images hosted alongside your game on a server.
+Note that if a name is used instead of an id,
+only the first tile with that name is affected.
 
 HOW TO USE:
 1. Copy-paste this script into a script tag after the bitsy source
-2. Edit the hackOptions object as needed
+2. Update the `hackOptions` object at the top of the script with your custom effects
+
+EFFECT NOTES:
+Each effect looks like:
+	key: function(pos, time, context) {
+		...
+	}
+
+The key is the name of the effect, used in the dialog command to apply it.
+
+The function is called every frame before rendering the images it is applied to.
+The function arguments are:
+	pos:     has the properties `x` and `y`; can be used to modify rendered position
+	time:    the current time in milliseconds; can be used to animate effects over time
+	context: the 2D canvas rendering context; can be used for various advanced effects
+	         (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
 */
 this.hacks = this.hacks || {};
 (function (exports, bitsy) {
 'use strict';
 var hackOptions = {
-	// influences the resolution of the drawn image
-	// `bitsy.scale` (4 by default) is the max and will match bitsy's internal scale (i.e. 512x512)
-	// 1 will match bitsy's in-game virtual scale (i.e. 128x128)
-	// it's best to decide this up-front and make portrait images that match this resolution
-	scale: bitsy.scale,
-	// a list of portrait files
-	// the format is: 'id for portrait tag': 'file path'
-	// these may be:
-	// - local files (in which case you need to include them with your html when publishing)
-	// - online urls (which are not guaranteed to work as they are network-dependent)
-	// - base64-encoded images (the most reliable but unwieldy)
-	portraits: {
-		cat: './cat.png',
+	// map of custom effects
+	effects: {
+		wvy: function (pos, time) {
+			// sample effect based on bitsy's {wvy} text
+			pos.y += (Math.sin(time / 250 - pos.x / 2) * 4) / bitsy.mapsize;
+		},
+		shk: function (pos, time) {
+			// sample effect based on bitsy's {shk} text
+			function disturb(func, offset, mult1, mult2) {
+				return func(time * mult1 - offset * mult2);
+			}
+			var y = (3 / bitsy.mapsize) * disturb(Math.sin, pos.x, 0.1, 0.5) * disturb(Math.cos, pos.x, 0.3, 0.2) * disturb(Math.sin, pos.y, 2.0, 1.0);
+			var x = (3 / bitsy.mapsize) * disturb(Math.cos, pos.y, 0.1, 1.0) * disturb(Math.sin, pos.x, 3.0, 0.7) * disturb(Math.cos, pos.x, 0.2, 0.3);
+			pos.x += x;
+			pos.y += y;
+		},
+		rbw: function (pos, time, context) {
+			// sample effect based on bitsy's {rbw} text
+			// note that this uses CSS filters (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter)
+			var t = Math.sin(time / 600 - (pos.x + pos.y) / 8);
+			context.filter = 'grayscale() sepia() saturate(2) hue-rotate(' + t + 'turn)';
+		},
+		invert: function (pos, time, context) {
+			context.filter = 'invert()';
+		},
 	},
-	autoReset: true, // if true, automatically resets the portrait to blank when dialog is exited
-	dialogOnly: true, // if true, portrait is only shown when dialog is active
+	// reset function called after drawing a tile
+	// this can be used to undo any modifications to the canvas or context
+	reset: function (img, context) {
+		context.filter = 'none';
+	},
 };
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
@@ -103,6 +118,22 @@ function inject(searchRegex, replaceString) {
 	newScriptTag.textContent = code;
 	scriptTag.insertAdjacentElement('afterend', newScriptTag);
 	scriptTag.remove();
+}
+
+/*
+Helper for getting image by name or id
+
+Args:
+	name: id or name of image to return
+	 map: map of images (e.g. `sprite`, `tile`, `item`)
+
+Returns: the image in the given map with the given name/id
+ */
+function getImage(name, map) {
+	var id = Object.prototype.hasOwnProperty.call(map, name) ? name : Object.keys(map).find(function (e) {
+		return map[e].name === name;
+	});
+	return map[id];
 }
 
 /**
@@ -329,63 +360,173 @@ function addDialogTag(tag, fn) {
 	injectDialogTag(tag, 'kitsy.dialogFunctions["' + tag + '"]');
 }
 
+/**
+ * Adds a custom dialog tag which executes the provided function.
+ * For ease-of-use with the bitsy editor, tags can be written as
+ * (tagname "parameters") in addition to the standard {tagname "parameters"}
+ *
+ * Function is executed after the dialog box.
+ *
+ * @param {string}   tag Name of tag
+ * @param {Function} fn  Function to execute, with signature `function(environment, parameters){}`
+ *                       environment: provides access to SetVariable/GetVariable (among other things, see Environment in the bitsy source for more info)
+ *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
+ */
+function addDeferredDialogTag(tag, fn) {
+	addDialogFunction(tag, fn);
+	bitsy.kitsy.deferredDialogFunctions = bitsy.kitsy.deferredDialogFunctions || {};
+	var deferred = bitsy.kitsy.deferredDialogFunctions[tag] = [];
+	injectDialogTag(tag, 'function(e, p, o){ kitsy.deferredDialogFunctions["' + tag + '"].push({e:e,p:p}); o(null); }');
+	// Hook into the dialog finish event and execute the actual function
+	after('onExitDialog', function () {
+		while (deferred.length) {
+			var args = deferred.shift();
+			bitsy.kitsy.dialogFunctions[tag](args.e, args.p, args.o);
+		}
+	});
+	// Hook into the game reset and make sure data gets cleared
+	after('clearGameData', function () {
+		deferred.length = 0;
+	});
+}
+
+/**
+ * Adds two custom dialog tags which execute the provided function,
+ * one with the provided tagname executed after the dialog box,
+ * and one suffixed with 'Now' executed immediately when the tag is reached.
+ *
+ * i.e. helper for the (exit)/(exitNow) pattern.
+ *
+ * @param {string}   tag Name of tag
+ * @param {Function} fn  Function to execute, with signature `function(environment, parameters){}`
+ *                       environment: provides access to SetVariable/GetVariable (among other things, see Environment in the bitsy source for more info)
+ *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
+ */
+function addDualDialogTag(tag, fn) {
+	addDialogTag(tag + 'Now', function (environment, parameters, onReturn) {
+		fn(environment, parameters);
+		onReturn(null);
+	});
+	addDeferredDialogTag(tag, fn);
+}
 
 
 
 
-var state = {
-	portraits: {},
-	portrait: null,
+
+var activeEffects = {
+	tile: {},
+	sprite: {},
+	item: {},
 };
 
-// preload images into a cache
-after('startExportedGame', function () {
-	Object.keys(hackOptions.portraits).forEach(function (i) {
-		state.portraits[i] = new Image();
-		state.portraits[i].src = hackOptions.portraits[i];
+// create a map of the images to be rendered for reference
+// note: this is being done after `drawRoom` to avoid interfering
+// with transparent sprites, which needs to pre-process first
+var tileMap = {
+	tile: {},
+	sprite: {},
+	item: {},
+};
+function buildMap(map, room) {
+	var m = tileMap[map];
+	Object.keys(activeEffects[map]).forEach(function (id) {
+		var tile = bitsy[map][id];
+		if (!tile) {
+			return;
+		}
+		var t = (m[id] = m[id] || {});
+		var p = (t[room.pal] = t[room.pal] || {});
+		new Array(tile.animation.frameCount).fill(0).forEach(function (_, frame) {
+			p[frame] = bitsy.getTileImage(tile, room.pal, frame);
+		});
 	});
+}
+after('drawRoom', function (room) {
+	buildMap('tile', room);
+	buildMap('sprite', room);
+	buildMap('item', room);
 });
 
-// hook up dialog tag
-addDialogTag('portrait', function (environment, parameters, onReturn) {
-	var newPortrait = parameters[0];
-	var image = state.portraits[newPortrait];
-	if (state.portrait === image) {
-		onReturn(null);
-		return;
-	}
-	state.portrait = image;
-	onReturn(null);
+// apply effects before rendering tiles
+function preprocess(map, img, x, y, context) {
+	var m = tileMap[map];
+	var foundEffects = Object.entries(activeEffects[map]).find(function (entry) {
+		var t = m && m[entry[0]];
+		var p = t && t[bitsy.room[bitsy.curRoom].pal];
+		return (
+			p
+			&& Object.values(p).some(function (frame) {
+				return frame === img;
+			})
+		);
+	});
+	var effects = foundEffects ? foundEffects[1] : [];
+
+	var totalPos = { x: Number(x), y: Number(y) };
+	Object.keys(effects).forEach(function (effect) {
+		var pos = { x: totalPos.x, y: totalPos.y };
+		hackOptions.effects[effect](pos, Date.now(), context);
+		totalPos = pos;
+	});
+	return [img, totalPos.x.toString(), totalPos.y.toString(), context];
+}
+before('drawTile', function (img, x, y, context) {
+	return preprocess('tile', img, x, y, context);
+});
+before('drawSprite', function (img, x, y, context) {
+	return preprocess('sprite', img, x, y, context);
+});
+before('drawItem', function (img, x, y, context) {
+	return preprocess('item', img, x, y, context);
 });
 
-// hook up drawing
-var context;
-after('drawRoom', function () {
-	if ((hackOptions.dialogOnly && !bitsy.isDialogMode && !bitsy.isNarrating) || !state.portrait) {
-		return;
+// reset after having drawn a tile
+after('drawTile', function (img, x, y, context) {
+	hackOptions.reset(img, context);
+});
+
+// setup dialog commands
+var mapMap = {
+	spr: 'sprite',
+	sprite: 'sprite',
+	itm: 'item',
+	item: 'item',
+	til: 'tile',
+	tile: 'tile',
+};
+addDualDialogTag('spriteEffect', function (environment, parameters) {
+	var params = parameters[0].split(/,\s?/);
+	var map = mapMap[(params[0] || '').toLowerCase()];
+	var id = getImage(params[1] || '', bitsy[map]).id;
+	var effect = params[2] || '';
+	if (!hackOptions.effects[effect]) {
+		throw new Error('Tried to use sprite effect "' + effect + '", but it does not exist');
 	}
-	if (!context) {
-		context = bitsy.canvas.getContext('2d');
-		context.imageSmoothingEnabled = false;
-	}
-	try {
-		context.drawImage(state.portrait, 0, 0, bitsy.width * hackOptions.scale, bitsy.height * hackOptions.scale, 0, 0, bitsy.width * bitsy.scale, bitsy.height * bitsy.scale);
-	} catch (error) {
-		// log and ignore errors
-		// so broken images don't break the game
-		console.error('Portrait error', error);
+	var tile = (activeEffects[map][id] = activeEffects[map][id] || {});
+	if (tile && tile[effect]) {
+		delete tile[effect];
+	} else {
+		tile[effect] = true;
 	}
 });
 
-after('onExitDialog', function () {
-	if (hackOptions.autoReset) {
-		state.portrait = '';
-	}
+// reset
+before('reset_cur_game', function () {
+	activeEffects = {
+		tile: {},
+		sprite: {},
+		item: {},
+	};
+	tileMap = {
+		tile: {},
+		sprite: {},
+		item: {},
+	};
 });
 
 exports.hackOptions = hackOptions;
-exports.state = state;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-}(this.hacks.character_portraits = this.hacks.character_portraits || {}, window));
+}(this.hacks.sprite_effects = this.hacks.sprite_effects || {}, window));

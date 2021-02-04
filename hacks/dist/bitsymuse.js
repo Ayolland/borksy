@@ -3,13 +3,15 @@
 @file bitsymuse
 @summary A variety of Bitsy sound and music handlers
 @license MIT
-@version 3.1.3
+@version 15.4.1
 @requires 4.8, 4.9
 @author David Mowatt
 
 @description
 A hack that adds a variety of audio controls, including music that changes as you move between rooms.
 If the same song is played as you move between rooms, the audio file will continue playing.
+
+Check out https://kool.tools/bitsy/tools/bitsymuse-ui for a tool to help configure this hack
 
 HOW TO USE:
 1. Place your audio files somewhere relative to your bitsy html file (in the zip if you're uploading to itch.io)
@@ -38,11 +40,13 @@ var hackOptions = {
 	// Put entries in this list for each audio file you want to use
 	// the key will be the id needed to play it in dialog tags and the musicByRoom options below,
 	// and the value will be the properties of the corresponding <audio> tag (e.g. src, loop, volume)
+	// `src` can be either a string, or an array of strings (to support fallbacks in different formats)
 	// Note: you can add <audio> tags to the html manually if you prefer
 	audio: {
 		// Note: the entries below are examples that should be removed and replaced with your own audio files
 		'example song ID': { src: './example song filepath.mp3', loop: true },
 		'example sfx ID': { src: './example sfx filepath.mp3', volume: 0.5 },
+		'example with multiple formats': { src: ['./preferred.mp3', './fallback.ogg'] },
 	},
 	// Put entries in this list for every room ID or name that will change the music
 	// If the player moves between rooms with the same audio ID, the music keeps playing seamlessly.
@@ -59,7 +63,9 @@ var hackOptions = {
 	resume: false, // If true, songs will pause/resume on change; otherwise, they'll stop/play (doesn't affect sound effects)
 };
 
-bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
 /**
 @file utils
@@ -128,7 +134,6 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -146,14 +151,21 @@ HOW TO USE:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
 
-
 // Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
 function inject$1(searchRegex, replaceString) {
 	var kitsy = kitsyInit();
-	kitsy.queuedInjectScripts.push({
-		searchRegex: searchRegex,
-		replaceString: replaceString
-	});
+	if (
+		!kitsy.queuedInjectScripts.some(function (script) {
+			return searchRegex.toString() === script.searchRegex.toString() && replaceString === script.replaceString;
+		})
+	) {
+		kitsy.queuedInjectScripts.push({
+			searchRegex: searchRegex,
+			replaceString: replaceString,
+		});
+	} else {
+		console.warn('Ignored duplicate inject');
+	}
 }
 
 // Ex: before('load_game', function run() { alert('Loading!'); });
@@ -182,7 +194,7 @@ function kitsyInit() {
 	bitsy.kitsy = {
 		queuedInjectScripts: [],
 		queuedBeforeScripts: {},
-		queuedAfterScripts: {}
+		queuedAfterScripts: {},
 	};
 
 	var oldStartFunc = bitsy.startExportedGame;
@@ -201,12 +213,11 @@ function kitsyInit() {
 	return bitsy.kitsy;
 }
 
-
 function doInjects() {
 	bitsy.kitsy.queuedInjectScripts.forEach(function (injectScript) {
 		inject(injectScript.searchRegex, injectScript.replaceString);
 	});
-	_reinitEngine();
+	reinitEngine();
 }
 
 function applyAllHooks() {
@@ -254,21 +265,20 @@ function applyHook(functionName) {
 				// Assume funcs that accept more args than the original are
 				// async and accept a callback as an additional argument.
 				return functions[i++].apply(this, args.concat(runBefore.bind(this)));
-			} else {
-				// run synchronously
-				returnVal = functions[i++].apply(this, args);
-				if (returnVal && returnVal.length) {
-					args = returnVal;
-				}
-				return runBefore.apply(this, args);
 			}
+			// run synchronously
+			returnVal = functions[i++].apply(this, args);
+			if (returnVal && returnVal.length) {
+				args = returnVal;
+			}
+			return runBefore.apply(this, args);
 		}
 
 		return runBefore.apply(this, arguments);
 	};
 }
 
-function _reinitEngine() {
+function reinitEngine() {
 	// recreate the script and dialog objects so that they'll be
 	// referencing the code with injections instead of the original
 	bitsy.scriptModule = new bitsy.Script();
@@ -283,7 +293,7 @@ function _reinitEngine() {
 // interpreter. Unescape escaped parentheticals, too.
 function convertDialogTags(input, tag) {
 	return input
-		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".*?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
 			if (match.substr(0, 1) === '\\') {
 				return '(' + group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
 			}
@@ -291,17 +301,17 @@ function convertDialogTags(input, tag) {
 		});
 }
 
-
 function addDialogFunction(tag, fn) {
 	var kitsy = kitsyInit();
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
 	if (kitsy.dialogFunctions[tag]) {
-		throw new Error('The dialog function "' + tag + '" already exists.');
+		console.warn('The dialog function "' + tag + '" already exists.');
+		return;
 	}
 
 	// Hook into game load and rewrite custom functions in game data to Bitsy format.
-	before('parseWorld', function (game_data) {
-		return [convertDialogTags(game_data, tag)];
+	before('parseWorld', function (gameData) {
+		return [convertDialogTags(gameData, tag)];
 	});
 
 	kitsy.dialogFunctions[tag] = fn;
@@ -310,7 +320,7 @@ function addDialogFunction(tag, fn) {
 function injectDialogTag(tag, code) {
 	inject$1(
 		/(var functionMap = new Map\(\);[^]*?)(this.HasFunction)/m,
-		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2'
+		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2',
 	);
 }
 
@@ -318,7 +328,7 @@ function injectDialogTag(tag, code) {
  * Adds a custom dialog tag which executes the provided function.
  * For ease-of-use with the bitsy editor, tags can be written as
  * (tagname "parameters") in addition to the standard {tagname "parameters"}
- * 
+ *
  * Function is executed immediately when the tag is reached.
  *
  * @param {string}   tag Name of tag
@@ -336,7 +346,7 @@ function addDialogTag(tag, fn) {
  * Adds a custom dialog tag which executes the provided function.
  * For ease-of-use with the bitsy editor, tags can be written as
  * (tagname "parameters") in addition to the standard {tagname "parameters"}
- * 
+ *
  * Function is executed after the dialog box.
  *
  * @param {string}   tag Name of tag
@@ -390,6 +400,17 @@ var audioElementsById = {};
 var currentMusic;
 var roomMusicFlag = null;
 
+// cleanup old audio tags if any are present (e.g. on restart)
+before('load_game', function () {
+	Object.entries(hackOptions.audio).forEach(function (entry) {
+		var el = document.getElementById(entry[0]);
+		if (el) {
+			el.remove();
+		}
+		delete audioElementsById[entry[0]];
+	});
+});
+
 after('load_game', function () {
 	var room;
 	// expand the map to include ids of rooms listed by name
@@ -402,8 +423,18 @@ after('load_game', function () {
 	// add audio tags from options
 	Object.entries(hackOptions.audio).forEach(function (entry) {
 		var el = document.createElement('audio');
+		var src = entry[1].src;
 		el.id = entry[0];
 		Object.assign(el, entry[1]);
+		if (typeof src !== 'string') {
+			el.src = null;
+			src.forEach(function (s) {
+				var sourceEl = document.createElement('source');
+				sourceEl.src = s;
+				sourceEl.type = 'audio/' + s.split('.').pop();
+				el.appendChild(sourceEl);
+			});
+		}
 		document.body.appendChild(el);
 		audioElementsById[el.id] = el;
 	});
@@ -427,7 +458,6 @@ after('load_game', function () {
 	document.body.addEventListener('pointerup', handleAutoPlayRestrictions);
 	document.body.addEventListener('keydown', handleAutoPlayRestrictions);
 });
-
 
 function getAudio(id) {
 	var el = audioElementsById[id] || (audioElementsById[id] = document.getElementById(id));
@@ -495,5 +525,7 @@ addDualDialogTag('soundeffect', function (environment, parameters) {
 // End of (music) dialog function mod
 
 exports.hackOptions = hackOptions;
+
+Object.defineProperty(exports, '__esModule', { value: true });
 
 }(this.hacks.bitsymuse = this.hacks.bitsymuse || {}, window));

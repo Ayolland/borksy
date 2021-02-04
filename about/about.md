@@ -1,12 +1,11 @@
-Borksy v 4.4
+Borksy v 4.4.1
 
 Borksy is a hacking tool to be used in conjunction with [Bitsy Game Maker](https://ledoux.itch.io/bitsy)! Use it to customize your games and add hacks without needing a web server or any manual cut-and-paste work.
 
 If you're not sure how to use this tool, check out the 'How To Use Borksy' section. If you're having issues, check the 'Troubleshooting/FAQs' section. If you're not familiar with how Bitsy can be extended, explore [Sean's great collection of Bitsy hacks](https://github.com/seleb/bitsy-hacks/).
 
-April 22, 2020 - What's new in 4.4:
-* Bitsy 7.2 template
-* Updated Hack file paths to work with Github again.
+Feb 04, 2021 - What's new in 4.4.1:
+* I literally just added the backdrops hack b/c it's v cool and ppl wanted it.
 
 **NOTE on upcoming changes to Bitsy:** Bitsy 8.0 is currently in development, and will likely deprecate/break most current hacks. It's unclear at this moment what that means for Borksy, although I will try to find a solution that assists as many Borksy users as possible. My personal advice is to finish any incomplete projects you are currently working on that use Bitsy 7.
 
