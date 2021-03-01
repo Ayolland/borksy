@@ -3,7 +3,7 @@
 @file gravity
 @summary Pseudo-platforming/gravity/physics
 @license MIT
-@version 1.0.3
+@version 15.4.1
 @requires 6.3
 @author Cole Sea
 
@@ -113,7 +113,9 @@ var hackOptions = {
 	maxHorizontalFallingRatio: 0.51,
 };
 
-bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
 /**
 @file utils
@@ -188,7 +190,6 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -206,14 +207,21 @@ HOW TO USE:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
 
-
 // Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
 function inject$1(searchRegex, replaceString) {
 	var kitsy = kitsyInit();
-	kitsy.queuedInjectScripts.push({
-		searchRegex: searchRegex,
-		replaceString: replaceString
-	});
+	if (
+		!kitsy.queuedInjectScripts.some(function (script) {
+			return searchRegex.toString() === script.searchRegex.toString() && replaceString === script.replaceString;
+		})
+	) {
+		kitsy.queuedInjectScripts.push({
+			searchRegex: searchRegex,
+			replaceString: replaceString,
+		});
+	} else {
+		console.warn('Ignored duplicate inject');
+	}
 }
 
 // Ex: before('load_game', function run() { alert('Loading!'); });
@@ -242,7 +250,7 @@ function kitsyInit() {
 	bitsy.kitsy = {
 		queuedInjectScripts: [],
 		queuedBeforeScripts: {},
-		queuedAfterScripts: {}
+		queuedAfterScripts: {},
 	};
 
 	var oldStartFunc = bitsy.startExportedGame;
@@ -261,12 +269,11 @@ function kitsyInit() {
 	return bitsy.kitsy;
 }
 
-
 function doInjects() {
 	bitsy.kitsy.queuedInjectScripts.forEach(function (injectScript) {
 		inject(injectScript.searchRegex, injectScript.replaceString);
 	});
-	_reinitEngine();
+	reinitEngine();
 }
 
 function applyAllHooks() {
@@ -314,21 +321,20 @@ function applyHook(functionName) {
 				// Assume funcs that accept more args than the original are
 				// async and accept a callback as an additional argument.
 				return functions[i++].apply(this, args.concat(runBefore.bind(this)));
-			} else {
-				// run synchronously
-				returnVal = functions[i++].apply(this, args);
-				if (returnVal && returnVal.length) {
-					args = returnVal;
-				}
-				return runBefore.apply(this, args);
 			}
+			// run synchronously
+			returnVal = functions[i++].apply(this, args);
+			if (returnVal && returnVal.length) {
+				args = returnVal;
+			}
+			return runBefore.apply(this, args);
 		}
 
 		return runBefore.apply(this, arguments);
 	};
 }
 
-function _reinitEngine() {
+function reinitEngine() {
 	// recreate the script and dialog objects so that they'll be
 	// referencing the code with injections instead of the original
 	bitsy.scriptModule = new bitsy.Script();
@@ -343,7 +349,7 @@ function _reinitEngine() {
 // interpreter. Unescape escaped parentheticals, too.
 function convertDialogTags(input, tag) {
 	return input
-		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".*?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
 			if (match.substr(0, 1) === '\\') {
 				return '(' + group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
 			}
@@ -351,17 +357,17 @@ function convertDialogTags(input, tag) {
 		});
 }
 
-
 function addDialogFunction(tag, fn) {
 	var kitsy = kitsyInit();
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
 	if (kitsy.dialogFunctions[tag]) {
-		throw new Error('The dialog function "' + tag + '" already exists.');
+		console.warn('The dialog function "' + tag + '" already exists.');
+		return;
 	}
 
 	// Hook into game load and rewrite custom functions in game data to Bitsy format.
-	before('parseWorld', function (game_data) {
-		return [convertDialogTags(game_data, tag)];
+	before('parseWorld', function (gameData) {
+		return [convertDialogTags(gameData, tag)];
 	});
 
 	kitsy.dialogFunctions[tag] = fn;
@@ -370,7 +376,7 @@ function addDialogFunction(tag, fn) {
 function injectDialogTag(tag, code) {
 	inject$1(
 		/(var functionMap = new Map\(\);[^]*?)(this.HasFunction)/m,
-		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2'
+		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2',
 	);
 }
 
@@ -378,7 +384,7 @@ function injectDialogTag(tag, code) {
  * Adds a custom dialog tag which executes the provided function.
  * For ease-of-use with the bitsy editor, tags can be written as
  * (tagname "parameters") in addition to the standard {tagname "parameters"}
- * 
+ *
  * Function is executed immediately when the tag is reached.
  *
  * @param {string}   tag Name of tag
@@ -396,7 +402,7 @@ function addDialogTag(tag, fn) {
  * Adds a custom dialog tag which executes the provided function.
  * For ease-of-use with the bitsy editor, tags can be written as
  * (tagname "parameters") in addition to the standard {tagname "parameters"}
- * 
+ *
  * Function is executed after the dialog box.
  *
  * @param {string}   tag Name of tag
@@ -449,8 +455,8 @@ function addDualDialogTag(tag, fn) {
 
 // copied from https://stackoverflow.com/a/46805290
 function transpose(matrix) {
-	const rows = matrix.length,
-		cols = matrix[0].length;
+	const rows = matrix.length;
+	const cols = matrix[0].length;
 	const grid = [];
 	for (let j = 0; j < cols; j++) {
 		grid[j] = Array(rows);
@@ -465,7 +471,12 @@ function transpose(matrix) {
 
 // helper function to flip sprite data
 function transformSpriteData(spriteData, v, h, rot) {
-	var x, y, x2, y2, col, tmp;
+	var x;
+	var y;
+	var x2;
+	var y2;
+	var col;
+	var tmp;
 	var s = spriteData.slice();
 	if (v) {
 		for (y = 0; y < s.length / 2; ++y) {
@@ -554,7 +565,6 @@ function setSpriteData(id, frame, newData) {
 
 
 
-
 var active = hackOptions.activeOnLoad;
 var wasStandingOnSomething = false;
 var wasClimbing = false; //
@@ -610,14 +620,25 @@ var offsets = {
 	right: [0, 1],
 };
 
-after('onPlayerMoved', function () {
-	if (!active) return;
+var px;
+var py;
+var pr;
+before('update', function () {
 	var player = bitsy.player();
+	px = player.x;
+	py = player.y;
+	pr = player.room;
+});
+after('update', function () {
+	var player = bitsy.player();
+	if (px !== player.x || py !== player.y || pr !== player.room) {
+		if (!active) return;
 
-	wasStandingOnSomething = isSolid(gravityDir, player.x, player.y);
+		wasStandingOnSomething = isSolid(gravityDir, player.x, player.y);
 
-	// if player is standing on something and has a fallCounter > 0, then they just landed
-	if (wasStandingOnSomething && fallCounter && hackOptions.landed) hackOptions.landed(fallCounter);
+		// if player is standing on something and has a fallCounter > 0, then they just landed
+		if (wasStandingOnSomething && fallCounter && hackOptions.landed) hackOptions.landed(fallCounter);
+	}
 });
 
 before('movePlayer', function () {
@@ -648,7 +669,6 @@ before('movePlayer', function () {
 		forceGravityDir = undefined;
 	}
 });
-
 
 window.advanceGravity = function () {
 	if (!active) return;
@@ -830,7 +850,6 @@ function reallyMovePlayer(player, dir) {
 	}
 }
 
-
 function flipAvatar(gravityDirection) {
 	var hflip = false;
 	var vflip = false;
@@ -909,5 +928,7 @@ addDualDialogTag('forceGravity', function (env, params) {
 });
 
 exports.hackOptions = hackOptions;
+
+Object.defineProperty(exports, '__esModule', { value: true });
 
 }(this.hacks.gravity = this.hacks.gravity || {}, window));

@@ -3,7 +3,7 @@
 @file character portraits animated
 @summary high quality anime gifs
 @license MIT
-@version 1.0.8
+@version 15.4.1
 @requires Bitsy Version: 5.3
 @author Sean S. LeBlanc
 
@@ -35,6 +35,7 @@ var hackOptions$1 = {
 	// overrides for the base hack
 	scale: bitsy.scale,
 	autoReset: true,
+	dialogOnly: true,
 	portraits: {
 		earth: './GIF.gif',
 		cat: './test-export.gif',
@@ -42,7 +43,9 @@ var hackOptions$1 = {
 	},
 };
 
-bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
 function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
@@ -403,7 +406,7 @@ function GifReader(buf) {
   var global_palette_flag = pf0 >> 7;
   var num_global_colors_pow2 = pf0 & 0x7;
   var num_global_colors = 1 << (num_global_colors_pow2 + 1);
-  var background = buf[p++];
+  buf[p++];
   buf[p++];  // Pixel aspect ratio (unused?).
 
   var global_palette_offset = null;
@@ -829,7 +832,7 @@ function GifReaderLZWOutputIndexStream(code_stream, p, output, output_length) {
 // CommonJS.
 try { exports.GifWriter = GifWriter; exports.GifReader = GifReader; } catch(e) {}
 });
-var omggif_1 = omggif.GifWriter;
+omggif.GifWriter;
 var omggif_2 = omggif.GifReader;
 
 /**
@@ -889,7 +892,6 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -907,14 +909,21 @@ HOW TO USE:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
 
-
 // Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
 function inject$1(searchRegex, replaceString) {
 	var kitsy = kitsyInit();
-	kitsy.queuedInjectScripts.push({
-		searchRegex: searchRegex,
-		replaceString: replaceString
-	});
+	if (
+		!kitsy.queuedInjectScripts.some(function (script) {
+			return searchRegex.toString() === script.searchRegex.toString() && replaceString === script.replaceString;
+		})
+	) {
+		kitsy.queuedInjectScripts.push({
+			searchRegex: searchRegex,
+			replaceString: replaceString,
+		});
+	} else {
+		console.warn('Ignored duplicate inject');
+	}
 }
 
 // Ex: before('load_game', function run() { alert('Loading!'); });
@@ -943,7 +952,7 @@ function kitsyInit() {
 	bitsy.kitsy = {
 		queuedInjectScripts: [],
 		queuedBeforeScripts: {},
-		queuedAfterScripts: {}
+		queuedAfterScripts: {},
 	};
 
 	var oldStartFunc = bitsy.startExportedGame;
@@ -962,12 +971,11 @@ function kitsyInit() {
 	return bitsy.kitsy;
 }
 
-
 function doInjects() {
 	bitsy.kitsy.queuedInjectScripts.forEach(function (injectScript) {
 		inject(injectScript.searchRegex, injectScript.replaceString);
 	});
-	_reinitEngine();
+	reinitEngine();
 }
 
 function applyAllHooks() {
@@ -1015,21 +1023,20 @@ function applyHook(functionName) {
 				// Assume funcs that accept more args than the original are
 				// async and accept a callback as an additional argument.
 				return functions[i++].apply(this, args.concat(runBefore.bind(this)));
-			} else {
-				// run synchronously
-				returnVal = functions[i++].apply(this, args);
-				if (returnVal && returnVal.length) {
-					args = returnVal;
-				}
-				return runBefore.apply(this, args);
 			}
+			// run synchronously
+			returnVal = functions[i++].apply(this, args);
+			if (returnVal && returnVal.length) {
+				args = returnVal;
+			}
+			return runBefore.apply(this, args);
 		}
 
 		return runBefore.apply(this, arguments);
 	};
 }
 
-function _reinitEngine() {
+function reinitEngine() {
 	// recreate the script and dialog objects so that they'll be
 	// referencing the code with injections instead of the original
 	bitsy.scriptModule = new bitsy.Script();
@@ -1044,7 +1051,7 @@ function _reinitEngine() {
 // interpreter. Unescape escaped parentheticals, too.
 function convertDialogTags(input, tag) {
 	return input
-		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".*?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
 			if (match.substr(0, 1) === '\\') {
 				return '(' + group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
 			}
@@ -1052,17 +1059,17 @@ function convertDialogTags(input, tag) {
 		});
 }
 
-
 function addDialogFunction(tag, fn) {
 	var kitsy = kitsyInit();
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
 	if (kitsy.dialogFunctions[tag]) {
-		throw new Error('The dialog function "' + tag + '" already exists.');
+		console.warn('The dialog function "' + tag + '" already exists.');
+		return;
 	}
 
 	// Hook into game load and rewrite custom functions in game data to Bitsy format.
-	before('parseWorld', function (game_data) {
-		return [convertDialogTags(game_data, tag)];
+	before('parseWorld', function (gameData) {
+		return [convertDialogTags(gameData, tag)];
 	});
 
 	kitsy.dialogFunctions[tag] = fn;
@@ -1071,7 +1078,7 @@ function addDialogFunction(tag, fn) {
 function injectDialogTag(tag, code) {
 	inject$1(
 		/(var functionMap = new Map\(\);[^]*?)(this.HasFunction)/m,
-		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2'
+		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2',
 	);
 }
 
@@ -1079,7 +1086,7 @@ function injectDialogTag(tag, code) {
  * Adds a custom dialog tag which executes the provided function.
  * For ease-of-use with the bitsy editor, tags can be written as
  * (tagname "parameters") in addition to the standard {tagname "parameters"}
- * 
+ *
  * Function is executed immediately when the tag is reached.
  *
  * @param {string}   tag Name of tag
@@ -1098,7 +1105,7 @@ function addDialogTag(tag, fn) {
 @file character portraits
 @summary high quality anime jpegs (or pngs i guess)
 @license MIT
-@version 2.0.7
+@version auto
 @requires Bitsy Version: 5.3
 @author Sean S. LeBlanc
 
@@ -1124,7 +1131,10 @@ and they simply won't draw if they're not loaded or have errored out.
 
 All standard browser image formats are supported, but keep filesize in mind!
 
-Note: The hack is called "character portraits", but this can easily be used to show images of any sort
+Notes:
+- The hack is called "character portraits", but this can easily be used to show images of any sort
+- Images drawn with this hack may taint bitsy's canvas, preventing exit transitions from working.
+  You can avoid this by only using images hosted alongside your game on a server.
 
 HOW TO USE:
 1. Copy-paste this script into a script tag after the bitsy source
@@ -1147,6 +1157,7 @@ var hackOptions = {
 		cat: './cat.png',
 	},
 	autoReset: true, // if true, automatically resets the portrait to blank when dialog is exited
+	dialogOnly: true, // if true, portrait is only shown when dialog is active
 };
 
 var state = {
@@ -1167,6 +1178,7 @@ addDialogTag('portrait', function (environment, parameters, onReturn) {
 	var newPortrait = parameters[0];
 	var image = state.portraits[newPortrait];
 	if (state.portrait === image) {
+		onReturn(null);
 		return;
 	}
 	state.portrait = image;
@@ -1176,7 +1188,7 @@ addDialogTag('portrait', function (environment, parameters, onReturn) {
 // hook up drawing
 var context;
 after('drawRoom', function () {
-	if ((!bitsy.isDialogMode && !bitsy.isNarrating) || !state.portrait) {
+	if ((hackOptions.dialogOnly && !bitsy.isDialogMode && !bitsy.isNarrating) || !state.portrait) {
 		return;
 	}
 	if (!context) {
@@ -1206,6 +1218,7 @@ before('startExportedGame', function () {
 	hackOptions.portraits = hackOptions$1.portraits;
 	hackOptions.scale = hackOptions$1.scale;
 	hackOptions.autoReset = hackOptions$1.autoReset;
+	hackOptions.dialogOnly = hackOptions$1.dialogOnly;
 });
 
 // convert portrait state to new format supporting multiple frames
@@ -1214,7 +1227,7 @@ after('startExportedGame', function () {
 	Object.keys(state.portraits).forEach(function (portrait) {
 		var src = state.portraits[portrait].src;
 
-		if (src.substr(-4).toUpperCase() !== '.GIF') {
+		if (src.substr(-4).toUpperCase() !== '.GIF' && src.substr(0, 14) !== 'data:image/gif') {
 			state.portraits[portrait] = {
 				loop: false,
 				duration: 0,
@@ -1309,5 +1322,7 @@ after('drawRoom', function () {
 });
 
 exports.hackOptions = hackOptions$1;
+
+Object.defineProperty(exports, '__esModule', { value: true });
 
 }(this.hacks.character_portraits_animated = this.hacks.character_portraits_animated || {}, window));

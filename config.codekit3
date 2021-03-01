@@ -246,6 +246,17 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"/hacks/dist/backdrops.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/backdrops-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"/hacks/dist/basic-sfx.js": {
 		"bF": 0,
 		"ft": 64,
@@ -484,6 +495,17 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/edit-image-from-dialog-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/edit-player-from-dialog.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/edit-player-from-dialog-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -752,6 +774,17 @@
 		"sC": 1,
 		"tS": 0
 		},
+	"/hacks/dist/sprite-effects.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/sprite-effects-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
 	"/hacks/dist/stopwatch.js": {
 		"bF": 0,
 		"ft": 64,
@@ -803,6 +836,17 @@
 		"mi": 1,
 		"oA": 0,
 		"oAP": "/hacks/dist/min/transitions-min.js",
+		"oF": 0,
+		"sC": 1,
+		"tS": 0
+		},
+	"/hacks/dist/transparent-background.js": {
+		"bF": 0,
+		"ft": 64,
+		"ma": 0,
+		"mi": 1,
+		"oA": 0,
+		"oAP": "/hacks/dist/min/transparent-background-min.js",
 		"oF": 0,
 		"sC": 1,
 		"tS": 0
@@ -1129,6 +1173,14 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/hacks/options/avatar-by-room.options.txt",
+		"oF": 0
+		},
+	"/hacks/options/backdrops.options.txt": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/hacks/options/backdrops.options.txt",
 		"oF": 0
 		},
 	"/hacks/options/bitsymuse.options.txt": {
