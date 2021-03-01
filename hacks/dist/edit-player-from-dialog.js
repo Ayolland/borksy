@@ -1,64 +1,35 @@
 /**
-😽
-@file character portraits
-@summary high quality anime jpegs (or pngs i guess)
+👯‍♂️
+@file edit player from dialog
+@summary change which sprite is controlled by the player
 @license MIT
 @version 15.4.1
-@requires Bitsy Version: 5.3
+@requires 7.0
 @author Sean S. LeBlanc
 
 @description
-Adds a tag (portrait "id") which adds the ability to draw high resolution images during dialog.
+You can use this to change which sprite is controlled by the player.
+
+(player "target")
+(playerNow "target")
+Parameters:
+	target: id/name of sprite that will be the new player
 
 Examples:
-	(portrait "cat")
-		draws the image named "cat" in the hackOptions
-	(portrait "")
-		resets the portrait to not draw
-
-By default, the portrait will clear when dialog is exited,
-but this can be customized in the hackOptions below.
-
-All portraits are drawn from the top-left corner, on top of the game and below the dialog box.
-They are scaled uniformly according to the hackOptions below,
-and are cropped to bitsy's canvas width/height.
-
-All portraits are preloaded, but their loading state is ignored.
-i.e. The game will start before they have all loaded,
-and they simply won't draw if they're not loaded or have errored out.
-
-All standard browser image formats are supported, but keep filesize in mind!
-
-Notes:
-- The hack is called "character portraits", but this can easily be used to show images of any sort
-- Images drawn with this hack may taint bitsy's canvas, preventing exit transitions from working.
-  You can avoid this by only using images hosted alongside your game on a server.
+(player "a")
+(playerNow "a")
 
 HOW TO USE:
-1. Copy-paste this script into a script tag after the bitsy source
-2. Edit the hackOptions object as needed
+	Copy-paste this script into a new script tag after the Bitsy source code.
+
+NOTE:
+- The original player sprite has an id of 'A' by default
+- Inventory (i.e. item counts) is per-sprite, not shared.
+  If you want to simulate "shared" inventory, include standard
+  dialog variables on your items that increment when picked up
 */
-this.hacks = this.hacks || {};
-(function (exports, bitsy) {
+(function (bitsy) {
 'use strict';
-var hackOptions = {
-	// influences the resolution of the drawn image
-	// `bitsy.scale` (4 by default) is the max and will match bitsy's internal scale (i.e. 512x512)
-	// 1 will match bitsy's in-game virtual scale (i.e. 128x128)
-	// it's best to decide this up-front and make portrait images that match this resolution
-	scale: bitsy.scale,
-	// a list of portrait files
-	// the format is: 'id for portrait tag': 'file path'
-	// these may be:
-	// - local files (in which case you need to include them with your html when publishing)
-	// - online urls (which are not guaranteed to work as they are network-dependent)
-	// - base64-encoded images (the most reliable but unwieldy)
-	portraits: {
-		cat: './cat.png',
-	},
-	autoReset: true, // if true, automatically resets the portrait to blank when dialog is exited
-	dialogOnly: true, // if true, portrait is only shown when dialog is active
-};
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -103,6 +74,22 @@ function inject(searchRegex, replaceString) {
 	newScriptTag.textContent = code;
 	scriptTag.insertAdjacentElement('afterend', newScriptTag);
 	scriptTag.remove();
+}
+
+/*
+Helper for getting image by name or id
+
+Args:
+	name: id or name of image to return
+	 map: map of images (e.g. `sprite`, `tile`, `item`)
+
+Returns: the image in the given map with the given name/id
+ */
+function getImage(name, map) {
+	var id = Object.prototype.hasOwnProperty.call(map, name) ? name : Object.keys(map).find(function (e) {
+		return map[e].name === name;
+	});
+	return map[id];
 }
 
 /**
@@ -329,63 +316,69 @@ function addDialogTag(tag, fn) {
 	injectDialogTag(tag, 'kitsy.dialogFunctions["' + tag + '"]');
 }
 
-
-
-
-
-var state = {
-	portraits: {},
-	portrait: null,
-};
-
-// preload images into a cache
-after('startExportedGame', function () {
-	Object.keys(hackOptions.portraits).forEach(function (i) {
-		state.portraits[i] = new Image();
-		state.portraits[i].src = hackOptions.portraits[i];
+/**
+ * Adds a custom dialog tag which executes the provided function.
+ * For ease-of-use with the bitsy editor, tags can be written as
+ * (tagname "parameters") in addition to the standard {tagname "parameters"}
+ *
+ * Function is executed after the dialog box.
+ *
+ * @param {string}   tag Name of tag
+ * @param {Function} fn  Function to execute, with signature `function(environment, parameters){}`
+ *                       environment: provides access to SetVariable/GetVariable (among other things, see Environment in the bitsy source for more info)
+ *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
+ */
+function addDeferredDialogTag(tag, fn) {
+	addDialogFunction(tag, fn);
+	bitsy.kitsy.deferredDialogFunctions = bitsy.kitsy.deferredDialogFunctions || {};
+	var deferred = bitsy.kitsy.deferredDialogFunctions[tag] = [];
+	injectDialogTag(tag, 'function(e, p, o){ kitsy.deferredDialogFunctions["' + tag + '"].push({e:e,p:p}); o(null); }');
+	// Hook into the dialog finish event and execute the actual function
+	after('onExitDialog', function () {
+		while (deferred.length) {
+			var args = deferred.shift();
+			bitsy.kitsy.dialogFunctions[tag](args.e, args.p, args.o);
+		}
 	});
-});
+	// Hook into the game reset and make sure data gets cleared
+	after('clearGameData', function () {
+		deferred.length = 0;
+	});
+}
 
-// hook up dialog tag
-addDialogTag('portrait', function (environment, parameters, onReturn) {
-	var newPortrait = parameters[0];
-	var image = state.portraits[newPortrait];
-	if (state.portrait === image) {
+/**
+ * Adds two custom dialog tags which execute the provided function,
+ * one with the provided tagname executed after the dialog box,
+ * and one suffixed with 'Now' executed immediately when the tag is reached.
+ *
+ * i.e. helper for the (exit)/(exitNow) pattern.
+ *
+ * @param {string}   tag Name of tag
+ * @param {Function} fn  Function to execute, with signature `function(environment, parameters){}`
+ *                       environment: provides access to SetVariable/GetVariable (among other things, see Environment in the bitsy source for more info)
+ *                       parameters: array containing parameters as string in first element (i.e. `parameters[0]`)
+ */
+function addDualDialogTag(tag, fn) {
+	addDialogTag(tag + 'Now', function (environment, parameters, onReturn) {
+		fn(environment, parameters);
 		onReturn(null);
-		return;
+	});
+	addDeferredDialogTag(tag, fn);
+}
+
+
+
+addDualDialogTag('player', function (environment, parameters) {
+	var targetId = parameters[0];
+	var target = getImage(targetId, bitsy.sprite);
+	if (!target) {
+		throw new Error('Could not change player: invalid sprite "' + targetId + '"');
 	}
-	state.portrait = image;
-	onReturn(null);
+	if (!target.room) {
+		throw new Error('Could not change player: sprite "' + targetId + '" not placed in a room');
+	}
+	bitsy.playerId = targetId;
+	bitsy.curRoom = target.room;
 });
 
-// hook up drawing
-var context;
-after('drawRoom', function () {
-	if ((hackOptions.dialogOnly && !bitsy.isDialogMode && !bitsy.isNarrating) || !state.portrait) {
-		return;
-	}
-	if (!context) {
-		context = bitsy.canvas.getContext('2d');
-		context.imageSmoothingEnabled = false;
-	}
-	try {
-		context.drawImage(state.portrait, 0, 0, bitsy.width * hackOptions.scale, bitsy.height * hackOptions.scale, 0, 0, bitsy.width * bitsy.scale, bitsy.height * bitsy.scale);
-	} catch (error) {
-		// log and ignore errors
-		// so broken images don't break the game
-		console.error('Portrait error', error);
-	}
-});
-
-after('onExitDialog', function () {
-	if (hackOptions.autoReset) {
-		state.portrait = '';
-	}
-});
-
-exports.hackOptions = hackOptions;
-exports.state = state;
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-}(this.hacks.character_portraits = this.hacks.character_portraits || {}, window));
+}(window));

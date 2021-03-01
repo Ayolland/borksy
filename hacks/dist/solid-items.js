@@ -3,7 +3,8 @@
 @file solid items
 @summary treat some items like sprites that can be placed multiple times
 @license MIT
-@version 2.1.6
+@version 15.4.1
+@requires 7.0
 @author Sean S. LeBlanc
 
 @description
@@ -26,7 +27,9 @@ var hackOptions = {
 	},
 };
 
-bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
 /**
 @file utils
@@ -85,7 +88,6 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -112,13 +114,6 @@ function before(targetFuncName, beforeFn) {
 	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
 }
 
-// Ex: after('load_game', function run() { alert('Loaded!'); });
-function after(targetFuncName, afterFn) {
-	var kitsy = kitsyInit();
-	kitsy.queuedAfterScripts[targetFuncName] = kitsy.queuedAfterScripts[targetFuncName] || [];
-	kitsy.queuedAfterScripts[targetFuncName].push(afterFn);
-}
-
 function kitsyInit() {
 	// return already-initialized kitsy
 	if (bitsy.kitsy) {
@@ -129,7 +124,7 @@ function kitsyInit() {
 	bitsy.kitsy = {
 		queuedInjectScripts: [],
 		queuedBeforeScripts: {},
-		queuedAfterScripts: {}
+		queuedAfterScripts: {},
 	};
 
 	var oldStartFunc = bitsy.startExportedGame;
@@ -148,12 +143,11 @@ function kitsyInit() {
 	return bitsy.kitsy;
 }
 
-
 function doInjects() {
 	bitsy.kitsy.queuedInjectScripts.forEach(function (injectScript) {
 		inject(injectScript.searchRegex, injectScript.replaceString);
 	});
-	_reinitEngine();
+	reinitEngine();
 }
 
 function applyAllHooks() {
@@ -201,21 +195,20 @@ function applyHook(functionName) {
 				// Assume funcs that accept more args than the original are
 				// async and accept a callback as an additional argument.
 				return functions[i++].apply(this, args.concat(runBefore.bind(this)));
-			} else {
-				// run synchronously
-				returnVal = functions[i++].apply(this, args);
-				if (returnVal && returnVal.length) {
-					args = returnVal;
-				}
-				return runBefore.apply(this, args);
 			}
+			// run synchronously
+			returnVal = functions[i++].apply(this, args);
+			if (returnVal && returnVal.length) {
+				args = returnVal;
+			}
+			return runBefore.apply(this, args);
 		}
 
 		return runBefore.apply(this, arguments);
 	};
 }
 
-function _reinitEngine() {
+function reinitEngine() {
 	// recreate the script and dialog objects so that they'll be
 	// referencing the code with injections instead of the original
 	bitsy.scriptModule = new bitsy.Script();
@@ -237,41 +230,54 @@ var y;
 before('movePlayer', function () {
 	x = bitsy.player().x;
 	y = bitsy.player().y;
+});
+before('startItemDialog', function (itemId, dialogCallback) {
 	room = bitsy.room[bitsy.curRoom];
 	oldItems = room.items.slice();
-});
-after('movePlayer', function () {
-	var newItems = room.items;
-	if (newItems.length === oldItems.length) {
-		return; // nothing changed
+	// something changed
+	if (!hackOptions.itemIsSolid(bitsy.item[itemId])) {
+		return undefined;
 	}
+	// get back there!
+	bitsy.player().x = x;
+	bitsy.player().y = y;
+	return [itemId, function () {
+		var newItems = room.items;
+		if (newItems.length === oldItems.length) {
+			return; // nothing changed
+		}
 
-	// check for changes
-	for (var i = 0; i < oldItems.length; ++i) {
-		if (!newItems[i]
-			|| oldItems[i].x !== newItems[i].x
-			|| oldItems[i].y !== newItems[i].y
-			|| oldItems[i].id !== newItems[i].id
-		) {
-			// something changed
-			if (hackOptions.itemIsSolid(bitsy.item[oldItems[i].id])) {
-				// put that back!
-				newItems.splice(i, 0, oldItems[i]);
-				// get back there!
-				bitsy.player().x = x;
-				bitsy.player().y = y;
-			} else {
-				// add an empty entry for now to keep the arrays aligned
-				newItems.splice(i, 0, null);
+		// check for changes
+		for (var i = 0; i < oldItems.length; ++i) {
+			if (!newItems[i]
+				|| oldItems[i].x !== newItems[i].x
+				|| oldItems[i].y !== newItems[i].y
+				|| oldItems[i].id !== newItems[i].id
+			) {
+				// something changed
+				if (hackOptions.itemIsSolid(bitsy.item[oldItems[i].id])) {
+					// put that back!
+					newItems.splice(i, 0, oldItems[i]);
+				} else {
+					// add an empty entry for now to keep the arrays aligned
+					newItems.splice(i, 0, null);
+				}
 			}
 		}
-	}
-	// clear out those empty entries
-	room.items = newItems.filter(function (item) {
-		return !!item;
-	});
+		// clear out those empty entries
+		room.items = newItems.filter(function (item) {
+			return !!item;
+		});
+
+		// run the actual callback
+		if (dialogCallback) {
+			dialogCallback();
+		}
+	}];
 });
 
 exports.hackOptions = hackOptions;
+
+Object.defineProperty(exports, '__esModule', { value: true });
 
 }(this.hacks.solid_items = this.hacks.solid_items || {}, window));

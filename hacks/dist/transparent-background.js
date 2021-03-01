@@ -1,15 +1,16 @@
 /**
-🏁
-@file transparent sprites
-@summary makes all sprites have transparent backgrounds
+🔳
+@file transparent background
+@summary makes the game have a transparent background
 @license MIT
 @version 15.4.1
-@requires Bitsy Version: 6.1
-@author Sean S. LeBlanc
+@requires Bitsy Version: 7.2
+@author Cephalopodunk & Sean S. LeBlanc
 
 @description
-Makes all sprites have transparent backgrounds.
-i.e. tiles can be seen underneath the player, sprites, and items.
+Makes the game background transparent, showing whatever would be visible behind it in the html document.
+
+Note: also includes transparent sprites
 
 HOW TO USE:
 1. Copy-paste this script into a script tag after the bitsy source
@@ -18,7 +19,8 @@ HOW TO USE:
 this.hacks = this.hacks || {};
 (function (exports, bitsy) {
 'use strict';
-var hackOptions = {
+var hackOptions$1 = {
+	// transparent sprites option
 	isTransparent: function (drawing) {
 		// return drawing.name == 'tea'; // specific transparent drawing
 		// return ['tea', 'flower', 'hat'].indexOf(drawing.name) !== -1; // specific transparent drawing list
@@ -104,6 +106,23 @@ HOW TO USE:
   For more info, see the documentation at:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
+
+// Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
+function inject$1(searchRegex, replaceString) {
+	var kitsy = kitsyInit();
+	if (
+		!kitsy.queuedInjectScripts.some(function (script) {
+			return searchRegex.toString() === script.searchRegex.toString() && replaceString === script.replaceString;
+		})
+	) {
+		kitsy.queuedInjectScripts.push({
+			searchRegex: searchRegex,
+			replaceString: replaceString,
+		});
+	} else {
+		console.warn('Ignored duplicate inject');
+	}
+}
 
 // Ex: before('load_game', function run() { alert('Loading!'); });
 //     before('show_text', function run(text) { return text.toUpperCase(); });
@@ -219,9 +238,32 @@ function reinitEngine() {
 	bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 }
 
+/**
+🏁
+@file transparent sprites
+@summary makes all sprites have transparent backgrounds
+@license MIT
+@version auto
+@requires Bitsy Version: 6.1
+@author Sean S. LeBlanc
 
+@description
+Makes all sprites have transparent backgrounds.
+i.e. tiles can be seen underneath the player, sprites, and items.
 
+HOW TO USE:
+1. Copy-paste this script into a script tag after the bitsy source
+2. Edit hackOptions below as needed
+*/
 
+var hackOptions = {
+	isTransparent: function (drawing) {
+		// return drawing.name == 'tea'; // specific transparent drawing
+		// return ['tea', 'flower', 'hat'].indexOf(drawing.name) !== -1; // specific transparent drawing list
+		// return drawing.name && drawing.name.indexOf('TRANSPARENT') !== -1; // transparent drawing flag in name
+		return true; // all drawings are transparent
+	},
+};
 
 var madeTransparent;
 var makeTransparent;
@@ -265,8 +307,20 @@ before('drawTile', function (canvas) {
 	}
 });
 
-exports.hackOptions = hackOptions;
+
+
+
+
+// pass through transparent sprites option
+hackOptions.isTransparent = function (drawing) {
+	return hackOptions$1.isTransparent(drawing);
+};
+
+inject$1(/ctx.fillRect(\(0,0,canvas.width,canvas.height\);)/g, 'ctx.clearRect$1');
+inject$1(/context.fillRect(\(0,0,canvas.width,canvas.height\);)/g, 'context.clearRect$1');
+
+exports.hackOptions = hackOptions$1;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-}(this.hacks.transparent_sprites = this.hacks.transparent_sprites || {}, window));
+}(this.hacks.transparent_background = this.hacks.transparent_background || {}, window));

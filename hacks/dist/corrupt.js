@@ -3,7 +3,7 @@
 @file corrupt
 @summary corrupts gamedata at runtime
 @license MIT
-@version 3.0.7
+@version 15.4.1
 @requires 5.5
 @author Sean S. LeBlanc
 
@@ -51,7 +51,9 @@ var hackOptions = {
 	paletteAmplitude: 10, // how much to corrupt palette by (0-128)
 };
 
-bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
 /**
 @file utils
@@ -200,7 +202,6 @@ function setItemData(id, frame, newData) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -217,6 +218,15 @@ HOW TO USE:
   For more info, see the documentation at:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
+
+// Ex: before('load_game', function run() { alert('Loading!'); });
+//     before('show_text', function run(text) { return text.toUpperCase(); });
+//     before('show_text', function run(text, done) { done(text.toUpperCase()); });
+function before(targetFuncName, beforeFn) {
+	var kitsy = kitsyInit();
+	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
+	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
+}
 
 // Ex: after('load_game', function run() { alert('Loaded!'); });
 function after(targetFuncName, afterFn) {
@@ -235,7 +245,7 @@ function kitsyInit() {
 	bitsy.kitsy = {
 		queuedInjectScripts: [],
 		queuedBeforeScripts: {},
-		queuedAfterScripts: {}
+		queuedAfterScripts: {},
 	};
 
 	var oldStartFunc = bitsy.startExportedGame;
@@ -254,12 +264,11 @@ function kitsyInit() {
 	return bitsy.kitsy;
 }
 
-
 function doInjects() {
 	bitsy.kitsy.queuedInjectScripts.forEach(function (injectScript) {
 		inject(injectScript.searchRegex, injectScript.replaceString);
 	});
-	_reinitEngine();
+	reinitEngine();
 }
 
 function applyAllHooks() {
@@ -307,21 +316,20 @@ function applyHook(functionName) {
 				// Assume funcs that accept more args than the original are
 				// async and accept a callback as an additional argument.
 				return functions[i++].apply(this, args.concat(runBefore.bind(this)));
-			} else {
-				// run synchronously
-				returnVal = functions[i++].apply(this, args);
-				if (returnVal && returnVal.length) {
-					args = returnVal;
-				}
-				return runBefore.apply(this, args);
 			}
+			// run synchronously
+			returnVal = functions[i++].apply(this, args);
+			if (returnVal && returnVal.length) {
+				args = returnVal;
+			}
+			return runBefore.apply(this, args);
 		}
 
 		return runBefore.apply(this, arguments);
 	};
 }
 
-function _reinitEngine() {
+function reinitEngine() {
 	// recreate the script and dialog objects so that they'll be
 	// referencing the code with injections instead of the original
 	bitsy.scriptModule = new bitsy.Script();
@@ -340,7 +348,21 @@ function _reinitEngine() {
 
 
 // hook corruption to player movement
-after('onPlayerMoved', corrupt);
+var px;
+var py;
+var pr;
+before('update', function () {
+	var player = bitsy.player();
+	px = player.x;
+	py = player.y;
+	pr = player.room;
+});
+after('update', function () {
+	var player = bitsy.player();
+	if (px !== player.x || py !== player.y || pr !== player.room) {
+		corrupt();
+	}
+});
 
 // ////////////////
 // corrupt code //
@@ -463,5 +485,7 @@ function rndItem(array) {
 }
 
 exports.hackOptions = hackOptions;
+
+Object.defineProperty(exports, '__esModule', { value: true });
 
 }(this.hacks.corrupt = this.hacks.corrupt || {}, window));

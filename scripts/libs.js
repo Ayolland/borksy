@@ -1,7 +1,7 @@
 var loadedFiles ={};
 
 var borksyInfo = {
-	lastUpdated: "December 01, 2020",
+	lastUpdated: "Febuary 28, 2021",
 	templates: [
 		{filename:"Bitsy.5.5", description: "Bitsy 5.5 (modified for Borksy)", isDefault: false},
 		{filename:"BitsyHD.5.1", description: "Bitsy HD + Borksy (modified from Bitsy 5.1)", isDefault: false},
@@ -125,6 +125,20 @@ var hacks = {
 		order: 5,
 		conflicts: false,
 		github: 'avatar-by-room.js',
+		forceLocal: false
+	},
+
+	"backdrops": {
+		title: "🖼 Backdrops",
+		description: "Gives the game a backdrop",
+		author: "Cephalopodunk",
+		readme: true,
+		type: "options",
+		requires: "",
+		hidden: false,
+		order: 5,
+		conflicts: false,
+		github: 'backdrops.js',
 		forceLocal: false
 	},
 

@@ -2,7 +2,8 @@
 🔀
 @file logic-operators-extended
 @summary adds conditional logic operators
-@version 1.1.6
+@version 15.4.1
+@requires 7.2
 @author @mildmojo
 
 @description
@@ -10,17 +11,14 @@ Adds conditional logic operators:
   - !== (not equal to)
   - && (and)
   - || (or)
-  - &&! (and not)
-  - ||! (or not)
+  - % (modulo)
 
 Examples: candlecount > 5 && haslighter == 1
           candlecount > 5 && papercount > 1 && isIndoors
           haslighter == 1 || hasmatches == 1
           candlecount > 5 && candlecount !== 666
-          candlecount > 5 &&! droppedlighter
-          droppedlighter ||! hasmatches
 
-NOTE: The combining operators (&&, ||, &&!, ||!) have lower precedence than
+NOTE: The combining operators (&&, ||) have lower precedence than
       all other math and comparison operators, so it might be hard to write
       tests that mix and match these new operators and have them evaluate
       correctly. If you're using multiple `&&` and `||` operators in one
@@ -30,7 +28,9 @@ NOTE: The combining operators (&&, ||, &&!, ||!) have lower precedence than
 (function (bitsy) {
 'use strict';
 
-bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
 /**
 @file utils
@@ -89,7 +89,6 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -107,14 +106,21 @@ HOW TO USE:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
 
-
 // Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
 function inject$1(searchRegex, replaceString) {
 	var kitsy = kitsyInit();
-	kitsy.queuedInjectScripts.push({
-		searchRegex: searchRegex,
-		replaceString: replaceString
-	});
+	if (
+		!kitsy.queuedInjectScripts.some(function (script) {
+			return searchRegex.toString() === script.searchRegex.toString() && replaceString === script.replaceString;
+		})
+	) {
+		kitsy.queuedInjectScripts.push({
+			searchRegex: searchRegex,
+			replaceString: replaceString,
+		});
+	} else {
+		console.warn('Ignored duplicate inject');
+	}
 }
 
 function kitsyInit() {
@@ -127,7 +133,7 @@ function kitsyInit() {
 	bitsy.kitsy = {
 		queuedInjectScripts: [],
 		queuedBeforeScripts: {},
-		queuedAfterScripts: {}
+		queuedAfterScripts: {},
 	};
 
 	var oldStartFunc = bitsy.startExportedGame;
@@ -146,12 +152,11 @@ function kitsyInit() {
 	return bitsy.kitsy;
 }
 
-
 function doInjects() {
 	bitsy.kitsy.queuedInjectScripts.forEach(function (injectScript) {
 		inject(injectScript.searchRegex, injectScript.replaceString);
 	});
-	_reinitEngine();
+	reinitEngine();
 }
 
 function applyAllHooks() {
@@ -199,21 +204,20 @@ function applyHook(functionName) {
 				// Assume funcs that accept more args than the original are
 				// async and accept a callback as an additional argument.
 				return functions[i++].apply(this, args.concat(runBefore.bind(this)));
-			} else {
-				// run synchronously
-				returnVal = functions[i++].apply(this, args);
-				if (returnVal && returnVal.length) {
-					args = returnVal;
-				}
-				return runBefore.apply(this, args);
 			}
+			// run synchronously
+			returnVal = functions[i++].apply(this, args);
+			if (returnVal && returnVal.length) {
+				args = returnVal;
+			}
+			return runBefore.apply(this, args);
 		}
 
 		return runBefore.apply(this, arguments);
 	};
 }
 
-function _reinitEngine() {
+function reinitEngine() {
 	// recreate the script and dialog objects so that they'll be
 	// referencing the code with injections instead of the original
 	bitsy.scriptModule = new bitsy.Script();
@@ -226,58 +230,29 @@ function _reinitEngine() {
 
 
 
-function andExp(environment, left, right, onReturn) {
-	right.Eval(environment, function (rVal) {
-		left.Eval(environment, function (lVal) {
-			onReturn(lVal && rVal);
-		});
-	});
-}
+var operators = ['!==', '&&', '||', '%'];
 
-function orExp(environment, left, right, onReturn) {
+function expression(operator) {
+	return `function (environment, left, right, onReturn) {
 	right.Eval(environment, function (rVal) {
 		left.Eval(environment, function (lVal) {
-			onReturn(lVal || rVal);
+			onReturn(lVal ${operator} rVal);
 		});
 	});
-}
-
-function notEqExp(environment, left, right, onReturn) {
-	right.Eval(environment, function (rVal) {
-		left.Eval(environment, function (lVal) {
-			onReturn(lVal !== rVal);
-		});
-	});
-}
-
-function andNotExp(environment, left, right, onReturn) {
-	right.Eval(environment, function (rVal) {
-		left.Eval(environment, function (lVal) {
-			onReturn(lVal && !rVal);
-		});
-	});
-}
-
-function orNotExp(environment, left, right, onReturn) {
-	right.Eval(environment, function (rVal) {
-		left.Eval(environment, function (lVal) {
-			onReturn(lVal || !rVal);
-		});
-	});
+}`;
 }
 
 inject$1(/(operatorMap\.set\("-", subExp\);)/, `
 	$1
-	operatorMap.set("&&", ${andExp.toString()});
-	operatorMap.set("||", ${orExp.toString()});
-	operatorMap.set("&&!", ${andNotExp.toString()});
-	operatorMap.set("||!", ${orNotExp.toString()});
-	operatorMap.set("!==", ${notEqExp.toString()});
+	${operators.map(function (operator) {
+		return `operatorMap.set("${operator}", ${expression(operator)});`;
+	}).join('\n')}
 `);
 inject$1(
-	/(var operatorSymbols = \[.+\];)/,
-	'$1operatorSymbols.unshift("!==", "&&", "||", "&&!", "||!");',
+	/(Operators : \[)(.+\],)/,
+	`$1 ${operators.map(function (operator) {
+		return `"${operator}", `;
+	}).join('')} $2`,
 );
-// End of logic operators mod
 
 }(window));

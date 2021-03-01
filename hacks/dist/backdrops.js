@@ -1,15 +1,16 @@
 /**
-🏁
-@file transparent sprites
-@summary makes all sprites have transparent backgrounds
+🖼
+@file backdrops
+@summary makes the game have a backdrop
 @license MIT
 @version 15.4.1
-@requires Bitsy Version: 6.1
-@author Sean S. LeBlanc
+@requires Bitsy Version: 7.2
+@author Cephalopodunk & Sean S. LeBlanc
 
 @description
-Makes all sprites have transparent backgrounds.
-i.e. tiles can be seen underneath the player, sprites, and items.
+Shows backdrops behind the game
+
+Note: includes transparent background/sprites
 
 HOW TO USE:
 1. Copy-paste this script into a script tag after the bitsy source
@@ -18,7 +19,19 @@ HOW TO USE:
 this.hacks = this.hacks || {};
 (function (exports, bitsy) {
 'use strict';
-var hackOptions = {
+var hackOptions$2 = {
+	// If true, backdrop changes will persist across rooms without a backdrop defined
+	permanent: false,
+	// Backdrops shown by room
+	// Include an entry in this map for every room that you want to trigger a change,
+	// and then specify the image source for the backdrop (generally a file path relative to your game's html file).
+	// Expand the map to include as many rooms as you need.
+	backdropsByRoom: {
+		'room name or id': './images/image for room.png',
+	},
+	// Backdrop shown during title
+	backdropTitle: './images/title.png',
+	// transparent sprites option
 	isTransparent: function (drawing) {
 		// return drawing.name == 'tea'; // specific transparent drawing
 		// return ['tea', 'flower', 'hat'].indexOf(drawing.name) !== -1; // specific transparent drawing list
@@ -105,6 +118,23 @@ HOW TO USE:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
 
+// Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
+function inject$1(searchRegex, replaceString) {
+	var kitsy = kitsyInit();
+	if (
+		!kitsy.queuedInjectScripts.some(function (script) {
+			return searchRegex.toString() === script.searchRegex.toString() && replaceString === script.replaceString;
+		})
+	) {
+		kitsy.queuedInjectScripts.push({
+			searchRegex: searchRegex,
+			replaceString: replaceString,
+		});
+	} else {
+		console.warn('Ignored duplicate inject');
+	}
+}
+
 // Ex: before('load_game', function run() { alert('Loading!'); });
 //     before('show_text', function run(text) { return text.toUpperCase(); });
 //     before('show_text', function run(text, done) { done(text.toUpperCase()); });
@@ -112,6 +142,13 @@ function before(targetFuncName, beforeFn) {
 	var kitsy = kitsyInit();
 	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
 	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
+}
+
+// Ex: after('load_game', function run() { alert('Loaded!'); });
+function after(targetFuncName, afterFn) {
+	var kitsy = kitsyInit();
+	kitsy.queuedAfterScripts[targetFuncName] = kitsy.queuedAfterScripts[targetFuncName] || [];
+	kitsy.queuedAfterScripts[targetFuncName].push(afterFn);
 }
 
 function kitsyInit() {
@@ -219,9 +256,32 @@ function reinitEngine() {
 	bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 }
 
+/**
+🏁
+@file transparent sprites
+@summary makes all sprites have transparent backgrounds
+@license MIT
+@version auto
+@requires Bitsy Version: 6.1
+@author Sean S. LeBlanc
 
+@description
+Makes all sprites have transparent backgrounds.
+i.e. tiles can be seen underneath the player, sprites, and items.
 
+HOW TO USE:
+1. Copy-paste this script into a script tag after the bitsy source
+2. Edit hackOptions below as needed
+*/
 
+var hackOptions = {
+	isTransparent: function (drawing) {
+		// return drawing.name == 'tea'; // specific transparent drawing
+		// return ['tea', 'flower', 'hat'].indexOf(drawing.name) !== -1; // specific transparent drawing list
+		// return drawing.name && drawing.name.indexOf('TRANSPARENT') !== -1; // transparent drawing flag in name
+		return true; // all drawings are transparent
+	},
+};
 
 var madeTransparent;
 var makeTransparent;
@@ -265,8 +325,102 @@ before('drawTile', function (canvas) {
 	}
 });
 
-exports.hackOptions = hackOptions;
+/**
+🔳
+@file transparent background
+@summary makes the game have a transparent background
+@license MIT
+@version auto
+@requires Bitsy Version: 7.2
+@author Cephalopodunk & Sean S. LeBlanc
+
+@description
+Makes the game background transparent, showing whatever would be visible behind it in the html document.
+
+Note: also includes transparent sprites
+
+HOW TO USE:
+1. Copy-paste this script into a script tag after the bitsy source
+2. Edit hackOptions below as needed
+*/
+
+var hackOptions$1 = {
+	// transparent sprites option
+	isTransparent: function (drawing) {
+		// return drawing.name == 'tea'; // specific transparent drawing
+		// return ['tea', 'flower', 'hat'].indexOf(drawing.name) !== -1; // specific transparent drawing list
+		// return drawing.name && drawing.name.indexOf('TRANSPARENT') !== -1; // transparent drawing flag in name
+		return true; // all drawings are transparent
+	},
+};
+
+// pass through transparent sprites option
+hackOptions.isTransparent = function (drawing) {
+	return hackOptions$1.isTransparent(drawing);
+};
+
+inject$1(/ctx.fillRect(\(0,0,canvas.width,canvas.height\);)/g, 'ctx.clearRect$1');
+inject$1(/context.fillRect(\(0,0,canvas.width,canvas.height\);)/g, 'context.clearRect$1');
+
+
+
+
+
+// pass through transparent sprites option
+hackOptions$1.isTransparent = function (drawing) {
+	return hackOptions$2.isTransparent(drawing);
+};
+
+var imgCache = [];
+after('onload', function () {
+	// set base style
+	var game = document.getElementById('game');
+	game.style.backgroundSize = 'cover';
+	// preload images
+	Object.values(hackOptions$2.imagesByRoom)
+		.concat([hackOptions$2.imageTitle, hackOptions$2.imageDefault])
+		.filter(function (src) {
+			return src;
+		})
+		.reduce(function (result, src) {
+			var img = new Image();
+			img.src = src;
+			result.push(img);
+			return result;
+		}, imgCache);
+});
+
+// hook up backdrops
+var currentBackdrop;
+function setBackdrop(src) {
+	if (src === currentBackdrop) {
+		return;
+	}
+	currentBackdrop = src;
+	var game = document.getElementById('game');
+	if (!src) {
+		game.style.backgroundImage = null;
+		return;
+	}
+	game.style.backgroundImage = 'url("' + src + '")';
+}
+
+before('drawRoom', function () {
+	var backdrop = hackOptions$2.backdropsByRoom[bitsy.player().room];
+	// if no backdrop defined + not permanent, reset
+	if (backdrop !== undefined || !hackOptions$2.permanent) {
+		setBackdrop(backdrop);
+	}
+});
+
+after('startNarrating', function (dialogStr, end) {
+	if (!end) {
+		setBackdrop(hackOptions$2.backdropTitle);
+	}
+});
+
+exports.hackOptions = hackOptions$2;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-}(this.hacks.transparent_sprites = this.hacks.transparent_sprites || {}, window));
+}(this.hacks.backdrops = this.hacks.backdrops || {}, window));

@@ -3,7 +3,7 @@
 @file dynamic background
 @summary HTML background matching bitsy background
 @license MIT
-@version 2.1.6
+@version 15.4.1
 @author Sean S. LeBlanc
 
 @description
@@ -12,10 +12,26 @@ Updates the background of the html body to match the background colour of the bi
 HOW TO USE:
 Copy-paste this script into a script tag after the bitsy source
 */
-(function (bitsy) {
+this.hacks = this.hacks || {};
+(function (exports, bitsy) {
 'use strict';
+var hackOptions = {
+	// which palette colour to use for the background
+	// 	0 = background
+	// 	1 = tile
+	// 	2 = sprite
+	default: 0,
+	// entries here will override the default for the given room
+	byRoom: {
+		// examples:
+		// 0: 2
+		// 'my room': 1
+	},
+};
 
-bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
 /**
 @file utils
@@ -59,6 +75,16 @@ function inject(searchRegex, replaceString) {
 }
 
 /**
+ * Helper for getting room by name or id
+ * @param {string} name id or name of room to return
+ * @return {string} room, or undefined if it doesn't exist
+ */
+function getRoom(name) {
+	var id = Object.prototype.hasOwnProperty.call(bitsy.room, name) ? name : bitsy.names.room.get(name);
+	return bitsy.room[id];
+}
+
+/**
  * Helper for getting an array with unique elements
  * @param  {Array} array Original array
  * @return {Array}       Copy of array, excluding duplicates
@@ -74,7 +100,6 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -91,15 +116,6 @@ HOW TO USE:
   For more info, see the documentation at:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
-
-// Ex: before('load_game', function run() { alert('Loading!'); });
-//     before('show_text', function run(text) { return text.toUpperCase(); });
-//     before('show_text', function run(text, done) { done(text.toUpperCase()); });
-function before(targetFuncName, beforeFn) {
-	var kitsy = kitsyInit();
-	kitsy.queuedBeforeScripts[targetFuncName] = kitsy.queuedBeforeScripts[targetFuncName] || [];
-	kitsy.queuedBeforeScripts[targetFuncName].push(beforeFn);
-}
 
 // Ex: after('load_game', function run() { alert('Loaded!'); });
 function after(targetFuncName, afterFn) {
@@ -118,7 +134,7 @@ function kitsyInit() {
 	bitsy.kitsy = {
 		queuedInjectScripts: [],
 		queuedBeforeScripts: {},
-		queuedAfterScripts: {}
+		queuedAfterScripts: {},
 	};
 
 	var oldStartFunc = bitsy.startExportedGame;
@@ -137,12 +153,11 @@ function kitsyInit() {
 	return bitsy.kitsy;
 }
 
-
 function doInjects() {
 	bitsy.kitsy.queuedInjectScripts.forEach(function (injectScript) {
 		inject(injectScript.searchRegex, injectScript.replaceString);
 	});
-	_reinitEngine();
+	reinitEngine();
 }
 
 function applyAllHooks() {
@@ -190,21 +205,20 @@ function applyHook(functionName) {
 				// Assume funcs that accept more args than the original are
 				// async and accept a callback as an additional argument.
 				return functions[i++].apply(this, args.concat(runBefore.bind(this)));
-			} else {
-				// run synchronously
-				returnVal = functions[i++].apply(this, args);
-				if (returnVal && returnVal.length) {
-					args = returnVal;
-				}
-				return runBefore.apply(this, args);
 			}
+			// run synchronously
+			returnVal = functions[i++].apply(this, args);
+			if (returnVal && returnVal.length) {
+				args = returnVal;
+			}
+			return runBefore.apply(this, args);
 		}
 
 		return runBefore.apply(this, arguments);
 	};
 }
 
-function _reinitEngine() {
+function reinitEngine() {
 	// recreate the script and dialog objects so that they'll be
 	// referencing the code with injections instead of the original
 	bitsy.scriptModule = new bitsy.Script();
@@ -217,37 +231,43 @@ function _reinitEngine() {
 
 
 
-var p1;
-var p2;
 
-function getBg() {
-	try {
-		p1 = bitsy.curPal();
-	} catch (e) {
-		p1 = null;
-	}
-}
 
 // helper function which detects when the palette has changed,
 // and updates the background to match
 function updateBg() {
-	// get the new palette
-	p2 = bitsy.curPal();
+	// get the palette colour
+	var c = hackOptions.byRoom[bitsy.curRoom];
+	if (c === undefined) {
+		c = hackOptions.default;
+	}
 
 	// if the palette changed, update background
-	if (p1 !== p2) {
-		document.body.style.background = 'rgb(' + bitsy.getPal(bitsy.curPal())[0].toString() + ')';
+	var bg = 'rgb(' + bitsy.getPal(bitsy.curPal())[c].join(',') + ')';
+	if (document.body.style.background !== bg) {
+		document.body.style.background = bg;
 	}
 }
 
+// expand the map to include ids of rooms listed by name
+after('load_game', function () {
+	var room;
+	Object.keys(hackOptions.byRoom).forEach(function (i) {
+		room = getRoom(i);
+		if (room) {
+			hackOptions.byRoom[room.id] = hackOptions.byRoom[i];
+		}
+	});
+});
+
 // wrap every function which involves changing the palette
-before('moveSprites', getBg);
-before('movePlayer', getBg);
-before('parseWorld', getBg);
-before('movePlayerThroughExit', getBg);
 after('moveSprites', updateBg);
 after('movePlayer', updateBg);
 after('parseWorld', updateBg);
 after('movePlayerThroughExit', updateBg);
 
-}(window));
+exports.hackOptions = hackOptions;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+}(this.hacks.dynamic_background = this.hacks.dynamic_background || {}, window));

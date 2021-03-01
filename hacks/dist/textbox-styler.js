@@ -3,7 +3,7 @@
 @file textbox styler
 @summary customize the style and properties of the textbox
 @license MIT
-@version 1.0.3
+@version 15.4.1
 @requires Bitsy Version: 6.1
 @author Dana Holdampf & Sean S. LeBlanc
 
@@ -399,7 +399,9 @@ var hackOptions = {
 	},
 };
 
-bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
 /**
 @file utils
@@ -487,7 +489,6 @@ function clamp(value, min, max) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -505,14 +506,21 @@ HOW TO USE:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
 
-
 // Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
 function inject$1(searchRegex, replaceString) {
 	var kitsy = kitsyInit();
-	kitsy.queuedInjectScripts.push({
-		searchRegex: searchRegex,
-		replaceString: replaceString
-	});
+	if (
+		!kitsy.queuedInjectScripts.some(function (script) {
+			return searchRegex.toString() === script.searchRegex.toString() && replaceString === script.replaceString;
+		})
+	) {
+		kitsy.queuedInjectScripts.push({
+			searchRegex: searchRegex,
+			replaceString: replaceString,
+		});
+	} else {
+		console.warn('Ignored duplicate inject');
+	}
 }
 
 // Ex: before('load_game', function run() { alert('Loading!'); });
@@ -541,7 +549,7 @@ function kitsyInit() {
 	bitsy.kitsy = {
 		queuedInjectScripts: [],
 		queuedBeforeScripts: {},
-		queuedAfterScripts: {}
+		queuedAfterScripts: {},
 	};
 
 	var oldStartFunc = bitsy.startExportedGame;
@@ -560,12 +568,11 @@ function kitsyInit() {
 	return bitsy.kitsy;
 }
 
-
 function doInjects() {
 	bitsy.kitsy.queuedInjectScripts.forEach(function (injectScript) {
 		inject(injectScript.searchRegex, injectScript.replaceString);
 	});
-	_reinitEngine();
+	reinitEngine();
 }
 
 function applyAllHooks() {
@@ -613,21 +620,20 @@ function applyHook(functionName) {
 				// Assume funcs that accept more args than the original are
 				// async and accept a callback as an additional argument.
 				return functions[i++].apply(this, args.concat(runBefore.bind(this)));
-			} else {
-				// run synchronously
-				returnVal = functions[i++].apply(this, args);
-				if (returnVal && returnVal.length) {
-					args = returnVal;
-				}
-				return runBefore.apply(this, args);
 			}
+			// run synchronously
+			returnVal = functions[i++].apply(this, args);
+			if (returnVal && returnVal.length) {
+				args = returnVal;
+			}
+			return runBefore.apply(this, args);
 		}
 
 		return runBefore.apply(this, arguments);
 	};
 }
 
-function _reinitEngine() {
+function reinitEngine() {
 	// recreate the script and dialog objects so that they'll be
 	// referencing the code with injections instead of the original
 	bitsy.scriptModule = new bitsy.Script();
@@ -642,7 +648,7 @@ function _reinitEngine() {
 // interpreter. Unescape escaped parentheticals, too.
 function convertDialogTags(input, tag) {
 	return input
-		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".*?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
 			if (match.substr(0, 1) === '\\') {
 				return '(' + group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
 			}
@@ -650,17 +656,17 @@ function convertDialogTags(input, tag) {
 		});
 }
 
-
 function addDialogFunction(tag, fn) {
 	var kitsy = kitsyInit();
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
 	if (kitsy.dialogFunctions[tag]) {
-		throw new Error('The dialog function "' + tag + '" already exists.');
+		console.warn('The dialog function "' + tag + '" already exists.');
+		return;
 	}
 
 	// Hook into game load and rewrite custom functions in game data to Bitsy format.
-	before('parseWorld', function (game_data) {
-		return [convertDialogTags(game_data, tag)];
+	before('parseWorld', function (gameData) {
+		return [convertDialogTags(gameData, tag)];
 	});
 
 	kitsy.dialogFunctions[tag] = fn;
@@ -669,7 +675,7 @@ function addDialogFunction(tag, fn) {
 function injectDialogTag(tag, code) {
 	inject$1(
 		/(var functionMap = new Map\(\);[^]*?)(this.HasFunction)/m,
-		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2'
+		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2',
 	);
 }
 
@@ -677,7 +683,7 @@ function injectDialogTag(tag, code) {
  * Adds a custom dialog tag which executes the provided function.
  * For ease-of-use with the bitsy editor, tags can be written as
  * (tagname "parameters") in addition to the standard {tagname "parameters"}
- * 
+ *
  * Function is executed immediately when the tag is reached.
  *
  * @param {string}   tag Name of tag
@@ -695,7 +701,7 @@ function addDialogTag(tag, fn) {
  * Adds a custom dialog tag which executes the provided function.
  * For ease-of-use with the bitsy editor, tags can be written as
  * (tagname "parameters") in addition to the standard {tagname "parameters"}
- * 
+ *
  * Function is executed after the dialog box.
  *
  * @param {string}   tag Name of tag
@@ -753,7 +759,7 @@ inject$1(/(this\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffe
 @file paragraph-break
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
-@version 1.1.7
+@version auto
 @requires Bitsy Version: 5.0, 5.1
 @author Sean S. LeBlanc, David Mowatt
 
@@ -1121,7 +1127,7 @@ var textboxStyler = window.textboxStyler = {
 // Applies only a Style's defined attributes to the current textbox style.
 // {style "StyleName"}
 // {textStyleNow "StyleName"}
-addDualDialogTag('textStyleNow', function (_environment, parameters) {
+addDualDialogTag('textStyle', function (_environment, parameters) {
 	textboxStyler.style(parameters[0]);
 });
 
@@ -1355,5 +1361,7 @@ inject$1(/(else if \(curRowIndex )== 0/g, '$1 < textboxStyler.activeStyle.textMa
 inject$1(/(if \(lastPage\.length) <= 1/, '$1 < textboxStyler.activeStyle.textMaxLines');
 
 exports.hackOptions = hackOptions;
+
+Object.defineProperty(exports, '__esModule', { value: true });
 
 }(this.hacks.textbox_styler = this.hacks.textbox_styler || {}, window));

@@ -1,15 +1,15 @@
 /**
 💕
 @file follower
-@summary makes a single sprite follow the player
+@summary make sprites follow the player
 @license MIT
-@version 4.0.1
+@version 15.4.1
 @requires 7.0
 @author Sean S. LeBlanc
 
 @description
-Makes a single sprite follow the player.
-The follower can optionally collide with the player,
+Make sprites follow the player.
+Followers can optionally collide with the player,
 and can be changed at runtime with dialog commands.
 
 Usage:
@@ -22,9 +22,8 @@ Usage:
 	(followerSyncNow)
 
 Examples:
-	(follower "a") - the sprite with the id "a" starts following
-	(follower "my follower") - the sprite with the name "my follower" starts following
-	(follower) - stops a current follower
+	(follower "a") - the sprite with the id "a" starts/stops following
+	(follower "my follower") - the sprite with the name "my follower" starts/stops following
 	(followerCollision "true") - enables follower collision
 	(followerCollision "false") - disables follower collision
 	(followerDelay "0") - sets follower to move immediately after player
@@ -32,29 +31,31 @@ Examples:
 	(followerDelay "1000") - sets follower to move once per second
 	(followerSync) - moves the follower on top of the player
 
-
 Known issues:
 - Followers will warp to the player on their first movement.
   This can be avoided by placing them next to or on the same tile as the player.
 - When collision is enabled, it's possible for the player to get stuck
-  between walls and their follower. Make sure to avoid single-tile width
+  between walls and their followers. Make sure to avoid single-tile width
   spaces when using this (or design with that restriction in mind!)
 
 HOW TO USE:
 1. Copy-paste this script into a script tag after the bitsy source
-2. Edit hackOptions below to set up an initial follower
+2. Edit hackOptions below to set up initial followers
 3. Use dialog commands as needed
 */
 this.hacks = this.hacks || {};
 (function (exports, bitsy) {
 'use strict';
 var hackOptions = {
-	allowFollowerCollision: false, // if true, the player can walk into the follower and talk to them (possible to get stuck this way)
-	follower: 'a', // id or name of sprite to be the follower; use '' to start without a follower
+	allowFollowerCollision: false, // if true, the player can walk into followers and talk to them (possible to get stuck this way)
+	followers: ['a'], // ids or names of sprites to be followers; use [] to start without a follower
 	delay: 200, // delay between each follower step (0 is immediate, 400 is twice as slow as normal)
+	stack: false, // if true, followers stack on top of each other; otherwise, they will form a chain
 };
 
-bitsy = bitsy && Object.prototype.hasOwnProperty.call(bitsy, 'default') ? bitsy['default'] : bitsy;
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
 /**
 @file utils
@@ -129,7 +130,6 @@ function unique(array) {
 @file kitsy-script-toolkit
 @summary makes it easier and cleaner to run code before and after Bitsy functions or to inject new code into Bitsy script tags
 @license WTFPL (do WTF you want)
-@version 4.0.1
 @requires Bitsy Version: 4.5, 4.6
 @author @mildmojo
 
@@ -147,14 +147,21 @@ HOW TO USE:
   https://github.com/seleb/bitsy-hacks/wiki/Coding-with-kitsy
 */
 
-
 // Ex: inject(/(names.sprite.set\( name, id \);)/, '$1console.dir(names)');
 function inject$1(searchRegex, replaceString) {
 	var kitsy = kitsyInit();
-	kitsy.queuedInjectScripts.push({
-		searchRegex: searchRegex,
-		replaceString: replaceString
-	});
+	if (
+		!kitsy.queuedInjectScripts.some(function (script) {
+			return searchRegex.toString() === script.searchRegex.toString() && replaceString === script.replaceString;
+		})
+	) {
+		kitsy.queuedInjectScripts.push({
+			searchRegex: searchRegex,
+			replaceString: replaceString,
+		});
+	} else {
+		console.warn('Ignored duplicate inject');
+	}
 }
 
 // Ex: before('load_game', function run() { alert('Loading!'); });
@@ -183,7 +190,7 @@ function kitsyInit() {
 	bitsy.kitsy = {
 		queuedInjectScripts: [],
 		queuedBeforeScripts: {},
-		queuedAfterScripts: {}
+		queuedAfterScripts: {},
 	};
 
 	var oldStartFunc = bitsy.startExportedGame;
@@ -202,12 +209,11 @@ function kitsyInit() {
 	return bitsy.kitsy;
 }
 
-
 function doInjects() {
 	bitsy.kitsy.queuedInjectScripts.forEach(function (injectScript) {
 		inject(injectScript.searchRegex, injectScript.replaceString);
 	});
-	_reinitEngine();
+	reinitEngine();
 }
 
 function applyAllHooks() {
@@ -255,21 +261,20 @@ function applyHook(functionName) {
 				// Assume funcs that accept more args than the original are
 				// async and accept a callback as an additional argument.
 				return functions[i++].apply(this, args.concat(runBefore.bind(this)));
-			} else {
-				// run synchronously
-				returnVal = functions[i++].apply(this, args);
-				if (returnVal && returnVal.length) {
-					args = returnVal;
-				}
-				return runBefore.apply(this, args);
 			}
+			// run synchronously
+			returnVal = functions[i++].apply(this, args);
+			if (returnVal && returnVal.length) {
+				args = returnVal;
+			}
+			return runBefore.apply(this, args);
 		}
 
 		return runBefore.apply(this, arguments);
 	};
 }
 
-function _reinitEngine() {
+function reinitEngine() {
 	// recreate the script and dialog objects so that they'll be
 	// referencing the code with injections instead of the original
 	bitsy.scriptModule = new bitsy.Script();
@@ -284,7 +289,7 @@ function _reinitEngine() {
 // interpreter. Unescape escaped parentheticals, too.
 function convertDialogTags(input, tag) {
 	return input
-		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".+?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
+		.replace(new RegExp('\\\\?\\((' + tag + '(\\s+(".*?"|.+?))?)\\\\?\\)', 'g'), function (match, group) {
 			if (match.substr(0, 1) === '\\') {
 				return '(' + group + ')'; // Rewrite \(tag "..."|...\) to (tag "..."|...)
 			}
@@ -292,17 +297,17 @@ function convertDialogTags(input, tag) {
 		});
 }
 
-
 function addDialogFunction(tag, fn) {
 	var kitsy = kitsyInit();
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
 	if (kitsy.dialogFunctions[tag]) {
-		throw new Error('The dialog function "' + tag + '" already exists.');
+		console.warn('The dialog function "' + tag + '" already exists.');
+		return;
 	}
 
 	// Hook into game load and rewrite custom functions in game data to Bitsy format.
-	before('parseWorld', function (game_data) {
-		return [convertDialogTags(game_data, tag)];
+	before('parseWorld', function (gameData) {
+		return [convertDialogTags(gameData, tag)];
 	});
 
 	kitsy.dialogFunctions[tag] = fn;
@@ -311,7 +316,7 @@ function addDialogFunction(tag, fn) {
 function injectDialogTag(tag, code) {
 	inject$1(
 		/(var functionMap = new Map\(\);[^]*?)(this.HasFunction)/m,
-		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2'
+		'$1\nfunctionMap.set("' + tag + '", ' + code + ');\n$2',
 	);
 }
 
@@ -319,7 +324,7 @@ function injectDialogTag(tag, code) {
  * Adds a custom dialog tag which executes the provided function.
  * For ease-of-use with the bitsy editor, tags can be written as
  * (tagname "parameters") in addition to the standard {tagname "parameters"}
- * 
+ *
  * Function is executed immediately when the tag is reached.
  *
  * @param {string}   tag Name of tag
@@ -337,7 +342,7 @@ function addDialogTag(tag, fn) {
  * Adds a custom dialog tag which executes the provided function.
  * For ease-of-use with the bitsy editor, tags can be written as
  * (tagname "parameters") in addition to the standard {tagname "parameters"}
- * 
+ *
  * Function is executed after the dialog box.
  *
  * @param {string}   tag Name of tag
@@ -386,11 +391,22 @@ function addDualDialogTag(tag, fn) {
 
 
 
+
+var followers = [];
 var paths = {};
 
 function setFollower(followerName) {
-	exports.follower = followerName && getImage(followerName, bitsy.sprite);
-	paths[exports.follower.id] = paths[exports.follower.id] || [];
+	var follower = followerName && getImage(followerName, bitsy.sprite);
+	if (!follower) {
+		throw new Error('Failed to find sprite with id/name "' + followerName + '"');
+	}
+	var idx = followers.indexOf(follower);
+	if (idx >= 0) {
+		followers.splice(idx, 1);
+	} else {
+		followers.push(follower);
+	}
+	paths[follower.id] = paths[follower.id] || [];
 	takeStep();
 }
 
@@ -402,38 +418,56 @@ function takeStep() {
 	}
 	walking = true;
 	setTimeout(() => {
-		var path = paths[exports.follower.id];
-		var point = path.shift();
-		if (point) {
-			exports.follower.x = point.x;
-			exports.follower.y = point.y;
-			exports.follower.room = point.room;
-		}
-		walking = false;
-		if (path.length) {
+		let takeAnother = false;
+		followers.forEach(function (follower) {
+			var path = paths[follower.id];
+			var point = path.shift();
+			if (point) {
+				follower.x = point.x;
+				follower.y = point.y;
+				follower.room = point.room;
+			}
+			walking = false;
+			if (path.length) {
+				takeAnother = true;
+			}
+		});
+		if (takeAnother) {
 			takeStep();
 		}
 	}, hackOptions.delay);
 }
 
 after('startExportedGame', function () {
-	setFollower(hackOptions.follower);
+	hackOptions.followers.forEach(setFollower);
 
-	// remove + add player to sprite list to force rendering them on top of follower
+	// remove + add player to sprite list to force rendering them on top of followers
 	var p = bitsy.sprite[bitsy.playerId];
 	delete bitsy.sprite[bitsy.playerId];
 	bitsy.sprite[bitsy.playerId] = p;
 });
 
+let px;
+let py;
+before('update', function () {
+	px = bitsy.player().x;
+	py = bitsy.player().y;
+});
 let movedFollower = false;
-after('onPlayerMoved', function () {
+after('update', function () {
+	// only walk if player moved
+	if (px === bitsy.player().x && py === bitsy.player().y) {
+		return;
+	}
 	// skip walking if already moved due to exits
 	if (movedFollower) {
 		movedFollower = false;
 		return;
 	}
 
-	if (!exports.follower) {
+	if (!followers.length) {
+		takeStep();
+		walking = false;
 		return;
 	}
 
@@ -458,55 +492,86 @@ after('onPlayerMoved', function () {
 		step.x -= 1;
 		break;
 	}
-	paths[exports.follower.id].push(step);
+	followers.forEach(function (follower, idx) {
+		if (idx === 0 || hackOptions.stack) {
+			paths[follower.id].push(step);
+		} else {
+			var prevFollower = followers[idx - 1];
+			var prev = paths[prevFollower.id];
+			paths[follower.id].push(prev[prev.length - 2] || {
+				x: prevFollower.x,
+				y: prevFollower.y,
+				room: prevFollower.room,
+			});
+		}
+	});
 	takeStep();
 });
 
-// make follower walk "through" exits
+// make followers walk "through" exits
 before('movePlayerThroughExit', function (exit) {
-	if (exports.follower) {
+	if (followers.length) {
 		movedFollower = true;
-		paths[exports.follower.id].push({
-			x: exit.dest.x,
-			y: exit.dest.y,
-			room: exit.dest.room,
+		followers.forEach(function (follower) {
+			paths[follower.id].push({
+				x: exit.dest.x,
+				y: exit.dest.y,
+				room: exit.dest.room,
+			});
 		});
 		takeStep();
 	}
 });
 
 function filterFollowing(id) {
-	return exports.follower === bitsy.sprite[id] ? null : id;
+	return followers.some(function (follower) {
+		return follower.id === id;
+	}) ? null : id;
 }
-// filter follower out of collisions
-var originalGetSpriteLeft = bitsy.getSpriteLeft;
-bitsy.getSpriteLeft = function () {
-	if (!hackOptions.allowFollowerCollision) {
-		return filterFollowing(originalGetSpriteLeft());
-	}
-	return originalGetSpriteLeft();
-};
-var originalGetSpriteRight = bitsy.getSpriteRight;
-bitsy.getSpriteRight = function () {
-	if (!hackOptions.allowFollowerCollision) {
-		return filterFollowing(originalGetSpriteRight());
-	}
-	return originalGetSpriteRight();
-};
-var originalGetSpriteUp = bitsy.getSpriteUp;
-bitsy.getSpriteUp = function () {
-	if (!hackOptions.allowFollowerCollision) {
-		return filterFollowing(originalGetSpriteUp());
-	}
-	return originalGetSpriteUp();
-};
-var originalGetSpriteDown = bitsy.getSpriteDown;
-bitsy.getSpriteDown = function () {
-	if (!hackOptions.allowFollowerCollision) {
-		return filterFollowing(originalGetSpriteDown());
-	}
-	return originalGetSpriteDown();
-};
+
+var originalGetSpriteLeft;
+var originalGetSpriteRight;
+var originalGetSpriteUp;
+var originalGetSpriteDown;
+before('movePlayer', function () {
+	originalGetSpriteLeft = bitsy.getSpriteLeft;
+	originalGetSpriteRight = bitsy.getSpriteRight;
+	originalGetSpriteUp = bitsy.getSpriteUp;
+	originalGetSpriteDown = bitsy.getSpriteDown;
+
+	// filter follower out of collisions
+	bitsy.getSpriteLeft = function () {
+		if (!hackOptions.allowFollowerCollision) {
+			return filterFollowing(originalGetSpriteLeft());
+		}
+		return originalGetSpriteLeft();
+	};
+	bitsy.getSpriteRight = function () {
+		if (!hackOptions.allowFollowerCollision) {
+			return filterFollowing(originalGetSpriteRight());
+		}
+		return originalGetSpriteRight();
+	};
+	bitsy.getSpriteUp = function () {
+		if (!hackOptions.allowFollowerCollision) {
+			return filterFollowing(originalGetSpriteUp());
+		}
+		return originalGetSpriteUp();
+	};
+	bitsy.getSpriteDown = function () {
+		if (!hackOptions.allowFollowerCollision) {
+			return filterFollowing(originalGetSpriteDown());
+		}
+		return originalGetSpriteDown();
+	};
+});
+
+after('movePlayer', function () {
+	bitsy.getSpriteLeft = originalGetSpriteLeft;
+	bitsy.getSpriteRight = originalGetSpriteRight;
+	bitsy.getSpriteUp = originalGetSpriteUp;
+	bitsy.getSpriteDown = originalGetSpriteDown;
+});
 
 addDualDialogTag('follower', function (environment, parameters) {
 	setFollower(parameters[0]);
@@ -518,13 +583,13 @@ addDualDialogTag('followerDelay', function (environment, parameters) {
 	hackOptions.delay = parseInt(parameters[0], 10);
 });
 addDualDialogTag('followerSync', function () {
-	if (exports.follower) {
-		var player = bitsy.player();
-		exports.follower.room = player.room;
-		exports.follower.x = player.x;
-		exports.follower.y = player.y;
-		paths[exports.follower.id].length = 0;
-	}
+	var player = bitsy.player();
+	followers.forEach(function (follower) {
+		follower.room = player.room;
+		follower.x = player.x;
+		follower.y = player.y;
+		paths[follower.id].length = 0;
+	});
 });
 
 before('moveSprites', function () {
@@ -532,6 +597,9 @@ before('moveSprites', function () {
 	bitsy.moveCounter += bitsy.deltaTime * (200 / hackOptions.delay); // apply movement delay from options
 });
 
+exports.followers = followers;
 exports.hackOptions = hackOptions;
+
+Object.defineProperty(exports, '__esModule', { value: true });
 
 }(this.hacks.follower = this.hacks.follower || {}, window));

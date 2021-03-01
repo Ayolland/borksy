@@ -1,0 +1,21 @@
+// If true, backdrop changes will persist across rooms without a backdrop defined
+permanent: false,
+
+// Backdrops shown by room
+// Include an entry in this map for every room that you want to trigger a change,
+// and then specify the image source for the backdrop (generally a file path relative to your game's html file).
+// Expand the map to include as many rooms as you need.
+backdropsByRoom: {
+	'room name or id': './images/image for room.png',
+},
+
+// Backdrop shown during title
+backdropTitle: './images/title.png',
+
+// transparent sprites option
+isTransparent: function (drawing) {
+	// return drawing.name == 'tea'; // specific transparent drawing
+	// return ['tea', 'flower', 'hat'].indexOf(drawing.name) !== -1; // specific transparent drawing list
+	// return drawing.name && drawing.name.indexOf('TRANSPARENT') !== -1; // transparent drawing flag in name
+	return true; // all drawings are transparent
+},

@@ -270,9 +270,9 @@ function assembleHacks(hackBundle){
 		
 		var hackFile = loadedFiles[filename];
 		if (hackObj.type === "options"){
-			var hackOptions = $('#' + hackName + '-options').val();
-			hackOptions = "var hackOptions = {\n" + hackOptions + "\n};"
-			hackFile = unescape(hackFile).replace(new RegExp(/^var\s+hackOptions\s?=\s?{[\s\S]*?^};$/,'gm'),hackOptions);
+			hackFile = unescape(hackFile);
+			var newHackOptionsContents = $('#' + hackName + '-options').val();
+			hackFile = hackFile.replace(/(var hackOptions.*= ){[^]*?}(;$)/m, `$1 {\n${newHackOptionsContents}\n} $2`);
 		}
 		hackBundle += hackFile + '\n';
 	});
