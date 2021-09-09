@@ -1,6 +1,6 @@
 **After I add hacks using Borksy, when I load my html file back into Bitsy, all my hacks are gone.**
 
-Yes. Bitsy can't read hacks added through Borksy. So you need to edit your game in the Bitsy editor, and then modify it with Borksy. It is wise to keep a copy of your Bitsy game saved without any Borky modifactions.
+Yes. Bitsy can't read hacks added through Borksy. So you need to edit your game in the Bitsy editor, and then modify it with Borksy. It is wise to keep a copy of your Bitsy game saved without any Borky modifications.
 
 **My Borksy game won't download?**
 
