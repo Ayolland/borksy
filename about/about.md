@@ -8,8 +8,6 @@ Sep 9, 2021 - What's new in 4.5.0:
 * Added Bitsy 7.8 template
 * Added Bitsy 7.9 template
 
-**NOTE on upcoming changes to Bitsy:** Bitsy 8.0 is currently in development. It's unclear at this moment what that means for Borksy, although I will try to find a solution that assists as many Borksy users as possible. My personal advice is to finish any incomplete projects you are currently working on that use Bitsy 7.
-
 The Bitsy 7.8 templates and older are kept in Borksy as a legacy feature, however currently most hacks have been updated to support Bitsy 7.9 and may not be compatible with older versions. If you are building a project using an older version of Bitsy, Borksy may not be a good solution for you. Seek help in the Bitsy discord if you are working on a Bitsy project that requires older versions of Bitsy.
 
 Borksy Features:
