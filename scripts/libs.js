@@ -1,7 +1,7 @@
 var loadedFiles ={};
 
 var borksyInfo = {
-	lastUpdated: "Febuary 28, 2021",
+	lastUpdated: "September 9, 2021",
 	templates: [
 		{filename:"Bitsy.5.5", description: "Bitsy 5.5 (modified for Borksy)", isDefault: false},
 		{filename:"BitsyHD.5.1", description: "Bitsy HD + Borksy (modified from Bitsy 5.1)", isDefault: false},
@@ -10,7 +10,9 @@ var borksyInfo = {
 		{filename:"Bitsy.6.4", description: "Bitsy 6.4 (modified for Borksy)", isDefault: false},
 		{filename:"Bitsy.6.5", description: "Bitsy 6.5", isDefault: false},
 		{filename:"Bitsy.7.0", description: "Bitsy 7.0", isDefault: false},
-		{filename:"Bitsy.7.2", description: "Bitsy 7.2", isDefault: true},
+		{filename:"Bitsy.7.2", description: "Bitsy 7.2", isDefault: false},
+		{filename:"Bitsy.7.8", description: "Bitsy 7.8", isDefault: false},
+		{filename:"Bitsy.7.9", description: "Bitsy 7.9", isDefault: true},
 	]
 };
 
