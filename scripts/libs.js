@@ -1,7 +1,7 @@
 var loadedFiles ={};
 
 var borksyInfo = {
-	lastUpdated: "September 9, 2021",
+	lastUpdated: "September 16, 2021",
 	templates: [
 		{filename:"Bitsy.5.5", description: "Bitsy 5.5 (modified for Borksy)", isDefault: false},
 		{filename:"BitsyHD.5.1", description: "Bitsy HD + Borksy (modified from Bitsy 5.1)", isDefault: false},
