@@ -12,7 +12,7 @@ var borksyInfo = {
 		{filename:"Bitsy.7.0", description: "Bitsy 7.0", isDefault: false},
 		{filename:"Bitsy.7.2", description: "Bitsy 7.2", isDefault: false},
 		{filename:"Bitsy.7.8", description: "Bitsy 7.8", isDefault: false},
-		{filename:"Bitsy.7.9", description: "Bitsy 7.9", isDefault: true},
+		{filename:"Bitsy.7.10", description: "Bitsy 7.10", isDefault: true},
 	]
 };
 

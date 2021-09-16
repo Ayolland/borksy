@@ -3,8 +3,8 @@
 
 <!-- HEADER -->
 
-<!-- Borksy 4.5 -->
-<!-- Bitsy 7.9 -->
+<!-- Borksy 4.6 -->
+<!-- Bitsy 7.10 -->
 <head>
 
 <meta charset="UTF-8">
@@ -23,10 +23,10 @@ BORKSY-CSS
 <script>
 function startExportedGame() {
 	var gameCanvas = document.getElementById("game");
-	var exportedGameData = document.getElementById("exportedGameData").text.slice(1);
-	var exportedDefaultFontData = document.getElementById(defaultFontName).text.slice(1)
+	var gameData = document.getElementById("exportedGameData").text.slice(1);
+	var defaultFontData = document.getElementById(defaultFontName).text.slice(1)
 	attachCanvas(gameCanvas);
-	loadGame(exportedGameData, exportedDefaultFontData);
+	loadGame(gameData, defaultFontData);
 }
 </script>
 
@@ -4850,7 +4850,7 @@ var spriteStartLocations = {};
 /* VERSION */
 var version = {
 	major: 7, // major changes
-	minor: 9, // smaller changes
+	minor: 10, // smaller changes
 	devBuildPhase: "RELEASE",
 };
 function getEngineVersion() {
