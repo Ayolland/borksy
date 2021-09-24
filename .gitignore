@@ -1,6 +1,5 @@
 # TODO: dont ignore docs when gh-pages build is ready
 docs
-scripts/min/libs-min.js
 
 
 # Logs
