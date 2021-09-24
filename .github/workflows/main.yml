@@ -24,3 +24,7 @@ jobs:
           ITCH_USER: ayolland
           PACKAGE: docs
           VERSION: ${{ steps.package-version.outputs.current-version}}
+      - uses: EndBug/add-and-commit@v7.3.0
+        with:
+          add: 'docs'
+          message: 'update build [skip ci]'

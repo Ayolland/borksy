@@ -1,7 +1,3 @@
-# TODO: dont ignore docs when gh-pages build is ready
-docs
-
-
 # Logs
 logs
 *.log
