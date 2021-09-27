@@ -1,0 +1,19 @@
+{
+  "name": "borksy",
+  "version": "4.6.0",
+  "description": "Borksy Game Hacker: A tool for extending Bitsy games",
+  "scripts": {
+    "build": "rm -r -f ./docs && cp -r ./src ./docs && rm ./docs/about/*.md",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ayolland/borksy.git"
+  },
+  "author": "AYolland",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Ayolland/borksy/issues"
+  },
+  "homepage": "https://ayolland.itch.io/borksy"
+}
