@@ -1,0 +1,1 @@
+Updates the background of the html body to match the background colour of the bitsy palette.

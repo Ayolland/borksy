@@ -1,0 +1,13 @@
+itemIsPermanent: function (item) {
+  // specific permanent item
+  //return item.name == 'tea';
+
+  // specific permanent item list
+  //return ['tea', 'flower', 'hat'].indexOf(item.name) !== -1;
+
+  // permanent item flag in name
+  return item.name.indexOf('PERMANENT') !== -1;
+  
+  // all items are permanent
+  //return true;
+}

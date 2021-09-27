@@ -1,0 +1,19 @@
+Adds a tag (portrait "id") which adds the ability to draw high resolution images during dialog.
+
+Examples:
+  (portrait "cat")
+    draws the image named "cat" in the hackOptions
+  (portrait "")
+    resets the portrait to not draw
+
+All portraits are drawn from the top-left corner, on top of the game and below the dialog box.
+
+They are scaled uniformly according to the hackOptions below,
+and are cropped to bitsy's canvas width/height.
+
+All portraits are preloaded, but their loading state is ignored.
+i.e. The game will start before they have all loaded,
+and they simply won't draw if they're not loaded or have errored out.
+
+All standard browser image formats are supported, but keep filesize in mind!
+Note: The hack is called "character portraits", but this can easily be used to show images of any sort.

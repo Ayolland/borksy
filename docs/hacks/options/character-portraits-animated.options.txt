@@ -1,0 +1,21 @@
+// influences the resolution of the drawn image
+// `bitsy.scale` (4 by default) is the max and will match bitsy's internal scale (i.e. 512x512)
+// 1 will match bitsy's in-game virtual scale (i.e. 128x128)
+// it's best to decide this up-front and make portrait images that match this resolution
+
+scale: bitsy.scale,
+
+// a list of portrait files
+// the format is: 'id for portrait tag': 'file path'
+// these may be:
+// - local files (in which case you need to include them with your html when publishing)
+// - online urls (which are not guaranteed to work as they are network-dependent)
+// - base64-encoded images (the most reliable but unwieldy)
+
+portraits: {
+	earth: './GIF.gif',
+	cat: './test-export.gif',
+	png: './test.gif',
+},
+
+autoReset: true, // if true, automatically resets the portrait to blank when dialog is exited

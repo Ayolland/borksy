@@ -1,0 +1,70 @@
+Adds a dialog tag which allows you to present the player with binary dialog choices.
+
+Usage:
+
+{choice
+  - option one
+    result of picking option
+  - option two
+    result of picking option
+}
+
+Recommended uses:
+
+DLG_simple_response
+"""
+Greeting text
+{choice
+  - Response one
+    answer to response one
+  - Response two
+    answer to response two
+}
+"""
+
+DLG_complex_response
+"""
+Greeting text
+{choice
+  - Response one
+    {a = 1}
+  - Response two
+    {a = 2}
+}
+constant part of answer{
+  - a == 1 ?
+    custom part based on response one
+  - a == 2 ?
+    custom part based on response two
+}
+"""
+
+Note: it's recommended you combine this hack
+with the dialog jump hack for complex cases.
+
+Limitations:
+
+Each option must fit on a single line, or the interaction will break.
+Checking the value of a variable set in an option
+*immediately after the choice* will not work,
+as it will evaluate before the player has selected
+an option if there is no text inbetween the two.
+e.g.
+
+"""
+{a = 1}
+{choice
+  - Response one
+    {a = 2}
+  - Response two
+    {a = 3}
+}
+{
+  - a == 1 ?
+    this will print
+  - a == 2 ?
+    these will not
+  - a == 3 ?
+    these will not
+}
+"""
