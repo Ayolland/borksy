@@ -1,6 +1,6 @@
 {
   "name": "borksy",
-  "version": "4.6.0",
+  "version": "4.6.1",
   "description": "Borksy Game Hacker: A tool for extending Bitsy games",
   "scripts": {
     "build": "rm -r -f ./docs && cp -r ./src ./docs && rm ./docs/about/*.md",
