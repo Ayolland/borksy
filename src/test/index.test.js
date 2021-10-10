@@ -67,6 +67,21 @@ describe('Borksy', () => {
 		await page.click('#hacks-section > .collapsible_header'); // open hacks
 		await page.click('.collapsible[data-associated-hack="transparent-sprites"] > .collapsible_header'); // open transparent sprites
 		await page.click('.collapsible[data-associated-hack="transparent-sprites"] input[type="checkbox"]'); // click checkbox
+		await page.click('.collapsible[data-associated-hack="transparent-sprites"] .collapsible:first-of-type > .collapsible_header'); // open hack options
+		expect(await page.screenshot()).toMatchImageSnapshot();
+
+		// customize `isTransparent` check in `gameOptions`
+		await page.focus('.collapsible[data-associated-hack="transparent-sprites"] [data-default-type="hackOptions"]');
+		await page.keyboard.down('Control');
+		await page.keyboard.press('Home');
+		await page.keyboard.up('Control');
+		await page.keyboard.press('End');
+		await page.keyboard.type('\n\treturn drawing === player();');
+		expect(await page.screenshot()).toMatchImageSnapshot();
+	});
+
+	it('should include hack READMEs', async () => {
+		await page.click('.collapsible[data-associated-hack="transparent-sprites"] .collapsible:last-of-type > .collapsible_header');
 		expect(await page.screenshot()).toMatchImageSnapshot();
 	});
 
@@ -110,6 +125,15 @@ describe('Borksy', () => {
 		await page.keyboard.down('ArrowLeft');
 		await page.waitForTimeout(100);
 		await page.keyboard.up('ArrowLeft');
+		await page.waitForTimeout(100);
+		expect(await page.screenshot()).toMatchImageSnapshot();
+	});
+
+	it('should include customized hackOptions', async () => {
+		// move dog onto wall to demonstrate `isTransparent` check
+		await page.evaluate(() => {
+			window.sprite.a.x = 1;
+		});
 		await page.waitForTimeout(100);
 		expect(await page.screenshot()).toMatchImageSnapshot();
 	});
