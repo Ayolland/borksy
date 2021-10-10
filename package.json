@@ -3,8 +3,8 @@
   "version": "4.6.1",
   "description": "Borksy Game Hacker: A tool for extending Bitsy games",
   "scripts": {
-    "build": "rm -r -f ./docs && cp -r ./src ./docs && rm ./docs/about/*.md",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -r -f ./docs && cp -r ./src ./docs && rm ./docs/about/*.md && rm -r ./docs/test",
+    "test": "jest --runInBand"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,16 @@
   "bugs": {
     "url": "https://github.com/Ayolland/borksy/issues"
   },
-  "homepage": "https://ayolland.itch.io/borksy"
+  "homepage": "https://ayolland.itch.io/borksy",
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/test/setupTests.js"
+    ]
+  },
+  "devDependencies": {
+    "jest": "^27.2.5",
+    "jest-image-snapshot": "^4.5.1",
+    "puppeteer": "^10.4.0"
+  }
 }
