@@ -86,7 +86,7 @@ describe('Borksy', () => {
 	});
 
 	it('should allow custom javascript to be added', async () => {
-		await page.click('form .collapsible:nth-of-type(3) > .collapsible_header'); // open additional js
+		await page.click('form > .collapsible:last-of-type > .collapsible_header'); // open additional js
 		await page.focus('#additionalJS');
 		await page.keyboard.type(`
 requestAnimationFrame(() => {
