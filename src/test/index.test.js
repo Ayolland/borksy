@@ -43,13 +43,13 @@ describe('Borksy', () => {
 
 	it('should allow game to be customized', async () => {
 		// fill out game data
-		await page.click('form .collapsible:first-of-type .collapsible_header'); // open title
+		await page.click('form > .collapsible:first-of-type > .collapsible_header'); // open title
 		await page.type('#title', 'Custom Title');
 		await page.type('#filename', 'Custom Filename');
 		expect(await page.screenshot()).toMatchImageSnapshot();
 
 		// remove collision on walls
-		await page.click('form .collapsible:nth-of-type(3) .collapsible_header'); // open gamedata
+		await page.click('form > .collapsible:nth-of-type(3) > .collapsible_header'); // open gamedata
 		await page.focus('#gamedata');
 		await page.keyboard.down('Control');
 		await page.keyboard.press('Home');
