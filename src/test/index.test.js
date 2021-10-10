@@ -1,11 +1,14 @@
 const path = require('path');
 const puppeteer = require('puppeteer');
+const fs = require('fs');
 
 describe('Borksy', () => {
 	/** @type puppeteer.Browser */
 	let browser;
 	/** @type puppeteer.Page */
 	let page;
+
+	const download = path.resolve(__dirname, 'myBORKSYgameCustomFilename.html');
 
 	beforeAll(async () => {
 		browser = await puppeteer.launch({
@@ -34,15 +37,25 @@ describe('Borksy', () => {
 		expect(await page.screenshot()).toMatchImageSnapshot();
 	});
 	it('should allow game to be downloaded', async () => {
+		// fill out game data
 		await page.click('form .collapsible:first-of-type .collapsible_header'); // open title
 		await page.type('#title', 'Custom Title');
 		await page.type('#filename', 'Custom Filename');
-		await page.click('#download-button');
-		await page.waitForTimeout(2000); // TODO: replace with actually checking for file
+
+		// TODO: enable some representative/testable hacks
+
+		// remove download if we already have one
+		if (fs.existsSync(download)) {
+			await fs.promises.unlink(download);
+		}
+
+		await page.click('#download-button'); // start download
+		await page.waitForTimeout(2000); // wait for download to finish
+		expect(fs.existsSync(download)).toBe(true);
 	});
 
 	it('should produce a playable game', async () => {
-		await page.goto(`file:///${path.resolve(__dirname, 'myBORKSYgameCustomFilename.html').replace(/\\/g, '/')}`, {
+		await page.goto(`file:///${download.replace(/\\/g, '/')}`, {
 			waitUntil: 'networkidle2',
 		});
 		await page.keyboard.down('ArrowRight'); // complete title dialog
