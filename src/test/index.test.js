@@ -13,7 +13,6 @@ describe('Borksy', () => {
 	beforeAll(async () => {
 		browser = await puppeteer.launch({
 			headless: false,
-			devtools: true,
 			args: ['--disable-web-security', '--disable-features=IsolateOrigins', ' --disable-site-isolation-trials'],
 		});
 		page = await browser.newPage();
