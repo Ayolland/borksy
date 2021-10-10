@@ -36,6 +36,12 @@ describe('Borksy', () => {
 	it('should load', async () => {
 		expect(await page.screenshot()).toMatchImageSnapshot();
 	});
+
+	it('should collapse sections when clicked', async () => {
+		await page.click('#about .collapsible_header');
+		expect(await page.screenshot()).toMatchImageSnapshot();
+	});
+
 	it('should allow game to be downloaded', async () => {
 		// fill out game data
 		await page.click('form .collapsible:first-of-type .collapsible_header'); // open title
