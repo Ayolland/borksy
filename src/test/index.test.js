@@ -54,7 +54,7 @@ describe('Borksy', () => {
 		await page.keyboard.down('Control');
 		await page.keyboard.press('Home');
 		await page.keyboard.up('Control');
-			for (let i = 0; i < 39; ++i) {
+		for (let i = 0; i < 39; ++i) {
 			await page.keyboard.press('ArrowDown');
 		}
 		await page.keyboard.down('Shift');
