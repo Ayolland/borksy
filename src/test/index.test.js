@@ -85,6 +85,23 @@ describe('Borksy', () => {
 		expect(await page.screenshot()).toMatchImageSnapshot();
 	});
 
+	it('should allow custom javascript to be added', async () => {
+		await page.click('form .collapsible:nth-of-type(3) > .collapsible_header'); // open additional js
+		await page.focus('#additionalJS');
+		await page.keyboard.type(`
+requestAnimationFrame(() => {
+	var el = document.createElement('div');
+	el.textContent = 'test';
+	el.style.position = 'fixed';
+	el.style.top = '0';
+	el.style.left = '0';
+	el.style.color='white';
+	document.body.appendChild(el);
+});
+`);
+		expect(await page.screenshot()).toMatchImageSnapshot();
+	});
+
 	it('should allow game to be downloaded', async () => {
 		// remove download if we already have one
 		if (fs.existsSync(download)) {
