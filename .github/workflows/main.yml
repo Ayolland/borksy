@@ -33,6 +33,8 @@ jobs:
       - run: git add docs package.json
       - run: git commit --allow-empty -m "update build [skip ci]"
       - run: git push --tags
+      - id: package-version2
+        uses: martinbeentjes/npm-get-version-action@v1.1.0
       - uses: josephbmanley/butler-publish-itchio-action@v1.0.2
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
@@ -40,4 +42,4 @@ jobs:
           ITCH_GAME: borksy
           ITCH_USER: ayolland
           PACKAGE: docs
-          VERSION: ${{ steps.package-version.outputs.current-version }}
+          VERSION: ${{ steps.package-version2.outputs.current-version }}
