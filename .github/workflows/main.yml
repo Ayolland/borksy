@@ -31,7 +31,7 @@ jobs:
       - run: npm run build
       - run: git add docs package.json
       - run: git commit -m "update build [skip ci]"
-      - run: git push
+      - run: git push --tags
       - uses: josephbmanley/butler-publish-itchio-action@v1.0.2
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
