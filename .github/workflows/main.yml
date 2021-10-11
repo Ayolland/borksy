@@ -39,4 +39,4 @@ jobs:
           ITCH_GAME: borksy
           ITCH_USER: ayolland
           PACKAGE: docs
-          VERSION: ${{ steps.package-version.outputs.current-version}}
+          VERSION: ${{ steps.package-version.outputs.current-version }}
