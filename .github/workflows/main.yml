@@ -22,11 +22,12 @@ jobs:
       - uses: mukunku/tag-exists-action@v1.0.0
         id: tag-exists
         with: 
-          tag: v${{ steps.package-version.outputs.current-version}}
+          tag: v${{ steps.package-version.outputs.current-version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: npm version patch
         if: steps.tag-exists.outputs.exists == 'true'
+      - run: git tag v${{ steps.package-version.outputs.current-version }}
       - run: npm run build
       - run: git add docs package.json
       - run: git commit -m "update build [skip ci]"
