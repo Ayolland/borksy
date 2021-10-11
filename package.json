@@ -1,8 +1,10 @@
 {
+  "private": true,
   "name": "borksy",
   "version": "4.6.1",
   "description": "Borksy Game Hacker: A tool for extending Bitsy games",
   "scripts": {
+    "preversion": "npm run build",
     "build": "rm -r -f ./docs && cp -r ./src ./docs && rm ./docs/about/*.md",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +17,25 @@
   "bugs": {
     "url": "https://github.com/Ayolland/borksy/issues"
   },
-  "homepage": "https://ayolland.itch.io/borksy"
+  "homepage": "https://ayolland.itch.io/borksy",
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "docs/*",
+            "CHANGELOG.md",
+            "package.json",
+            "package-lock.json"
+          ]
+        }
+      ]
+    ]
+  }
 }
