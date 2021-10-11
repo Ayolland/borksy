@@ -10,10 +10,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-node@v2
         with:
           node-version: 14
-      - run: npm run build
+      - run: npm ci
+      - uses: cycjimmy/semantic-release-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          semantic_version: 17.0.8
+          extra_plugins: |
+            @semantic-release/changelog@5.0.1
+            @semantic-release/git@9.0.0
+          branches: main
       - id: package-version
         uses: martinbeentjes/npm-get-version-action@v1.1.0
       - uses: josephbmanley/butler-publish-itchio-action@v1.0.2
@@ -23,8 +34,4 @@ jobs:
           ITCH_GAME: borksy
           ITCH_USER: ayolland
           PACKAGE: docs
-          VERSION: ${{ steps.package-version.outputs.current-version}}
-      - uses: EndBug/add-and-commit@v7.3.0
-        with:
-          add: 'docs'
-          message: 'update build [skip ci]'
+          VERSION: ${{ steps.package-version.outputs.current-version }}
