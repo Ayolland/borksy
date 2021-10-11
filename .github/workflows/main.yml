@@ -28,7 +28,7 @@ jobs:
       - run: npm version patch
         if: steps.tag-exists.outputs.exists == 'true'
       - run: npm run build
-      - run: git add docs package.json package-lock.json
+      - run: git add docs package.json
       - run: git commit -m "update build [skip ci]"
       - run: git push
       - uses: josephbmanley/butler-publish-itchio-action@v1.0.2
