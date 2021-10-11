@@ -28,6 +28,7 @@ jobs:
       - run: npm version patch
         if: steps.tag-exists.outputs.exists == 'true'
       - run: git tag v${{ steps.package-version.outputs.current-version }}
+        if: steps.tag-exists.outputs.exists == 'false'
       - run: npm run build
       - run: git add docs package.json
       - run: git commit --allow-empty -m "update build [skip ci]"
