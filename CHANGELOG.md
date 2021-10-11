@@ -1,3 +1,10 @@
+## [4.6.4](https://github.com/Ayolland/borksy/compare/v4.6.3...v4.6.4) (2021-10-11)
+
+
+### Bug Fixes
+
+* open external links in new tab ([d335ed2](https://github.com/Ayolland/borksy/commit/d335ed2d3a208f5cc85f18bc13a2b2f8b69fd354))
+
 ## [4.6.3](https://github.com/Ayolland/borksy/compare/v4.6.2...v4.6.3) (2021-10-11)
 
 
