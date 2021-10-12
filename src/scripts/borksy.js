@@ -1,3 +1,6 @@
+import $ from 'jquery';
+import './libs.js';
+
 function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride){
 	doneCallback = doneCallback || function(){};
 	failCallBack = failCallBack || function(){};
