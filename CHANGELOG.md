@@ -1,3 +1,10 @@
+## [4.6.6](https://github.com/Ayolland/borksy/compare/v4.6.5...v4.6.6) (2021-10-12)
+
+
+### Bug Fixes
+
+* `Ctrl` instead of `Ctl` ([c6d10ea](https://github.com/Ayolland/borksy/commit/c6d10ea757a6b1bf2b3bd248d8c7953bf81c1792))
+
 ## [4.6.5](https://github.com/Ayolland/borksy/compare/v4.6.4...v4.6.5) (2021-10-12)
 
 
