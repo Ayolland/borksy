@@ -409,7 +409,7 @@ function loadDefaultFont($thisField){
 function loadDefaultOption($thisField){
 	let options = $thisField[0].options;
 	for (var i = options.length - 1; i >= 0; i--) {
-		$option = $(options[i]);
+		const $option = $(options[i]);
 		if ( $option.data('default-option') !== undefined ){
 			$thisField[0].selectedIndex = i;
 			break;
