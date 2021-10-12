@@ -823,7 +823,7 @@ function makeNewCollapsible(header){
 }
 
 function activateCollapsibles(){
-	$collapsibles = $('[data-collapsible]');
+	const $collapsibles = $('[data-collapsible]');
 	var counter = 0;
 	$collapsibles.each( function(){
 		var $thisCollapsible = $(this);
