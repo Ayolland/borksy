@@ -1,3 +1,13 @@
+## [4.6.7](https://github.com/Ayolland/borksy/compare/v4.6.6...v4.6.7) (2021-10-12)
+
+
+### Bug Fixes
+
+* `$collapsibles` variable used before it was defined ([d269ccd](https://github.com/Ayolland/borksy/commit/d269ccd91967ccb2291c6f216163713f77cde1f4))
+* `$option` variable used before it was defined ([c231e90](https://github.com/Ayolland/borksy/commit/c231e90c17fa5e52753d74d99f8639314f71db51))
+* explicitly reference `window` when defining/accessing global variables ([4ca4d01](https://github.com/Ayolland/borksy/commit/4ca4d014301b38197903364346e830d885e113a2))
+* use relative filepaths ([4aeeee3](https://github.com/Ayolland/borksy/commit/4aeeee345b8f88420bd5b1187ed6070137673828))
+
 ## [4.6.6](https://github.com/Ayolland/borksy/compare/v4.6.5...v4.6.6) (2021-10-12)
 
 
@@ -157,4 +167,3 @@
 # 0.1.0 (2018-04-13)
 
 * Initial version
-
