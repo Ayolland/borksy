@@ -2,6 +2,25 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
+// tests are sequential, which makes subsequent failures after the first confusing;
+// this causes individual checks to skip after the first failure
+// based on https://stackoverflow.com/a/69104498
+let hasTestFailed = false;
+function sit(name, action) {
+	it(name, async () => {
+		if (hasTestFailed) {
+			console.warn(`[skipped]: ${name}`);
+		} else {
+			try {
+				await action();
+			} catch (error) {
+				hasTestFailed = true;
+				throw error;
+			}
+		}
+	});
+};
+
 describe('Borksy', () => {
 	/** @type puppeteer.Browser */
 	let browser;
@@ -32,16 +51,16 @@ describe('Borksy', () => {
 		await browser.close();
 	});
 
-	it('should load', async () => {
+	sit('should load', async () => {
 		expect(await page.screenshot()).toMatchImageSnapshot();
 	});
 
-	it('should collapse sections when clicked', async () => {
+	sit('should collapse sections when clicked', async () => {
 		await page.click('#about .collapsible_header');
 		expect(await page.screenshot()).toMatchImageSnapshot();
 	});
 
-	it('should allow game to be customized', async () => {
+	sit('should allow game to be customized', async () => {
 		// fill out game data
 		await page.click('form > .collapsible:first-of-type > .collapsible_header'); // open title
 		await page.type('#title', 'Custom Title');
@@ -80,12 +99,12 @@ describe('Borksy', () => {
 		expect(await page.screenshot()).toMatchImageSnapshot();
 	});
 
-	it('should include hack READMEs', async () => {
+	sit('should include hack READMEs', async () => {
 		await page.click('.collapsible[data-associated-hack="transparent-sprites"] .collapsible:last-of-type > .collapsible_header');
 		expect(await page.screenshot()).toMatchImageSnapshot();
 	});
 
-	it('should allow custom javascript to be added', async () => {
+	sit('should allow custom javascript to be added', async () => {
 		await page.click('form > .collapsible:last-of-type > .collapsible_header'); // open additional js
 		await page.focus('#additionalJS');
 		await page.keyboard.type(`
@@ -102,7 +121,7 @@ requestAnimationFrame(() => {
 		expect(await page.screenshot()).toMatchImageSnapshot();
 	});
 
-	it('should allow game to be downloaded', async () => {
+	sit('should allow game to be downloaded', async () => {
 		// remove download if we already have one
 		if (fs.existsSync(download)) {
 			await fs.promises.unlink(download);
@@ -113,7 +132,7 @@ requestAnimationFrame(() => {
 		expect(fs.existsSync(download)).toBe(true);
 	});
 
-	it('should produce a playable game', async () => {
+	sit('should produce a playable game', async () => {
 		await page.goto(`file:///${download.replace(/\\/g, '/')}`, {
 			waitUntil: 'networkidle2',
 		});
@@ -129,7 +148,7 @@ requestAnimationFrame(() => {
 		expect(await page.screenshot()).toMatchImageSnapshot();
 	});
 
-	it('should produce a game with hacks applied', async () => {
+	sit('should produce a game with hacks applied', async () => {
 		// walk on top of wall to demonstrate transparent sprites
 		await page.keyboard.down('ArrowLeft');
 		await page.waitForTimeout(100);
@@ -146,7 +165,7 @@ requestAnimationFrame(() => {
 		expect(await page.screenshot()).toMatchImageSnapshot();
 	});
 
-	it('should include customized hackOptions', async () => {
+	sit('should include customized hackOptions', async () => {
 		// move dog onto wall to demonstrate `isTransparent` check
 		await page.evaluate(() => {
 			window.sprite.a.x = 1;
