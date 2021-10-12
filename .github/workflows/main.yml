@@ -28,7 +28,7 @@ jobs:
       - uses: josephbmanley/butler-publish-itchio-action@v1.0.2
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-          CHANNEL: win-linux-mac-stable
+          CHANNEL: web
           ITCH_GAME: borksy
           ITCH_USER: ayolland
           PACKAGE: docs
