@@ -32,12 +32,11 @@ describe('Borksy', () => {
 	beforeAll(async () => {
 		browser = await puppeteer.launch({
 			headless: false,
-			args: ['--disable-web-security', '--disable-features=IsolateOrigins', ' --disable-site-isolation-trials'],
 		});
 		page = await browser.newPage();
 
 		await page._client.send('Page.setDownloadBehavior', { behavior: 'allow', downloadPath: path.resolve(__dirname) });
-		await page.goto(`file:///${path.resolve(__dirname, '../../docs/index.html').replace(/\\/g, '/')}`, {
+		await page.goto('http://localhost:5000', {
 			waitUntil: 'networkidle2',
 		});
 
