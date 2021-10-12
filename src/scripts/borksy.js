@@ -4,29 +4,29 @@ function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filen
 	var $ajax = $.ajax( pathToDir + filename );
 	$ajax.done(function(){
 		filename = filenameOverride || filename;
-		loadedFiles[filename] = escape($ajax.responseText);
+		window.loadedFiles[filename] = escape($ajax.responseText);
 		console.log('Loaded ' + filename + ' via AJAX');
 		doneCallback($ajax.responseText,filenameOverride);
 	});
 	$ajax.fail(function(){
-		//loadedFiles[filename] = "";
+		//window.loadedFiles[filename] = "";
 		console.log('Error loading ' + filename + ' via AJAX');
 		failCallBack($ajax.responseText,filenameOverride);
 	});
 }
 
 // function loadTemplate(){
-// 	loadFileFromPath( borksyInfo.templateVersion + '.template.html','template/');
+// 	loadFileFromPath( window.borksyInfo.templateVersion + '.template.html','template/');
 // }
 
 function loadTemplates(){
 	let templateSel = document.querySelector('select#template');
 	templateSel.innerHTML = "";
-	for (var i = borksyInfo.templates.length - 1; i >= 0; i--) {
-		let filename = borksyInfo.templates[i].filename + '.html';
-		let description = borksyInfo.templates[i].description;
+	for (var i = window.borksyInfo.templates.length - 1; i >= 0; i--) {
+		let filename = window.borksyInfo.templates[i].filename + '.html';
+		let description = window.borksyInfo.templates[i].description;
 		let localStorageVer = localStorage.getItem('template');
-		let isDefault = borksyInfo.templates[i].isDefault;
+		let isDefault = window.borksyInfo.templates[i].isDefault;
 		templateSel.innerHTML += `<option value="${filename}" ${ isDefault ? "data-default-option" : "" }>${description}</option>`;
 		loadFileFromPath( filename,'template/');
 	}
@@ -131,7 +131,7 @@ function setSaveTrigger($this){
 function saveTemplateExtras($this){
 	let isHD = $this.val().split('.')[0] === "BitsyHD";
 	let noSavedGameData = localStorage.getItem('gamedate') == null;
-	let HDgamedata = loadedFiles['gamedata.HD.txt'];
+	let HDgamedata = window.loadedFiles['gamedata.HD.txt'];
 	let HDgamedataExists = HDgamedata !== undefined;
 	let $mascot = $('#mascot');
 	if (isHD){
@@ -268,7 +268,7 @@ function assembleHacks(hackBundle){
 			return;
 		}
 		
-		var hackFile = loadedFiles[filename];
+		var hackFile = window.loadedFiles[filename];
 		if (hackObj.type === "options"){
 			hackFile = unescape(hackFile);
 			var newHackOptionsContents = $('#' + hackName + '-options').val();
@@ -285,7 +285,7 @@ function assembleAndDownloadFile(){
 	});
 
 	let templateName = $('#template').val();
-	var modifiedTemplate = loadedFiles[ templateName ].repeat(1);
+	var modifiedTemplate = window.loadedFiles[ templateName ].repeat(1);
 	var hackBundle = "";
 
 	modifiedTemplate = assembleSingles(modifiedTemplate);
@@ -317,7 +317,7 @@ function loadHDGameData(){
 	let $ajax = $.ajax('defaults/' + filename);
 	$ajax.done(function(){
 		var response = $ajax.responseText;
-		loadedFiles[filename] = response;
+		window.loadedFiles[filename] = response;
 	});
 }
 
@@ -369,7 +369,7 @@ function loadDefaultString($thisField){
 }
 
 function loadDefaultHackOptions($thisField){
-	var options = unescape(loadedFiles[$thisField.attr("name") + '.txt']);
+	var options = unescape(window.loadedFiles[$thisField.attr("name") + '.txt']);
 	$thisField.val(options);
 	setSaveTrigger($thisField);
 }
@@ -392,7 +392,7 @@ function loadDefaultTextfile($thisField){
 	$ajax.done(function(){
 		var response = $ajax.responseText;
 		$thisField.val(response);
-		loadedFiles[filename] = response;
+		window.loadedFiles[filename] = response;
 		setSaveTrigger($thisField);
 	});
 	$ajax.fail(function(){
@@ -700,11 +700,11 @@ function hackGitHubMessage(hackName,hackInfo,$parentCollapse){
 	var msg = "";
 	var hackTitle = removeExtraChars(hackInfo.title);
 	if( hackInfo.forceLocal !== false ){
-		msg = 'Borksy is opting to use a local version of ' + hackTitle + ' from ' + borksyInfo.lastUpdated + '.';
+		msg = 'Borksy is opting to use a local version of ' + hackTitle + ' from ' + window.borksyInfo.lastUpdated + '.';
 	} else if( hacks[hackName].usingGithub === true ){
 		msg = hackTitle + ' is using the most recent version from Github.';
 	} else {
-		msg = hackTitle + ' could not be loaded from Github, local version retrieved on ' + borksyInfo.lastUpdated + ' is being used.';
+		msg = hackTitle + ' could not be loaded from Github, local version retrieved on ' + window.borksyInfo.lastUpdated + ' is being used.';
 		className += " warning";
 	}
 	var $message = $('<p>',{
@@ -806,9 +806,9 @@ function createHiddenHack(hackName,hackObj){
 }
 
 function createHackMenus($here){
-	let alphabetizedHacks = Object.keys(hacks).sort();
+	let alphabetizedHacks = Object.keys(window.hacks).sort();
 	$.each(alphabetizedHacks,function(index,hackName){
-		loadThisHack(hackName,hacks[hackName]);
+		loadThisHack(hackName,window.hacks[hackName]);
 	});
 }
 

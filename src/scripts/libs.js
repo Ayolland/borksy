@@ -1,6 +1,6 @@
-var loadedFiles ={};
+window.loadedFiles ={};
 
-var borksyInfo = {
+window.borksyInfo = {
 	lastUpdated: "September 16, 2021",
 	templates: [
 		{filename:"Bitsy.5.5", description: "Bitsy 5.5 (modified for Borksy)", isDefault: false},
@@ -16,7 +16,7 @@ var borksyInfo = {
 	]
 };
 
-var hacks = {
+window.hacks = {
 
 	// "kitsy-script-toolkit": {
 	// 	title: "🛠 Kitsy",
