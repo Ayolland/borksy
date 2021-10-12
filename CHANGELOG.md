@@ -1,3 +1,10 @@
+## [4.6.5](https://github.com/Ayolland/borksy/compare/v4.6.4...v4.6.5) (2021-10-12)
+
+
+### Bug Fixes
+
+* remove unused test game data ([67998b0](https://github.com/Ayolland/borksy/commit/67998b04cf8f669f73d9269b729a44dfe498f014))
+
 ## [4.6.4](https://github.com/Ayolland/borksy/compare/v4.6.3...v4.6.4) (2021-10-11)
 
 
