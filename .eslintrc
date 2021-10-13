@@ -1,0 +1,45 @@
+{
+	"extends": ["airbnb-base", "plugin:prettier/recommended"],
+	"env": {
+		"browser": true
+	},
+	"parserOptions": {
+		"ecmaVersion": "latest",
+		"sourceType": "module",
+		"ecmaFeatures": {
+			"modules": true,
+			"spread": true,
+			"experimentalObjectRestSpread": true
+		}
+	},
+	"ignorePatterns": ["public"],
+	"rules": {
+		"indent": "off", // prettier handles indentation
+		"max-len": "off", // just apply common-sense
+
+		// for dev accessibility
+		"no-console": "off",
+		"no-use-before-define": "off",
+
+		// i just like using these 🤷‍♀️
+		"no-multi-assign": "off",
+		"no-plusplus": "off",
+		"no-continue": "off"
+	},
+	"overrides": [{
+		"files": ["**/*.test.js", "**/*/test/**/*.js"],
+		"env": {
+			"jest": true,
+			"es6": true
+		},
+		"parserOptions": {
+			"ecmaVersion": 9,
+			"sourceType": "module"
+		},
+		"rules": {
+			"import/no-extraneous-dependencies": ["error", {
+				"devDependencies": true
+			}]
+		}
+	}]
+}
