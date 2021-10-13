@@ -72,7 +72,7 @@ function saveThisData($this, value) {
 	}
 	if ($this.prop('type') === 'checkbox') {
 		value = $this.prop('checked');
-	} else if (typeof value === 'undefined') {
+	} else if (value === undefined) {
 		value = $this.val();
 	} else {
 		$this.val(value);
