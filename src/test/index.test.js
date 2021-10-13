@@ -40,9 +40,13 @@ describe('Borksy', () => {
 			waitUntil: 'networkidle2',
 		});
 
-		// hide mascot to avoid noise in snapshots
 		await page.evaluate(() => {
+			// hide mascot to avoid noise in snapshots
 			document.querySelector('#mascot').style.visibility = 'hidden';
+			// disable spellcheck to avoid noise in snapshots (spellcheck is async)
+			Array.from(document.querySelectorAll('textarea, input')).forEach(i => {
+				i.spellcheck = false;
+			});
 		});
 	});
 
