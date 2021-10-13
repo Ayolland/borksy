@@ -2,19 +2,17 @@ import $ from 'jquery';
 import './libs';
 
 function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride) {
-	doneCallback = doneCallback || function () {};
-	failCallBack = failCallBack || function () {};
 	const $ajax = $.ajax(pathToDir + filename);
 	$ajax.done(function () {
 		filename = filenameOverride || filename;
 		window.loadedFiles[filename] = escape($ajax.responseText);
 		console.log(`Loaded ${filename} via AJAX`);
-		doneCallback($ajax.responseText, filenameOverride);
+		doneCallback?.($ajax.responseText, filenameOverride);
 	});
 	$ajax.fail(function () {
 		// window.loadedFiles[filename] = "";
 		console.log(`Error loading ${filename} via AJAX`);
-		failCallBack($ajax.responseText, filenameOverride);
+		failCallBack?.($ajax.responseText, filenameOverride);
 	});
 }
 
