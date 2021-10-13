@@ -366,6 +366,7 @@ function loadDefaultOption($thisField) {
 	for (let i = options.length - 1; i >= 0; i--) {
 		const $option = $(options[i]);
 		if ($option.data('default-option') !== undefined) {
+			// eslint-disable-next-line no-param-reassign
 			$thisField[0].selectedIndex = i;
 			break;
 		}
