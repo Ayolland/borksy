@@ -1,26 +1,26 @@
 html {
-	margin:0px;
-	padding:0px;
+	margin: 0px;
+	padding: 0px;
 }
 
 body {
-	margin:0px;
-	padding:0px;
-	overflow:hidden;
-	background:#000;
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+	background: #000;
 }
 
 #game {
-	background:black;
-	width:100vw;
-	max-width:100vh;
-	margin:auto;
-	display:block;
+	background: black;
+	width: 100vw;
+	max-width: 100vh;
+	margin: auto;
+	display: block;
 	touch-action: none; /* fixing touch-input errors in chrome */
 
 	/* sharp pixel edges */
 	/* https://caniuse.com/#search=image-render */
-  	-ms-interpolation-mode: nearest-neighbor; /* IE */
-  	image-rendering: -moz-crisp-edges; /* FF 6.0+ */
-  	image-rendering: pixelated; /* Chrome, Safari */
+	-ms-interpolation-mode: nearest-neighbor; /* IE */
+	image-rendering: -moz-crisp-edges; /* FF 6.0+ */
+	image-rendering: pixelated; /* Chrome, Safari */
 }

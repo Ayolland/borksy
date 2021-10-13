@@ -1,3 +1,16 @@
+## [4.6.8](https://github.com/Ayolland/borksy/compare/v4.6.7...v4.6.8) (2021-10-13)
+
+
+### Bug Fixes
+
+* `gamedate` -> `gamedata` typo ([a112e7a](https://github.com/Ayolland/borksy/commit/a112e7a52b6099a8d8c950a0c5d1eb1b834b787b))
+* `loadDefaults` always checking save data, regardless of param ([1bddac0](https://github.com/Ayolland/borksy/commit/1bddac0966b6c2e28ba4dc22c52110380e0172ba))
+* add error case to loading defaults ([65a4a41](https://github.com/Ayolland/borksy/commit/65a4a41566982f4b7bab4b74a4011b200ce38d2e))
+* avoid race condition causing hacks to appear in non-alphabetical order ([bbc129f](https://github.com/Ayolland/borksy/commit/bbc129f4c0a51ed70567792ecd77dba54520c08d))
+* close self-closing html tags ([153a666](https://github.com/Ayolland/borksy/commit/153a666fe48a5eebb9c28116e21ae226f74dde1d))
+* format default css ([4230e23](https://github.com/Ayolland/borksy/commit/4230e23f158c4b5202088cac49d6e3e49eafabb0))
+* missing global reference ([5e75991](https://github.com/Ayolland/borksy/commit/5e75991f1c57867c736f8f09737c243247d2d535))
+
 ## [4.6.7](https://github.com/Ayolland/borksy/compare/v4.6.6...v4.6.7) (2021-10-12)
 
 
