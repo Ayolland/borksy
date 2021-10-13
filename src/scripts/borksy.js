@@ -221,8 +221,8 @@ function assembleHacks(hackBundle) {
 }
 
 function assembleAndDownloadFile() {
-	$('[data-save]').each(function () {
-		saveThisData($(this));
+	Array.from(document.querySelectorAll('[data-save]')).forEach(i => {
+		saveThisData($(i));
 	});
 
 	const templateName = $('#template').val();
