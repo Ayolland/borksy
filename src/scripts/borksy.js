@@ -420,16 +420,12 @@ function loadDefaults(checkSaveData = true) {
 }
 
 function restoreDefaults() {
-	const $fields = $('[data-save]');
-	let totalFields = $fields.length;
 	if (window.confirm('Are you sure you want to erase all data and restore defaults?')) {
-		$fields.each(function () {
-			localStorage.removeItem($(this).attr('name'));
-			if (!--totalFields) {
-				console.log('Cookies removed');
-				loadDefaults(false);
-			}
+		Array.from(document.querySelectorAll('[data-save]')).forEach(i => {
+			localStorage.removeItem($(i).attr('name'));
 		});
+		console.log('Cookies removed');
+		loadDefaults(false);
 		$('#mascot').removeClass('borksyHD');
 	}
 }
