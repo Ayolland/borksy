@@ -60,6 +60,7 @@
     "jest-image-snapshot": "^4.5.1",
     "prettier": "^2.4.1",
     "puppeteer": "^10.4.0",
+    "sass": "^1.42.1",
     "vite": "^2.6.4"
   },
   "dependencies": {
