@@ -274,6 +274,10 @@ function loadAboutInfo() {
 	const elAbout = document.querySelector('#about_content');
 	elAbout.innerHTML = htmlAbout;
 
+	const lastUpdate = document.createElement('p');
+	lastUpdate.innerHTML = htmlChangelog.match(/(<h[12][^]+?)<h[12]/m)?.[1].replace(/<h[12]>([^]+?)<\/h[12]>/g, "<h2>What's new in v$1</h2>");
+	elAbout.prepend(lastUpdate);
+
 	const elHowto = makeNewCollapsible('How To Use Borksy');
 	elHowto.append(htmlHowto);
 	elAbout.appendChild(elHowto[0]);
