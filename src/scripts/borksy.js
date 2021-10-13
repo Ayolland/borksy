@@ -463,7 +463,7 @@ function onFontImageLoaded() {
 		fontdata[i] = c;
 	}
 	// flatten characters into fontdata
-	fontdata = [].concat.apply([], fontdata);
+	fontdata = fontdata.flat();
 	// display output
 	saveThisData($('#fontdata'), `[/*${$('#fontfilename').val()}*/${fontdata.toString()}]`);
 }
