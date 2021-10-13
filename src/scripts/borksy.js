@@ -504,59 +504,8 @@ function replaceThisElement($elementToReplace) {
 	$elementToReplace.replaceWith($replacement);
 }
 
-function createFontSelect() {
-	const currentFontName = $('#fontfilename').val().slice(0, -4);
-	let usingCustomFont = true;
-	const $select = $('<select>', {
-		id: 'fontSelect',
-	});
-	const $option1 = $('<option>', {
-		text: 'Select Font',
-		value: 0,
-	});
-	$option1.attr('disabled', true);
-	$select.append($option1);
-	$.each(fonts, function (name, description) {
-		const $newOption = $('<option>', {
-			text: description,
-			value: name,
-		});
-		if (name === currentFontName) {
-			$newOption.attr('selected', true);
-			usingCustomFont = false;
-		}
-		$select.append($newOption);
-	});
-	if (usingCustomFont) {
-		$option1.attr('selected', true);
-	}
-	$select.change(selectFont);
-	return $select;
-}
-
-function createFontPreview() {
-	let $newElement;
-	const fontFilename = $('#fontfilename').val();
-	const nameNoExtension = fontFilename.slice(0, -4);
-	if (typeof fonts[nameNoExtension] !== 'undefined') {
-		$newElement = $('<img>', {
-			class: `${nameNoExtension} font-preview`,
-			src: `fonts/previews/${fontFilename}`,
-		});
-	} else {
-		$newElement = $('<label>', { text: '(Sorry, Preview Unavailable for Custom Fonts)' });
-	}
-	$newElement.attr('data-replace-element', 'createFontPreview');
-	return $newElement;
-}
-
 function changeFontPreview() {
 	replaceThisElement($('[data-replace-element=createFontPreview]'));
-}
-
-function selectFont() {
-	const filename = `${this.value}.png`;
-	readFontFile(filename);
 }
 
 function localHackSuccess(response, filename) {
@@ -574,9 +523,9 @@ function localHackSuccess(response, filename) {
 	}
 }
 
-function localHackFail(response, filename) {}
+function localHackFail() {}
 
-function loadThisHackLocally(hackName, hackInfo) {
+function loadThisHackLocally(hackName) {
 	var hackName = hackName.substr(0, hackName.lastIndexOf('.')) || hackName;
 	const filename = `${hackName}.js`;
 	const pathToDir = 'hacks/dist/';
@@ -736,19 +685,7 @@ function createThisHackMenu(hackName, hackInfo) {
 	return $collapse;
 }
 
-function createHiddenHack(hackName, hackObj) {
-	const $hidden = $('<input>', {
-		type: 'hidden',
-		name: hackName,
-		id: hackName,
-	});
-	bakeHackData($hidden, hackName, hackObj);
-	loadThisData($hidden);
-
-	return $hidden;
-}
-
-function createHackMenus($here) {
+function createHackMenus() {
 	$.each(Object.keys(window.hacks), function (index, hackName) {
 		loadThisHack(hackName, window.hacks[hackName]);
 	});
