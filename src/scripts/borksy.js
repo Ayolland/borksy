@@ -140,7 +140,7 @@ function saveTemplateExtras($this) {
 }
 
 function removeConflictingHacks(conflictsArr) {
-	$.each(conflictsArr, function (index, hackName) {
+	$.each(conflictsArr, (_index, hackName) => {
 		const $conflictingHack = $(`#${hackName}`);
 		const hiddenAndNotIncluded = $conflictingHack.prop('type') === 'hidden' && $conflictingHack.val() === false;
 		const checkboxAndNotIncluded = $conflictingHack.prop('type') === 'checkbox' && $conflictingHack.prop('checked') === false;
