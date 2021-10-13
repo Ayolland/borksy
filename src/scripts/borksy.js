@@ -646,7 +646,7 @@ function loadThisHackLocally(hackName,hackInfo){
 function githubHackSuccess(response,filename){
 	var hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
 	hacks[hackName].usingGithub = true;
-	$("#hacks-section").append(createThisHackMenu(hackName,hacks[hackName]));
+	localHackSuccess(response, filename);
 }
 
 function githubHackFail(response,filename){
