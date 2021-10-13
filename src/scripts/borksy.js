@@ -168,10 +168,7 @@ function toggleIncludedDisplay($collapsible, $thisHack) {
 	}
 }
 
-function saveThisHack($thisHack, checkConflicts) {
-	if (typeof checkConflicts === 'undefined') {
-		checkConflicts = true;
-	}
+function saveThisHack($thisHack, checkConflicts = true) {
 	saveThisData($thisHack);
 	checkAndToggleIncludedDisplay($thisHack);
 
