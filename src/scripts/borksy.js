@@ -422,7 +422,7 @@ function loadDefaults(checkSaveData = true) {
 function restoreDefaults() {
 	const $fields = $('[data-save]');
 	let totalFields = $fields.length;
-	if (confirm('Are you sure you want to erase all data and restore defaults?')) {
+	if (window.confirm('Are you sure you want to erase all data and restore defaults?')) {
 		$fields.each(function () {
 			localStorage.removeItem($(this).attr('name'));
 			if (!--totalFields) {
