@@ -65,6 +65,7 @@
     "vite-plugin-markdown": "^2.0.2"
   },
   "dependencies": {
+    "file-saver": "^2.0.5",
     "jquery": "^3.3.1"
   }
 }

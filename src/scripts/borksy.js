@@ -1,3 +1,4 @@
+import { saveAs } from 'file-saver';
 import $ from 'jquery';
 import { html as htmlChangelog } from '../../CHANGELOG.md';
 import { htmlAbout, htmlFaqs, htmlHowto, htmlTips, htmlTools } from '../about';
@@ -8,7 +9,7 @@ const loadedFiles = {};
 function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride) {
 	const $ajax = $.ajax(pathToDir + filename);
 	$ajax.done(() => {
-		loadedFiles[filenameOverride || filename] = escape($ajax.responseText);
+		loadedFiles[filenameOverride || filename] = $ajax.responseText;
 		console.log(`Loaded ${filenameOverride || filename} via AJAX`);
 		doneCallback?.($ajax.responseText, filenameOverride);
 	});
@@ -31,16 +32,8 @@ function loadTemplates() {
 }
 
 function download(filename, text) {
-	const element = document.createElement('a');
-	element.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(unescape(text))}`);
-	element.setAttribute('download', filename);
-
-	element.style.display = 'none';
-	document.body.appendChild(element);
-
-	element.click();
-
-	document.body.removeChild(element);
+	console.log(text);
+	saveAs(new Blob([text], { type: 'text/html;charset=utf-8' }), filename);
 	console.log(`File '${filename}' downloaded`);
 }
 
