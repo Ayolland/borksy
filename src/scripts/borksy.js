@@ -212,13 +212,13 @@ function reOrderHacks() {
 
 function assembleHacks(hackBundle) {
 	const orderedHacks = reOrderHacks();
-	$.each(orderedHacks, function (index, hackObj) {
+	return orderedHacks.reduce((acc, hackObj) => {
 		const hackName = hackObj.name;
 		const filename = hackObj.type === 'simple' && false ? `${hackName}-min.js` : `${hackName}.js`;
 		const $hackField = $(`#${hackName}`);
 		const isIncluded = $hackField.prop('checked') || $hackField.val() === 'true';
 		if (!isIncluded) {
-			return;
+			return acc;
 		}
 
 		let hackFile = window.loadedFiles[filename];
@@ -227,9 +227,8 @@ function assembleHacks(hackBundle) {
 			const newHackOptionsContents = $(`#${hackName}-options`).val();
 			hackFile = hackFile.replace(/(var hackOptions.*= ){[^]*?}(;$)/m, `$1 {\n${newHackOptionsContents}\n} $2`);
 		}
-		hackBundle += `${hackFile}\n`;
-	});
-	return hackBundle;
+		return `${acc}${hackFile}\n`;
+	}, hackBundle);
 }
 
 function assembleAndDownloadFile() {
