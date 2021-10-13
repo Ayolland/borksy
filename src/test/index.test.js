@@ -45,6 +45,7 @@ describe('Borksy', () => {
 			document.querySelector('#mascot').style.visibility = 'hidden';
 			// disable spellcheck to avoid noise in snapshots (spellcheck is async)
 			Array.from(document.querySelectorAll('textarea, input')).forEach(i => {
+				// eslint-disable-next-line no-param-reassign
 				i.spellcheck = false;
 			});
 		});
@@ -77,6 +78,7 @@ describe('Borksy', () => {
 		await page.keyboard.press('Home');
 		await page.keyboard.up('Control');
 		for (let i = 0; i < 39; ++i) {
+			// eslint-disable-next-line no-await-in-loop
 			await page.keyboard.press('ArrowDown');
 		}
 		await page.keyboard.down('Shift');
