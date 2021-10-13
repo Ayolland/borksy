@@ -19,7 +19,7 @@ function sit(name, action) {
 			}
 		}
 	});
-};
+}
 
 describe('Borksy', () => {
 	/** @type puppeteer.Browser */

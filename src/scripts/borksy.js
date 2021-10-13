@@ -1,20 +1,20 @@
 import $ from 'jquery';
 import './libs.js';
 
-function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride){
-	doneCallback = doneCallback || function(){};
-	failCallBack = failCallBack || function(){};
-	var $ajax = $.ajax( pathToDir + filename );
-	$ajax.done(function(){
+function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride) {
+	doneCallback = doneCallback || function () {};
+	failCallBack = failCallBack || function () {};
+	var $ajax = $.ajax(pathToDir + filename);
+	$ajax.done(function () {
 		filename = filenameOverride || filename;
 		window.loadedFiles[filename] = escape($ajax.responseText);
 		console.log('Loaded ' + filename + ' via AJAX');
-		doneCallback($ajax.responseText,filenameOverride);
+		doneCallback($ajax.responseText, filenameOverride);
 	});
-	$ajax.fail(function(){
+	$ajax.fail(function () {
 		//window.loadedFiles[filename] = "";
 		console.log('Error loading ' + filename + ' via AJAX');
-		failCallBack($ajax.responseText,filenameOverride);
+		failCallBack($ajax.responseText, filenameOverride);
 	});
 }
 
@@ -22,124 +22,124 @@ function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filen
 // 	loadFileFromPath( window.borksyInfo.templateVersion + '.template.html','template/');
 // }
 
-function loadTemplates(){
+function loadTemplates() {
 	let templateSel = document.querySelector('select#template');
-	templateSel.innerHTML = "";
+	templateSel.innerHTML = '';
 	for (var i = window.borksyInfo.templates.length - 1; i >= 0; i--) {
 		let filename = window.borksyInfo.templates[i].filename + '.html';
 		let description = window.borksyInfo.templates[i].description;
 		let localStorageVer = localStorage.getItem('template');
 		let isDefault = window.borksyInfo.templates[i].isDefault;
-		templateSel.innerHTML += `<option value="${filename}" ${ isDefault ? "data-default-option" : "" }>${description}</option>`;
-		loadFileFromPath( filename,'template/');
+		templateSel.innerHTML += `<option value="${filename}" ${isDefault ? 'data-default-option' : ''}>${description}</option>`;
+		loadFileFromPath(filename, 'template/');
 	}
 }
 
 function download(filename, text) {
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent( unescape(text) ) );
-    element.setAttribute('download', filename);
+	var element = document.createElement('a');
+	element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(unescape(text)));
+	element.setAttribute('download', filename);
 
-    element.style.display = 'none';
-    document.body.appendChild(element);
+	element.style.display = 'none';
+	document.body.appendChild(element);
 
-    element.click();
+	element.click();
 
-    document.body.removeChild(element);
-    console.log("File '" + filename + "' downloaded");
+	document.body.removeChild(element);
+	console.log("File '" + filename + "' downloaded");
 }
 
-function shortenString(value,length){
+function shortenString(value, length) {
 	length = length || 10;
 	var string = value.toString();
-	var ending = string.length > length ? "..." : "";
-	return string.substring(0,length) + ending;
+	var ending = string.length > length ? '...' : '';
+	return string.substring(0, length) + ending;
 }
 
-function dashesToCamelCase(string){
-	return string.toLowerCase().replace(/-(.)/g, function(match, group1) {
-        return group1.toUpperCase();
-    });
+function dashesToCamelCase(string) {
+	return string.toLowerCase().replace(/-(.)/g, function (match, group1) {
+		return group1.toUpperCase();
+	});
 }
 
-function removeExtraChars(string){
+function removeExtraChars(string) {
 	return string.replace(/[^\w\s]/gi, '');
 }
 
-function arrayToSentenceFrag(arr){
-	if (arr.length > 1){
-		return arr.slice(0, arr.length - 1).join(', ') + ", and " + arr.slice(-1);
+function arrayToSentenceFrag(arr) {
+	if (arr.length > 1) {
+		return arr.slice(0, arr.length - 1).join(', ') + ', and ' + arr.slice(-1);
 	} else {
 		return arr[0];
 	}
 }
 
-function cleanUsingRegEx($this,regExStr){
-	var regex = new RegExp(regExStr,"g");
-	$this.val($this.val().replace(regex,""));
+function cleanUsingRegEx($this, regExStr) {
+	var regex = new RegExp(regExStr, 'g');
+	$this.val($this.val().replace(regex, ''));
 }
 
-function saveThisData($this, value){
-	if ( $this.data('clean-regex') ){
+function saveThisData($this, value) {
+	if ($this.data('clean-regex')) {
 		cleanUsingRegEx($this, $this.data('clean-regex'));
 	}
-	if ( $this.prop('type') === "checkbox"){
+	if ($this.prop('type') === 'checkbox') {
 		value = $this.prop('checked');
-	} else if (typeof(value) === "undefined"){
+	} else if (typeof value === 'undefined') {
 		value = $this.val();
 	} else {
 		$this.val(value);
 	}
 	var name = $this.attr('name');
 	localStorage.setItem(name, value);
-	console.log("Key: '" + name + "' saved to localStorage: " + shortenString(value) );
+	console.log("Key: '" + name + "' saved to localStorage: " + shortenString(value));
 }
 
-function loadThisData($this){
+function loadThisData($this) {
 	var name = $this.attr('name');
 	var value = localStorage.getItem(name);
-	if ( value === null ){
-		console.log(" Attempted to get key: " + name + " from localStorage, but nothing was found.");
+	if (value === null) {
+		console.log(' Attempted to get key: ' + name + ' from localStorage, but nothing was found.');
 		return;
-	} else if ( $this.prop('type') === "checkbox" ){
-		var booleanVal = ( value === 'true');
-		$this.prop('checked',booleanVal);
+	} else if ($this.prop('type') === 'checkbox') {
+		var booleanVal = value === 'true';
+		$this.prop('checked', booleanVal);
 	} else {
 		$this.val(value);
 	}
-	console.log(" Got key: " + name + " from localStorage: " + shortenString(value) );
-	if (name === "template" && value.split('.')[0] === "BitsyHD"){
+	console.log(' Got key: ' + name + ' from localStorage: ' + shortenString(value));
+	if (name === 'template' && value.split('.')[0] === 'BitsyHD') {
 		$('#mascot').addClass('borksyHD');
-		console.log("BitsyHD detected");
+		console.log('BitsyHD detected');
 	}
 }
 
-function setSaveTrigger($this){
+function setSaveTrigger($this) {
 	let name = $this.attr('name');
-	let extraFunction = function(){};
-	switch (name){
+	let extraFunction = function () {};
+	switch (name) {
 		case 'template':
 			loadHDGameData();
 			extraFunction = saveTemplateExtras;
-		break;
+			break;
 		default:
-		break;
+			break;
 	}
-	$this.change(function(){
+	$this.change(function () {
 		saveThisData($this);
 		extraFunction($this);
 	});
 }
 
-function saveTemplateExtras($this){
-	let isHD = $this.val().split('.')[0] === "BitsyHD";
+function saveTemplateExtras($this) {
+	let isHD = $this.val().split('.')[0] === 'BitsyHD';
 	let noSavedGameData = localStorage.getItem('gamedate') == null;
 	let HDgamedata = window.loadedFiles['gamedata.HD.txt'];
 	let HDgamedataExists = HDgamedata !== undefined;
 	let $mascot = $('#mascot');
-	if (isHD){
+	if (isHD) {
 		$mascot.addClass('borksyHD');
-		if(noSavedGameData && HDgamedataExists){
+		if (noSavedGameData && HDgamedataExists) {
 			let $gamedata = $('#gamedata');
 			$gamedata.val(HDgamedata);
 			saveThisData($gamedata);
@@ -149,18 +149,18 @@ function saveTemplateExtras($this){
 	}
 }
 
-function checkHacksRequiring($thisHack){
+function checkHacksRequiring($thisHack) {
 	var $hacksWithRequires = $('[data-requires]');
 	var $includedHacksRequiringThis = $();
-	$hacksWithRequires.each(function(index){
+	$hacksWithRequires.each(function (index) {
 		var $currentHack = $(this);
 		var hackIsIncluded = $currentHack.val() === 'true' || $currentHack.prop('checked') === true;
 		var hackRequiresThis = $currentHack.data('requires').includes($thisHack.attr('id')) || false;
-		if (hackIsIncluded && hackRequiresThis){
+		if (hackIsIncluded && hackRequiresThis) {
 			$includedHacksRequiringThis = $includedHacksRequiringThis.add($currentHack);
 		}
 	});
-	if( $includedHacksRequiringThis.length > 0 ){
+	if ($includedHacksRequiringThis.length > 0) {
 		//no logic yet for hacks that can be both required AND user-selected
 		//$thisHack.prop('checked', true);
 		$thisHack.val(true);
@@ -171,37 +171,37 @@ function checkHacksRequiring($thisHack){
 	saveThisHack($thisHack);
 }
 
-function removeConflictingHacks(conflictsArr){
-	$.each(conflictsArr,function(index,hackName){
+function removeConflictingHacks(conflictsArr) {
+	$.each(conflictsArr, function (index, hackName) {
 		var $conflictingHack = $('#' + hackName);
 		var hiddenAndNotIncluded = $conflictingHack.prop('type') === 'hidden' && $conflictingHack.val() === false;
 		var checkboxAndNotIncluded = $conflictingHack.prop('type') === 'checkbox' && $conflictingHack.prop('checked') === false;
-		if( hiddenAndNotIncluded || checkboxAndNotIncluded ){
+		if (hiddenAndNotIncluded || checkboxAndNotIncluded) {
 			return;
 		}
 		$conflictingHack.val(false);
-		$conflictingHack.prop('checked',false);
+		$conflictingHack.prop('checked', false);
 		saveThisHack($conflictingHack, false);
 	});
 }
 
-function checkAndToggleIncludedDisplay($thisField){
+function checkAndToggleIncludedDisplay($thisField) {
 	var $collapsible = $('[data-associated-hack=' + $thisField.data('hack') + ']');
-	if( $collapsible.length > 0 ){
-		toggleIncludedDisplay($collapsible,$thisField);
+	if ($collapsible.length > 0) {
+		toggleIncludedDisplay($collapsible, $thisField);
 	}
 }
 
-function toggleIncludedDisplay($collapsible,$thisHack){
-	if ( $thisHack.prop('checked') === true ){
+function toggleIncludedDisplay($collapsible, $thisHack) {
+	if ($thisHack.prop('checked') === true) {
 		$collapsible.addClass('included');
 	} else {
 		$collapsible.removeClass('included');
 	}
 }
 
-function saveThisHack($thisHack,checkConflicts){
-	if( typeof(checkConflicts) === 'undefined' ){
+function saveThisHack($thisHack, checkConflicts) {
+	if (typeof checkConflicts === 'undefined') {
 		checkConflicts = true;
 	}
 	saveThisData($thisHack);
@@ -221,36 +221,36 @@ function saveThisHack($thisHack,checkConflicts){
 	// 	});
 	// }
 	var thisConflicts = hacks[$thisHack.data('hack')].conflicts;
-	if( thisConflicts && checkConflicts){
+	if (thisConflicts && checkConflicts) {
 		removeConflictingHacks(thisConflicts.split(','));
 	}
 }
 
-function hackIncludeTrigger($this){
-	$this.change(function(){
+function hackIncludeTrigger($this) {
+	$this.change(function () {
 		saveThisHack($this);
 	});
 }
 
-function assembleSingles(modifiedTemplate){
-	$('[data-borksy-replace-single]').each(function(){
+function assembleSingles(modifiedTemplate) {
+	$('[data-borksy-replace-single]').each(function () {
 		var $this = $(this);
 		var valueToReplace = 'BORKSY-' + $this.data('borksy-replace-single');
 		var formValue = $this.val();
 		modifiedTemplate = modifiedTemplate.replace(valueToReplace, formValue);
 	});
-	return	modifiedTemplate;
+	return modifiedTemplate;
 }
 
-function reOrderHacks(){
+function reOrderHacks() {
 	var hackArray = [];
-	$.each(hacks,function(hackName, hackObj){
-		hackArray.push(Object.assign({name: hackName},hackObj));
+	$.each(hacks, function (hackName, hackObj) {
+		hackArray.push(Object.assign({ name: hackName }, hackObj));
 	});
-	hackArray.sort(function(obj1,obj2){
-		if(obj1.order > obj2.order){
+	hackArray.sort(function (obj1, obj2) {
+		if (obj1.order > obj2.order) {
 			return 1;
-		} else if (obj1.order === obj2.order){
+		} else if (obj1.order === obj2.order) {
 			return 0;
 		} else {
 			return -1;
@@ -259,20 +259,19 @@ function reOrderHacks(){
 	return hackArray;
 }
 
-function assembleHacks(hackBundle){
+function assembleHacks(hackBundle) {
 	var orderedHacks = reOrderHacks();
-	$.each(orderedHacks,function(index, hackObj){
-
+	$.each(orderedHacks, function (index, hackObj) {
 		var hackName = hackObj.name;
-		var filename = hackObj.type === "simple" && false ? hackName + "-min.js" : hackName + ".js";
-		var $hackField = $('#' + hackName );
-		var isIncluded = ( $hackField.prop('checked') || ($hackField.val() === 'true') );
-		if (!isIncluded){
+		var filename = hackObj.type === 'simple' && false ? hackName + '-min.js' : hackName + '.js';
+		var $hackField = $('#' + hackName);
+		var isIncluded = $hackField.prop('checked') || $hackField.val() === 'true';
+		if (!isIncluded) {
 			return;
 		}
-		
+
 		var hackFile = window.loadedFiles[filename];
-		if (hackObj.type === "options"){
+		if (hackObj.type === 'options') {
 			hackFile = unescape(hackFile);
 			var newHackOptionsContents = $('#' + hackName + '-options').val();
 			hackFile = hackFile.replace(/(var hackOptions.*= ){[^]*?}(;$)/m, `$1 {\n${newHackOptionsContents}\n} $2`);
@@ -282,31 +281,35 @@ function assembleHacks(hackBundle){
 	return hackBundle;
 }
 
-function assembleAndDownloadFile(){
-	$('[data-save]').each(function(){
+function assembleAndDownloadFile() {
+	$('[data-save]').each(function () {
 		saveThisData($(this));
 	});
 
 	let templateName = $('#template').val();
-	var modifiedTemplate = window.loadedFiles[ templateName ].repeat(1);
-	var hackBundle = "";
+	var modifiedTemplate = window.loadedFiles[templateName].repeat(1);
+	var hackBundle = '';
 
 	modifiedTemplate = assembleSingles(modifiedTemplate);
 
-	$('[data-borksy-replace-single]').promise().done(function(){
-		hackBundle = assembleHacks(hackBundle);
-	});
+	$('[data-borksy-replace-single]')
+		.promise()
+		.done(function () {
+			hackBundle = assembleHacks(hackBundle);
+		});
 
-	$('[data-hack]').promise().done(function(){
-		var filename = $('#filename').val();
-		modifiedTemplate = modifiedTemplate.replace('BORKSY-HACKS', hackBundle);
-		download( filename + '.html', modifiedTemplate);
-	});
+	$('[data-hack]')
+		.promise()
+		.done(function () {
+			var filename = $('#filename').val();
+			modifiedTemplate = modifiedTemplate.replace('BORKSY-HACKS', hackBundle);
+			download(filename + '.html', modifiedTemplate);
+		});
 }
 
-function togglePartyMode(){
+function togglePartyMode() {
 	var $body = $('body');
-	if( $body.hasClass('party') ){
+	if ($body.hasClass('party')) {
 		$body.removeClass('party');
 		alert('😾 Party Mode Deactivated. Everyone out. 😾');
 	} else {
@@ -315,105 +318,104 @@ function togglePartyMode(){
 	}
 }
 
-function loadHDGameData(){
-	let filename = "gamedata.HD.txt";
+function loadHDGameData() {
+	let filename = 'gamedata.HD.txt';
 	let $ajax = $.ajax('defaults/' + filename);
-	$ajax.done(function(){
+	$ajax.done(function () {
 		var response = $ajax.responseText;
 		window.loadedFiles[filename] = response;
 	});
 }
 
-function loadAboutInfo(){
+function loadAboutInfo() {
 	var $aboutContent = $('#about_content');
 	var $ajax = $.ajax('about/about.html');
 	var error = '<p>Whoa, Something went wrong!</p>';
-	$ajax.done(function(){
+	$ajax.done(function () {
 		var response = $ajax.responseText;
 		$aboutContent.html(response);
 
 		var $ajax3 = $.ajax('about/how-to-use-borksy.html');
-		$ajax3.done(function(){
-			var $howto = makeNewCollapsible( "How To Use Borksy" );
+		$ajax3.done(function () {
+			var $howto = makeNewCollapsible('How To Use Borksy');
 			$howto.append($ajax3.responseText);
 			$aboutContent.append($howto);
 		});
 
 		var $ajax5 = $.ajax('about/troubleshooting-faqs.html');
-		$ajax5.done(function(){
-			var $faqs = makeNewCollapsible( "Troubleshooting / FAQs" );
+		$ajax5.done(function () {
+			var $faqs = makeNewCollapsible('Troubleshooting / FAQs');
 			$faqs.append($ajax5.responseText);
 			$aboutContent.append($faqs);
 		});
 
 		var $ajax2 = $.ajax('about/other-tools.html');
-		$ajax2.done(function(){
-			var $tools = makeNewCollapsible( "Other Bitsy Tools" );
+		$ajax2.done(function () {
+			var $tools = makeNewCollapsible('Other Bitsy Tools');
 			$tools.append($ajax2.responseText);
 			$aboutContent.append($tools);
 		});
 
 		var $ajax4 = $.ajax('about/ayos-special-tips.html');
-		$ajax4.done(function(){
-			var $tips = makeNewCollapsible( "AYo's Special Tips" );
+		$ajax4.done(function () {
+			var $tips = makeNewCollapsible("AYo's Special Tips");
 			$tips.append($ajax4.responseText);
 			$aboutContent.append($tips);
 		});
-
 	});
-	$ajax.fail(function(){
+	$ajax.fail(function () {
 		$aboutContent.html(error);
 	});
 }
 
-function loadDefaultString($thisField){
+function loadDefaultString($thisField) {
 	$thisField.val($thisField.data('default'));
 	setSaveTrigger($thisField);
 }
 
-function loadDefaultHackOptions($thisField){
-	var options = unescape(window.loadedFiles[$thisField.attr("name") + '.txt']);
+function loadDefaultHackOptions($thisField) {
+	var options = unescape(window.loadedFiles[$thisField.attr('name') + '.txt']);
 	$thisField.val(options);
 	setSaveTrigger($thisField);
 }
 
-function loadDefaultBoolean($thisField){
+function loadDefaultBoolean($thisField) {
 	var defaultVal = $thisField.data('default');
-	defaultVal = ( defaultVal === 'true' );
-	if ($thisField.prop('type') === 'checkbox'){
-		$thisField.prop('checked', defaultVal );
+	defaultVal = defaultVal === 'true';
+	if ($thisField.prop('type') === 'checkbox') {
+		$thisField.prop('checked', defaultVal);
 	} else {
 		$thisField.val(defaultVal);
 	}
 	setSaveTrigger($thisField);
 }
 
-function loadDefaultTextfile($thisField){
+function loadDefaultTextfile($thisField) {
 	var filename = $thisField.data('default');
 	var path = 'defaults/' + filename;
 	var $ajax = $.ajax(path);
-	$ajax.done(function(){
+	$ajax.done(function () {
 		var response = $ajax.responseText;
 		$thisField.val(response);
 		window.loadedFiles[filename] = response;
 		setSaveTrigger($thisField);
 	});
-	$ajax.fail(function(){
+	$ajax.fail(function () {
 		$thisField.val('failed to load default!');
 		console.log($ajax.error);
 		setSaveTrigger($thisField);
 	});
 }
 
-function loadDefaultFont($thisField){
+function loadDefaultFont($thisField) {
 	readFontFile($thisField.data('default'));
 }
 
-function loadDefaultOption($thisField){
+function loadDefaultOption($thisField) {
 	let options = $thisField[0].options;
 	for (var i = options.length - 1; i >= 0; i--) {
 		const $option = $(options[i]);
-		if ( $option.data('default-option') !== undefined ){
+		if ($option.data('default-option') !== undefined) {
 			$thisField[0].selectedIndex = i;
 			break;
 		}
@@ -421,59 +423,57 @@ function loadDefaultOption($thisField){
 	setSaveTrigger($thisField);
 }
 
-function loadDefaults(checkSaveData){
+function loadDefaults(checkSaveData) {
 	checkSaveData = checkSaveData || true;
-	$('[data-save]').each(function(){
+	$('[data-save]').each(function () {
 		var $thisField = $(this);
 		var thisSaveData = localStorage.getItem($thisField.attr('name'));
-		var hasDefault = typeof($thisField.data('default')) !== 'undefined';
+		var hasDefault = typeof $thisField.data('default') !== 'undefined';
 		var hasSaveData = thisSaveData !== null;
 
-		if( hasDefault && (!hasSaveData || !checkSaveData) ){
-
+		if (hasDefault && (!hasSaveData || !checkSaveData)) {
 			var defaultType = $thisField.data('default-type');
 
-			switch(defaultType){
-				case "string":
+			switch (defaultType) {
+				case 'string':
 					loadDefaultString($thisField);
-				break;
-				case "boolean":
+					break;
+				case 'boolean':
 					loadDefaultBoolean($thisField);
-				break;
-				case "textfile":
+					break;
+				case 'textfile':
 					loadDefaultTextfile($thisField);
-				break;
-				case "font":
+					break;
+				case 'font':
 					loadDefaultFont($thisField);
-				break;
-				case "option":
+					break;
+				case 'option':
 					loadDefaultOption($thisField);
-				break;
-				case "hackOptions":
+					break;
+				case 'hackOptions':
 					loadDefaultHackOptions($thisField);
-				break;
+					break;
 			}
-
 		} else {
-			if( hasSaveData ){
+			if (hasSaveData) {
 				loadThisData($thisField);
 			} else {
-				$thisField.val("");
+				$thisField.val('');
 			}
 			setSaveTrigger($thisField);
 		}
 		checkAndToggleIncludedDisplay($thisField);
 	});
-	console.log("Defaults loaded. Forced? " + !checkSaveData);
+	console.log('Defaults loaded. Forced? ' + !checkSaveData);
 }
 
-function restoreDefaults(){
+function restoreDefaults() {
 	var $fields = $('[data-save]');
 	var totalFields = $fields.length;
-	if ( confirm('Are you sure you want to erase all data and restore defaults?') ){
-		$fields.each(function(){
+	if (confirm('Are you sure you want to erase all data and restore defaults?')) {
+		$fields.each(function () {
 			localStorage.removeItem($(this).attr('name'));
-			if(!--totalFields){
+			if (!--totalFields) {
 				console.log('Cookies removed');
 				loadDefaults(false);
 			}
@@ -485,11 +485,11 @@ function restoreDefaults(){
 function onFontImageLoaded() {
 	var fontsize = {
 		x: 6,
-		y: 8
+		y: 8,
 	}; // bitsy font size
 	var characters = {
 		x: 16,
-		y: 16
+		y: 16,
 	}; // x * y must equal 256
 	var padding = 1;
 	// canvas context
@@ -519,13 +519,12 @@ function onFontImageLoaded() {
 	//console.log(fontdata.toString());
 	// display output
 	//document.getElementById('fontdata').value = "[" + fontdata.toString() + "]";
-	saveThisData($('#fontdata'), "[/*" + $('#fontfilename').val() + "*/" + fontdata.toString() + "]");
-
+	saveThisData($('#fontdata'), '[/*' + $('#fontfilename').val() + '*/' + fontdata.toString() + ']');
 }
 
 function readFontFile(eventOrFilename) {
 	var src;
-	if( typeof(eventOrFilename) === 'object' ){
+	if (typeof eventOrFilename === 'object') {
 		src = eventOrFilename.target.result;
 	} else {
 		src = 'fonts/' + eventOrFilename;
@@ -551,90 +550,90 @@ function loadFontImage(input) {
 	reader.readAsDataURL(input.files[0]);
 }
 
-function changeFontFilename(filename){
+function changeFontFilename(filename) {
 	var $field = $('#fontfilename');
-	if( $field.val() !== filename ){
+	if ($field.val() !== filename) {
 		$field.val(filename);
 		saveThisData($field);
 	}
 }
 
-function replaceElements(){
-	$('[data-replace-element]').each(function(){
+function replaceElements() {
+	$('[data-replace-element]').each(function () {
 		replaceThisElement($(this));
 	});
 }
 
-function replaceThisElement($elementToReplace){
+function replaceThisElement($elementToReplace) {
 	var functionName = $elementToReplace.data('replace-element');
 	var $replacement = window[functionName]();
 	$elementToReplace.replaceWith($replacement);
 }
 
-function createFontSelect(){
+function createFontSelect() {
 	var currentFontName = $('#fontfilename').val().slice(0, -4);
 	var usingCustomFont = true;
-	var $select = $('<select>',{
-		id: 'fontSelect'
+	var $select = $('<select>', {
+		id: 'fontSelect',
 	});
-	var $option1 = $('<option>',{
-		text: "Select Font",
-		value: 0
+	var $option1 = $('<option>', {
+		text: 'Select Font',
+		value: 0,
 	});
 	$option1.attr('disabled', true);
 	$select.append($option1);
-	$.each(fonts, function( name, description){
-		var $newOption = $('<option>',{
+	$.each(fonts, function (name, description) {
+		var $newOption = $('<option>', {
 			text: description,
-			value: name
-		}); 
-		if( name === currentFontName ){
+			value: name,
+		});
+		if (name === currentFontName) {
 			$newOption.attr('selected', true);
 			usingCustomFont = false;
 		}
 		$select.append($newOption);
 	});
-	if(usingCustomFont){
+	if (usingCustomFont) {
 		$option1.attr('selected', true);
 	}
 	$select.change(selectFont);
 	return $select;
 }
 
-function createFontPreview(){
+function createFontPreview() {
 	var $newElement;
 	var fontFilename = $('#fontfilename').val();
 	var nameNoExtension = fontFilename.slice(0, -4);
-	if( typeof(fonts[nameNoExtension]) !== "undefined"){
-		$newElement = $('<img>',{
-			class: nameNoExtension + " font-preview",
-			src: "fonts/previews/" + fontFilename
+	if (typeof fonts[nameNoExtension] !== 'undefined') {
+		$newElement = $('<img>', {
+			class: nameNoExtension + ' font-preview',
+			src: 'fonts/previews/' + fontFilename,
 		});
 	} else {
-		$newElement = $('<label>',{text: "(Sorry, Preview Unavailable for Custom Fonts)"});
+		$newElement = $('<label>', { text: '(Sorry, Preview Unavailable for Custom Fonts)' });
 	}
-	$newElement.attr('data-replace-element','createFontPreview');
+	$newElement.attr('data-replace-element', 'createFontPreview');
 	return $newElement;
 }
 
-function changeFontPreview(){
+function changeFontPreview() {
 	replaceThisElement($('[data-replace-element=createFontPreview]'));
 }
 
-function selectFont(){
-	var filename = this.value + ".png";
+function selectFont() {
+	var filename = this.value + '.png';
 	readFontFile(filename);
 }
 
-function localHackSuccess(response,filename){
+function localHackSuccess(response, filename) {
 	const elHackSection = document.querySelector('#hacks-section');
 	var hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
 	//var hackName = filename.substring(0,filename.length - 3);
-	const hacks = Array.from(elHackSection.querySelectorAll(":scope > .collapsible")).map(i=>i.dataset.associatedHack);
+	const hacks = Array.from(elHackSection.querySelectorAll(':scope > .collapsible')).map(i => i.dataset.associatedHack);
 	hacks.push(hackName);
 	hacks.sort();
-	const prev = elHackSection.querySelector(`:scope > .collapsible[data-associated-hack=\"${hacks[hacks.indexOf(hackName)+1]}\"]`);
-	const elHack = createThisHackMenu(hackName,window.hacks[hackName])[0];
+	const prev = elHackSection.querySelector(`:scope > .collapsible[data-associated-hack=\"${hacks[hacks.indexOf(hackName) + 1]}\"]`);
+	const elHack = createThisHackMenu(hackName, window.hacks[hackName])[0];
 	if (prev) {
 		elHackSection.insertBefore(elHack, prev);
 	} else {
@@ -642,255 +641,253 @@ function localHackSuccess(response,filename){
 	}
 }
 
-function localHackFail(response,filename){
-	
-}
+function localHackFail(response, filename) {}
 
-function loadThisHackLocally(hackName,hackInfo){
+function loadThisHackLocally(hackName, hackInfo) {
 	var hackName = hackName.substr(0, hackName.lastIndexOf('.')) || hackName;
-	var filename = hackName + ".js"
-	var pathToDir = "hacks/dist/";
-	loadFileFromPath(filename,pathToDir,localHackSuccess,localHackFail,filename)
+	var filename = hackName + '.js';
+	var pathToDir = 'hacks/dist/';
+	loadFileFromPath(filename, pathToDir, localHackSuccess, localHackFail, filename);
 }
 
-function githubHackSuccess(response,filename){
+function githubHackSuccess(response, filename) {
 	var hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
 	hacks[hackName].usingGithub = true;
 	localHackSuccess(response, filename);
 }
 
-function githubHackFail(response,filename){
+function githubHackFail(response, filename) {
 	var hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
 	hacks[hackName].usingGithub = false;
-	loadThisHackLocally(filename,hacks[hackName]);
+	loadThisHackLocally(filename, hacks[hackName]);
 }
 
-function loadThisHackFromGithub(hackName,hackInfo){
+function loadThisHackFromGithub(hackName, hackInfo) {
 	var filenameOverride = hackName + '.js';
 	var filename = hackInfo.github;
-	var pathToDir = "https://raw.githubusercontent.com/seleb/bitsy-hacks/main/dist/";
-	loadFileFromPath(filename,pathToDir,githubHackSuccess,githubHackFail,filenameOverride);
+	var pathToDir = 'https://raw.githubusercontent.com/seleb/bitsy-hacks/main/dist/';
+	loadFileFromPath(filename, pathToDir, githubHackSuccess, githubHackFail, filenameOverride);
 }
 
-function loadThisHack(hackName,hackInfo){
-	if ( hackInfo.forceLocal !== false ){
-		loadThisHackLocally(hackName,hackInfo)
-	} else if ( hackInfo.github !== false ){
-		loadThisHackFromGithub(hackName,hackInfo)
+function loadThisHack(hackName, hackInfo) {
+	if (hackInfo.forceLocal !== false) {
+		loadThisHackLocally(hackName, hackInfo);
+	} else if (hackInfo.github !== false) {
+		loadThisHackFromGithub(hackName, hackInfo);
 	} else {
 		// there's no dist version of kitsy/utils rn
 	}
 }
 
-function bakeHackData($element,hackName,hackInfo){
+function bakeHackData($element, hackName, hackInfo) {
 	$element.attr({
-		'data-save':true,
-		'data-default':false,
-		'data-default-type':"boolean",
+		'data-save': true,
+		'data-default': false,
+		'data-default-type': 'boolean',
 		'data-hack': hackName,
-		'data-hack-type': hackInfo.type
+		'data-hack-type': hackInfo.type,
 	});
-	if (hackInfo.requires){
-		$element.attr('data-requires',hackInfo.requires);
+	if (hackInfo.requires) {
+		$element.attr('data-requires', hackInfo.requires);
 	}
 }
 
-function hackMenuConflicts(hackName,hackInfo,$parentCollapse){
-	var conflictTitlesArr = []
-	$.each(hackInfo.conflicts.split(','),function(index,conflictName){
-		conflictTitlesArr.push( removeExtraChars(hacks[conflictName].title) );
+function hackMenuConflicts(hackName, hackInfo, $parentCollapse) {
+	var conflictTitlesArr = [];
+	$.each(hackInfo.conflicts.split(','), function (index, conflictName) {
+		conflictTitlesArr.push(removeExtraChars(hacks[conflictName].title));
 	});
 	var sentenceFrag = arrayToSentenceFrag(conflictTitlesArr);
-	var $warning = $('<p>',{
+	var $warning = $('<p>', {
 		text: 'This hack conflicts with ' + sentenceFrag + '.',
-		class: 'conflict-warning'
+		class: 'conflict-warning',
 	});
 	$parentCollapse.append($warning);
 }
 
-function hackGitHubMessage(hackName,hackInfo,$parentCollapse){
-	var className = "github-message";
-	var msg = "";
+function hackGitHubMessage(hackName, hackInfo, $parentCollapse) {
+	var className = 'github-message';
+	var msg = '';
 	var hackTitle = removeExtraChars(hackInfo.title);
-	if( hackInfo.forceLocal !== false ){
+	if (hackInfo.forceLocal !== false) {
 		msg = 'Borksy is opting to use a local version of ' + hackTitle + ' from ' + window.borksyInfo.lastUpdated + '.';
-	} else if( hacks[hackName].usingGithub === true ){
+	} else if (hacks[hackName].usingGithub === true) {
 		msg = hackTitle + ' is using the most recent version from Github.';
 	} else {
 		msg = hackTitle + ' could not be loaded from Github, local version retrieved on ' + window.borksyInfo.lastUpdated + ' is being used.';
-		className += " warning";
+		className += ' warning';
 	}
-	var $message = $('<p>',{
+	var $message = $('<p>', {
 		text: msg,
-		class: className
+		class: className,
 	});
 	$parentCollapse.append($message);
 }
 
-function hackMenuOptions(hackName,hackInfo,$parentCollapse){
-	var $options = makeNewCollapsible( removeExtraChars(hackInfo.title) + " Options:");
-	var $optionsLabel = $('<label>',{
-		text: "var " + dashesToCamelCase(hackName) + "Options = {"
+function hackMenuOptions(hackName, hackInfo, $parentCollapse) {
+	var $options = makeNewCollapsible(removeExtraChars(hackInfo.title) + ' Options:');
+	var $optionsLabel = $('<label>', {
+		text: 'var ' + dashesToCamelCase(hackName) + 'Options = {',
 	});
-	loadFileFromPath(hackName + '.options.txt','hacks/options/',function(responseText){
-		var $optionsField = $('<textarea>',{
+	loadFileFromPath(hackName + '.options.txt', 'hacks/options/', function (responseText) {
+		var $optionsField = $('<textarea>', {
 			rows: 5,
 			cols: 50,
 			text: responseText,
 			name: hackName + '.options',
-			id: hackName + '-options'
+			id: hackName + '-options',
 		});
 		$optionsField.attr({
-			'data-save':true,
-			'data-default-type':"hackOptions",
-			'data-default': hackName + '.options.txt'
+			'data-save': true,
+			'data-default-type': 'hackOptions',
+			'data-default': hackName + '.options.txt',
 		});
 		loadThisData($optionsField);
 		setSaveTrigger($optionsField);
 		$optionsLabel.append($optionsField);
-		$optionsLabel.append(document.createTextNode("};"));
+		$optionsLabel.append(document.createTextNode('};'));
 		$options.append($optionsLabel);
 		$parentCollapse.append($options);
 	});
 }
 
-function hackMenuReadme(hackName,hackInfo,$parentCollapse){
-	var $readme = makeNewCollapsible( removeExtraChars(hackInfo.title) + " README:");
-	loadFileFromPath(hackName + '.readme.txt','hacks/info/',function(responseText){
-		var $pre = $('<pre>',{
-			text: responseText
+function hackMenuReadme(hackName, hackInfo, $parentCollapse) {
+	var $readme = makeNewCollapsible(removeExtraChars(hackInfo.title) + ' README:');
+	loadFileFromPath(hackName + '.readme.txt', 'hacks/info/', function (responseText) {
+		var $pre = $('<pre>', {
+			text: responseText,
 		});
 		$readme.append($pre);
 		$parentCollapse.append($readme);
 	});
 }
 
-function createThisHackMenu(hackName,hackInfo){
-	var $collapse = makeNewCollapsible(hackInfo.title + " (By " + hackInfo.author + ")");
-	$collapse.attr('data-associated-hack',hackName);
+function createThisHackMenu(hackName, hackInfo) {
+	var $collapse = makeNewCollapsible(hackInfo.title + ' (By ' + hackInfo.author + ')');
+	$collapse.attr('data-associated-hack', hackName);
 
-	var $description = $('<p>',{
-		text: hackInfo.description
+	var $description = $('<p>', {
+		text: hackInfo.description,
 	});
 	$collapse.append($description);
 
-	if (hackInfo.conflicts){
-		hackMenuConflicts(hackName,hackInfo,$collapse);
+	if (hackInfo.conflicts) {
+		hackMenuConflicts(hackName, hackInfo, $collapse);
 	}
 
-	hackGitHubMessage(hackName,hackInfo,$collapse);
+	hackGitHubMessage(hackName, hackInfo, $collapse);
 
-	var $label = $('<label>',{
-		text: "Include " + removeExtraChars(hackInfo.title)
+	var $label = $('<label>', {
+		text: 'Include ' + removeExtraChars(hackInfo.title),
 	});
-	var $checkbox = $('<input>',{
+	var $checkbox = $('<input>', {
 		type: 'checkbox',
 		name: hackName,
-		id: hackName
+		id: hackName,
 	});
-	bakeHackData($checkbox,hackName,hackInfo);
+	bakeHackData($checkbox, hackName, hackInfo);
 	loadThisData($checkbox);
-	toggleIncludedDisplay($collapse,$checkbox);
+	toggleIncludedDisplay($collapse, $checkbox);
 	hackIncludeTrigger($checkbox);
 	$label.append($checkbox);
 	$collapse.append($label);
 
-	if(hackInfo.type === "options"){
-		hackMenuOptions(hackName,hackInfo,$collapse);
+	if (hackInfo.type === 'options') {
+		hackMenuOptions(hackName, hackInfo, $collapse);
 	}
 
-	if(hackInfo.readme === true){
-		hackMenuReadme(hackName,hackInfo,$collapse);
+	if (hackInfo.readme === true) {
+		hackMenuReadme(hackName, hackInfo, $collapse);
 	}
 
 	return $collapse;
 }
 
-function createHiddenHack(hackName,hackObj){
-	var $hidden = $('<input>',{
-		type: "hidden",
+function createHiddenHack(hackName, hackObj) {
+	var $hidden = $('<input>', {
+		type: 'hidden',
 		name: hackName,
-		id: hackName
+		id: hackName,
 	});
-	bakeHackData($hidden,hackName,hackObj);
+	bakeHackData($hidden, hackName, hackObj);
 	loadThisData($hidden);
 
 	return $hidden;
 }
 
-function createHackMenus($here){
-	$.each(Object.keys(window.hacks),function(index,hackName){
-		loadThisHack(hackName,window.hacks[hackName]);
+function createHackMenus($here) {
+	$.each(Object.keys(window.hacks), function (index, hackName) {
+		loadThisHack(hackName, window.hacks[hackName]);
 	});
 }
 
-function makeNewCollapsible(header){
-	var $collapse = $('<div>',{
-		class: "collapsible"
+function makeNewCollapsible(header) {
+	var $collapse = $('<div>', {
+		class: 'collapsible',
 	});
-	$collapse.data('collapse','');
+	$collapse.data('collapse', '');
 	$collapse.data('header', header);
 	activateThisCollapsible($collapse);
 	return $collapse;
 }
 
-function activateCollapsibles(){
+function activateCollapsibles() {
 	const $collapsibles = $('[data-collapsible]');
 	var counter = 0;
-	$collapsibles.each( function(){
+	$collapsibles.each(function () {
 		var $thisCollapsible = $(this);
 		activateThisCollapsible($thisCollapsible);
-		if( $thisCollapsible.attr('id') === "hacks-section" ){
+		if ($thisCollapsible.attr('id') === 'hacks-section') {
 			console.log('HACK IT UP YO');
 			createHackMenus($thisCollapsible);
 		}
 		counter++;
-		if (counter === $collapsibles.length){
+		if (counter === $collapsibles.length) {
 			$('#preloader').fadeOut();
 		}
 	});
 }
 
-function activateThisCollapsible($thisCollapsible){
+function activateThisCollapsible($thisCollapsible) {
 	var $closer = $('<span>', {
-		class: "collapsible_closer",
-		click: function(){
+		class: 'collapsible_closer',
+		click: function () {
 			$thisCollapsible.toggleClass('open');
-		}
+		},
 	});
 	var $header = $('<span>', {
-		class: "collapsible_header",
+		class: 'collapsible_header',
 		text: $thisCollapsible.data('header'),
-		click: function(){
+		click: function () {
 			$thisCollapsible.toggleClass('open');
-		}
+		},
 	});
 	$thisCollapsible.prepend($closer);
 	$thisCollapsible.prepend($header);
 }
 
-function setHotKeys(){
-	$(window).bind('keydown', function(event) {
+function setHotKeys() {
+	$(window).bind('keydown', function (event) {
 		if (event.ctrlKey || event.metaKey) {
 			switch (String.fromCharCode(event.which).toLowerCase()) {
-			case 's':
-				event.preventDefault();
-				assembleAndDownloadFile();
-			break;
-			case 'd':
-				event.preventDefault();
-				restoreDefaults();
-			break;
-			case 'p':
-				event.preventDefault();
-				togglePartyMode();
-			break;
+				case 's':
+					event.preventDefault();
+					assembleAndDownloadFile();
+					break;
+				case 'd':
+					event.preventDefault();
+					restoreDefaults();
+					break;
+				case 'p':
+					event.preventDefault();
+					togglePartyMode();
+					break;
 			}
 		}
 	});
 }
-			
-$(document).ready(function(){
+
+$(document).ready(function () {
 	activateCollapsibles();
 	loadAboutInfo();
 	loadTemplates();
