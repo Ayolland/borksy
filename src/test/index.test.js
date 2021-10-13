@@ -35,7 +35,7 @@ describe('Borksy', () => {
 		});
 		page = await browser.newPage();
 
-		await page._client.send('Page.setDownloadBehavior', { behavior: 'allow', downloadPath: path.resolve(__dirname) });
+		await page.client().send('Page.setDownloadBehavior', { behavior: 'allow', downloadPath: path.resolve(__dirname) });
 		await page.goto('http://localhost:5000', {
 			waitUntil: 'networkidle2',
 		});
