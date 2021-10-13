@@ -41,5 +41,12 @@
 				"devDependencies": true
 			}]
 		}
+	}, {
+		"files": ["vite.config.js"],
+		"rules": {
+			"import/no-extraneous-dependencies": ["error", {
+				"devDependencies": true
+			}]
+		}
 	}]
 }
