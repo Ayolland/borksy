@@ -240,6 +240,24 @@ header {
 
 #about {
 	//padding: 0 0.75em;
+
+	.faq {
+		ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+		blockquote {
+			margin: 0;
+			font-style: italic;
+
+			> p::before,
+			> p::after {
+				display: inline;
+				content: '"';
+			}
+		}
+	}
 }
 
 form {

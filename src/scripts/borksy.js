@@ -283,6 +283,7 @@ function loadAboutInfo() {
 	elAbout.appendChild(elHowto[0]);
 
 	const elFaqs = makeNewCollapsible('Troubleshooting / FAQs');
+	elFaqs.addClass('faq');
 	elFaqs.append(htmlFaqs);
 	elAbout.appendChild(elFaqs[0]);
 
