@@ -751,6 +751,8 @@ function setHotKeys() {
 					event.preventDefault();
 					togglePartyMode();
 					break;
+				default:
+					break;
 			}
 		}
 	});
