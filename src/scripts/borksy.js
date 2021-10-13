@@ -690,20 +690,15 @@ function makeNewCollapsible(header) {
 }
 
 function activateCollapsibles() {
-	const $collapsibles = $('[data-collapsible]');
-	let counter = 0;
-	$collapsibles.each(function () {
-		const $thisCollapsible = $(this);
+	Array.from(document.querySelectorAll('[data-collapsible]')).forEach(i => {
+		const $thisCollapsible = $(i);
 		activateThisCollapsible($thisCollapsible);
 		if ($thisCollapsible.attr('id') === 'hacks-section') {
 			console.log('HACK IT UP YO');
 			createHackMenus($thisCollapsible);
 		}
-		counter++;
-		if (counter === $collapsibles.length) {
-			$('#preloader').fadeOut();
-		}
 	});
+	$('#preloader').fadeOut();
 }
 
 function activateThisCollapsible($thisCollapsible) {
