@@ -375,8 +375,8 @@ function loadDefaultOption($thisField) {
 }
 
 function loadDefaults(checkSaveData = true) {
-	$('[data-save]').each(function () {
-		const $thisField = $(this);
+	Array.from(document.querySelectorAll('[data-save]')).forEach(i => {
+		const $thisField = $(i);
 		const thisSaveData = localStorage.getItem($thisField.attr('name'));
 		const hasDefault = typeof $thisField.data('default') !== 'undefined';
 		const hasSaveData = thisSaveData !== null;
