@@ -526,8 +526,7 @@ function localHackSuccess(response, filename) {
 function localHackFail() {}
 
 function loadThisHackLocally(hackName) {
-	var hackName = hackName.substr(0, hackName.lastIndexOf('.')) || hackName;
-	const filename = `${hackName}.js`;
+	const filename = `${hackName.substr(0, hackName.lastIndexOf('.')) || hackName}.js`;
 	const pathToDir = 'hacks/dist/';
 	loadFileFromPath(filename, pathToDir, localHackSuccess, localHackFail, filename);
 }
