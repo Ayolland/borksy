@@ -233,13 +233,13 @@ function assembleAndDownloadFile() {
 
 	$('[data-borksy-replace-single]')
 		.promise()
-		.done(function () {
+		.done(() => {
 			hackBundle = assembleHacks(hackBundle);
 		});
 
 	$('[data-hack]')
 		.promise()
-		.done(function () {
+		.done(() => {
 			const filename = $('#filename').val();
 			modifiedTemplate = modifiedTemplate.replace('BORKSY-HACKS', hackBundle);
 			download(`${filename}.html`, modifiedTemplate);
@@ -260,7 +260,7 @@ function togglePartyMode() {
 function loadHDGameData() {
 	const filename = 'gamedata.HD.txt';
 	const $ajax = $.ajax(`defaults/${filename}`);
-	$ajax.done(function () {
+	$ajax.done(() => {
 		const response = $ajax.responseText;
 		window.loadedFiles[filename] = response;
 	});
@@ -270,39 +270,39 @@ function loadAboutInfo() {
 	const $aboutContent = $('#about_content');
 	const $ajax = $.ajax('about/about.html');
 	const error = '<p>Whoa, Something went wrong!</p>';
-	$ajax.done(function () {
+	$ajax.done(() => {
 		const response = $ajax.responseText;
 		$aboutContent.html(response);
 
 		const $ajax3 = $.ajax('about/how-to-use-borksy.html');
-		$ajax3.done(function () {
+		$ajax3.done(() => {
 			const $howto = makeNewCollapsible('How To Use Borksy');
 			$howto.append($ajax3.responseText);
 			$aboutContent.append($howto);
 		});
 
 		const $ajax5 = $.ajax('about/troubleshooting-faqs.html');
-		$ajax5.done(function () {
+		$ajax5.done(() => {
 			const $faqs = makeNewCollapsible('Troubleshooting / FAQs');
 			$faqs.append($ajax5.responseText);
 			$aboutContent.append($faqs);
 		});
 
 		const $ajax2 = $.ajax('about/other-tools.html');
-		$ajax2.done(function () {
+		$ajax2.done(() => {
 			const $tools = makeNewCollapsible('Other Bitsy Tools');
 			$tools.append($ajax2.responseText);
 			$aboutContent.append($tools);
 		});
 
 		const $ajax4 = $.ajax('about/ayos-special-tips.html');
-		$ajax4.done(function () {
+		$ajax4.done(() => {
 			const $tips = makeNewCollapsible("AYo's Special Tips");
 			$tips.append($ajax4.responseText);
 			$aboutContent.append($tips);
 		});
 	});
-	$ajax.fail(function () {
+	$ajax.fail(() => {
 		$aboutContent.html(error);
 	});
 }
@@ -333,13 +333,13 @@ function loadDefaultTextfile($thisField) {
 	const filename = $thisField.data('default');
 	const path = `defaults/${filename}`;
 	const $ajax = $.ajax(path);
-	$ajax.done(function () {
+	$ajax.done(() => {
 		const response = $ajax.responseText;
 		$thisField.val(response);
 		window.loadedFiles[filename] = response;
 		setSaveTrigger($thisField);
 	});
-	$ajax.fail(function () {
+	$ajax.fail(() => {
 		$thisField.val('failed to load default!');
 		console.log($ajax.error);
 		setSaveTrigger($thisField);
