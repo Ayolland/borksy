@@ -194,20 +194,9 @@ function assembleSingles(modifiedTemplate) {
 }
 
 function reOrderHacks() {
-	const hackArray = [];
-	$.each(window.hacks, function (hackName, hackObj) {
-		hackArray.push({ name: hackName, ...hackObj });
-	});
-	hackArray.sort(function (obj1, obj2) {
-		if (obj1.order > obj2.order) {
-			return 1;
-		}
-		if (obj1.order === obj2.order) {
-			return 0;
-		}
-		return -1;
-	});
-	return hackArray;
+	return Object.entries(window.hacks)
+		.map(([hackName, hackObj]) => ({ name: hackName, ...hackObj }))
+		.sort(({ order: a }, { order: b }) => a - b);
 }
 
 function assembleHacks(hackBundle) {
