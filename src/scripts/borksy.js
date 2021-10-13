@@ -564,7 +564,7 @@ function bakeHackData($element, hackName, hackInfo) {
 
 function hackMenuConflicts(hackName, hackInfo, $parentCollapse) {
 	const conflictTitlesArr = [];
-	$.each(hackInfo.conflicts.split(','), function (index, conflictName) {
+	$.each(hackInfo.conflicts.split(','), (index, conflictName) => {
 		conflictTitlesArr.push(removeExtraChars(window.hacks[conflictName].title));
 	});
 	const sentenceFrag = arrayToSentenceFrag(conflictTitlesArr);
@@ -599,7 +599,7 @@ function hackMenuOptions(hackName, hackInfo, $parentCollapse) {
 	const $optionsLabel = $('<label>', {
 		text: `var ${dashesToCamelCase(hackName)}Options = {`,
 	});
-	loadFileFromPath(`${hackName}.options.txt`, 'hacks/options/', function (responseText) {
+	loadFileFromPath(`${hackName}.options.txt`, 'hacks/options/', responseText => {
 		const $optionsField = $('<textarea>', {
 			rows: 5,
 			cols: 50,
@@ -623,7 +623,7 @@ function hackMenuOptions(hackName, hackInfo, $parentCollapse) {
 
 function hackMenuReadme(hackName, hackInfo, $parentCollapse) {
 	const $readme = makeNewCollapsible(`${removeExtraChars(hackInfo.title)} README:`);
-	loadFileFromPath(`${hackName}.readme.txt`, 'hacks/info/', function (responseText) {
+	loadFileFromPath(`${hackName}.readme.txt`, 'hacks/info/', responseText => {
 		const $pre = $('<pre>', {
 			text: responseText,
 		});
@@ -674,7 +674,7 @@ function createThisHackMenu(hackName, hackInfo) {
 }
 
 function createHackMenus() {
-	$.each(Object.keys(window.hacks), function (index, hackName) {
+	$.each(Object.keys(window.hacks), (index, hackName) => {
 		loadThisHack(hackName, window.hacks[hackName]);
 	});
 }
