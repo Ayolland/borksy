@@ -1,10 +1,10 @@
 import $ from 'jquery';
-import './libs';
+import { borksyInfo, hacks, loadedFiles } from './libs';
 
 function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride) {
 	const $ajax = $.ajax(pathToDir + filename);
 	$ajax.done(() => {
-		window.loadedFiles[filenameOverride || filename] = escape($ajax.responseText);
+		loadedFiles[filenameOverride || filename] = escape($ajax.responseText);
 		console.log(`Loaded ${filenameOverride || filename} via AJAX`);
 		doneCallback?.($ajax.responseText, filenameOverride);
 	});
@@ -17,10 +17,10 @@ function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filen
 function loadTemplates() {
 	const templateSel = document.querySelector('select#template');
 	templateSel.innerHTML = '';
-	for (let i = window.borksyInfo.templates.length - 1; i >= 0; i--) {
-		const filename = `${window.borksyInfo.templates[i].filename}.html`;
-		const { description } = window.borksyInfo.templates[i];
-		const { isDefault } = window.borksyInfo.templates[i];
+	for (let i = borksyInfo.templates.length - 1; i >= 0; i--) {
+		const filename = `${borksyInfo.templates[i].filename}.html`;
+		const { description } = borksyInfo.templates[i];
+		const { isDefault } = borksyInfo.templates[i];
 		templateSel.innerHTML += `<option value="${filename}" ${isDefault ? 'data-default-option' : ''}>${description}</option>`;
 		loadFileFromPath(filename, 'template/');
 	}
@@ -124,7 +124,7 @@ function setSaveTrigger($this) {
 function saveTemplateExtras($this) {
 	const isHD = $this.val().split('.')[0] === 'BitsyHD';
 	const noSavedGameData = localStorage.getItem('gamedata') == null;
-	const HDgamedata = window.loadedFiles['gamedata.HD.txt'];
+	const HDgamedata = loadedFiles['gamedata.HD.txt'];
 	const HDgamedataExists = HDgamedata !== undefined;
 	const $mascot = $('#mascot');
 	if (isHD) {
@@ -172,7 +172,7 @@ function saveThisHack($thisHack, checkConflicts = true) {
 	saveThisData($thisHack);
 	checkAndToggleIncludedDisplay($thisHack);
 
-	const thisConflicts = window.hacks[$thisHack.data('hack')].conflicts;
+	const thisConflicts = hacks[$thisHack.data('hack')].conflicts;
 	if (thisConflicts && checkConflicts) {
 		removeConflictingHacks(thisConflicts.split(','));
 	}
@@ -194,7 +194,7 @@ function assembleSingles(modifiedTemplate) {
 }
 
 function reOrderHacks() {
-	return Object.entries(window.hacks)
+	return Object.entries(hacks)
 		.map(([hackName, hackObj]) => ({ name: hackName, ...hackObj }))
 		.sort(({ order: a }, { order: b }) => a - b);
 }
@@ -210,7 +210,7 @@ function assembleHacks(hackBundle) {
 			return acc;
 		}
 
-		let hackFile = window.loadedFiles[filename];
+		let hackFile = loadedFiles[filename];
 		if (hackObj.type === 'options') {
 			hackFile = unescape(hackFile);
 			const newHackOptionsContents = $(`#${hackName}-options`).val();
@@ -226,7 +226,7 @@ function assembleAndDownloadFile() {
 	});
 
 	const templateName = $('#template').val();
-	let modifiedTemplate = window.loadedFiles[templateName].repeat(1);
+	let modifiedTemplate = loadedFiles[templateName].repeat(1);
 	let hackBundle = '';
 
 	modifiedTemplate = assembleSingles(modifiedTemplate);
@@ -262,7 +262,7 @@ function loadHDGameData() {
 	const $ajax = $.ajax(`defaults/${filename}`);
 	$ajax.done(() => {
 		const response = $ajax.responseText;
-		window.loadedFiles[filename] = response;
+		loadedFiles[filename] = response;
 	});
 }
 
@@ -313,7 +313,7 @@ function loadDefaultString($thisField) {
 }
 
 function loadDefaultHackOptions($thisField) {
-	const options = unescape(window.loadedFiles[`${$thisField.attr('name')}.txt`]);
+	const options = unescape(loadedFiles[`${$thisField.attr('name')}.txt`]);
 	$thisField.val(options);
 	setSaveTrigger($thisField);
 }
@@ -336,7 +336,7 @@ function loadDefaultTextfile($thisField) {
 	$ajax.done(() => {
 		const response = $ajax.responseText;
 		$thisField.val(response);
-		window.loadedFiles[filename] = response;
+		loadedFiles[filename] = response;
 		setSaveTrigger($thisField);
 	});
 	$ajax.fail(() => {
@@ -504,7 +504,7 @@ function localHackSuccess(response, filename) {
 	hacks.push(hackName);
 	hacks.sort();
 	const prev = elHackSection.querySelector(`:scope > .collapsible[data-associated-hack="${hacks[hacks.indexOf(hackName) + 1]}"]`);
-	const elHack = createThisHackMenu(hackName, window.hacks[hackName])[0];
+	const elHack = createThisHackMenu(hackName, hacks[hackName])[0];
 	if (prev) {
 		elHackSection.insertBefore(elHack, prev);
 	} else {
@@ -522,14 +522,14 @@ function loadThisHackLocally(hackName) {
 
 function githubHackSuccess(response, filename) {
 	const hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
-	window.hacks[hackName].usingGithub = true;
+	hacks[hackName].usingGithub = true;
 	localHackSuccess(response, filename);
 }
 
 function githubHackFail(response, filename) {
 	const hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
-	window.hacks[hackName].usingGithub = false;
-	loadThisHackLocally(filename, window.hacks[hackName]);
+	hacks[hackName].usingGithub = false;
+	loadThisHackLocally(filename, hacks[hackName]);
 }
 
 function loadThisHackFromGithub(hackName, hackInfo) {
@@ -565,7 +565,7 @@ function bakeHackData($element, hackName, hackInfo) {
 function hackMenuConflicts(hackName, hackInfo, $parentCollapse) {
 	const conflictTitlesArr = [];
 	$.each(hackInfo.conflicts.split(','), (index, conflictName) => {
-		conflictTitlesArr.push(removeExtraChars(window.hacks[conflictName].title));
+		conflictTitlesArr.push(removeExtraChars(hacks[conflictName].title));
 	});
 	const sentenceFrag = arrayToSentenceFrag(conflictTitlesArr);
 	const $warning = $('<p>', {
@@ -580,11 +580,11 @@ function hackGitHubMessage(hackName, hackInfo, $parentCollapse) {
 	let msg = '';
 	const hackTitle = removeExtraChars(hackInfo.title);
 	if (hackInfo.forceLocal !== false) {
-		msg = `Borksy is opting to use a local version of ${hackTitle} from ${window.borksyInfo.lastUpdated}.`;
-	} else if (window.hacks[hackName].usingGithub === true) {
+		msg = `Borksy is opting to use a local version of ${hackTitle} from ${borksyInfo.lastUpdated}.`;
+	} else if (hacks[hackName].usingGithub === true) {
 		msg = `${hackTitle} is using the most recent version from Github.`;
 	} else {
-		msg = `${hackTitle} could not be loaded from Github, local version retrieved on ${window.borksyInfo.lastUpdated} is being used.`;
+		msg = `${hackTitle} could not be loaded from Github, local version retrieved on ${borksyInfo.lastUpdated} is being used.`;
 		className += ' warning';
 	}
 	const $message = $('<p>', {
@@ -674,8 +674,8 @@ function createThisHackMenu(hackName, hackInfo) {
 }
 
 function createHackMenus() {
-	$.each(Object.keys(window.hacks), (index, hackName) => {
-		loadThisHack(hackName, window.hacks[hackName]);
+	$.each(Object.keys(hacks), (index, hackName) => {
+		loadThisHack(hackName, hacks[hackName]);
 	});
 }
 

@@ -1,6 +1,6 @@
-window.loadedFiles = {};
+export const loadedFiles = {};
 
-window.borksyInfo = {
+export const borksyInfo = {
 	lastUpdated: 'September 16, 2021',
 	templates: [
 		{ filename: 'Bitsy.5.5', description: 'Bitsy 5.5 (modified for Borksy)', isDefault: false },
@@ -16,7 +16,7 @@ window.borksyInfo = {
 	],
 };
 
-window.hacks = {
+export const hacks = {
 	'avatar-by-room': {
 		title: '👥 Avatar By Room',
 		description: 'Allows changing the avatar in certain rooms.',
