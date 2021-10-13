@@ -750,8 +750,8 @@ $(document).ready(() => {
 	loadTemplates();
 	loadDefaults();
 	replaceElements();
-	$('#download-button').click(assembleAndDownloadFile);
-	$('#restore-button').click(restoreDefaults);
+	$('#download-button').on('click', assembleAndDownloadFile);
+	$('#restore-button').on('click', restoreDefaults);
 	setHotKeys();
-	$('#mascot').click(togglePartyMode);
+	$('#mascot').on('click', togglePartyMode);
 });
