@@ -627,9 +627,19 @@ function selectFont(){
 }
 
 function localHackSuccess(response,filename){
+	const elHackSection = document.querySelector('#hacks-section');
 	var hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
 	//var hackName = filename.substring(0,filename.length - 3);
-	$("#hacks-section").append(createThisHackMenu(hackName,hacks[hackName]));
+	const hacks = Array.from(elHackSection.querySelectorAll(":scope > .collapsible")).map(i=>i.dataset.associatedHack);
+	hacks.push(hackName);
+	hacks.sort();
+	const prev = elHackSection.querySelector(`:scope > .collapsible[data-associated-hack=\"${hacks[hacks.indexOf(hackName)+1]}\"]`);
+	const elHack = createThisHackMenu(hackName,window.hacks[hackName])[0];
+	if (prev) {
+		elHackSection.insertBefore(elHack, prev);
+	} else {
+		elHackSection.appendChild(elHack);
+	}
 }
 
 function localHackFail(response,filename){
@@ -809,8 +819,7 @@ function createHiddenHack(hackName,hackObj){
 }
 
 function createHackMenus($here){
-	let alphabetizedHacks = Object.keys(window.hacks).sort();
-	$.each(alphabetizedHacks,function(index,hackName){
+	$.each(Object.keys(window.hacks),function(index,hackName){
 		loadThisHack(hackName,window.hacks[hackName]);
 	});
 }
