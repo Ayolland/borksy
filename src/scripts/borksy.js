@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import { htmlAbout, htmlFaqs, htmlHowto, htmlTips, htmlTools } from '../about';
 import { borksyInfo, hacks } from './libs';
 
 const loadedFiles = {};
@@ -269,44 +270,24 @@ function loadHDGameData() {
 }
 
 function loadAboutInfo() {
-	const $aboutContent = $('#about_content');
-	const $ajax = $.ajax('about/about.html');
-	const error = '<p>Whoa, Something went wrong!</p>';
-	$ajax.done(() => {
-		const response = $ajax.responseText;
-		$aboutContent.html(response);
+	const elAbout = document.querySelector('#about_content');
+	elAbout.innerHTML = htmlAbout;
 
-		const $ajax3 = $.ajax('about/how-to-use-borksy.html');
-		$ajax3.done(() => {
-			const $howto = makeNewCollapsible('How To Use Borksy');
-			$howto.append($ajax3.responseText);
-			$aboutContent.append($howto);
-		});
+	const elHowto = makeNewCollapsible('How To Use Borksy');
+	elHowto.append(htmlHowto);
+	elAbout.appendChild(elHowto[0]);
 
-		const $ajax5 = $.ajax('about/troubleshooting-faqs.html');
-		$ajax5.done(() => {
-			const $faqs = makeNewCollapsible('Troubleshooting / FAQs');
-			$faqs.append($ajax5.responseText);
-			$aboutContent.append($faqs);
-		});
+	const elFaqs = makeNewCollapsible('Troubleshooting / FAQs');
+	elFaqs.append(htmlFaqs);
+	elAbout.appendChild(elFaqs[0]);
 
-		const $ajax2 = $.ajax('about/other-tools.html');
-		$ajax2.done(() => {
-			const $tools = makeNewCollapsible('Other Bitsy Tools');
-			$tools.append($ajax2.responseText);
-			$aboutContent.append($tools);
-		});
+	const elTools = makeNewCollapsible('Other Bitsy Tools');
+	elTools.append(htmlTools);
+	elAbout.appendChild(elTools[0]);
 
-		const $ajax4 = $.ajax('about/ayos-special-tips.html');
-		$ajax4.done(() => {
-			const $tips = makeNewCollapsible("AYo's Special Tips");
-			$tips.append($ajax4.responseText);
-			$aboutContent.append($tips);
-		});
-	});
-	$ajax.fail(() => {
-		$aboutContent.html(error);
-	});
+	const elTips = makeNewCollapsible("AYo's Special Tips");
+	elTips.append(htmlTips);
+	elAbout.appendChild(elTips[0]);
 }
 
 function loadDefaultString($thisField) {
