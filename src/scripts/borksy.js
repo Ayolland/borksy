@@ -9,15 +9,10 @@ function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filen
 		doneCallback?.($ajax.responseText, filenameOverride);
 	});
 	$ajax.fail(() => {
-		// window.loadedFiles[filename] = "";
 		console.log(`Error loading ${filename} via AJAX`);
 		failCallBack?.($ajax.responseText, filenameOverride);
 	});
 }
-
-// function loadTemplate(){
-// 	loadFileFromPath( window.borksyInfo.templateVersion + '.template.html','template/');
-// }
 
 function loadTemplates() {
 	const templateSel = document.querySelector('select#template');
@@ -25,7 +20,6 @@ function loadTemplates() {
 	for (let i = window.borksyInfo.templates.length - 1; i >= 0; i--) {
 		const filename = `${window.borksyInfo.templates[i].filename}.html`;
 		const { description } = window.borksyInfo.templates[i];
-		const localStorageVer = localStorage.getItem('template');
 		const { isDefault } = window.borksyInfo.templates[i];
 		templateSel.innerHTML += `<option value="${filename}" ${isDefault ? 'data-default-option' : ''}>${description}</option>`;
 		loadFileFromPath(filename, 'template/');
@@ -146,28 +140,6 @@ function saveTemplateExtras($this) {
 	}
 }
 
-function checkHacksRequiring($thisHack) {
-	const $hacksWithRequires = $('[data-requires]');
-	let $includedHacksRequiringThis = $();
-	$hacksWithRequires.each(function (index) {
-		const $currentHack = $(this);
-		const hackIsIncluded = $currentHack.val() === 'true' || $currentHack.prop('checked') === true;
-		const hackRequiresThis = $currentHack.data('requires').includes($thisHack.attr('id')) || false;
-		if (hackIsIncluded && hackRequiresThis) {
-			$includedHacksRequiringThis = $includedHacksRequiringThis.add($currentHack);
-		}
-	});
-	if ($includedHacksRequiringThis.length > 0) {
-		// no logic yet for hacks that can be both required AND user-selected
-		// $thisHack.prop('checked', true);
-		$thisHack.val(true);
-	} else {
-		// $thisHack.prop('checked', false);
-		$thisHack.val(false);
-	}
-	saveThisHack($thisHack);
-}
-
 function removeConflictingHacks(conflictsArr) {
 	$.each(conflictsArr, function (index, hackName) {
 		const $conflictingHack = $(`#${hackName}`);
@@ -204,19 +176,6 @@ function saveThisHack($thisHack, checkConflicts) {
 	saveThisData($thisHack);
 	checkAndToggleIncludedDisplay($thisHack);
 
-	// requires removed currently
-
-	// var thisRequires = hacks[$thisHack.data('hack')].requires;
-
-	// if( thisRequires && !thisRequires.includes(',') ){
-	// 	var $requiredHack = $('#' + thisRequires);
-	// 	checkHacksRequiring($requiredHack);
-	// } else if ( thisRequires ) {
-	// 	$.each(thisRequires.split(','),function(index,requiredHackName){
-	// 		var $requiredHack = $('#' + requiredHackName);
-	// 		checkHacksRequiring($requiredHack);
-	// 	});
-	// }
 	const thisConflicts = hacks[$thisHack.data('hack')].conflicts;
 	if (thisConflicts && checkConflicts) {
 		removeConflictingHacks(thisConflicts.split(','));
@@ -513,9 +472,7 @@ function onFontImageLoaded() {
 	}
 	// flatten characters into fontdata
 	fontdata = [].concat.apply([], fontdata);
-	// console.log(fontdata.toString());
 	// display output
-	// document.getElementById('fontdata').value = "[" + fontdata.toString() + "]";
 	saveThisData($('#fontdata'), `[/*${$('#fontfilename').val()}*/${fontdata.toString()}]`);
 }
 
@@ -533,18 +490,6 @@ function readFontFile(eventOrFilename) {
 	img.src = src;
 	// if possible, change preview
 	changeFontPreview();
-}
-
-function loadFontImage(input) {
-	if (!input.files || !input.files[0]) {
-		// do nothing
-		return;
-	}
-	// read image
-	const reader = new FileReader();
-	reader.onload = readFontFile;
-	changeFontFilename(input.files[0].name);
-	reader.readAsDataURL(input.files[0]);
 }
 
 function changeFontFilename(filename) {
@@ -625,7 +570,6 @@ function selectFont() {
 function localHackSuccess(response, filename) {
 	const elHackSection = document.querySelector('#hacks-section');
 	const hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
-	// var hackName = filename.substring(0,filename.length - 3);
 	const hacks = Array.from(elHackSection.querySelectorAll(':scope > .collapsible')).map(i => i.dataset.associatedHack);
 	hacks.push(hackName);
 	hacks.sort();
