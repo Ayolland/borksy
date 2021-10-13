@@ -66,16 +66,18 @@ function cleanUsingRegEx($this, regExStr) {
 	$this.val($this.val().replace(regex, ''));
 }
 
-function saveThisData($this, value) {
+function saveThisData($this, override) {
 	if ($this.data('clean-regex')) {
 		cleanUsingRegEx($this, $this.data('clean-regex'));
 	}
+	let value;
 	if ($this.prop('type') === 'checkbox') {
 		value = $this.prop('checked');
-	} else if (value === undefined) {
+	} else if (override === undefined) {
 		value = $this.val();
 	} else {
-		$this.val(value);
+		value = override;
+		$this.val(override);
 	}
 	const name = $this.attr('name');
 	localStorage.setItem(name, value);
