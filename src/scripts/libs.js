@@ -1,5 +1,3 @@
-export const loadedFiles = {};
-
 export const borksyInfo = {
 	lastUpdated: 'September 16, 2021',
 	templates: [

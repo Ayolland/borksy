@@ -1,5 +1,7 @@
 import $ from 'jquery';
-import { borksyInfo, hacks, loadedFiles } from './libs';
+import { borksyInfo, hacks } from './libs';
+
+const loadedFiles = {};
 
 function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride) {
 	const $ajax = $.ajax(pathToDir + filename);
