@@ -47,9 +47,7 @@ function shortenString(value, length = 10) {
 }
 
 function dashesToCamelCase(string) {
-	return string.toLowerCase().replace(/-(.)/g, function (match, group1) {
-		return group1.toUpperCase();
-	});
+	return string.toLowerCase().replace(/-(.)/g, (_match, group1) => group1.toUpperCase());
 }
 
 function removeExtraChars(string) {
