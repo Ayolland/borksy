@@ -3,13 +3,13 @@ import './libs';
 
 function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride) {
 	const $ajax = $.ajax(pathToDir + filename);
-	$ajax.done(function () {
+	$ajax.done(() => {
 		filename = filenameOverride || filename;
 		window.loadedFiles[filename] = escape($ajax.responseText);
 		console.log(`Loaded ${filename} via AJAX`);
 		doneCallback?.($ajax.responseText, filenameOverride);
 	});
-	$ajax.fail(function () {
+	$ajax.fail(() => {
 		// window.loadedFiles[filename] = "";
 		console.log(`Error loading ${filename} via AJAX`);
 		failCallBack?.($ajax.responseText, filenameOverride);
