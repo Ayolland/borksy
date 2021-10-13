@@ -185,13 +185,12 @@ function hackIncludeTrigger($this) {
 }
 
 function assembleSingles(modifiedTemplate) {
-	$('[data-borksy-replace-single]').each(function () {
-		const $this = $(this);
+	return Array.from(document.querySelectorAll('[data-borksy-replace-single]')).reduce((acc, i) => {
+		const $this = $(i);
 		const valueToReplace = `BORKSY-${$this.data('borksy-replace-single')}`;
 		const formValue = $this.val();
-		modifiedTemplate = modifiedTemplate.replace(valueToReplace, formValue);
-	});
-	return modifiedTemplate;
+		return acc.replace(valueToReplace, formValue);
+	}, modifiedTemplate);
 }
 
 function reOrderHacks() {
