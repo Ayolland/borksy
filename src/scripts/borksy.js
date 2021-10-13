@@ -115,7 +115,7 @@ function setSaveTrigger($this) {
 		default:
 			break;
 	}
-	$this.change(function () {
+	$this.change(() => {
 		saveThisData($this);
 		extraFunction?.($this);
 	});
