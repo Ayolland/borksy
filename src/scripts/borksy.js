@@ -40,8 +40,7 @@ function download(filename, text) {
 	console.log(`File '${filename}' downloaded`);
 }
 
-function shortenString(value, length) {
-	length = length || 10;
+function shortenString(value, length = 10) {
 	const string = value.toString();
 	const ending = string.length > length ? '...' : '';
 	return string.substring(0, length) + ending;
