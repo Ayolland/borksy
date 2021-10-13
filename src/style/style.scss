@@ -163,24 +163,6 @@ footer {
 			content: ' \02705';
 		}
 
-		&.python {
-			&.green {
-				> .collapsible_header::after {
-					content: ' \1F49A';
-				}
-			}
-			&.yellow {
-				> .collapsible_header::after {
-					content: ' \1F49B';
-				}
-			}
-			&.red {
-				> .collapsible_header::after {
-					content: ' \1F494';
-				}
-			}
-		}
-
 		.collapsible {
 			.collapsible_header {
 				background-color: transparent;
