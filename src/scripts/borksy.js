@@ -666,9 +666,9 @@ function createHackMenus() {
 }
 
 function makeNewCollapsible(header) {
-	const $collapse = $('<div>', {
-		class: 'collapsible',
-	});
+	const elDetails = document.createElement('details');
+	const $collapse = $(elDetails);
+	elDetails.className = 'collapsible';
 	$collapse.data('collapse', '');
 	$collapse.data('header', header);
 	activateThisCollapsible($collapse);
@@ -688,21 +688,10 @@ function activateCollapsibles() {
 }
 
 function activateThisCollapsible($thisCollapsible) {
-	const $closer = $('<span>', {
-		class: 'collapsible_closer',
-		click() {
-			$thisCollapsible.toggleClass('open');
-		},
-	});
-	const $header = $('<span>', {
-		class: 'collapsible_header',
-		text: $thisCollapsible.data('header'),
-		click() {
-			$thisCollapsible.toggleClass('open');
-		},
-	});
-	$thisCollapsible.prepend($closer);
-	$thisCollapsible.prepend($header);
+	const elSummary = document.createElement('summary');
+	elSummary.textContent = $thisCollapsible.data('header');
+	elSummary.className = 'collapsible_header';
+	$thisCollapsible.prepend(elSummary);
 }
 
 function setHotKeys() {

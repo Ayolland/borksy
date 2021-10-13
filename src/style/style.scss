@@ -87,46 +87,17 @@ footer {
 }
 
 .collapsible {
-	display: block;
-	position: relative;
-	overflow: hidden;
 	background: $light-glass;
-	max-height: 1em;
-	padding: 0.75em;
+	padding: 0.5rem;
 	margin-bottom: 0.75em;
 
-	&.open {
-		max-height: none;
-
-		& > .collapsible_closer::after {
-			content: '\25b2';
-		}
-	}
-
-	.collapsible_header {
-		display: block;
+	> .collapsible_header {
 		background: $light-glass;
-		margin: -0.5em -0.5em 0 -0.5em;
+		margin: -0.5rem;
 		padding: 0.25em 0.5em;
 		height: 1.75rem;
 		line-height: 1;
 		font-size: 1.5em;
-	}
-
-	.collapsible_closer {
-		position: absolute;
-		display: block;
-		width: 1.75em;
-		height: 1.75em;
-		top: 0.35em;
-		right: 0.5em;
-
-		&::after {
-			content: '\25bc';
-			color: $dark-glass;
-			line-height: 1;
-			font-size: 1.75em;
-		}
 	}
 
 	.collapsible {
@@ -136,27 +107,11 @@ footer {
 		margin-top: 0.5em;
 		border: 1px solid $dark-glass;
 
-		.collapsible_header {
+		> .collapsible_header {
 			background-color: $dark-glass;
 			font-size: 1em;
 			height: 1em;
-			margin: -0.5em -0.5em 0;
 			padding: 0.5em;
-
-			&::after {
-				white-space: pre;
-				vertical-align: middle;
-			}
-		}
-
-		.collapsible_closer {
-			width: 1em;
-			height: 1em;
-			top: 0.35em;
-
-			&::after {
-				font-size: 1em;
-			}
 		}
 
 		&.included > .collapsible_header::after {
@@ -164,7 +119,7 @@ footer {
 		}
 
 		.collapsible {
-			.collapsible_header {
+			> .collapsible_header {
 				background-color: transparent;
 			}
 		}
