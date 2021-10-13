@@ -179,7 +179,7 @@ function saveThisHack($thisHack, checkConflicts = true) {
 }
 
 function hackIncludeTrigger($this) {
-	$this.change(function () {
+	$this.change(() => {
 		saveThisHack($this);
 	});
 }
