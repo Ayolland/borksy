@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import { html as htmlChangelog } from '../../CHANGELOG.md';
 import { htmlAbout, htmlFaqs, htmlHowto, htmlTips, htmlTools } from '../about';
 import { borksyInfo, hacks } from './libs';
 
@@ -288,6 +289,10 @@ function loadAboutInfo() {
 	const elTips = makeNewCollapsible("AYo's Special Tips");
 	elTips.append(htmlTips);
 	elAbout.appendChild(elTips[0]);
+
+	const elChangelog = makeNewCollapsible('Changelog');
+	elChangelog.append(htmlChangelog);
+	elAbout.appendChild(elChangelog[0]);
 }
 
 function loadDefaultString($thisField) {
