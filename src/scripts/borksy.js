@@ -123,7 +123,7 @@ function setSaveTrigger($this) {
 
 function saveTemplateExtras($this) {
 	const isHD = $this.val().split('.')[0] === 'BitsyHD';
-	const noSavedGameData = localStorage.getItem('gamedate') == null;
+	const noSavedGameData = localStorage.getItem('gamedata') == null;
 	const HDgamedata = window.loadedFiles['gamedata.HD.txt'];
 	const HDgamedataExists = HDgamedata !== undefined;
 	const $mascot = $('#mascot');
