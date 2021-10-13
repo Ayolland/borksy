@@ -4,9 +4,8 @@ import './libs';
 function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride) {
 	const $ajax = $.ajax(pathToDir + filename);
 	$ajax.done(() => {
-		filename = filenameOverride || filename;
-		window.loadedFiles[filename] = escape($ajax.responseText);
-		console.log(`Loaded ${filename} via AJAX`);
+		window.loadedFiles[filenameOverride || filename] = escape($ajax.responseText);
+		console.log(`Loaded ${filenameOverride || filename} via AJAX`);
 		doneCallback?.($ajax.responseText, filenameOverride);
 	});
 	$ajax.fail(() => {
