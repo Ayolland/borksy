@@ -482,8 +482,8 @@ function changeFontFilename(filename) {
 }
 
 function replaceElements() {
-	$('[data-replace-element]').each(function () {
-		replaceThisElement($(this));
+	Array.from(document.querySelectorAll('[data-replace-element]')).forEach(i => {
+		replaceThisElement($(i));
 	});
 }
 
