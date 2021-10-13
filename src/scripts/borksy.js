@@ -214,7 +214,7 @@ function assembleHacks(hackBundle) {
 	const orderedHacks = reOrderHacks();
 	return orderedHacks.reduce((acc, hackObj) => {
 		const hackName = hackObj.name;
-		const filename = hackObj.type === 'simple' && false ? `${hackName}-min.js` : `${hackName}.js`;
+		const filename = `${hackName}.js`;
 		const $hackField = $(`#${hackName}`);
 		const isIncluded = $hackField.prop('checked') || $hackField.val() === 'true';
 		if (!isIncluded) {
