@@ -106,7 +106,7 @@ function loadThisData($this) {
 
 function setSaveTrigger($this) {
 	const name = $this.attr('name');
-	let extraFunction = function () {};
+	let extraFunction;
 	switch (name) {
 		case 'template':
 			loadHDGameData();
@@ -117,7 +117,7 @@ function setSaveTrigger($this) {
 	}
 	$this.change(function () {
 		saveThisData($this);
-		extraFunction($this);
+		extraFunction?.($this);
 	});
 }
 
