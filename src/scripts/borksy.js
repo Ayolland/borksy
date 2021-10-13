@@ -744,7 +744,7 @@ function setHotKeys() {
 	});
 }
 
-$(document).ready(() => {
+$(() => {
 	activateCollapsibles();
 	loadAboutInfo();
 	loadTemplates();
