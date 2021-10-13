@@ -403,6 +403,8 @@ function loadDefaults(checkSaveData = true) {
 				case 'hackOptions':
 					loadDefaultHackOptions($thisField);
 					break;
+				default:
+					throw new Error('Unknown type');
 			}
 		} else {
 			if (hasSaveData) {
