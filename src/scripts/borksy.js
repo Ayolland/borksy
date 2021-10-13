@@ -172,7 +172,7 @@ function saveThisHack($thisHack, checkConflicts = true) {
 	saveThisData($thisHack);
 	checkAndToggleIncludedDisplay($thisHack);
 
-	const thisConflicts = hacks[$thisHack.data('hack')].conflicts;
+	const thisConflicts = window.hacks[$thisHack.data('hack')].conflicts;
 	if (thisConflicts && checkConflicts) {
 		removeConflictingHacks(thisConflicts.split(','));
 	}
@@ -195,7 +195,7 @@ function assembleSingles(modifiedTemplate) {
 
 function reOrderHacks() {
 	const hackArray = [];
-	$.each(hacks, function (hackName, hackObj) {
+	$.each(window.hacks, function (hackName, hackObj) {
 		hackArray.push({ name: hackName, ...hackObj });
 	});
 	hackArray.sort(function (obj1, obj2) {
@@ -588,14 +588,14 @@ function loadThisHackLocally(hackName, hackInfo) {
 
 function githubHackSuccess(response, filename) {
 	const hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
-	hacks[hackName].usingGithub = true;
+	window.hacks[hackName].usingGithub = true;
 	localHackSuccess(response, filename);
 }
 
 function githubHackFail(response, filename) {
 	const hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
-	hacks[hackName].usingGithub = false;
-	loadThisHackLocally(filename, hacks[hackName]);
+	window.hacks[hackName].usingGithub = false;
+	loadThisHackLocally(filename, window.hacks[hackName]);
 }
 
 function loadThisHackFromGithub(hackName, hackInfo) {
@@ -631,7 +631,7 @@ function bakeHackData($element, hackName, hackInfo) {
 function hackMenuConflicts(hackName, hackInfo, $parentCollapse) {
 	const conflictTitlesArr = [];
 	$.each(hackInfo.conflicts.split(','), function (index, conflictName) {
-		conflictTitlesArr.push(removeExtraChars(hacks[conflictName].title));
+		conflictTitlesArr.push(removeExtraChars(window.hacks[conflictName].title));
 	});
 	const sentenceFrag = arrayToSentenceFrag(conflictTitlesArr);
 	const $warning = $('<p>', {
@@ -647,7 +647,7 @@ function hackGitHubMessage(hackName, hackInfo, $parentCollapse) {
 	const hackTitle = removeExtraChars(hackInfo.title);
 	if (hackInfo.forceLocal !== false) {
 		msg = `Borksy is opting to use a local version of ${hackTitle} from ${window.borksyInfo.lastUpdated}.`;
-	} else if (hacks[hackName].usingGithub === true) {
+	} else if (window.hacks[hackName].usingGithub === true) {
 		msg = `${hackTitle} is using the most recent version from Github.`;
 	} else {
 		msg = `${hackTitle} could not be loaded from Github, local version retrieved on ${window.borksyInfo.lastUpdated} is being used.`;
