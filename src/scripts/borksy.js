@@ -374,8 +374,7 @@ function loadDefaultOption($thisField) {
 	setSaveTrigger($thisField);
 }
 
-function loadDefaults(checkSaveData) {
-	checkSaveData = checkSaveData || true;
+function loadDefaults(checkSaveData = true) {
 	$('[data-save]').each(function () {
 		const $thisField = $(this);
 		const thisSaveData = localStorage.getItem($thisField.attr('name'));
