@@ -720,7 +720,7 @@ function activateThisCollapsible($thisCollapsible) {
 }
 
 function setHotKeys() {
-	$(window).bind('keydown', function (event) {
+	$(window).bind('keydown', event => {
 		if (event.ctrlKey || event.metaKey) {
 			switch (String.fromCharCode(event.which).toLowerCase()) {
 				case 's':
@@ -742,7 +742,7 @@ function setHotKeys() {
 	});
 }
 
-$(document).ready(function () {
+$(document).ready(() => {
 	activateCollapsibles();
 	loadAboutInfo();
 	loadTemplates();
