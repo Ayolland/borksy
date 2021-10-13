@@ -261,10 +261,10 @@ function togglePartyMode() {
 	const $body = $('body');
 	if ($body.hasClass('party')) {
 		$body.removeClass('party');
-		alert('😾 Party Mode Deactivated. Everyone out. 😾');
+		window.alert('😾 Party Mode Deactivated. Everyone out. 😾');
 	} else {
 		$body.addClass('party');
-		alert('✨🌈 Party Mode Activated! 🌈✨');
+		window.alert('✨🌈 Party Mode Activated! 🌈✨');
 	}
 }
 
