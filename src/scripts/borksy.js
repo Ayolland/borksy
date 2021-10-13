@@ -514,7 +514,7 @@ function localHackSuccess(response, filename) {
 	const hacks = Array.from(elHackSection.querySelectorAll(':scope > .collapsible')).map(i => i.dataset.associatedHack);
 	hacks.push(hackName);
 	hacks.sort();
-	const prev = elHackSection.querySelector(`:scope > .collapsible[data-associated-hack=\"${hacks[hacks.indexOf(hackName) + 1]}\"]`);
+	const prev = elHackSection.querySelector(`:scope > .collapsible[data-associated-hack="${hacks[hacks.indexOf(hackName) + 1]}"]`);
 	const elHack = createThisHackMenu(hackName, window.hacks[hackName])[0];
 	if (prev) {
 		elHackSection.insertBefore(elHack, prev);
