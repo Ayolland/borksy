@@ -8,7 +8,6 @@ Borksy Features:
 
 - Multiple Bitsy version templates
 - Preloaded Hacks Menu
-- Hacks are retrieved from Github, with local backups
 - Editable hack options
 - Customize HTML/CSS
 - Customize page title / filename

@@ -1,7 +1,0 @@
-Simple hack for changing avatar to another sprite as you move between rooms.
-
-HOW TO USE:
-Edit hackOptions to set up the avatar list for rooms you move through.
-
-By default, the avatar will reset to the default if you enter a room without a sprite defined.
-This can also be changed in the hackOptions below to instead apply avatar changes permanently.

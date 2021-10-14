@@ -9,7 +9,8 @@
     "build": "vite build",
     "serve": "vite preview",
     "test": "jest --runInBand",
-    "lint": "eslint \"src/**/*.js\""
+    "lint": "eslint \"src/**/*.js\"",
+    "update-hacks": "node ./update-hacks.js"
   },
   "repository": {
     "type": "git",
@@ -50,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "@bitsy/hecks": "^19.1.2",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",

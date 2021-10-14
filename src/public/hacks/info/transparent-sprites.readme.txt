@@ -1,6 +1,0 @@
-By default, enabling this hack makes all 
-sprites/items have transparent backgrounds.
-i.e. tiles can be seen underneath the player, sprites, and items.
-
-Optionally edit the options object to change the 
-function that determines what drawings are transparent.

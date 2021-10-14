@@ -1,6 +1,0 @@
-By default, enabling this hack will cause the player
-avatar to flip horizontally when the player moves
-left and right.
-
-Edit the options object to enable/disable
-horizontal and vertical flipping.

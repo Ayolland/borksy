@@ -3,22 +3,36 @@ import $ from 'jquery';
 import { html as htmlChangelog } from '../../CHANGELOG.md';
 import { htmlAbout, htmlFaqs, htmlHowto, htmlTips, htmlTools } from '../about';
 import * as defaults from '../defaults';
+import hacksRaw from '../hacks';
 import * as templates from '../template';
-import { borksyInfo, hacks } from './libs';
+import borksyInfo from './libs';
 
-const loadedFiles = {};
-
-async function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride) {
-	try {
-		const response = await fetch(pathToDir + filename);
-		const text = await response.text();
-		loadedFiles[filenameOverride || filename] = text;
-		doneCallback?.(text, filenameOverride);
-	} catch (err) {
-		console.error(`Error loading ${filename}`, err);
-		failCallBack?.(err, filenameOverride);
-	}
-}
+const hacks = hacksRaw.map(hack => {
+	const [header] = hack.match(/^(\/\*\*[\S\s]*?\*\/)$/gm);
+	const headerLines = header.split('\n').slice(1, -1);
+	const emoji = headerLines[0];
+	const file = headerLines.find(i => i.startsWith('@file')).split('@file ')[1];
+	const author = headerLines.find(i => i.startsWith('@author')).split('@author ')[1];
+	const summary = headerLines.find(i => i.startsWith('@summary')).split('@summary ')[1];
+	const description = headerLines
+		.slice(headerLines.findIndex(i => i.startsWith('@description')) + 1)
+		.join('\n')
+		.replace(/Copy-paste .* after the bitsy source\.?/g, 'Include hack')
+		.replace(/hackOptions below/g, 'hackOptions above');
+	const [, options] = hack.match(/var hackOptions.*= {\n+([^]+?)\n+};$/m) || [];
+	return {
+		metadata: {
+			emoji,
+			id: file.replace(/\s/g, '-'),
+			name: file,
+			author,
+			summary,
+			description,
+		},
+		options,
+		data: hack,
+	};
+});
 
 function loadTemplates() {
 	const templateSel = document.querySelector('select#template');
@@ -49,13 +63,6 @@ function dashesToCamelCase(string) {
 
 function removeExtraChars(string) {
 	return string.replace(/[^\w\s]/gi, '');
-}
-
-function arrayToSentenceFrag(arr) {
-	if (arr.length > 1) {
-		return `${arr.slice(0, arr.length - 1).join(', ')}, and ${arr.slice(-1)}`;
-	}
-	return arr[0];
 }
 
 function cleanUsingRegEx($this, regExStr) {
@@ -136,7 +143,7 @@ function saveTemplateExtras($this) {
 }
 
 function checkAndToggleIncludedDisplay($thisField) {
-	const $collapsible = $(`[data-associated-hack=${$thisField.data('hack')}]`);
+	const $collapsible = $(`[data-associated-hack="${$thisField.data('hack')}"]`);
 	if ($collapsible.length > 0) {
 		toggleIncludedDisplay($collapsible, $thisField);
 	}
@@ -170,27 +177,17 @@ function assembleSingles(modifiedTemplate) {
 	}, modifiedTemplate);
 }
 
-function reOrderHacks() {
-	return Object.entries(hacks)
-		.map(([hackName, hackObj]) => ({ name: hackName, ...hackObj }))
-		.sort(({ order: a }, { order: b }) => a - b);
-}
-
 function assembleHacks(hackBundle) {
-	const orderedHacks = reOrderHacks();
-	return orderedHacks.reduce((acc, hackObj) => {
-		const hackName = hackObj.name;
-		const filename = `${hackName}.js`;
-		const $hackField = $(`#${hackName}`);
+	return hacks.reduce((acc, hackObj) => {
+		const $hackField = $(`#${hackObj.metadata.id}`);
 		const isIncluded = $hackField.prop('checked') || $hackField.val() === 'true';
 		if (!isIncluded) {
 			return acc;
 		}
 
-		let hackFile = loadedFiles[filename];
-		if (hackObj.type === 'options') {
-			hackFile = unescape(hackFile);
-			const newHackOptionsContents = $(`#${hackName}-options`).val();
+		let hackFile = hackObj.data;
+		if (hackObj.options) {
+			const newHackOptionsContents = $(`#${hackObj.metadata.id}-options`).val();
 			hackFile = hackFile.replace(/(var hackOptions.*= ){[^]*?}(;$)/m, `$1 {\n${newHackOptionsContents}\n} $2`);
 		}
 		return `${acc}${hackFile}\n`;
@@ -270,7 +267,8 @@ function loadDefaultString($thisField) {
 }
 
 function loadDefaultHackOptions($thisField) {
-	const options = unescape(loadedFiles[`${$thisField.attr('name')}.txt`]);
+	const id = $thisField.attr('id').replace(/-options$/, '');
+	const { options } = hacks.find(i => i.metadata.id === id);
 	$thisField.val(options);
 	setSaveTrigger($thisField);
 }
@@ -292,7 +290,6 @@ function loadDefaultTextfile($thisField) {
 	if (!fileContents) {
 		throw new Error(`Could not find file ${filename}`);
 	}
-	loadedFiles[filename] = fileContents;
 	$thisField.val(fileContents);
 	setSaveTrigger($thisField);
 }
@@ -448,168 +445,75 @@ function changeFontPreview() {
 	replaceThisElement($('[data-replace-element=createFontPreview]'));
 }
 
-function localHackSuccess(response, filename) {
-	const elHackSection = document.querySelector('#hacks-section');
-	const hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
-	const loadedHacks = Array.from(elHackSection.querySelectorAll(':scope > .collapsible')).map(i => i.dataset.associatedHack);
-	loadedHacks.push(hackName);
-	loadedHacks.sort();
-	const prev = elHackSection.querySelector(`:scope > .collapsible[data-associated-hack="${loadedHacks[loadedHacks.indexOf(hackName) + 1]}"]`);
-	const elHack = createThisHackMenu(hackName, hacks[hackName])[0];
-	if (prev) {
-		elHackSection.insertBefore(elHack, prev);
-	} else {
-		elHackSection.appendChild(elHack);
-	}
-}
-
-function localHackFail() {}
-
-function loadThisHackLocally(hackName) {
-	const filename = `${hackName.substr(0, hackName.lastIndexOf('.')) || hackName}.js`;
-	const pathToDir = 'hacks/dist/';
-	loadFileFromPath(filename, pathToDir, localHackSuccess, localHackFail, filename);
-}
-
-function githubHackSuccess(response, filename) {
-	const hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
-	hacks[hackName].usingGithub = true;
-	localHackSuccess(response, filename);
-}
-
-function githubHackFail(response, filename) {
-	const hackName = filename.substr(0, filename.lastIndexOf('.')) || filename;
-	hacks[hackName].usingGithub = false;
-	loadThisHackLocally(filename, hacks[hackName]);
-}
-
-function loadThisHackFromGithub(hackName, hackInfo) {
-	const filenameOverride = `${hackName}.js`;
-	const filename = hackInfo.github;
-	const pathToDir = 'https://raw.githubusercontent.com/seleb/bitsy-hacks/main/dist/';
-	loadFileFromPath(filename, pathToDir, githubHackSuccess, githubHackFail, filenameOverride);
-}
-
-function loadThisHack(hackName, hackInfo) {
-	if (hackInfo.forceLocal !== false) {
-		loadThisHackLocally(hackName, hackInfo);
-	} else if (hackInfo.github !== false) {
-		loadThisHackFromGithub(hackName, hackInfo);
-	} else {
-		// there's no dist version of kitsy/utils rn
-	}
-}
-
-function bakeHackData($element, hackName, hackInfo) {
+function bakeHackData($element, hackName) {
 	$element.attr({
 		'data-save': true,
 		'data-default': false,
 		'data-default-type': 'boolean',
 		'data-hack': hackName,
-		'data-hack-type': hackInfo.type,
-	});
-	if (hackInfo.requires) {
-		$element.attr('data-requires', hackInfo.requires);
-	}
-}
-
-function hackGitHubMessage(hackName, hackInfo, $parentCollapse) {
-	let className = 'github-message';
-	let msg = '';
-	const hackTitle = removeExtraChars(hackInfo.title);
-	if (hackInfo.forceLocal !== false) {
-		msg = `Borksy is opting to use a local version of ${hackTitle} from ${borksyInfo.lastUpdated}.`;
-	} else if (hacks[hackName].usingGithub === true) {
-		msg = `${hackTitle} is using the most recent version from Github.`;
-	} else {
-		msg = `${hackTitle} could not be loaded from Github, local version retrieved on ${borksyInfo.lastUpdated} is being used.`;
-		className += ' warning';
-	}
-	const $message = $('<p>', {
-		text: msg,
-		class: className,
-	});
-	$parentCollapse.append($message);
-}
-
-function hackMenuOptions(hackName, hackInfo, $parentCollapse) {
-	const $options = makeNewCollapsible(`${removeExtraChars(hackInfo.title)} Options:`);
-	const $optionsLabel = $('<label>', {
-		text: `var ${dashesToCamelCase(hackName)}Options = {`,
-	});
-	loadFileFromPath(`${hackName}.options.txt`, 'hacks/options/', responseText => {
-		const $optionsField = $('<textarea>', {
-			rows: 5,
-			cols: 50,
-			text: responseText,
-			name: `${hackName}.options`,
-			id: `${hackName}-options`,
-		});
-		$optionsField.attr({
-			'data-save': true,
-			'data-default-type': 'hackOptions',
-			'data-default': `${hackName}.options.txt`,
-		});
-		loadThisData($optionsField);
-		setSaveTrigger($optionsField);
-		$optionsLabel.append($optionsField);
-		$optionsLabel.append(document.createTextNode('};'));
-		$options.append($optionsLabel);
-		$parentCollapse.append($options);
 	});
 }
 
-function hackMenuReadme(hackName, hackInfo, $parentCollapse) {
-	const $readme = makeNewCollapsible(`${removeExtraChars(hackInfo.title)} README:`);
-	loadFileFromPath(`${hackName}.readme.txt`, 'hacks/info/', responseText => {
-		const $pre = $('<pre>', {
-			text: responseText,
-		});
-		$readme.append($pre);
-		$parentCollapse.append($readme);
-	});
-}
-
-function createThisHackMenu(hackName, hackInfo) {
-	const $collapse = makeNewCollapsible(`${hackInfo.title} (By ${hackInfo.author})`);
-	$collapse.attr('data-associated-hack', hackName);
+function createThisHackMenu(hack) {
+	const $collapse = makeNewCollapsible(`${hack.metadata.emoji} ${hack.metadata.name} (by ${hack.metadata.author})`);
+	$collapse.attr('data-associated-hack', hack.metadata.id);
 
 	const $description = $('<p>', {
-		text: hackInfo.description,
+		text: hack.metadata.summary,
 	});
 	$collapse.append($description);
 
-	hackGitHubMessage(hackName, hackInfo, $collapse);
-
 	const $label = $('<label>', {
-		text: `Include ${removeExtraChars(hackInfo.title)}`,
+		text: `Include "${removeExtraChars(hack.metadata.name)}" hack`,
 	});
 	const $checkbox = $('<input>', {
 		type: 'checkbox',
-		name: hackName,
-		id: hackName,
+		name: hack.metadata.name,
+		id: hack.metadata.id,
 	});
-	bakeHackData($checkbox, hackName, hackInfo);
+	bakeHackData($checkbox, hack.metadata.id);
 	loadThisData($checkbox);
 	toggleIncludedDisplay($collapse, $checkbox);
 	hackIncludeTrigger($checkbox);
 	$label.append($checkbox);
 	$collapse.append($label);
 
-	if (hackInfo.type === 'options') {
-		hackMenuOptions(hackName, hackInfo, $collapse);
+	if (hack.options) {
+		const $options = makeNewCollapsible('Options');
+		const $optionsLabel = $('<label>', { text: `var ${dashesToCamelCase(hack.metadata.id)}Options = {` });
+		const $optionsField = $('<textarea>', {
+			rows: 5,
+			cols: 50,
+			text: hack.options,
+			name: `${hack.metadata.name}.options`,
+			id: `${hack.metadata.id}-options`,
+		});
+		$optionsField.attr({
+			'data-save': true,
+			'data-default-type': 'hackOptions',
+			'data-default': hack.metadata.id,
+		});
+		loadThisData($optionsField);
+		setSaveTrigger($optionsField);
+		$optionsLabel.append($optionsField);
+		$optionsLabel.append(document.createTextNode('};'));
+		$options.append($optionsLabel);
+		$collapse.append($options);
 	}
 
-	if (hackInfo.readme === true) {
-		hackMenuReadme(hackName, hackInfo, $collapse);
+	if (hack.metadata.description) {
+		const $readme = makeNewCollapsible('README');
+		$readme.append($('<pre>', { text: hack.metadata.description }));
+		$collapse.append($readme);
 	}
 
 	return $collapse;
 }
 
 function createHackMenus() {
-	$.each(Object.keys(hacks), (index, hackName) => {
-		loadThisHack(hackName, hacks[hackName]);
+	const elHackSection = document.querySelector('#hacks-section');
+	hacks.forEach(hack => {
+		elHackSection.appendChild(createThisHackMenu(hack)[0]);
 	});
 }
 
