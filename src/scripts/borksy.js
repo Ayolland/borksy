@@ -6,17 +6,16 @@ import { borksyInfo, hacks } from './libs';
 
 const loadedFiles = {};
 
-function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride) {
-	const $ajax = $.ajax(pathToDir + filename);
-	$ajax.done(() => {
-		loadedFiles[filenameOverride || filename] = $ajax.responseText;
-		console.log(`Loaded ${filenameOverride || filename} via AJAX`);
-		doneCallback?.($ajax.responseText, filenameOverride);
-	});
-	$ajax.fail(() => {
-		console.log(`Error loading ${filename} via AJAX`);
-		failCallBack?.($ajax.responseText, filenameOverride);
-	});
+async function loadFileFromPath(filename, pathToDir, doneCallback, failCallBack, filenameOverride) {
+	try {
+		const response = await fetch(pathToDir + filename);
+		const text = await response.text();
+		loadedFiles[filenameOverride || filename] = text;
+		doneCallback?.(text, filenameOverride);
+	} catch (err) {
+		console.error(`Error loading ${filename}`, err);
+		failCallBack?.(err, filenameOverride);
+	}
 }
 
 function loadTemplates() {
