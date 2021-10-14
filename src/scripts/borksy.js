@@ -135,20 +135,6 @@ function saveTemplateExtras($this) {
 	}
 }
 
-function removeConflictingHacks(conflictsArr) {
-	$.each(conflictsArr, (_index, hackName) => {
-		const $conflictingHack = $(`#${hackName}`);
-		const hiddenAndNotIncluded = $conflictingHack.prop('type') === 'hidden' && $conflictingHack.val() === false;
-		const checkboxAndNotIncluded = $conflictingHack.prop('type') === 'checkbox' && $conflictingHack.prop('checked') === false;
-		if (hiddenAndNotIncluded || checkboxAndNotIncluded) {
-			return;
-		}
-		$conflictingHack.val(false);
-		$conflictingHack.prop('checked', false);
-		saveThisHack($conflictingHack, false);
-	});
-}
-
 function checkAndToggleIncludedDisplay($thisField) {
 	const $collapsible = $(`[data-associated-hack=${$thisField.data('hack')}]`);
 	if ($collapsible.length > 0) {
@@ -164,14 +150,9 @@ function toggleIncludedDisplay($collapsible, $thisHack) {
 	}
 }
 
-function saveThisHack($thisHack, checkConflicts = true) {
+function saveThisHack($thisHack) {
 	saveThisData($thisHack);
 	checkAndToggleIncludedDisplay($thisHack);
-
-	const thisConflicts = hacks[$thisHack.data('hack')].conflicts;
-	if (thisConflicts && checkConflicts) {
-		removeConflictingHacks(thisConflicts.split(','));
-	}
 }
 
 function hackIncludeTrigger($this) {
@@ -532,19 +513,6 @@ function bakeHackData($element, hackName, hackInfo) {
 	}
 }
 
-function hackMenuConflicts(hackName, hackInfo, $parentCollapse) {
-	const conflictTitlesArr = [];
-	$.each(hackInfo.conflicts.split(','), (index, conflictName) => {
-		conflictTitlesArr.push(removeExtraChars(hacks[conflictName].title));
-	});
-	const sentenceFrag = arrayToSentenceFrag(conflictTitlesArr);
-	const $warning = $('<p>', {
-		text: `This hack conflicts with ${sentenceFrag}.`,
-		class: 'conflict-warning',
-	});
-	$parentCollapse.append($warning);
-}
-
 function hackGitHubMessage(hackName, hackInfo, $parentCollapse) {
 	let className = 'github-message';
 	let msg = '';
@@ -610,10 +578,6 @@ function createThisHackMenu(hackName, hackInfo) {
 		text: hackInfo.description,
 	});
 	$collapse.append($description);
-
-	if (hackInfo.conflicts) {
-		hackMenuConflicts(hackName, hackInfo, $collapse);
-	}
 
 	hackGitHubMessage(hackName, hackInfo, $collapse);
 
