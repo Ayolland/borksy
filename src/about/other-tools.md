@@ -1,6 +1,6 @@
 If you haven't already, check out some of the other tools created to enhance Bitsy!
 
-- <a href="https://github.com/seleb/bitsy-hacks/" target="_blank" rel="noopener">Bitsy Hack Repo</a> - Almost All the Bitsy hacks (not just borksy-included ones)
+- <a href="https://github.com/seleb/bitsy-hacks/" target="_blank" rel="noopener">Bitsy Hack Repo</a> - Almost All the Bitsy hacks
 - <a href="https://aloelazoe.itch.io/bitsy-3d" target="_blank" rel="noopener">Bitsy 3D</a> - Bitsy but in 3D!!!
 - <a href="https://vonbednar.itch.io/bitsy-x2" target="_blank" rel="noopener">Bitsy HD</a> - Bitsy but with 16x16 drawings
 - <a href="https://ruin.itch.io/image-to-bitsy" target="_blank" rel="noopener">Image To Bitsy</a> - Convert images into rooms
