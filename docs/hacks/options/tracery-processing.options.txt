@@ -1,9 +1,0 @@
-grammar: {
-	// put your grammar entries here
-	// these are examples:
-	// thing: ['#animal#', '#adjective# #animal#']
-	// animal: ['cat', 'dog', 'mouse'],
-	// adjective: ['good', 'nice', 'powerful']
-},
-// modifiers to include (if this is not provided, the default tracery-provided modifiers like `.capitalize` are used)
-modifiers: undefined,

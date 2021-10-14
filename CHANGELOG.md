@@ -1,3 +1,33 @@
+# [5.0.0](https://github.com/Ayolland/borksy/compare/v4.6.8...v5.0.0) (2021-10-14)
+
+
+### Bug Fixes
+
+* checkbox floating over top of other elements ([9d5aea2](https://github.com/Ayolland/borksy/commit/9d5aea2ef0dff378e4fd508ae58a102bf5c957da))
+* only scroll readme if needed ([6c17e5a](https://github.com/Ayolland/borksy/commit/6c17e5a2f414b1fd50fe0d4b905b626d4f28d33b))
+
+
+### Features
+
+* add warning for users with javascript disabled ([89fc41a](https://github.com/Ayolland/borksy/commit/89fc41ab7150eb5110816075a4ec3d412990e283))
+* automatically include last update in about section ([2f66638](https://github.com/Ayolland/borksy/commit/2f66638afbb62a14572afabc36666554d3879b40))
+* improve troubleshooting/FAQ accessibility + style ([1f0bf47](https://github.com/Ayolland/borksy/commit/1f0bf47fac823fcd043d4f4267e381a868beacc4))
+* include full changelog in about section ([bb2e07b](https://github.com/Ayolland/borksy/commit/bb2e07b02648d2a5a5d222fd881650443b37eac1))
+* reduce tab size in options/readmes for better legibility ([e7a8025](https://github.com/Ayolland/borksy/commit/e7a8025cf94e0dca4c3a5d80eeffe2259e57cff7))
+* replace asynchronously loaded "about" html with imported markdown ([7651d4d](https://github.com/Ayolland/borksy/commit/7651d4ddca429700d2356ea94bf24b545120096e))
+* replace asynchronously loaded defaults with imported text ([28d4a5f](https://github.com/Ayolland/borksy/commit/28d4a5f38dee3909c3c967f2a8af2e6c3b64e1f7))
+* replace asynchronously loaded hacks with imported text ([2a97864](https://github.com/Ayolland/borksy/commit/2a97864759d96b2c086de1f3e01ac7716ab2b7af))
+* replace asynchronously loaded templates with imported text ([bbaeece](https://github.com/Ayolland/borksy/commit/bbaeece46af922511f311c74e4f5175e004e94c9))
+* replace custom collapsibles with `details` to simplify/improve accessibility ([78716c1](https://github.com/Ayolland/borksy/commit/78716c1060621c11be942e5e4743664625ea7b32))
+* replace dataurl-based saving with blob + `file-saver` for better reliability ([5cfe2fc](https://github.com/Ayolland/borksy/commit/5cfe2fc8f91776ce3230d4553f3024f9d0015d3d))
+* show pointer cursor on collapsible headers ([2fd8d2f](https://github.com/Ayolland/borksy/commit/2fd8d2fb906309b4bda13cb207f248ada0387a5c))
+* update info to reflect updated structure/maintenance ([64bcfc9](https://github.com/Ayolland/borksy/commit/64bcfc97ff919003bdc8b133f24a7fbea5c088bb))
+
+
+### BREAKING CHANGES
+
+* Hacks are no longer loaded from Github with local backups, and are instead local-only. This means that if hacks are updated, Borksy must be updated as well. However, updating Borksy to pick up the latest changes in hacks is now almost fully automatic: local copies of hacks are pulled from the latest publish of the hacks repo, and all of the metadata is parsed from the hacks themselves instead of maintained manually in Borksy. A script is included (`update-hacks`) which will make fully automating hack updates possible in the future.
+
 ## [4.6.8](https://github.com/Ayolland/borksy/compare/v4.6.7...v4.6.8) (2021-10-13)
 
 

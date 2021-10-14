@@ -1,6 +1,0 @@
-tileIsOpaque: function (tile) {
-  // return tile.name == 'wall'; // specific opaque tile
-  // return ['wall', 'column', 'door'].indexOf(tile.name) !== -1; // specific opaque tile list
-  return tile.name && tile.name.indexOf('OPAQUE') !== -1; // opaque tile flag in name
-  // return true; // all tiles are opaque
-}
