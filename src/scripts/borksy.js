@@ -627,11 +627,9 @@ function activateCollapsibles() {
 	Array.from(document.querySelectorAll('[data-collapsible]')).forEach(i => {
 		const $thisCollapsible = $(i);
 		activateThisCollapsible($thisCollapsible);
-		if ($thisCollapsible.attr('id') === 'hacks-section') {
-			console.log('HACK IT UP YO');
-			createHackMenus($thisCollapsible);
-		}
 	});
+	console.log('HACK IT UP YO');
+	createHackMenus($('#hacks-section'));
 	$('#preloader').fadeOut();
 }
 
