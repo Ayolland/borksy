@@ -218,6 +218,7 @@ form {
 			font-family: monospace;
 			background-color: $light-glass;
 			border: 0;
+			tab-size: 2;
 
 			&.half {
 				min-width: 50%;
@@ -239,6 +240,7 @@ form {
 pre {
 	overflow-x: auto;
 	color: $extra-dark-glass;
+	tab-size: 2;
 }
 
 img.font-preview {
