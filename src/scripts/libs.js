@@ -1,5 +1,4 @@
 export default {
-	lastUpdated: 'September 16, 2021',
 	templates: [
 		{ filename: 'Bitsy55', description: 'Bitsy 5.5 (modified for Borksy)', isDefault: false },
 		{ filename: 'BitsyHD51', description: 'Bitsy HD + Borksy (modified from Bitsy 5.1)', isDefault: false },
