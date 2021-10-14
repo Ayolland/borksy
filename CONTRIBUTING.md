@@ -21,7 +21,6 @@ Bitsy templates are stored in [`./src/template/`](./src/template). To add a new 
    - TODO: list all expected template tags
 5. Place game file in template folder with name `Bitsy.<version>.txt`
 6. Add import/export to [`index`](./src/template/index.js) in template folder for new file
-7. Add new entry to [`./src/scripts/libs.js`](./src/scripts/libs.js) to match new template
 
 ## Release
 

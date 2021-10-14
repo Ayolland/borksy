@@ -4,8 +4,7 @@ import { html as htmlChangelog } from '../../CHANGELOG.md';
 import { htmlAbout, htmlFaqs, htmlHowto, htmlTips, htmlTools } from '../about';
 import * as defaults from '../defaults';
 import hacksRaw from '../hacks';
-import * as templates from '../template';
-import borksyInfo from './libs';
+import templates from '../template';
 
 const hacks = hacksRaw.map(hack => {
 	const [header] = hack.match(/^(\/\*\*[\S\s]*?\*\/)$/gm);
@@ -37,11 +36,9 @@ const hacks = hacksRaw.map(hack => {
 function loadTemplates() {
 	const templateSel = document.querySelector('select#template');
 	templateSel.innerHTML = '';
-	for (let i = borksyInfo.templates.length - 1; i >= 0; i--) {
-		const { filename } = borksyInfo.templates[i];
-		const { description } = borksyInfo.templates[i];
-		const { isDefault } = borksyInfo.templates[i];
-		templateSel.innerHTML += `<option value="${filename}" ${isDefault ? 'data-default-option' : ''}>${description}</option>`;
+	for (let i = templates.length - 1; i >= 0; i--) {
+		const { id, description, isDefault } = templates[i];
+		templateSel.innerHTML += `<option value="${id}" ${isDefault ? 'data-default-option' : ''}>${description}</option>`;
 	}
 }
 
@@ -200,7 +197,7 @@ function assembleAndDownloadFile() {
 	});
 
 	const templateName = $('#template').val();
-	let modifiedTemplate = templates[templateName];
+	let modifiedTemplate = templates.find(i => i.id === templateName).data;
 	let hackBundle = '';
 
 	modifiedTemplate = assembleSingles(modifiedTemplate);
