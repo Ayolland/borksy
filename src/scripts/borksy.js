@@ -3,6 +3,7 @@ import $ from 'jquery';
 import { html as htmlChangelog } from '../../CHANGELOG.md';
 import { htmlAbout, htmlFaqs, htmlHowto, htmlTips, htmlTools } from '../about';
 import * as defaults from '../defaults';
+import * as templates from '../template';
 import { borksyInfo, hacks } from './libs';
 
 const loadedFiles = {};
@@ -23,11 +24,10 @@ function loadTemplates() {
 	const templateSel = document.querySelector('select#template');
 	templateSel.innerHTML = '';
 	for (let i = borksyInfo.templates.length - 1; i >= 0; i--) {
-		const filename = `${borksyInfo.templates[i].filename}.html`;
+		const { filename } = borksyInfo.templates[i];
 		const { description } = borksyInfo.templates[i];
 		const { isDefault } = borksyInfo.templates[i];
 		templateSel.innerHTML += `<option value="${filename}" ${isDefault ? 'data-default-option' : ''}>${description}</option>`;
-		loadFileFromPath(filename, 'template/');
 	}
 }
 
@@ -222,7 +222,7 @@ function assembleAndDownloadFile() {
 	});
 
 	const templateName = $('#template').val();
-	let modifiedTemplate = loadedFiles[templateName].repeat(1);
+	let modifiedTemplate = templates[templateName];
 	let hackBundle = '';
 
 	modifiedTemplate = assembleSingles(modifiedTemplate);
