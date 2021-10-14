@@ -62,7 +62,8 @@
     "puppeteer": "^10.4.0",
     "sass": "^1.42.1",
     "vite": "^2.6.4",
-    "vite-plugin-markdown": "^2.0.2"
+    "vite-plugin-markdown": "^2.0.2",
+    "vite-plugin-string": "^1.0.1"
   },
   "dependencies": {
     "file-saver": "^2.0.5",

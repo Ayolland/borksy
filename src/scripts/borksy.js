@@ -2,6 +2,7 @@ import { saveAs } from 'file-saver';
 import $ from 'jquery';
 import { html as htmlChangelog } from '../../CHANGELOG.md';
 import { htmlAbout, htmlFaqs, htmlHowto, htmlTips, htmlTools } from '../about';
+import * as defaults from '../defaults';
 import { borksyInfo, hacks } from './libs';
 
 const loadedFiles = {};
@@ -105,7 +106,6 @@ function setSaveTrigger($this) {
 	let extraFunction;
 	switch (name) {
 		case 'template':
-			loadHDGameData();
 			extraFunction = saveTemplateExtras;
 			break;
 		default:
@@ -120,7 +120,7 @@ function setSaveTrigger($this) {
 function saveTemplateExtras($this) {
 	const isHD = $this.val().split('.')[0] === 'BitsyHD';
 	const noSavedGameData = localStorage.getItem('gamedata') == null;
-	const HDgamedata = loadedFiles['gamedata.HD.txt'];
+	const HDgamedata = defaults.gamedataHD;
 	const HDgamedataExists = HDgamedata !== undefined;
 	const $mascot = $('#mascot');
 	if (isHD) {
@@ -253,15 +253,6 @@ function togglePartyMode() {
 	}
 }
 
-function loadHDGameData() {
-	const filename = 'gamedata.HD.txt';
-	const $ajax = $.ajax(`defaults/${filename}`);
-	$ajax.done(() => {
-		const response = $ajax.responseText;
-		loadedFiles[filename] = response;
-	});
-}
-
 function loadAboutInfo() {
 	const elAbout = document.querySelector('#about_content');
 	elAbout.innerHTML = htmlAbout;
@@ -316,19 +307,13 @@ function loadDefaultBoolean($thisField) {
 
 function loadDefaultTextfile($thisField) {
 	const filename = $thisField.data('default');
-	const path = `defaults/${filename}`;
-	const $ajax = $.ajax(path);
-	$ajax.done(() => {
-		const response = $ajax.responseText;
-		$thisField.val(response);
-		loadedFiles[filename] = response;
-		setSaveTrigger($thisField);
-	});
-	$ajax.fail(() => {
-		$thisField.val('failed to load default!');
-		console.log($ajax.error);
-		setSaveTrigger($thisField);
-	});
+	const fileContents = defaults[filename];
+	if (!fileContents) {
+		throw new Error(`Could not find file ${filename}`);
+	}
+	loadedFiles[filename] = fileContents;
+	$thisField.val(fileContents);
+	setSaveTrigger($thisField);
 }
 
 function loadDefaultFont($thisField) {
