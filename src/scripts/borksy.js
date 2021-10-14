@@ -567,14 +567,12 @@ function setHotKeys() {
 	});
 }
 
-$(() => {
-	activateCollapsibles();
-	loadAboutInfo();
-	loadTemplates();
-	loadDefaults();
-	replaceElements();
-	$('#download-button').on('click', assembleAndDownloadFile);
-	$('#restore-button').on('click', restoreDefaults);
-	setHotKeys();
-	$('#mascot').on('click', togglePartyMode);
-});
+activateCollapsibles();
+loadAboutInfo();
+loadTemplates();
+loadDefaults();
+replaceElements();
+$('#download-button').on('click', assembleAndDownloadFile);
+$('#restore-button').on('click', restoreDefaults);
+setHotKeys();
+$('#mascot').on('click', togglePartyMode);
