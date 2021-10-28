@@ -366,3 +366,9 @@ footer {
 		}
 	}
 }
+
+@media (prefers-reduced-motion) {
+	#mascot {
+		display: none;
+	}
+}
