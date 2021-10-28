@@ -215,7 +215,7 @@ form {
 			display: block;
 			box-sizing: border-box;
 			min-height: 2em;
-			width: calc(100% + 2em);
+			min-width: 2em;
 			max-width: 100%;
 			max-height: 80vh;
 			padding: 0.25em 1em;
@@ -224,20 +224,10 @@ form {
 			background-color: $light-glass;
 			border: 0;
 			tab-size: 2;
+		}
 
-			&.half {
-				min-width: 50%;
-				width: 50%;
-			}
-
-			&.inline {
-				display: inline-block;
-				margin-right: 0.5em;
-			}
-
-			&.right {
-				text-align: right;
-			}
+		textarea {
+			width: 100%;
 		}
 
 		&.horizontal {
@@ -247,6 +237,8 @@ form {
 			> * {
 				flex: auto;
 			}
+
+			> input[type="checkbox"],
 			&::before,
 			&::after {
 				flex: none;

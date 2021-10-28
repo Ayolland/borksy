@@ -461,7 +461,7 @@ function createThisHackMenu(hack) {
 	$collapse.append($description);
 
 	const $label = $('<label>', {
-		text: `Include "${removeExtraChars(hack.metadata.name)}" hack`,
+		class: 'horizontal',
 	});
 	const $checkbox = $('<input>', {
 		type: 'checkbox',
@@ -473,6 +473,7 @@ function createThisHackMenu(hack) {
 	toggleIncludedDisplay($collapse, $checkbox);
 	hackIncludeTrigger($checkbox);
 	$label.append($checkbox);
+	$label.append(`Include "${removeExtraChars(hack.metadata.name)}" hack`);
 	$collapse.append($label);
 
 	if (hack.options) {
