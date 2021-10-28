@@ -266,9 +266,8 @@ img.font-preview {
 		flex-direction: column;
 		align-items: center;
 
-		span {
+		> kbd {
 			font-size: 0.8em;
-			line-height: 1.5;
 		}
 	}
 }
