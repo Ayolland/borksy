@@ -8,13 +8,18 @@
 	<meta name="description" content="A tool for extending Bitsy games" />
 	<meta name="keywords" content="borksy,bitsy,game,games" />
 	<link rel="shortcut icon" href="./borksy.gif" />
+	<link rel="shortcut icon" href="./borksy-white.gif" media="(prefers-color-scheme:dark)" />
+	<link rel="shortcut icon" href="./borksy.gif"
+		media="(prefers-color-scheme:light) or (prefers-color-scheme:no-preference)" />
 	<link rel="stylesheet" href="./style/style.scss" type="text/css" />
 	<title>Borksy Game Hacker</title>
 </head>
 
 <body>
 	<div id="preloader">
-		<img src="./borksy.gif" class="preloader_animation" />
+		<img src="./borksy.gif" media="(prefers-color-scheme:light) or (prefers-color-scheme:no-preference)"
+			class="preloader_animation" />
+		<img src="./borksy-white.gif" media="(prefers-color-scheme:dark)" class="preloader_animation" />
 		<p class="preloader_text">Loading...</p>
 		<noscript>You must enable javascript to use this tool.</noscript>
 	</div>

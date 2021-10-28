@@ -1,7 +1,18 @@
-$light-gray: #ccc;
-$dark-glass: fade-out(#000, 0.9);
-$extra-dark-glass: fade-out(#000, 0.25);
-$light-glass: fade-out(#fff, 0.7);
+:root {
+	color-scheme: light;
+	--light-gray: #ccc;
+	--dark-glass: #{fade-out(#000, 0.9)};
+	--extra-dark-glass: #{fade-out(#000, 0.25)};
+	--light-glass: #{fade-out(#fff, 0.7)};
+
+	@media (prefers-color-scheme: dark) {
+		color-scheme: dark;
+		--light-gray: #000;
+		--dark-glass: #{fade-out(#ccc, 0.8)};
+		--extra-dark-glass: #{fade-out(#fff, 0.25)};
+		--light-glass: #{fade-out(#000, 0.8)};
+	}
+}
 
 $red-ish: HSL(0, 80%, 70%);
 $orange-ish: HSL(0, 80%, 70%);
@@ -17,7 +28,7 @@ body {
 	font-family: sans-serif;
 	box-sizing: border-box;
 	margin: 0;
-	background-color: $light-gray;
+	background-color: var(--light-gray);
 
 	&.party {
 		background-image: url('../borksy_bg.gif');
@@ -30,8 +41,8 @@ body {
 		image-rendering: -moz-crisp-edges; /* FF 6.0+ */
 		image-rendering: pixelated;
 
-		.collapsible {
-			background-color: #bbb;
+		#wrapper {
+			backdrop-filter: contrast(0.5) blur(0.25rem);
 		}
 	}
 }
@@ -68,7 +79,7 @@ div#preloader {
 	width: 100vw;
 	height: 100vh;
 	flex-direction: column;
-	background: $light-gray;
+	background-color: var(--light-gray);
 	z-index: 100;
 }
 
@@ -83,7 +94,7 @@ img.preloader_animation {
 	overflow: auto;
 	padding: 1em;
 	margin: 0 auto;
-	background-color: $dark-glass;
+	background-color: var(--dark-glass);
 }
 
 header,
@@ -94,12 +105,12 @@ footer {
 }
 
 .collapsible {
-	background: $light-glass;
+	background: var(--light-glass);
 	padding: 0.5rem;
 	margin-bottom: 0.75em;
 
 	> .collapsible_header {
-		background: $light-glass;
+		background: var(--light-glass);
 		margin: -0.5rem;
 		padding: 0.25em 0.5em;
 		min-height: 1.75rem;
@@ -113,10 +124,10 @@ footer {
 		padding: 0.5em;
 		margin-bottom: 0;
 		margin-top: 0.5em;
-		border: 1px solid $dark-glass;
+		border: 1px solid var(--dark-glass);
 
 		> .collapsible_header {
-			background-color: $dark-glass;
+			background-color: var(--dark-glass);
 			font-size: 1em;
 			min-height: 1em;
 			padding: 0.5em;
@@ -163,6 +174,14 @@ header {
 		&.borksyHD {
 			background-image: url('../borksyHD.gif');
 		}
+
+		@media (prefers-color-scheme: dark) {
+			background-image: url(../borksy-white.gif);
+
+			&.borksyHD {
+				background-image: url('../borksyHD-white.gif');
+			}
+		}
 	}
 
 	h1 {
@@ -207,7 +226,7 @@ form {
 		margin: 0;
 		font-family: monospace;
 		line-height: 2;
-		color: $extra-dark-glass;
+		color: var(--extra-dark-glass);
 
 		&[data-pre]::before {
 			content: attr(data-pre);
@@ -227,7 +246,7 @@ form {
 			padding: 0.25em 1em;
 			font-size: 1em;
 			font-family: monospace;
-			background-color: $light-glass;
+			background-color: var(--light-glass);
 			border: 0;
 			tab-size: 2;
 		}
@@ -259,7 +278,7 @@ pre {
 	white-space: pre-wrap;
 	padding: 0.25em 1em;
 	margin-bottom: 0;
-	background-color: $light-glass;
+	background-color: var(--light-glass);
 }
 
 img.font-preview {
@@ -284,8 +303,8 @@ img.font-preview {
 }
 
 button {
-	background: $extra-dark-glass;
-	color: white;
+	background-color: var(--extra-dark-glass);
+	color: var(--light-gray);
 	font-size: 1.25em;
 	font-weight: 100;
 	border: 0;
