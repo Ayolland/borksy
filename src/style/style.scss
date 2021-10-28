@@ -52,6 +52,12 @@ li {
 
 a {
 	color: initial;
+	transition: opacity 0.1s ease-out;
+
+	&:hover,
+	&:focus {
+		opacity: 0.8;
+	}
 }
 
 div#preloader {
