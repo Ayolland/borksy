@@ -244,9 +244,10 @@ form {
 
 pre {
 	overflow-x: auto;
-	color: $extra-dark-glass;
 	tab-size: 2;
 	white-space: pre-wrap;
+	padding: 0.25em 1em;
+	background-color: $light-glass;
 }
 
 img.font-preview {
