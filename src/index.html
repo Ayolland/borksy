@@ -33,13 +33,17 @@
 
 			<details data-collapsible data-header="Page Title / Filename" class="collapsible">
 				<p>This is what the title of your page (not game) will be:</p>
-				<label>&lt;title&gt;<textarea data-save data-borksy-replace-single="TITLE" data-default-type="string"
+				<label data-pre="&lt;title&gt;" data-post="&lt;&#47;title&gt;">
+					<textarea data-save data-borksy-replace-single="TITLE" data-default-type="string"
 						data-default="My Bitsy Game By Me" rows="1" cols="50" wrap="hard" name="title"
-						id="title"></textarea>&lt;&#47;title&gt;</label>
+						id="title"></textarea>
+				</label>
 				<p>This is the filename that will be downloaded: <em>(only A-z,0-9,-,_ allowed)</em></p>
-				<label><input data-save data-borksy-replace-single="FILENAME" data-default-type="string"
+				<label data-post=".html">
+					<input data-save data-borksy-replace-single="FILENAME" data-default-type="string"
 						data-default="myBORKSYgame" data-clean-regex="^-|\W" name="filename" id="filename"
-						class="half inline right">.html</label>
+						class="half inline right">
+				</label>
 			</details>
 
 			<details data-collapsible data-header="Bitsy Version" class="collapsible">
@@ -52,22 +56,25 @@
 
 			<details data-collapsible data-header="Game Data" class="collapsible">
 				<p>This is the gamedata from Bitsy:</p>
-				<label>&lt;script type="bitsyGameData" id="exportedGameData"&gt;<textarea data-save
-						data-borksy-replace-single="GAMEDATA" data-default-type="textfile" data-default="gamedata"
-						rows="4" cols="50" wrap="hard" name="gamedata"
-						id="gamedata"></textarea>&lt;&#47;script&gt;</label>
+				<label data-pre="&lt;script type=&quot;bitsyGameData&quot; id=&quot;exportedGameData&quot;&gt;"
+					data-post="&lt;&#47;script&gt;">
+					<textarea data-save data-borksy-replace-single="GAMEDATA" data-default-type="textfile"
+						data-default="gamedata" rows="4" cols="50" wrap="hard" name="gamedata" id="gamedata"></textarea>
+				</label>
 			</details>
 
 			<details data-collapsible data-header="HTML / CSS Theme" class="collapsible">
 				<p>This is the HTML content of your game's body tag:<br>NOTE: the canvas#game tag is crucial for Bitsy
 					to work.</p>
-				<label>&lt;body&gt;<textarea data-save data-borksy-replace-single="MARKUP" data-default-type="textfile"
-						data-default="body" rows="4" cols="50" wrap="hard" name="markup"
-						id="markup"></textarea>&lt;&#47;body&gt;</label>
+				<label data-pre="&lt;body&gt;" data-post="&lt;&#47;body&gt;">
+					<textarea data-save data-borksy-replace-single="MARKUP" data-default-type="textfile"
+						data-default="body" rows="4" cols="50" wrap="hard" name="markup" id="markup"></textarea>
+				</label>
 				<p>This is the CSS style for your page:</p>
-				<label>&lt;style type="text/css"&gt;<textarea data-save data-borksy-replace-single="CSS"
-						data-default-type="textfile" data-default="style" rows="4" cols="50" wrap="hard" name="css"
-						id="css"></textarea>&lt;&#47;style&gt;</label>
+				<label data-pre="&lt;style type=&quot;text/css&quot;&gt;" data-post="&lt;&#47;style&gt;">
+					<textarea data-save data-borksy-replace-single="CSS" data-default-type="textfile"
+						data-default="style" rows="4" cols="50" wrap="hard" name="css" id="css"></textarea>
+				</label>
 			</details>
 
 			<details data-collapsible data-header="Hacks" class="collapsible" id="hacks-section">
@@ -79,9 +86,11 @@
 			<details data-collapsible data-header="Additional JavaScript" class="collapsible">
 				<p>This is JavaScript loaded into a script tag after all Bitsy code.<br>Other hacks can go in here
 					(among other things).</p>
-				<label>&lt;script type="text/javascript" id="borksyAdditionalJS"&gt;<textarea data-save
-						data-borksy-replace-single="ADDITIONALJS" rows="4" cols="50" wrap="hard" name="additionalJS"
-						id="additionalJS"></textarea>&lt;&#47;script&gt;</label>
+				<label data-pre="&lt;script type=&quot;text/javascript&quot; id=&quot;borksyAdditionalJS&quot;&gt;"
+					data-post="&lt;&#47;script&gt;">
+					<textarea data-save data-borksy-replace-single="ADDITIONALJS" rows="4" cols="50" wrap="hard"
+						name="additionalJS" id="additionalJS"></textarea>
+				</label>
 			</details>
 
 		</form>

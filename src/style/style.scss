@@ -203,6 +203,13 @@ form {
 		line-height: 2;
 		color: $extra-dark-glass;
 
+		&[data-pre]::before {
+			content: attr(data-pre);
+		}
+		&[data-post]::after {
+			content: attr(data-post);
+		}
+
 		input,
 		textarea {
 			display: block;

@@ -477,7 +477,7 @@ function createThisHackMenu(hack) {
 
 	if (hack.options) {
 		const $options = makeNewCollapsible('Options');
-		const $optionsLabel = $('<label>', { text: `var ${dashesToCamelCase(hack.metadata.id)}Options = {` });
+		const $optionsLabel = $(`<label data-pre="var ${dashesToCamelCase(hack.metadata.id)}Options = {" data-post="};">`);
 		const $optionsField = $('<textarea>', {
 			rows: 5,
 			cols: 50,
@@ -493,7 +493,6 @@ function createThisHackMenu(hack) {
 		loadThisData($optionsField);
 		setSaveTrigger($optionsField);
 		$optionsLabel.append($optionsField);
-		$optionsLabel.append(document.createTextNode('};'));
 		$options.append($optionsLabel);
 		$collapse.append($options);
 	}
