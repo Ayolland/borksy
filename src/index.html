@@ -1,91 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<meta name="author" content="Andrew Yolland" />
-		<meta name="description" content="A tool for extending Bitsy games" />
-		<meta name="keywords" content="borksy,bitsy,game,games" />
-		<link rel="shortcut icon" href="./borksy.gif" />
-		<link rel="stylesheet" href="./style/style.scss" type="text/css" />
-		<title>Borksy Game Hacker</title>
-	</head>
-	<body>
-		<div id="preloader">
-			<img src="./borksy.gif" class="preloader_animation" />
-			<p class="preloader_text">Loading...</p>
-			<noscript>You must enable javascript to use this tool.</noscript>
-		</div>
-		<div id="wrapper">
-			<header>
-				<div id="mascot"></div>
-				<h1><strong>Borksy</strong> Game Hacker</h1>
-				<noscript>You must enable javascript to use this tool.</noscript>
-			</header>
 
-			<details id="about" data-collapsible data-header="About Borksy" class="collapsible" open>
-				<div id="about_content"></div>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<meta name="author" content="Andrew Yolland" />
+	<meta name="description" content="A tool for extending Bitsy games" />
+	<meta name="keywords" content="borksy,bitsy,game,games" />
+	<link rel="shortcut icon" href="./borksy.gif" />
+	<link rel="stylesheet" href="./style/style.scss" type="text/css" />
+	<title>Borksy Game Hacker</title>
+</head>
+
+<body>
+	<div id="preloader">
+		<img src="./borksy.gif" class="preloader_animation" />
+		<p class="preloader_text">Loading...</p>
+		<noscript>You must enable javascript to use this tool.</noscript>
+	</div>
+	<div id="wrapper">
+		<header>
+			<div id="mascot"></div>
+			<h1><strong>Borksy</strong> Game Hacker</h1>
+			<noscript>You must enable javascript to use this tool.</noscript>
+		</header>
+
+		<details id="about" data-collapsible data-header="About Borksy" class="collapsible" open>
+			<div id="about_content"></div>
+		</details>
+
+		<form>
+
+			<details data-collapsible data-header="Page Title / Filename" class="collapsible">
+				<p>This is what the title of your page (not game) will be:</p>
+				<label>&lt;title&gt;<textarea data-save data-borksy-replace-single="TITLE" data-default-type="string"
+						data-default="My Bitsy Game By Me" rows="1" cols="50" wrap="hard" name="title"
+						id="title"></textarea>&lt;&#47;title&gt;</label>
+				<p>This is the filename that will be downloaded: <em>(only A-z,0-9,-,_ allowed)</em></p>
+				<label><input data-save data-borksy-replace-single="FILENAME" data-default-type="string"
+						data-default="myBORKSYgame" data-clean-regex="^-|\W" name="filename" id="filename"
+						class="half inline right">.html</label>
 			</details>
 
-			<form>
-				
-				<details data-collapsible data-header="Page Title / Filename" class="collapsible">
-					<p>This is what the title of your page (not game) will be:</p>
-					<label>&lt;title&gt;<textarea data-save data-borksy-replace-single="TITLE" data-default-type="string" data-default="My Bitsy Game By Me" rows="1" cols="50" wrap="hard" name="title" id="title"></textarea>&lt;&#47;title&gt;</label>
-					<p>This is the filename that will be downloaded: <em>(only A-z,0-9,-,_ allowed)</em></p>
-					<label><input data-save data-borksy-replace-single="FILENAME" data-default-type="string" data-default="myBORKSYgame" data-clean-regex="^-|\W" name="filename" id="filename" class="half inline right">.html</label>
-				</details>
-
-				<details data-collapsible data-header="Bitsy Version" class="collapsible">
-					<p>This is the version of the Bitsy engine you wish to include with your game.</p>
-					<label id="template-label">
-						<select data-save name="template" id="template" data-default="" data-default-type="option">
-						</select>
-					</label>
-				</details>
-
-				<details data-collapsible data-header="Game Data" class="collapsible">
-					<p>This is the gamedata from Bitsy:</p>
-					<label>&lt;script type="bitsyGameData" id="exportedGameData"&gt;<textarea data-save data-borksy-replace-single="GAMEDATA" data-default-type="textfile" data-default="gamedata" rows="4" cols="50" wrap="hard" name="gamedata" id="gamedata"></textarea>&lt;&#47;script&gt;</label>
-				</details>
-	
-				<details data-collapsible data-header="HTML / CSS Theme" class="collapsible">
-					<p>This is the HTML content of your game's body tag:<br>NOTE: the canvas#game tag is crucial for Bitsy to work.</p>
-					<label>&lt;body&gt;<textarea data-save data-borksy-replace-single="MARKUP" data-default-type="textfile" data-default="body" rows="4" cols="50" wrap="hard" name="markup" id="markup"></textarea>&lt;&#47;body&gt;</label>
-					<p>This is the CSS style for your page:</p>
-					<label>&lt;style type="text/css"&gt;<textarea data-save data-borksy-replace-single="CSS" data-default-type="textfile" data-default="style" rows="4" cols="50" wrap="hard" name="css" id="css"></textarea>&lt;&#47;style&gt;</label>
-				</details>
-
-				<details data-collapsible data-header="Hacks" class="collapsible" id="hacks-section">
-					<p>These are pre-loaded hacks that modify and extend Bitsy's behavior. Just check the box to include the hack. Hacks with options have a expandable section with a modifiable JavaScript options object. If you need a hack not seen here, use the Additional JavaScript field instead.</p>
-				</details>
-	
-				<details data-collapsible data-header="Additional JavaScript" class="collapsible">
-					<p>This is JavaScript loaded into a script tag after all Bitsy code.<br>Other hacks can go in here (among other things).</p>
-					<label>&lt;script type="text/javascript" id="borksyAdditionalJS"&gt;<textarea data-save data-borksy-replace-single="ADDITIONALJS" rows="4" cols="50" wrap="hard" name="additionalJS" id="additionalJS"></textarea>&lt;&#47;script&gt;</label>
-				</details>
-				
-			</form>
-
-			<div class="button-group">
-				<label>
-					<button id="restore-button">Restore Defaults</button>
-					<span>(Ctrl/Cmd D)</span>
+			<details data-collapsible data-header="Bitsy Version" class="collapsible">
+				<p>This is the version of the Bitsy engine you wish to include with your game.</p>
+				<label id="template-label">
+					<select data-save name="template" id="template" data-default="" data-default-type="option">
+					</select>
 				</label>
-				<label>
-					<button id="download-button">Download File</button>
-					<span>(Ctrl/Cmd S)</span>
-				</label>
-			</div>
+			</details>
 
-			<footer>
-				<p>Borksy was originally built by AYolland: <a href="https://twitter.com/ayolland" target="_blank" rel="noopener">Twitter</a> <a href="https://github.com/Ayolland" target="_blank" rel="noopener">Github</a> <a href="https://ayolland.itch.io/" target="_blank" rel="noopener">Itch.io</a></p>
-				<p>Bitsy is built by Adam Le Doux: <a href="https://twitter.com/adamledoux" target="_blank" rel="noopener">Twitter</a> <a href="https://github.com/le-doux" target="_blank" rel="noopener">Github</a> <a href="https://ledoux.itch.io/" target="_blank" rel="noopener">Itch.io</a></p>
-				<p>Borksy and the hacks are maintained by Sean S. LeBlanc: <a href="https://twitter.com/SeanSLeBlanc" target="_blank" rel="noopener">Twitter</a> <a href="https://github.com/seleb" target="_blank" rel="noopener">Github</a> <a href="https://seansleblanc.itch.io/" target="_blank" rel="noopener">Itch.io</a></p>
-			</footer>
+			<details data-collapsible data-header="Game Data" class="collapsible">
+				<p>This is the gamedata from Bitsy:</p>
+				<label>&lt;script type="bitsyGameData" id="exportedGameData"&gt;<textarea data-save
+						data-borksy-replace-single="GAMEDATA" data-default-type="textfile" data-default="gamedata"
+						rows="4" cols="50" wrap="hard" name="gamedata"
+						id="gamedata"></textarea>&lt;&#47;script&gt;</label>
+			</details>
 
+			<details data-collapsible data-header="HTML / CSS Theme" class="collapsible">
+				<p>This is the HTML content of your game's body tag:<br>NOTE: the canvas#game tag is crucial for Bitsy
+					to work.</p>
+				<label>&lt;body&gt;<textarea data-save data-borksy-replace-single="MARKUP" data-default-type="textfile"
+						data-default="body" rows="4" cols="50" wrap="hard" name="markup"
+						id="markup"></textarea>&lt;&#47;body&gt;</label>
+				<p>This is the CSS style for your page:</p>
+				<label>&lt;style type="text/css"&gt;<textarea data-save data-borksy-replace-single="CSS"
+						data-default-type="textfile" data-default="style" rows="4" cols="50" wrap="hard" name="css"
+						id="css"></textarea>&lt;&#47;style&gt;</label>
+			</details>
+
+			<details data-collapsible data-header="Hacks" class="collapsible" id="hacks-section">
+				<p>These are pre-loaded hacks that modify and extend Bitsy's behavior. Just check the box to include the
+					hack. Hacks with options have a expandable section with a modifiable JavaScript options object. If
+					you need a hack not seen here, use the Additional JavaScript field instead.</p>
+			</details>
+
+			<details data-collapsible data-header="Additional JavaScript" class="collapsible">
+				<p>This is JavaScript loaded into a script tag after all Bitsy code.<br>Other hacks can go in here
+					(among other things).</p>
+				<label>&lt;script type="text/javascript" id="borksyAdditionalJS"&gt;<textarea data-save
+						data-borksy-replace-single="ADDITIONALJS" rows="4" cols="50" wrap="hard" name="additionalJS"
+						id="additionalJS"></textarea>&lt;&#47;script&gt;</label>
+			</details>
+
+		</form>
+
+		<div class="button-group">
+			<label>
+				<button id="restore-button">Restore Defaults</button>
+				<span>(Ctrl/Cmd D)</span>
+			</label>
+			<label>
+				<button id="download-button">Download File</button>
+				<span>(Ctrl/Cmd S)</span>
+			</label>
 		</div>
 
-		<script type="module" src="./scripts/borksy.js"></script>
-	</body>
+		<footer>
+			<p>Borksy was originally built by AYolland: <a href="https://twitter.com/ayolland" target="_blank"
+					rel="noopener">Twitter</a> <a href="https://github.com/Ayolland" target="_blank"
+					rel="noopener">Github</a> <a href="https://ayolland.itch.io/" target="_blank"
+					rel="noopener">Itch.io</a></p>
+			<p>Bitsy is built by Adam Le Doux: <a href="https://twitter.com/adamledoux" target="_blank"
+					rel="noopener">Twitter</a> <a href="https://github.com/le-doux" target="_blank"
+					rel="noopener">Github</a> <a href="https://ledoux.itch.io/" target="_blank"
+					rel="noopener">Itch.io</a></p>
+			<p>Borksy and the hacks are maintained by Sean S. LeBlanc: <a href="https://twitter.com/SeanSLeBlanc"
+					target="_blank" rel="noopener">Twitter</a> <a href="https://github.com/seleb" target="_blank"
+					rel="noopener">Github</a> <a href="https://seansleblanc.itch.io/" target="_blank"
+					rel="noopener">Itch.io</a></p>
+		</footer>
+
+	</div>
+
+	<script type="module" src="./scripts/borksy.js"></script>
+</body>
+
 </html>
