@@ -291,9 +291,11 @@ button {
 	border: 0;
 	padding: 0.25em 0.75em;
 	cursor: pointer !important;
+	transition: opacity 0.1s ease-out;
 
-	&:hover {
-		background-color: black;
+	&:hover,
+	&:focus {
+		opacity: 0.8;
 	}
 }
 
