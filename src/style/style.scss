@@ -96,7 +96,7 @@ footer {
 		background: $light-glass;
 		margin: -0.5rem;
 		padding: 0.25em 0.5em;
-		height: 1.75rem;
+		min-height: 1.75rem;
 		line-height: 1;
 		font-size: 1.5em;
 		cursor: pointer;
@@ -112,7 +112,7 @@ footer {
 		> .collapsible_header {
 			background-color: $dark-glass;
 			font-size: 1em;
-			height: 1em;
+			min-height: 1em;
 			padding: 0.5em;
 		}
 
