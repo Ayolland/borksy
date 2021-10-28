@@ -73,6 +73,7 @@ img.preloader_animation {
 
 #wrapper {
 	max-width: $breakpoint;
+	max-width: max(75%, $breakpoint);
 	overflow: auto;
 	padding: 1em;
 	margin: 0 auto;
