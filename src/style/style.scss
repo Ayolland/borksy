@@ -197,7 +197,6 @@ form {
 
 	label {
 		display: block;
-		padding: 0 1em;
 		margin: 0;
 		font-family: monospace;
 		line-height: 2;
@@ -217,9 +216,8 @@ form {
 			min-width: 100%;
 			min-height: 2em;
 			width: calc(100% + 2em);
-			max-width: calc(100% + 2em);
+			max-width: 100%;
 			max-height: 80vh;
-			margin: 0 -1em 0 -1em;
 			padding: 0.25em 1em;
 			font-size: 1em;
 			font-family: monospace;
