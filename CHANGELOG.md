@@ -1,3 +1,10 @@
+## [5.1.1](https://github.com/Ayolland/borksy/compare/v5.1.0...v5.1.1) (2021-10-29)
+
+
+### Bug Fixes
+
+* dark mode text colour issues ([2011068](https://github.com/Ayolland/borksy/commit/2011068dd9933bdf77926d28626788629484f985))
+
 # [5.1.0](https://github.com/Ayolland/borksy/compare/v5.0.0...v5.1.0) (2021-10-29)
 
 
