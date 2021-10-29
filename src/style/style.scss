@@ -232,13 +232,14 @@ form {
 		margin: 0;
 		font-family: monospace;
 		line-height: 2;
-		color: var(--extra-dark-glass);
 
 		&[data-pre]::before {
 			content: attr(data-pre);
+			color: var(--extra-dark-glass);
 		}
 		&[data-post]::after {
 			content: attr(data-post);
+			color: var(--extra-dark-glass);
 		}
 
 		input,
