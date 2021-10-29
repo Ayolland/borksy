@@ -49,6 +49,8 @@ describe('Borksy', () => {
 		await page.evaluate(() => {
 			// hide mascot to avoid noise in snapshots
 			document.querySelector('#mascot').style.visibility = 'hidden';
+			// replace "last update" with fixed string to avoid noise in snapshots
+			document.querySelector('#last-update').textContent = 'running automated tests';
 			// disable spellcheck to avoid noise in snapshots (spellcheck is async)
 			Array.from(document.querySelectorAll('textarea, input')).forEach(i => {
 				// eslint-disable-next-line no-param-reassign
