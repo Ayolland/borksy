@@ -1,3 +1,10 @@
+## [5.1.2](https://github.com/Ayolland/borksy/compare/v5.1.1...v5.1.2) (2021-10-29)
+
+
+### Bug Fixes
+
+* hack options text contrast ([dc16a6d](https://github.com/Ayolland/borksy/commit/dc16a6d2b5cfcaff1bd6950771ec127554879c59))
+
 ## [5.1.1](https://github.com/Ayolland/borksy/compare/v5.1.0...v5.1.1) (2021-10-29)
 
 
