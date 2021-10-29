@@ -39,7 +39,7 @@ function loadTemplates() {
 	for (let i = templates.length - 1; i >= 0; i--) {
 		const { id, description } = templates[i];
 		const isLatest = i === templates.length - 1;
-		templateSel.innerHTML += `<option value="${id}" ${isLatest ? 'data-default-option' : ''}>${description}</option>`;
+		templateSel.innerHTML += `<option value="${id}" ${isLatest ? 'data-default-option' : ''}>${description}${isLatest ? ' (latest)' : ''}</option>`;
 	}
 }
 

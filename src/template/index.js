@@ -10,11 +10,11 @@ import Bitsy78 from './Bitsy.7.8.txt';
 import BitsyHD51 from './BitsyHD.5.1.txt';
 
 export default [
-	{ data: Bitsy55, id: 'Bitsy55', description: 'Bitsy 5.5 (modified for Borksy)' },
-	{ data: BitsyHD51, id: 'BitsyHD51', description: 'Bitsy HD + Borksy (modified from Bitsy 5.1)' },
-	{ data: Bitsy60, id: 'Bitsy60', description: 'Bitsy 6.0 (modified for Borksy)' },
-	{ data: Bitsy63, id: 'Bitsy63', description: 'Bitsy 6.3 (modified for Borksy)' },
-	{ data: Bitsy64, id: 'Bitsy64', description: 'Bitsy 6.4 (modified for Borksy)' },
+	{ data: BitsyHD51, id: 'BitsyHD51', description: 'Bitsy HD (Bitsy 5.1)' },
+	{ data: Bitsy55, id: 'Bitsy55', description: 'Bitsy 5.5' },
+	{ data: Bitsy60, id: 'Bitsy60', description: 'Bitsy 6.0' },
+	{ data: Bitsy63, id: 'Bitsy63', description: 'Bitsy 6.3' },
+	{ data: Bitsy64, id: 'Bitsy64', description: 'Bitsy 6.4' },
 	{ data: Bitsy65, id: 'Bitsy65', description: 'Bitsy 6.5' },
 	{ data: Bitsy70, id: 'Bitsy70', description: 'Bitsy 7.0' },
 	{ data: Bitsy72, id: 'Bitsy72', description: 'Bitsy 7.2' },
