@@ -99,7 +99,7 @@ function loadThisData($this) {
 		$this.val(value);
 	}
 	console.log(` Got key: ${name} from localStorage: ${shortenString(value)}`);
-	if (name === 'template' && value.split('.')[0] === 'BitsyHD') {
+	if (name === 'template' && value.split('.')[0] === 'BitsyHD51') {
 		$('#mascot').addClass('borksyHD');
 		console.log('BitsyHD detected');
 	}
