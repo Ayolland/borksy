@@ -1,3 +1,34 @@
+# [5.1.0](https://github.com/Ayolland/borksy/compare/v5.0.0...v5.1.0) (2021-10-29)
+
+
+### Bug Fixes
+
+* allow collapsible header text to wrap if needed ([6e341e1](https://github.com/Ayolland/borksy/commit/6e341e1931bb7cfc3fe0098a2b3694939fe2f5d0))
+* buggy padding/margin on collapsibles ([6a63459](https://github.com/Ayolland/borksy/commit/6a634595648a8d2e6d2be594103d45f7093047ff))
+* faded text contrast ([e1cc31a](https://github.com/Ayolland/borksy/commit/e1cc31a145fbc71e947ebd39a1041faa2ebb99f1))
+* improve readme legibility ([27752af](https://github.com/Ayolland/borksy/commit/27752af933c9b15fe55f13c5df9fae86b7b2bd88))
+* mascot not switching to HD when HD template is used ([f421b0b](https://github.com/Ayolland/borksy/commit/f421b0b94ab8167a95113ce68339f6c2ad6867c8))
+* more flexible title input layout ([7632466](https://github.com/Ayolland/borksy/commit/763246627a163073fe91343ba312c1e6b31c8f41))
+* remove animation while loading ([c39ce21](https://github.com/Ayolland/borksy/commit/c39ce213a8012ec731a2e4bb64ebc680df8b6539))
+* remove hacky padding/negative margin on labels ([1bff26d](https://github.com/Ayolland/borksy/commit/1bff26d63a461bc4f68495ef98e3fafe1fed1aa0))
+* remove unnecessary margin on readme ([7fdab93](https://github.com/Ayolland/borksy/commit/7fdab932e478d5334d6dfa53248744172e083566))
+* remove unnecessary unit in default style ([2e1c4d8](https://github.com/Ayolland/borksy/commit/2e1c4d816cd713df2783ec3fd278b00b2f094c0f))
+* replace keyboard shortcut indicators with semantic html ([1814248](https://github.com/Ayolland/borksy/commit/181424882021e3ca132d71b659db354317a3c706))
+
+
+### Features
+
+* allow more screen real estate to be used ([9f3e2ba](https://github.com/Ayolland/borksy/commit/9f3e2ba74ca78567783fa39b64b849eef7793090))
+* button hover/focus style ([f23bfe4](https://github.com/Ayolland/borksy/commit/f23bfe4c1e2a50c329ff3f09c2cbc6a83ce836dd))
+* clarify that borksy templates are modifications ([74edd37](https://github.com/Ayolland/borksy/commit/74edd37df9c19603844da0ed65607a7f6ad02679))
+* dark mode ([dce827e](https://github.com/Ayolland/borksy/commit/dce827e1e996fee5f34ef5b5e1f393ca7d1e2dbe))
+* hide animated mascot if user prefers reduced motion ([570873d](https://github.com/Ayolland/borksy/commit/570873d7f6261efbb26e54cf585c733e008f1a3a))
+* link hover/focus style ([e7b7047](https://github.com/Ayolland/borksy/commit/e7b704783b9b88f891595ebefc3e4f1a44f9e26f))
+* new checkbox style ([91e4c20](https://github.com/Ayolland/borksy/commit/91e4c20f53e19a990c22cf4d8d4d494a69b9c51c))
+* replace label pre/post content with pseudo-elements ([1bb6682](https://github.com/Ayolland/borksy/commit/1bb668253e67ed45faccdb87b5e865eb22ab4ae6))
+* simplify bitsy version labels ([744806f](https://github.com/Ayolland/borksy/commit/744806f7c5be9f0f6c2b6634c1f281ec7cba2306))
+* wrap readme content if needed instead of horizontal scroll ([cc32862](https://github.com/Ayolland/borksy/commit/cc32862805106b7838f51a3f630d99237503c47d))
+
 # [5.0.0](https://github.com/Ayolland/borksy/compare/v4.6.8...v5.0.0) (2021-10-14)
 
 
