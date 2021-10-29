@@ -1,5 +1,6 @@
 :root {
 	color-scheme: light;
+	color: #000;
 	--light-gray: #ccc;
 	--dark-glass: #{fade-out(#000, 0.9)};
 	--extra-dark-glass: #{fade-out(#000, 0.25)};
@@ -7,6 +8,7 @@
 
 	@media (prefers-color-scheme: dark) {
 		color-scheme: dark;
+		color: #fff;
 		--light-gray: #000;
 		--dark-glass: #{fade-out(#ccc, 0.8)};
 		--extra-dark-glass: #{fade-out(#fff, 0.25)};
@@ -62,7 +64,7 @@ li {
 }
 
 a {
-	color: initial;
+	color: inherit;
 	transition: opacity 0.1s ease-out;
 
 	&:hover,
@@ -241,6 +243,7 @@ form {
 
 		input,
 		textarea {
+			color: inherit;
 			display: block;
 			box-sizing: border-box;
 			min-height: 2em;
