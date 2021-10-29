@@ -37,8 +37,9 @@ function loadTemplates() {
 	const templateSel = document.querySelector('select#template');
 	templateSel.innerHTML = '';
 	for (let i = templates.length - 1; i >= 0; i--) {
-		const { id, description, isDefault } = templates[i];
-		templateSel.innerHTML += `<option value="${id}" ${isDefault ? 'data-default-option' : ''}>${description}</option>`;
+		const { id, description } = templates[i];
+		const isLatest = i === templates.length - 1;
+		templateSel.innerHTML += `<option value="${id}" ${isLatest ? 'data-default-option' : ''}>${description}</option>`;
 	}
 }
 
