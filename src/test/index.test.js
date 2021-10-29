@@ -34,6 +34,12 @@ describe('Borksy', () => {
 			headless: false,
 		});
 		page = await browser.newPage();
+		await page.emulateMediaFeatures([
+			{
+				name: 'prefers-color-scheme',
+				value: 'light',
+			},
+		]);
 
 		await page.client().send('Page.setDownloadBehavior', { behavior: 'allow', downloadPath: path.resolve(__dirname) });
 		await page.goto('http://localhost:5000', {
