@@ -233,7 +233,8 @@ function loadAboutInfo() {
 	const elAbout = document.querySelector('#about_content');
 	elAbout.innerHTML = htmlAbout;
 
-	const lastUpdate = document.createElement('p');
+	const lastUpdate = document.createElement('section');
+	lastUpdate.id = 'last-update';
 	lastUpdate.innerHTML = htmlChangelog.match(/(<h[12][^]+?)<h[12]/m)?.[1].replace(/<h[12]>([^]+?)<\/h[12]>/g, "<h2>What's new in v$1</h2>");
 	elAbout.prepend(lastUpdate);
 
