@@ -1,3 +1,10 @@
+## [5.1.3](https://github.com/Ayolland/borksy/compare/v5.1.2...v5.1.3) (2021-11-12)
+
+
+### Bug Fixes
+
+* hack options incorrectly including extra brackets due to parsing error ([1bb46a3](https://github.com/Ayolland/borksy/commit/1bb46a3dcf01a9df689aa9d20fe359aae0f6fb8f))
+
 ## [5.1.2](https://github.com/Ayolland/borksy/compare/v5.1.1...v5.1.2) (2021-10-29)
 
 
