@@ -25,10 +25,3 @@ jobs:
             @semantic-release/changelog@5.0.1
             @semantic-release/git@9.0.0
           branches: main
-      - uses: josephbmanley/butler-publish-itchio-action@v1.0.2
-        env:
-          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-          CHANNEL: web
-          ITCH_GAME: borksy
-          ITCH_USER: ayolland
-          PACKAGE: docs
