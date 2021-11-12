@@ -1,3 +1,10 @@
+## [5.1.6](https://github.com/Ayolland/borksy/compare/v5.1.5...v5.1.6) (2021-11-12)
+
+
+### Bug Fixes
+
+* clean up metadata ([69ba1f7](https://github.com/Ayolland/borksy/commit/69ba1f70d2406727b30148448fa5194210779bc3))
+
 ## [5.1.5](https://github.com/Ayolland/borksy/compare/v5.1.4...v5.1.5) (2021-11-12)
 
 

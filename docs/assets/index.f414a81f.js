@@ -1,4 +1,9 @@
-import{$ as o,F as R}from"./vendor.9cfe5c75.js";const T=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const a of document.querySelectorAll('link[rel="modulepreload"]'))r(a);new MutationObserver(a=>{for(const i of a)if(i.type==="childList")for(const s of i.addedNodes)s.tagName==="LINK"&&s.rel==="modulepreload"&&r(s)}).observe(document,{childList:!0,subtree:!0});function e(a){const i={};return a.integrity&&(i.integrity=a.integrity),a.referrerpolicy&&(i.referrerPolicy=a.referrerpolicy),a.crossorigin==="use-credentials"?i.credentials="include":a.crossorigin==="anonymous"?i.credentials="omit":i.credentials="same-origin",i}function r(a){if(a.ep)return;a.ep=!0;const i=e(a);fetch(a.href,i)}};T();const y=`<h2><a href="https://github.com/Ayolland/borksy/compare/v5.1.4...v5.1.5">5.1.5</a> (2021-11-12)</h2>
+import{$ as o,F as R}from"./vendor.9cfe5c75.js";const T=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const a of document.querySelectorAll('link[rel="modulepreload"]'))r(a);new MutationObserver(a=>{for(const i of a)if(i.type==="childList")for(const s of i.addedNodes)s.tagName==="LINK"&&s.rel==="modulepreload"&&r(s)}).observe(document,{childList:!0,subtree:!0});function e(a){const i={};return a.integrity&&(i.integrity=a.integrity),a.referrerpolicy&&(i.referrerPolicy=a.referrerpolicy),a.crossorigin==="use-credentials"?i.credentials="include":a.crossorigin==="anonymous"?i.credentials="omit":i.credentials="same-origin",i}function r(a){if(a.ep)return;a.ep=!0;const i=e(a);fetch(a.href,i)}};T();const y=`<h2><a href="https://github.com/Ayolland/borksy/compare/v5.1.5...v5.1.6">5.1.6</a> (2021-11-12)</h2>
+<h3>Bug Fixes</h3>
+<ul>
+<li>clean up metadata (<a href="https://github.com/Ayolland/borksy/commit/69ba1f70d2406727b30148448fa5194210779bc3">69ba1f7</a>)</li>
+</ul>
+<h2><a href="https://github.com/Ayolland/borksy/compare/v5.1.4...v5.1.5">5.1.5</a> (2021-11-12)</h2>
 <h3>Bug Fixes</h3>
 <ul>
 <li>author metadata (<a href="https://github.com/Ayolland/borksy/commit/3545d2aa94a3062c21370cab452f0054e54f108b">3545d2a</a>)</li>
