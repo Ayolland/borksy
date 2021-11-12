@@ -186,7 +186,7 @@ function assembleHacks(hackBundle) {
 		let hackFile = hackObj.data;
 		if (hackObj.options) {
 			const newHackOptionsContents = $(`#${hackObj.metadata.id}-options`).val();
-			hackFile = hackFile.replace(/(var hackOptions.*= ){[^]*?}(;$)/m, `$1 {\n${newHackOptionsContents}\n} $2`);
+			hackFile = hackFile.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m, `$1 {\n${newHackOptionsContents}\n}$2`);
 		}
 		return `${acc}${hackFile}\n`;
 	}, hackBundle);
