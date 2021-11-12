@@ -1,3 +1,10 @@
+## [5.1.5](https://github.com/Ayolland/borksy/compare/v5.1.4...v5.1.5) (2021-11-12)
+
+
+### Bug Fixes
+
+* author metadata ([3545d2a](https://github.com/Ayolland/borksy/commit/3545d2aa94a3062c21370cab452f0054e54f108b))
+
 ## [5.1.4](https://github.com/Ayolland/borksy/compare/v5.1.3...v5.1.4) (2021-11-12)
 
 
