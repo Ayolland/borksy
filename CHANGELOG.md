@@ -1,3 +1,10 @@
+## [5.1.4](https://github.com/Ayolland/borksy/compare/v5.1.3...v5.1.4) (2021-11-12)
+
+
+### Bug Fixes
+
+* update dependencies ([dc1df88](https://github.com/Ayolland/borksy/commit/dc1df884c0d08177ebefa783bbd034eadfd5d550))
+
 ## [5.1.3](https://github.com/Ayolland/borksy/compare/v5.1.2...v5.1.3) (2021-11-12)
 
 
