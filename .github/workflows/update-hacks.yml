@@ -14,7 +14,6 @@ jobs:
           node-version: 14
       - run: npm ci
       - run: npm run update-hacks
-      - run: npm run update-hacks
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: 'feat: update hacks'
