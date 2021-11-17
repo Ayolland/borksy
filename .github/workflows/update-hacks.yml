@@ -1,4 +1,4 @@
-name: main
+name: update-hacks
 
 on: repository_dispatch
 
