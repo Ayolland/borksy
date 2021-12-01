@@ -1,4 +1,9 @@
-import{$ as o,F as R}from"./vendor.9cfe5c75.js";const T=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const a of document.querySelectorAll('link[rel="modulepreload"]'))r(a);new MutationObserver(a=>{for(const i of a)if(i.type==="childList")for(const s of i.addedNodes)s.tagName==="LINK"&&s.rel==="modulepreload"&&r(s)}).observe(document,{childList:!0,subtree:!0});function e(a){const i={};return a.integrity&&(i.integrity=a.integrity),a.referrerpolicy&&(i.referrerPolicy=a.referrerpolicy),a.crossorigin==="use-credentials"?i.credentials="include":a.crossorigin==="anonymous"?i.credentials="omit":i.credentials="same-origin",i}function r(a){if(a.ep)return;a.ep=!0;const i=e(a);fetch(a.href,i)}};T();const y=`<h1><a href="https://github.com/Ayolland/borksy/compare/v5.2.0...v5.3.0">5.3.0</a> (2021-11-17)</h1>
+import{$ as o,F as R}from"./vendor.9cfe5c75.js";const T=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const a of document.querySelectorAll('link[rel="modulepreload"]'))r(a);new MutationObserver(a=>{for(const i of a)if(i.type==="childList")for(const s of i.addedNodes)s.tagName==="LINK"&&s.rel==="modulepreload"&&r(s)}).observe(document,{childList:!0,subtree:!0});function e(a){const i={};return a.integrity&&(i.integrity=a.integrity),a.referrerpolicy&&(i.referrerPolicy=a.referrerpolicy),a.crossorigin==="use-credentials"?i.credentials="include":a.crossorigin==="anonymous"?i.credentials="omit":i.credentials="same-origin",i}function r(a){if(a.ep)return;a.ep=!0;const i=e(a);fetch(a.href,i)}};T();const y=`<h1><a href="https://github.com/Ayolland/borksy/compare/v5.3.0...v5.4.0">5.4.0</a> (2021-12-01)</h1>
+<h3>Features</h3>
+<ul>
+<li>update hacks (<a href="https://github.com/Ayolland/borksy/commit/d2923c67b6f2da1f6188d99fcdd6b4c0fc5cdc95">d2923c6</a>)</li>
+</ul>
+<h1><a href="https://github.com/Ayolland/borksy/compare/v5.2.0...v5.3.0">5.3.0</a> (2021-11-17)</h1>
 <h3>Features</h3>
 <ul>
 <li>update hacks (<a href="https://github.com/Ayolland/borksy/commit/4038077daf0c85b1a836488b1281f270c974b582">4038077</a>)</li>
@@ -2980,7 +2985,7 @@ body {
 @summary change the avatar in certain rooms
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -3150,7 +3155,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -3217,7 +3222,7 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -3305,7 +3310,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary makes the game have a backdrop
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -3482,7 +3487,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -3551,7 +3556,7 @@ var after = kitsy.after;
 @summary makes all sprites have transparent backgrounds
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -3603,12 +3608,14 @@ after('renderPixelInstruction', function (bufferId, buffer, paletteIndex, x, y) 
 @summary makes the game have a transparent background
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
 @description
 Makes the game background transparent, showing whatever would be visible behind it in the html document.
+Note that the bitsy canvas has a black background in CSS by default, which blocks things behind it.
+Depending on your use case, you may need to change this (e.g. to \`background: transparent;\`)
 
 Note: also includes transparent sprites
 
@@ -3711,7 +3718,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary "walk" and "talk" sound effect support
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -3879,7 +3886,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -3946,7 +3953,7 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -4045,7 +4052,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary A variety of Bitsy sound and music handlers
 @license MIT
 @author David Mowatt
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -4247,7 +4254,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -4412,7 +4419,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -4568,7 +4575,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary WebGLazy bitsy integration (this one's mostly just for me)
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -4765,7 +4772,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -4857,7 +4864,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary high quality anime gifs
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -5824,7 +5831,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -5941,7 +5948,7 @@ function addDialogTag(tag, fn) {
 @summary high quality anime jpegs (or pngs i guess)
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -6175,7 +6182,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary high quality anime jpegs (or pngs i guess)
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -6371,7 +6378,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -6550,7 +6557,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary Prevents from playing past an ending
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -6709,7 +6716,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -6801,7 +6808,7 @@ after('onExitDialog', function () {
 @summary corrupts gamedata at runtime
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -6857,7 +6864,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -6919,7 +6926,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 @description
@@ -7138,7 +7145,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -7356,7 +7363,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make custom exit transition effects
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -7551,7 +7558,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -7659,7 +7666,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary run custom code on key inputs
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -7843,7 +7850,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -7951,7 +7958,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make {custom}text effects{custom}
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -8298,7 +8305,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -8419,7 +8426,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary animal crossing-style audio powered by the pink trombone vocal synth
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -9299,7 +9306,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -9416,7 +9423,7 @@ function addDialogTag(tag, fn) {
 @summary animal crossing-style audio
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -9473,7 +9480,7 @@ before('dialogBuffer.DoNextChar', function () {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -9815,7 +9822,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary animal crossing-style audio
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -10001,7 +10008,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -10087,7 +10094,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary adds an easing transition animation to display the dialog box text
 @license MIT
 @author Delacannon
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -10243,7 +10250,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -10369,7 +10376,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary dialog choices
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -10606,7 +10613,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -10780,7 +10787,7 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -10824,7 +10831,7 @@ addDialogTag('p', function (environment, parameters, onReturn) {
 @summary put more words onscreen
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -11109,7 +11116,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary jump from one dialog entry to another
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -11279,7 +11286,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -11470,7 +11477,7 @@ addDualDialogTag('jump', function (environment, parameters) {
 @summary add pauses in between printing text
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -11626,7 +11633,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -11751,7 +11758,7 @@ addDialogTag('pause', function (environment, parameters, onReturn) {
 @summary prompt the user for text input in dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -11944,7 +11951,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -12068,7 +12075,7 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -12235,7 +12242,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary provides a variable with player direction
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -12397,7 +12404,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -12483,7 +12490,7 @@ before('startDialog', function () {
 @summary flips the player's sprite based on directional movement
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -12520,7 +12527,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -12582,7 +12589,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 @description
@@ -12785,7 +12792,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -12958,7 +12965,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary HTML background matching bitsy background
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -13124,7 +13131,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -13191,7 +13198,7 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -13253,7 +13260,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary edit dialog from dialog (yes really)
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -13418,7 +13425,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -13545,7 +13552,7 @@ function addDeferredDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -13616,7 +13623,7 @@ addDeferredDialogTag('dialog', editDialog);
 @summary edit sprites, items, and tiles from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -13679,7 +13686,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -13741,7 +13748,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 @description
@@ -13936,7 +13943,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -14192,7 +14199,7 @@ addDualDialogTag('imagePal', editPalette);
 @summary change which sprite is controlled by the player
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -14359,7 +14366,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -14524,7 +14531,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -14569,7 +14576,7 @@ addDualDialogTag('player', function (environment, parameters) {
 @summary modify the content of a room from dialog
 @license MIT
 @author Dana Holdampf
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -14855,7 +14862,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -15020,7 +15027,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -15642,7 +15649,7 @@ function copyBoxAt(mapId, targetId, x1, y1, x2, y2, copyRoomId, pasteXPos, paste
 @summary trigger an ending from dialog, including narration text
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -15832,7 +15839,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -16018,7 +16025,7 @@ addDualDialogTag('end', function (environment, parameters) {
 @summary exit to another room from dialog, including conditionals
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -16208,7 +16215,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -16373,7 +16380,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -16452,7 +16459,7 @@ function getExitParams(parameters) {
 @summary separate Bitsy game data from your (modded) HTML for easier development
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -16630,7 +16637,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -16779,7 +16786,7 @@ function dos2unix(text) {
 @summary generate a browser favicon (tab icon) from a Bitsy sprite, including animation!
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -16945,7 +16952,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -17012,7 +17019,7 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -17150,7 +17157,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make sprites follow the player
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -17339,7 +17346,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -17504,7 +17511,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -17747,7 +17754,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary HTML5 gamepad support
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -18232,7 +18239,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -18342,7 +18349,7 @@ after('update', function () {
 @summary Pseudo-platforming/gravity/physics
 @license MIT
 @author Cole Sea
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -18460,7 +18467,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -18522,7 +18529,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 @description
@@ -18725,7 +18732,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -19318,7 +19325,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary for when bitsy's not small enough
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -19485,7 +19492,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -19593,7 +19600,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary execute arbitrary javascript from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -19770,7 +19777,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -19948,7 +19955,7 @@ addDualDialogTag('js', executeJs);
 @file logic-operators-extended
 @summary adds conditional logic operators
 @author @mildmojo
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -20113,7 +20120,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -20217,7 +20224,7 @@ inject(
 @summary put more words onscreen
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -20397,7 +20404,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -20571,7 +20578,7 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -20655,7 +20662,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make the player big
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -20844,7 +20851,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -20911,7 +20918,7 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -21075,7 +21082,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary walk through wall tiles, sprites, items, exits, and endings
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -21253,7 +21260,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -21322,7 +21329,7 @@ var after = kitsy.after;
 @summary run custom code on key inputs
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -21434,7 +21441,7 @@ hackOptions.ondown = {
 @summary multiplayer bitsy
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 @description
@@ -21612,7 +21619,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -21777,7 +21784,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -21841,7 +21848,7 @@ function getImage(name, map) {
 @summary edit dialog from dialog (yes really)
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -21908,7 +21915,7 @@ addDeferredDialogTag('dialog', editDialog);
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 @description
@@ -21978,7 +21985,7 @@ function setSpriteData(id, frame, newData) {
 @summary edit sprites, items, and tiles from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -22123,7 +22130,7 @@ addDualDialogTag('imagePal', editPalette);
 @summary execute arbitrary javascript from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -22328,7 +22335,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary tiles which hide the player
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -22493,7 +22500,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -22598,7 +22605,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -22770,7 +22777,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -22904,7 +22911,7 @@ addDialogTag('p', function (environment, parameters, onReturn) {
 @summary prevent some items from being picked up
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -23066,7 +23073,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -23191,7 +23198,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary sokoban-style sprite pushing
 @license MIT
 @author jan0sc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -23385,7 +23392,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -23447,7 +23454,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 @description
@@ -23650,7 +23657,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -24082,7 +24089,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary add name-tags to replace drawings when the game is loading
 @license MIT
 @author Elkie Nova
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -24255,7 +24262,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -24361,7 +24368,7 @@ after('parseWorld', function () {
 @summary save/load your game
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -24552,7 +24559,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -24717,7 +24724,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -24923,7 +24930,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary ease the player's movement
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -25089,7 +25096,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -25232,7 +25239,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary treat some items like sprites that can be placed multiple times
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -25395,7 +25402,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -25525,7 +25532,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary like text effects, but for sprites
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -25736,7 +25743,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -25901,7 +25908,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -26060,7 +26067,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary time player actions
 @license MIT
 @author Lenny Magner
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -26258,7 +26265,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -26423,7 +26430,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -26530,7 +26537,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary text-to-speech for bitsy dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -26718,7 +26725,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -27019,7 +27026,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary process all dialog text with a tracery grammar
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -28051,7 +28058,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -28140,7 +28147,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary customizable WebGL transitions
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -28359,7 +28366,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -28428,7 +28435,7 @@ var after = kitsy.after;
 @summary WebGLazy bitsy integration (this one's mostly just for me)
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -28557,12 +28564,14 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary makes the game have a transparent background
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
 @description
 Makes the game background transparent, showing whatever would be visible behind it in the html document.
+Note that the bitsy canvas has a black background in CSS by default, which blocks things behind it.
+Depending on your use case, you may need to change this (e.g. to \`background: transparent;\`)
 
 Note: also includes transparent sprites
 
@@ -28722,7 +28731,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -28791,7 +28800,7 @@ var after = kitsy.after;
 @summary makes all sprites have transparent backgrounds
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -28867,7 +28876,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary makes the dialog box have a transparent background
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -29019,7 +29028,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -29097,7 +29106,7 @@ after('renderClearInstruction', function (bufferId, buffer, paletteIndex) {
 @summary makes all sprites have transparent backgrounds
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -29260,7 +29269,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -29362,7 +29371,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary interprocess communication for twine and bitsy
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -29596,7 +29605,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
@@ -29833,7 +29842,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary items which, when picked up, remove all other instances of that item from the game
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 
@@ -29996,7 +30005,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.3
+@version 19.2.4
 @requires Bitsy 7.10
 
 */
