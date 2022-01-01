@@ -1,3 +1,4 @@
+import pkgHacks from '@bitsy/hecks/package.json';
 import { saveAs } from 'file-saver';
 import $ from 'jquery';
 import { html as htmlChangelog } from '../../CHANGELOG.md';
@@ -231,7 +232,7 @@ function togglePartyMode() {
 
 function loadAboutInfo() {
 	const elAbout = document.querySelector('#about_content');
-	elAbout.innerHTML = htmlAbout;
+	elAbout.innerHTML = htmlAbout.replace('HACKS_BITSY_VERSION', pkgHacks.bitsyVersion);
 
 	const lastUpdate = document.createElement('section');
 	lastUpdate.id = 'last-update';
