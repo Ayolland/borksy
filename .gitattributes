@@ -3,6 +3,7 @@ docs/* linguist-generated=true
 # Auto detect text files and perform LF normalization
 * text=auto
 *.js text eol=lf
+*.txt text eol=lf
 
 # Custom for Visual Studio
 *.cs     diff=csharp
