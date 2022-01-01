@@ -4,6 +4,7 @@
 <!-- HEADER -->
 
 <!-- Borksy BORKSY-VERSION -->
+<!-- bitsy-hacks BORKSY-HACKS-VERSION -->
 <!-- Bitsy 6.0 -->
 <head>
 

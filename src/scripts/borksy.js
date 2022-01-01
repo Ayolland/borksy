@@ -215,7 +215,7 @@ function assembleAndDownloadFile() {
 		.promise()
 		.done(() => {
 			const filename = $('#filename').val();
-			modifiedTemplate = modifiedTemplate.replace('BORKSY-HACKS', hackBundle).replace('BORKSY-VERSION', pkg.version);
+			modifiedTemplate = modifiedTemplate.replace('BORKSY-VERSION', pkg.version).replace('BORKSY-HACKS-VERSION', pkgHacks.version).replace('BORKSY-HACKS', hackBundle);
 			download(`${filename}.html`, modifiedTemplate);
 		});
 }
