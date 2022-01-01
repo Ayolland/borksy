@@ -57,18 +57,16 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-prettier": "^4.0.0",
+    "file-saver": "^2.0.5",
     "jest": "^27.2.5",
     "jest-dev-server": "^6.0.0",
     "jest-image-snapshot": "^4.5.1",
+    "jquery": "^3.6.0",
     "prettier": "^2.4.1",
     "puppeteer": "^10.4.0",
     "sass": "^1.42.1",
     "vite": "^2.6.4",
     "vite-plugin-markdown": "^2.0.2",
     "vite-plugin-string": "^1.0.1"
-  },
-  "dependencies": {
-    "file-saver": "^2.0.5",
-    "jquery": "^3.3.1"
   }
 }

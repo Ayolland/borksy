@@ -17,6 +17,11 @@
 		"indent": "off", // prettier handles indentation
 		"max-len": "off", // just apply common-sense
 
+		// all dependencies are bundled
+		"import/no-extraneous-dependencies": ["error", {
+			"devDependencies": true
+		}],
+
 		// for dev accessibility
 		"no-console": "off",
 		"no-use-before-define": "off",
@@ -36,13 +41,6 @@
 			"ecmaVersion": 9,
 			"sourceType": "module"
 		},
-		"rules": {
-			"import/no-extraneous-dependencies": ["error", {
-				"devDependencies": true
-			}]
-		}
-	}, {
-		"files": ["vite.config.js"],
 		"rules": {
 			"import/no-extraneous-dependencies": ["error", {
 				"devDependencies": true
