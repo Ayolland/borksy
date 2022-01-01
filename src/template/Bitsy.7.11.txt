@@ -3,7 +3,7 @@
 
 <!-- HEADER -->
 
-<!-- Borksy 4.6 -->
+<!-- Borksy BORKSY-VERSION -->
 <!-- Bitsy 7.11 -->
 <head>
 

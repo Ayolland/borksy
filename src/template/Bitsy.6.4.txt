@@ -1,10 +1,10 @@
 <!DOCTYPE HTML>
 <html>
 
-<!-- Borksy 4.2 -->
-<!-- Bitsy 6.4 -->
-
 <!-- HEADER -->
+
+<!-- Borksy BORKSY-VERSION -->
+<!-- Bitsy 6.4 -->
 <head>
 
 <meta charset="UTF-8">

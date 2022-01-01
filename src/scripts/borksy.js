@@ -2,6 +2,7 @@ import pkgHacks from '@bitsy/hecks/package.json';
 import { saveAs } from 'file-saver';
 import $ from 'jquery';
 import { html as htmlChangelog } from '../../CHANGELOG.md';
+import pkg from '../../package.json';
 import { htmlAbout, htmlFaqs, htmlHowto, htmlTips, htmlTools } from '../about';
 import * as defaults from '../defaults';
 import hacksRaw from '../hacks';
@@ -214,7 +215,7 @@ function assembleAndDownloadFile() {
 		.promise()
 		.done(() => {
 			const filename = $('#filename').val();
-			modifiedTemplate = modifiedTemplate.replace('BORKSY-HACKS', hackBundle);
+			modifiedTemplate = modifiedTemplate.replace('BORKSY-HACKS', hackBundle).replace('BORKSY-VERSION', pkg.version);
 			download(`${filename}.html`, modifiedTemplate);
 		});
 }
