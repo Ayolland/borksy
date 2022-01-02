@@ -1,3 +1,21 @@
+# [5.7.0](https://github.com/Ayolland/borksy/compare/v5.6.0...v5.7.0) (2022-01-02)
+
+
+### Bug Fixes
+
+* assume confirmation if window modal fails ([19a2124](https://github.com/Ayolland/borksy/commit/19a21243b0deb7f1c0d264a6bde004bcbcbbb576))
+* not recognizing bitsy HD visual state ([860bdf3](https://github.com/Ayolland/borksy/commit/860bdf3d67ba2de25b5905ec17ae6dc7c5110d6e))
+
+
+### Features
+
+* add Bitsy HD 7.11 template ([afa1ae4](https://github.com/Ayolland/borksy/commit/afa1ae443360a3ae000841c522bae29d1bf94069))
+* added Bitsy 7.11 template ([dccf1fb](https://github.com/Ayolland/borksy/commit/dccf1fb44a30ee79cb3dc22471ee94ddf1e451f5))
+* include correct borksy version in exported files ([f96f424](https://github.com/Ayolland/borksy/commit/f96f424d6d4e6364ededdfe60f3a98798ac64301))
+* include hacks version in exported file header ([121e3dd](https://github.com/Ayolland/borksy/commit/121e3dd0c8081569c9c54dfd71f7357e7259e9ab))
+* move legacy version warning to version section, and show when there is a mismatch ([088889b](https://github.com/Ayolland/borksy/commit/088889b86a9f7ed8b4348ed80675f210929b6d5b))
+* update "about" section to reference bitsy version from hacks ([ea454e2](https://github.com/Ayolland/borksy/commit/ea454e2cf1c4ce38332cca8a2a6d0858b8012b3d))
+
 # [5.6.0](https://github.com/Ayolland/borksy/compare/v5.5.0...v5.6.0) (2022-01-01)
 
 
