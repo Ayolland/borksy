@@ -102,9 +102,16 @@ function loadThisData($this) {
 		$this.val(value);
 	}
 	console.log(` Got key: ${name} from localStorage: ${shortenString(value)}`);
-	if (name === 'template' && value.split('.')[0] === 'BitsyHD51') {
+}
+
+function onTemplateChanged(event) {
+	const { value } = event.currentTarget;
+	console.log(value);
+	if (value.includes('HD')) {
 		$('#mascot').addClass('borksyHD');
 		console.log('BitsyHD detected');
+	} else {
+		$('#mascot').removeClass('borksyHD');
 	}
 }
 
@@ -129,16 +136,12 @@ function saveTemplateExtras($this) {
 	const noSavedGameData = localStorage.getItem('gamedata') == null;
 	const HDgamedata = defaults.gamedataHD;
 	const HDgamedataExists = HDgamedata !== undefined;
-	const $mascot = $('#mascot');
 	if (isHD) {
-		$mascot.addClass('borksyHD');
 		if (noSavedGameData && HDgamedataExists) {
 			const $gamedata = $('#gamedata');
 			$gamedata.val(HDgamedata);
 			saveThisData($gamedata);
 		}
-	} else {
-		$mascot.removeClass('borksyHD');
 	}
 }
 
@@ -568,12 +571,14 @@ function setHotKeys() {
 	});
 }
 
+$('#download-button').on('click', assembleAndDownloadFile);
+$('#restore-button').on('click', restoreDefaults);
+$('#mascot').on('click', togglePartyMode);
+$('#template').on('change', onTemplateChanged);
 activateCollapsibles();
 loadAboutInfo();
 loadTemplates();
 loadDefaults();
 replaceElements();
-$('#download-button').on('click', assembleAndDownloadFile);
-$('#restore-button').on('click', restoreDefaults);
 setHotKeys();
-$('#mascot').on('click', togglePartyMode);
+$('#template').trigger('change');
