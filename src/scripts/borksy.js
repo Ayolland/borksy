@@ -546,7 +546,7 @@ function activateThisCollapsible($thisCollapsible) {
 }
 
 function setHotKeys() {
-	$(window).bind('keydown', event => {
+	$(window).on('keydown', event => {
 		if (event.ctrlKey || event.metaKey) {
 			switch (String.fromCharCode(event.which).toLowerCase()) {
 				case 's':
