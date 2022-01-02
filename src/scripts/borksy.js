@@ -106,12 +106,23 @@ function loadThisData($this) {
 
 function onTemplateChanged(event) {
 	const { value } = event.currentTarget;
-	console.log(value);
-	if (value.includes('HD')) {
+	const template = templates.find(i => i.id === value);
+	if (!template) {
+		$('#template').val(templates.find(i => i.isDefault).id);
+		onTemplateChanged(event);
+		return;
+	}
+	if (template.isHd) {
 		$('#mascot').addClass('borksyHD');
-		console.log('BitsyHD detected');
 	} else {
 		$('#mascot').removeClass('borksyHD');
+	}
+	if (template.bitsyVersion === pkgHacks.bitsyVersion) {
+		$('#legacy-version-warning').hide();
+		$('[data-header="Bitsy Version"] > summary').text('Bitsy Version');
+	} else {
+		$('#legacy-version-warning').show();
+		$('[data-header="Bitsy Version"] > summary').text('❗ Bitsy Version ❗');
 	}
 }
 
