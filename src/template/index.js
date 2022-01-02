@@ -9,6 +9,7 @@ import Bitsy711 from './Bitsy.7.11.hbs';
 import Bitsy72 from './Bitsy.7.2.hbs';
 import Bitsy78 from './Bitsy.7.8.hbs';
 import BitsyHD51 from './BitsyHD.5.1.hbs';
+import BitsyHD711 from './BitsyHD.7.11.hbs';
 
 export default [
 	{ data: BitsyHD51, bitsyVersion: '5.1', isHd: true, description: 'Bitsy HD (Bitsy 5.1)' },
@@ -21,5 +22,6 @@ export default [
 	{ data: Bitsy72, bitsyVersion: '7.2', description: 'Bitsy 7.2' },
 	{ data: Bitsy78, bitsyVersion: '7.8', description: 'Bitsy 7.8' },
 	{ data: Bitsy710, bitsyVersion: '7.10', description: 'Bitsy 7.10' },
+	{ data: BitsyHD711, bitsyVersion: '7.11', isHd: true, description: 'Bitsy HD (Bitsy 7.11)' },
 	{ data: Bitsy711, bitsyVersion: '7.11', description: 'Bitsy 7.11', isDefault: true },
 ].map(i => ({ ...i, id: `Bitsy${i.isHd ? 'HD' : ''}${i.bitsyVersion.replace(/\./g, '')}` }));
