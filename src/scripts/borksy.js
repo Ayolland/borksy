@@ -365,14 +365,19 @@ function loadDefaults(checkSaveData = true) {
 }
 
 function restoreDefaults() {
-	if (window.confirm('Are you sure you want to erase all data and restore defaults?')) {
-		Array.from(document.querySelectorAll('[data-save]')).forEach(i => {
-			localStorage.removeItem($(i).attr('name'));
-		});
-		console.log('Cookies removed');
-		loadDefaults(false);
-		$('#mascot').removeClass('borksyHD');
+	let confirm;
+	try {
+		confirm = window.confirm('Are you sure you want to erase all data and restore defaults?');
+	} catch {
+		confirm = true;
 	}
+	if (!confirm) return;
+	Array.from(document.querySelectorAll('[data-save]')).forEach(i => {
+		localStorage.removeItem($(i).attr('name'));
+	});
+	console.log('Cookies removed');
+	loadDefaults(false);
+	$('#mascot').removeClass('borksyHD');
 }
 
 function onFontImageLoaded() {
