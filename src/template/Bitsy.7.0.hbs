@@ -3,389 +3,28 @@
 
 <!-- HEADER -->
 
-<!-- Borksy BORKSY-VERSION -->
-<!-- bitsy-hacks BORKSY-HACKS-VERSION -->
-<!-- Bitsy 7.8 -->
+<!-- Borksy {{BORKSY-VERSION}} -->
+<!-- bitsy-hacks {{HACKS-VERSION}} -->
+<!-- Bitsy 7.0 -->
 <head>
 
 <meta charset="UTF-8">
 
-<title>BORKSY-TITLE</title>
+<title>{{TITLE}}</title>
 
 <script type="text/bitsyGameData" id="exportedGameData">
-BORKSY-GAMEDATA
+{{{GAMEDATA}}}
 </script>
 
 <style>
-BORKSY-CSS
+{{{CSS}}}
 </style>
 
 <!-- SCRIPTS -->
 <script>
 function startExportedGame() {
-	attachCanvas(document.getElementById("game"));
-	loadGame(document.getElementById("exportedGameData").text.slice(1));
-}
-</script>
-
-<script>
-/* logging */
-var DebugLogCategory = {
-	bitsy : false,
-	editor : false,
-};
-
-/* input */
-var key = {
-	left : 37,
-	right : 39,
-	up : 38,
-	down : 40,
-	space : 32,
-	enter : 13,
-	w : 87,
-	a : 65,
-	s : 83,
-	d : 68,
-	r : 82,
-	shift : 16,
-	ctrl : 17,
-	alt : 18,
-	cmd : 224
-};
-
-var InputManager = function() {
-	var self = this;
-
-	var pressed;
-	var ignored;
-	var newKeyPress;
-	var touchState;
-
-	var SwipeDir = {
-		None : -1,
-		Up : 0,
-		Down : 1,
-		Left : 2,
-		Right : 3,
-	};
-
-	function resetAll() {
-		pressed = {};
-		ignored = {};
-		newKeyPress = false;
-
-		touchState = {
-			isDown : false,
-			startX : 0,
-			startY : 0,
-			curX : 0,
-			curY : 0,
-			swipeDistance : 30,
-			swipeDirection : SwipeDir.None,
-			tapReleased : false
-		};
-	}
-	resetAll();
-
-	function stopWindowScrolling(e) {
-		if(e.keyCode == key.left || e.keyCode == key.right || e.keyCode == key.up || e.keyCode == key.down || !isPlayerEmbeddedInEditor)
-			e.preventDefault();
-	}
-
-	function tryRestartGame(e) {
-		/* RESTART GAME */
-		if ( e.keyCode === key.r && ( e.getModifierState("Control") || e.getModifierState("Meta") ) ) {
-			if ( confirm("Restart the game?") ) {
-				reset_cur_game();
-			}
-		}
-	}
-
-	function eventIsModifier(event) {
-		return (event.keyCode == key.shift || event.keyCode == key.ctrl || event.keyCode == key.alt || event.keyCode == key.cmd);
-	}
-
-	function isModifierKeyDown() {
-		return ( self.isKeyDown(key.shift) || self.isKeyDown(key.ctrl) || self.isKeyDown(key.alt) || self.isKeyDown(key.cmd) );
-	}
-
-	this.ignoreHeldKeys = function() {
-		for (var key in pressed) {
-			if (pressed[key]) { // only ignore keys that are actually held
-				ignored[key] = true;
-				// bitsyLog("IGNORE -- " + key);
-			}
-		}
-	}
-
-	this.onkeydown = function(event) {
-		// bitsyLog("KEYDOWN -- " + event.keyCode);
-
-		stopWindowScrolling(event);
-
-		tryRestartGame(event);
-
-		// Special keys being held down can interfere with keyup events and lock movement
-		// so just don't collect input when they're held
-		{
-			if (isModifierKeyDown()) {
-				return;
-			}
-
-			if (eventIsModifier(event)) {
-				resetAll();
-			}
-		}
-
-		if (ignored[event.keyCode]) {
-			return;
-		}
-
-		if (!self.isKeyDown(event.keyCode)) {
-			newKeyPress = true;
-		}
-
-		pressed[event.keyCode] = true;
-		ignored[event.keyCode] = false;
-	}
-
-	this.onkeyup = function(event) {
-		// bitsyLog("KEYUP -- " + event.keyCode);
-		pressed[event.keyCode] = false;
-		ignored[event.keyCode] = false;
-	}
-
-	this.ontouchstart = function(event) {
-		event.preventDefault();
-
-		if( event.changedTouches.length > 0 ) {
-			touchState.isDown = true;
-
-			touchState.startX = touchState.curX = event.changedTouches[0].clientX;
-			touchState.startY = touchState.curY = event.changedTouches[0].clientY;
-
-			touchState.swipeDirection = SwipeDir.None;
-		}
-	}
-
-	this.ontouchmove = function(event) {
-		event.preventDefault();
-
-		if( touchState.isDown && event.changedTouches.length > 0 ) {
-			touchState.curX = event.changedTouches[0].clientX;
-			touchState.curY = event.changedTouches[0].clientY;
-
-			var prevDirection = touchState.swipeDirection;
-
-			if( touchState.curX - touchState.startX <= -touchState.swipeDistance ) {
-				touchState.swipeDirection = SwipeDir.Left;
-			}
-			else if( touchState.curX - touchState.startX >= touchState.swipeDistance ) {
-				touchState.swipeDirection = SwipeDir.Right;
-			}
-			else if( touchState.curY - touchState.startY <= -touchState.swipeDistance ) {
-				touchState.swipeDirection = SwipeDir.Up;
-			}
-			else if( touchState.curY - touchState.startY >= touchState.swipeDistance ) {
-				touchState.swipeDirection = SwipeDir.Down;
-			}
-
-			if( touchState.swipeDirection != prevDirection ) {
-				// reset center so changing directions is easier
-				touchState.startX = touchState.curX;
-				touchState.startY = touchState.curY;
-			}
-		}
-	}
-
-	this.ontouchend = function(event) {
-		event.preventDefault();
-
-		touchState.isDown = false;
-
-		if( touchState.swipeDirection == SwipeDir.None ) {
-			// tap!
-			touchState.tapReleased = true;
-		}
-
-		touchState.swipeDirection = SwipeDir.None;
-	}
-
-	this.isKeyDown = function(keyCode) {
-		return pressed[keyCode] != null && pressed[keyCode] == true && (ignored[keyCode] == null || ignored[keyCode] == false);
-	}
-
-	this.anyKeyPressed = function() {
-		return newKeyPress;
-	}
-
-	this.resetKeyPressed = function() {
-		newKeyPress = false;
-	}
-
-	this.swipeLeft = function() {
-		return touchState.swipeDirection == SwipeDir.Left;
-	}
-
-	this.swipeRight = function() {
-		return touchState.swipeDirection == SwipeDir.Right;
-	}
-
-	this.swipeUp = function() {
-		return touchState.swipeDirection == SwipeDir.Up;
-	}
-
-	this.swipeDown = function() {
-		return touchState.swipeDirection == SwipeDir.Down;
-	}
-
-	this.isTapReleased = function() {
-		return touchState.tapReleased;
-	}
-
-	this.resetTapReleased = function() {
-		touchState.tapReleased = false;
-	}
-
-	this.onblur = function() {
-		// bitsyLog("~~~ BLUR ~~");
-		resetAll();
-	}
-}
-
-var input = new InputManager();
-
-/* events */
-var onLoadFunction = null;
-var onQuitFunction = null;
-var onUpdateFunction = null;
-var updateInterval = null;
-
-function loadGame(gameData) {
-	document.addEventListener('keydown', input.onkeydown);
-	document.addEventListener('keyup', input.onkeyup);
-
-	if (isPlayerEmbeddedInEditor) {
-		canvas.addEventListener('touchstart', input.ontouchstart, {passive:false});
-		canvas.addEventListener('touchmove', input.ontouchmove, {passive:false});
-		canvas.addEventListener('touchend', input.ontouchend, {passive:false});
-	}
-	else {
-		// creates a 'touchTrigger' element that covers the entire screen and can universally have touch event listeners added w/o issue.
-
-		// we're checking for existing touchTriggers both at game start and end, so it's slightly redundant.
-		var existingTouchTrigger = document.querySelector('#touchTrigger');
-
-		if (existingTouchTrigger === null) {
-			var touchTrigger = document.createElement("div");
-			touchTrigger.setAttribute("id","touchTrigger");
-
-			// afaik css in js is necessary here to force a fullscreen element
-			touchTrigger.setAttribute(
-				"style","position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden;"
-			);
-
-			document.body.appendChild(touchTrigger);
-
-			touchTrigger.addEventListener('touchstart', input.ontouchstart);
-			touchTrigger.addEventListener('touchmove', input.ontouchmove);
-			touchTrigger.addEventListener('touchend', input.ontouchend);
-		}
-	}
-
-	window.onblur = input.onblur;
-
-	if (onLoadFunction) {
-		onLoadFunction(gameData);
-	}
-
-	updateInterval = setInterval(
-		function() {
-			if (onUpdateFunction) {
-				onUpdateFunction();
-			}
-
-			input.resetKeyPressed();
-			input.resetTapReleased();
-		},
-		16);
-}
-
-function quitGame() {
-	document.removeEventListener('keydown', input.onkeydown);
-	document.removeEventListener('keyup', input.onkeyup);
-
-	if (isPlayerEmbeddedInEditor) {
-		canvas.removeEventListener('touchstart', input.ontouchstart);
-		canvas.removeEventListener('touchmove', input.ontouchmove);
-		canvas.removeEventListener('touchend', input.ontouchend);
-	}
-	else {
-		//check for touchTrigger and removes it
-
-		var existingTouchTrigger = document.querySelector('#touchTrigger');
-
-		if (existingTouchTrigger !== null) {
-			existingTouchTrigger.removeEventListener('touchstart', input.ontouchstart);
-			existingTouchTrigger.removeEventListener('touchmove', input.ontouchmove);
-			existingTouchTrigger.removeEventListener('touchend', input.ontouchend);
-
-			existingTouchTrigger.parentElement.removeChild(existingTouchTrigger);
-		}
-	}
-
-	window.onblur = null;
-
-	if (onQuitFunction) {
-		onQuitFunction();
-	}
-
-	clearInterval(updateInterval);
-}
-
-/* ==== */
-function bitsyLog(message, category) {
-	if (!category) {
-		category = "bitsy";
-	}
-
-	if (DebugLogCategory[category] === true) {
-		console.log(category + "::" + message);
-	}
-}
-
-// todo : should 0 be used for any instead of null/undefined?
-function bitsyButton(buttonCode) {
-	switch (buttonCode) {
-		case 0: // UP
-			return (input.isKeyDown(key.up) || input.isKeyDown(key.w) || input.swipeUp());
-		case 1: // DOWN
-			return (input.isKeyDown(key.down) || input.isKeyDown(key.s) || input.swipeDown());
-		case 2: // LEFT
-			return (input.isKeyDown(key.left) || input.isKeyDown(key.a) || input.swipeLeft());
-		case 3: // RIGHT
-			return ((input.isKeyDown(key.right) || input.isKeyDown(key.d) || input.swipeRight()));
-	}
-
-	// if no code is supplied, check any key
-	return input.isKeyDown(key.up) || input.isKeyDown(key.w) ||
-		input.isKeyDown(key.down) || input.isKeyDown(key.s) ||
-		input.isKeyDown(key.left) || input.isKeyDown(key.a) ||
-		input.isKeyDown(key.right) || input.isKeyDown(key.d) ||
-		input.isTapReleased();
-}
-
-function bitsyOnLoad(fn) {
-	onLoadFunction = fn;
-}
-
-function bitsyOnQuit(fn) {
-	onQuitFunction = fn;
-}
-
-function bitsyOnUpdate(fn) {
-	onUpdateFunction = fn;
+	attachCanvas( document.getElementById("game") );
+	load_game( document.getElementById("exportedGameData").text.slice(1) );
 }
 </script>
 
@@ -530,7 +169,7 @@ function hslToRgb(h, s, l) {
     b = hue2rgb(p, q, h - 1/3);
   }
 
-  return [ Math.floor(r * 255), Math.floor(g * 255), Math.floor(b * 255) ];
+  return [ r * 255, g * 255, b * 255 ];
 }
 
 /**
@@ -580,7 +219,7 @@ var TransitionManager = function() {
 	var prevStep = -1; // used to avoid running post-process effect constantly
 
 	this.BeginTransition = function(startRoom,startX,startY,endRoom,endX,endY,effectName) {
-		// bitsyLog("--- START ROOM TRANSITION ---");
+		// console.log("--- START ROOM TRANSITION ---");
 
 		curEffect = effectName;
 
@@ -639,7 +278,7 @@ var TransitionManager = function() {
 		var step = Math.floor(transitionDelta * maxStep);
 
 		if (step != prevStep) {
-			// bitsyLog("step! " + step + " " + transitionDelta);
+			// console.log("step! " + step + " " + transitionDelta);
 			for (var y = 0; y < effectImage.Height; y++) {
 				for (var x = 0; x < effectImage.Width; x++) {
 					var color = transitionEffects[curEffect].pixelEffectFunc(transitionStart,transitionEnd,x,y,(step / maxStep));
@@ -967,8 +606,8 @@ var PostProcessUtilities = {
 		return { r:r, g:g, b:b, a:a };
 	},
 	SetPixelColor : function(image,x,y,colorRgba) {
-		for (var yDelta = 0; yDelta < scale; yDelta++) {
-			for (var xDelta = 0; xDelta < scale; xDelta++) {
+		for (var yDelta = 0; yDelta <= scale; yDelta++) {
+			for (var xDelta = 0; xDelta <= scale; xDelta++) {
 				var pixelIndex = (((y * scale) + yDelta) * image.width * 4) + (((x * scale) + xDelta) * 4);
 				image.data[pixelIndex + 0] = colorRgba.r;
 				image.data[pixelIndex + 1] = colorRgba.g;
@@ -1094,10 +733,7 @@ function Font(fontData) {
 	var width = 6; // default size so if you have NO font or an invalid font it displays boxes
 	var height = 8;
 	var chardata = {};
-
-	// create invalid char data at default size in case the font is missing
 	var invalidCharData = {};
-	updateInvalidCharData();
 
 	this.getName = function() {
 		return name;
@@ -1140,37 +776,9 @@ function Font(fontData) {
 		return codeList;
 	}
 
-	function createCharData() {
-		return { 
-			width: width,
-			height: height,
-			offset: {
-				x: 0,
-				y: 0
-			},
-			spacing: width,
-			data: [],
-		};
-	}
-
-	function updateInvalidCharData() {
-		invalidCharData = createCharData();
-		for (var y = 0; y < height; y++) {
-			for (var x = 0; x < width; x++) {
-				if (x < width-1 && y < height-1) {
-					invalidCharData.data.push(1);
-				}
-				else {
-					invalidCharData.data.push(0);
-				}
-			}
-		}
-	}
-
 	function parseFont(fontData) {
-		if (fontData == null) {
+		if (fontData == null)
 			return;
-		}
 
 		var lines = fontData.split("\n");
 
@@ -1202,7 +810,16 @@ function Font(fontData) {
 
 					curCharLineCount = 0;
 					curCharCode = parseInt(args[1]);
-					chardata[curCharCode] = createCharData();
+					chardata[curCharCode] = { 
+						width: width,
+						height: height,
+						offset: {
+							x: 0,
+							y: 0
+						},
+						spacing: width,
+						data: []
+					};
 				}
 			}
 			else {
@@ -1249,8 +866,27 @@ function Font(fontData) {
 			}
 		}
 
-		// re-init invalid character box at the actual font size once it's loaded
-		updateInvalidCharData();
+		// init invalid character box
+		invalidCharData = { 
+			width: width,
+			height: height,
+			offset: {
+				x: 0,
+				y: 0
+			},
+			spacing: width, // TODO : name?
+			data: []
+		};
+		for (var y = 0; y < height; y++) {
+			for (var x = 0; x < width; x++) {
+				if (x < width-1 && y < height-1) {
+					invalidCharData.data.push(1);
+				}
+				else {
+					invalidCharData.data.push(0);
+				}
+			}
+		}
 	}
 
 	parseFont(fontData);
@@ -1278,7 +914,7 @@ var Interpreter = function() {
 
 	// TODO -- maybe this should return a string instead othe actual script??
 	this.Compile = function(scriptName, scriptStr) {
-		// bitsyLog("COMPILE");
+		// console.log("COMPILE");
 		var script = parser.Parse(scriptStr, scriptName);
 		env.SetScript(scriptName, script);
 	}
@@ -1294,7 +930,7 @@ var Interpreter = function() {
 		script.Eval( localEnv, function(result) { OnScriptReturn(localEnv, exitHandler); } );
 	}
 	this.Interpret = function(scriptStr, exitHandler, objectContext) { // Compiles and runs code immediately
-		// bitsyLog("INTERPRET");
+		// console.log("INTERPRET");
 		var localEnv = new LocalEnvironment(env);
 
 		if (objectContext) {
@@ -1369,7 +1005,7 @@ var Interpreter = function() {
 	function DebugVisualizeScriptTree(scriptTree) {
 		var printVisitor = {
 			Visit : function(node,depth) {
-				bitsyLog("-".repeat(depth) + "- " + node.ToString());
+				console.log("-".repeat(depth) + "- " + node.ToString());
 			},
 		};
 
@@ -1627,7 +1263,7 @@ var Utils = function() {
 
 /* BUILT-IN FUNCTIONS */ // TODO: better way to encapsulate these?
 function deprecatedFunc(environment,parameters,onReturn) {
-	bitsyLog("BITSY SCRIPT WARNING: Tried to use deprecated function");
+	console.log("BITSY SCRIPT WARNING: Tried to use deprecated function");
 	onReturn(null);
 }
 
@@ -1643,7 +1279,7 @@ function printFunc(environment, parameters, onReturn) {
 }
 
 function linebreakFunc(environment, parameters, onReturn) {
-	// bitsyLog("LINEBREAK FUNC");
+	// console.log("LINEBREAK FUNC");
 	environment.GetDialogBuffer().AddLinebreak();
 	environment.GetDialogBuffer().AddScriptReturn(function() { onReturn(null); });
 }
@@ -1768,7 +1404,7 @@ function propertyFunc(environment, parameters, onReturn) {
 		}
 	}
 
-	bitsyLog("PROPERTY! " + propertyName + " " + outValue);
+	console.log("PROPERTY! " + propertyName + " " + outValue);
 
 	onReturn(outValue);
 }
@@ -1822,7 +1458,7 @@ function exitFunc(environment,parameters,onReturn) {
 
 /* BUILT-IN OPERATORS */
 function setExp(environment,left,right,onReturn) {
-	// bitsyLog("SET " + left.name);
+	// console.log("SET " + left.name);
 
 	if(left.type != "variable") {
 		// not a variable! return null and hope for the best D:
@@ -1832,16 +1468,16 @@ function setExp(environment,left,right,onReturn) {
 
 	right.Eval(environment,function(rVal) {
 		environment.SetVariable( left.name, rVal );
-		// bitsyLog("VAL " + environment.GetVariable( left.name ) );
+		// console.log("VAL " + environment.GetVariable( left.name ) );
 		left.Eval(environment,function(lVal) {
 			onReturn( lVal );
 		});
 	});
 }
 function equalExp(environment,left,right,onReturn) {
-	// bitsyLog("EVAL EQUAL");
-	// bitsyLog(left);
-	// bitsyLog(right);
+	// console.log("EVAL EQUAL");
+	// console.log(left);
+	// console.log(right);
 	right.Eval(environment,function(rVal){
 		left.Eval(environment,function(lVal){
 			onReturn( lVal === rVal );
@@ -1945,7 +1581,7 @@ var Environment = function() {
 	this.HasVariable = function(name) { return variableMap.has(name); };
 	this.GetVariable = function(name) { return variableMap.get(name); };
 	this.SetVariable = function(name,value,useHandler) {
-		// bitsyLog("SET VARIABLE " + name + " = " + value);
+		// console.log("SET VARIABLE " + name + " = " + value);
 		if(useHandler === undefined) useHandler = true;
 		variableMap.set(name, value);
 		if(onVariableChangeHandler != null && useHandler){
@@ -2071,7 +1707,7 @@ function leadingWhitespace(depth) {
 	for(var i = 0; i < depth; i++) {
 		str += "  "; // two spaces per indent
 	}
-	// bitsyLog("WHITESPACE " + depth + " ::" + str + "::");
+	// console.log("WHITESPACE " + depth + " ::" + str + "::");
 	return str;
 }
 
@@ -2109,7 +1745,7 @@ var TreeRelationship = function() {
 
 	this.rootId = null; // for debugging
 	this.GetId = function() {
-		// bitsyLog(this);
+		// console.log(this);
 		if (this.rootId != null) {
 			return this.rootId;
 		}
@@ -2131,7 +1767,7 @@ var DialogBlockNode = function(doIndentFirstLine) {
 	this.type = "dialog_block";
 
 	this.Eval = function(environment, onReturn) {
-		// bitsyLog("EVAL BLOCK " + this.children.length);
+		// console.log("EVAL BLOCK " + this.children.length);
 
 		if (isPlayerEmbeddedInEditor && events != undefined && events != null) {
 			events.Raise("script_node_enter", { id: this.GetId() });
@@ -2142,9 +1778,9 @@ var DialogBlockNode = function(doIndentFirstLine) {
 
 		function evalChildren(children, done) {
 			if (i < children.length) {
-				// bitsyLog(">> CHILD " + i);
+				// console.log(">> CHILD " + i);
 				children[i].Eval(environment, function(val) {
-					// bitsyLog("<< CHILD " + i);
+					// console.log("<< CHILD " + i);
 					lastVal = val;
 					i++;
 					evalChildren(children,done);
@@ -2181,14 +1817,29 @@ var DialogBlockNode = function(doIndentFirstLine) {
 
 			var curNode = this.children[i];
 
+			var curNodeIsNonInlineCode = curNode.type === "code_block" && !isInlineCode(curNode);
+			var prevNodeIsNonInlineCode = lastNode && lastNode.type === "code_block" && !isInlineCode(lastNode);
+
 			var shouldIndentFirstLine = (i == 0 && doIndentFirstLine);
 			var shouldIndentAfterLinebreak = (lastNode && lastNode.type === "function" && lastNode.name === "br");
+			var shouldIndentCodeBlock = i > 0 && curNodeIsNonInlineCode;
+			var shouldIndentAfterCodeBlock = prevNodeIsNonInlineCode;
 
-			if (shouldIndentFirstLine || shouldIndentAfterLinebreak) {
+			// need to insert a newline before the first block of non-inline code that isn't 
+			// preceded by a {br}, since those will create their own newline
+			if (i > 0 && curNodeIsNonInlineCode && !prevNodeIsNonInlineCode && !shouldIndentAfterLinebreak) {
+				str += "\n";
+			}
+
+			if (shouldIndentFirstLine || shouldIndentAfterLinebreak || shouldIndentCodeBlock || shouldIndentAfterCodeBlock) {
 				str += leadingWhitespace(depth);
 			}
 
 			str += curNode.Serialize(depth);
+
+			if (i < this.children.length-1 && curNodeIsNonInlineCode) {
+				str += "\n";
+			}
 
 			lastNode = curNode;
 		}
@@ -2206,7 +1857,7 @@ var CodeBlockNode = function() {
 	this.type = "code_block";
 
 	this.Eval = function(environment, onReturn) {
-		// bitsyLog("EVAL BLOCK " + this.children.length);
+		// console.log("EVAL BLOCK " + this.children.length);
 
 		if (isPlayerEmbeddedInEditor && events != undefined && events != null) {
 			events.Raise("script_node_enter", { id: this.GetId() });
@@ -2217,9 +1868,9 @@ var CodeBlockNode = function() {
 
 		function evalChildren(children, done) {
 			if (i < children.length) {
-				// bitsyLog(">> CHILD " + i);
+				// console.log(">> CHILD " + i);
 				children[i].Eval(environment, function(val) {
-					// bitsyLog("<< CHILD " + i);
+					// console.log("<< CHILD " + i);
 					lastVal = val;
 					i++;
 					evalChildren(children,done);
@@ -2245,9 +1896,9 @@ var CodeBlockNode = function() {
 			depth = 0;
 		}
 
-		// bitsyLog("SERIALIZE BLOCK!!!");
-		// bitsyLog(depth);
-		// bitsyLog(doIndentFirstLine);
+		// console.log("SERIALIZE BLOCK!!!");
+		// console.log(depth);
+		// console.log(doIndentFirstLine);
 
 		var str = "{"; // todo: increase scope of Sym?
 
@@ -2446,7 +2097,7 @@ var VarNode = function(name) {
 	this.name = name;
 
 	this.Eval = function(environment,onReturn) {
-		// bitsyLog("EVAL " + this.name + " " + environment.HasVariable(this.name) + " " + environment.GetVariable(this.name));
+		// console.log("EVAL " + this.name + " " + environment.HasVariable(this.name) + " " + environment.GetVariable(this.name));
 		if( environment.HasVariable(this.name) )
 			onReturn( environment.GetVariable( this.name ) );
 		else
@@ -2471,11 +2122,11 @@ var ExpNode = function(operator, left, right) {
 	this.right = right;
 
 	this.Eval = function(environment,onReturn) {
-		// bitsyLog("EVAL " + this.operator);
+		// console.log("EVAL " + this.operator);
 		var self = this; // hack to deal with scope
 		environment.EvalOperator( this.operator, this.left, this.right, 
 			function(val){
-				// bitsyLog("EVAL EXP " + self.operator + " " + val);
+				// console.log("EVAL EXP " + self.operator + " " + val);
 				onReturn(val);
 			} );
 		// NOTE : sadly this pushes a lot of complexity down onto the actual operator methods
@@ -2558,7 +2209,7 @@ var SequenceNode = function(options) {
 
 	var index = 0;
 	this.Eval = function(environment, onReturn) {
-		// bitsyLog("SEQUENCE " + index);
+		// console.log("SEQUENCE " + index);
 		this.children[index].Eval(environment, onReturn);
 
 		var next = index + 1;
@@ -2576,7 +2227,7 @@ var CycleNode = function(options) {
 
 	var index = 0;
 	this.Eval = function(environment, onReturn) {
-		// bitsyLog("CYCLE " + index);
+		// console.log("CYCLE " + index);
 		this.children[index].Eval(environment, onReturn);
 
 		var next = index + 1;
@@ -2629,7 +2280,7 @@ var IfNode = function(conditions, results, isSingleLine) {
 
 	var self = this;
 	this.Eval = function(environment, onReturn) {
-		// bitsyLog("EVAL IF");
+		// console.log("EVAL IF");
 		var i = 0;
 		function TestCondition() {
 			self.children[i].Eval(environment, function(result) {
@@ -2781,8 +2432,8 @@ var Parser = function(env) {
 		rootNode.rootId = rootId;
 		var state = new ParserState(rootNode, scriptStr);
 
-		bitsyLog(scriptStr);
-		bitsyLog(state.Source());
+		console.log(scriptStr);
+		console.log(state.Source());
 
 		if (state.MatchAhead(Sym.DialogOpen)) {
 			// multi-line dialog block
@@ -2812,10 +2463,10 @@ var Parser = function(env) {
 		this.Char = function() { return sourceStr[i]; };
 		this.Step = function(n) { if(n===undefined) n=1; i += n; };
 		this.MatchAhead = function(str) {
-			// bitsyLog(str);
+			// console.log(str);
 			str = "" + str; // hack to turn single chars into strings
-			// bitsyLog(str);
-			// bitsyLog(str.length);
+			// console.log(str);
+			// console.log(str.length);
 			for (var j = 0; j < str.length; j++) {
 				if (i + j >= sourceStr.length) {
 					return false;
@@ -2829,12 +2480,12 @@ var Parser = function(env) {
 		this.Peak = function(end) {
 			var str = "";
 			var j = i;
-			// bitsyLog(j);
+			// console.log(j);
 			while (j < sourceStr.length && end.indexOf(sourceStr[j]) == -1) {
 				str += sourceStr[j];
 				j++;
 			}
-			// bitsyLog("PEAK ::" + str + "::");
+			// console.log("PEAK ::" + str + "::");
 			return str;
 		}
 		this.ConsumeBlock = function(open, close, includeSymbols) {
@@ -2872,7 +2523,7 @@ var Parser = function(env) {
 			}
 		}
 
-		this.Print = function() { bitsyLog(sourceStr); };
+		this.Print = function() { console.log(sourceStr); };
 		this.Source = function() { return sourceStr; };
 	};
 
@@ -3129,7 +2780,7 @@ var Parser = function(env) {
 	}
 
 	function IsSequence(str) {
-		// bitsyLog("IsSequence? " + str);
+		// console.log("IsSequence? " + str);
 		return str === "sequence" || str === "cycle" || str === "shuffle";
 	}
 
@@ -3253,16 +2904,16 @@ var Parser = function(env) {
 	}
 
 	function ParseFunction(state, funcName) {
-		bitsyLog("~~~ PARSE FUNCTION " + funcName);
+		console.log("~~~ PARSE FUNCTION " + funcName);
 
 		var args = [];
 
 		var curSymbol = "";
 		function OnSymbolEnd() {
 			curSymbol = curSymbol.trim();
-			// bitsyLog("PARAMTER " + curSymbol);
+			// console.log("PARAMTER " + curSymbol);
 			args.push( StringToValue(curSymbol) );
-			// bitsyLog(args);
+			// console.log(args);
 			curSymbol = "";
 		}
 
@@ -3277,7 +2928,7 @@ var Parser = function(env) {
 			else if( state.MatchAhead(Sym.String) ) {
 				/* STRING LITERAL */
 				var str = state.ConsumeBlock(Sym.String, Sym.String);
-				// bitsyLog("STRING " + str);
+				// console.log("STRING " + str);
 				args.push( new LiteralNode(str) );
 				curSymbol = "";
 			}
@@ -3302,7 +2953,7 @@ var Parser = function(env) {
 	function IsValidVariableName(str) {
 		var reg = /^[a-zA-Z_$][a-zA-Z_$0-9]*$/;
 		var isValid = reg.test(str);
-		// bitsyLog("VALID variable??? " + isValid);
+		// console.log("VALID variable??? " + isValid);
 		return isValid;
 	}
 
@@ -3316,14 +2967,14 @@ var Parser = function(env) {
 		}
 		else if(valStr[0] === Sym.String) {
 			// STRING!!
-			// bitsyLog("STRING");
+			// console.log("STRING");
 			var str = "";
 			var i = 1;
 			while (i < valStr.length && valStr[i] != Sym.String) {
 				str += valStr[i];
 				i++;
 			}
-			// bitsyLog(str);
+			// console.log(str);
 			return new LiteralNode( str );
 		}
 		else if(valStr === "true") {
@@ -3336,12 +2987,12 @@ var Parser = function(env) {
 		}
 		else if( !isNaN(parseFloat(valStr)) ) {
 			// NUMBER!!
-			// bitsyLog("NUMBER!!! " + valStr);
+			// console.log("NUMBER!!! " + valStr);
 			return new LiteralNode( parseFloat(valStr) );
 		}
 		else if(IsValidVariableName(valStr)) {
 			// VARIABLE!!
-			// bitsyLog("VARIABLE");
+			// console.log("VARIABLE");
 			return new VarNode(valStr); // TODO : check for valid potential variables
 		}
 		else {
@@ -3482,9 +3133,9 @@ var Parser = function(env) {
 
 	function ParseExpression(state) {
 		var line = state.Source(); // state.Peak( [Sym.Linebreak] ); // TODO : remove the linebreak thing
-		// bitsyLog("EXPRESSION " + line);
+		// console.log("EXPRESSION " + line);
 		var exp = CreateExpression(line);
-		// bitsyLog(exp);
+		// console.log(exp);
 		state.curNode.AddChild(exp);
 		state.Step(line.length);
 		return state;
@@ -3649,7 +3300,7 @@ var DialogRenderer = function() {
 		0,0,1,0,0
 	];
 	this.DrawNextArrow = function() {
-		// bitsyLog("draw arrow!");
+		// console.log("draw arrow!");
 		var top = (textboxInfo.height-5) * scale;
 		var left = (textboxInfo.width-(5+4)) * scale;
 		if (textDirection === TextDirection.RightToLeft) { // RTL hack
@@ -3796,7 +3447,7 @@ var DialogBuffer = function() {
 		for (var i = 0; i < rowCount; i++) {
 			var row = this.CurPage()[i];
 			var charCount = (i == rowIndex) ? charIndex+1 : row.length;
-			// bitsyLog(charCount);
+			// console.log(charCount);
 
 			var leftPos = 0;
 			if (textDirection === TextDirection.RightToLeft) {
@@ -3809,7 +3460,7 @@ var DialogBuffer = function() {
 					if (textDirection === TextDirection.RightToLeft) {
 						leftPos -= char.spacing;
 					}
-					// bitsyLog(j + " " + leftPos);
+					// console.log(j + " " + leftPos);
 
 					// handler( char, i /*rowIndex*/, j /*colIndex*/ );
 					handler(char, i /*rowIndex*/, j /*colIndex*/, leftPos)
@@ -3884,7 +3535,7 @@ var DialogBuffer = function() {
 	};
 
 	this.Skip = function() {
-		bitsyLog("SKIPPP");
+		console.log("SKIPPP");
 		didPageFinishThisFrame = false;
 		didFlipPageThisFrame = false;
 		// add new characters until you get to the end of the current line of dialog
@@ -3920,7 +3571,7 @@ var DialogBuffer = function() {
 	var afterManualPagebreak = false; // is it bad to track this state like this?
 
 	this.Continue = function() {
-		bitsyLog("CONTINUE");
+		console.log("CONTINUE");
 
 		// if we used a page break character to continue we need
 		// to run whatever is in the script afterwards! // TODO : make this comment better
@@ -3933,13 +3584,13 @@ var DialogBuffer = function() {
 			return false;
 		}
 		if (pageIndex + 1 < this.CurPageCount()) {
-			bitsyLog("FLIP PAGE!");
+			console.log("FLIP PAGE!");
 			//start next page
 			this.FlipPage();
 			return true; /* hasMoreDialog */
 		}
 		else {
-			bitsyLog("END DIALOG!");
+			console.log("END DIALOG!");
 			//end dialog mode
 			this.EndDialog();
 			return false; /* hasMoreDialog */
@@ -3970,17 +3621,17 @@ var DialogBuffer = function() {
 		this.row = 0;
 
 		this.SetPosition = function(row,col) {
-			// bitsyLog("SET POS");
-			// bitsyLog(this);
+			// console.log("SET POS");
+			// console.log(this);
 			this.row = row;
 			this.col = col;
 		}
 
 		this.ApplyEffects = function(time) {
-			// bitsyLog("APPLY EFFECTS! " + time);
+			// console.log("APPLY EFFECTS! " + time);
 			for(var i = 0; i < this.effectList.length; i++) {
 				var effectName = this.effectList[i];
-				// bitsyLog("FX " + effectName);
+				// console.log("FX " + effectName);
 				TextEffects[ effectName ].DoEffect( this, time );
 			}
 		}
@@ -3991,7 +3642,7 @@ var DialogBuffer = function() {
 		}
 		this.OnPrint = function() {
 			if (printHandler != null) {
-				// bitsyLog("PRINT HANDLER ---- DIALOG BUFFER");
+				// console.log("PRINT HANDLER ---- DIALOG BUFFER");
 				printHandler();
 				printHandler = null; // only call handler once (hacky)
 			}
@@ -4025,7 +3676,7 @@ var DialogBuffer = function() {
 		var imageData = renderer.GetImageSource(drawingId)[0];
 		var imageDataFlat = [];
 		for (var i = 0; i < imageData.length; i++) {
-			// bitsyLog(imageData[i]);
+			// console.log(imageData[i]);
 			imageDataFlat = imageDataFlat.concat(imageData[i]);
 		}
 
@@ -4106,7 +3757,7 @@ var DialogBuffer = function() {
 	}
 
 	this.AddDrawing = function(drawingId) {
-		// bitsyLog("DRAWING ID " + drawingId);
+		// console.log("DRAWING ID " + drawingId);
 
 		var curPageIndex = buffer.length - 1;
 		var curRowIndex = buffer[curPageIndex].length - 1;
@@ -4158,7 +3809,7 @@ var DialogBuffer = function() {
 
 	// TODO : convert this into something that takes DialogChar arrays
 	this.AddText = function(textStr) {
-		bitsyLog("ADD TEXT " + textStr);
+		console.log("ADD TEXT " + textStr);
 
 		//process dialog so it's easier to display
 		var words = textStr.split(" ");
@@ -4237,7 +3888,7 @@ var DialogBuffer = function() {
 			var lastChar = lastRow[lastRow.length-1];
 		}
 
-		// bitsyLog(buffer);
+		// console.log(buffer);
 
 		isActive = true;
 	};
@@ -4245,7 +3896,7 @@ var DialogBuffer = function() {
 	this.AddLinebreak = function() {
 		var lastPage = buffer[buffer.length-1];
 		if (lastPage.length <= 1) {
-			// bitsyLog("LINEBREAK - NEW ROW ");
+			// console.log("LINEBREAK - NEW ROW ");
 			// add new row
 			lastPage.push([]);
 		}
@@ -4253,7 +3904,7 @@ var DialogBuffer = function() {
 			// add new page
 			buffer.push([[]]);
 		}
-		// bitsyLog(buffer);
+		// console.log(buffer);
 
 		isActive = true;
 	}
@@ -4465,10 +4116,10 @@ var TextEffects = new Map();
 
 var RainbowEffect = function() { // TODO - should it be an object or just a method?
 	this.DoEffect = function(char,time) {
-		// bitsyLog("RAINBOW!!!");
-		// bitsyLog(char);
-		// bitsyLog(char.color);
-		// bitsyLog(char.col);
+		// console.log("RAINBOW!!!");
+		// console.log(char);
+		// console.log(char.color);
+		// console.log(char.col);
 
 		var h = Math.abs( Math.sin( (time / 600) - (char.col / 8) ) );
 		var rgb = hslToRgb( h, 1, 0.5 );
@@ -4484,7 +4135,7 @@ var ColorEffect = function(index) {
 	this.DoEffect = function(char) {
 		var pal = getPal( curPal() );
 		var color = pal[ parseInt( index ) ];
-		// bitsyLog(color);
+		// console.log(color);
 		char.color.r = color[0];
 		char.color.g = color[1];
 		char.color.b = color[2];
@@ -4547,7 +4198,7 @@ TODO
 
 function Renderer(tilesize, scale) {
 
-bitsyLog("!!!!! NEW RENDERER");
+console.log("!!!!! NEW RENDERER");
 
 var imageStore = { // TODO : rename to imageCache
 	source: {},
@@ -4589,7 +4240,7 @@ var debugRenderCount = 0;
 // TODO : change image store path from (pal > col > draw) to (draw > pal > col)
 function renderImage(drawing, paletteId) {
 	// debugRenderCount++;
-	// bitsyLog("RENDER COUNT " + debugRenderCount);
+	// console.log("RENDER COUNT " + debugRenderCount);
 
 	var col = drawing.col;
 	var colStr = "" + col;
@@ -4617,7 +4268,7 @@ function renderImage(drawing, paletteId) {
 }
 
 function imageDataFromImageSource(imageSource, pal, col) {
-	//bitsyLog(imageSource);
+	//console.log(imageSource);
 
 	var img = context.createImageData(tilesize*scale,tilesize*scale);
 
@@ -4726,10 +4377,6 @@ this.AttachContext = function(ctx) {
 	context = ctx;
 }
 
-this.ClearCache = function() {
-	imageStore.render = {};
-}
-
 } // Renderer()
 </script>
 
@@ -4800,7 +4447,7 @@ var spriteStartLocations = {};
 /* VERSION */
 var version = {
 	major: 7, // major changes
-	minor: 8, // smaller changes
+	minor: 0, // smaller changes
 	devBuildPhase: "RELEASE",
 };
 function getEngineVersion() {
@@ -4861,14 +4508,37 @@ var mapsize = 16;
 
 var curRoom = "0";
 
+var key = {
+	left : 37,
+	right : 39,
+	up : 38,
+	down : 40,
+	space : 32,
+	enter : 13,
+	w : 87,
+	a : 65,
+	s : 83,
+	d : 68,
+	r : 82,
+	shift : 16,
+	ctrl : 17,
+	alt : 18,
+	cmd : 224
+};
+
 var prevTime = 0;
 var deltaTime = 0;
 
-// engine event hooks for the editor
+//methods used to trigger gif recording
+var didPlayerMoveThisFrame = false;
+var onPlayerMoved = null;
+// var didDialogUpdateThisFrame = false;
+var onDialogUpdate = null;
+
+//inventory update UI handles
 var onInventoryChanged = null;
 var onVariableChanged = null;
 var onGameReset = null;
-var onInitRoom = null;
 
 var isPlayerEmbeddedInEditor = false;
 
@@ -4876,7 +4546,7 @@ var renderer = new Renderer(tilesize, scale);
 
 function getGameNameFromURL() {
 	var game = window.location.hash.substring(1);
-	// bitsyLog("game name --- " + game);
+	// console.log("game name --- " + game);
 	return game;
 }
 
@@ -4909,6 +4579,8 @@ function load_game(game_data, startWithTitle) {
 
 	setInitialVariables();
 
+	// setInterval(updateLoadingScreen, 300); // hack test
+
 	onready(startWithTitle);
 }
 
@@ -4926,12 +4598,48 @@ function reset_cur_game() {
 	}
 }
 
+var update_interval = null;
 function onready(startWithTitle) {
-	if (startWithTitle === undefined || startWithTitle === null) {
-		startWithTitle = true;
+	if(startWithTitle === undefined || startWithTitle === null) startWithTitle = true;
+
+	clearInterval(loading_interval);
+
+	input = new InputManager();
+
+	document.addEventListener('keydown', input.onkeydown);
+	document.addEventListener('keyup', input.onkeyup);
+
+	if (isPlayerEmbeddedInEditor) {
+		canvas.addEventListener('touchstart', input.ontouchstart, {passive:false});
+		canvas.addEventListener('touchmove', input.ontouchmove, {passive:false});
+		canvas.addEventListener('touchend', input.ontouchend, {passive:false});
+	}
+	else {
+		// creates a 'touchTrigger' element that covers the entire screen and can universally have touch event listeners added w/o issue.
+
+		// we're checking for existing touchTriggers both at game start and end, so it's slightly redundant.
+	  	var existingTouchTrigger = document.querySelector('#touchTrigger');
+	  	if (existingTouchTrigger === null){
+	  	  var touchTrigger = document.createElement("div");
+	  	  touchTrigger.setAttribute("id","touchTrigger");
+
+	  	  // afaik css in js is necessary here to force a fullscreen element
+	  	  touchTrigger.setAttribute(
+	  	    "style","position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden;"
+	  	  );
+	  	  document.body.appendChild(touchTrigger);
+
+	  	  touchTrigger.addEventListener('touchstart', input.ontouchstart);
+	  	  touchTrigger.addEventListener('touchmove', input.ontouchmove);
+	  	  touchTrigger.addEventListener('touchend', input.ontouchend);
+	  	}
 	}
 
-	if (startWithTitle) { // used by editor 
+	window.onblur = input.onblur;
+
+	update_interval = setInterval(update,16);
+
+	if(startWithTitle) { // used by editor 
 		startNarrating(getTitle());
 	}
 }
@@ -4969,7 +4677,32 @@ function getOffset(evt) {
 }
 
 function stopGame() {
-	bitsyLog("stop GAME!");
+	console.log("stop GAME!");
+
+	document.removeEventListener('keydown', input.onkeydown);
+	document.removeEventListener('keyup', input.onkeyup);
+
+	if (isPlayerEmbeddedInEditor) {
+		canvas.removeEventListener('touchstart', input.ontouchstart);
+		canvas.removeEventListener('touchmove', input.ontouchmove);
+		canvas.removeEventListener('touchend', input.ontouchend);
+	}
+	else {
+		//check for touchTrigger and removes it
+
+    		var existingTouchTrigger = document.querySelector('#touchTrigger');
+    		if (existingTouchTrigger !== null){
+    			existingTouchTrigger.removeEventListener('touchstart', input.ontouchstart);
+    			existingTouchTrigger.removeEventListener('touchmove', input.ontouchmove);
+    			existingTouchTrigger.removeEventListener('touchend', input.ontouchend);
+
+    			existingTouchTrigger.parentElement.removeChild(existingTouchTrigger);
+    		}
+	}
+
+	window.onblur = null;
+
+	clearInterval(update_interval);
 }
 
 /* loading animation */
@@ -5027,6 +4760,7 @@ var loading_anim_data = [
 ];
 var loading_anim_frame = 0;
 var loading_anim_speed = 500;
+var loading_interval = null;
 
 function loadingAnimation() {
 	//create image
@@ -5115,21 +4849,31 @@ function update() {
 	}
 
 	prevTime = curTime;
+
+	//for gif recording
+	if (didPlayerMoveThisFrame && onPlayerMoved != null) {
+		onPlayerMoved();
+	}
+	didPlayerMoveThisFrame = false;
+
+	/* hacky replacement */
+	if (onDialogUpdate != null) {
+		dialogRenderer.SetPageFinishHandler( onDialogUpdate );
+	}
+
+	input.resetKeyPressed();
+	input.resetTapReleased();
 }
 
-var isAnyButtonHeld = false;
-var isIgnoringInput = false;
-
 function updateInput() {
-	if (dialogBuffer.IsActive()) {
-		if (!isAnyButtonHeld && bitsyButton()) {
+	if( dialogBuffer.IsActive() ) {
+		if (input.anyKeyPressed() || input.isTapReleased()) {
 			/* CONTINUE DIALOG */
 			if (dialogBuffer.CanContinue()) {
 				var hasMoreDialog = dialogBuffer.Continue();
-				if (!hasMoreDialog) {
+				if(!hasMoreDialog) {
 					// ignore currently held keys UNTIL they are released (stops player from insta-moving)
-					isIgnoringInput = true;
-					curPlayerDirection = Direction.None;
+					input.ignoreHeldKeys();
 				}
 			}
 			else {
@@ -5137,43 +4881,37 @@ function updateInput() {
 			}
 		}
 	}
-	else if (isEnding) {
-		if (!isAnyButtonHeld && bitsyButton()) {
+	else if ( isEnding ) {
+		if (input.anyKeyPressed() || input.isTapReleased()) {
 			/* RESTART GAME */
 			reset_cur_game();
 		}
 	}
-	else if (!isIgnoringInput) {
+	else {
 		/* WALK */
 		var prevPlayerDirection = curPlayerDirection;
 
-		if (bitsyButton(0)) {
-			curPlayerDirection = Direction.Up;
-		}
-		else if (bitsyButton(1)) {
-			curPlayerDirection = Direction.Down;
-		}
-		else if (bitsyButton(2)) {
+		if ( input.isKeyDown( key.left ) || input.isKeyDown( key.a ) || input.swipeLeft() ) {
 			curPlayerDirection = Direction.Left;
 		}
-		else if (bitsyButton(3)) {
+		else if ( input.isKeyDown( key.right ) || input.isKeyDown( key.d ) || input.swipeRight() ) {
 			curPlayerDirection = Direction.Right;
+		}
+		else if ( input.isKeyDown( key.up ) || input.isKeyDown( key.w ) || input.swipeUp() ) {
+			curPlayerDirection = Direction.Up;
+		}
+		else if ( input.isKeyDown( key.down ) || input.isKeyDown( key.s ) || input.swipeDown() ) {
+			curPlayerDirection = Direction.Down;
 		}
 		else {
 			curPlayerDirection = Direction.None;
 		}
 
 		if (curPlayerDirection != Direction.None && curPlayerDirection != prevPlayerDirection) {
-			movePlayer(curPlayerDirection);
+			movePlayer( curPlayerDirection );
 			playerHoldToMoveTimer = 500;
 		}
 	}
-
-	if (!bitsyButton()) {
-		isIgnoringInput = false;
-	}
-
-	isAnyButtonHeld = bitsyButton();
 }
 
 var animationCounter = 0;
@@ -5259,6 +4997,199 @@ var Direction = {
 var curPlayerDirection = Direction.None;
 var playerHoldToMoveTimer = 0;
 
+var InputManager = function() {
+	var self = this;
+
+	var pressed;
+	var ignored;
+	var newKeyPress;
+	var touchState;
+
+	function resetAll() {
+		pressed = {};
+		ignored = {};
+		newKeyPress = false;
+
+		touchState = {
+			isDown : false,
+			startX : 0,
+			startY : 0,
+			curX : 0,
+			curY : 0,
+			swipeDistance : 30,
+			swipeDirection : Direction.None,
+			tapReleased : false
+		};
+	}
+	resetAll();
+
+	function stopWindowScrolling(e) {
+		if(e.keyCode == key.left || e.keyCode == key.right || e.keyCode == key.up || e.keyCode == key.down || !isPlayerEmbeddedInEditor)
+			e.preventDefault();
+	}
+
+	function tryRestartGame(e) {
+		/* RESTART GAME */
+		if ( e.keyCode === key.r && ( e.getModifierState("Control") || e.getModifierState("Meta") ) ) {
+			if ( confirm("Restart the game?") ) {
+				reset_cur_game();
+			}
+		}
+	}
+
+	function eventIsModifier(event) {
+		return (event.keyCode == key.shift || event.keyCode == key.ctrl || event.keyCode == key.alt || event.keyCode == key.cmd);
+	}
+
+	function isModifierKeyDown() {
+		return ( self.isKeyDown(key.shift) || self.isKeyDown(key.ctrl) || self.isKeyDown(key.alt) || self.isKeyDown(key.cmd) );
+	}
+
+	this.ignoreHeldKeys = function() {
+		for (var key in pressed) {
+			if (pressed[key]) { // only ignore keys that are actually held
+				ignored[key] = true;
+				// console.log("IGNORE -- " + key);
+			}
+		}
+	}
+
+	this.onkeydown = function(event) {
+		// console.log("KEYDOWN -- " + event.keyCode);
+
+		stopWindowScrolling(event);
+
+		tryRestartGame(event);
+
+		// Special keys being held down can interfere with keyup events and lock movement
+		// so just don't collect input when they're held
+		{
+			if (isModifierKeyDown()) {
+				return;
+			}
+
+			if (eventIsModifier(event)) {
+				resetAll();
+			}
+		}
+
+		if (ignored[event.keyCode]) {
+			return;
+		}
+
+		if (!self.isKeyDown(event.keyCode)) {
+			newKeyPress = true;
+		}
+
+		pressed[event.keyCode] = true;
+		ignored[event.keyCode] = false;
+	}
+
+	this.onkeyup = function(event) {
+		// console.log("KEYUP -- " + event.keyCode);
+		pressed[event.keyCode] = false;
+		ignored[event.keyCode] = false;
+	}
+
+	this.ontouchstart = function(event) {
+		event.preventDefault();
+
+		if( event.changedTouches.length > 0 ) {
+			touchState.isDown = true;
+
+			touchState.startX = touchState.curX = event.changedTouches[0].clientX;
+			touchState.startY = touchState.curY = event.changedTouches[0].clientY;
+
+			touchState.swipeDirection = Direction.None;
+		}
+	}
+
+	this.ontouchmove = function(event) {
+		event.preventDefault();
+
+		if( touchState.isDown && event.changedTouches.length > 0 ) {
+			touchState.curX = event.changedTouches[0].clientX;
+			touchState.curY = event.changedTouches[0].clientY;
+
+			var prevDirection = touchState.swipeDirection;
+
+			if( touchState.curX - touchState.startX <= -touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Left;
+			}
+			else if( touchState.curX - touchState.startX >= touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Right;
+			}
+			else if( touchState.curY - touchState.startY <= -touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Up;
+			}
+			else if( touchState.curY - touchState.startY >= touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Down;
+			}
+
+			if( touchState.swipeDirection != prevDirection ) {
+				// reset center so changing directions is easier
+				touchState.startX = touchState.curX;
+				touchState.startY = touchState.curY;
+			}
+		}
+	}
+
+	this.ontouchend = function(event) {
+		event.preventDefault();
+
+		touchState.isDown = false;
+
+		if( touchState.swipeDirection == Direction.None ) {
+			// tap!
+			touchState.tapReleased = true;
+		}
+
+		touchState.swipeDirection = Direction.None;
+	}
+
+	this.isKeyDown = function(keyCode) {
+		return pressed[keyCode] != null && pressed[keyCode] == true && (ignored[keyCode] == null || ignored[keyCode] == false);
+	}
+
+	this.anyKeyPressed = function() {
+		return newKeyPress;
+	}
+
+	this.resetKeyPressed = function() {
+		newKeyPress = false;
+	}
+
+	this.swipeLeft = function() {
+		return touchState.swipeDirection == Direction.Left;
+	}
+
+	this.swipeRight = function() {
+		return touchState.swipeDirection == Direction.Right;
+	}
+
+	this.swipeUp = function() {
+		return touchState.swipeDirection == Direction.Up;
+	}
+
+	this.swipeDown = function() {
+		return touchState.swipeDirection == Direction.Down;
+	}
+
+	this.isTapReleased = function() {
+		return touchState.tapReleased;
+	}
+
+	this.resetTapReleased = function() {
+		touchState.tapReleased = false;
+	}
+
+	this.onblur = function() {
+		// console.log("~~~ BLUR ~~");
+		resetAll();
+	}
+}
+var input = null;
+
 function movePlayer(direction) {
 	if (player().room == null || !Object.keys(room).includes(player().room)) {
 		return; // player room is missing or invalid.. can't move them!
@@ -5268,15 +5199,19 @@ function movePlayer(direction) {
 
 	if ( curPlayerDirection == Direction.Left && !(spr = getSpriteLeft()) && !isWallLeft()) {
 		player().x -= 1;
+		didPlayerMoveThisFrame = true;
 	}
 	else if ( curPlayerDirection == Direction.Right && !(spr = getSpriteRight()) && !isWallRight()) {
 		player().x += 1;
+		didPlayerMoveThisFrame = true;
 	}
 	else if ( curPlayerDirection == Direction.Up && !(spr = getSpriteUp()) && !isWallUp()) {
 		player().y -= 1;
+		didPlayerMoveThisFrame = true;
 	}
 	else if ( curPlayerDirection == Direction.Down && !(spr = getSpriteDown()) && !isWallDown()) {
 		player().y += 1;
+		didPlayerMoveThisFrame = true;
 	}
 	
 	var ext = getExit( player().room, player().x, player().y );
@@ -5364,10 +5299,6 @@ function initRoom(roomId) {
 	// init ending properties
 	for (var i = 0; i < room[roomId].endings.length; i++) {
 		room[roomId].endings[i].property = { locked:false };
-	}
-
-	if (onInitRoom) {
-		onInitRoom(roomId);
 	}
 }
 
@@ -5462,7 +5393,7 @@ function getEnding(roomId,x,y) {
 }
 
 function getTile(x,y) {
-	// bitsyLog(x + " " + y);
+	// console.log(x + " " + y);
 	var t = getRoom().tilemap[y][x];
 	return t;
 }
@@ -5508,7 +5439,7 @@ function parseWorld(file) {
 	while (i < lines.length) {
 		var curLine = lines[i];
 
-		// bitsyLog(lines[i]);
+		// console.log(lines[i]);
 
 		if (i == 0) {
 			i = parseTitle(lines, i);
@@ -5605,7 +5536,7 @@ function parseWorld(file) {
 
 function scriptCompatibility(compatibilityFlags) {
 	if (compatibilityFlags.convertSayToPrint) {
-		bitsyLog("CONVERT SAY TO PRINT!");
+		console.log("CONVERT SAY TO PRINT!");
 
 		var PrintFunctionVisitor = function() {
 			var didChange = false;
@@ -5871,13 +5802,13 @@ function isExitValid(e) {
 
 function placeSprites() {
 	for (id in spriteStartLocations) {
-		//bitsyLog(id);
-		//bitsyLog( spriteStartLocations[id] );
-		//bitsyLog(sprite[id]);
+		//console.log(id);
+		//console.log( spriteStartLocations[id] );
+		//console.log(sprite[id]);
 		sprite[id].room = spriteStartLocations[id].room;
 		sprite[id].x = spriteStartLocations[id].x;
 		sprite[id].y = spriteStartLocations[id].y;
-		//bitsyLog(sprite[id]);
+		//console.log(sprite[id]);
 	}
 }
 
@@ -5950,7 +5881,7 @@ function parseRoom(lines, i, compatibilityFlags) {
 	}
 
 	while (i < lines.length && lines[i].length > 0) { //look for empty line
-		// bitsyLog(getType(lines[i]));
+		// console.log(getType(lines[i]));
 		if (getType(lines[i]) === "SPR") {
 			/* NOTE SPRITE START LOCATIONS */
 			var sprId = getId(lines[i]);
@@ -6097,67 +6028,87 @@ function parsePalette(lines,i) { //todo this has to go first right now :(
 
 function parseTile(lines, i) {
 	var id = getId(lines[i]);
-	var tileData = createDrawingData("TIL", id);
+	var drwId = null;
+	var name = null;
 
 	i++;
 
-	// read & store tile image source
-	i = parseDrawingCore(lines, i, tileData.drw);
+	if (getType(lines[i]) === "DRW") { //load existing drawing
+		drwId = getId(lines[i]);
+		i++;
+	}
+	else {
+		// store tile source
+		drwId = "TIL_" + id;
+		i = parseDrawingCore( lines, i, drwId );
+	}
 
-	// update animation info
-	tileData.animation.frameCount = renderer.GetFrameCount(tileData.drw);
-	tileData.animation.isAnimated = tileData.animation.frameCount > 1;
-
-	// read other properties
-	while (i < lines.length && lines[i].length > 0) { // look for empty line
+	//other properties
+	var colorIndex = 1; // default palette color index is 1
+	var isWall = null; // null indicates it can vary from room to room (original version)
+	while (i < lines.length && lines[i].length > 0) { //look for empty line
 		if (getType(lines[i]) === "COL") {
-			tileData.col = parseInt(getId(lines[i]));
+			colorIndex = parseInt( getId(lines[i]) );
 		}
 		else if (getType(lines[i]) === "NAME") {
 			/* NAME */
-			tileData.name = lines[i].split(/\s(.+)/)[1];
-			names.tile.set(tileData.name, id);
+			name = lines[i].split(/\s(.+)/)[1];
+			names.tile.set( name, id );
 		}
 		else if (getType(lines[i]) === "WAL") {
-			var wallArg = getArg(lines[i], 1);
-			if (wallArg === "true") {
-				tileData.isWall = true;
+			var wallArg = getArg( lines[i], 1 );
+			if( wallArg === "true" ) {
+				isWall = true;
 			}
-			else if (wallArg === "false") {
-				tileData.isWall = false;
+			else if( wallArg === "false" ) {
+				isWall = false;
 			}
 		}
-
 		i++;
 	}
 
-	// store tile data
-	tile[id] = tileData;
+	//tile data
+	tile[id] = {
+		id : id,
+		drw : drwId, //drawing id
+		col : colorIndex,
+		animation : {
+			isAnimated : (renderer.GetFrameCount(drwId) > 1),
+			frameIndex : 0,
+			frameCount : renderer.GetFrameCount(drwId)
+		},
+		name : name,
+		isWall : isWall
+	};
 
 	return i;
 }
 
 function parseSprite(lines, i) {
 	var id = getId(lines[i]);
-	var type = (id === "A") ? "AVA" : "SPR";
-	var spriteData = createDrawingData(type, id);
-
-	bitsyLog(spriteData);
+	var drwId = null;
+	var name = null;
 
 	i++;
 
-	// read & store sprite image source
-	i = parseDrawingCore(lines, i, spriteData.drw);
+	if (getType(lines[i]) === "DRW") { //load existing drawing
+		drwId = getId(lines[i]);
+		i++;
+	}
+	else {
+		// store sprite source
+		drwId = "SPR_" + id;
+		i = parseDrawingCore( lines, i, drwId );
+	}
 
-	// update animation info
-	spriteData.animation.frameCount = renderer.GetFrameCount(spriteData.drw);
-	spriteData.animation.isAnimated = spriteData.animation.frameCount > 1;
-
-	// read other properties
-	while (i < lines.length && lines[i].length > 0) { // look for empty line
+	//other properties
+	var colorIndex = 2; //default palette color index is 2
+	var dialogId = null;
+	var startingInventory = {};
+	while (i < lines.length && lines[i].length > 0) { //look for empty line
 		if (getType(lines[i]) === "COL") {
 			/* COLOR OFFSET INDEX */
-			spriteData.col = parseInt(getId(lines[i]));
+			colorIndex = parseInt( getId(lines[i]) );
 		}
 		else if (getType(lines[i]) === "POS") {
 			/* STARTING POSITION */
@@ -6171,62 +6122,108 @@ function parseSprite(lines, i) {
 			};
 		}
 		else if(getType(lines[i]) === "DLG") {
-			spriteData.dlg = getId(lines[i]);
+			dialogId = getId(lines[i]);
 		}
 		else if (getType(lines[i]) === "NAME") {
 			/* NAME */
-			spriteData.name = lines[i].split(/\s(.+)/)[1];
-			names.sprite.set(spriteData.name, id);
+			name = lines[i].split(/\s(.+)/)[1];
+			names.sprite.set( name, id );
 		}
 		else if (getType(lines[i]) === "ITM") {
 			/* ITEM STARTING INVENTORY */
 			var itemId = getId(lines[i]);
-			var itemCount = parseFloat(getArg(lines[i], 2));
-			spriteData.inventory[itemId] = itemCount;
+			var itemCount = parseFloat( getArg(lines[i], 2) );
+			startingInventory[itemId] = itemCount;
 		}
-
 		i++;
 	}
 
-	// store sprite data
-	sprite[id] = spriteData;
-
+	//sprite data
+	sprite[id] = {
+		id : id,
+		drw : drwId, //drawing id
+		col : colorIndex,
+		dlg : dialogId,
+		room : null, //default location is "offstage"
+		x : -1,
+		y : -1,
+		animation : {
+			isAnimated : (renderer.GetFrameCount(drwId) > 1),
+			frameIndex : 0,
+			frameCount : renderer.GetFrameCount(drwId)
+		},
+		inventory : startingInventory,
+		name : name
+	};
 	return i;
 }
 
 function parseItem(lines, i) {
 	var id = getId(lines[i]);
-	var itemData = createDrawingData("ITM", id);
+	var drwId = null;
+	var name = null;
 
 	i++;
 
-	// read & store item image source
-	i = parseDrawingCore(lines, i, itemData.drw);
+	if (getType(lines[i]) === "DRW") { //load existing drawing
+		drwId = getId(lines[i]);
+		i++;
+	}
+	else {
+		// store item source
+		drwId = "ITM_" + id; // these prefixes are maybe a terrible way to differentiate drawing tyepes :/
+		i = parseDrawingCore( lines, i, drwId );
+	}
 
-	// update animation info
-	itemData.animation.frameCount = renderer.GetFrameCount(itemData.drw);
-	itemData.animation.isAnimated = itemData.animation.frameCount > 1;
-
-	// read other properties
-	while (i < lines.length && lines[i].length > 0) { // look for empty line
+	//other properties
+	var colorIndex = 2; //default palette color index is 2
+	var dialogId = null;
+	while (i < lines.length && lines[i].length > 0) { //look for empty line
 		if (getType(lines[i]) === "COL") {
 			/* COLOR OFFSET INDEX */
-			itemData.col = parseInt(getArg(lines[i], 1));
+			colorIndex = parseInt( getArg( lines[i], 1 ) );
 		}
-		else if (getType(lines[i]) === "DLG") {
-			itemData.dlg = getId(lines[i]);
+		// else if (getType(lines[i]) === "POS") {
+		// 	/* STARTING POSITION */
+		// 	var posArgs = lines[i].split(" ");
+		// 	var roomId = posArgs[1];
+		// 	var coordArgs = posArgs[2].split(",");
+		// 	spriteStartLocations[id] = {
+		// 		room : roomId,
+		// 		x : parseInt(coordArgs[0]),
+		// 		y : parseInt(coordArgs[1])
+		// 	};
+		// }
+		else if(getType(lines[i]) === "DLG") {
+			dialogId = getId(lines[i]);
 		}
 		else if (getType(lines[i]) === "NAME") {
 			/* NAME */
-			itemData.name = lines[i].split(/\s(.+)/)[1];
-			names.item.set(itemData.name, id);
+			name = lines[i].split(/\s(.+)/)[1];
+			names.item.set( name, id );
 		}
-
 		i++;
 	}
 
-	// store item data
-	item[id] = itemData;
+	//item data
+	item[id] = {
+		id : id,
+		drw : drwId, //drawing id
+		col : colorIndex,
+		dlg : dialogId,
+		// room : null, //default location is "offstage"
+		// x : -1,
+		// y : -1,
+		animation : {
+			isAnimated : (renderer.GetFrameCount(drwId) > 1),
+			frameIndex : 0,
+			frameCount : renderer.GetFrameCount(drwId)
+		},
+		name : name
+	};
+
+	// console.log("ITM " + id);
+	// console.log(item[id]);
 
 	return i;
 }
@@ -6269,45 +6266,6 @@ function parseDrawingCore(lines, i, drwId) {
 	return i;
 }
 
-// creates a drawing data structure with default property values for the type
-function createDrawingData(type, id) {
-	// the avatar's drawing id still uses the sprite prefix (for back compat)
-	var drwId = (type === "AVA" ? "SPR" : type) + "_" + id;
-
-	var drawingData = {
-		type : type,
-		id : id,
-		name : null,
-		drw : drwId,
-		col : (type === "TIL") ? 1 : 2,
-		animation : {
-			isAnimated : false,
-			frameIndex : 0,
-			frameCount : 1,
-		},
-	};
-
-	// add type specific properties
-	if (type === "TIL") {
-		// default null value indicates it can vary from room to room (original version)
-		drawingData.isWall = null;
-	}
-
-	if (type === "AVA" || type === "SPR") {
-		// default sprite location is "offstage"
-		drawingData.room = null;
-		drawingData.x = -1;
-		drawingData.y = -1;
-		drawingData.inventory = {};
-	}
-
-	if (type === "AVA" || type === "SPR" || type === "ITM") {
-		drawingData.dlg = null;
-	}
-
-	return drawingData;
-}
-
 function parseScript(lines, i, backCompatPrefix, compatibilityFlags) {
 	var id = getId(lines[i]);
 	id = backCompatPrefix + id;
@@ -6315,7 +6273,7 @@ function parseScript(lines, i, backCompatPrefix, compatibilityFlags) {
 
 	var results = scriptUtils.ReadDialogScript(lines,i);
 
-	dialog[id] = { src: results.script, name: null, id: id, };
+	dialog[id] = { src:results.script, name:null };
 
 	if (compatibilityFlags.convertImplicitSpriteDialogIds) {
 		// explicitly hook up dialog that used to be implicitly
@@ -6426,7 +6384,7 @@ function drawRoom(room,context,frameIndex) { // context & frameIndex are optiona
 
 	// if (room.id != debugLastRoomDrawn) {
 	// 	debugLastRoomDrawn = room.id;
-	// 	bitsyLog("DRAW ROOM " + debugLastRoomDrawn);
+	// 	console.log("DRAW ROOM " + debugLastRoomDrawn);
 	// }
 
 	var paletteId = "default";
@@ -6450,13 +6408,13 @@ function drawRoom(room,context,frameIndex) { // context & frameIndex are optiona
 		for (j in room.tilemap[i]) {
 			var id = room.tilemap[i][j];
 			if (id != "0") {
-				//bitsyLog(id);
+				//console.log(id);
 				if (tile[id] == null) { // hack-around to avoid corrupting files (not a solution though!)
 					id = "0";
 					room.tilemap[i][j] = id;
 				}
 				else {
-					// bitsyLog(id);
+					// console.log(id);
 					drawTile( getTileImage(tile[id],paletteId,frameIndex), j, i, context );
 				}
 			}
@@ -6526,9 +6484,8 @@ var dialogRenderer = dialogModule.CreateRenderer();
 var dialogBuffer = dialogModule.CreateBuffer();
 var fontManager = new FontManager();
 
-// TODO : is this scriptResult thing being used anywhere???
 function onExitDialog(scriptResult, dialogCallback) {
-	bitsyLog("EXIT DIALOG!");
+	console.log("EXIT DIALOG!");
 
 	isDialogMode = false;
 
@@ -6557,7 +6514,7 @@ TODO
 - what about a special script block separate from DLG?
 */
 function startNarrating(dialogStr,end) {
-	bitsyLog("NARRATE " + dialogStr);
+	console.log("NARRATE " + dialogStr);
 
 	if(end === undefined) {
 		end = false;
@@ -6587,7 +6544,7 @@ function startEndingDialog(ending) {
 
 function startItemDialog(itemId, dialogCallback) {
 	var dialogId = item[itemId].dlg;
-	// bitsyLog("START ITEM DIALOG " + dialogId);
+	// console.log("START ITEM DIALOG " + dialogId);
 	if (dialog[dialogId]) {
 		var dialogStr = dialog[dialogId].src;
 		startDialog(dialogStr, dialogId, dialogCallback);
@@ -6600,7 +6557,7 @@ function startItemDialog(itemId, dialogCallback) {
 function startSpriteDialog(spriteId) {
 	var spr = sprite[spriteId];
 	var dialogId = spr.dlg;
-	// bitsyLog("START SPRITE DIALOG " + dialogId);
+	// console.log("START SPRITE DIALOG " + dialogId);
 	if (dialog[dialogId]){
 		var dialogStr = dialog[dialogId].src;
 		startDialog(dialogStr,dialogId);
@@ -6608,10 +6565,10 @@ function startSpriteDialog(spriteId) {
 }
 
 function startDialog(dialogStr, scriptId, dialogCallback, objectContext) {
-	// bitsyLog("START DIALOG ");
+	// console.log("START DIALOG ");
 	if (dialogStr.length <= 0) {
-		// bitsyLog("ON EXIT DIALOG -- startDialog 1");
-		onExitDialog(null, dialogCallback);
+		// console.log("ON EXIT DIALOG -- startDialog 1");
+		onExitDialog(dialogCallback);
 		return;
 	}
 
@@ -6672,15 +6629,11 @@ var scriptInterpreter = scriptModule.CreateInterpreter();
 var scriptUtils = scriptModule.CreateUtils(); // TODO: move to editor.js?
 // scriptInterpreter.SetDialogBuffer( dialogBuffer );
 
-/* EVENTS */
-bitsyOnUpdate(update);
-bitsyOnQuit(stopGame);
-bitsyOnLoad(load_game);
 </script>
 
 <!-- store default font in separate script tag for back compat-->
 <!-- Borksy modification: uses better encoded default font. -->
-<script type="text/bitsyFontData" id="ascii_small">
+<script type="bitsyFontData" id="ascii_small">
 FONT ascii_small
 SIZE 6 8
 CHAR 0
@@ -8847,14 +8800,11 @@ CHAR 9835
 
 <!-- BORKSY HACKS -->
 <script type="text/javascript" id="borksyHacks">
-//borksy uses dist versions of hacks from the bitsy hacks repo now
-
-BORKSY-HACKS
-
+{{{HACKS}}}
 </script>
 
 <script type="text/javascript" id="borksyAdditionalJS">
-BORKSY-ADDITIONALJS
+{{{ADDITIONALJS}}}
 </script>
 
 </head>
@@ -8862,7 +8812,7 @@ BORKSY-ADDITIONALJS
 
 <!-- DOCUMENT BODY -->
 <body onload='startExportedGame()'>
-BORKSY-MARKUP
+{{{MARKUP}}}
 </body>
 
 

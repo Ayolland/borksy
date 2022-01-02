@@ -10,7 +10,7 @@ export default {
 	},
 	plugins: [
 		strPlugin({
-			include: ['**/*.txt'],
+			include: ['**/*.txt', '**/*.hbs'],
 			compress: false,
 		}),
 		mdPlugin({

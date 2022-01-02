@@ -3,21 +3,21 @@
 
 <!-- HEADER -->
 
-<!-- Borksy BORKSY-VERSION -->
-<!-- bitsy-hacks BORKSY-HACKS-VERSION -->
-<!-- Bitsy 6.3 -->
+<!-- Borksy {{BORKSY-VERSION}} -->
+<!-- bitsy-hacks {{HACKS-VERSION}} -->
+<!-- Bitsy 6.5 -->
 <head>
 
 <meta charset="UTF-8">
 
-<title>BORKSY-TITLE</title>
+<title>{{TITLE}}</title>
 
 <script type="text/bitsyGameData" id="exportedGameData">
-BORKSY-GAMEDATA
+{{{GAMEDATA}}}
 </script>
 
 <style>
-BORKSY-CSS
+{{{CSS}}}
 </style>
 
 <!-- SCRIPTS -->
@@ -3674,7 +3674,7 @@ var spriteStartLocations = {};
 /* VERSION */
 var version = {
 	major: 6, // major changes
-	minor: 3 // smaller changes
+	minor: 5 // smaller changes
 };
 function getEngineVersion() {
 	return version.major + "." + version.minor;
@@ -3836,17 +3836,20 @@ function onready(startWithTitle) {
 	document.addEventListener('keyup', input.onkeyup);
 
 	if (isPlayerEmbeddedInEditor) {
-		canvas.addEventListener('touchstart', input.ontouchstart);
-		canvas.addEventListener('touchmove', input.ontouchmove);
-		canvas.addEventListener('touchend', input.ontouchend);
+		canvas.addEventListener('touchstart', input.ontouchstart, {passive:false});
+		canvas.addEventListener('touchmove', input.ontouchmove, {passive:false});
+		canvas.addEventListener('touchend', input.ontouchend, {passive:false});
 	}
 	else {
-		//borksy modification, fixing touch controls on itch.io mobile embeds
+		// creates a 'touchTrigger' element that covers the entire screen and can universally have touch event listeners added w/o issue.
 
-	  	let existingTouchTrigger = document.querySelector('#touchTrigger');
+		// we're checking for existing touchTriggers both at game start and end, so it's slightly redundant.
+	  	var existingTouchTrigger = document.querySelector('#touchTrigger');
 	  	if (existingTouchTrigger === null){
 	  	  var touchTrigger = document.createElement("div");
 	  	  touchTrigger.setAttribute("id","touchTrigger");
+
+	  	  // afaik css in js is necessary here to force a fullscreen element
 	  	  touchTrigger.setAttribute(
 	  	    "style","position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden;"
 	  	  );
@@ -4017,16 +4020,16 @@ function stopGame() {
 		canvas.removeEventListener('touchend', input.ontouchend);
 	}
 	else {
-		//borksy modifications
+		//check for touchTrigger and removes it
 
-    	let existingTouchTrigger = document.querySelector('#touchTrigger');
-    	if (existingTouchTrigger !== null){
-    		existingTouchTrigger.removeEventListener('touchstart', input.ontouchstart);
-    		existingTouchTrigger.removeEventListener('touchmove', input.ontouchmove);
-    		existingTouchTrigger.removeEventListener('touchend', input.ontouchend);
+    		var existingTouchTrigger = document.querySelector('#touchTrigger');
+    		if (existingTouchTrigger !== null){
+    			existingTouchTrigger.removeEventListener('touchstart', input.ontouchstart);
+    			existingTouchTrigger.removeEventListener('touchmove', input.ontouchmove);
+    			existingTouchTrigger.removeEventListener('touchend', input.ontouchend);
 
-    	  existingTouchTrigger.parentElement.removeChild(existingTouchTrigger);
-    	}
+    			existingTouchTrigger.parentElement.removeChild(existingTouchTrigger);
+    		}
 	}
 
 	window.onblur = null;
@@ -5964,8 +5967,10 @@ var scriptModule = new Script();
 var scriptInterpreter = scriptModule.CreateInterpreter();
 var scriptUtils = scriptModule.CreateUtils(); // TODO: move to editor.js?
 // scriptInterpreter.SetDialogBuffer( dialogBuffer );
+
 </script>
 
+<!-- store default font in separate script tag for back compat-->
 <!-- Borksy modification: uses better encoded default font. -->
 <script type="bitsyFontData" id="ascii_small">
 FONT ascii_small
@@ -8134,14 +8139,11 @@ CHAR 9835
 
 <!-- BORKSY HACKS -->
 <script type="text/javascript" id="borksyHacks">
-//borksy uses dist versions of hacks from the bitsy hacks repo now
-
-BORKSY-HACKS
-
+{{{HACKS}}}
 </script>
 
 <script type="text/javascript" id="borksyAdditionalJS">
-BORKSY-ADDITIONALJS
+{{{ADDITIONALJS}}}
 </script>
 
 </head>
@@ -8149,7 +8151,7 @@ BORKSY-ADDITIONALJS
 
 <!-- DOCUMENT BODY -->
 <body onload='startExportedGame()'>
-BORKSY-MARKUP
+{{{MARKUP}}}
 </body>
 
 

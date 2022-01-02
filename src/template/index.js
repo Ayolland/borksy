@@ -1,14 +1,14 @@
-import Bitsy55 from './Bitsy.5.5.txt';
-import Bitsy60 from './Bitsy.6.0.txt';
-import Bitsy63 from './Bitsy.6.3.txt';
-import Bitsy64 from './Bitsy.6.4.txt';
-import Bitsy65 from './Bitsy.6.5.txt';
-import Bitsy70 from './Bitsy.7.0.txt';
-import Bitsy710 from './Bitsy.7.10.txt';
-import Bitsy711 from './Bitsy.7.11.txt';
-import Bitsy72 from './Bitsy.7.2.txt';
-import Bitsy78 from './Bitsy.7.8.txt';
-import BitsyHD51 from './BitsyHD.5.1.txt';
+import Bitsy55 from './Bitsy.5.5.hbs';
+import Bitsy60 from './Bitsy.6.0.hbs';
+import Bitsy63 from './Bitsy.6.3.hbs';
+import Bitsy64 from './Bitsy.6.4.hbs';
+import Bitsy65 from './Bitsy.6.5.hbs';
+import Bitsy70 from './Bitsy.7.0.hbs';
+import Bitsy710 from './Bitsy.7.10.hbs';
+import Bitsy711 from './Bitsy.7.11.hbs';
+import Bitsy72 from './Bitsy.7.2.hbs';
+import Bitsy78 from './Bitsy.7.8.hbs';
+import BitsyHD51 from './BitsyHD.5.1.hbs';
 
 export default [
 	{ data: BitsyHD51, bitsyVersion: '5.1', isHd: true, description: 'Bitsy HD (Bitsy 5.1)' },

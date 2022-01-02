@@ -1,5 +1,6 @@
 import pkgHacks from '@bitsy/hecks/package.json';
 import { saveAs } from 'file-saver';
+import { compile } from 'handlebars';
 import $ from 'jquery';
 import { html as htmlChangelog } from '../../CHANGELOG.md';
 import pkg from '../../package.json';
@@ -182,16 +183,15 @@ function hackIncludeTrigger($this) {
 	});
 }
 
-function assembleSingles(modifiedTemplate) {
+function assembleSingles() {
 	return Array.from(document.querySelectorAll('[data-borksy-replace-single]')).reduce((acc, i) => {
 		const $this = $(i);
-		const valueToReplace = `BORKSY-${$this.data('borksy-replace-single')}`;
-		const formValue = $this.val();
-		return acc.replace(valueToReplace, formValue);
-	}, modifiedTemplate);
+		acc[$this.data('borksy-replace-single')] = $this.val();
+		return acc;
+	}, {});
 }
 
-function assembleHacks(hackBundle) {
+function assembleHacks() {
 	return hacks.reduce((acc, hackObj) => {
 		const $hackField = $(`#${hackObj.metadata.id}`);
 		const isIncluded = $hackField.prop('checked') || $hackField.val() === 'true';
@@ -205,7 +205,7 @@ function assembleHacks(hackBundle) {
 			hackFile = hackFile.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m, `$1 {\n${newHackOptionsContents}\n}$2`);
 		}
 		return `${acc}${hackFile}\n`;
-	}, hackBundle);
+	}, '');
 }
 
 function assembleAndDownloadFile() {
@@ -214,24 +214,17 @@ function assembleAndDownloadFile() {
 	});
 
 	const templateName = $('#template').val();
-	let modifiedTemplate = templates.find(i => i.id === templateName).data;
-	let hackBundle = '';
-
-	modifiedTemplate = assembleSingles(modifiedTemplate);
-
-	$('[data-borksy-replace-single]')
-		.promise()
-		.done(() => {
-			hackBundle = assembleHacks(hackBundle);
-		});
-
-	$('[data-hack]')
-		.promise()
-		.done(() => {
-			const filename = $('#filename').val();
-			modifiedTemplate = modifiedTemplate.replace('BORKSY-VERSION', pkg.version).replace('BORKSY-HACKS-VERSION', pkgHacks.version).replace('BORKSY-HACKS', hackBundle);
-			download(`${filename}.html`, modifiedTemplate);
-		});
+	const template = compile(templates.find(i => i.id === templateName).data);
+	const context = {
+		'BORKSY-VERSION': pkg.version,
+		'HACKS-VERSION': pkgHacks.version,
+		HACKS: assembleHacks(),
+		...assembleSingles(),
+	};
+	console.log(context);
+	const filename = $('#filename').val();
+	const file = template(context);
+	download(`${filename}.html`, file);
 }
 
 function togglePartyMode() {
