@@ -442,17 +442,8 @@ function changeFontFilename(filename) {
 	}
 }
 
-function replaceElements() {
-	Array.from(document.querySelectorAll('[data-replace-element]')).forEach(i => {
-		replaceThisElement($(i));
-	});
 }
 
-function replaceThisElement($elementToReplace) {
-	const functionName = $elementToReplace.data('replace-element');
-	const $replacement = window[functionName]();
-	$elementToReplace.replaceWith($replacement);
-}
 
 function changeFontPreview() {
 	replaceThisElement($('[data-replace-element=createFontPreview]'));
@@ -588,6 +579,5 @@ activateCollapsibles();
 loadAboutInfo();
 loadTemplates();
 loadDefaults();
-replaceElements();
 setHotKeys();
 $('#template').trigger('change');
