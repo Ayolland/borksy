@@ -1,7 +1,6 @@
 import pkgHacks from '@bitsy/hecks/package.json';
 import { saveAs } from 'file-saver';
 import { compile } from 'handlebars';
-import $ from 'jquery';
 import { html as htmlChangelog } from '../../CHANGELOG.md';
 import pkg from '../../package.json';
 import { htmlAbout, htmlFaqs, htmlHowto, htmlTips, htmlTools } from '../about';
@@ -66,41 +65,45 @@ function removeExtraChars(string) {
 	return string.replace(/[^\w\s]/gi, '');
 }
 
-function cleanUsingRegEx($this, regExStr) {
+function cleanUsingRegEx(el, regExStr) {
 	const regex = new RegExp(regExStr, 'g');
-	$this.val($this.val().replace(regex, ''));
+	// eslint-disable-next-line no-param-reassign
+	el.value = el.value.replace(regex, '');
 }
 
-function saveThisData($this, override) {
-	if ($this.data('clean-regex')) {
-		cleanUsingRegEx($this, $this.data('clean-regex'));
+function saveThisData(el, override) {
+	if (el.dataset.cleanRegex) {
+		cleanUsingRegEx(el, el.dataset.cleanRegex);
 	}
 	let value;
-	if ($this.prop('type') === 'checkbox') {
-		value = $this.prop('checked');
+	if (el.type === 'checkbox') {
+		value = el.checked;
 	} else if (override === undefined) {
-		value = $this.val();
+		value = el.value;
 	} else {
 		value = override;
-		$this.val(override);
+		// eslint-disable-next-line no-param-reassign
+		el.value = override;
 	}
-	const name = $this.attr('name');
+	const { name } = el;
 	localStorage.setItem(name, value);
 	console.log(`Key: '${name}' saved to localStorage: ${shortenString(value)}`);
 }
 
-function loadThisData($this) {
-	const name = $this.attr('name');
+function loadThisData(el) {
+	const { name } = el;
 	const value = localStorage.getItem(name);
 	if (value === null) {
 		console.log(` Attempted to get key: ${name} from localStorage, but nothing was found.`);
 		return;
 	}
-	if ($this.prop('type') === 'checkbox') {
+	if (el.type === 'checkbox') {
 		const booleanVal = value === 'true';
-		$this.prop('checked', booleanVal);
+		// eslint-disable-next-line no-param-reassign
+		el.checked = booleanVal;
 	} else {
-		$this.val(value);
+		// eslint-disable-next-line no-param-reassign
+		el.value = value;
 	}
 	console.log(` Got key: ${name} from localStorage: ${shortenString(value)}`);
 }
@@ -109,26 +112,26 @@ function onTemplateChanged(event) {
 	const { value } = event.currentTarget;
 	const template = templates.find(i => i.id === value);
 	if (!template) {
-		$('#template').val(templates.find(i => i.isDefault).id);
+		document.querySelector('#template').value = templates.find(i => i.isDefault).id;
 		onTemplateChanged(event);
 		return;
 	}
 	if (template.isHd) {
-		$('#mascot').addClass('borksyHD');
+		document.querySelector('#mascot').classList.add('borksyHD');
 	} else {
-		$('#mascot').removeClass('borksyHD');
+		document.querySelector('#mascot').classList.remove('borksyHD');
 	}
 	if (template.bitsyVersion === pkgHacks.bitsyVersion) {
-		$('#legacy-version-warning').hide();
-		$('[data-header="Bitsy Version"] > summary').text('Bitsy Version');
+		document.querySelector('#legacy-version-warning').style.display = 'none';
+		document.querySelector('[data-header="Bitsy Version"] > summary').textContent = 'Bitsy Version';
 	} else {
-		$('#legacy-version-warning').show();
-		$('[data-header="Bitsy Version"] > summary').text('❗ Bitsy Version ❗');
+		document.querySelector('#legacy-version-warning').style.display = null;
+		document.querySelector('[data-header="Bitsy Version"] > summary').textContent = '❗ Bitsy Version ❗';
 	}
 }
 
-function setSaveTrigger($this) {
-	const name = $this.attr('name');
+function setSaveTrigger(el) {
+	const { name } = el;
 	let extraFunction;
 	switch (name) {
 		case 'template':
@@ -137,71 +140,70 @@ function setSaveTrigger($this) {
 		default:
 			break;
 	}
-	$this.change(() => {
-		saveThisData($this);
-		extraFunction?.($this);
+	el.addEventListener('change', () => {
+		saveThisData(el);
+		extraFunction?.(el);
 	});
 }
 
-function saveTemplateExtras($this) {
-	const isHD = $this.val().split('.')[0] === 'BitsyHD';
+function saveTemplateExtras(el) {
+	const isHD = el.value.split('.')[0] === 'BitsyHD';
 	const noSavedGameData = localStorage.getItem('gamedata') == null;
 	const HDgamedata = defaults.gamedataHD;
 	const HDgamedataExists = HDgamedata !== undefined;
 	if (isHD) {
 		if (noSavedGameData && HDgamedataExists) {
-			const $gamedata = $('#gamedata');
-			$gamedata.val(HDgamedata);
-			saveThisData($gamedata);
+			const elGamedata = document.querySelector('#gamedata');
+			elGamedata.value = HDgamedata;
+			saveThisData(elGamedata);
 		}
 	}
 }
 
-function checkAndToggleIncludedDisplay($thisField) {
-	const $collapsible = $(`[data-associated-hack="${$thisField.data('hack')}"]`);
-	if ($collapsible.length > 0) {
-		toggleIncludedDisplay($collapsible, $thisField);
+function checkAndToggleIncludedDisplay(elHack) {
+	const elCollapsible = document.querySelector(`[data-associated-hack="${elHack.dataset.hack}"]`);
+	if (elCollapsible) {
+		toggleIncludedDisplay(elCollapsible, elHack);
 	}
 }
 
-function toggleIncludedDisplay($collapsible, $thisHack) {
-	if ($thisHack.prop('checked') === true) {
-		$collapsible.addClass('included');
+function toggleIncludedDisplay(elCollapsible, elHack) {
+	if (elHack.checked === true) {
+		elCollapsible.classList.add('included');
 	} else {
-		$collapsible.removeClass('included');
+		elCollapsible.classList.remove('included');
 	}
 }
 
-function saveThisHack($thisHack) {
-	saveThisData($thisHack);
-	checkAndToggleIncludedDisplay($thisHack);
+function saveThisHack(elHack) {
+	saveThisData(elHack);
+	checkAndToggleIncludedDisplay(elHack);
 }
 
-function hackIncludeTrigger($this) {
-	$this.change(() => {
-		saveThisHack($this);
+function hackIncludeTrigger(elHack) {
+	elHack.addEventListener('change', () => {
+		saveThisHack(elHack);
 	});
 }
 
 function assembleSingles() {
 	return Array.from(document.querySelectorAll('[data-borksy-replace-single]')).reduce((acc, i) => {
-		const $this = $(i);
-		acc[$this.data('borksy-replace-single')] = $this.val();
+		acc[i.dataset.borksyReplaceSingle] = i.value;
 		return acc;
 	}, {});
 }
 
 function assembleHacks() {
 	return hacks.reduce((acc, hackObj) => {
-		const $hackField = $(`#${hackObj.metadata.id}`);
-		const isIncluded = $hackField.prop('checked') || $hackField.val() === 'true';
+		const elHack = document.querySelector(`#${hackObj.metadata.id}`);
+		const isIncluded = elHack.checked || elHack.value === 'true';
 		if (!isIncluded) {
 			return acc;
 		}
 
 		let hackFile = hackObj.data;
 		if (hackObj.options) {
-			const newHackOptionsContents = $(`#${hackObj.metadata.id}-options`).val();
+			const newHackOptionsContents = document.querySelector(`#${hackObj.metadata.id}-options`).value;
 			hackFile = hackFile.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m, `$1 {\n${newHackOptionsContents}\n}$2`);
 		}
 		return `${acc}${hackFile}\n`;
@@ -209,11 +211,9 @@ function assembleHacks() {
 }
 
 function assembleAndDownloadFile() {
-	Array.from(document.querySelectorAll('[data-save]')).forEach(i => {
-		saveThisData($(i));
-	});
+	Array.from(document.querySelectorAll('[data-save]')).forEach(i => saveThisData(i));
 
-	const templateName = $('#template').val();
+	const templateName = document.querySelector('#template').value;
 	const template = compile(templates.find(i => i.id === templateName).data);
 	const context = {
 		'BORKSY-VERSION': pkg.version,
@@ -222,18 +222,18 @@ function assembleAndDownloadFile() {
 		...assembleSingles(),
 	};
 	console.log(context);
-	const filename = $('#filename').val();
+	const filename = document.querySelector('#filename').value;
 	const file = template(context);
 	download(`${filename}.html`, file);
 }
 
 function togglePartyMode() {
-	const $body = $('body');
-	if ($body.hasClass('party')) {
-		$body.removeClass('party');
+	const { body } = document;
+	if (body.classList.contains('party')) {
+		body.classList.remove('party');
 		window.alert('😾 Party Mode Deactivated. Everyone out. 😾');
 	} else {
-		$body.addClass('party');
+		body.classList.add('party');
 		window.alert('✨🌈 Party Mode Activated! 🌈✨');
 	}
 }
@@ -249,117 +249,122 @@ function loadAboutInfo() {
 
 	const elHowto = makeNewCollapsible('How To Use Borksy');
 	elHowto.append(htmlHowto);
-	elAbout.appendChild(elHowto[0]);
+	elAbout.appendChild(elHowto);
 
 	const elFaqs = makeNewCollapsible('Troubleshooting / FAQs');
-	elFaqs.addClass('faq');
+	elFaqs.classList.add('faq');
 	elFaqs.append(htmlFaqs);
-	elAbout.appendChild(elFaqs[0]);
+	elAbout.appendChild(elFaqs);
 
 	const elTools = makeNewCollapsible('Other Bitsy Tools');
 	elTools.append(htmlTools);
-	elAbout.appendChild(elTools[0]);
+	elAbout.appendChild(elTools);
 
 	const elTips = makeNewCollapsible("AYo's Special Tips");
 	elTips.append(htmlTips);
-	elAbout.appendChild(elTips[0]);
+	elAbout.appendChild(elTips);
 
 	const elChangelog = makeNewCollapsible('Changelog');
 	elChangelog.append(htmlChangelog);
-	elAbout.appendChild(elChangelog[0]);
+	elAbout.appendChild(elChangelog);
 }
 
-function loadDefaultString($thisField) {
-	$thisField.val($thisField.data('default'));
-	setSaveTrigger($thisField);
+function loadDefaultString(elField) {
+	// eslint-disable-next-line no-param-reassign
+	elField.value = elField.dataset.default;
+	setSaveTrigger(elField);
 }
 
-function loadDefaultHackOptions($thisField) {
-	const id = $thisField.attr('id').replace(/-options$/, '');
+function loadDefaultHackOptions(elField) {
+	const id = elField.id.replace(/-options$/, '');
 	const { options } = hacks.find(i => i.metadata.id === id);
-	$thisField.val(options);
-	setSaveTrigger($thisField);
+	// eslint-disable-next-line no-param-reassign
+	elField.value = options;
+	setSaveTrigger(elField);
 }
 
-function loadDefaultBoolean($thisField) {
-	let defaultVal = $thisField.data('default');
+function loadDefaultBoolean(elField) {
+	let defaultVal = elField.dataset.default;
 	defaultVal = defaultVal === 'true';
-	if ($thisField.prop('type') === 'checkbox') {
-		$thisField.prop('checked', defaultVal);
+	if (elField.type === 'checkbox') {
+		// eslint-disable-next-line no-param-reassign
+		elField.checked = defaultVal;
 	} else {
-		$thisField.val(defaultVal);
+		// eslint-disable-next-line no-param-reassign
+		elField.value = defaultVal;
 	}
-	setSaveTrigger($thisField);
+	setSaveTrigger(elField);
 }
 
-function loadDefaultTextfile($thisField) {
-	const filename = $thisField.data('default');
+function loadDefaultTextfile(elField) {
+	const filename = elField.dataset.default;
 	const fileContents = defaults[filename];
 	if (!fileContents) {
 		throw new Error(`Could not find file ${filename}`);
 	}
-	$thisField.val(fileContents);
-	setSaveTrigger($thisField);
+	// eslint-disable-next-line no-param-reassign
+	elField.value = fileContents;
+	setSaveTrigger(elField);
 }
 
-function loadDefaultFont($thisField) {
-	readFontFile($thisField.data('default'));
+function loadDefaultFont(elField) {
+	readFontFile(elField.dataset.default);
 }
 
-function loadDefaultOption($thisField) {
-	const { options } = $thisField[0];
+function loadDefaultOption(elField) {
+	const { options } = elField;
 	for (let i = options.length - 1; i >= 0; i--) {
-		const $option = $(options[i]);
-		if ($option.data('default-option') !== undefined) {
+		const elOption = options[i];
+		if (elOption.dataset.defaultOption !== undefined) {
 			// eslint-disable-next-line no-param-reassign
-			$thisField[0].selectedIndex = i;
+			elField.selectedIndex = i;
 			break;
 		}
 	}
-	setSaveTrigger($thisField);
+	setSaveTrigger(elField);
 }
 
 function loadDefaults(checkSaveData = true) {
-	Array.from(document.querySelectorAll('[data-save]')).forEach(i => {
-		const $thisField = $(i);
-		const thisSaveData = localStorage.getItem($thisField.attr('name'));
-		const hasDefault = typeof $thisField.data('default') !== 'undefined';
+	Array.from(document.querySelectorAll('[data-save]')).forEach(elField => {
+		const thisSaveData = localStorage.getItem(elField.name);
+		const hasDefault = typeof elField.dataset.default !== 'undefined';
 		const hasSaveData = thisSaveData !== null;
 
 		if (hasDefault && (!hasSaveData || !checkSaveData)) {
-			const defaultType = $thisField.data('default-type');
+			const { defaultType } = elField.dataset;
 
 			switch (defaultType) {
 				case 'string':
-					loadDefaultString($thisField);
+					loadDefaultString(elField);
 					break;
 				case 'boolean':
-					loadDefaultBoolean($thisField);
+					loadDefaultBoolean(elField);
 					break;
 				case 'textfile':
-					loadDefaultTextfile($thisField);
+					loadDefaultTextfile(elField);
 					break;
 				case 'font':
-					loadDefaultFont($thisField);
+					loadDefaultFont(elField);
 					break;
 				case 'option':
-					loadDefaultOption($thisField);
+					loadDefaultOption(elField);
 					break;
 				case 'hackOptions':
-					loadDefaultHackOptions($thisField);
+					loadDefaultHackOptions(elField);
 					break;
 				default:
 					throw new Error('Unknown type');
 			}
 		} else {
 			if (hasSaveData) {
-				loadThisData($thisField);
+				loadThisData(elField);
 			} else {
-				$thisField.val('');
+				// eslint-disable-next-line no-param-reassign
+				elField.value = '';
 			}
-			setSaveTrigger($thisField);
+			setSaveTrigger(elField);
 		}
-		checkAndToggleIncludedDisplay($thisField);
+		checkAndToggleIncludedDisplay(elField);
 	});
 	console.log(`Defaults loaded. Forced? ${!checkSaveData}`);
 }
@@ -373,11 +378,11 @@ function restoreDefaults() {
 	}
 	if (!confirm) return;
 	Array.from(document.querySelectorAll('[data-save]')).forEach(i => {
-		localStorage.removeItem($(i).attr('name'));
+		localStorage.removeItem(i.name);
 	});
 	console.log('Cookies removed');
 	loadDefaults(false);
-	$('#mascot').removeClass('borksyHD');
+	document.querySelector('#mascot').classList.remove('borksyHD');
 }
 
 function onFontImageLoaded() {
@@ -415,7 +420,7 @@ function onFontImageLoaded() {
 	// flatten characters into fontdata
 	fontdata = fontdata.flat();
 	// display output
-	saveThisData($('#fontdata'), `[/*${$('#fontfilename').val()}*/${fontdata.toString()}]`);
+	saveThisData(document.querySelector('#fontdata'), `[/*${document.querySelector('#fontfilename').value}*/${fontdata.toString()}]`);
 }
 
 function readFontFile(eventOrFilename) {
@@ -430,126 +435,113 @@ function readFontFile(eventOrFilename) {
 	const img = new Image();
 	img.onload = onFontImageLoaded;
 	img.src = src;
-	// if possible, change preview
-	changeFontPreview();
 }
 
 function changeFontFilename(filename) {
-	const $field = $('#fontfilename');
-	if ($field.val() !== filename) {
-		$field.val(filename);
-		saveThisData($field);
+	const el = document.querySelector('#fontfilename');
+	if (el.value !== filename) {
+		el.value = filename;
+		saveThisData(el);
 	}
 }
 
-}
-
-
-function changeFontPreview() {
-	replaceThisElement($('[data-replace-element=createFontPreview]'));
-}
-
-function bakeHackData($element, hackName) {
-	$element.attr({
-		'data-save': true,
-		'data-default': false,
-		'data-default-type': 'boolean',
-		'data-hack': hackName,
-	});
+function bakeHackData(el, hackName) {
+	/* eslint-disable no-param-reassign */
+	el.dataset.save = true;
+	el.dataset.default = false;
+	el.dataset.defaultType = 'boolean';
+	el.dataset.hack = hackName;
+	/* eslint-enable no-param-reassign */
 }
 
 function createThisHackMenu(hack) {
-	const $collapse = makeNewCollapsible(`${hack.metadata.emoji} ${hack.metadata.name} (by ${hack.metadata.author})`);
-	$collapse.attr('data-associated-hack', hack.metadata.id);
+	const elCollapse = makeNewCollapsible(`${hack.metadata.emoji} ${hack.metadata.name} (by ${hack.metadata.author})`);
+	elCollapse.dataset.associatedHack = hack.metadata.id;
 
-	const $description = $('<p>', {
-		text: hack.metadata.summary,
-	});
-	$collapse.append($description);
+	const elDescription = document.createElement('p');
+	elDescription.textContent = hack.metadata.summary;
+	elCollapse.append(elDescription);
 
-	const $label = $('<label>', {
-		class: 'horizontal',
-	});
-	const $checkbox = $('<input>', {
-		type: 'checkbox',
-		name: hack.metadata.name,
-		id: hack.metadata.id,
-	});
-	bakeHackData($checkbox, hack.metadata.id);
-	loadThisData($checkbox);
-	toggleIncludedDisplay($collapse, $checkbox);
-	hackIncludeTrigger($checkbox);
-	$label.append($checkbox);
-	$label.append(`Include "${removeExtraChars(hack.metadata.name)}" hack`);
-	$collapse.append($label);
+	const elLabel = document.createElement('label');
+	elLabel.className = 'horizontal';
+
+	const elCheckbox = document.createElement('input');
+	elCheckbox.type = 'checkbox';
+	elCheckbox.name = hack.metadata.name;
+	elCheckbox.id = hack.metadata.id;
+
+	bakeHackData(elCheckbox, hack.metadata.id);
+	loadThisData(elCheckbox);
+	toggleIncludedDisplay(elCollapse, elCheckbox);
+	hackIncludeTrigger(elCheckbox);
+	elLabel.append(elCheckbox);
+	elLabel.append(`Include "${removeExtraChars(hack.metadata.name)}" hack`);
+	elCollapse.append(elLabel);
 
 	if (hack.options) {
-		const $options = makeNewCollapsible('Options');
-		const $optionsLabel = $(`<label data-pre="var ${dashesToCamelCase(hack.metadata.id)}Options = {" data-post="};">`);
-		const $optionsField = $('<textarea>', {
-			rows: 5,
-			cols: 50,
-			text: hack.options,
-			name: `${hack.metadata.name}.options`,
-			id: `${hack.metadata.id}-options`,
-		});
-		$optionsField.attr({
-			'data-save': true,
-			'data-default-type': 'hackOptions',
-			'data-default': hack.metadata.id,
-		});
-		loadThisData($optionsField);
-		setSaveTrigger($optionsField);
-		$optionsLabel.append($optionsField);
-		$options.append($optionsLabel);
-		$collapse.append($options);
+		const elOptions = makeNewCollapsible('Options');
+		const elOptionsLabel = document.createElement('label');
+		elOptionsLabel.dataset.pre = `var ${dashesToCamelCase(hack.metadata.id)}Options = {`;
+		elOptionsLabel.dataset.post = '};';
+		const elOptionsField = document.createElement('textarea');
+		elOptionsField.rows = 5;
+		elOptionsField.cols = 50;
+		elOptionsField.textContent = hack.options;
+		elOptionsField.name = `${hack.metadata.name}.options`;
+		elOptionsField.id = `${hack.metadata.id}-options`;
+		elOptionsField.dataset.save = true;
+		elOptionsField.dataset.default = hack.metadata.id;
+		elOptionsField.dataset.defaultType = 'hackOptions';
+		loadThisData(elOptionsField);
+		setSaveTrigger(elOptionsField);
+		elOptionsLabel.append(elOptionsField);
+		elOptions.append(elOptionsLabel);
+		elCollapse.append(elOptions);
 	}
 
 	if (hack.metadata.description) {
-		const $readme = makeNewCollapsible('README');
-		$readme.append($('<pre>', { text: hack.metadata.description }));
-		$collapse.append($readme);
+		const elReadme = makeNewCollapsible('README');
+		const elPre = document.createElement('pre');
+		elPre.textContent = hack.metadata.description;
+		elReadme.append(elPre);
+		elCollapse.append(elReadme);
 	}
 
-	return $collapse;
+	return elCollapse;
 }
 
 function createHackMenus() {
 	const elHackSection = document.querySelector('#hacks-section');
 	hacks.forEach(hack => {
-		elHackSection.appendChild(createThisHackMenu(hack)[0]);
+		elHackSection.appendChild(createThisHackMenu(hack));
 	});
 }
 
 function makeNewCollapsible(header) {
 	const elDetails = document.createElement('details');
-	const $collapse = $(elDetails);
 	elDetails.className = 'collapsible';
-	$collapse.data('collapse', '');
-	$collapse.data('header', header);
-	activateThisCollapsible($collapse);
-	return $collapse;
+	elDetails.dataset.collapse = '';
+	elDetails.dataset.header = header;
+	activateThisCollapsible(elDetails);
+	return elDetails;
 }
 
 function activateCollapsibles() {
-	Array.from(document.querySelectorAll('[data-collapsible]')).forEach(i => {
-		const $thisCollapsible = $(i);
-		activateThisCollapsible($thisCollapsible);
-	});
+	Array.from(document.querySelectorAll('[data-collapsible]')).forEach(activateThisCollapsible);
 	console.log('HACK IT UP YO');
-	createHackMenus($('#hacks-section'));
-	$('#preloader').fadeOut();
+	createHackMenus();
+	document.querySelector('#preloader').remove();
 }
 
-function activateThisCollapsible($thisCollapsible) {
+function activateThisCollapsible(elCollapsible) {
 	const elSummary = document.createElement('summary');
-	elSummary.textContent = $thisCollapsible.data('header');
+	elSummary.textContent = elCollapsible.dataset.header;
 	elSummary.className = 'collapsible_header';
-	$thisCollapsible.prepend(elSummary);
+	elCollapsible.prepend(elSummary);
 }
 
 function setHotKeys() {
-	$(window).on('keydown', event => {
+	window.addEventListener('keydown', event => {
 		if (event.ctrlKey || event.metaKey) {
 			switch (String.fromCharCode(event.which).toLowerCase()) {
 				case 's':
@@ -571,13 +563,13 @@ function setHotKeys() {
 	});
 }
 
-$('#download-button').on('click', assembleAndDownloadFile);
-$('#restore-button').on('click', restoreDefaults);
-$('#mascot').on('click', togglePartyMode);
-$('#template').on('change', onTemplateChanged);
+document.querySelector('#download-button').addEventListener('click', assembleAndDownloadFile);
+document.querySelector('#restore-button').addEventListener('click', restoreDefaults);
+document.querySelector('#mascot').addEventListener('click', togglePartyMode);
+document.querySelector('#template').addEventListener('change', onTemplateChanged);
 activateCollapsibles();
 loadAboutInfo();
 loadTemplates();
 loadDefaults();
 setHotKeys();
-$('#template').trigger('change');
+onTemplateChanged({ currentTarget: document.querySelector('#template') });

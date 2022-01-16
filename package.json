@@ -62,7 +62,6 @@
     "jest": "^27.2.5",
     "jest-dev-server": "^6.0.0",
     "jest-image-snapshot": "^4.5.1",
-    "jquery": "^3.6.0",
     "prettier": "^2.4.1",
     "puppeteer": "^13.0.1",
     "sass": "^1.42.1",
