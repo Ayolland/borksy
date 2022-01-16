@@ -1,3 +1,10 @@
+## [5.9.1](https://github.com/Ayolland/borksy/compare/v5.9.0...v5.9.1) (2022-01-16)
+
+
+### Bug Fixes
+
+* about sections showing raw html ([818b8c8](https://github.com/Ayolland/borksy/commit/818b8c8699c3de8efb343100a123820d4e1fa5bb))
+
 # [5.9.0](https://github.com/Ayolland/borksy/compare/v5.8.0...v5.9.0) (2022-01-16)
 
 

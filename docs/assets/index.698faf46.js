@@ -1,4 +1,9 @@
-var q=Object.defineProperty,R=Object.defineProperties;var C=Object.getOwnPropertyDescriptors;var k=Object.getOwnPropertySymbols;var L=Object.prototype.hasOwnProperty,P=Object.prototype.propertyIsEnumerable;var x=(t,n,e)=>n in t?q(t,n,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[n]=e,h=(t,n)=>{for(var e in n||(n={}))L.call(n,e)&&x(t,e,n[e]);if(k)for(var e of k(n))P.call(n,e)&&x(t,e,n[e]);return t},S=(t,n)=>R(t,C(n));import{p as m,h as M,F as H}from"./vendor.78573d31.js";const G=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const r of document.querySelectorAll('link[rel="modulepreload"]'))i(r);new MutationObserver(r=>{for(const a of r)if(a.type==="childList")for(const o of a.addedNodes)o.tagName==="LINK"&&o.rel==="modulepreload"&&i(o)}).observe(document,{childList:!0,subtree:!0});function e(r){const a={};return r.integrity&&(a.integrity=r.integrity),r.referrerpolicy&&(a.referrerPolicy=r.referrerpolicy),r.crossorigin==="use-credentials"?a.credentials="include":r.crossorigin==="anonymous"?a.credentials="omit":a.credentials="same-origin",a}function i(r){if(r.ep)return;r.ep=!0;const a=e(r);fetch(r.href,a)}};G();const j=`<h1><a href="https://github.com/Ayolland/borksy/compare/v5.8.0...v5.9.0">5.9.0</a> (2022-01-16)</h1>
+var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropertyDescriptors;var x=Object.getOwnPropertySymbols;var P=Object.prototype.hasOwnProperty,M=Object.prototype.propertyIsEnumerable;var S=(t,n,e)=>n in t?R(t,n,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[n]=e,m=(t,n)=>{for(var e in n||(n={}))P.call(n,e)&&S(t,e,n[e]);if(x)for(var e of x(n))M.call(n,e)&&S(t,e,n[e]);return t},j=(t,n)=>C(t,L(n));import{p as y,h as H,F as G}from"./vendor.78573d31.js";const U=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const r of document.querySelectorAll('link[rel="modulepreload"]'))i(r);new MutationObserver(r=>{for(const a of r)if(a.type==="childList")for(const o of a.addedNodes)o.tagName==="LINK"&&o.rel==="modulepreload"&&i(o)}).observe(document,{childList:!0,subtree:!0});function e(r){const a={};return r.integrity&&(a.integrity=r.integrity),r.referrerpolicy&&(a.referrerPolicy=r.referrerpolicy),r.crossorigin==="use-credentials"?a.credentials="include":r.crossorigin==="anonymous"?a.credentials="omit":a.credentials="same-origin",a}function i(r){if(r.ep)return;r.ep=!0;const a=e(r);fetch(r.href,a)}};U();const T=`<h2><a href="https://github.com/Ayolland/borksy/compare/v5.9.0...v5.9.1">5.9.1</a> (2022-01-16)</h2>
+<h3>Bug Fixes</h3>
+<ul>
+<li>about sections showing raw html (<a href="https://github.com/Ayolland/borksy/commit/818b8c8699c3de8efb343100a123820d4e1fa5bb">818b8c8</a>)</li>
+</ul>
+<h1><a href="https://github.com/Ayolland/borksy/compare/v5.8.0...v5.9.0">5.9.0</a> (2022-01-16)</h1>
 <h3>Bug Fixes</h3>
 <ul>
 <li>open all links in new tab (<a href="https://github.com/Ayolland/borksy/commit/949191d46a820b646ee6c0065caa30fda71153b8">949191d</a>)</li>
@@ -304,7 +309,7 @@ var q=Object.defineProperty,R=Object.defineProperties;var C=Object.getOwnPropert
 <ul>
 <li>Initial version</li>
 </ul>
-`,U="borksy",V="5.9.0",z="Borksy Game Hacker: A tool for extending Bitsy games",$={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},W={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},Y="AYolland",X="MIT",K={url:"https://github.com/Ayolland/borksy/issues"},J="https://ayolland.itch.io/borksy",Q={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},Z={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},tt={"@bitsy/hecks":"^19.2.7",eslint:"^8.6.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.3.0","eslint-plugin-import":"^2.25.2","eslint-plugin-prettier":"^4.0.0","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^27.2.5","jest-dev-server":"^6.0.0","jest-image-snapshot":"^4.5.1",prettier:"^2.4.1",puppeteer:"^13.0.1","rollup-plugin-visualizer":"^5.5.4",sass:"^1.42.1",vite:"^2.6.4","vite-plugin-markdown":"^2.0.2","vite-plugin-string":"^1.0.1"};var nt={private:!0,name:U,version:V,description:z,scripts:$,repository:W,author:Y,license:X,bugs:K,homepage:J,jest:Q,release:Z,devDependencies:tt};const et=`<p>Borksy is a hacking tool to be used in conjunction with <a href="https://ledoux.itch.io/bitsy">Bitsy Game Maker</a>! Use it to customize your games and add hacks without needing to manually cut-and-paste html.</p>
+`,V="borksy",z="5.9.1",$="Borksy Game Hacker: A tool for extending Bitsy games",W={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},Y={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},X="AYolland",K="MIT",J={url:"https://github.com/Ayolland/borksy/issues"},Q="https://ayolland.itch.io/borksy",Z={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},tt={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},nt={"@bitsy/hecks":"^19.2.7",eslint:"^8.6.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.3.0","eslint-plugin-import":"^2.25.2","eslint-plugin-prettier":"^4.0.0","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^27.2.5","jest-dev-server":"^6.0.0","jest-image-snapshot":"^4.5.1",prettier:"^2.4.1",puppeteer:"^13.0.1","rollup-plugin-visualizer":"^5.5.4",sass:"^1.42.1",vite:"^2.6.4","vite-plugin-markdown":"^2.0.2","vite-plugin-string":"^1.0.1"};var et={private:!0,name:V,version:z,description:$,scripts:W,repository:Y,author:X,license:K,bugs:J,homepage:Q,jest:Z,release:tt,devDependencies:nt};const rt=`<p>Borksy is a hacking tool to be used in conjunction with <a href="https://ledoux.itch.io/bitsy">Bitsy Game Maker</a>! Use it to customize your games and add hacks without needing to manually cut-and-paste html.</p>
 <p>If you're not sure how to use this tool, check out the 'How To Use Borksy' section. If you're having issues, check the 'Troubleshooting/FAQs' section. If you're not familiar with how Bitsy can be extended, try exploring <a href="https://github.com/seleb/bitsy-hacks/">the Bitsy hacks repo</a>.</p>
 <p>Borksy Features:</p>
 <ul>
@@ -319,18 +324,18 @@ var q=Object.defineProperty,R=Object.defineProperties;var C=Object.getOwnPropert
 <li>Party Mode!</li>
 </ul>
 <p>Report any bugs you find <a href="https://github.com/Ayolland/borksy/issues">on GitHub</a>, or reach out to <a href="https://twitter.com/SeanSLeBlanc">Sean</a>!</p>
-`,rt=`<ul>
+`,it=`<ul>
 <li>If you're still using the exit-from-dialog or end-from-dialog hacks, make sure to check out and new the new locked exits functionality in Bitsy 7.0!</li>
 <li>You can access the Bitsy game variables from JavaScript using <code>window.scriptInterpreter.GetVariable(variableName)</code> and <code>window.scriptInterpreter.SetVariable(variableName)</code></li>
 <li>Using CSS to add a background image to your game can add a lot of polish for mimimal effort, especially on mobile.</li>
 <li>Borksy changes the canvas rendering of Bitsy game to display crisp pixel-edges. This can be commented out in the CSS if your prefer the default anti-aliasing.</li>
 <li>Remember, you can add hacks that aren't included in Borksy using the 'Additional JS' field.</li>
 </ul>
-`,it=`<p>In order to use Borksy, you need to already have a Bitsy game you wish to add functionality to.</p>
+`,at=`<p>In order to use Borksy, you need to already have a Bitsy game you wish to add functionality to.</p>
 <p>Borksy accepts the gamedata from Bitsy and combines that with a Bitsy template to create a modified HTML file with your Bitsy game as well as any hacks or modifications you chose to include. You'll need to copy the gamedata from the Bitsy editor and paste it into Borksy. The file Borksy saves is the file you will release as your game.</p>
 <p>Hacks are not guaranteed to work with each other, and particular hacks are not guaranteed to work with particular templates. Make sure you test the particular load-out of hacks you plan to use before developing with them.</p>
 <p>While Borksy uses your browser data to save your work, it is a good idea to save any modifications (hackOptions, additional JS, HTML modifications) somewhere on your computer separately, as there is no way for Borksy to load these from a saved Borksy game.</p>
-`,at=`<p>If you haven't already, check out some of the other tools created to enhance Bitsy!</p>
+`,ot=`<p>If you haven't already, check out some of the other tools created to enhance Bitsy!</p>
 <ul>
 <li><a href="https://github.com/seleb/bitsy-hacks/" target="_blank" rel="noopener">Bitsy Hack Repo</a> - Almost All the Bitsy hacks</li>
 <li><a href="https://aloelazoe.itch.io/bitsy-3d" target="_blank" rel="noopener">Bitsy 3D</a> - Bitsy but in 3D!!!</li>
@@ -351,7 +356,7 @@ var q=Object.defineProperty,R=Object.defineProperties;var C=Object.getOwnPropert
 <li><a href="https://aloelazoe.itch.io/bitsy-savior" target="_blank" rel="noopener">Bitsy Savior</a> - Save your Bitsy game to a hacked file w/o copy-pasting!</li>
 </ul>
 <p>Check out <a href="https://itch.io/c/381992/that-good-good-bitsy-tools" target="_blank" rel="noopener">this list of tools/tips on itch</a> for even more!</p>
-`,ot=`<ul>
+`,st=`<ul>
 <li>
 <blockquote>
 <p>After I add hacks using Borksy, when I load my html file back into Bitsy, all my hacks are gone.</p>
@@ -401,8 +406,8 @@ var q=Object.defineProperty,R=Object.defineProperties;var C=Object.getOwnPropert
 <p>The <a href="discordapp.com/invite/9rAjhtr">Bitsy discord</a> is a great place to get help with Bitsy or Borksy.</p>
 </li>
 </ul>
-`;var st=`<!-- GAME CANVAS -->
-<canvas id='game'></canvas>`,ct=`[
+`;var ct=`<!-- GAME CANVAS -->
+<canvas id='game'></canvas>`,lt=`[
 		/* num: 0 */
 		0,0,0,0,0,0,
 		0,0,0,0,0,0,
@@ -2715,7 +2720,7 @@ var q=Object.defineProperty,R=Object.defineProperties;var C=Object.getOwnPropert
 		0,1,0,0,1,0,
 		0,0,0,0,0,0,
 		0,0,0,0,0,0
-]`,lt=`BORK BORK BORK
+]`,ut=`BORK BORK BORK
 
 # BITSY VERSION 5.5
 
@@ -2822,7 +2827,7 @@ DLG ITM_0
 You found a nice warm cup of tea
 
 VAR a
-42`,T=`BORK BORK HD BORK
+42`,I=`BORK BORK HD BORK
 
 # BITSY VERSION 5.1
 
@@ -2991,7 +2996,7 @@ DLG SPR_1
 Borksy: I'm in HD!! (If by HD you mean 16x16 2-bit graphics!)
 
 VAR a
-42`,ut=`html {
+42`,dt=`html {
 	margin: 0;
 	padding: 0;
 }
@@ -3017,7 +3022,7 @@ body {
 	image-rendering: -moz-crisp-edges; /* FF 6.0+ */
 	image-rendering: pixelated; /* Chrome, Safari */
 }
-`,dt=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",body:st,fontdata:ct,gamedata:lt,gamedataHD:T,style:ut}),pt=`/**
+`,pt=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",body:ct,fontdata:lt,gamedata:ut,gamedataHD:I,style:dt}),ft=`/**
 \u{1F465}
 @file avatar by room
 @summary change the avatar in certain rooms
@@ -3342,7 +3347,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.avatar_by_room = this.hacks.avatar_by_room || {}, window);
-`,ft=`/**
+`,gt=`/**
 \u{1F5BC}
 @file backdrops
 @summary makes the game have a backdrop
@@ -3750,7 +3755,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.backdrops = this.hacks.backdrops || {}, window);
-`,gt=`/**
+`,ht=`/**
 \u{1F508}
 @file basic sfx
 @summary "walk" and "talk" sound effect support
@@ -4084,7 +4089,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.basic_sfx = this.hacks.basic_sfx || {}, window);
-`,ht=`/**
+`,mt=`/**
 \u{1F60C}
 @file bitsymuse
 @summary A variety of Bitsy sound and music handlers
@@ -4607,7 +4612,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.bitsymuse = this.hacks.bitsymuse || {}, window);
-`,mt=`/**
+`,yt=`/**
 \u{1F634}
 @file canvas replacement
 @summary WebGLazy bitsy integration (this one's mostly just for me)
@@ -4898,7 +4903,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.canvas_replacement = this.hacks.canvas_replacement || {}, window);
-`,yt=`/**
+`,bt=`/**
 \u{1F640}
 @file character portraits animated
 @summary high quality anime gifs
@@ -6216,7 +6221,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.character_portraits_animated = this.hacks.character_portraits_animated || {}, window);
-`,bt=`/**
+`,vt=`/**
 \u{1F63D}
 @file character portraits
 @summary high quality anime jpegs (or pngs i guess)
@@ -6591,7 +6596,7 @@ exports.state = state;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.character_portraits = this.hacks.character_portraits || {}, window);
-`,vt=`/**
+`,wt=`/**
 \u26D4\uFE0F
 @file close on ending
 @summary Prevents from playing past an ending
@@ -6842,7 +6847,7 @@ after('onExitDialog', function () {
 });
 
 })(window);
-`,wt=`/**
+`,kt=`/**
 \u27BF
 @file corrupt
 @summary corrupts gamedata at runtime
@@ -7396,7 +7401,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.corrupt = this.hacks.corrupt || {}, window);
-`,kt=`/**
+`,xt=`/**
 \u{1F39E}
 @file custom-exit-effects
 @summary make custom exit transition effects
@@ -7699,7 +7704,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["custom-exit-effects"] = this.hacks["custom-exit-effects"] || {}, window);
-`,xt=`/**
+`,St=`/**
 \u2328
 @file custom-keyhandlers
 @summary run custom code on key inputs
@@ -7991,7 +7996,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["custom-keyhandlers"] = this.hacks["custom-keyhandlers"] || {}, window);
-`,St=`/**
+`,jt=`/**
 \u{1F170}
 @file custom text effect
 @summary make {custom}text effects{custom}
@@ -8459,7 +8464,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.custom_text_effect = this.hacks.custom_text_effect || {}, window);
-`,jt=`/**
+`,Tt=`/**
 \u{1F3BA}
 @file dialog audio vocal synth
 @summary animal crossing-style audio powered by the pink trombone vocal synth
@@ -9855,7 +9860,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.dialog_audio_vocal_synth = this.hacks.dialog_audio_vocal_synth || {}, window);
-`,Tt=`/**
+`,It=`/**
 \u{1F4AC}
 @file dialog audio
 @summary animal crossing-style audio
@@ -10127,7 +10132,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.dialog_audio = this.hacks.dialog_audio || {}, window);
-`,It=`/**
+`,Ft=`/**
 \u{1F501}
 @file dialog box transition
 @summary adds an easing transition animation to display the dialog box text
@@ -10409,7 +10414,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.dialog_box_transition = this.hacks.dialog_box_transition || {}, window);
-`,Ft=`/**
+`,At=`/**
 \u{1F500}
 @file dialog choices
 @summary dialog choices
@@ -11149,7 +11154,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.dialog_choices = this.hacks.dialog_choices || {}, window);
-`,At=`/**
+`,Et=`/**
 \u{1F680}
 @file dialog jump
 @summary jump from one dialog entry to another
@@ -11510,7 +11515,7 @@ addDualDialogTag('jump', function (environment, parameters) {
 });
 
 })(window);
-`,Et=`/**
+`,Ot=`/**
 \u{1F4AC}
 @file dialog pause
 @summary add pauses in between printing text
@@ -11791,7 +11796,7 @@ addDialogTag('pause', function (environment, parameters, onReturn) {
 });
 
 })(window);
-`,Ot=`/**
+`,Nt=`/**
 \u2328
 @file dialog prompt
 @summary prompt the user for text input in dialog
@@ -12275,7 +12280,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.dialog_prompt = this.hacks.dialog_prompt || {}, window);
-`,Nt=`/**
+`,Dt=`/**
 \u{1F51D}
 @file direction in dialog
 @summary provides a variable with player direction
@@ -12523,7 +12528,7 @@ before('startDialog', function () {
 });
 
 })(window);
-`,Dt=`/**
+`,Bt=`/**
 \u2194
 @file directional avatar
 @summary flips the player's sprite based on directional movement
@@ -12997,7 +13002,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.directional_avatar = this.hacks.directional_avatar || {}, window);
-`,Bt=`/**
+`,_t=`/**
 \u{1F5BC}
 @file dynamic background
 @summary HTML background matching bitsy background
@@ -13292,7 +13297,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.dynamic_background = this.hacks.dynamic_background || {}, window);
-`,_t=`/**
+`,qt=`/**
 \u{1F4DD}
 @file edit dialog from dialog
 @summary edit dialog from dialog (yes really)
@@ -13655,7 +13660,7 @@ function editDialog(environment, parameters) {
 addDeferredDialogTag('dialog', editDialog);
 
 })(window);
-`,qt=`/**
+`,Rt=`/**
 \u{1F58C}
 @file edit image from dialog
 @summary edit sprites, items, and tiles from dialog
@@ -14230,7 +14235,7 @@ addDualDialogTag('image', editImage);
 addDualDialogTag('imagePal', editPalette);
 
 })(window);
-`,Rt=`/**
+`,Ct=`/**
 \u{1F46F}\u200D\u2642\uFE0F
 @file edit player from dialog
 @summary change which sprite is controlled by the player
@@ -14607,7 +14612,7 @@ addDualDialogTag('player', function (environment, parameters) {
 });
 
 })(window);
-`,Ct=`/**
+`,Lt=`/**
 \u{1F3E0}
 @file edit room from dialog
 @summary modify the content of a room from dialog
@@ -15680,7 +15685,7 @@ function copyBoxAt(mapId, targetId, x1, y1, x2, y2, copyRoomId, pasteXPos, paste
 }
 
 })(window);
-`,Lt=`/**
+`,Pt=`/**
 \u{1F51A}
 @file end-from-dialog
 @summary trigger an ending from dialog, including narration text
@@ -16056,7 +16061,7 @@ addDualDialogTag('end', function (environment, parameters) {
 });
 
 })(window);
-`,Pt=`/**
+`,Mt=`/**
 \u{1F6AA}
 @file exit-from-dialog
 @summary exit to another room from dialog, including conditionals
@@ -16490,7 +16495,7 @@ function getExitParams(parameters) {
 // End of (exit) dialog function mod
 
 })(window);
-`,Mt=`/**
+`,Ht=`/**
 \u{1F6F0}
 @file external-game-data
 @summary separate Bitsy game data from your (modded) HTML for easier development
@@ -16817,7 +16822,7 @@ function dos2unix(text) {
 }
 
 })(window);
-`,Ht=`/**
+`,Gt=`/**
 \u{1F310}
 @file favicon-from-sprite
 @summary generate a browser favicon (tab icon) from a Bitsy sprite, including animation!
@@ -17188,7 +17193,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["favicon-from-sprite"] = this.hacks["favicon-from-sprite"] || {}, window);
-`,Gt=`/**
+`,Ut=`/**
 \u{1F495}
 @file follower
 @summary make sprites follow the player
@@ -17785,7 +17790,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.follower = this.hacks.follower || {}, window);
-`,Ut=`/**
+`,Vt=`/**
 \u{1F3AE}
 @file gamepad input
 @summary HTML5 gamepad support
@@ -18380,7 +18385,7 @@ after('update', function () {
 });
 
 })(window);
-`,Vt=`/**
+`,zt=`/**
 \u{1F342}
 @file gravity
 @summary Pseudo-platforming/gravity/physics
@@ -19355,7 +19360,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.gravity = this.hacks.gravity || {}, window);
-`,zt=`/**
+`,$t=`/**
 \u{1F577}
 @file itsy-bitsy
 @summary for when bitsy's not small enough
@@ -19630,7 +19635,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["itsy-bitsy"] = this.hacks["itsy-bitsy"] || {}, window);
-`,$t=`/**
+`,Wt=`/**
 \u2615
 @file javascript dialog
 @summary execute arbitrary javascript from dialog
@@ -19986,7 +19991,7 @@ function executeJs(environment, parameters) {
 addDualDialogTag('js', executeJs);
 
 })(window);
-`,Wt=`/**
+`,Yt=`/**
 \u{1F500}
 @file logic-operators-extended
 @summary adds conditional logic operators
@@ -20254,7 +20259,7 @@ inject(
 );
 
 })(window);
-`,Yt=`/**
+`,Xt=`/**
 \u{1F4DC}
 @file long dialog
 @summary put more words onscreen
@@ -20692,7 +20697,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.long_dialog = this.hacks.long_dialog || {}, window);
-`,Xt=`/**
+`,Kt=`/**
 \u{1F468}\u200D\u{1F468}\u200D\u{1F467}\u200D\u{1F467}
 @file multi-sprite avatar
 @summary make the player big
@@ -21112,7 +21117,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["multi-sprite_avatar"] = this.hacks["multi-sprite_avatar"] || {}, window);
-`,Kt=`/**
+`,Jt=`/**
 \u{1F4CE}
 @file noclip
 @summary walk through wall tiles, sprites, items, exits, and endings
@@ -21471,7 +21476,7 @@ hackOptions.ondown = {
 };
 
 })(window);
-`,Jt=`/**
+`,Qt=`/**
 \u{1F504}
 @file online
 @summary multiplayer bitsy
@@ -22364,7 +22369,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.online = this.hacks.online || {}, window);
-`,Qt=`/**
+`,Zt=`/**
 \u2B1B
 @file opaque tiles
 @summary tiles which hide the player
@@ -22634,7 +22639,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.opaque_tiles = this.hacks.opaque_tiles || {}, window);
-`,Zt=`/**
+`,tn=`/**
 \u{1F4C3}
 @file paragraph-break
 @summary Adds paragraph breaks to the dialogue parser
@@ -22940,7 +22945,7 @@ addDialogTag('p', function (environment, parameters, onReturn) {
 // End of (p) paragraph break mod
 
 })(window);
-`,tn=`/**
+`,nn=`/**
 \u23F3
 @file permanent items
 @summary prevent some items from being picked up
@@ -23227,7 +23232,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.permanent_items = this.hacks.permanent_items || {}, window);
-`,nn=`/**
+`,en=`/**
 \u27A1
 @file push sprites
 @summary sokoban-style sprite pushing
@@ -24117,7 +24122,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["push-sprites"] = this.hacks["push-sprites"] || {}, window);
-`,en=`/**
+`,rn=`/**
 \u{1F3AD}
 @file replace drawing
 @summary add name-tags to replace drawings when the game is loading
@@ -24396,7 +24401,7 @@ after('parseWorld', function () {
 });
 
 })(window);
-`,rn=`/**
+`,an=`/**
 \u{1F4BE}
 @file save
 @summary save/load your game
@@ -24958,7 +24963,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.save = this.hacks.save || {}, window);
-`,an=`/**
+`,on=`/**
 \u{1F3C3}
 @file smooth moves
 @summary ease the player's movement
@@ -25267,7 +25272,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.smooth_moves = this.hacks.smooth_moves || {}, window);
-`,on=`/**
+`,sn=`/**
 \u{1F6D1}
 @file solid items
 @summary treat some items like sprites that can be placed multiple times
@@ -25560,7 +25565,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.solid_items = this.hacks.solid_items || {}, window);
-`,sn=`/**
+`,cn=`/**
 \u{1F483}
 @file sprite effects
 @summary like text effects, but for sprites
@@ -26095,7 +26100,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.sprite_effects = this.hacks.sprite_effects || {}, window);
-`,cn=`/**
+`,ln=`/**
 \u23F1\uFE0F
 @file stopwatch
 @summary time player actions
@@ -26565,7 +26570,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.stopwatch = this.hacks.stopwatch || {}, window);
-`,ln=`/**
+`,un=`/**
 \u{1F5E3}
 @file text-to-speech
 @summary text-to-speech for bitsy dialog
@@ -27054,7 +27059,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["text-to-speech"] = this.hacks["text-to-speech"] || {}, window);
-`,un=`/**
+`,dn=`/**
 \u{1F3F0}
 @file tracery processing
 @summary process all dialog text with a tracery grammar
@@ -28175,7 +28180,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.tracery_processing = this.hacks.tracery_processing || {}, window);
-`,dn=`/**
+`,pn=`/**
 \u{1F39E}
 @file transitions
 @summary customizable WebGL transitions
@@ -28594,7 +28599,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.transitions = this.hacks.transitions || {}, window);
-`,pn=`/**
+`,fn=`/**
 \u{1F533}
 @file transparent background
 @summary makes the game have a transparent background
@@ -28906,7 +28911,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.transparent_background = this.hacks.transparent_background || {}, window);
-`,fn=`/**
+`,gn=`/**
 \u{1F441}\uFE0F\u200D\u{1F5E8}\uFE0F
 @file transparent dialog
 @summary makes the dialog box have a transparent background
@@ -29136,7 +29141,7 @@ after('renderClearInstruction', function (bufferId, buffer, paletteIndex) {
 });
 
 })(window);
-`,gn=`/**
+`,hn=`/**
 \u{1F3C1}
 @file transparent sprites
 @summary makes all sprites have transparent backgrounds
@@ -29401,7 +29406,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.transparent_sprites = this.hacks.transparent_sprites || {}, window);
-`,hn=`/**
+`,mn=`/**
 \u{1F4B1}
 @file twine bitsy comms
 @summary interprocess communication for twine and bitsy
@@ -29872,7 +29877,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["twine-bitsy-comms"] = this.hacks["twine-bitsy-comms"] || {}, window);
-`,mn=`/**
+`,yn=`/**
 \u2744
 @file unique items
 @summary items which, when picked up, remove all other instances of that item from the game
@@ -30123,9 +30128,9 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.unique_items = this.hacks.unique_items || {}, window);
-`,yn=[pt,ft,gt,ht,mt,yt,bt,vt,wt,kt,xt,St,jt,Tt,It,Ft,At,Et,Ot,Nt,Dt,Bt,_t,qt,Rt,Ct,Lt,Pt,Mt,Ht,Gt,Ut,Vt,zt,$t,Wt,Yt,Xt,Kt,Jt,Qt,Zt,tn,nn,en,rn,an,on,sn,cn,ln,un,dn,pn,fn,gn,hn,mn];const bn="modulepreload",I={},vn="./",c=function(n,e){return!e||e.length===0?n():Promise.all(e.map(i=>{if(i=`${vn}${i}`,i in I)return;I[i]=!0;const r=i.endsWith(".css"),a=r?'[rel="stylesheet"]':"";if(document.querySelector(`link[href="${i}"]${a}`))return;const o=document.createElement("link");if(o.rel=r?"stylesheet":bn,r||(o.as="script",o.crossOrigin=""),o.href=i,document.head.appendChild(o),r)return new Promise((s,l)=>{o.addEventListener("load",s),o.addEventListener("error",l)})})).then(()=>n())};var f=[{data:()=>c(()=>import("./BitsyHD.5.1.224b5bed.js"),[]),bitsyVersion:"5.1",isHd:!0,description:"Bitsy HD (Bitsy 5.1)"},{data:()=>c(()=>import("./Bitsy.5.5.b578c1f1.js"),[]),bitsyVersion:"5.5",description:"Bitsy 5.5"},{data:()=>c(()=>import("./Bitsy.6.0.d01fe5ea.js"),[]),bitsyVersion:"6.0",description:"Bitsy 6.0"},{data:()=>c(()=>import("./Bitsy.6.3.f1de51df.js"),[]),bitsyVersion:"6.3",description:"Bitsy 6.3"},{data:()=>c(()=>import("./Bitsy.6.4.4364f87f.js"),[]),bitsyVersion:"6.4",description:"Bitsy 6.4"},{data:()=>c(()=>import("./Bitsy.6.5.bd486411.js"),[]),bitsyVersion:"6.5",description:"Bitsy 6.5"},{data:()=>c(()=>import("./Bitsy.7.0.005afbac.js"),[]),bitsyVersion:"7.0",description:"Bitsy 7.0"},{data:()=>c(()=>import("./Bitsy.7.2.e7deb823.js"),[]),bitsyVersion:"7.2",description:"Bitsy 7.2"},{data:()=>c(()=>import("./Bitsy.7.8.a8e1ddd6.js"),[]),bitsyVersion:"7.8",description:"Bitsy 7.8"},{data:()=>c(()=>import("./Bitsy.7.10.1cdc75c6.js"),[]),bitsyVersion:"7.10",description:"Bitsy 7.10"},{data:()=>c(()=>import("./BitsyHD.7.11.f9a8cfdc.js"),[]),bitsyVersion:"7.11",isHd:!0,description:"Bitsy HD (Bitsy 7.11)"},{data:()=>c(()=>import("./Bitsy.7.11.c7cee104.js"),[]),bitsyVersion:"7.11",description:"Bitsy 7.11",isDefault:!0}].map(t=>S(h({},t),{id:`Bitsy${t.isHd?"HD":""}${t.bitsyVersion.replace(/\./g,"")}`}));const y=yn.map(t=>{const[n]=t.match(/^(\/\*\*[\S\s]*?\*\/)$/gm),e=n.split(`
+`,bn=[ft,gt,ht,mt,yt,bt,vt,wt,kt,xt,St,jt,Tt,It,Ft,At,Et,Ot,Nt,Dt,Bt,_t,qt,Rt,Ct,Lt,Pt,Mt,Ht,Gt,Ut,Vt,zt,$t,Wt,Yt,Xt,Kt,Jt,Qt,Zt,tn,nn,en,rn,an,on,sn,cn,ln,un,dn,pn,fn,gn,hn,mn,yn];const vn="modulepreload",F={},wn="./",c=function(n,e){return!e||e.length===0?n():Promise.all(e.map(i=>{if(i=`${wn}${i}`,i in F)return;F[i]=!0;const r=i.endsWith(".css"),a=r?'[rel="stylesheet"]':"";if(document.querySelector(`link[href="${i}"]${a}`))return;const o=document.createElement("link");if(o.rel=r?"stylesheet":vn,r||(o.as="script",o.crossOrigin=""),o.href=i,document.head.appendChild(o),r)return new Promise((s,l)=>{o.addEventListener("load",s),o.addEventListener("error",l)})})).then(()=>n())};var f=[{data:()=>c(()=>import("./BitsyHD.5.1.224b5bed.js"),[]),bitsyVersion:"5.1",isHd:!0,description:"Bitsy HD (Bitsy 5.1)"},{data:()=>c(()=>import("./Bitsy.5.5.b578c1f1.js"),[]),bitsyVersion:"5.5",description:"Bitsy 5.5"},{data:()=>c(()=>import("./Bitsy.6.0.d01fe5ea.js"),[]),bitsyVersion:"6.0",description:"Bitsy 6.0"},{data:()=>c(()=>import("./Bitsy.6.3.f1de51df.js"),[]),bitsyVersion:"6.3",description:"Bitsy 6.3"},{data:()=>c(()=>import("./Bitsy.6.4.4364f87f.js"),[]),bitsyVersion:"6.4",description:"Bitsy 6.4"},{data:()=>c(()=>import("./Bitsy.6.5.bd486411.js"),[]),bitsyVersion:"6.5",description:"Bitsy 6.5"},{data:()=>c(()=>import("./Bitsy.7.0.005afbac.js"),[]),bitsyVersion:"7.0",description:"Bitsy 7.0"},{data:()=>c(()=>import("./Bitsy.7.2.e7deb823.js"),[]),bitsyVersion:"7.2",description:"Bitsy 7.2"},{data:()=>c(()=>import("./Bitsy.7.8.a8e1ddd6.js"),[]),bitsyVersion:"7.8",description:"Bitsy 7.8"},{data:()=>c(()=>import("./Bitsy.7.10.1cdc75c6.js"),[]),bitsyVersion:"7.10",description:"Bitsy 7.10"},{data:()=>c(()=>import("./BitsyHD.7.11.f9a8cfdc.js"),[]),bitsyVersion:"7.11",isHd:!0,description:"Bitsy HD (Bitsy 7.11)"},{data:()=>c(()=>import("./Bitsy.7.11.c7cee104.js"),[]),bitsyVersion:"7.11",description:"Bitsy 7.11",isDefault:!0}].map(t=>j(m({},t),{id:`Bitsy${t.isHd?"HD":""}${t.bitsyVersion.replace(/\./g,"")}`}));const b=bn.map(t=>{const[n]=t.match(/^(\/\*\*[\S\s]*?\*\/)$/gm),e=n.split(`
 `).slice(1,-1),i=e[0],r=e.find(d=>d.startsWith("@file")).split("@file ")[1],a=e.find(d=>d.startsWith("@author")).split("@author ")[1],o=e.find(d=>d.startsWith("@summary")).split("@summary ")[1],s=e.slice(e.findIndex(d=>d.startsWith("@description"))+1).join(`
-`).replace(/Copy-paste .* after the bitsy source\.?/g,"Include hack").replace(/hackOptions below/g,"hackOptions above"),[,l]=t.match(/var hackOptions.*= {\n+([^]+?)\n+};$/m)||[];return{metadata:{emoji:i,id:r.replace(/\s/g,"-"),name:r,author:a,summary:o,description:s},options:l,data:t}});function wn(){const t=document.querySelector("select#template");t.innerHTML="";for(let n=f.length-1;n>=0;n--){const{id:e,description:i}=f[n],r=n===f.length-1;t.innerHTML+=`<option value="${e}" ${r?"data-default-option":""}>${i}${r?" (latest)":""}</option>`}}function kn(t,n){console.log(n),H.exports.saveAs(new Blob([n],{type:"text/html;charset=utf-8"}),t),console.log(`File '${t}' downloaded`)}function F(t,n=10){const e=t.toString(),i=e.length>n?"...":"";return e.substring(0,n)+i}function xn(t){return t.toLowerCase().replace(/-(.)/g,(n,e)=>e.toUpperCase())}function Sn(t){return t.replace(/[^\w\s]/gi,"")}function jn(t,n){const e=new RegExp(n,"g");t.value=t.value.replace(e,"")}function g(t,n){t.dataset.cleanRegex&&jn(t,t.dataset.cleanRegex);let e;t.type==="checkbox"?e=t.checked:n===void 0?e=t.value:(e=n,t.value=n);const{name:i}=t;localStorage.setItem(i,e),console.log(`Key: '${i}' saved to localStorage: ${F(e)}`)}function b(t){const{name:n}=t,e=localStorage.getItem(n);if(e===null){console.log(` Attempted to get key: ${n} from localStorage, but nothing was found.`);return}if(t.type==="checkbox"){const i=e==="true";t.checked=i}else t.value=e;console.log(` Got key: ${n} from localStorage: ${F(e)}`)}function v(t){const{value:n}=t.currentTarget,e=f.find(i=>i.id===n);if(!e){document.querySelector("#template").value=f.find(i=>i.isDefault).id,v(t);return}e.isHd?document.querySelector("#mascot").classList.add("borksyHD"):document.querySelector("#mascot").classList.remove("borksyHD"),e.bitsyVersion===m.bitsyVersion?(document.querySelector("#legacy-version-warning").style.display="none",document.querySelector('[data-header="Bitsy Version"] > summary').textContent="Bitsy Version"):(document.querySelector("#legacy-version-warning").style.display=null,document.querySelector('[data-header="Bitsy Version"] > summary').textContent="\u2757 Bitsy Version \u2757"),e.data()}function p(t){const{name:n}=t;let e;switch(n){case"template":e=Tn;break}t.addEventListener("change",()=>{g(t),e==null||e(t)})}function Tn(t){const n=t.value.split(".")[0]==="BitsyHD",e=localStorage.getItem("gamedata")==null,i=T;if(n&&e&&i!==void 0){const a=document.querySelector("#gamedata");a.value=i,g(a)}}function A(t){const n=document.querySelector(`[data-associated-hack="${t.dataset.hack}"]`);n&&E(n,t)}function E(t,n){n.checked===!0?t.classList.add("included"):t.classList.remove("included")}function In(t){g(t),A(t)}function Fn(t){t.addEventListener("change",()=>{In(t)})}function An(){return Array.from(document.querySelectorAll("[data-borksy-replace-single]")).reduce((t,n)=>(t[n.dataset.borksyReplaceSingle]=n.value,t),{})}function En(){return y.reduce((t,n)=>{const e=document.querySelector(`#${n.metadata.id}`);if(!(e.checked||e.value==="true"))return t;let r=n.data;if(n.options){const a=document.querySelector(`#${n.metadata.id}-options`).value;r=r.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m,`$1 {
+`).replace(/Copy-paste .* after the bitsy source\.?/g,"Include hack").replace(/hackOptions below/g,"hackOptions above"),[,l]=t.match(/var hackOptions.*= {\n+([^]+?)\n+};$/m)||[];return{metadata:{emoji:i,id:r.replace(/\s/g,"-"),name:r,author:a,summary:o,description:s},options:l,data:t}});function kn(){const t=document.querySelector("select#template");t.innerHTML="";for(let n=f.length-1;n>=0;n--){const{id:e,description:i}=f[n],r=n===f.length-1;t.innerHTML+=`<option value="${e}" ${r?"data-default-option":""}>${i}${r?" (latest)":""}</option>`}}function xn(t,n){console.log(n),G.exports.saveAs(new Blob([n],{type:"text/html;charset=utf-8"}),t),console.log(`File '${t}' downloaded`)}function A(t,n=10){const e=t.toString(),i=e.length>n?"...":"";return e.substring(0,n)+i}function Sn(t){return t.toLowerCase().replace(/-(.)/g,(n,e)=>e.toUpperCase())}function jn(t){return t.replace(/[^\w\s]/gi,"")}function Tn(t,n){const e=new RegExp(n,"g");t.value=t.value.replace(e,"")}function g(t,n){t.dataset.cleanRegex&&Tn(t,t.dataset.cleanRegex);let e;t.type==="checkbox"?e=t.checked:n===void 0?e=t.value:(e=n,t.value=n);const{name:i}=t;localStorage.setItem(i,e),console.log(`Key: '${i}' saved to localStorage: ${A(e)}`)}function v(t){const{name:n}=t,e=localStorage.getItem(n);if(e===null){console.log(` Attempted to get key: ${n} from localStorage, but nothing was found.`);return}if(t.type==="checkbox"){const i=e==="true";t.checked=i}else t.value=e;console.log(` Got key: ${n} from localStorage: ${A(e)}`)}function w(t){const{value:n}=t.currentTarget,e=f.find(i=>i.id===n);if(!e){document.querySelector("#template").value=f.find(i=>i.isDefault).id,w(t);return}e.isHd?document.querySelector("#mascot").classList.add("borksyHD"):document.querySelector("#mascot").classList.remove("borksyHD"),e.bitsyVersion===y.bitsyVersion?(document.querySelector("#legacy-version-warning").style.display="none",document.querySelector('[data-header="Bitsy Version"] > summary').textContent="Bitsy Version"):(document.querySelector("#legacy-version-warning").style.display=null,document.querySelector('[data-header="Bitsy Version"] > summary').textContent="\u2757 Bitsy Version \u2757"),e.data()}function p(t){const{name:n}=t;let e;switch(n){case"template":e=In;break}t.addEventListener("change",()=>{g(t),e==null||e(t)})}function In(t){const n=t.value.split(".")[0]==="BitsyHD",e=localStorage.getItem("gamedata")==null,i=I;if(n&&e&&i!==void 0){const a=document.querySelector("#gamedata");a.value=i,g(a)}}function E(t){const n=document.querySelector(`[data-associated-hack="${t.dataset.hack}"]`);n&&O(n,t)}function O(t,n){n.checked===!0?t.classList.add("included"):t.classList.remove("included")}function Fn(t){g(t),E(t)}function An(t){t.addEventListener("change",()=>{Fn(t)})}function En(){return Array.from(document.querySelectorAll("[data-borksy-replace-single]")).reduce((t,n)=>(t[n.dataset.borksyReplaceSingle]=n.value,t),{})}function On(){return b.reduce((t,n)=>{const e=document.querySelector(`#${n.metadata.id}`);if(!(e.checked||e.value==="true"))return t;let r=n.data;if(n.options){const a=document.querySelector(`#${n.metadata.id}-options`).value;r=r.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m,`$1 {
 ${a}
 }$2`)}return`${t}${r}
-`},"")}let w=!1;async function O(){if(!w){w=!0;try{Array.from(document.querySelectorAll("[data-save]")).forEach(a=>g(a));const t=document.querySelector("#template").value,n=h({"BORKSY-VERSION":nt.version,"HACKS-VERSION":m.version,HACKS:En()},An());console.log(n);const e=document.querySelector("#filename").value,r=M.exports.compile((await f.find(a=>a.id===t).data()).default)(n);kn(`${e}.html`,r)}finally{w=!1}}}function N(){const{body:t}=document;t.classList.contains("party")?(t.classList.remove("party"),window.alert("\u{1F63E} Party Mode Deactivated. Everyone out. \u{1F63E}")):(t.classList.add("party"),window.alert("\u2728\u{1F308} Party Mode Activated! \u{1F308}\u2728"))}function On(){var s;const t=document.querySelector("#about_content");t.innerHTML=et.replace("HACKS_BITSY_VERSION",m.bitsyVersion);const n=document.createElement("section");n.id="last-update",n.innerHTML=(s=j.match(/(<h[12][^]+?)<h[12]/m))==null?void 0:s[1].replace(/<h[12]>([^]+?)<\/h[12]>/g,"<h2>What's new in v$1</h2>"),t.prepend(n);const e=u("How To Use Borksy");e.append(it),t.appendChild(e);const i=u("Troubleshooting / FAQs");i.classList.add("faq"),i.append(ot),t.appendChild(i);const r=u("Other Bitsy Tools");r.append(at),t.appendChild(r);const a=u("AYo's Special Tips");a.append(rt),t.appendChild(a);const o=u("Changelog");o.append(j),t.appendChild(o)}function Nn(t){t.value=t.dataset.default,p(t)}function Dn(t){const n=t.id.replace(/-options$/,""),{options:e}=y.find(i=>i.metadata.id===n);t.value=e,p(t)}function Bn(t){let n=t.dataset.default;n=n==="true",t.type==="checkbox"?t.checked=n:t.value=n,p(t)}function _n(t){const n=t.dataset.default,e=dt[n];if(!e)throw new Error(`Could not find file ${n}`);t.value=e,p(t)}function qn(t){Ln(t.dataset.default)}function Rn(t){const{options:n}=t;for(let e=n.length-1;e>=0;e--)if(n[e].dataset.defaultOption!==void 0){t.selectedIndex=e;break}p(t)}function D(t=!0){Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{const e=localStorage.getItem(n.name),i=typeof n.dataset.default!="undefined",r=e!==null;if(i&&(!r||!t)){const{defaultType:a}=n.dataset;switch(a){case"string":Nn(n);break;case"boolean":Bn(n);break;case"textfile":_n(n);break;case"font":qn(n);break;case"option":Rn(n);break;case"hackOptions":Dn(n);break;default:throw new Error("Unknown type")}}else r?b(n):n.value="",p(n);A(n)}),console.log(`Defaults loaded. Forced? ${!t}`)}function B(){let t;try{t=window.confirm("Are you sure you want to erase all data and restore defaults?")}catch{t=!0}!t||(Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{localStorage.removeItem(n.name)}),console.log("Cookies removed"),D(!1),document.querySelector("#mascot").classList.remove("borksyHD"))}function Cn(){const t={x:6,y:8},n={x:16,y:16},e=1,i=document.createElement("canvas");i.width=(t.x+e)*n.x+e,i.height=(t.y+e)*n.y+e;const r=i.getContext("2d");let a=[];r.drawImage(this,0,0);for(let o=0;o<n.y;++o)for(let s=0;s<n.x;++s){const l=r.getImageData(s*(t.x+e)+e,o*(t.y+e)+e,t.x,t.y);a.push(l.data)}for(let o=0;o<a.length;++o){const s=[];for(let l=0;l<a[o].length;l+=4)s.push(a[o][l]>255/2?1:0);a[o]=s}a=a.flat(),g(document.querySelector("#fontdata"),`[/*${document.querySelector("#fontfilename").value}*/${a.toString()}]`)}function Ln(t){let n;typeof t=="object"?n=t.target.result:(n=`fonts/${t}`,Pn(t));const e=new Image;e.onload=Cn,e.src=n}function Pn(t){const n=document.querySelector("#fontfilename");n.value!==t&&(n.value=t,g(n))}function Mn(t,n){t.dataset.save=!0,t.dataset.default=!1,t.dataset.defaultType="boolean",t.dataset.hack=n}function Hn(t){const n=u(`${t.metadata.emoji} ${t.metadata.name} (by ${t.metadata.author})`);n.dataset.associatedHack=t.metadata.id;const e=document.createElement("p");e.textContent=t.metadata.summary,n.append(e);const i=document.createElement("label");i.className="horizontal";const r=document.createElement("input");if(r.type="checkbox",r.name=t.metadata.name,r.id=t.metadata.id,Mn(r,t.metadata.id),b(r),E(n,r),Fn(r),i.append(r),i.append(`Include "${Sn(t.metadata.name)}" hack`),n.append(i),t.options){const a=u("Options"),o=document.createElement("label");o.dataset.pre=`var ${xn(t.metadata.id)}Options = {`,o.dataset.post="};";const s=document.createElement("textarea");s.rows=5,s.cols=50,s.textContent=t.options,s.name=`${t.metadata.name}.options`,s.id=`${t.metadata.id}-options`,s.dataset.save=!0,s.dataset.default=t.metadata.id,s.dataset.defaultType="hackOptions",b(s),p(s),o.append(s),a.append(o),n.append(a)}if(t.metadata.description){const a=u("README"),o=document.createElement("pre");o.textContent=t.metadata.description,a.append(o),n.append(a)}return n}function Gn(){const t=document.querySelector("#hacks-section");y.forEach(n=>{t.appendChild(Hn(n))})}function u(t){const n=document.createElement("details");return n.className="collapsible",n.dataset.collapse="",n.dataset.header=t,_(n),n}function Un(){Array.from(document.querySelectorAll("[data-collapsible]")).forEach(_),console.log("HACK IT UP YO"),Gn(),document.querySelector("#preloader").remove()}function _(t){const n=document.createElement("summary");n.textContent=t.dataset.header,n.className="collapsible_header",t.prepend(n)}function Vn(){window.addEventListener("keydown",t=>{if(t.ctrlKey||t.metaKey)switch(String.fromCharCode(t.which).toLowerCase()){case"s":t.preventDefault(),O();break;case"d":t.preventDefault(),B();break;case"p":t.preventDefault(),N();break}})}document.querySelector("#download-button").addEventListener("click",O);document.querySelector("#restore-button").addEventListener("click",B);document.querySelector("#mascot").addEventListener("click",N);document.querySelector("#template").addEventListener("change",v);Un();On();wn();D();Vn();v({currentTarget:document.querySelector("#template")});
+`},"")}let k=!1;async function N(){if(!k){k=!0;try{Array.from(document.querySelectorAll("[data-save]")).forEach(a=>g(a));const t=document.querySelector("#template").value,n=m({"BORKSY-VERSION":et.version,"HACKS-VERSION":y.version,HACKS:On()},En());console.log(n);const e=document.querySelector("#filename").value,r=H.exports.compile((await f.find(a=>a.id===t).data()).default)(n);xn(`${e}.html`,r)}finally{k=!1}}}function D(){const{body:t}=document;t.classList.contains("party")?(t.classList.remove("party"),window.alert("\u{1F63E} Party Mode Deactivated. Everyone out. \u{1F63E}")):(t.classList.add("party"),window.alert("\u2728\u{1F308} Party Mode Activated! \u{1F308}\u2728"))}function h(t){const n=document.createElement("div");return n.innerHTML=t,n.children}function Nn(){var s;const t=document.querySelector("#about_content");t.innerHTML=rt.replace("HACKS_BITSY_VERSION",y.bitsyVersion);const n=document.createElement("section");n.id="last-update",n.innerHTML=(s=T.match(/(<h[12][^]+?)<h[12]/m))==null?void 0:s[1].replace(/<h[12]>([^]+?)<\/h[12]>/g,"<h2>What's new in v$1</h2>"),t.prepend(n);const e=u("How To Use Borksy");e.append(...h(at)),t.appendChild(e);const i=u("Troubleshooting / FAQs");i.classList.add("faq"),i.append(...h(st)),t.appendChild(i);const r=u("Other Bitsy Tools");r.append(...h(ot)),t.appendChild(r);const a=u("AYo's Special Tips");a.append(...h(it)),t.appendChild(a);const o=u("Changelog");o.append(...h(T)),t.appendChild(o)}function Dn(t){t.value=t.dataset.default,p(t)}function Bn(t){const n=t.id.replace(/-options$/,""),{options:e}=b.find(i=>i.metadata.id===n);t.value=e,p(t)}function _n(t){let n=t.dataset.default;n=n==="true",t.type==="checkbox"?t.checked=n:t.value=n,p(t)}function qn(t){const n=t.dataset.default,e=pt[n];if(!e)throw new Error(`Could not find file ${n}`);t.value=e,p(t)}function Rn(t){Pn(t.dataset.default)}function Cn(t){const{options:n}=t;for(let e=n.length-1;e>=0;e--)if(n[e].dataset.defaultOption!==void 0){t.selectedIndex=e;break}p(t)}function B(t=!0){Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{const e=localStorage.getItem(n.name),i=typeof n.dataset.default!="undefined",r=e!==null;if(i&&(!r||!t)){const{defaultType:a}=n.dataset;switch(a){case"string":Dn(n);break;case"boolean":_n(n);break;case"textfile":qn(n);break;case"font":Rn(n);break;case"option":Cn(n);break;case"hackOptions":Bn(n);break;default:throw new Error("Unknown type")}}else r?v(n):n.value="",p(n);E(n)}),console.log(`Defaults loaded. Forced? ${!t}`)}function _(){let t;try{t=window.confirm("Are you sure you want to erase all data and restore defaults?")}catch{t=!0}!t||(Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{localStorage.removeItem(n.name)}),console.log("Cookies removed"),B(!1),document.querySelector("#mascot").classList.remove("borksyHD"))}function Ln(){const t={x:6,y:8},n={x:16,y:16},e=1,i=document.createElement("canvas");i.width=(t.x+e)*n.x+e,i.height=(t.y+e)*n.y+e;const r=i.getContext("2d");let a=[];r.drawImage(this,0,0);for(let o=0;o<n.y;++o)for(let s=0;s<n.x;++s){const l=r.getImageData(s*(t.x+e)+e,o*(t.y+e)+e,t.x,t.y);a.push(l.data)}for(let o=0;o<a.length;++o){const s=[];for(let l=0;l<a[o].length;l+=4)s.push(a[o][l]>255/2?1:0);a[o]=s}a=a.flat(),g(document.querySelector("#fontdata"),`[/*${document.querySelector("#fontfilename").value}*/${a.toString()}]`)}function Pn(t){let n;typeof t=="object"?n=t.target.result:(n=`fonts/${t}`,Mn(t));const e=new Image;e.onload=Ln,e.src=n}function Mn(t){const n=document.querySelector("#fontfilename");n.value!==t&&(n.value=t,g(n))}function Hn(t,n){t.dataset.save=!0,t.dataset.default=!1,t.dataset.defaultType="boolean",t.dataset.hack=n}function Gn(t){const n=u(`${t.metadata.emoji} ${t.metadata.name} (by ${t.metadata.author})`);n.dataset.associatedHack=t.metadata.id;const e=document.createElement("p");e.textContent=t.metadata.summary,n.append(e);const i=document.createElement("label");i.className="horizontal";const r=document.createElement("input");if(r.type="checkbox",r.name=t.metadata.name,r.id=t.metadata.id,Hn(r,t.metadata.id),v(r),O(n,r),An(r),i.append(r),i.append(`Include "${jn(t.metadata.name)}" hack`),n.append(i),t.options){const a=u("Options"),o=document.createElement("label");o.dataset.pre=`var ${Sn(t.metadata.id)}Options = {`,o.dataset.post="};";const s=document.createElement("textarea");s.rows=5,s.cols=50,s.textContent=t.options,s.name=`${t.metadata.name}.options`,s.id=`${t.metadata.id}-options`,s.dataset.save=!0,s.dataset.default=t.metadata.id,s.dataset.defaultType="hackOptions",v(s),p(s),o.append(s),a.append(o),n.append(a)}if(t.metadata.description){const a=u("README"),o=document.createElement("pre");o.textContent=t.metadata.description,a.append(o),n.append(a)}return n}function Un(){const t=document.querySelector("#hacks-section");b.forEach(n=>{t.appendChild(Gn(n))})}function u(t){const n=document.createElement("details");return n.className="collapsible",n.dataset.collapse="",n.dataset.header=t,q(n),n}function Vn(){Array.from(document.querySelectorAll("[data-collapsible]")).forEach(q),console.log("HACK IT UP YO"),Un(),document.querySelector("#preloader").remove()}function q(t){const n=document.createElement("summary");n.textContent=t.dataset.header,n.className="collapsible_header",t.prepend(n)}function zn(){window.addEventListener("keydown",t=>{if(t.ctrlKey||t.metaKey)switch(String.fromCharCode(t.which).toLowerCase()){case"s":t.preventDefault(),N();break;case"d":t.preventDefault(),_();break;case"p":t.preventDefault(),D();break}})}document.querySelector("#download-button").addEventListener("click",N);document.querySelector("#restore-button").addEventListener("click",_);document.querySelector("#mascot").addEventListener("click",D);document.querySelector("#template").addEventListener("change",w);Vn();Nn();kn();B();zn();w({currentTarget:document.querySelector("#template")});
