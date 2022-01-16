@@ -247,6 +247,12 @@ function togglePartyMode() {
 	}
 }
 
+function toHtml(string) {
+	const el = document.createElement('div');
+	el.innerHTML = string;
+	return el.children;
+}
+
 function loadAboutInfo() {
 	const elAbout = document.querySelector('#about_content');
 	elAbout.innerHTML = htmlAbout.replace('HACKS_BITSY_VERSION', pkgHacks.bitsyVersion);
@@ -257,24 +263,24 @@ function loadAboutInfo() {
 	elAbout.prepend(lastUpdate);
 
 	const elHowto = makeNewCollapsible('How To Use Borksy');
-	elHowto.append(htmlHowto);
+	elHowto.append(...toHtml(htmlHowto));
 	elAbout.appendChild(elHowto);
 
 	const elFaqs = makeNewCollapsible('Troubleshooting / FAQs');
 	elFaqs.classList.add('faq');
-	elFaqs.append(htmlFaqs);
+	elFaqs.append(...toHtml(htmlFaqs));
 	elAbout.appendChild(elFaqs);
 
 	const elTools = makeNewCollapsible('Other Bitsy Tools');
-	elTools.append(htmlTools);
+	elTools.append(...toHtml(htmlTools));
 	elAbout.appendChild(elTools);
 
 	const elTips = makeNewCollapsible("AYo's Special Tips");
-	elTips.append(htmlTips);
+	elTips.append(...toHtml(htmlTips));
 	elAbout.appendChild(elTips);
 
 	const elChangelog = makeNewCollapsible('Changelog');
-	elChangelog.append(htmlChangelog);
+	elChangelog.append(...toHtml(htmlChangelog));
 	elAbout.appendChild(elChangelog);
 }
 
