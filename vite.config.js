@@ -1,6 +1,7 @@
 import mdPlugin, { Mode } from 'vite-plugin-markdown';
 import strPlugin from 'vite-plugin-string';
 
+/** @type {import('vite').UserConfig} */
 export default {
 	root: 'src',
 	base: './',
