@@ -128,6 +128,8 @@ function onTemplateChanged(event) {
 		document.querySelector('#legacy-version-warning').style.display = null;
 		document.querySelector('[data-header="Bitsy Version"] > summary').textContent = '❗ Bitsy Version ❗';
 	}
+	// preload template
+	template.data();
 }
 
 function setSaveTrigger(el) {
@@ -210,21 +212,28 @@ function assembleHacks() {
 	}, '');
 }
 
-function assembleAndDownloadFile() {
-	Array.from(document.querySelectorAll('[data-save]')).forEach(i => saveThisData(i));
+let saving = false;
+async function assembleAndDownloadFile() {
+	if (saving) return;
+	saving = true;
+	try {
+		Array.from(document.querySelectorAll('[data-save]')).forEach(i => saveThisData(i));
 
-	const templateName = document.querySelector('#template').value;
-	const template = compile(templates.find(i => i.id === templateName).data);
-	const context = {
-		'BORKSY-VERSION': pkg.version,
-		'HACKS-VERSION': pkgHacks.version,
-		HACKS: assembleHacks(),
-		...assembleSingles(),
-	};
-	console.log(context);
-	const filename = document.querySelector('#filename').value;
-	const file = template(context);
-	download(`${filename}.html`, file);
+		const templateName = document.querySelector('#template').value;
+		const context = {
+			'BORKSY-VERSION': pkg.version,
+			'HACKS-VERSION': pkgHacks.version,
+			HACKS: assembleHacks(),
+			...assembleSingles(),
+		};
+		console.log(context);
+		const filename = document.querySelector('#filename').value;
+		const template = compile((await templates.find(i => i.id === templateName).data()).default);
+		const file = template(context);
+		download(`${filename}.html`, file);
+	} finally {
+		saving = false;
+	}
 }
 
 function togglePartyMode() {
