@@ -1,3 +1,15 @@
+# [5.9.0](https://github.com/Ayolland/borksy/compare/v5.8.0...v5.9.0) (2022-01-16)
+
+
+### Bug Fixes
+
+* open all links in new tab ([949191d](https://github.com/Ayolland/borksy/commit/949191d46a820b646ee6c0065caa30fda71153b8))
+
+
+### Features
+
+* reduce load time ([97fc9b5](https://github.com/Ayolland/borksy/commit/97fc9b517a9857c9ee94494cccf865fd14417bcd))
+
 # [5.8.0](https://github.com/Ayolland/borksy/compare/v5.7.0...v5.8.0) (2022-01-12)
 
 
