@@ -1,3 +1,16 @@
+# [5.11.0](https://github.com/Ayolland/borksy/compare/v5.10.0...v5.11.0) (2022-01-29)
+
+
+### Bug Fixes
+
+* update default gamedata ([21f4fa9](https://github.com/Ayolland/borksy/commit/21f4fa983f71d213f4cde93ddadb202be3dd7926))
+
+
+### Features
+
+* add Bitsy 7.12 template ([904ab29](https://github.com/Ayolland/borksy/commit/904ab29758f08748519d7d26d062aade6119ed54))
+* add Bitsy HD 7.12 template ([5ccbe4f](https://github.com/Ayolland/borksy/commit/5ccbe4f701dba30adea36a5a46715477399a6a6e))
+
 # [5.10.0](https://github.com/Ayolland/borksy/compare/v5.9.1...v5.10.0) (2022-01-29)
 
 

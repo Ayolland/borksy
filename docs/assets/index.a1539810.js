@@ -1,4 +1,14 @@
-var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropertyDescriptors;var x=Object.getOwnPropertySymbols;var P=Object.prototype.hasOwnProperty,M=Object.prototype.propertyIsEnumerable;var S=(t,n,e)=>n in t?R(t,n,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[n]=e,m=(t,n)=>{for(var e in n||(n={}))P.call(n,e)&&S(t,e,n[e]);if(x)for(var e of x(n))M.call(n,e)&&S(t,e,n[e]);return t},j=(t,n)=>C(t,L(n));import{p as y,h as H,F as G}from"./vendor.c0896bb1.js";const U=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const r of document.querySelectorAll('link[rel="modulepreload"]'))i(r);new MutationObserver(r=>{for(const a of r)if(a.type==="childList")for(const o of a.addedNodes)o.tagName==="LINK"&&o.rel==="modulepreload"&&i(o)}).observe(document,{childList:!0,subtree:!0});function e(r){const a={};return r.integrity&&(a.integrity=r.integrity),r.referrerpolicy&&(a.referrerPolicy=r.referrerpolicy),r.crossorigin==="use-credentials"?a.credentials="include":r.crossorigin==="anonymous"?a.credentials="omit":a.credentials="same-origin",a}function i(r){if(r.ep)return;r.ep=!0;const a=e(r);fetch(r.href,a)}};U();const T=`<h1><a href="https://github.com/Ayolland/borksy/compare/v5.9.1...v5.10.0">5.10.0</a> (2022-01-29)</h1>
+var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropertyDescriptors;var x=Object.getOwnPropertySymbols;var P=Object.prototype.hasOwnProperty,M=Object.prototype.propertyIsEnumerable;var S=(t,n,e)=>n in t?R(t,n,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[n]=e,m=(t,n)=>{for(var e in n||(n={}))P.call(n,e)&&S(t,e,n[e]);if(x)for(var e of x(n))M.call(n,e)&&S(t,e,n[e]);return t},j=(t,n)=>C(t,L(n));import{p as y,h as H,F as G}from"./vendor.c0896bb1.js";const U=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const r of document.querySelectorAll('link[rel="modulepreload"]'))a(r);new MutationObserver(r=>{for(const i of r)if(i.type==="childList")for(const o of i.addedNodes)o.tagName==="LINK"&&o.rel==="modulepreload"&&a(o)}).observe(document,{childList:!0,subtree:!0});function e(r){const i={};return r.integrity&&(i.integrity=r.integrity),r.referrerpolicy&&(i.referrerPolicy=r.referrerpolicy),r.crossorigin==="use-credentials"?i.credentials="include":r.crossorigin==="anonymous"?i.credentials="omit":i.credentials="same-origin",i}function a(r){if(r.ep)return;r.ep=!0;const i=e(r);fetch(r.href,i)}};U();const T=`<h1><a href="https://github.com/Ayolland/borksy/compare/v5.10.0...v5.11.0">5.11.0</a> (2022-01-29)</h1>
+<h3>Bug Fixes</h3>
+<ul>
+<li>update default gamedata (<a href="https://github.com/Ayolland/borksy/commit/21f4fa983f71d213f4cde93ddadb202be3dd7926">21f4fa9</a>)</li>
+</ul>
+<h3>Features</h3>
+<ul>
+<li>add Bitsy 7.12 template (<a href="https://github.com/Ayolland/borksy/commit/904ab29758f08748519d7d26d062aade6119ed54">904ab29</a>)</li>
+<li>add Bitsy HD 7.12 template (<a href="https://github.com/Ayolland/borksy/commit/5ccbe4f701dba30adea36a5a46715477399a6a6e">5ccbe4f</a>)</li>
+</ul>
+<h1><a href="https://github.com/Ayolland/borksy/compare/v5.9.1...v5.10.0">5.10.0</a> (2022-01-29)</h1>
 <h3>Features</h3>
 <ul>
 <li>update hacks (<a href="https://github.com/Ayolland/borksy/commit/bfc348447cc98524f517e0a6993b46cac5cb613e">bfc3484</a>)</li>
@@ -314,7 +324,7 @@ var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropert
 <ul>
 <li>Initial version</li>
 </ul>
-`,V="borksy",z="5.10.0",$="Borksy Game Hacker: A tool for extending Bitsy games",W={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},Y={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},X="AYolland",K="MIT",J={url:"https://github.com/Ayolland/borksy/issues"},Q="https://ayolland.itch.io/borksy",Z={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},tt={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},nt={"@bitsy/hecks":"^20.0.0",eslint:"^8.6.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.3.0","eslint-plugin-import":"^2.25.2","eslint-plugin-prettier":"^4.0.0","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^27.2.5","jest-dev-server":"^6.0.0","jest-image-snapshot":"^4.5.1",prettier:"^2.4.1",puppeteer:"^13.0.1","rollup-plugin-visualizer":"^5.5.4",sass:"^1.42.1",vite:"^2.6.4","vite-plugin-markdown":"^2.0.2","vite-plugin-string":"^1.0.1"};var et={private:!0,name:V,version:z,description:$,scripts:W,repository:Y,author:X,license:K,bugs:J,homepage:Q,jest:Z,release:tt,devDependencies:nt};const rt=`<p>Borksy is a hacking tool to be used in conjunction with <a href="https://ledoux.itch.io/bitsy">Bitsy Game Maker</a>! Use it to customize your games and add hacks without needing to manually cut-and-paste html.</p>
+`,V="borksy",z="5.11.0",$="Borksy Game Hacker: A tool for extending Bitsy games",W={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},Y={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},X="AYolland",K="MIT",J={url:"https://github.com/Ayolland/borksy/issues"},Q="https://ayolland.itch.io/borksy",Z={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},tt={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},nt={"@bitsy/hecks":"^20.0.0",eslint:"^8.6.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.3.0","eslint-plugin-import":"^2.25.2","eslint-plugin-prettier":"^4.0.0","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^27.2.5","jest-dev-server":"^6.0.0","jest-image-snapshot":"^4.5.1",prettier:"^2.4.1",puppeteer:"^13.0.1","rollup-plugin-visualizer":"^5.5.4",sass:"^1.42.1",vite:"^2.6.4","vite-plugin-markdown":"^2.0.2","vite-plugin-string":"^1.0.1"};var et={private:!0,name:V,version:z,description:$,scripts:W,repository:Y,author:X,license:K,bugs:J,homepage:Q,jest:Z,release:tt,devDependencies:nt};const rt=`<p>Borksy is a hacking tool to be used in conjunction with <a href="https://ledoux.itch.io/bitsy">Bitsy Game Maker</a>! Use it to customize your games and add hacks without needing to manually cut-and-paste html.</p>
 <p>If you're not sure how to use this tool, check out the 'How To Use Borksy' section. If you're having issues, check the 'Troubleshooting/FAQs' section. If you're not familiar with how Bitsy can be extended, try exploring <a href="https://github.com/seleb/bitsy-hacks/">the Bitsy hacks repo</a>.</p>
 <p>Borksy Features:</p>
 <ul>
@@ -329,14 +339,14 @@ var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropert
 <li>Party Mode!</li>
 </ul>
 <p>Report any bugs you find <a href="https://github.com/Ayolland/borksy/issues">on GitHub</a>, or reach out to <a href="https://twitter.com/SeanSLeBlanc">Sean</a>!</p>
-`,it=`<ul>
+`,at=`<ul>
 <li>If you're still using the exit-from-dialog or end-from-dialog hacks, make sure to check out and new the new locked exits functionality in Bitsy 7.0!</li>
 <li>You can access the Bitsy game variables from JavaScript using <code>window.scriptInterpreter.GetVariable(variableName)</code> and <code>window.scriptInterpreter.SetVariable(variableName)</code></li>
 <li>Using CSS to add a background image to your game can add a lot of polish for mimimal effort, especially on mobile.</li>
 <li>Borksy changes the canvas rendering of Bitsy game to display crisp pixel-edges. This can be commented out in the CSS if your prefer the default anti-aliasing.</li>
 <li>Remember, you can add hacks that aren't included in Borksy using the 'Additional JS' field.</li>
 </ul>
-`,at=`<p>In order to use Borksy, you need to already have a Bitsy game you wish to add functionality to.</p>
+`,it=`<p>In order to use Borksy, you need to already have a Bitsy game you wish to add functionality to.</p>
 <p>Borksy accepts the gamedata from Bitsy and combines that with a Bitsy template to create a modified HTML file with your Bitsy game as well as any hacks or modifications you chose to include. You'll need to copy the gamedata from the Bitsy editor and paste it into Borksy. The file Borksy saves is the file you will release as your game.</p>
 <p>Hacks are not guaranteed to work with each other, and particular hacks are not guaranteed to work with particular templates. Make sure you test the particular load-out of hacks you plan to use before developing with them.</p>
 <p>While Borksy uses your browser data to save your work, it is a good idea to save any modifications (hackOptions, additional JS, HTML modifications) somewhere on your computer separately, as there is no way for Borksy to load these from a saved Borksy game.</p>
@@ -2727,11 +2737,12 @@ var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropert
 		0,0,0,0,0,0
 ]`,ut=`BORK BORK BORK
 
-# BITSY VERSION 5.5
+# BITSY VERSION 7.12
 
 ! ROOM_FORMAT 1
 
 PAL 0
+NAME blueprint
 187,56,102
 255,141,78
 0,0,0
@@ -2753,6 +2764,7 @@ ROOM 0
 0,a,0,0,0,0,0,0,0,0,0,0,0,0,a,0
 0,a,a,a,a,a,a,a,a,a,a,a,a,a,a,0
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+NAME example room
 PAL 0
 
 TIL a
@@ -2764,6 +2776,7 @@ TIL a
 10000001
 10000001
 11111111
+NAME block
 WAL true
 
 SPR A
@@ -2805,7 +2818,7 @@ SPR a
 01111010
 11111100
 NAME dog
-DLG SPR_0
+DLG 0
 POS 0 8,12
 
 ITM 0
@@ -2818,21 +2831,29 @@ ITM 0
 00011000
 00000000
 NAME tea
-DLG ITM_0
+DLG 1
 
-DLG SPR_0
+DLG 0
 """
 {sequence
   - BORKSY: bork bork bork i'm a cat
   - BORKSY: (heh heh i'm not a cat)
 }
 """
+NAME dog dialog
 
-DLG ITM_0
+DLG 1
 You found a nice warm cup of tea
+NAME tea dialog
+
+DLG 2
+A key! {wvy}What does it open?{wvy}
+NAME key dialog
 
 VAR a
-42`,I=`BORK BORK HD BORK
+42
+
+`,I=`BORK BORK HD BORK
 
 # BITSY VERSION 5.1
 
@@ -17821,334 +17842,334 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
-var Buttons;\r
-(function (Buttons) {\r
-    // XBOX360 wired controller configuration\r
-    Buttons[Buttons["A"] = 0] = "A";\r
-    Buttons[Buttons["X"] = 2] = "X";\r
-    Buttons[Buttons["B"] = 1] = "B";\r
-    Buttons[Buttons["Y"] = 3] = "Y";\r
-    Buttons[Buttons["LB"] = 4] = "LB";\r
-    Buttons[Buttons["RB"] = 5] = "RB";\r
-    Buttons[Buttons["LT"] = 6] = "LT";\r
-    Buttons[Buttons["RT"] = 7] = "RT";\r
-    Buttons[Buttons["BACK"] = 8] = "BACK";\r
-    Buttons[Buttons["START"] = 9] = "START";\r
-    Buttons[Buttons["LHAT"] = 10] = "LHAT";\r
-    Buttons[Buttons["RHAT"] = 11] = "RHAT";\r
-    Buttons[Buttons["DPAD_UP"] = 12] = "DPAD_UP";\r
-    Buttons[Buttons["DPAD_DOWN"] = 13] = "DPAD_DOWN";\r
-    Buttons[Buttons["DPAD_LEFT"] = 14] = "DPAD_LEFT";\r
-    Buttons[Buttons["DPAD_RIGHT"] = 15] = "DPAD_RIGHT";\r
-})(Buttons || (Buttons = {}));\r
-var Axes;\r
-(function (Axes) {\r
-    Axes[Axes["LSTICK_H"] = 0] = "LSTICK_H";\r
-    Axes[Axes["LSTICK_V"] = 1] = "LSTICK_V";\r
-    Axes[Axes["RSTICK_H"] = 2] = "RSTICK_H";\r
-    Axes[Axes["RSTICK_V"] = 3] = "RSTICK_V";\r
-})(Axes || (Axes = {}));\r
-var nullGamepad = {\r
-    original: {\r
-        axes: [],\r
-        buttons: [],\r
-        connected: false,\r
-    },\r
-    disabled: true,\r
-    down: {},\r
-    justDown: {},\r
-    justUp: {},\r
-    axesPrev: {},\r
-};\r
-var Gamepads = /** @class */ (function () {\r
-    /**\r
-    * initialize gamepads\r
-    */\r
-    function Gamepads() {\r
-        var _this = this;\r
-        // settings\r
-        /** if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead */\r
-        this.deadZone = 0.25;\r
-        /** if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1 instead */\r
-        this.snapZone = 0.25;\r
-        /** axis values between \`deadZone\` and \`snapZone\` will be run through this function\r
-        *\r
-        * defaults to normalizing between the two thresholds */\r
-        this.interpolate = function (value) {\r
-            var v = Math.max(0, Math.min(1, (value - _this.deadZone) / (1.0 - _this.snapZone - _this.deadZone)));\r
-            return v;\r
-        };\r
-        // internal vars\r
-        this.players = {};\r
-        this.available = false;\r
-        this.pollEveryFrame = false;\r
-        this.connected = false;\r
-        /**\r
-        * update gamepads (clears arrays, polls connections, etc.)\r
-        */\r
-        this.pollconnections = function () {\r
-            _this.connected = false;\r
-            // assume existing players' gamepads aren't enabled until they're found\r
-            Object.values(_this.players).forEach(function (player) {\r
-                player.disabled = true;\r
-            });\r
-            var gps = navigator.getGamepads();\r
-            for (var i = 0; i < gps.length; ++i) {\r
-                var gp = gps[i];\r
-                if (gp) {\r
-                    if (gp.connected) {\r
-                        if (_this.players[gp.index] == null) {\r
-                            // new player\r
-                            _this.players[gp.index] = {\r
-                                disabled: false,\r
-                                original: gp,\r
-                                down: {},\r
-                                justDown: {},\r
-                                justUp: {},\r
-                                axesPrev: {},\r
-                            };\r
-                        }\r
-                        else {\r
-                            // returning player, just assign the gamepad\r
-                            _this.players[gp.index].original = gp;\r
-                        }\r
-                        _this.connected = true;\r
-                        _this.players[gp.index].disabled = false;\r
-                    }\r
-                    else {\r
-                        delete _this.players[gp.index];\r
-                    }\r
-                }\r
-            }\r
-        };\r
-        /**\r
-        * update gamepads (clears arrays, polls connections, etc.)\r
-        */\r
-        this.update = function () {\r
-            // store the previous axis values\r
-            // has to be done before pollConnections since that will get the new axis values\r
-            Object.keys(_this.players).forEach(function (i) {\r
-                var _a;\r
-                var p = _this.getPlayer(i);\r
-                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.axes) {\r
-                    p.axesPrev = p.original.axes.slice();\r
-                }\r
-            });\r
-            // poll connections and update gamepad states every frame because chrome's a lazy bum\r
-            if (_this.pollEveryFrame) {\r
-                _this.pollconnections();\r
-            }\r
-            Object.keys(_this.players).forEach(function (i) {\r
-                var _a;\r
-                var p = _this.getPlayer(i);\r
-                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.buttons) {\r
-                    for (var j = 0; j < p.original.buttons.length; ++j) {\r
-                        if (p.original.buttons[j].pressed) {\r
-                            p.justDown[j] = !(p.down[j] === true);\r
-                            p.down[j] = true;\r
-                            p.justUp[j] = false;\r
-                        }\r
-                        else {\r
-                            p.justUp[j] = p.down[j] === true;\r
-                            p.down[j] = false;\r
-                            p.justDown[j] = false;\r
-                        }\r
-                    }\r
-                }\r
-            });\r
-        };\r
-        /**\r
-        * @returns \`player\`'s gamepad\r
-        *\r
-        * if one doesn't exist, returns an object with gamepad properties reflecting a null state\r
-        */\r
-        this.getPlayer = function (player) {\r
-            var _a, _b, _c;\r
-            if (((_b = (_a = _this.players[player]) === null || _a === void 0 ? void 0 : _a.original) === null || _b === void 0 ? void 0 : _b.connected) && !((_c = _this.players[player]) === null || _c === void 0 ? void 0 : _c.disabled)) {\r
-                return _this.players[player];\r
-            }\r
-            return nullGamepad;\r
-        };\r
-        /**\r
-        * @returns an array representing \`length\` axes for \`player\` at \`offset\`\r
-        *\r
-        * if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead\r
-        * if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1/-1 instead\r
-        * otherwise, returns the axis value normalized between \`deadZone\` and \`(1-snapZone)\`\r
-        * @param {Number} offset axis index\r
-        * @param {Number} length number of axes to return\r
-        * @param {Number} player player index (\`undefined\` for "sum of all")\r
-        * @param {boolean} prev if \`true\` uses axis values from previous update\r
-        */\r
-        this.getAxes = function (offset, length, player, prev) {\r
-            if (offset === void 0) { offset = 0; }\r
-            if (length === void 0) { length = 2; }\r
-            if (prev === void 0) { prev = false; }\r
-            var axes = [];\r
-            for (var i = 0; i < length; ++i) {\r
-                axes[i] = 0;\r
-            }\r
-            if (player === undefined) {\r
-                Object.keys(_this.players).forEach(function (i) {\r
-                    var a = _this.getAxes(offset, length, i, prev);\r
-                    for (var j = 0; j < a.length; ++j) {\r
-                        axes[j] += a[j];\r
-                    }\r
-                });\r
-            }\r
-            else {\r
-                var p = _this.getPlayer(player);\r
-                if (p === null || p === void 0 ? void 0 : p.original) {\r
-                    var axesSource = prev ? p.axesPrev : p.original.axes;\r
-                    var a = Object.values(axesSource).slice(offset, offset + length);\r
-                    for (var i = 0; i < a.length; ++i) {\r
-                        if (Math.abs(a[i]) < _this.deadZone) {\r
-                            axes[i] += 0;\r
-                        }\r
-                        else if (Math.abs(1.0 - a[i]) < _this.snapZone) {\r
-                            axes[i] += 1;\r
-                        }\r
-                        else if (Math.abs(-1.0 - a[i]) < _this.snapZone) {\r
-                            axes[i] -= 1;\r
-                        }\r
-                        else {\r
-                            axes[i] += Math.sign(a[i]) * _this.interpolate(Math.abs(a[i]));\r
-                        }\r
-                    }\r
-                }\r
-            }\r
-            return axes;\r
-        };\r
-        /**\r
-       * @returns equivalent to \`getAxes(axis, 1, player, prev)[0]\`\r
-       */\r
-        this.getAxis = function (axis, player, prev) { return _this.getAxes(axis, 1, player, prev)[0]; };\r
-        /**\r
-        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\`\r
-        * @param {Number} axis axis index\r
-        * @param {Number} threshold threshold (-1 to 1)\r
-        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        * @param {boolean} prev if \`true\` uses axis values from previous update\r
-        */\r
-        this.axisPast = function (axis, threshold, direction, player, prev) {\r
-            if (!threshold) {\r
-                throw new Error('must specify a non-zero threshold');\r
-            }\r
-            if (!direction) {\r
-                direction = threshold > 0 ? 1 : -1;\r
-            }\r
-            var a = _this.getAxis(axis, player, prev);\r
-            return direction < 0 ? a < threshold : a > threshold;\r
-        };\r
-        /**\r
-        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\` and WAS NOT in previous update\r
-        * @param {Number} axis axis index\r
-        * @param {Number} threshold threshold (-1 to 1)\r
-        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.axisJustPast = function (axis, threshold, direction, player) { return _this.axisPast(axis, threshold, direction, player, false)\r
-            && !_this.axisPast(axis, threshold, direction, player, true); };\r
-        /**\r
-        * @returns \`[x,y]\` representing the dpad for \`player\`\r
-        * @param {Number} player player index (\`undefined\` for "sum of all")\r
-        */\r
-        this.getDpad = function (player) {\r
-            var x = 0;\r
-            var y = 0;\r
-            if (player === undefined) {\r
-                Object.keys(_this.players).forEach(function (i) {\r
-                    var _a = _this.getDpad(i), ix = _a[0], iy = _a[1];\r
-                    x += ix;\r
-                    y += iy;\r
-                });\r
-            }\r
-            else {\r
-                if (_this.isDown(Buttons.DPAD_RIGHT, player)) {\r
-                    x += 1;\r
-                }\r
-                if (_this.isDown(Buttons.DPAD_LEFT, player)) {\r
-                    x -= 1;\r
-                }\r
-                if (_this.isDown(Buttons.DPAD_UP, player)) {\r
-                    y += 1;\r
-                }\r
-                if (_this.isDown(Buttons.DPAD_DOWN, player)) {\r
-                    y -= 1;\r
-                }\r
-            }\r
-            return [x, y];\r
-        };\r
-        /**\r
-        * @returns \`true\` if \`player\`'s \`btn\` is currently down\r
-        * @param {Number} btn button index\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.isDown = function (btn, player) {\r
-            if (btn === undefined) {\r
-                throw new Error('must specify a button');\r
-            }\r
-            if (player === undefined) {\r
-                return Object.keys(_this.players).some(function (i) { return _this.isDown(btn, i); });\r
-            }\r
-            return _this.getPlayer(player).down[btn];\r
-        };\r
-        /**\r
-        * @returns equivalent to \`!isDown(btn, player)\`\r
-        * @param {Number} btn button index\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.isUp = function (btn, player) { return !_this.isDown(btn, player); };\r
-        /**\r
-        * @returns \`true\` if \`player\`'s \`btn\` is currently down and WAS NOT in previous update\r
-        * @param {Number} btn button index\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.isJustDown = function (btn, player) {\r
-            if (btn === undefined) {\r
-                throw new Error('must specify a button');\r
-            }\r
-            if (player === undefined) {\r
-                return Object.keys(_this.players).some(function (i) { return _this.isJustDown(btn, i); });\r
-            }\r
-            return _this.getPlayer(player).justDown[btn];\r
-        };\r
-        /**\r
-        * @returns \`true\` if \`player\`'s \`btn\` is currently NOT down and WAS down in previous update\r
-        * @param {Number} btn button index\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.isJustUp = function (btn, player) {\r
-            if (btn === undefined) {\r
-                throw new Error('must specify a button');\r
-            }\r
-            if (player === undefined) {\r
-                return Object.keys(_this.players).some(function (i) { return _this.isJustUp(btn, i); });\r
-            }\r
-            return _this.getPlayer(player).justUp[btn];\r
-        };\r
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore\r
-        // @ts-ignore\r
-        if (navigator.getGamepads) {\r
-            this.available = true;\r
-        }\r
-        else if (navigator.webkitGetGamepads) {\r
-            navigator.getGamepads = navigator.webkitGetGamepads;\r
-            this.available = true;\r
-        }\r
-        if (this.available) {\r
-            if (navigator.userAgent.includes('Firefox')) {\r
-                // listen to connection events for firefox\r
-                window.addEventListener('gamepadconnected', this.pollconnections.bind(this));\r
-                window.addEventListener('gamepaddisconnected', this.pollconnections.bind(this));\r
-            }\r
-            else {\r
-                this.pollEveryFrame = true;\r
-            }\r
-        }\r
-    }\r
-    return Gamepads;\r
+var Buttons;
+(function (Buttons) {
+    // XBOX360 wired controller configuration
+    Buttons[Buttons["A"] = 0] = "A";
+    Buttons[Buttons["X"] = 2] = "X";
+    Buttons[Buttons["B"] = 1] = "B";
+    Buttons[Buttons["Y"] = 3] = "Y";
+    Buttons[Buttons["LB"] = 4] = "LB";
+    Buttons[Buttons["RB"] = 5] = "RB";
+    Buttons[Buttons["LT"] = 6] = "LT";
+    Buttons[Buttons["RT"] = 7] = "RT";
+    Buttons[Buttons["BACK"] = 8] = "BACK";
+    Buttons[Buttons["START"] = 9] = "START";
+    Buttons[Buttons["LHAT"] = 10] = "LHAT";
+    Buttons[Buttons["RHAT"] = 11] = "RHAT";
+    Buttons[Buttons["DPAD_UP"] = 12] = "DPAD_UP";
+    Buttons[Buttons["DPAD_DOWN"] = 13] = "DPAD_DOWN";
+    Buttons[Buttons["DPAD_LEFT"] = 14] = "DPAD_LEFT";
+    Buttons[Buttons["DPAD_RIGHT"] = 15] = "DPAD_RIGHT";
+})(Buttons || (Buttons = {}));
+var Axes;
+(function (Axes) {
+    Axes[Axes["LSTICK_H"] = 0] = "LSTICK_H";
+    Axes[Axes["LSTICK_V"] = 1] = "LSTICK_V";
+    Axes[Axes["RSTICK_H"] = 2] = "RSTICK_H";
+    Axes[Axes["RSTICK_V"] = 3] = "RSTICK_V";
+})(Axes || (Axes = {}));
+var nullGamepad = {
+    original: {
+        axes: [],
+        buttons: [],
+        connected: false,
+    },
+    disabled: true,
+    down: {},
+    justDown: {},
+    justUp: {},
+    axesPrev: {},
+};
+var Gamepads = /** @class */ (function () {
+    /**
+    * initialize gamepads
+    */
+    function Gamepads() {
+        var _this = this;
+        // settings
+        /** if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead */
+        this.deadZone = 0.25;
+        /** if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1 instead */
+        this.snapZone = 0.25;
+        /** axis values between \`deadZone\` and \`snapZone\` will be run through this function
+        *
+        * defaults to normalizing between the two thresholds */
+        this.interpolate = function (value) {
+            var v = Math.max(0, Math.min(1, (value - _this.deadZone) / (1.0 - _this.snapZone - _this.deadZone)));
+            return v;
+        };
+        // internal vars
+        this.players = {};
+        this.available = false;
+        this.pollEveryFrame = false;
+        this.connected = false;
+        /**
+        * update gamepads (clears arrays, polls connections, etc.)
+        */
+        this.pollconnections = function () {
+            _this.connected = false;
+            // assume existing players' gamepads aren't enabled until they're found
+            Object.values(_this.players).forEach(function (player) {
+                player.disabled = true;
+            });
+            var gps = navigator.getGamepads();
+            for (var i = 0; i < gps.length; ++i) {
+                var gp = gps[i];
+                if (gp) {
+                    if (gp.connected) {
+                        if (_this.players[gp.index] == null) {
+                            // new player
+                            _this.players[gp.index] = {
+                                disabled: false,
+                                original: gp,
+                                down: {},
+                                justDown: {},
+                                justUp: {},
+                                axesPrev: {},
+                            };
+                        }
+                        else {
+                            // returning player, just assign the gamepad
+                            _this.players[gp.index].original = gp;
+                        }
+                        _this.connected = true;
+                        _this.players[gp.index].disabled = false;
+                    }
+                    else {
+                        delete _this.players[gp.index];
+                    }
+                }
+            }
+        };
+        /**
+        * update gamepads (clears arrays, polls connections, etc.)
+        */
+        this.update = function () {
+            // store the previous axis values
+            // has to be done before pollConnections since that will get the new axis values
+            Object.keys(_this.players).forEach(function (i) {
+                var _a;
+                var p = _this.getPlayer(i);
+                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.axes) {
+                    p.axesPrev = p.original.axes.slice();
+                }
+            });
+            // poll connections and update gamepad states every frame because chrome's a lazy bum
+            if (_this.pollEveryFrame) {
+                _this.pollconnections();
+            }
+            Object.keys(_this.players).forEach(function (i) {
+                var _a;
+                var p = _this.getPlayer(i);
+                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.buttons) {
+                    for (var j = 0; j < p.original.buttons.length; ++j) {
+                        if (p.original.buttons[j].pressed) {
+                            p.justDown[j] = !(p.down[j] === true);
+                            p.down[j] = true;
+                            p.justUp[j] = false;
+                        }
+                        else {
+                            p.justUp[j] = p.down[j] === true;
+                            p.down[j] = false;
+                            p.justDown[j] = false;
+                        }
+                    }
+                }
+            });
+        };
+        /**
+        * @returns \`player\`'s gamepad
+        *
+        * if one doesn't exist, returns an object with gamepad properties reflecting a null state
+        */
+        this.getPlayer = function (player) {
+            var _a, _b, _c;
+            if (((_b = (_a = _this.players[player]) === null || _a === void 0 ? void 0 : _a.original) === null || _b === void 0 ? void 0 : _b.connected) && !((_c = _this.players[player]) === null || _c === void 0 ? void 0 : _c.disabled)) {
+                return _this.players[player];
+            }
+            return nullGamepad;
+        };
+        /**
+        * @returns an array representing \`length\` axes for \`player\` at \`offset\`
+        *
+        * if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead
+        * if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1/-1 instead
+        * otherwise, returns the axis value normalized between \`deadZone\` and \`(1-snapZone)\`
+        * @param {Number} offset axis index
+        * @param {Number} length number of axes to return
+        * @param {Number} player player index (\`undefined\` for "sum of all")
+        * @param {boolean} prev if \`true\` uses axis values from previous update
+        */
+        this.getAxes = function (offset, length, player, prev) {
+            if (offset === void 0) { offset = 0; }
+            if (length === void 0) { length = 2; }
+            if (prev === void 0) { prev = false; }
+            var axes = [];
+            for (var i = 0; i < length; ++i) {
+                axes[i] = 0;
+            }
+            if (player === undefined) {
+                Object.keys(_this.players).forEach(function (i) {
+                    var a = _this.getAxes(offset, length, i, prev);
+                    for (var j = 0; j < a.length; ++j) {
+                        axes[j] += a[j];
+                    }
+                });
+            }
+            else {
+                var p = _this.getPlayer(player);
+                if (p === null || p === void 0 ? void 0 : p.original) {
+                    var axesSource = prev ? p.axesPrev : p.original.axes;
+                    var a = Object.values(axesSource).slice(offset, offset + length);
+                    for (var i = 0; i < a.length; ++i) {
+                        if (Math.abs(a[i]) < _this.deadZone) {
+                            axes[i] += 0;
+                        }
+                        else if (Math.abs(1.0 - a[i]) < _this.snapZone) {
+                            axes[i] += 1;
+                        }
+                        else if (Math.abs(-1.0 - a[i]) < _this.snapZone) {
+                            axes[i] -= 1;
+                        }
+                        else {
+                            axes[i] += Math.sign(a[i]) * _this.interpolate(Math.abs(a[i]));
+                        }
+                    }
+                }
+            }
+            return axes;
+        };
+        /**
+       * @returns equivalent to \`getAxes(axis, 1, player, prev)[0]\`
+       */
+        this.getAxis = function (axis, player, prev) { return _this.getAxes(axis, 1, player, prev)[0]; };
+        /**
+        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\`
+        * @param {Number} axis axis index
+        * @param {Number} threshold threshold (-1 to 1)
+        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))
+        * @param {Number} player player index (\`undefined\` for "any")
+        * @param {boolean} prev if \`true\` uses axis values from previous update
+        */
+        this.axisPast = function (axis, threshold, direction, player, prev) {
+            if (!threshold) {
+                throw new Error('must specify a non-zero threshold');
+            }
+            if (!direction) {
+                direction = threshold > 0 ? 1 : -1;
+            }
+            var a = _this.getAxis(axis, player, prev);
+            return direction < 0 ? a < threshold : a > threshold;
+        };
+        /**
+        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\` and WAS NOT in previous update
+        * @param {Number} axis axis index
+        * @param {Number} threshold threshold (-1 to 1)
+        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.axisJustPast = function (axis, threshold, direction, player) { return _this.axisPast(axis, threshold, direction, player, false)
+            && !_this.axisPast(axis, threshold, direction, player, true); };
+        /**
+        * @returns \`[x,y]\` representing the dpad for \`player\`
+        * @param {Number} player player index (\`undefined\` for "sum of all")
+        */
+        this.getDpad = function (player) {
+            var x = 0;
+            var y = 0;
+            if (player === undefined) {
+                Object.keys(_this.players).forEach(function (i) {
+                    var _a = _this.getDpad(i), ix = _a[0], iy = _a[1];
+                    x += ix;
+                    y += iy;
+                });
+            }
+            else {
+                if (_this.isDown(Buttons.DPAD_RIGHT, player)) {
+                    x += 1;
+                }
+                if (_this.isDown(Buttons.DPAD_LEFT, player)) {
+                    x -= 1;
+                }
+                if (_this.isDown(Buttons.DPAD_UP, player)) {
+                    y += 1;
+                }
+                if (_this.isDown(Buttons.DPAD_DOWN, player)) {
+                    y -= 1;
+                }
+            }
+            return [x, y];
+        };
+        /**
+        * @returns \`true\` if \`player\`'s \`btn\` is currently down
+        * @param {Number} btn button index
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.isDown = function (btn, player) {
+            if (btn === undefined) {
+                throw new Error('must specify a button');
+            }
+            if (player === undefined) {
+                return Object.keys(_this.players).some(function (i) { return _this.isDown(btn, i); });
+            }
+            return _this.getPlayer(player).down[btn];
+        };
+        /**
+        * @returns equivalent to \`!isDown(btn, player)\`
+        * @param {Number} btn button index
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.isUp = function (btn, player) { return !_this.isDown(btn, player); };
+        /**
+        * @returns \`true\` if \`player\`'s \`btn\` is currently down and WAS NOT in previous update
+        * @param {Number} btn button index
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.isJustDown = function (btn, player) {
+            if (btn === undefined) {
+                throw new Error('must specify a button');
+            }
+            if (player === undefined) {
+                return Object.keys(_this.players).some(function (i) { return _this.isJustDown(btn, i); });
+            }
+            return _this.getPlayer(player).justDown[btn];
+        };
+        /**
+        * @returns \`true\` if \`player\`'s \`btn\` is currently NOT down and WAS down in previous update
+        * @param {Number} btn button index
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.isJustUp = function (btn, player) {
+            if (btn === undefined) {
+                throw new Error('must specify a button');
+            }
+            if (player === undefined) {
+                return Object.keys(_this.players).some(function (i) { return _this.isJustUp(btn, i); });
+            }
+            return _this.getPlayer(player).justUp[btn];
+        };
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        if (navigator.getGamepads) {
+            this.available = true;
+        }
+        else if (navigator.webkitGetGamepads) {
+            navigator.getGamepads = navigator.webkitGetGamepads;
+            this.available = true;
+        }
+        if (this.available) {
+            if (navigator.userAgent.includes('Firefox')) {
+                // listen to connection events for firefox
+                window.addEventListener('gamepadconnected', this.pollconnections.bind(this));
+                window.addEventListener('gamepaddisconnected', this.pollconnections.bind(this));
+            }
+            else {
+                this.pollEveryFrame = true;
+            }
+        }
+    }
+    return Gamepads;
 }());
 
 /**
@@ -30128,9 +30149,9 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.unique_items = this.hacks.unique_items || {}, window);
-`,bn=[ft,gt,ht,mt,yt,bt,vt,wt,kt,xt,St,jt,Tt,It,Ft,At,Et,Ot,Nt,Dt,Bt,_t,qt,Rt,Ct,Lt,Pt,Mt,Ht,Gt,Ut,Vt,zt,$t,Wt,Yt,Xt,Kt,Jt,Qt,Zt,tn,nn,en,rn,an,on,sn,cn,ln,un,dn,pn,fn,gn,hn,mn,yn];const vn="modulepreload",F={},wn="./",c=function(n,e){return!e||e.length===0?n():Promise.all(e.map(i=>{if(i=`${wn}${i}`,i in F)return;F[i]=!0;const r=i.endsWith(".css"),a=r?'[rel="stylesheet"]':"";if(document.querySelector(`link[href="${i}"]${a}`))return;const o=document.createElement("link");if(o.rel=r?"stylesheet":vn,r||(o.as="script",o.crossOrigin=""),o.href=i,document.head.appendChild(o),r)return new Promise((s,l)=>{o.addEventListener("load",s),o.addEventListener("error",l)})})).then(()=>n())};var f=[{data:()=>c(()=>import("./BitsyHD.5.1.224b5bed.js"),[]),bitsyVersion:"5.1",isHd:!0,description:"Bitsy HD (Bitsy 5.1)"},{data:()=>c(()=>import("./Bitsy.5.5.b578c1f1.js"),[]),bitsyVersion:"5.5",description:"Bitsy 5.5"},{data:()=>c(()=>import("./Bitsy.6.0.d01fe5ea.js"),[]),bitsyVersion:"6.0",description:"Bitsy 6.0"},{data:()=>c(()=>import("./Bitsy.6.3.f1de51df.js"),[]),bitsyVersion:"6.3",description:"Bitsy 6.3"},{data:()=>c(()=>import("./Bitsy.6.4.4364f87f.js"),[]),bitsyVersion:"6.4",description:"Bitsy 6.4"},{data:()=>c(()=>import("./Bitsy.6.5.bd486411.js"),[]),bitsyVersion:"6.5",description:"Bitsy 6.5"},{data:()=>c(()=>import("./Bitsy.7.0.005afbac.js"),[]),bitsyVersion:"7.0",description:"Bitsy 7.0"},{data:()=>c(()=>import("./Bitsy.7.2.e7deb823.js"),[]),bitsyVersion:"7.2",description:"Bitsy 7.2"},{data:()=>c(()=>import("./Bitsy.7.8.a8e1ddd6.js"),[]),bitsyVersion:"7.8",description:"Bitsy 7.8"},{data:()=>c(()=>import("./Bitsy.7.10.1cdc75c6.js"),[]),bitsyVersion:"7.10",description:"Bitsy 7.10"},{data:()=>c(()=>import("./BitsyHD.7.11.f9a8cfdc.js"),[]),bitsyVersion:"7.11",isHd:!0,description:"Bitsy HD (Bitsy 7.11)"},{data:()=>c(()=>import("./Bitsy.7.11.c7cee104.js"),[]),bitsyVersion:"7.11",description:"Bitsy 7.11",isDefault:!0}].map(t=>j(m({},t),{id:`Bitsy${t.isHd?"HD":""}${t.bitsyVersion.replace(/\./g,"")}`}));const b=bn.map(t=>{const[n]=t.match(/^(\/\*\*[\S\s]*?\*\/)$/gm),e=n.split(`
-`).slice(1,-1),i=e[0],r=e.find(d=>d.startsWith("@file")).split("@file ")[1],a=e.find(d=>d.startsWith("@author")).split("@author ")[1],o=e.find(d=>d.startsWith("@summary")).split("@summary ")[1],s=e.slice(e.findIndex(d=>d.startsWith("@description"))+1).join(`
-`).replace(/Copy-paste .* after the bitsy source\.?/g,"Include hack").replace(/hackOptions below/g,"hackOptions above"),[,l]=t.match(/var hackOptions.*= {\n+([^]+?)\n+};$/m)||[];return{metadata:{emoji:i,id:r.replace(/\s/g,"-"),name:r,author:a,summary:o,description:s},options:l,data:t}});function kn(){const t=document.querySelector("select#template");t.innerHTML="";for(let n=f.length-1;n>=0;n--){const{id:e,description:i}=f[n],r=n===f.length-1;t.innerHTML+=`<option value="${e}" ${r?"data-default-option":""}>${i}${r?" (latest)":""}</option>`}}function xn(t,n){console.log(n),G.exports.saveAs(new Blob([n],{type:"text/html;charset=utf-8"}),t),console.log(`File '${t}' downloaded`)}function A(t,n=10){const e=t.toString(),i=e.length>n?"...":"";return e.substring(0,n)+i}function Sn(t){return t.toLowerCase().replace(/-(.)/g,(n,e)=>e.toUpperCase())}function jn(t){return t.replace(/[^\w\s]/gi,"")}function Tn(t,n){const e=new RegExp(n,"g");t.value=t.value.replace(e,"")}function g(t,n){t.dataset.cleanRegex&&Tn(t,t.dataset.cleanRegex);let e;t.type==="checkbox"?e=t.checked:n===void 0?e=t.value:(e=n,t.value=n);const{name:i}=t;localStorage.setItem(i,e),console.log(`Key: '${i}' saved to localStorage: ${A(e)}`)}function v(t){const{name:n}=t,e=localStorage.getItem(n);if(e===null){console.log(` Attempted to get key: ${n} from localStorage, but nothing was found.`);return}if(t.type==="checkbox"){const i=e==="true";t.checked=i}else t.value=e;console.log(` Got key: ${n} from localStorage: ${A(e)}`)}function w(t){const{value:n}=t.currentTarget,e=f.find(i=>i.id===n);if(!e){document.querySelector("#template").value=f.find(i=>i.isDefault).id,w(t);return}e.isHd?document.querySelector("#mascot").classList.add("borksyHD"):document.querySelector("#mascot").classList.remove("borksyHD"),e.bitsyVersion===y.bitsyVersion?(document.querySelector("#legacy-version-warning").style.display="none",document.querySelector('[data-header="Bitsy Version"] > summary').textContent="Bitsy Version"):(document.querySelector("#legacy-version-warning").style.display=null,document.querySelector('[data-header="Bitsy Version"] > summary').textContent="\u2757 Bitsy Version \u2757"),e.data()}function p(t){const{name:n}=t;let e;switch(n){case"template":e=In;break}t.addEventListener("change",()=>{g(t),e==null||e(t)})}function In(t){const n=t.value.split(".")[0]==="BitsyHD",e=localStorage.getItem("gamedata")==null,i=I;if(n&&e&&i!==void 0){const a=document.querySelector("#gamedata");a.value=i,g(a)}}function E(t){const n=document.querySelector(`[data-associated-hack="${t.dataset.hack}"]`);n&&O(n,t)}function O(t,n){n.checked===!0?t.classList.add("included"):t.classList.remove("included")}function Fn(t){g(t),E(t)}function An(t){t.addEventListener("change",()=>{Fn(t)})}function En(){return Array.from(document.querySelectorAll("[data-borksy-replace-single]")).reduce((t,n)=>(t[n.dataset.borksyReplaceSingle]=n.value,t),{})}function On(){return b.reduce((t,n)=>{const e=document.querySelector(`#${n.metadata.id}`);if(!(e.checked||e.value==="true"))return t;let r=n.data;if(n.options){const a=document.querySelector(`#${n.metadata.id}-options`).value;r=r.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m,`$1 {
-${a}
+`,bn=[ft,gt,ht,mt,yt,bt,vt,wt,kt,xt,St,jt,Tt,It,Ft,At,Et,Ot,Nt,Dt,Bt,_t,qt,Rt,Ct,Lt,Pt,Mt,Ht,Gt,Ut,Vt,zt,$t,Wt,Yt,Xt,Kt,Jt,Qt,Zt,tn,nn,en,rn,an,on,sn,cn,ln,un,dn,pn,fn,gn,hn,mn,yn];const vn="modulepreload",F={},wn="./",c=function(n,e){return!e||e.length===0?n():Promise.all(e.map(a=>{if(a=`${wn}${a}`,a in F)return;F[a]=!0;const r=a.endsWith(".css"),i=r?'[rel="stylesheet"]':"";if(document.querySelector(`link[href="${a}"]${i}`))return;const o=document.createElement("link");if(o.rel=r?"stylesheet":vn,r||(o.as="script",o.crossOrigin=""),o.href=a,document.head.appendChild(o),r)return new Promise((s,l)=>{o.addEventListener("load",s),o.addEventListener("error",l)})})).then(()=>n())};var f=[{data:()=>c(()=>import("./BitsyHD.5.1.224b5bed.js"),[]),bitsyVersion:"5.1",isHd:!0,description:"Bitsy HD (Bitsy 5.1)"},{data:()=>c(()=>import("./Bitsy.5.5.b578c1f1.js"),[]),bitsyVersion:"5.5",description:"Bitsy 5.5"},{data:()=>c(()=>import("./Bitsy.6.0.d01fe5ea.js"),[]),bitsyVersion:"6.0",description:"Bitsy 6.0"},{data:()=>c(()=>import("./Bitsy.6.3.f1de51df.js"),[]),bitsyVersion:"6.3",description:"Bitsy 6.3"},{data:()=>c(()=>import("./Bitsy.6.4.4364f87f.js"),[]),bitsyVersion:"6.4",description:"Bitsy 6.4"},{data:()=>c(()=>import("./Bitsy.6.5.bd486411.js"),[]),bitsyVersion:"6.5",description:"Bitsy 6.5"},{data:()=>c(()=>import("./Bitsy.7.0.005afbac.js"),[]),bitsyVersion:"7.0",description:"Bitsy 7.0"},{data:()=>c(()=>import("./Bitsy.7.2.e7deb823.js"),[]),bitsyVersion:"7.2",description:"Bitsy 7.2"},{data:()=>c(()=>import("./Bitsy.7.8.a8e1ddd6.js"),[]),bitsyVersion:"7.8",description:"Bitsy 7.8"},{data:()=>c(()=>import("./Bitsy.7.10.1cdc75c6.js"),[]),bitsyVersion:"7.10",description:"Bitsy 7.10"},{data:()=>c(()=>import("./BitsyHD.7.11.f9a8cfdc.js"),[]),bitsyVersion:"7.11",isHd:!0,description:"Bitsy HD (Bitsy 7.11)"},{data:()=>c(()=>import("./Bitsy.7.11.c7cee104.js"),[]),bitsyVersion:"7.11",description:"Bitsy 7.11"},{data:()=>c(()=>import("./BitsyHD.7.12.06a63c86.js"),[]),bitsyVersion:"7.12",isHd:!0,description:"Bitsy HD (Bitsy 7.12)"},{data:()=>c(()=>import("./Bitsy.7.12.7a7fbf49.js"),[]),bitsyVersion:"7.12",description:"Bitsy 7.12",isDefault:!0}].map(t=>j(m({},t),{id:`Bitsy${t.isHd?"HD":""}${t.bitsyVersion.replace(/\./g,"")}`}));const b=bn.map(t=>{const[n]=t.match(/^(\/\*\*[\S\s]*?\*\/)$/gm),e=n.split(`
+`).slice(1,-1),a=e[0],r=e.find(d=>d.startsWith("@file")).split("@file ")[1],i=e.find(d=>d.startsWith("@author")).split("@author ")[1],o=e.find(d=>d.startsWith("@summary")).split("@summary ")[1],s=e.slice(e.findIndex(d=>d.startsWith("@description"))+1).join(`
+`).replace(/Copy-paste .* after the bitsy source\.?/g,"Include hack").replace(/hackOptions below/g,"hackOptions above"),[,l]=t.match(/var hackOptions.*= {\n+([^]+?)\n+};$/m)||[];return{metadata:{emoji:a,id:r.replace(/\s/g,"-"),name:r,author:i,summary:o,description:s},options:l,data:t}});function kn(){const t=document.querySelector("select#template");t.innerHTML="";for(let n=f.length-1;n>=0;n--){const{id:e,description:a}=f[n],r=n===f.length-1;t.innerHTML+=`<option value="${e}" ${r?"data-default-option":""}>${a}${r?" (latest)":""}</option>`}}function xn(t,n){console.log(n),G.exports.saveAs(new Blob([n],{type:"text/html;charset=utf-8"}),t),console.log(`File '${t}' downloaded`)}function A(t,n=10){const e=t.toString(),a=e.length>n?"...":"";return e.substring(0,n)+a}function Sn(t){return t.toLowerCase().replace(/-(.)/g,(n,e)=>e.toUpperCase())}function jn(t){return t.replace(/[^\w\s]/gi,"")}function Tn(t,n){const e=new RegExp(n,"g");t.value=t.value.replace(e,"")}function g(t,n){t.dataset.cleanRegex&&Tn(t,t.dataset.cleanRegex);let e;t.type==="checkbox"?e=t.checked:n===void 0?e=t.value:(e=n,t.value=n);const{name:a}=t;localStorage.setItem(a,e),console.log(`Key: '${a}' saved to localStorage: ${A(e)}`)}function v(t){const{name:n}=t,e=localStorage.getItem(n);if(e===null){console.log(` Attempted to get key: ${n} from localStorage, but nothing was found.`);return}if(t.type==="checkbox"){const a=e==="true";t.checked=a}else t.value=e;console.log(` Got key: ${n} from localStorage: ${A(e)}`)}function w(t){const{value:n}=t.currentTarget,e=f.find(a=>a.id===n);if(!e){document.querySelector("#template").value=f.find(a=>a.isDefault).id,w(t);return}e.isHd?document.querySelector("#mascot").classList.add("borksyHD"):document.querySelector("#mascot").classList.remove("borksyHD"),e.bitsyVersion===y.bitsyVersion?(document.querySelector("#legacy-version-warning").style.display="none",document.querySelector('[data-header="Bitsy Version"] > summary').textContent="Bitsy Version"):(document.querySelector("#legacy-version-warning").style.display=null,document.querySelector('[data-header="Bitsy Version"] > summary').textContent="\u2757 Bitsy Version \u2757"),e.data()}function p(t){const{name:n}=t;let e;switch(n){case"template":e=In;break}t.addEventListener("change",()=>{g(t),e==null||e(t)})}function In(t){const n=t.value.split(".")[0]==="BitsyHD",e=localStorage.getItem("gamedata")==null,a=I;if(n&&e&&a!==void 0){const i=document.querySelector("#gamedata");i.value=a,g(i)}}function E(t){const n=document.querySelector(`[data-associated-hack="${t.dataset.hack}"]`);n&&O(n,t)}function O(t,n){n.checked===!0?t.classList.add("included"):t.classList.remove("included")}function Fn(t){g(t),E(t)}function An(t){t.addEventListener("change",()=>{Fn(t)})}function En(){return Array.from(document.querySelectorAll("[data-borksy-replace-single]")).reduce((t,n)=>(t[n.dataset.borksyReplaceSingle]=n.value,t),{})}function On(){return b.reduce((t,n)=>{const e=document.querySelector(`#${n.metadata.id}`);if(!(e.checked||e.value==="true"))return t;let r=n.data;if(n.options){const i=document.querySelector(`#${n.metadata.id}-options`).value;r=r.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m,`$1 {
+${i}
 }$2`)}return`${t}${r}
-`},"")}let k=!1;async function N(){if(!k){k=!0;try{Array.from(document.querySelectorAll("[data-save]")).forEach(a=>g(a));const t=document.querySelector("#template").value,n=m({"BORKSY-VERSION":et.version,"HACKS-VERSION":y.version,HACKS:On()},En());console.log(n);const e=document.querySelector("#filename").value,r=H.exports.compile((await f.find(a=>a.id===t).data()).default)(n);xn(`${e}.html`,r)}finally{k=!1}}}function D(){const{body:t}=document;t.classList.contains("party")?(t.classList.remove("party"),window.alert("\u{1F63E} Party Mode Deactivated. Everyone out. \u{1F63E}")):(t.classList.add("party"),window.alert("\u2728\u{1F308} Party Mode Activated! \u{1F308}\u2728"))}function h(t){const n=document.createElement("div");return n.innerHTML=t,n.children}function Nn(){var s;const t=document.querySelector("#about_content");t.innerHTML=rt.replace("HACKS_BITSY_VERSION",y.bitsyVersion);const n=document.createElement("section");n.id="last-update",n.innerHTML=(s=T.match(/(<h[12][^]+?)<h[12]/m))==null?void 0:s[1].replace(/<h[12]>([^]+?)<\/h[12]>/g,"<h2>What's new in v$1</h2>"),t.prepend(n);const e=u("How To Use Borksy");e.append(...h(at)),t.appendChild(e);const i=u("Troubleshooting / FAQs");i.classList.add("faq"),i.append(...h(st)),t.appendChild(i);const r=u("Other Bitsy Tools");r.append(...h(ot)),t.appendChild(r);const a=u("AYo's Special Tips");a.append(...h(it)),t.appendChild(a);const o=u("Changelog");o.append(...h(T)),t.appendChild(o)}function Dn(t){t.value=t.dataset.default,p(t)}function Bn(t){const n=t.id.replace(/-options$/,""),{options:e}=b.find(i=>i.metadata.id===n);t.value=e,p(t)}function _n(t){let n=t.dataset.default;n=n==="true",t.type==="checkbox"?t.checked=n:t.value=n,p(t)}function qn(t){const n=t.dataset.default,e=pt[n];if(!e)throw new Error(`Could not find file ${n}`);t.value=e,p(t)}function Rn(t){Pn(t.dataset.default)}function Cn(t){const{options:n}=t;for(let e=n.length-1;e>=0;e--)if(n[e].dataset.defaultOption!==void 0){t.selectedIndex=e;break}p(t)}function B(t=!0){Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{const e=localStorage.getItem(n.name),i=typeof n.dataset.default!="undefined",r=e!==null;if(i&&(!r||!t)){const{defaultType:a}=n.dataset;switch(a){case"string":Dn(n);break;case"boolean":_n(n);break;case"textfile":qn(n);break;case"font":Rn(n);break;case"option":Cn(n);break;case"hackOptions":Bn(n);break;default:throw new Error("Unknown type")}}else r?v(n):n.value="",p(n);E(n)}),console.log(`Defaults loaded. Forced? ${!t}`)}function _(){let t;try{t=window.confirm("Are you sure you want to erase all data and restore defaults?")}catch{t=!0}!t||(Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{localStorage.removeItem(n.name)}),console.log("Cookies removed"),B(!1),document.querySelector("#mascot").classList.remove("borksyHD"))}function Ln(){const t={x:6,y:8},n={x:16,y:16},e=1,i=document.createElement("canvas");i.width=(t.x+e)*n.x+e,i.height=(t.y+e)*n.y+e;const r=i.getContext("2d");let a=[];r.drawImage(this,0,0);for(let o=0;o<n.y;++o)for(let s=0;s<n.x;++s){const l=r.getImageData(s*(t.x+e)+e,o*(t.y+e)+e,t.x,t.y);a.push(l.data)}for(let o=0;o<a.length;++o){const s=[];for(let l=0;l<a[o].length;l+=4)s.push(a[o][l]>255/2?1:0);a[o]=s}a=a.flat(),g(document.querySelector("#fontdata"),`[/*${document.querySelector("#fontfilename").value}*/${a.toString()}]`)}function Pn(t){let n;typeof t=="object"?n=t.target.result:(n=`fonts/${t}`,Mn(t));const e=new Image;e.onload=Ln,e.src=n}function Mn(t){const n=document.querySelector("#fontfilename");n.value!==t&&(n.value=t,g(n))}function Hn(t,n){t.dataset.save=!0,t.dataset.default=!1,t.dataset.defaultType="boolean",t.dataset.hack=n}function Gn(t){const n=u(`${t.metadata.emoji} ${t.metadata.name} (by ${t.metadata.author})`);n.dataset.associatedHack=t.metadata.id;const e=document.createElement("p");e.textContent=t.metadata.summary,n.append(e);const i=document.createElement("label");i.className="horizontal";const r=document.createElement("input");if(r.type="checkbox",r.name=t.metadata.name,r.id=t.metadata.id,Hn(r,t.metadata.id),v(r),O(n,r),An(r),i.append(r),i.append(`Include "${jn(t.metadata.name)}" hack`),n.append(i),t.options){const a=u("Options"),o=document.createElement("label");o.dataset.pre=`var ${Sn(t.metadata.id)}Options = {`,o.dataset.post="};";const s=document.createElement("textarea");s.rows=5,s.cols=50,s.textContent=t.options,s.name=`${t.metadata.name}.options`,s.id=`${t.metadata.id}-options`,s.dataset.save=!0,s.dataset.default=t.metadata.id,s.dataset.defaultType="hackOptions",v(s),p(s),o.append(s),a.append(o),n.append(a)}if(t.metadata.description){const a=u("README"),o=document.createElement("pre");o.textContent=t.metadata.description,a.append(o),n.append(a)}return n}function Un(){const t=document.querySelector("#hacks-section");b.forEach(n=>{t.appendChild(Gn(n))})}function u(t){const n=document.createElement("details");return n.className="collapsible",n.dataset.collapse="",n.dataset.header=t,q(n),n}function Vn(){Array.from(document.querySelectorAll("[data-collapsible]")).forEach(q),console.log("HACK IT UP YO"),Un(),document.querySelector("#preloader").remove()}function q(t){const n=document.createElement("summary");n.textContent=t.dataset.header,n.className="collapsible_header",t.prepend(n)}function zn(){window.addEventListener("keydown",t=>{if(t.ctrlKey||t.metaKey)switch(String.fromCharCode(t.which).toLowerCase()){case"s":t.preventDefault(),N();break;case"d":t.preventDefault(),_();break;case"p":t.preventDefault(),D();break}})}document.querySelector("#download-button").addEventListener("click",N);document.querySelector("#restore-button").addEventListener("click",_);document.querySelector("#mascot").addEventListener("click",D);document.querySelector("#template").addEventListener("change",w);Vn();Nn();kn();B();zn();w({currentTarget:document.querySelector("#template")});
+`},"")}let k=!1;async function N(){if(!k){k=!0;try{Array.from(document.querySelectorAll("[data-save]")).forEach(i=>g(i));const t=document.querySelector("#template").value,n=m({"BORKSY-VERSION":et.version,"HACKS-VERSION":y.version,HACKS:On()},En());console.log(n);const e=document.querySelector("#filename").value,r=H.exports.compile((await f.find(i=>i.id===t).data()).default)(n);xn(`${e}.html`,r)}finally{k=!1}}}function D(){const{body:t}=document;t.classList.contains("party")?(t.classList.remove("party"),window.alert("\u{1F63E} Party Mode Deactivated. Everyone out. \u{1F63E}")):(t.classList.add("party"),window.alert("\u2728\u{1F308} Party Mode Activated! \u{1F308}\u2728"))}function h(t){const n=document.createElement("div");return n.innerHTML=t,n.children}function Nn(){var s;const t=document.querySelector("#about_content");t.innerHTML=rt.replace("HACKS_BITSY_VERSION",y.bitsyVersion);const n=document.createElement("section");n.id="last-update",n.innerHTML=(s=T.match(/(<h[12][^]+?)<h[12]/m))==null?void 0:s[1].replace(/<h[12]>([^]+?)<\/h[12]>/g,"<h2>What's new in v$1</h2>"),t.prepend(n);const e=u("How To Use Borksy");e.append(...h(it)),t.appendChild(e);const a=u("Troubleshooting / FAQs");a.classList.add("faq"),a.append(...h(st)),t.appendChild(a);const r=u("Other Bitsy Tools");r.append(...h(ot)),t.appendChild(r);const i=u("AYo's Special Tips");i.append(...h(at)),t.appendChild(i);const o=u("Changelog");o.append(...h(T)),t.appendChild(o)}function Dn(t){t.value=t.dataset.default,p(t)}function Bn(t){const n=t.id.replace(/-options$/,""),{options:e}=b.find(a=>a.metadata.id===n);t.value=e,p(t)}function _n(t){let n=t.dataset.default;n=n==="true",t.type==="checkbox"?t.checked=n:t.value=n,p(t)}function qn(t){const n=t.dataset.default,e=pt[n];if(!e)throw new Error(`Could not find file ${n}`);t.value=e,p(t)}function Rn(t){Pn(t.dataset.default)}function Cn(t){const{options:n}=t;for(let e=n.length-1;e>=0;e--)if(n[e].dataset.defaultOption!==void 0){t.selectedIndex=e;break}p(t)}function B(t=!0){Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{const e=localStorage.getItem(n.name),a=typeof n.dataset.default!="undefined",r=e!==null;if(a&&(!r||!t)){const{defaultType:i}=n.dataset;switch(i){case"string":Dn(n);break;case"boolean":_n(n);break;case"textfile":qn(n);break;case"font":Rn(n);break;case"option":Cn(n);break;case"hackOptions":Bn(n);break;default:throw new Error("Unknown type")}}else r?v(n):n.value="",p(n);E(n)}),console.log(`Defaults loaded. Forced? ${!t}`)}function _(){let t;try{t=window.confirm("Are you sure you want to erase all data and restore defaults?")}catch{t=!0}!t||(Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{localStorage.removeItem(n.name)}),console.log("Cookies removed"),B(!1),document.querySelector("#mascot").classList.remove("borksyHD"))}function Ln(){const t={x:6,y:8},n={x:16,y:16},e=1,a=document.createElement("canvas");a.width=(t.x+e)*n.x+e,a.height=(t.y+e)*n.y+e;const r=a.getContext("2d");let i=[];r.drawImage(this,0,0);for(let o=0;o<n.y;++o)for(let s=0;s<n.x;++s){const l=r.getImageData(s*(t.x+e)+e,o*(t.y+e)+e,t.x,t.y);i.push(l.data)}for(let o=0;o<i.length;++o){const s=[];for(let l=0;l<i[o].length;l+=4)s.push(i[o][l]>255/2?1:0);i[o]=s}i=i.flat(),g(document.querySelector("#fontdata"),`[/*${document.querySelector("#fontfilename").value}*/${i.toString()}]`)}function Pn(t){let n;typeof t=="object"?n=t.target.result:(n=`fonts/${t}`,Mn(t));const e=new Image;e.onload=Ln,e.src=n}function Mn(t){const n=document.querySelector("#fontfilename");n.value!==t&&(n.value=t,g(n))}function Hn(t,n){t.dataset.save=!0,t.dataset.default=!1,t.dataset.defaultType="boolean",t.dataset.hack=n}function Gn(t){const n=u(`${t.metadata.emoji} ${t.metadata.name} (by ${t.metadata.author})`);n.dataset.associatedHack=t.metadata.id;const e=document.createElement("p");e.textContent=t.metadata.summary,n.append(e);const a=document.createElement("label");a.className="horizontal";const r=document.createElement("input");if(r.type="checkbox",r.name=t.metadata.name,r.id=t.metadata.id,Hn(r,t.metadata.id),v(r),O(n,r),An(r),a.append(r),a.append(`Include "${jn(t.metadata.name)}" hack`),n.append(a),t.options){const i=u("Options"),o=document.createElement("label");o.dataset.pre=`var ${Sn(t.metadata.id)}Options = {`,o.dataset.post="};";const s=document.createElement("textarea");s.rows=5,s.cols=50,s.textContent=t.options,s.name=`${t.metadata.name}.options`,s.id=`${t.metadata.id}-options`,s.dataset.save=!0,s.dataset.default=t.metadata.id,s.dataset.defaultType="hackOptions",v(s),p(s),o.append(s),i.append(o),n.append(i)}if(t.metadata.description){const i=u("README"),o=document.createElement("pre");o.textContent=t.metadata.description,i.append(o),n.append(i)}return n}function Un(){const t=document.querySelector("#hacks-section");b.forEach(n=>{t.appendChild(Gn(n))})}function u(t){const n=document.createElement("details");return n.className="collapsible",n.dataset.collapse="",n.dataset.header=t,q(n),n}function Vn(){Array.from(document.querySelectorAll("[data-collapsible]")).forEach(q),console.log("HACK IT UP YO"),Un(),document.querySelector("#preloader").remove()}function q(t){const n=document.createElement("summary");n.textContent=t.dataset.header,n.className="collapsible_header",t.prepend(n)}function zn(){window.addEventListener("keydown",t=>{if(t.ctrlKey||t.metaKey)switch(String.fromCharCode(t.which).toLowerCase()){case"s":t.preventDefault(),N();break;case"d":t.preventDefault(),_();break;case"p":t.preventDefault(),D();break}})}document.querySelector("#download-button").addEventListener("click",N);document.querySelector("#restore-button").addEventListener("click",_);document.querySelector("#mascot").addEventListener("click",D);document.querySelector("#template").addEventListener("change",w);Vn();Nn();kn();B();zn();w({currentTarget:document.querySelector("#template")});
