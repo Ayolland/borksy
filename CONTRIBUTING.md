@@ -18,7 +18,13 @@ Bitsy templates are stored in [`./src/template/`](./src/template). To add a new 
 2. Create a new game to ensure gamedata/settings are default
 3. Export a game as html
 4. Replace key sections of html with Borksy template tags
-   - TODO: list all expected template tags
+   - `<!-- HEADER -->` -> metadata comments
+   - `<title>` -> `{{TITLE}}`
+   - `<script type="text/bitsyGameData" id="exportedGameData">` -> `{{{GAMEDATA}}}`
+   - `<style>` -> `{{{CSS}}}`
+   - `<!-- store default font in separate script tag for back compat-->` -> modified Borksy font data
+   - below font data -> borksy hacks + additional js
+   - `<!-- GAME CANVAS -->` -> `{{{MARKUP}}}`
 5. Place game file in template folder with name `Bitsy.<version>.txt`
 6. Add import/export to [`index`](./src/template/index.js) in template folder for new file
 
