@@ -1,4 +1,9 @@
-var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropertyDescriptors;var x=Object.getOwnPropertySymbols;var P=Object.prototype.hasOwnProperty,M=Object.prototype.propertyIsEnumerable;var S=(t,n,e)=>n in t?R(t,n,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[n]=e,m=(t,n)=>{for(var e in n||(n={}))P.call(n,e)&&S(t,e,n[e]);if(x)for(var e of x(n))M.call(n,e)&&S(t,e,n[e]);return t},j=(t,n)=>C(t,L(n));import{p as y,h as H,F as G}from"./vendor.78573d31.js";const U=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const r of document.querySelectorAll('link[rel="modulepreload"]'))i(r);new MutationObserver(r=>{for(const a of r)if(a.type==="childList")for(const o of a.addedNodes)o.tagName==="LINK"&&o.rel==="modulepreload"&&i(o)}).observe(document,{childList:!0,subtree:!0});function e(r){const a={};return r.integrity&&(a.integrity=r.integrity),r.referrerpolicy&&(a.referrerPolicy=r.referrerpolicy),r.crossorigin==="use-credentials"?a.credentials="include":r.crossorigin==="anonymous"?a.credentials="omit":a.credentials="same-origin",a}function i(r){if(r.ep)return;r.ep=!0;const a=e(r);fetch(r.href,a)}};U();const T=`<h2><a href="https://github.com/Ayolland/borksy/compare/v5.9.0...v5.9.1">5.9.1</a> (2022-01-16)</h2>
+var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropertyDescriptors;var x=Object.getOwnPropertySymbols;var P=Object.prototype.hasOwnProperty,M=Object.prototype.propertyIsEnumerable;var S=(t,n,e)=>n in t?R(t,n,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[n]=e,m=(t,n)=>{for(var e in n||(n={}))P.call(n,e)&&S(t,e,n[e]);if(x)for(var e of x(n))M.call(n,e)&&S(t,e,n[e]);return t},j=(t,n)=>C(t,L(n));import{p as y,h as H,F as G}from"./vendor.c0896bb1.js";const U=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const r of document.querySelectorAll('link[rel="modulepreload"]'))i(r);new MutationObserver(r=>{for(const a of r)if(a.type==="childList")for(const o of a.addedNodes)o.tagName==="LINK"&&o.rel==="modulepreload"&&i(o)}).observe(document,{childList:!0,subtree:!0});function e(r){const a={};return r.integrity&&(a.integrity=r.integrity),r.referrerpolicy&&(a.referrerPolicy=r.referrerpolicy),r.crossorigin==="use-credentials"?a.credentials="include":r.crossorigin==="anonymous"?a.credentials="omit":a.credentials="same-origin",a}function i(r){if(r.ep)return;r.ep=!0;const a=e(r);fetch(r.href,a)}};U();const T=`<h1><a href="https://github.com/Ayolland/borksy/compare/v5.9.1...v5.10.0">5.10.0</a> (2022-01-29)</h1>
+<h3>Features</h3>
+<ul>
+<li>update hacks (<a href="https://github.com/Ayolland/borksy/commit/bfc348447cc98524f517e0a6993b46cac5cb613e">bfc3484</a>)</li>
+</ul>
+<h2><a href="https://github.com/Ayolland/borksy/compare/v5.9.0...v5.9.1">5.9.1</a> (2022-01-16)</h2>
 <h3>Bug Fixes</h3>
 <ul>
 <li>about sections showing raw html (<a href="https://github.com/Ayolland/borksy/commit/818b8c8699c3de8efb343100a123820d4e1fa5bb">818b8c8</a>)</li>
@@ -309,7 +314,7 @@ var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropert
 <ul>
 <li>Initial version</li>
 </ul>
-`,V="borksy",z="5.9.1",$="Borksy Game Hacker: A tool for extending Bitsy games",W={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},Y={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},X="AYolland",K="MIT",J={url:"https://github.com/Ayolland/borksy/issues"},Q="https://ayolland.itch.io/borksy",Z={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},tt={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},nt={"@bitsy/hecks":"^19.2.7",eslint:"^8.6.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.3.0","eslint-plugin-import":"^2.25.2","eslint-plugin-prettier":"^4.0.0","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^27.2.5","jest-dev-server":"^6.0.0","jest-image-snapshot":"^4.5.1",prettier:"^2.4.1",puppeteer:"^13.0.1","rollup-plugin-visualizer":"^5.5.4",sass:"^1.42.1",vite:"^2.6.4","vite-plugin-markdown":"^2.0.2","vite-plugin-string":"^1.0.1"};var et={private:!0,name:V,version:z,description:$,scripts:W,repository:Y,author:X,license:K,bugs:J,homepage:Q,jest:Z,release:tt,devDependencies:nt};const rt=`<p>Borksy is a hacking tool to be used in conjunction with <a href="https://ledoux.itch.io/bitsy">Bitsy Game Maker</a>! Use it to customize your games and add hacks without needing to manually cut-and-paste html.</p>
+`,V="borksy",z="5.10.0",$="Borksy Game Hacker: A tool for extending Bitsy games",W={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},Y={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},X="AYolland",K="MIT",J={url:"https://github.com/Ayolland/borksy/issues"},Q="https://ayolland.itch.io/borksy",Z={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},tt={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},nt={"@bitsy/hecks":"^20.0.0",eslint:"^8.6.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.3.0","eslint-plugin-import":"^2.25.2","eslint-plugin-prettier":"^4.0.0","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^27.2.5","jest-dev-server":"^6.0.0","jest-image-snapshot":"^4.5.1",prettier:"^2.4.1",puppeteer:"^13.0.1","rollup-plugin-visualizer":"^5.5.4",sass:"^1.42.1",vite:"^2.6.4","vite-plugin-markdown":"^2.0.2","vite-plugin-string":"^1.0.1"};var et={private:!0,name:V,version:z,description:$,scripts:W,repository:Y,author:X,license:K,bugs:J,homepage:Q,jest:Z,release:tt,devDependencies:nt};const rt=`<p>Borksy is a hacking tool to be used in conjunction with <a href="https://ledoux.itch.io/bitsy">Bitsy Game Maker</a>! Use it to customize your games and add hacks without needing to manually cut-and-paste html.</p>
 <p>If you're not sure how to use this tool, check out the 'How To Use Borksy' section. If you're having issues, check the 'Troubleshooting/FAQs' section. If you're not familiar with how Bitsy can be extended, try exploring <a href="https://github.com/seleb/bitsy-hacks/">the Bitsy hacks repo</a>.</p>
 <p>Borksy Features:</p>
 <ul>
@@ -3028,8 +3033,8 @@ body {
 @summary change the avatar in certain rooms
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -3198,8 +3203,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -3265,8 +3270,8 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -3353,8 +3358,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary makes the game have a backdrop
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -3530,8 +3535,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -3599,8 +3604,8 @@ var after = kitsy.after;
 @summary makes all sprites have transparent backgrounds
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -3651,8 +3656,8 @@ after('renderPixelInstruction', function (bufferId, buffer, paletteIndex, x, y) 
 @summary makes the game have a transparent background
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -3761,8 +3766,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary "walk" and "talk" sound effect support
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -3929,8 +3934,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -3996,8 +4001,8 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -4095,8 +4100,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary A variety of Bitsy sound and music handlers
 @license MIT
 @author David Mowatt
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -4297,8 +4302,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -4462,8 +4467,8 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -4618,8 +4623,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary WebGLazy bitsy integration (this one's mostly just for me)
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -4815,8 +4820,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -4909,8 +4914,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary high quality anime gifs
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -5876,8 +5881,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -5993,8 +5998,8 @@ function addDialogTag(tag, fn) {
 @summary high quality anime jpegs (or pngs i guess)
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -6227,8 +6232,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary high quality anime jpegs (or pngs i guess)
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -6423,8 +6428,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -6602,8 +6607,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary Prevents from playing past an ending
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -6761,8 +6766,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -6853,8 +6858,8 @@ after('onExitDialog', function () {
 @summary corrupts gamedata at runtime
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -6909,8 +6914,8 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -6971,8 +6976,8 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 @description
 Adds API for updating sprite, tile, and item data at runtime.
@@ -7189,8 +7194,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -7407,8 +7412,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make custom exit transition effects
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -7602,8 +7607,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -7710,8 +7715,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary run custom code on key inputs
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -7894,8 +7899,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -8002,8 +8007,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make {custom}text effects{custom}
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -8349,8 +8354,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -8470,8 +8475,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary animal crossing-style audio powered by the pink trombone vocal synth
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -9350,8 +9355,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -9467,8 +9472,8 @@ function addDialogTag(tag, fn) {
 @summary animal crossing-style audio
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -9524,8 +9529,8 @@ before('dialogBuffer.DoNextChar', function () {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -9866,8 +9871,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary animal crossing-style audio
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -10052,8 +10057,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -10138,8 +10143,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary adds an easing transition animation to display the dialog box text
 @license MIT
 @author Delacannon
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -10294,8 +10299,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -10420,8 +10425,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary dialog choices
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -10657,8 +10662,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -10831,8 +10836,8 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -10875,8 +10880,8 @@ addDialogTag('p', function (environment, parameters, onReturn) {
 @summary put more words onscreen
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -11160,8 +11165,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary jump from one dialog entry to another
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -11330,8 +11335,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -11521,8 +11526,8 @@ addDualDialogTag('jump', function (environment, parameters) {
 @summary add pauses in between printing text
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -11677,8 +11682,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -11802,8 +11807,8 @@ addDialogTag('pause', function (environment, parameters, onReturn) {
 @summary prompt the user for text input in dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -11995,8 +12000,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -12119,8 +12124,8 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -12286,8 +12291,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary provides a variable with player direction
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -12448,8 +12453,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -12534,8 +12539,8 @@ before('startDialog', function () {
 @summary flips the player's sprite based on directional movement
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -12571,8 +12576,8 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -12633,8 +12638,8 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 @description
 Adds API for updating sprite, tile, and item data at runtime.
@@ -12835,8 +12840,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -13008,8 +13013,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary HTML background matching bitsy background
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -13174,8 +13179,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -13241,8 +13246,8 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -13303,8 +13308,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary edit dialog from dialog (yes really)
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -13468,8 +13473,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -13595,8 +13600,8 @@ function addDeferredDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -13666,8 +13671,8 @@ addDeferredDialogTag('dialog', editDialog);
 @summary edit sprites, items, and tiles from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -13729,8 +13734,8 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -13791,8 +13796,8 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 @description
 Adds API for updating sprite, tile, and item data at runtime.
@@ -13985,8 +13990,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -14241,8 +14246,8 @@ addDualDialogTag('imagePal', editPalette);
 @summary change which sprite is controlled by the player
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -14408,8 +14413,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -14573,8 +14578,8 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -14618,8 +14623,8 @@ addDualDialogTag('player', function (environment, parameters) {
 @summary modify the content of a room from dialog
 @license MIT
 @author Dana Holdampf
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -14904,8 +14909,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -15069,8 +15074,8 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -15691,8 +15696,8 @@ function copyBoxAt(mapId, targetId, x1, y1, x2, y2, copyRoomId, pasteXPos, paste
 @summary trigger an ending from dialog, including narration text
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -15881,8 +15886,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -16067,8 +16072,8 @@ addDualDialogTag('end', function (environment, parameters) {
 @summary exit to another room from dialog, including conditionals
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -16257,8 +16262,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -16422,8 +16427,8 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -16501,8 +16506,8 @@ function getExitParams(parameters) {
 @summary separate Bitsy game data from your (modded) HTML for easier development
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -16679,8 +16684,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -16828,8 +16833,8 @@ function dos2unix(text) {
 @summary generate a browser favicon (tab icon) from a Bitsy sprite, including animation!
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -16994,8 +16999,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -17061,8 +17066,8 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -17199,8 +17204,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make sprites follow the player
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -17388,8 +17393,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -17553,8 +17558,8 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -17796,8 +17801,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary HTML5 gamepad support
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -17816,334 +17821,334 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
-var Buttons;
-(function (Buttons) {
-    // XBOX360 wired controller configuration
-    Buttons[Buttons["A"] = 0] = "A";
-    Buttons[Buttons["X"] = 2] = "X";
-    Buttons[Buttons["B"] = 1] = "B";
-    Buttons[Buttons["Y"] = 3] = "Y";
-    Buttons[Buttons["LB"] = 4] = "LB";
-    Buttons[Buttons["RB"] = 5] = "RB";
-    Buttons[Buttons["LT"] = 6] = "LT";
-    Buttons[Buttons["RT"] = 7] = "RT";
-    Buttons[Buttons["BACK"] = 8] = "BACK";
-    Buttons[Buttons["START"] = 9] = "START";
-    Buttons[Buttons["LHAT"] = 10] = "LHAT";
-    Buttons[Buttons["RHAT"] = 11] = "RHAT";
-    Buttons[Buttons["DPAD_UP"] = 12] = "DPAD_UP";
-    Buttons[Buttons["DPAD_DOWN"] = 13] = "DPAD_DOWN";
-    Buttons[Buttons["DPAD_LEFT"] = 14] = "DPAD_LEFT";
-    Buttons[Buttons["DPAD_RIGHT"] = 15] = "DPAD_RIGHT";
-})(Buttons || (Buttons = {}));
-var Axes;
-(function (Axes) {
-    Axes[Axes["LSTICK_H"] = 0] = "LSTICK_H";
-    Axes[Axes["LSTICK_V"] = 1] = "LSTICK_V";
-    Axes[Axes["RSTICK_H"] = 2] = "RSTICK_H";
-    Axes[Axes["RSTICK_V"] = 3] = "RSTICK_V";
-})(Axes || (Axes = {}));
-var nullGamepad = {
-    original: {
-        axes: [],
-        buttons: [],
-        connected: false,
-    },
-    disabled: true,
-    down: {},
-    justDown: {},
-    justUp: {},
-    axesPrev: {},
-};
-var Gamepads = /** @class */ (function () {
-    /**
-    * initialize gamepads
-    */
-    function Gamepads() {
-        var _this = this;
-        // settings
-        /** if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead */
-        this.deadZone = 0.25;
-        /** if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1 instead */
-        this.snapZone = 0.25;
-        /** axis values between \`deadZone\` and \`snapZone\` will be run through this function
-        *
-        * defaults to normalizing between the two thresholds */
-        this.interpolate = function (value) {
-            var v = Math.max(0, Math.min(1, (value - _this.deadZone) / (1.0 - _this.snapZone - _this.deadZone)));
-            return v;
-        };
-        // internal vars
-        this.players = {};
-        this.available = false;
-        this.pollEveryFrame = false;
-        this.connected = false;
-        /**
-        * update gamepads (clears arrays, polls connections, etc.)
-        */
-        this.pollconnections = function () {
-            _this.connected = false;
-            // assume existing players' gamepads aren't enabled until they're found
-            Object.values(_this.players).forEach(function (player) {
-                player.disabled = true;
-            });
-            var gps = navigator.getGamepads();
-            for (var i = 0; i < gps.length; ++i) {
-                var gp = gps[i];
-                if (gp) {
-                    if (gp.connected) {
-                        if (_this.players[gp.index] == null) {
-                            // new player
-                            _this.players[gp.index] = {
-                                disabled: false,
-                                original: gp,
-                                down: {},
-                                justDown: {},
-                                justUp: {},
-                                axesPrev: {},
-                            };
-                        }
-                        else {
-                            // returning player, just assign the gamepad
-                            _this.players[gp.index].original = gp;
-                        }
-                        _this.connected = true;
-                        _this.players[gp.index].disabled = false;
-                    }
-                    else {
-                        delete _this.players[gp.index];
-                    }
-                }
-            }
-        };
-        /**
-        * update gamepads (clears arrays, polls connections, etc.)
-        */
-        this.update = function () {
-            // store the previous axis values
-            // has to be done before pollConnections since that will get the new axis values
-            Object.keys(_this.players).forEach(function (i) {
-                var _a;
-                var p = _this.getPlayer(i);
-                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.axes) {
-                    p.axesPrev = p.original.axes.slice();
-                }
-            });
-            // poll connections and update gamepad states every frame because chrome's a lazy bum
-            if (_this.pollEveryFrame) {
-                _this.pollconnections();
-            }
-            Object.keys(_this.players).forEach(function (i) {
-                var _a;
-                var p = _this.getPlayer(i);
-                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.buttons) {
-                    for (var j = 0; j < p.original.buttons.length; ++j) {
-                        if (p.original.buttons[j].pressed) {
-                            p.justDown[j] = !(p.down[j] === true);
-                            p.down[j] = true;
-                            p.justUp[j] = false;
-                        }
-                        else {
-                            p.justUp[j] = p.down[j] === true;
-                            p.down[j] = false;
-                            p.justDown[j] = false;
-                        }
-                    }
-                }
-            });
-        };
-        /**
-        * @returns \`player\`'s gamepad
-        *
-        * if one doesn't exist, returns an object with gamepad properties reflecting a null state
-        */
-        this.getPlayer = function (player) {
-            var _a, _b, _c;
-            if (((_b = (_a = _this.players[player]) === null || _a === void 0 ? void 0 : _a.original) === null || _b === void 0 ? void 0 : _b.connected) && !((_c = _this.players[player]) === null || _c === void 0 ? void 0 : _c.disabled)) {
-                return _this.players[player];
-            }
-            return nullGamepad;
-        };
-        /**
-        * @returns an array representing \`length\` axes for \`player\` at \`offset\`
-        *
-        * if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead
-        * if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1/-1 instead
-        * otherwise, returns the axis value normalized between \`deadZone\` and \`(1-snapZone)\`
-        * @param {Number} offset axis index
-        * @param {Number} length number of axes to return
-        * @param {Number} player player index (\`undefined\` for "sum of all")
-        * @param {boolean} prev if \`true\` uses axis values from previous update
-        */
-        this.getAxes = function (offset, length, player, prev) {
-            if (offset === void 0) { offset = 0; }
-            if (length === void 0) { length = 2; }
-            if (prev === void 0) { prev = false; }
-            var axes = [];
-            for (var i = 0; i < length; ++i) {
-                axes[i] = 0;
-            }
-            if (player === undefined) {
-                Object.keys(_this.players).forEach(function (i) {
-                    var a = _this.getAxes(offset, length, i, prev);
-                    for (var j = 0; j < a.length; ++j) {
-                        axes[j] += a[j];
-                    }
-                });
-            }
-            else {
-                var p = _this.getPlayer(player);
-                if (p === null || p === void 0 ? void 0 : p.original) {
-                    var axesSource = prev ? p.axesPrev : p.original.axes;
-                    var a = Object.values(axesSource).slice(offset, offset + length);
-                    for (var i = 0; i < a.length; ++i) {
-                        if (Math.abs(a[i]) < _this.deadZone) {
-                            axes[i] += 0;
-                        }
-                        else if (Math.abs(1.0 - a[i]) < _this.snapZone) {
-                            axes[i] += 1;
-                        }
-                        else if (Math.abs(-1.0 - a[i]) < _this.snapZone) {
-                            axes[i] -= 1;
-                        }
-                        else {
-                            axes[i] += Math.sign(a[i]) * _this.interpolate(Math.abs(a[i]));
-                        }
-                    }
-                }
-            }
-            return axes;
-        };
-        /**
-       * @returns equivalent to \`getAxes(axis, 1, player, prev)[0]\`
-       */
-        this.getAxis = function (axis, player, prev) { return _this.getAxes(axis, 1, player, prev)[0]; };
-        /**
-        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\`
-        * @param {Number} axis axis index
-        * @param {Number} threshold threshold (-1 to 1)
-        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))
-        * @param {Number} player player index (\`undefined\` for "any")
-        * @param {boolean} prev if \`true\` uses axis values from previous update
-        */
-        this.axisPast = function (axis, threshold, direction, player, prev) {
-            if (!threshold) {
-                throw new Error('must specify a non-zero threshold');
-            }
-            if (!direction) {
-                direction = threshold > 0 ? 1 : -1;
-            }
-            var a = _this.getAxis(axis, player, prev);
-            return direction < 0 ? a < threshold : a > threshold;
-        };
-        /**
-        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\` and WAS NOT in previous update
-        * @param {Number} axis axis index
-        * @param {Number} threshold threshold (-1 to 1)
-        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.axisJustPast = function (axis, threshold, direction, player) { return _this.axisPast(axis, threshold, direction, player, false)
-            && !_this.axisPast(axis, threshold, direction, player, true); };
-        /**
-        * @returns \`[x,y]\` representing the dpad for \`player\`
-        * @param {Number} player player index (\`undefined\` for "sum of all")
-        */
-        this.getDpad = function (player) {
-            var x = 0;
-            var y = 0;
-            if (player === undefined) {
-                Object.keys(_this.players).forEach(function (i) {
-                    var _a = _this.getDpad(i), ix = _a[0], iy = _a[1];
-                    x += ix;
-                    y += iy;
-                });
-            }
-            else {
-                if (_this.isDown(Buttons.DPAD_RIGHT, player)) {
-                    x += 1;
-                }
-                if (_this.isDown(Buttons.DPAD_LEFT, player)) {
-                    x -= 1;
-                }
-                if (_this.isDown(Buttons.DPAD_UP, player)) {
-                    y += 1;
-                }
-                if (_this.isDown(Buttons.DPAD_DOWN, player)) {
-                    y -= 1;
-                }
-            }
-            return [x, y];
-        };
-        /**
-        * @returns \`true\` if \`player\`'s \`btn\` is currently down
-        * @param {Number} btn button index
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.isDown = function (btn, player) {
-            if (btn === undefined) {
-                throw new Error('must specify a button');
-            }
-            if (player === undefined) {
-                return Object.keys(_this.players).some(function (i) { return _this.isDown(btn, i); });
-            }
-            return _this.getPlayer(player).down[btn];
-        };
-        /**
-        * @returns equivalent to \`!isDown(btn, player)\`
-        * @param {Number} btn button index
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.isUp = function (btn, player) { return !_this.isDown(btn, player); };
-        /**
-        * @returns \`true\` if \`player\`'s \`btn\` is currently down and WAS NOT in previous update
-        * @param {Number} btn button index
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.isJustDown = function (btn, player) {
-            if (btn === undefined) {
-                throw new Error('must specify a button');
-            }
-            if (player === undefined) {
-                return Object.keys(_this.players).some(function (i) { return _this.isJustDown(btn, i); });
-            }
-            return _this.getPlayer(player).justDown[btn];
-        };
-        /**
-        * @returns \`true\` if \`player\`'s \`btn\` is currently NOT down and WAS down in previous update
-        * @param {Number} btn button index
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.isJustUp = function (btn, player) {
-            if (btn === undefined) {
-                throw new Error('must specify a button');
-            }
-            if (player === undefined) {
-                return Object.keys(_this.players).some(function (i) { return _this.isJustUp(btn, i); });
-            }
-            return _this.getPlayer(player).justUp[btn];
-        };
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        // @ts-ignore
-        if (navigator.getGamepads) {
-            this.available = true;
-        }
-        else if (navigator.webkitGetGamepads) {
-            navigator.getGamepads = navigator.webkitGetGamepads;
-            this.available = true;
-        }
-        if (this.available) {
-            if (navigator.userAgent.includes('Firefox')) {
-                // listen to connection events for firefox
-                window.addEventListener('gamepadconnected', this.pollconnections.bind(this));
-                window.addEventListener('gamepaddisconnected', this.pollconnections.bind(this));
-            }
-            else {
-                this.pollEveryFrame = true;
-            }
-        }
-    }
-    return Gamepads;
+var Buttons;\r
+(function (Buttons) {\r
+    // XBOX360 wired controller configuration\r
+    Buttons[Buttons["A"] = 0] = "A";\r
+    Buttons[Buttons["X"] = 2] = "X";\r
+    Buttons[Buttons["B"] = 1] = "B";\r
+    Buttons[Buttons["Y"] = 3] = "Y";\r
+    Buttons[Buttons["LB"] = 4] = "LB";\r
+    Buttons[Buttons["RB"] = 5] = "RB";\r
+    Buttons[Buttons["LT"] = 6] = "LT";\r
+    Buttons[Buttons["RT"] = 7] = "RT";\r
+    Buttons[Buttons["BACK"] = 8] = "BACK";\r
+    Buttons[Buttons["START"] = 9] = "START";\r
+    Buttons[Buttons["LHAT"] = 10] = "LHAT";\r
+    Buttons[Buttons["RHAT"] = 11] = "RHAT";\r
+    Buttons[Buttons["DPAD_UP"] = 12] = "DPAD_UP";\r
+    Buttons[Buttons["DPAD_DOWN"] = 13] = "DPAD_DOWN";\r
+    Buttons[Buttons["DPAD_LEFT"] = 14] = "DPAD_LEFT";\r
+    Buttons[Buttons["DPAD_RIGHT"] = 15] = "DPAD_RIGHT";\r
+})(Buttons || (Buttons = {}));\r
+var Axes;\r
+(function (Axes) {\r
+    Axes[Axes["LSTICK_H"] = 0] = "LSTICK_H";\r
+    Axes[Axes["LSTICK_V"] = 1] = "LSTICK_V";\r
+    Axes[Axes["RSTICK_H"] = 2] = "RSTICK_H";\r
+    Axes[Axes["RSTICK_V"] = 3] = "RSTICK_V";\r
+})(Axes || (Axes = {}));\r
+var nullGamepad = {\r
+    original: {\r
+        axes: [],\r
+        buttons: [],\r
+        connected: false,\r
+    },\r
+    disabled: true,\r
+    down: {},\r
+    justDown: {},\r
+    justUp: {},\r
+    axesPrev: {},\r
+};\r
+var Gamepads = /** @class */ (function () {\r
+    /**\r
+    * initialize gamepads\r
+    */\r
+    function Gamepads() {\r
+        var _this = this;\r
+        // settings\r
+        /** if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead */\r
+        this.deadZone = 0.25;\r
+        /** if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1 instead */\r
+        this.snapZone = 0.25;\r
+        /** axis values between \`deadZone\` and \`snapZone\` will be run through this function\r
+        *\r
+        * defaults to normalizing between the two thresholds */\r
+        this.interpolate = function (value) {\r
+            var v = Math.max(0, Math.min(1, (value - _this.deadZone) / (1.0 - _this.snapZone - _this.deadZone)));\r
+            return v;\r
+        };\r
+        // internal vars\r
+        this.players = {};\r
+        this.available = false;\r
+        this.pollEveryFrame = false;\r
+        this.connected = false;\r
+        /**\r
+        * update gamepads (clears arrays, polls connections, etc.)\r
+        */\r
+        this.pollconnections = function () {\r
+            _this.connected = false;\r
+            // assume existing players' gamepads aren't enabled until they're found\r
+            Object.values(_this.players).forEach(function (player) {\r
+                player.disabled = true;\r
+            });\r
+            var gps = navigator.getGamepads();\r
+            for (var i = 0; i < gps.length; ++i) {\r
+                var gp = gps[i];\r
+                if (gp) {\r
+                    if (gp.connected) {\r
+                        if (_this.players[gp.index] == null) {\r
+                            // new player\r
+                            _this.players[gp.index] = {\r
+                                disabled: false,\r
+                                original: gp,\r
+                                down: {},\r
+                                justDown: {},\r
+                                justUp: {},\r
+                                axesPrev: {},\r
+                            };\r
+                        }\r
+                        else {\r
+                            // returning player, just assign the gamepad\r
+                            _this.players[gp.index].original = gp;\r
+                        }\r
+                        _this.connected = true;\r
+                        _this.players[gp.index].disabled = false;\r
+                    }\r
+                    else {\r
+                        delete _this.players[gp.index];\r
+                    }\r
+                }\r
+            }\r
+        };\r
+        /**\r
+        * update gamepads (clears arrays, polls connections, etc.)\r
+        */\r
+        this.update = function () {\r
+            // store the previous axis values\r
+            // has to be done before pollConnections since that will get the new axis values\r
+            Object.keys(_this.players).forEach(function (i) {\r
+                var _a;\r
+                var p = _this.getPlayer(i);\r
+                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.axes) {\r
+                    p.axesPrev = p.original.axes.slice();\r
+                }\r
+            });\r
+            // poll connections and update gamepad states every frame because chrome's a lazy bum\r
+            if (_this.pollEveryFrame) {\r
+                _this.pollconnections();\r
+            }\r
+            Object.keys(_this.players).forEach(function (i) {\r
+                var _a;\r
+                var p = _this.getPlayer(i);\r
+                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.buttons) {\r
+                    for (var j = 0; j < p.original.buttons.length; ++j) {\r
+                        if (p.original.buttons[j].pressed) {\r
+                            p.justDown[j] = !(p.down[j] === true);\r
+                            p.down[j] = true;\r
+                            p.justUp[j] = false;\r
+                        }\r
+                        else {\r
+                            p.justUp[j] = p.down[j] === true;\r
+                            p.down[j] = false;\r
+                            p.justDown[j] = false;\r
+                        }\r
+                    }\r
+                }\r
+            });\r
+        };\r
+        /**\r
+        * @returns \`player\`'s gamepad\r
+        *\r
+        * if one doesn't exist, returns an object with gamepad properties reflecting a null state\r
+        */\r
+        this.getPlayer = function (player) {\r
+            var _a, _b, _c;\r
+            if (((_b = (_a = _this.players[player]) === null || _a === void 0 ? void 0 : _a.original) === null || _b === void 0 ? void 0 : _b.connected) && !((_c = _this.players[player]) === null || _c === void 0 ? void 0 : _c.disabled)) {\r
+                return _this.players[player];\r
+            }\r
+            return nullGamepad;\r
+        };\r
+        /**\r
+        * @returns an array representing \`length\` axes for \`player\` at \`offset\`\r
+        *\r
+        * if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead\r
+        * if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1/-1 instead\r
+        * otherwise, returns the axis value normalized between \`deadZone\` and \`(1-snapZone)\`\r
+        * @param {Number} offset axis index\r
+        * @param {Number} length number of axes to return\r
+        * @param {Number} player player index (\`undefined\` for "sum of all")\r
+        * @param {boolean} prev if \`true\` uses axis values from previous update\r
+        */\r
+        this.getAxes = function (offset, length, player, prev) {\r
+            if (offset === void 0) { offset = 0; }\r
+            if (length === void 0) { length = 2; }\r
+            if (prev === void 0) { prev = false; }\r
+            var axes = [];\r
+            for (var i = 0; i < length; ++i) {\r
+                axes[i] = 0;\r
+            }\r
+            if (player === undefined) {\r
+                Object.keys(_this.players).forEach(function (i) {\r
+                    var a = _this.getAxes(offset, length, i, prev);\r
+                    for (var j = 0; j < a.length; ++j) {\r
+                        axes[j] += a[j];\r
+                    }\r
+                });\r
+            }\r
+            else {\r
+                var p = _this.getPlayer(player);\r
+                if (p === null || p === void 0 ? void 0 : p.original) {\r
+                    var axesSource = prev ? p.axesPrev : p.original.axes;\r
+                    var a = Object.values(axesSource).slice(offset, offset + length);\r
+                    for (var i = 0; i < a.length; ++i) {\r
+                        if (Math.abs(a[i]) < _this.deadZone) {\r
+                            axes[i] += 0;\r
+                        }\r
+                        else if (Math.abs(1.0 - a[i]) < _this.snapZone) {\r
+                            axes[i] += 1;\r
+                        }\r
+                        else if (Math.abs(-1.0 - a[i]) < _this.snapZone) {\r
+                            axes[i] -= 1;\r
+                        }\r
+                        else {\r
+                            axes[i] += Math.sign(a[i]) * _this.interpolate(Math.abs(a[i]));\r
+                        }\r
+                    }\r
+                }\r
+            }\r
+            return axes;\r
+        };\r
+        /**\r
+       * @returns equivalent to \`getAxes(axis, 1, player, prev)[0]\`\r
+       */\r
+        this.getAxis = function (axis, player, prev) { return _this.getAxes(axis, 1, player, prev)[0]; };\r
+        /**\r
+        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\`\r
+        * @param {Number} axis axis index\r
+        * @param {Number} threshold threshold (-1 to 1)\r
+        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        * @param {boolean} prev if \`true\` uses axis values from previous update\r
+        */\r
+        this.axisPast = function (axis, threshold, direction, player, prev) {\r
+            if (!threshold) {\r
+                throw new Error('must specify a non-zero threshold');\r
+            }\r
+            if (!direction) {\r
+                direction = threshold > 0 ? 1 : -1;\r
+            }\r
+            var a = _this.getAxis(axis, player, prev);\r
+            return direction < 0 ? a < threshold : a > threshold;\r
+        };\r
+        /**\r
+        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\` and WAS NOT in previous update\r
+        * @param {Number} axis axis index\r
+        * @param {Number} threshold threshold (-1 to 1)\r
+        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.axisJustPast = function (axis, threshold, direction, player) { return _this.axisPast(axis, threshold, direction, player, false)\r
+            && !_this.axisPast(axis, threshold, direction, player, true); };\r
+        /**\r
+        * @returns \`[x,y]\` representing the dpad for \`player\`\r
+        * @param {Number} player player index (\`undefined\` for "sum of all")\r
+        */\r
+        this.getDpad = function (player) {\r
+            var x = 0;\r
+            var y = 0;\r
+            if (player === undefined) {\r
+                Object.keys(_this.players).forEach(function (i) {\r
+                    var _a = _this.getDpad(i), ix = _a[0], iy = _a[1];\r
+                    x += ix;\r
+                    y += iy;\r
+                });\r
+            }\r
+            else {\r
+                if (_this.isDown(Buttons.DPAD_RIGHT, player)) {\r
+                    x += 1;\r
+                }\r
+                if (_this.isDown(Buttons.DPAD_LEFT, player)) {\r
+                    x -= 1;\r
+                }\r
+                if (_this.isDown(Buttons.DPAD_UP, player)) {\r
+                    y += 1;\r
+                }\r
+                if (_this.isDown(Buttons.DPAD_DOWN, player)) {\r
+                    y -= 1;\r
+                }\r
+            }\r
+            return [x, y];\r
+        };\r
+        /**\r
+        * @returns \`true\` if \`player\`'s \`btn\` is currently down\r
+        * @param {Number} btn button index\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.isDown = function (btn, player) {\r
+            if (btn === undefined) {\r
+                throw new Error('must specify a button');\r
+            }\r
+            if (player === undefined) {\r
+                return Object.keys(_this.players).some(function (i) { return _this.isDown(btn, i); });\r
+            }\r
+            return _this.getPlayer(player).down[btn];\r
+        };\r
+        /**\r
+        * @returns equivalent to \`!isDown(btn, player)\`\r
+        * @param {Number} btn button index\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.isUp = function (btn, player) { return !_this.isDown(btn, player); };\r
+        /**\r
+        * @returns \`true\` if \`player\`'s \`btn\` is currently down and WAS NOT in previous update\r
+        * @param {Number} btn button index\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.isJustDown = function (btn, player) {\r
+            if (btn === undefined) {\r
+                throw new Error('must specify a button');\r
+            }\r
+            if (player === undefined) {\r
+                return Object.keys(_this.players).some(function (i) { return _this.isJustDown(btn, i); });\r
+            }\r
+            return _this.getPlayer(player).justDown[btn];\r
+        };\r
+        /**\r
+        * @returns \`true\` if \`player\`'s \`btn\` is currently NOT down and WAS down in previous update\r
+        * @param {Number} btn button index\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.isJustUp = function (btn, player) {\r
+            if (btn === undefined) {\r
+                throw new Error('must specify a button');\r
+            }\r
+            if (player === undefined) {\r
+                return Object.keys(_this.players).some(function (i) { return _this.isJustUp(btn, i); });\r
+            }\r
+            return _this.getPlayer(player).justUp[btn];\r
+        };\r
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore\r
+        // @ts-ignore\r
+        if (navigator.getGamepads) {\r
+            this.available = true;\r
+        }\r
+        else if (navigator.webkitGetGamepads) {\r
+            navigator.getGamepads = navigator.webkitGetGamepads;\r
+            this.available = true;\r
+        }\r
+        if (this.available) {\r
+            if (navigator.userAgent.includes('Firefox')) {\r
+                // listen to connection events for firefox\r
+                window.addEventListener('gamepadconnected', this.pollconnections.bind(this));\r
+                window.addEventListener('gamepaddisconnected', this.pollconnections.bind(this));\r
+            }\r
+            else {\r
+                this.pollEveryFrame = true;\r
+            }\r
+        }\r
+    }\r
+    return Gamepads;\r
 }());
 
 /**
@@ -18281,8 +18286,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -18391,8 +18396,8 @@ after('update', function () {
 @summary Pseudo-platforming/gravity/physics
 @license MIT
 @author Cole Sea
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -18509,8 +18514,8 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -18571,8 +18576,8 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 @description
 Adds API for updating sprite, tile, and item data at runtime.
@@ -18773,8 +18778,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -19366,8 +19371,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary for when bitsy's not small enough
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -19533,8 +19538,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -19600,13 +19605,8 @@ kitsy.after;
 
 
 
-// rewrite main canvas width/height
-inject(/(width =) 128/, '$1 64');
-inject(/(height =) 128/, '$1 64');
-
 inject(/4(; \\/\\/this is stupid but necessary)/, '1$1'); // rewrite canvas scale
 inject(/(mapsize =) 16/, '$1 8'); // rewrite mapsize
-inject(/(\\+ 1 >=) 16/g, '$1 8'); // rewrite right/down wall checks
 
 // rewrite text scale
 inject(/(var textScale =) 2/, '$1 1');
@@ -19641,8 +19641,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary execute arbitrary javascript from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -19818,8 +19818,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -19996,8 +19996,8 @@ addDualDialogTag('js', executeJs);
 @file logic-operators-extended
 @summary adds conditional logic operators
 @author @mildmojo
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -20161,8 +20161,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -20265,8 +20265,8 @@ inject(
 @summary put more words onscreen
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -20445,8 +20445,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -20619,8 +20619,8 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -20703,8 +20703,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make the player big
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -20892,8 +20892,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -20959,8 +20959,8 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -21123,8 +21123,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary walk through wall tiles, sprites, items, exits, and endings
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -21301,8 +21301,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -21370,8 +21370,8 @@ var after = kitsy.after;
 @summary run custom code on key inputs
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -21482,8 +21482,8 @@ hackOptions.ondown = {
 @summary multiplayer bitsy
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 @description
 Provides the groundwork for running a small online multiplayer bitsy game.
@@ -21660,8 +21660,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -21825,8 +21825,8 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -21889,8 +21889,8 @@ function getImage(name, map) {
 @summary edit dialog from dialog (yes really)
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -21956,8 +21956,8 @@ addDeferredDialogTag('dialog', editDialog);
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 @description
 Adds API for updating sprite, tile, and item data at runtime.
@@ -22025,8 +22025,8 @@ function setSpriteData(id, frame, newData) {
 @summary edit sprites, items, and tiles from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -22170,8 +22170,8 @@ addDualDialogTag('imagePal', editPalette);
 @summary execute arbitrary javascript from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -22375,8 +22375,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary tiles which hide the player
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -22540,8 +22540,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -22645,8 +22645,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -22817,8 +22817,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -22951,8 +22951,8 @@ addDialogTag('p', function (environment, parameters, onReturn) {
 @summary prevent some items from being picked up
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -23113,8 +23113,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -23238,8 +23238,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary sokoban-style sprite pushing
 @license MIT
 @author jan0sc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -23432,8 +23432,8 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -23494,8 +23494,8 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 @description
 Adds API for updating sprite, tile, and item data at runtime.
@@ -23696,8 +23696,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -24128,8 +24128,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary add name-tags to replace drawings when the game is loading
 @license MIT
 @author Elkie Nova
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -24301,8 +24301,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -24407,8 +24407,8 @@ after('parseWorld', function () {
 @summary save/load your game
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -24598,8 +24598,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -24763,8 +24763,8 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -24969,8 +24969,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary ease the player's movement
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -25135,8 +25135,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -25278,8 +25278,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary treat some items like sprites that can be placed multiple times
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -25441,8 +25441,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -25571,8 +25571,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary like text effects, but for sprites
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -25782,8 +25782,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -25947,8 +25947,8 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -26106,8 +26106,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary time player actions
 @license MIT
 @author Lenny Magner
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -26304,8 +26304,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -26469,8 +26469,8 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 
@@ -26576,8 +26576,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary text-to-speech for bitsy dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -26764,8 +26764,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -27065,8 +27065,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary process all dialog text with a tracery grammar
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -28097,8 +28097,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -28186,8 +28186,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary customizable WebGL transitions
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -28405,8 +28405,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -28474,8 +28474,8 @@ var after = kitsy.after;
 @summary WebGLazy bitsy integration (this one's mostly just for me)
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -28605,8 +28605,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary makes the game have a transparent background
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -28772,8 +28772,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -28841,8 +28841,8 @@ var after = kitsy.after;
 @summary makes all sprites have transparent backgrounds
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -28917,8 +28917,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary makes the dialog box have a transparent background
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -29069,8 +29069,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -29147,8 +29147,8 @@ after('renderClearInstruction', function (bufferId, buffer, paletteIndex) {
 @summary makes all sprites have transparent backgrounds
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -29310,8 +29310,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -29412,8 +29412,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary interprocess communication for twine and bitsy
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -29646,8 +29646,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -29883,8 +29883,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary items which, when picked up, remove all other instances of that item from the game
 @license MIT
 @author Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 
 @description
@@ -30046,8 +30046,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 19.2.7
-@requires Bitsy 7.11
+@version 20.0.0
+@requires Bitsy 7.12
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
