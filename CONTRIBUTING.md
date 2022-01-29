@@ -25,6 +25,11 @@ Bitsy templates are stored in [`./src/template/`](./src/template). To add a new 
    - `<!-- store default font in separate script tag for back compat-->` -> modified Borksy font data
    - below font data -> borksy hacks + additional js
    - `<!-- GAME CANVAS -->` -> `{{{MARKUP}}}`
+   - HD
+     - include "HD" in header metadata
+     - `textboxInfo.top`/`left`/`bottom` -> `*2`
+     - `var scale = 4;` -> `var scale = 2;`
+     - `var tilesize = 8;` -> `var tilesize = 16;`
 5. Place game file in template folder with name `Bitsy.<version>.txt`
 6. Add import/export to [`index`](./src/template/index.js) in template folder for new file
 
