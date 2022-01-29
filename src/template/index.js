@@ -10,5 +10,6 @@ export default [
 	{ data: () => import('./Bitsy.7.8.hbs'), bitsyVersion: '7.8', description: 'Bitsy 7.8' },
 	{ data: () => import('./Bitsy.7.10.hbs'), bitsyVersion: '7.10', description: 'Bitsy 7.10' },
 	{ data: () => import('./BitsyHD.7.11.hbs'), bitsyVersion: '7.11', isHd: true, description: 'Bitsy HD (Bitsy 7.11)' },
-	{ data: () => import('./Bitsy.7.11.hbs'), bitsyVersion: '7.11', description: 'Bitsy 7.11', isDefault: true },
+	{ data: () => import('./Bitsy.7.11.hbs'), bitsyVersion: '7.11', description: 'Bitsy 7.11' },
+	{ data: () => import('./Bitsy.7.12.hbs'), bitsyVersion: '7.12', description: 'Bitsy 7.12', isDefault: true },
 ].map(i => ({ ...i, id: `Bitsy${i.isHd ? 'HD' : ''}${i.bitsyVersion.replace(/\./g, '')}` }));
