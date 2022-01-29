@@ -1,10 +1,11 @@
 BORK BORK BORK
 
-# BITSY VERSION 5.5
+# BITSY VERSION 7.12
 
 ! ROOM_FORMAT 1
 
 PAL 0
+NAME blueprint
 187,56,102
 255,141,78
 0,0,0
@@ -26,6 +27,7 @@ ROOM 0
 0,a,0,0,0,0,0,0,0,0,0,0,0,0,a,0
 0,a,a,a,a,a,a,a,a,a,a,a,a,a,a,0
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+NAME example room
 PAL 0
 
 TIL a
@@ -37,6 +39,7 @@ TIL a
 10000001
 10000001
 11111111
+NAME block
 WAL true
 
 SPR A
@@ -78,7 +81,7 @@ SPR a
 01111010
 11111100
 NAME dog
-DLG SPR_0
+DLG 0
 POS 0 8,12
 
 ITM 0
@@ -91,18 +94,25 @@ ITM 0
 00011000
 00000000
 NAME tea
-DLG ITM_0
+DLG 1
 
-DLG SPR_0
+DLG 0
 """
 {sequence
   - BORKSY: bork bork bork i'm a cat
   - BORKSY: (heh heh i'm not a cat)
 }
 """
+NAME dog dialog
 
-DLG ITM_0
+DLG 1
 You found a nice warm cup of tea
+NAME tea dialog
+
+DLG 2
+A key! {wvy}What does it open?{wvy}
+NAME key dialog
 
 VAR a
 42
+
