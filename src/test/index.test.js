@@ -85,7 +85,7 @@ describe('Borksy', () => {
 		await page.keyboard.down('Control');
 		await page.keyboard.press('Home');
 		await page.keyboard.up('Control');
-		for (let i = 0; i < 39; ++i) {
+		for (let i = 0; i < 42; ++i) {
 			// eslint-disable-next-line no-await-in-loop
 			await page.keyboard.press('ArrowDown');
 		}
