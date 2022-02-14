@@ -1,3 +1,10 @@
+## [5.11.1](https://github.com/Ayolland/borksy/compare/v5.11.0...v5.11.1) (2022-02-14)
+
+
+### Bug Fixes
+
+* **deps:** bump follow-redirects from 1.14.7 to 1.14.8 ([#12](https://github.com/Ayolland/borksy/issues/12)) ([04d2838](https://github.com/Ayolland/borksy/commit/04d283825806238c635eaae0548a87c996bd98bb))
+
 # [5.11.0](https://github.com/Ayolland/borksy/compare/v5.10.0...v5.11.0) (2022-01-29)
 
 
