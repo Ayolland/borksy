@@ -1,3 +1,10 @@
+# [5.12.0](https://github.com/Ayolland/borksy/compare/v5.11.1...v5.12.0) (2022-02-23)
+
+
+### Features
+
+* update hacks ([ea16660](https://github.com/Ayolland/borksy/commit/ea166603e33ed94eda83a6feaf4425b8866bbf7c))
+
 ## [5.11.1](https://github.com/Ayolland/borksy/compare/v5.11.0...v5.11.1) (2022-02-14)
 
 
