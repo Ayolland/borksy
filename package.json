@@ -68,6 +68,6 @@
     "sass": "^1.42.1",
     "vite": "^2.6.4",
     "vite-plugin-markdown": "^2.0.2",
-    "vite-plugin-string": "^1.0.1"
+    "vite-plugin-string": "^1.1.2"
   }
 }
