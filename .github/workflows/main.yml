@@ -15,7 +15,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v3
       - run: npm ci
-      - uses: cycjimmy/semantic-release-action@v2
+      - uses: cycjimmy/semantic-release-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
