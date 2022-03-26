@@ -9,9 +9,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16
+      - uses: actions/setup-node@v3
       - run: npm ci
       - run: npm i @bitsy/hecks@latest
       - run: npm run update-hacks
