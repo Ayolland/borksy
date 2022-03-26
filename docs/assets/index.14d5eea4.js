@@ -1,4 +1,9 @@
-var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropertyDescriptors;var x=Object.getOwnPropertySymbols;var P=Object.prototype.hasOwnProperty,M=Object.prototype.propertyIsEnumerable;var S=(t,n,e)=>n in t?R(t,n,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[n]=e,m=(t,n)=>{for(var e in n||(n={}))P.call(n,e)&&S(t,e,n[e]);if(x)for(var e of x(n))M.call(n,e)&&S(t,e,n[e]);return t},j=(t,n)=>C(t,L(n));import{p as y,h as H,F as G}from"./vendor.5b462caf.js";const U=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const r of document.querySelectorAll('link[rel="modulepreload"]'))a(r);new MutationObserver(r=>{for(const i of r)if(i.type==="childList")for(const o of i.addedNodes)o.tagName==="LINK"&&o.rel==="modulepreload"&&a(o)}).observe(document,{childList:!0,subtree:!0});function e(r){const i={};return r.integrity&&(i.integrity=r.integrity),r.referrerpolicy&&(i.referrerPolicy=r.referrerpolicy),r.crossorigin==="use-credentials"?i.credentials="include":r.crossorigin==="anonymous"?i.credentials="omit":i.credentials="same-origin",i}function a(r){if(r.ep)return;r.ep=!0;const i=e(r);fetch(r.href,i)}};U();const T=`<h1><a href="https://github.com/Ayolland/borksy/compare/v5.11.1...v5.12.0">5.12.0</a> (2022-02-23)</h1>
+var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropertyDescriptors;var x=Object.getOwnPropertySymbols;var P=Object.prototype.hasOwnProperty,M=Object.prototype.propertyIsEnumerable;var S=(t,n,e)=>n in t?R(t,n,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[n]=e,m=(t,n)=>{for(var e in n||(n={}))P.call(n,e)&&S(t,e,n[e]);if(x)for(var e of x(n))M.call(n,e)&&S(t,e,n[e]);return t},j=(t,n)=>C(t,L(n));import{p as y,h as H,F as G}from"./vendor.3423f090.js";const U=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const r of document.querySelectorAll('link[rel="modulepreload"]'))a(r);new MutationObserver(r=>{for(const i of r)if(i.type==="childList")for(const o of i.addedNodes)o.tagName==="LINK"&&o.rel==="modulepreload"&&a(o)}).observe(document,{childList:!0,subtree:!0});function e(r){const i={};return r.integrity&&(i.integrity=r.integrity),r.referrerpolicy&&(i.referrerPolicy=r.referrerpolicy),r.crossorigin==="use-credentials"?i.credentials="include":r.crossorigin==="anonymous"?i.credentials="omit":i.credentials="same-origin",i}function a(r){if(r.ep)return;r.ep=!0;const i=e(r);fetch(r.href,i)}};U();const T=`<h1><a href="https://github.com/Ayolland/borksy/compare/v5.12.0...v5.13.0">5.13.0</a> (2022-03-26)</h1>
+<h3>Features</h3>
+<ul>
+<li>update hacks (<a href="https://github.com/Ayolland/borksy/commit/1c495836e05dcc2ee1f2c86d36d8673b8bee7b8b">1c49583</a>)</li>
+</ul>
+<h1><a href="https://github.com/Ayolland/borksy/compare/v5.11.1...v5.12.0">5.12.0</a> (2022-02-23)</h1>
 <h3>Features</h3>
 <ul>
 <li>update hacks (<a href="https://github.com/Ayolland/borksy/commit/ea166603e33ed94eda83a6feaf4425b8866bbf7c">ea16660</a>)</li>
@@ -334,7 +339,7 @@ var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropert
 <ul>
 <li>Initial version</li>
 </ul>
-`,V="borksy",z="5.12.0",$="Borksy Game Hacker: A tool for extending Bitsy games",W={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},Y={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},X="AYolland",K="MIT",J={url:"https://github.com/Ayolland/borksy/issues"},Q="https://ayolland.itch.io/borksy",Z={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},tt={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},nt={"@bitsy/hecks":"^20.1.0",eslint:"^8.6.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.3.0","eslint-plugin-import":"^2.25.2","eslint-plugin-prettier":"^4.0.0","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^27.2.5","jest-dev-server":"^6.0.0","jest-image-snapshot":"^4.5.1",prettier:"^2.4.1",puppeteer:"^13.0.1","rollup-plugin-visualizer":"^5.5.4",sass:"^1.42.1",vite:"^2.6.4","vite-plugin-markdown":"^2.0.2","vite-plugin-string":"^1.0.1"};var et={private:!0,name:V,version:z,description:$,scripts:W,repository:Y,author:X,license:K,bugs:J,homepage:Q,jest:Z,release:tt,devDependencies:nt};const rt=`<p>Borksy is a hacking tool to be used in conjunction with <a href="https://ledoux.itch.io/bitsy">Bitsy Game Maker</a>! Use it to customize your games and add hacks without needing to manually cut-and-paste html.</p>
+`,V="borksy",z="5.13.0",$="Borksy Game Hacker: A tool for extending Bitsy games",W={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},Y={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},X="AYolland",K="MIT",J={url:"https://github.com/Ayolland/borksy/issues"},Q="https://ayolland.itch.io/borksy",Z={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},tt={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},nt={"@bitsy/hecks":"^20.1.1",eslint:"^8.6.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.3.0","eslint-plugin-import":"^2.25.2","eslint-plugin-prettier":"^4.0.0","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^27.2.5","jest-dev-server":"^6.0.0","jest-image-snapshot":"^4.5.1",prettier:"^2.4.1",puppeteer:"^13.0.1","rollup-plugin-visualizer":"^5.5.4",sass:"^1.42.1",vite:"^2.6.4","vite-plugin-markdown":"^2.0.2","vite-plugin-string":"^1.0.1"};var et={private:!0,name:V,version:z,description:$,scripts:W,repository:Y,author:X,license:K,bugs:J,homepage:Q,jest:Z,release:tt,devDependencies:nt};const rt=`<p>Borksy is a hacking tool to be used in conjunction with <a href="https://ledoux.itch.io/bitsy">Bitsy Game Maker</a>! Use it to customize your games and add hacks without needing to manually cut-and-paste html.</p>
 <p>If you're not sure how to use this tool, check out the 'How To Use Borksy' section. If you're having issues, check the 'Troubleshooting/FAQs' section. If you're not familiar with how Bitsy can be extended, try exploring <a href="https://github.com/seleb/bitsy-hacks/">the Bitsy hacks repo</a>.</p>
 <p>Borksy Features:</p>
 <ul>
@@ -3064,7 +3069,7 @@ body {
 @summary change the avatar in certain rooms
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -3234,7 +3239,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -3301,7 +3306,7 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -3383,13 +3388,13 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.avatar_by_room = this.hacks.avatar_by_room || {}, window);
-`,gt=`/**
+`,ht=`/**
 \u{1F5BC}
 @file backdrops
 @summary makes the game have a backdrop
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -3566,7 +3571,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -3635,7 +3640,7 @@ var after = kitsy.after;
 @summary makes all sprites have transparent backgrounds
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -3687,7 +3692,7 @@ after('renderPixelInstruction', function (bufferId, buffer, paletteIndex, x, y) 
 @summary makes the game have a transparent background
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -3791,13 +3796,13 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.backdrops = this.hacks.backdrops || {}, window);
-`,ht=`/**
+`,gt=`/**
 \u{1F508}
 @file basic sfx
 @summary "walk" and "talk" sound effect support
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -3965,7 +3970,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -4032,7 +4037,7 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -4131,7 +4136,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary A variety of Bitsy sound and music handlers
 @license MIT
 @author David Mowatt
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -4333,7 +4338,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -4498,7 +4503,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -4654,7 +4659,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary WebGLazy bitsy integration (this one's mostly just for me)
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -4853,7 +4858,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -4947,7 +4952,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary high quality anime gifs
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -5914,7 +5919,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -6031,7 +6036,7 @@ function addDialogTag(tag, fn) {
 @summary high quality anime jpegs (or pngs i guess)
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -6265,7 +6270,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary high quality anime jpegs (or pngs i guess)
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -6461,7 +6466,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -6640,7 +6645,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary Prevents from playing past an ending
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -6799,7 +6804,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -6891,7 +6896,7 @@ after('onExitDialog', function () {
 @summary corrupts gamedata at runtime
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -6947,7 +6952,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -7009,7 +7014,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 @description
@@ -7227,7 +7232,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -7445,7 +7450,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make custom exit transition effects
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -7640,7 +7645,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -7748,7 +7753,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary run custom code on key inputs
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -7932,7 +7937,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -8040,7 +8045,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make {custom}text effects{custom}
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -8387,7 +8392,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -8508,7 +8513,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary animal crossing-style audio powered by the pink trombone vocal synth
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -9388,7 +9393,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -9505,7 +9510,7 @@ function addDialogTag(tag, fn) {
 @summary animal crossing-style audio
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -9562,7 +9567,7 @@ before('dialogBuffer.DoNextChar', function () {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -9904,7 +9909,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary animal crossing-style audio
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -10090,7 +10095,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -10176,7 +10181,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary adds an easing transition animation to display the dialog box text
 @license MIT
 @author Delacannon
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -10332,7 +10337,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -10458,7 +10463,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary dialog choices
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -10695,7 +10700,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -10869,7 +10874,7 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -10913,7 +10918,7 @@ addDialogTag('p', function (environment, parameters, onReturn) {
 @summary put more words onscreen
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -11198,7 +11203,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary jump from one dialog entry to another
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -11368,7 +11373,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -11559,7 +11564,7 @@ addDualDialogTag('jump', function (environment, parameters) {
 @summary add pauses in between printing text
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -11715,7 +11720,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -11840,7 +11845,7 @@ addDialogTag('pause', function (environment, parameters, onReturn) {
 @summary prompt the user for text input in dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -12033,7 +12038,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -12157,7 +12162,7 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -12324,7 +12329,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary provides a variable with player direction
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -12486,7 +12491,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -12572,7 +12577,7 @@ before('startDialog', function () {
 @summary flips the player's sprite based on directional movement
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -12609,7 +12614,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -12671,7 +12676,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 @description
@@ -12873,7 +12878,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -13046,7 +13051,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary HTML background matching bitsy background
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -13212,7 +13217,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -13279,7 +13284,7 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -13341,7 +13346,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary edit dialog from dialog (yes really)
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -13506,7 +13511,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -13633,7 +13638,7 @@ function addDeferredDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -13704,7 +13709,7 @@ addDeferredDialogTag('dialog', editDialog);
 @summary edit sprites, items, and tiles from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -13767,7 +13772,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -13829,7 +13834,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 @description
@@ -14023,7 +14028,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -14279,7 +14284,7 @@ addDualDialogTag('imagePal', editPalette);
 @summary change which sprite is controlled by the player
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -14446,7 +14451,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -14611,7 +14616,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -14656,7 +14661,7 @@ addDualDialogTag('player', function (environment, parameters) {
 @summary modify the content of a room from dialog
 @license MIT
 @author Dana Holdampf
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -14942,7 +14947,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -15107,7 +15112,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -15729,7 +15734,7 @@ function copyBoxAt(mapId, targetId, x1, y1, x2, y2, copyRoomId, pasteXPos, paste
 @summary trigger an ending from dialog, including narration text
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -15919,7 +15924,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -16105,7 +16110,7 @@ addDualDialogTag('end', function (environment, parameters) {
 @summary exit to another room from dialog, including conditionals
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -16295,7 +16300,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -16460,7 +16465,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -16539,7 +16544,7 @@ function getExitParams(parameters) {
 @summary separate Bitsy game data from your (modded) HTML for easier development
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -16717,7 +16722,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -16866,7 +16871,7 @@ function dos2unix(text) {
 @summary generate a browser favicon (tab icon) from a Bitsy sprite, including animation!
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -17032,7 +17037,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -17099,7 +17104,7 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -17237,7 +17242,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make sprites follow the player
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -17426,7 +17431,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -17591,7 +17596,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -17834,7 +17839,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary HTML5 gamepad support
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -18319,7 +18324,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -18429,7 +18434,7 @@ after('update', function () {
 @summary Pseudo-platforming/gravity/physics
 @license MIT
 @author Cole Sea
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -18547,7 +18552,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -18609,7 +18614,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 @description
@@ -18811,7 +18816,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -19404,7 +19409,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary for when bitsy's not small enough
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -19571,7 +19576,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -19674,7 +19679,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary execute arbitrary javascript from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -19866,7 +19871,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -20044,7 +20049,7 @@ addDualDialogTag('js', executeJs);
 @file logic-operators-extended
 @summary adds conditional logic operators
 @author @mildmojo
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -20209,7 +20214,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -20313,7 +20318,7 @@ inject(
 @summary put more words onscreen
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -20493,7 +20498,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -20667,7 +20672,7 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -20751,7 +20756,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make the player big
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -20940,7 +20945,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -21007,7 +21012,7 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -21171,7 +21176,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary walk through wall tiles, sprites, items, exits, and endings
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -21349,7 +21354,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -21418,7 +21423,7 @@ var after = kitsy.after;
 @summary run custom code on key inputs
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -21530,7 +21535,7 @@ hackOptions.ondown = {
 @summary multiplayer bitsy
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 @description
@@ -21708,7 +21713,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -21873,7 +21878,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -21937,7 +21942,7 @@ function getImage(name, map) {
 @summary edit dialog from dialog (yes really)
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -22004,7 +22009,7 @@ addDeferredDialogTag('dialog', editDialog);
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 @description
@@ -22073,7 +22078,7 @@ function setSpriteData(id, frame, newData) {
 @summary edit sprites, items, and tiles from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -22218,7 +22223,7 @@ addDualDialogTag('imagePal', editPalette);
 @summary execute arbitrary javascript from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -22438,7 +22443,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary tiles which hide the player
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -22603,7 +22608,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -22708,7 +22713,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -22880,7 +22885,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -23014,7 +23019,7 @@ addDialogTag('p', function (environment, parameters, onReturn) {
 @summary prevent some items from being picked up
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -23176,7 +23181,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -23301,7 +23306,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary sokoban-style sprite pushing
 @license MIT
 @author jan0sc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -23495,7 +23500,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -23557,7 +23562,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 @description
@@ -23759,7 +23764,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -24191,7 +24196,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary add name-tags to replace drawings when the game is loading
 @license MIT
 @author Elkie Nova
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -24364,7 +24369,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -24470,7 +24475,7 @@ after('parseWorld', function () {
 @summary save/load your game
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -24661,7 +24666,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -24826,7 +24831,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -25032,7 +25037,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary ease the player's movement
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -25198,7 +25203,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -25341,7 +25346,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary treat some items like sprites that can be placed multiple times
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -25504,7 +25509,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -25634,7 +25639,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary like text effects, but for sprites
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -25845,7 +25850,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -26010,7 +26015,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -26169,7 +26174,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary time player actions
 @license MIT
 @author Lenny Magner
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -26367,7 +26372,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -26532,7 +26537,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -26639,7 +26644,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary text-to-speech for bitsy dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -26827,7 +26832,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -27128,7 +27133,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary process all dialog text with a tracery grammar
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -28160,7 +28165,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -28249,7 +28254,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary customizable WebGL transitions
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -28468,7 +28473,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -28537,7 +28542,7 @@ var after = kitsy.after;
 @summary WebGLazy bitsy integration (this one's mostly just for me)
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -28670,7 +28675,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary makes the game have a transparent background
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -28837,7 +28842,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -28906,7 +28911,7 @@ var after = kitsy.after;
 @summary makes all sprites have transparent backgrounds
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -28976,13 +28981,13 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.transparent_background = this.hacks.transparent_background || {}, window);
-`,gn=`/**
+`,hn=`/**
 \u{1F441}\uFE0F\u200D\u{1F5E8}\uFE0F
 @file transparent dialog
 @summary makes the dialog box have a transparent background
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -29134,7 +29139,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -29206,13 +29211,13 @@ after('renderClearInstruction', function (bufferId, buffer, paletteIndex) {
 });
 
 })(window);
-`,hn=`/**
+`,gn=`/**
 \u{1F3C1}
 @file transparent sprites
 @summary makes all sprites have transparent backgrounds
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -29375,7 +29380,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -29477,7 +29482,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary interprocess communication for twine and bitsy
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -29711,7 +29716,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -29948,7 +29953,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary items which, when picked up, remove all other instances of that item from the game
 @license MIT
 @author Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 
@@ -30111,7 +30116,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.1.0
+@version 20.1.1
 @requires Bitsy 7.12
 
 */
@@ -30193,9 +30198,9 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.unique_items = this.hacks.unique_items || {}, window);
-`,bn=[ft,gt,ht,mt,yt,bt,vt,wt,kt,xt,St,jt,Tt,It,Ft,At,Et,Ot,Nt,Dt,Bt,_t,qt,Rt,Ct,Lt,Pt,Mt,Ht,Gt,Ut,Vt,zt,$t,Wt,Yt,Xt,Kt,Jt,Qt,Zt,tn,nn,en,rn,an,on,sn,cn,ln,un,dn,pn,fn,gn,hn,mn,yn];const vn="modulepreload",F={},wn="./",c=function(n,e){return!e||e.length===0?n():Promise.all(e.map(a=>{if(a=`${wn}${a}`,a in F)return;F[a]=!0;const r=a.endsWith(".css"),i=r?'[rel="stylesheet"]':"";if(document.querySelector(`link[href="${a}"]${i}`))return;const o=document.createElement("link");if(o.rel=r?"stylesheet":vn,r||(o.as="script",o.crossOrigin=""),o.href=a,document.head.appendChild(o),r)return new Promise((s,l)=>{o.addEventListener("load",s),o.addEventListener("error",l)})})).then(()=>n())};var f=[{data:()=>c(()=>import("./BitsyHD.5.1.224b5bed.js"),[]),bitsyVersion:"5.1",isHd:!0,description:"Bitsy HD (Bitsy 5.1)"},{data:()=>c(()=>import("./Bitsy.5.5.b578c1f1.js"),[]),bitsyVersion:"5.5",description:"Bitsy 5.5"},{data:()=>c(()=>import("./Bitsy.6.0.d01fe5ea.js"),[]),bitsyVersion:"6.0",description:"Bitsy 6.0"},{data:()=>c(()=>import("./Bitsy.6.3.f1de51df.js"),[]),bitsyVersion:"6.3",description:"Bitsy 6.3"},{data:()=>c(()=>import("./Bitsy.6.4.4364f87f.js"),[]),bitsyVersion:"6.4",description:"Bitsy 6.4"},{data:()=>c(()=>import("./Bitsy.6.5.bd486411.js"),[]),bitsyVersion:"6.5",description:"Bitsy 6.5"},{data:()=>c(()=>import("./Bitsy.7.0.005afbac.js"),[]),bitsyVersion:"7.0",description:"Bitsy 7.0"},{data:()=>c(()=>import("./Bitsy.7.2.e7deb823.js"),[]),bitsyVersion:"7.2",description:"Bitsy 7.2"},{data:()=>c(()=>import("./Bitsy.7.8.a8e1ddd6.js"),[]),bitsyVersion:"7.8",description:"Bitsy 7.8"},{data:()=>c(()=>import("./Bitsy.7.10.1cdc75c6.js"),[]),bitsyVersion:"7.10",description:"Bitsy 7.10"},{data:()=>c(()=>import("./BitsyHD.7.11.f9a8cfdc.js"),[]),bitsyVersion:"7.11",isHd:!0,description:"Bitsy HD (Bitsy 7.11)"},{data:()=>c(()=>import("./Bitsy.7.11.c7cee104.js"),[]),bitsyVersion:"7.11",description:"Bitsy 7.11"},{data:()=>c(()=>import("./BitsyHD.7.12.06a63c86.js"),[]),bitsyVersion:"7.12",isHd:!0,description:"Bitsy HD (Bitsy 7.12)"},{data:()=>c(()=>import("./Bitsy.7.12.7a7fbf49.js"),[]),bitsyVersion:"7.12",description:"Bitsy 7.12",isDefault:!0}].map(t=>j(m({},t),{id:`Bitsy${t.isHd?"HD":""}${t.bitsyVersion.replace(/\./g,"")}`}));const b=bn.map(t=>{const[n]=t.match(/^(\/\*\*[\S\s]*?\*\/)$/gm),e=n.split(`
+`,bn=[ft,ht,gt,mt,yt,bt,vt,wt,kt,xt,St,jt,Tt,It,Ft,At,Et,Ot,Nt,Dt,Bt,_t,qt,Rt,Ct,Lt,Pt,Mt,Ht,Gt,Ut,Vt,zt,$t,Wt,Yt,Xt,Kt,Jt,Qt,Zt,tn,nn,en,rn,an,on,sn,cn,ln,un,dn,pn,fn,hn,gn,mn,yn];const vn="modulepreload",F={},wn="./",c=function(n,e){return!e||e.length===0?n():Promise.all(e.map(a=>{if(a=`${wn}${a}`,a in F)return;F[a]=!0;const r=a.endsWith(".css"),i=r?'[rel="stylesheet"]':"";if(document.querySelector(`link[href="${a}"]${i}`))return;const o=document.createElement("link");if(o.rel=r?"stylesheet":vn,r||(o.as="script",o.crossOrigin=""),o.href=a,document.head.appendChild(o),r)return new Promise((s,l)=>{o.addEventListener("load",s),o.addEventListener("error",l)})})).then(()=>n())};var f=[{data:()=>c(()=>import("./BitsyHD.5.1.224b5bed.js"),[]),bitsyVersion:"5.1",isHd:!0,description:"Bitsy HD (Bitsy 5.1)"},{data:()=>c(()=>import("./Bitsy.5.5.b578c1f1.js"),[]),bitsyVersion:"5.5",description:"Bitsy 5.5"},{data:()=>c(()=>import("./Bitsy.6.0.d01fe5ea.js"),[]),bitsyVersion:"6.0",description:"Bitsy 6.0"},{data:()=>c(()=>import("./Bitsy.6.3.f1de51df.js"),[]),bitsyVersion:"6.3",description:"Bitsy 6.3"},{data:()=>c(()=>import("./Bitsy.6.4.4364f87f.js"),[]),bitsyVersion:"6.4",description:"Bitsy 6.4"},{data:()=>c(()=>import("./Bitsy.6.5.bd486411.js"),[]),bitsyVersion:"6.5",description:"Bitsy 6.5"},{data:()=>c(()=>import("./Bitsy.7.0.005afbac.js"),[]),bitsyVersion:"7.0",description:"Bitsy 7.0"},{data:()=>c(()=>import("./Bitsy.7.2.e7deb823.js"),[]),bitsyVersion:"7.2",description:"Bitsy 7.2"},{data:()=>c(()=>import("./Bitsy.7.8.a8e1ddd6.js"),[]),bitsyVersion:"7.8",description:"Bitsy 7.8"},{data:()=>c(()=>import("./Bitsy.7.10.1cdc75c6.js"),[]),bitsyVersion:"7.10",description:"Bitsy 7.10"},{data:()=>c(()=>import("./BitsyHD.7.11.f9a8cfdc.js"),[]),bitsyVersion:"7.11",isHd:!0,description:"Bitsy HD (Bitsy 7.11)"},{data:()=>c(()=>import("./Bitsy.7.11.c7cee104.js"),[]),bitsyVersion:"7.11",description:"Bitsy 7.11"},{data:()=>c(()=>import("./BitsyHD.7.12.06a63c86.js"),[]),bitsyVersion:"7.12",isHd:!0,description:"Bitsy HD (Bitsy 7.12)"},{data:()=>c(()=>import("./Bitsy.7.12.7a7fbf49.js"),[]),bitsyVersion:"7.12",description:"Bitsy 7.12",isDefault:!0}].map(t=>j(m({},t),{id:`Bitsy${t.isHd?"HD":""}${t.bitsyVersion.replace(/\./g,"")}`}));const b=bn.map(t=>{const[n]=t.match(/^(\/\*\*[\S\s]*?\*\/)$/gm),e=n.split(`
 `).slice(1,-1),a=e[0],r=e.find(d=>d.startsWith("@file")).split("@file ")[1],i=e.find(d=>d.startsWith("@author")).split("@author ")[1],o=e.find(d=>d.startsWith("@summary")).split("@summary ")[1],s=e.slice(e.findIndex(d=>d.startsWith("@description"))+1).join(`
-`).replace(/Copy-paste .* after the bitsy source\.?/g,"Include hack").replace(/hackOptions below/g,"hackOptions above"),[,l]=t.match(/var hackOptions.*= {\n+([^]+?)\n+};$/m)||[];return{metadata:{emoji:a,id:r.replace(/\s/g,"-"),name:r,author:i,summary:o,description:s},options:l,data:t}});function kn(){const t=document.querySelector("select#template");t.innerHTML="";for(let n=f.length-1;n>=0;n--){const{id:e,description:a}=f[n],r=n===f.length-1;t.innerHTML+=`<option value="${e}" ${r?"data-default-option":""}>${a}${r?" (latest)":""}</option>`}}function xn(t,n){console.log(n),G.exports.saveAs(new Blob([n],{type:"text/html;charset=utf-8"}),t),console.log(`File '${t}' downloaded`)}function A(t,n=10){const e=t.toString(),a=e.length>n?"...":"";return e.substring(0,n)+a}function Sn(t){return t.toLowerCase().replace(/-(.)/g,(n,e)=>e.toUpperCase())}function jn(t){return t.replace(/[^\w\s]/gi,"")}function Tn(t,n){const e=new RegExp(n,"g");t.value=t.value.replace(e,"")}function g(t,n){t.dataset.cleanRegex&&Tn(t,t.dataset.cleanRegex);let e;t.type==="checkbox"?e=t.checked:n===void 0?e=t.value:(e=n,t.value=n);const{name:a}=t;localStorage.setItem(a,e),console.log(`Key: '${a}' saved to localStorage: ${A(e)}`)}function v(t){const{name:n}=t,e=localStorage.getItem(n);if(e===null){console.log(` Attempted to get key: ${n} from localStorage, but nothing was found.`);return}if(t.type==="checkbox"){const a=e==="true";t.checked=a}else t.value=e;console.log(` Got key: ${n} from localStorage: ${A(e)}`)}function w(t){const{value:n}=t.currentTarget,e=f.find(a=>a.id===n);if(!e){document.querySelector("#template").value=f.find(a=>a.isDefault).id,w(t);return}e.isHd?document.querySelector("#mascot").classList.add("borksyHD"):document.querySelector("#mascot").classList.remove("borksyHD"),e.bitsyVersion===y.bitsyVersion?(document.querySelector("#legacy-version-warning").style.display="none",document.querySelector('[data-header="Bitsy Version"] > summary').textContent="Bitsy Version"):(document.querySelector("#legacy-version-warning").style.display=null,document.querySelector('[data-header="Bitsy Version"] > summary').textContent="\u2757 Bitsy Version \u2757"),e.data()}function p(t){const{name:n}=t;let e;switch(n){case"template":e=In;break}t.addEventListener("change",()=>{g(t),e==null||e(t)})}function In(t){const n=t.value.split(".")[0]==="BitsyHD",e=localStorage.getItem("gamedata")==null,a=I;if(n&&e&&a!==void 0){const i=document.querySelector("#gamedata");i.value=a,g(i)}}function E(t){const n=document.querySelector(`[data-associated-hack="${t.dataset.hack}"]`);n&&O(n,t)}function O(t,n){n.checked===!0?t.classList.add("included"):t.classList.remove("included")}function Fn(t){g(t),E(t)}function An(t){t.addEventListener("change",()=>{Fn(t)})}function En(){return Array.from(document.querySelectorAll("[data-borksy-replace-single]")).reduce((t,n)=>(t[n.dataset.borksyReplaceSingle]=n.value,t),{})}function On(){return b.reduce((t,n)=>{const e=document.querySelector(`#${n.metadata.id}`);if(!(e.checked||e.value==="true"))return t;let r=n.data;if(n.options){const i=document.querySelector(`#${n.metadata.id}-options`).value;r=r.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m,`$1 {
+`).replace(/Copy-paste .* after the bitsy source\.?/g,"Include hack").replace(/hackOptions below/g,"hackOptions above"),[,l]=t.match(/var hackOptions.*= {\n+([^]+?)\n+};$/m)||[];return{metadata:{emoji:a,id:r.replace(/\s/g,"-"),name:r,author:i,summary:o,description:s},options:l,data:t}});function kn(){const t=document.querySelector("select#template");t.innerHTML="";for(let n=f.length-1;n>=0;n--){const{id:e,description:a}=f[n],r=n===f.length-1;t.innerHTML+=`<option value="${e}" ${r?"data-default-option":""}>${a}${r?" (latest)":""}</option>`}}function xn(t,n){console.log(n),G.exports.saveAs(new Blob([n],{type:"text/html;charset=utf-8"}),t),console.log(`File '${t}' downloaded`)}function A(t,n=10){const e=t.toString(),a=e.length>n?"...":"";return e.substring(0,n)+a}function Sn(t){return t.toLowerCase().replace(/-(.)/g,(n,e)=>e.toUpperCase())}function jn(t){return t.replace(/[^\w\s]/gi,"")}function Tn(t,n){const e=new RegExp(n,"g");t.value=t.value.replace(e,"")}function h(t,n){t.dataset.cleanRegex&&Tn(t,t.dataset.cleanRegex);let e;t.type==="checkbox"?e=t.checked:n===void 0?e=t.value:(e=n,t.value=n);const{name:a}=t;localStorage.setItem(a,e),console.log(`Key: '${a}' saved to localStorage: ${A(e)}`)}function v(t){const{name:n}=t,e=localStorage.getItem(n);if(e===null){console.log(` Attempted to get key: ${n} from localStorage, but nothing was found.`);return}if(t.type==="checkbox"){const a=e==="true";t.checked=a}else t.value=e;console.log(` Got key: ${n} from localStorage: ${A(e)}`)}function w(t){const{value:n}=t.currentTarget,e=f.find(a=>a.id===n);if(!e){document.querySelector("#template").value=f.find(a=>a.isDefault).id,w(t);return}e.isHd?document.querySelector("#mascot").classList.add("borksyHD"):document.querySelector("#mascot").classList.remove("borksyHD"),e.bitsyVersion===y.bitsyVersion?(document.querySelector("#legacy-version-warning").style.display="none",document.querySelector('[data-header="Bitsy Version"] > summary').textContent="Bitsy Version"):(document.querySelector("#legacy-version-warning").style.display=null,document.querySelector('[data-header="Bitsy Version"] > summary').textContent="\u2757 Bitsy Version \u2757"),e.data()}function p(t){const{name:n}=t;let e;switch(n){case"template":e=In;break}t.addEventListener("change",()=>{h(t),e==null||e(t)})}function In(t){const n=t.value.split(".")[0]==="BitsyHD",e=localStorage.getItem("gamedata")==null,a=I;if(n&&e&&a!==void 0){const i=document.querySelector("#gamedata");i.value=a,h(i)}}function E(t){const n=document.querySelector(`[data-associated-hack="${t.dataset.hack}"]`);n&&O(n,t)}function O(t,n){n.checked===!0?t.classList.add("included"):t.classList.remove("included")}function Fn(t){h(t),E(t)}function An(t){t.addEventListener("change",()=>{Fn(t)})}function En(){return Array.from(document.querySelectorAll("[data-borksy-replace-single]")).reduce((t,n)=>(t[n.dataset.borksyReplaceSingle]=n.value,t),{})}function On(){return b.reduce((t,n)=>{const e=document.querySelector(`#${n.metadata.id}`);if(!(e.checked||e.value==="true"))return t;let r=n.data;if(n.options){const i=document.querySelector(`#${n.metadata.id}-options`).value;r=r.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m,`$1 {
 ${i}
 }$2`)}return`${t}${r}
-`},"")}let k=!1;async function N(){if(!k){k=!0;try{Array.from(document.querySelectorAll("[data-save]")).forEach(i=>g(i));const t=document.querySelector("#template").value,n=m({"BORKSY-VERSION":et.version,"HACKS-VERSION":y.version,HACKS:On()},En());console.log(n);const e=document.querySelector("#filename").value,r=H.exports.compile((await f.find(i=>i.id===t).data()).default)(n);xn(`${e}.html`,r)}finally{k=!1}}}function D(){const{body:t}=document;t.classList.contains("party")?(t.classList.remove("party"),window.alert("\u{1F63E} Party Mode Deactivated. Everyone out. \u{1F63E}")):(t.classList.add("party"),window.alert("\u2728\u{1F308} Party Mode Activated! \u{1F308}\u2728"))}function h(t){const n=document.createElement("div");return n.innerHTML=t,n.children}function Nn(){var s;const t=document.querySelector("#about_content");t.innerHTML=rt.replace("HACKS_BITSY_VERSION",y.bitsyVersion);const n=document.createElement("section");n.id="last-update",n.innerHTML=(s=T.match(/(<h[12][^]+?)<h[12]/m))==null?void 0:s[1].replace(/<h[12]>([^]+?)<\/h[12]>/g,"<h2>What's new in v$1</h2>"),t.prepend(n);const e=u("How To Use Borksy");e.append(...h(it)),t.appendChild(e);const a=u("Troubleshooting / FAQs");a.classList.add("faq"),a.append(...h(st)),t.appendChild(a);const r=u("Other Bitsy Tools");r.append(...h(ot)),t.appendChild(r);const i=u("AYo's Special Tips");i.append(...h(at)),t.appendChild(i);const o=u("Changelog");o.append(...h(T)),t.appendChild(o)}function Dn(t){t.value=t.dataset.default,p(t)}function Bn(t){const n=t.id.replace(/-options$/,""),{options:e}=b.find(a=>a.metadata.id===n);t.value=e,p(t)}function _n(t){let n=t.dataset.default;n=n==="true",t.type==="checkbox"?t.checked=n:t.value=n,p(t)}function qn(t){const n=t.dataset.default,e=pt[n];if(!e)throw new Error(`Could not find file ${n}`);t.value=e,p(t)}function Rn(t){Pn(t.dataset.default)}function Cn(t){const{options:n}=t;for(let e=n.length-1;e>=0;e--)if(n[e].dataset.defaultOption!==void 0){t.selectedIndex=e;break}p(t)}function B(t=!0){Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{const e=localStorage.getItem(n.name),a=typeof n.dataset.default!="undefined",r=e!==null;if(a&&(!r||!t)){const{defaultType:i}=n.dataset;switch(i){case"string":Dn(n);break;case"boolean":_n(n);break;case"textfile":qn(n);break;case"font":Rn(n);break;case"option":Cn(n);break;case"hackOptions":Bn(n);break;default:throw new Error("Unknown type")}}else r?v(n):n.value="",p(n);E(n)}),console.log(`Defaults loaded. Forced? ${!t}`)}function _(){let t;try{t=window.confirm("Are you sure you want to erase all data and restore defaults?")}catch{t=!0}!t||(Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{localStorage.removeItem(n.name)}),console.log("Cookies removed"),B(!1),document.querySelector("#mascot").classList.remove("borksyHD"))}function Ln(){const t={x:6,y:8},n={x:16,y:16},e=1,a=document.createElement("canvas");a.width=(t.x+e)*n.x+e,a.height=(t.y+e)*n.y+e;const r=a.getContext("2d");let i=[];r.drawImage(this,0,0);for(let o=0;o<n.y;++o)for(let s=0;s<n.x;++s){const l=r.getImageData(s*(t.x+e)+e,o*(t.y+e)+e,t.x,t.y);i.push(l.data)}for(let o=0;o<i.length;++o){const s=[];for(let l=0;l<i[o].length;l+=4)s.push(i[o][l]>255/2?1:0);i[o]=s}i=i.flat(),g(document.querySelector("#fontdata"),`[/*${document.querySelector("#fontfilename").value}*/${i.toString()}]`)}function Pn(t){let n;typeof t=="object"?n=t.target.result:(n=`fonts/${t}`,Mn(t));const e=new Image;e.onload=Ln,e.src=n}function Mn(t){const n=document.querySelector("#fontfilename");n.value!==t&&(n.value=t,g(n))}function Hn(t,n){t.dataset.save=!0,t.dataset.default=!1,t.dataset.defaultType="boolean",t.dataset.hack=n}function Gn(t){const n=u(`${t.metadata.emoji} ${t.metadata.name} (by ${t.metadata.author})`);n.dataset.associatedHack=t.metadata.id;const e=document.createElement("p");e.textContent=t.metadata.summary,n.append(e);const a=document.createElement("label");a.className="horizontal";const r=document.createElement("input");if(r.type="checkbox",r.name=t.metadata.name,r.id=t.metadata.id,Hn(r,t.metadata.id),v(r),O(n,r),An(r),a.append(r),a.append(`Include "${jn(t.metadata.name)}" hack`),n.append(a),t.options){const i=u("Options"),o=document.createElement("label");o.dataset.pre=`var ${Sn(t.metadata.id)}Options = {`,o.dataset.post="};";const s=document.createElement("textarea");s.rows=5,s.cols=50,s.textContent=t.options,s.name=`${t.metadata.name}.options`,s.id=`${t.metadata.id}-options`,s.dataset.save=!0,s.dataset.default=t.metadata.id,s.dataset.defaultType="hackOptions",v(s),p(s),o.append(s),i.append(o),n.append(i)}if(t.metadata.description){const i=u("README"),o=document.createElement("pre");o.textContent=t.metadata.description,i.append(o),n.append(i)}return n}function Un(){const t=document.querySelector("#hacks-section");b.forEach(n=>{t.appendChild(Gn(n))})}function u(t){const n=document.createElement("details");return n.className="collapsible",n.dataset.collapse="",n.dataset.header=t,q(n),n}function Vn(){Array.from(document.querySelectorAll("[data-collapsible]")).forEach(q),console.log("HACK IT UP YO"),Un(),document.querySelector("#preloader").remove()}function q(t){const n=document.createElement("summary");n.textContent=t.dataset.header,n.className="collapsible_header",t.prepend(n)}function zn(){window.addEventListener("keydown",t=>{if(t.ctrlKey||t.metaKey)switch(String.fromCharCode(t.which).toLowerCase()){case"s":t.preventDefault(),N();break;case"d":t.preventDefault(),_();break;case"p":t.preventDefault(),D();break}})}document.querySelector("#download-button").addEventListener("click",N);document.querySelector("#restore-button").addEventListener("click",_);document.querySelector("#mascot").addEventListener("click",D);document.querySelector("#template").addEventListener("change",w);Vn();Nn();kn();B();zn();w({currentTarget:document.querySelector("#template")});
+`},"")}let k=!1;async function N(){if(!k){k=!0;try{Array.from(document.querySelectorAll("[data-save]")).forEach(i=>h(i));const t=document.querySelector("#template").value,n=m({"BORKSY-VERSION":et.version,"HACKS-VERSION":y.version,HACKS:On()},En());console.log(n);const e=document.querySelector("#filename").value,r=H.exports.compile((await f.find(i=>i.id===t).data()).default)(n);xn(`${e}.html`,r)}finally{k=!1}}}function D(){const{body:t}=document;t.classList.contains("party")?(t.classList.remove("party"),window.alert("\u{1F63E} Party Mode Deactivated. Everyone out. \u{1F63E}")):(t.classList.add("party"),window.alert("\u2728\u{1F308} Party Mode Activated! \u{1F308}\u2728"))}function g(t){const n=document.createElement("div");return n.innerHTML=t,n.children}function Nn(){var s;const t=document.querySelector("#about_content");t.innerHTML=rt.replace("HACKS_BITSY_VERSION",y.bitsyVersion);const n=document.createElement("section");n.id="last-update",n.innerHTML=(s=T.match(/(<h[12][^]+?)<h[12]/m))==null?void 0:s[1].replace(/<h[12]>([^]+?)<\/h[12]>/g,"<h2>What's new in v$1</h2>"),t.prepend(n);const e=u("How To Use Borksy");e.append(...g(it)),t.appendChild(e);const a=u("Troubleshooting / FAQs");a.classList.add("faq"),a.append(...g(st)),t.appendChild(a);const r=u("Other Bitsy Tools");r.append(...g(ot)),t.appendChild(r);const i=u("AYo's Special Tips");i.append(...g(at)),t.appendChild(i);const o=u("Changelog");o.append(...g(T)),t.appendChild(o)}function Dn(t){t.value=t.dataset.default,p(t)}function Bn(t){const n=t.id.replace(/-options$/,""),{options:e}=b.find(a=>a.metadata.id===n);t.value=e,p(t)}function _n(t){let n=t.dataset.default;n=n==="true",t.type==="checkbox"?t.checked=n:t.value=n,p(t)}function qn(t){const n=t.dataset.default,e=pt[n];if(!e)throw new Error(`Could not find file ${n}`);t.value=e,p(t)}function Rn(t){Pn(t.dataset.default)}function Cn(t){const{options:n}=t;for(let e=n.length-1;e>=0;e--)if(n[e].dataset.defaultOption!==void 0){t.selectedIndex=e;break}p(t)}function B(t=!0){Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{const e=localStorage.getItem(n.name),a=typeof n.dataset.default!="undefined",r=e!==null;if(a&&(!r||!t)){const{defaultType:i}=n.dataset;switch(i){case"string":Dn(n);break;case"boolean":_n(n);break;case"textfile":qn(n);break;case"font":Rn(n);break;case"option":Cn(n);break;case"hackOptions":Bn(n);break;default:throw new Error("Unknown type")}}else r?v(n):n.value="",p(n);E(n)}),console.log(`Defaults loaded. Forced? ${!t}`)}function _(){let t;try{t=window.confirm("Are you sure you want to erase all data and restore defaults?")}catch{t=!0}!t||(Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{localStorage.removeItem(n.name)}),console.log("Cookies removed"),B(!1),document.querySelector("#mascot").classList.remove("borksyHD"))}function Ln(){const t={x:6,y:8},n={x:16,y:16},e=1,a=document.createElement("canvas");a.width=(t.x+e)*n.x+e,a.height=(t.y+e)*n.y+e;const r=a.getContext("2d");let i=[];r.drawImage(this,0,0);for(let o=0;o<n.y;++o)for(let s=0;s<n.x;++s){const l=r.getImageData(s*(t.x+e)+e,o*(t.y+e)+e,t.x,t.y);i.push(l.data)}for(let o=0;o<i.length;++o){const s=[];for(let l=0;l<i[o].length;l+=4)s.push(i[o][l]>255/2?1:0);i[o]=s}i=i.flat(),h(document.querySelector("#fontdata"),`[/*${document.querySelector("#fontfilename").value}*/${i.toString()}]`)}function Pn(t){let n;typeof t=="object"?n=t.target.result:(n=`fonts/${t}`,Mn(t));const e=new Image;e.onload=Ln,e.src=n}function Mn(t){const n=document.querySelector("#fontfilename");n.value!==t&&(n.value=t,h(n))}function Hn(t,n){t.dataset.save=!0,t.dataset.default=!1,t.dataset.defaultType="boolean",t.dataset.hack=n}function Gn(t){const n=u(`${t.metadata.emoji} ${t.metadata.name} (by ${t.metadata.author})`);n.dataset.associatedHack=t.metadata.id;const e=document.createElement("p");e.textContent=t.metadata.summary,n.append(e);const a=document.createElement("label");a.className="horizontal";const r=document.createElement("input");if(r.type="checkbox",r.name=t.metadata.name,r.id=t.metadata.id,Hn(r,t.metadata.id),v(r),O(n,r),An(r),a.append(r),a.append(`Include "${jn(t.metadata.name)}" hack`),n.append(a),t.options){const i=u("Options"),o=document.createElement("label");o.dataset.pre=`var ${Sn(t.metadata.id)}Options = {`,o.dataset.post="};";const s=document.createElement("textarea");s.rows=5,s.cols=50,s.textContent=t.options,s.name=`${t.metadata.name}.options`,s.id=`${t.metadata.id}-options`,s.dataset.save=!0,s.dataset.default=t.metadata.id,s.dataset.defaultType="hackOptions",v(s),p(s),o.append(s),i.append(o),n.append(i)}if(t.metadata.description){const i=u("README"),o=document.createElement("pre");o.textContent=t.metadata.description,i.append(o),n.append(i)}return n}function Un(){const t=document.querySelector("#hacks-section");b.forEach(n=>{t.appendChild(Gn(n))})}function u(t){const n=document.createElement("details");return n.className="collapsible",n.dataset.collapse="",n.dataset.header=t,q(n),n}function Vn(){Array.from(document.querySelectorAll("[data-collapsible]")).forEach(q),console.log("HACK IT UP YO"),Un(),document.querySelector("#preloader").remove()}function q(t){const n=document.createElement("summary");n.textContent=t.dataset.header,n.className="collapsible_header",t.prepend(n)}function zn(){window.addEventListener("keydown",t=>{if(t.ctrlKey||t.metaKey)switch(String.fromCharCode(t.which).toLowerCase()){case"s":t.preventDefault(),N();break;case"d":t.preventDefault(),_();break;case"p":t.preventDefault(),D();break}})}document.querySelector("#download-button").addEventListener("click",N);document.querySelector("#restore-button").addEventListener("click",_);document.querySelector("#mascot").addEventListener("click",D);document.querySelector("#template").addEventListener("change",w);Vn();Nn();kn();B();zn();w({currentTarget:document.querySelector("#template")});
