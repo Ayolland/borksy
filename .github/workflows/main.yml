@@ -16,6 +16,7 @@ jobs:
       - uses: actions/setup-node@v3
       - run: npm ci
       - uses: cycjimmy/semantic-release-action@v3
+        id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -25,8 +26,10 @@ jobs:
             @semantic-release/git@10.0.1
           branches: main
       - id: package-version
+        if: steps.semantic.outputs.new_release_published == 'true'
         uses: martinbeentjes/npm-get-version-action@v1.1.0
       - uses: josephbmanley/butler-publish-itchio-action@v1.0.3
+        if: steps.semantic.outputs.new_release_published == 'true'
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
           CHANNEL: web
