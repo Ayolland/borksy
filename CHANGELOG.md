@@ -1,3 +1,10 @@
+## [5.14.1](https://github.com/Ayolland/borksy/compare/v5.14.0...v5.14.1) (2022-04-04)
+
+
+### Bug Fixes
+
+* borksy not loading due to bad package update ([f6513dc](https://github.com/Ayolland/borksy/commit/f6513dc38d2deebe8a5055be98959c5947ce662c))
+
 # [5.14.0](https://github.com/Ayolland/borksy/compare/v5.13.0...v5.14.0) (2022-04-04)
 
 
