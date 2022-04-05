@@ -39,6 +39,10 @@ describe('Borksy', () => {
 				name: 'prefers-color-scheme',
 				value: 'light',
 			},
+			{
+				name: 'prefers-reduced-motion',
+				value: 'no-preference',
+			},
 		]);
 
 		await page.client().send('Page.setDownloadBehavior', { behavior: 'allow', downloadPath: path.resolve(__dirname) });
