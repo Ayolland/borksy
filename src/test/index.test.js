@@ -133,6 +133,7 @@ requestAnimationFrame(() => {
 	el.style.left = '0';
 	el.style.color='white';
 	document.body.appendChild(el);
+	window.animationTime = 3000;
 });
 `);
 		expect(await page.screenshot()).toMatchImageSnapshot();
@@ -179,6 +180,7 @@ requestAnimationFrame(() => {
 		await page.waitForTimeout(100);
 		await page.keyboard.up('ArrowLeft');
 		await page.waitForTimeout(100);
+		await page.waitForTimeout(2000); // wait long enough for second animation frame
 		expect(await page.screenshot()).toMatchImageSnapshot();
 	});
 
