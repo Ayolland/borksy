@@ -35,6 +35,4 @@ Bitsy templates are stored in [`./src/template/`](./src/template). To add a new 
 
 ## Release
 
-This project uses [semantic-release](https://github.com/semantic-release/semantic-release) to automatically bump version, update changelog, and publish releases based on commit messages.
-
-It will eventually be setup to publish to itch.io automatically, but there are issues preventing this atm. In the meantime, a production build can be made locally, and zipped + uploaded manually.
+This project uses [semantic-release](https://github.com/semantic-release/semantic-release) to automatically bump version, update changelog, and publish releases to both GitHub and itch.io based on commit messages.
