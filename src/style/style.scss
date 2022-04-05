@@ -172,6 +172,11 @@ header {
 		background-size: contain;
 		background-position: top center;
 		background-repeat: no-repeat;
+		cursor: grab;
+
+		&:active {
+			cursor: grabbing;
+		}
 
 		-ms-interpolation-mode: nearest-neighbor; /* IE */
 		image-rendering: -moz-crisp-edges; /* FF 6.0+ */
