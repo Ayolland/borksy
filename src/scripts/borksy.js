@@ -3,10 +3,11 @@ import { saveAs } from 'file-saver';
 import { compile } from 'handlebars';
 import { html as htmlChangelog } from '../../CHANGELOG.md';
 import pkg from '../../package.json';
-import { htmlAbout, htmlFaqs, htmlHowto, htmlTips, htmlTools } from '../about';
-import * as defaults from '../defaults';
-import hacksRaw from '../hacks';
 import templates from '../template';
+
+const html = Object.fromEntries(Object.entries(import.meta.globEager('../about/*.md')).map(([key, value]) => [key.match(/.*\/(.*?)\.md/)[1], value.html]));
+const defaults = Object.fromEntries(Object.entries(import.meta.globEager('../defaults/*.txt', { as: 'raw' })).map(([key, value]) => [key.match(/.*\/(.*?)\.txt/)[1], value]));
+const hacksRaw = Object.values(import.meta.globEager('../hacks/*.txt', { as: 'raw' }));
 
 const hacks = hacksRaw.map(hack => {
 	const [header] = hack.match(/^(\/\*\*[\S\s]*?\*\/)$/gm);
@@ -255,7 +256,7 @@ function toHtml(string) {
 
 function loadAboutInfo() {
 	const elAbout = document.querySelector('#about_content');
-	elAbout.innerHTML = htmlAbout.replace('HACKS_BITSY_VERSION', pkgHacks.bitsyVersion);
+	elAbout.innerHTML = html.about.replace('HACKS_BITSY_VERSION', pkgHacks.bitsyVersion);
 
 	const lastUpdate = document.createElement('section');
 	lastUpdate.id = 'last-update';
@@ -263,20 +264,20 @@ function loadAboutInfo() {
 	elAbout.prepend(lastUpdate);
 
 	const elHowto = makeNewCollapsible('How To Use Borksy');
-	elHowto.append(...toHtml(htmlHowto));
+	elHowto.append(...toHtml(html['how-to-use-borksy']));
 	elAbout.appendChild(elHowto);
 
 	const elFaqs = makeNewCollapsible('Troubleshooting / FAQs');
 	elFaqs.classList.add('faq');
-	elFaqs.append(...toHtml(htmlFaqs));
+	elFaqs.append(...toHtml(html['troubleshooting-faqs']));
 	elAbout.appendChild(elFaqs);
 
 	const elTools = makeNewCollapsible('Other Bitsy Tools');
-	elTools.append(...toHtml(htmlTools));
+	elTools.append(...toHtml(html['other-tools']));
 	elAbout.appendChild(elTools);
 
 	const elTips = makeNewCollapsible("AYo's Special Tips");
-	elTips.append(...toHtml(htmlTips));
+	elTips.append(...toHtml(html['ayos-special-tips']));
 	elAbout.appendChild(elTips);
 
 	const elChangelog = makeNewCollapsible('Changelog');
