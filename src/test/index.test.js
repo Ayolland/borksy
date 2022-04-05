@@ -31,7 +31,7 @@ describe('Borksy', () => {
 
 	beforeAll(async () => {
 		browser = await puppeteer.launch({
-			headless: process.env.CI === 'true',
+			headless: true,
 		});
 		page = await browser.newPage();
 		await page.emulateMediaFeatures([
