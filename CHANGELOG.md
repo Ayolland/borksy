@@ -1,3 +1,10 @@
+# [5.15.0](https://github.com/Ayolland/borksy/compare/v5.14.1...v5.15.0) (2022-04-05)
+
+
+### Features
+
+* update framework + simplify some imports ([527de69](https://github.com/Ayolland/borksy/commit/527de69fb12fcd9967533b668885374472bd16c5))
+
 ## [5.14.1](https://github.com/Ayolland/borksy/compare/v5.14.0...v5.14.1) (2022-04-04)
 
 

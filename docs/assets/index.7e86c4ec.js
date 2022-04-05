@@ -1,4 +1,127 @@
-var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropertyDescriptors;var x=Object.getOwnPropertySymbols;var P=Object.prototype.hasOwnProperty,M=Object.prototype.propertyIsEnumerable;var S=(t,n,e)=>n in t?R(t,n,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[n]=e,m=(t,n)=>{for(var e in n||(n={}))P.call(n,e)&&S(t,e,n[e]);if(x)for(var e of x(n))M.call(n,e)&&S(t,e,n[e]);return t},j=(t,n)=>C(t,L(n));import{p as y,h as H,F as G}from"./vendor.19d6f7d5.js";const U=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const r of document.querySelectorAll('link[rel="modulepreload"]'))a(r);new MutationObserver(r=>{for(const i of r)if(i.type==="childList")for(const o of i.addedNodes)o.tagName==="LINK"&&o.rel==="modulepreload"&&a(o)}).observe(document,{childList:!0,subtree:!0});function e(r){const i={};return r.integrity&&(i.integrity=r.integrity),r.referrerpolicy&&(i.referrerPolicy=r.referrerpolicy),r.crossorigin==="use-credentials"?i.credentials="include":r.crossorigin==="anonymous"?i.credentials="omit":i.credentials="same-origin",i}function a(r){if(r.ep)return;r.ep=!0;const i=e(r);fetch(r.href,i)}};U();const T=`<h2><a href="https://github.com/Ayolland/borksy/compare/v5.14.0...v5.14.1">5.14.1</a> (2022-04-04)</h2>
+var bn=Object.defineProperty,vn=Object.defineProperties;var wn=Object.getOwnPropertyDescriptors;var Gt=Object.getOwnPropertySymbols;var kn=Object.prototype.hasOwnProperty,xn=Object.prototype.propertyIsEnumerable;var Ut=(t,n,e)=>n in t?bn(t,n,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[n]=e,lt=(t,n)=>{for(var e in n||(n={}))kn.call(n,e)&&Ut(t,e,n[e]);if(Gt)for(var e of Gt(n))xn.call(n,e)&&Ut(t,e,n[e]);return t},Vt=(t,n)=>vn(t,wn(n));const Sn=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const p of document.querySelectorAll('link[rel="modulepreload"]'))a(p);new MutationObserver(p=>{for(const f of p)if(f.type==="childList")for(const d of f.addedNodes)d.tagName==="LINK"&&d.rel==="modulepreload"&&a(d)}).observe(document,{childList:!0,subtree:!0});function e(p){const f={};return p.integrity&&(f.integrity=p.integrity),p.referrerpolicy&&(f.referrerPolicy=p.referrerpolicy),p.crossorigin==="use-credentials"?f.credentials="include":p.crossorigin==="anonymous"?f.credentials="omit":f.credentials="same-origin",f}function a(p){if(p.ep)return;p.ep=!0;const f=e(p);fetch(p.href,f)}};Sn();const jn={},Tn=`<p>Borksy is a hacking tool to be used in conjunction with <a href="https://ledoux.itch.io/bitsy">Bitsy Game Maker</a>! Use it to customize your games and add hacks without needing to manually cut-and-paste html.</p>
+<p>If you're not sure how to use this tool, check out the 'How To Use Borksy' section. If you're having issues, check the 'Troubleshooting/FAQs' section. If you're not familiar with how Bitsy can be extended, try exploring <a href="https://github.com/seleb/bitsy-hacks/">the Bitsy hacks repo</a>.</p>
+<p>Borksy Features:</p>
+<ul>
+<li>Multiple Bitsy version templates</li>
+<li>Preloaded Hacks Menu</li>
+<li>Editable hack options</li>
+<li>Customize HTML/CSS</li>
+<li>Customize page title / filename</li>
+<li>Field for extra JS / hacks</li>
+<li>Saves work to <code>localStorage</code> for persistence</li>
+<li>Updated default Bitsy font with more consistent unicode support</li>
+<li>Party Mode!</li>
+</ul>
+<p>Report any bugs you find <a href="https://github.com/Ayolland/borksy/issues">on GitHub</a>, or reach out to <a href="https://twitter.com/SeanSLeBlanc">Sean</a>!</p>
+`;var In=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",attributes:jn,html:Tn});const Fn={},En=`<ul>
+<li>If you're still using the exit-from-dialog or end-from-dialog hacks, make sure to check out and new the new locked exits functionality in Bitsy 7.0!</li>
+<li>You can access the Bitsy game variables from JavaScript using <code>window.scriptInterpreter.GetVariable(variableName)</code> and <code>window.scriptInterpreter.SetVariable(variableName)</code></li>
+<li>Using CSS to add a background image to your game can add a lot of polish for mimimal effort, especially on mobile.</li>
+<li>Borksy changes the canvas rendering of Bitsy game to display crisp pixel-edges. This can be commented out in the CSS if your prefer the default anti-aliasing.</li>
+<li>Remember, you can add hacks that aren't included in Borksy using the 'Additional JS' field.</li>
+</ul>
+`;var An=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",attributes:Fn,html:En});const _n={},On=`<p>In order to use Borksy, you need to already have a Bitsy game you wish to add functionality to.</p>
+<p>Borksy accepts the gamedata from Bitsy and combines that with a Bitsy template to create a modified HTML file with your Bitsy game as well as any hacks or modifications you chose to include. You'll need to copy the gamedata from the Bitsy editor and paste it into Borksy. The file Borksy saves is the file you will release as your game.</p>
+<p>Hacks are not guaranteed to work with each other, and particular hacks are not guaranteed to work with particular templates. Make sure you test the particular load-out of hacks you plan to use before developing with them.</p>
+<p>While Borksy uses your browser data to save your work, it is a good idea to save any modifications (hackOptions, additional JS, HTML modifications) somewhere on your computer separately, as there is no way for Borksy to load these from a saved Borksy game.</p>
+`;var Nn=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",attributes:_n,html:On});const Dn={},Bn=`<p>If you haven't already, check out some of the other tools created to enhance Bitsy!</p>
+<ul>
+<li><a href="https://github.com/seleb/bitsy-hacks/" target="_blank" rel="noopener">Bitsy Hack Repo</a> - Almost All the Bitsy hacks</li>
+<li><a href="https://aloelazoe.itch.io/bitsy-3d" target="_blank" rel="noopener">Bitsy 3D</a> - Bitsy but in 3D!!!</li>
+<li><a href="https://vonbednar.itch.io/bitsy-x2" target="_blank" rel="noopener">Bitsy HD</a> - Bitsy but with 16x16 drawings</li>
+<li><a href="https://ruin.itch.io/image-to-bitsy" target="_blank" rel="noopener">Image To Bitsy</a> - Convert images into rooms</li>
+<li><a href="https://janosc.itch.io/rgbitsy" target="_blank" rel="noopener">RGBitsy</a> - Convert COLOR images to rooms!</li>
+<li><a href="https://janosc.itch.io/rgbsprite" target="_blank" rel="noopener">RGBsprite</a> - Convert color images to sprites/items/avatars!</li>
+<li><a href="https://tinybird.info/image-to-bitsy-hd/" target="_blank" rel="noopener">Image To Bitsy HD</a> - Convert images into rooms... in HD!</li>
+<li><a href="https://seansleblanc.itch.io/fontsy" target="_blank" rel="noopener">Fontsy</a> - Bitsy font editor</li>
+<li><a href="https://tommakesstuff.itch.io/spritesy" target="_blank" rel="noopener">Spritesy</a> - Tool for multiframe animations</li>
+<li><a href="https://voec.github.io/witchery/" target="_blank" rel="noopener">Overworld Witchery</a> - Create maps linking multiple rooms (May not work w/ Bitsy 6.0+ ?)</li>
+<li><a href="https://11808s8.itch.io/flipsy" target="_blank" rel="noopener">Flipsy</a> - Flip your room</li>
+<li><a href="https://brandonmakesthings.itch.io/shiftsy" target="_blank" rel="noopener">Shiftsy</a> - Shift your room a little</li>
+<li><a href="https://candle.itch.io/bitsy-audio" target="_blank" rel="noopener">Bitsy Audio</a> - Quick and Easy background audio</li>
+<li><a href="https://erikaverkaaik.itch.io/bitsy-museum-hack" target="_blank" rel="noopener">Bitsy Museum Hack</a> - Link multiple Bitsy games together</li>
+<li><a href="https://zenzoa.itch.io/palettsy" target="_blank" rel="noopener">Palettesy</a> - Bitsy Palette generator</li>
+<li><a href="https://seansleblanc.itch.io/bitsy-merge" target="_blank" rel="noopener">Bitsy Merge</a> - Combine multiple bitsy files together.</li>
+<li><a href="https://aloelazoe.itch.io/bitsy-savior" target="_blank" rel="noopener">Bitsy Savior</a> - Save your Bitsy game to a hacked file w/o copy-pasting!</li>
+</ul>
+<p>Check out <a href="https://itch.io/c/381992/that-good-good-bitsy-tools" target="_blank" rel="noopener">this list of tools/tips on itch</a> for even more!</p>
+`;var Cn=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",attributes:Dn,html:Bn});const Rn={},qn=`<ul>
+<li>
+<blockquote>
+<p>After I add hacks using Borksy, when I load my html file back into Bitsy, all my hacks are gone.</p>
+</blockquote>
+<p>Yes. Bitsy can't read hacks added through Borksy. So you need to edit your game in the Bitsy editor, and then modify it with Borksy. It is wise to keep a copy of your Bitsy game saved without any Borky modifications.</p>
+</li>
+<li>
+<blockquote>
+<p>My Borksy game won't download?</p>
+</blockquote>
+<p>Some game files can be too big for Borksy on certain browsers. If your game reaches a certain size, you may have to add hacks manually using a text-editor instead of using Borksy.</p>
+</li>
+<li>
+<blockquote>
+<p>What happened to X hack which used to be included in Borksy?</p>
+</blockquote>
+<p>Borksy simply pulls data from <a href="https://github.com/seleb/bitsy-hacks">the hacks repo</a>. If a hack you used is missing, try checking why it was removed there, or report an issue if you believe it's missing due to a bug.</p>
+</li>
+<li>
+<blockquote>
+<p>After using Borksy, the dialogue in my game isn't showing up, and instead there's just an empty dialogue box.</p>
+</blockquote>
+<p>If you're using a custom font, make sure that the font data is included when you paste your game data into Borksy. In Bitsy, the font data is hidden by default, even if you're using a custom font. In order for it be able to be copied, you'll need to click the 'font data' button on the button of the 'game data' window in Bitsy before copy your game data.</p>
+</li>
+<li>
+<blockquote>
+<p>My Bitsy HD game is not working after I use Borksy.</p>
+</blockquote>
+<p>Make sure you've selected a 'Borksy HD' option from the 'Bitsy Version' menu before you save out your Bitsy HD game.</p>
+</li>
+<li>
+<blockquote>
+<p>I'm using X hack and it's not working.</p>
+</blockquote>
+<p>Unfortunately, most hacks will only work with the latest Bitsy version. It's possible for there to be bugs or issues with the hack, or with Borksy, or even with Bitsy itself. Make sure and test the hacks and version of Bitsy you want to use for your game before you get too far into development.</p>
+</li>
+<li>
+<blockquote>
+<p>I don't see the hack I need in Borksy.</p>
+</blockquote>
+<p>You can add custom hacks or hacks from sources other than the hacks repo into your game using Borksy. You'll need to paste the hack into the 'Additional JS' field. This isn't too tricky, but you'll have to make sure you're pasting everything you need in.</p>
+</li>
+<li>
+<blockquote>
+<p>I need further help getting my game to work.</p>
+</blockquote>
+<p>The <a href="discordapp.com/invite/9rAjhtr">Bitsy discord</a> is a great place to get help with Bitsy or Borksy.</p>
+</li>
+</ul>
+`;var Pn=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",attributes:Rn,html:qn});const Ln="@bitsy/hecks",Mn="a collection of re-usable scripts for bitsy game maker",Hn=["bitsy","hacks"],Gn="index.mjs",Un="20.1.2",Vn="7.12",zn={build:"rollup -c",test:"jest --runInBand",lint:"eslint ./src/**/*.js",postversion:"npm run build"},$n="Sean S. LeBlanc <sean.s.leblanc@gmail.com>",Wn="MIT (individual hacks have their own license specified)",Yn={type:"git",url:"git://github.com/seleb/bitsy-hacks.git"},Xn={"@seansleblanc/pink-trombone":"^1.0.1","input-gamepads.js":"^3.0.4",kitsy:"^1.1.0",omggif:"^1.0.10",rollup:"^2.56.3","rollup-plugin-commonjs":"^10.1.0","rollup-plugin-node-resolve":"^5.2.0","tracery-grammar":"^2.7.4",webglazy:"^3.1.2"},Kn={"@babel/plugin-transform-runtime":"^7.15.0","@babel/preset-env":"^7.15.0","@babel/runtime":"^7.15.3",doctrine:"^3.0.0",eslint:"^8.2.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.3.0","eslint-plugin-import":"^2.24.2","eslint-plugin-prettier":"^4.0.0",jest:"^27.0.6","jest-image-snapshot":"^4.5.1",prettier:"^2.4.1",puppeteer:"^13.1.2"},Jn={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"]},Qn={branches:["+([0-9])?(.{+([0-9]),x}).x","main"],plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["dist/*.js","README.md","CHANGELOG.md","package.json","package-lock.json"]}]]};var Dt={name:Ln,description:Mn,keywords:Hn,main:Gn,version:Un,bitsyVersion:Vn,scripts:zn,author:$n,license:Wn,repository:Yn,dependencies:Xn,devDependencies:Kn,jest:Jn,release:Qn},O=typeof globalThis!="undefined"?globalThis:typeof window!="undefined"?window:typeof global!="undefined"?global:typeof self!="undefined"?self:{},Qt={exports:{}};(function(t,n){(function(e,a){a()})(O,function(){function e(u,c){return typeof c=="undefined"?c={autoBom:!1}:typeof c!="object"&&(console.warn("Deprecated: Expected third argument to be a object"),c={autoBom:!c}),c.autoBom&&/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(u.type)?new Blob(["\uFEFF",u],{type:u.type}):u}function a(u,c,h){var r=new XMLHttpRequest;r.open("GET",u),r.responseType="blob",r.onload=function(){o(r.response,c,h)},r.onerror=function(){console.error("could not download file")},r.send()}function p(u){var c=new XMLHttpRequest;c.open("HEAD",u,!1);try{c.send()}catch{}return 200<=c.status&&299>=c.status}function f(u){try{u.dispatchEvent(new MouseEvent("click"))}catch{var c=document.createEvent("MouseEvents");c.initMouseEvent("click",!0,!0,window,0,0,0,80,20,!1,!1,!1,!1,0,null),u.dispatchEvent(c)}}var d=typeof window=="object"&&window.window===window?window:typeof self=="object"&&self.self===self?self:typeof O=="object"&&O.global===O?O:void 0,l=d.navigator&&/Macintosh/.test(navigator.userAgent)&&/AppleWebKit/.test(navigator.userAgent)&&!/Safari/.test(navigator.userAgent),o=d.saveAs||(typeof window!="object"||window!==d?function(){}:"download"in HTMLAnchorElement.prototype&&!l?function(u,c,h){var r=d.URL||d.webkitURL,s=document.createElement("a");c=c||u.name||"download",s.download=c,s.rel="noopener",typeof u=="string"?(s.href=u,s.origin===location.origin?f(s):p(s.href)?a(u,c,h):f(s,s.target="_blank")):(s.href=r.createObjectURL(u),setTimeout(function(){r.revokeObjectURL(s.href)},4e4),setTimeout(function(){f(s)},0))}:"msSaveOrOpenBlob"in navigator?function(u,c,h){if(c=c||u.name||"download",typeof u!="string")navigator.msSaveOrOpenBlob(e(u,h),c);else if(p(u))a(u,c,h);else{var r=document.createElement("a");r.href=u,r.target="_blank",setTimeout(function(){f(r)})}}:function(u,c,h,r){if(r=r||open("","_blank"),r&&(r.document.title=r.document.body.innerText="downloading..."),typeof u=="string")return a(u,c,h);var s=u.type==="application/octet-stream",i=/constructor/i.test(d.HTMLElement)||d.safari,m=/CriOS\/[\d]+/.test(navigator.userAgent);if((m||s&&i||l)&&typeof FileReader!="undefined"){var g=new FileReader;g.onloadend=function(){var w=g.result;w=m?w:w.replace(/^data:[^;]*;/,"data:attachment/file;"),r?r.location.href=w:location=w,r=null},g.readAsDataURL(u)}else{var b=d.URL||d.webkitURL,y=b.createObjectURL(u);r?r.location=y:location.href=y,r=null,setTimeout(function(){b.revokeObjectURL(y)},4e4)}});d.saveAs=o.saveAs=o,t.exports=o})})(Qt);var ft={exports:{}},ht={exports:{}},A={},S={};S.__esModule=!0;S.extend=Zt;S.indexOf=re;S.escapeExpression=ie;S.isEmpty=ae;S.createFrame=se;S.blockParams=oe;S.appendContextPath=ce;var Zn={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","`":"&#x60;","=":"&#x3D;"},te=/[&<>"'`=]/g,ne=/[&<>"'`=]/;function ee(t){return Zn[t]}function Zt(t){for(var n=1;n<arguments.length;n++)for(var e in arguments[n])Object.prototype.hasOwnProperty.call(arguments[n],e)&&(t[e]=arguments[n][e]);return t}var Bt=Object.prototype.toString;S.toString=Bt;var gt=function(n){return typeof n=="function"};gt(/x/)&&(S.isFunction=gt=function(t){return typeof t=="function"&&Bt.call(t)==="[object Function]"});S.isFunction=gt;var tn=Array.isArray||function(t){return t&&typeof t=="object"?Bt.call(t)==="[object Array]":!1};S.isArray=tn;function re(t,n){for(var e=0,a=t.length;e<a;e++)if(t[e]===n)return e;return-1}function ie(t){if(typeof t!="string"){if(t&&t.toHTML)return t.toHTML();if(t==null)return"";if(!t)return t+"";t=""+t}return ne.test(t)?t.replace(te,ee):t}function ae(t){return!t&&t!==0?!0:!!(tn(t)&&t.length===0)}function se(t){var n=Zt({},t);return n._parent=t,n}function oe(t,n){return t.path=n,t}function ce(t,n){return(t?t+".":"")+n}var E={exports:{}};(function(t,n){n.__esModule=!0;var e=["description","fileName","lineNumber","endLineNumber","message","name","number","stack"];function a(p,f){var d=f&&f.loc,l=void 0,o=void 0,u=void 0,c=void 0;d&&(l=d.start.line,o=d.end.line,u=d.start.column,c=d.end.column,p+=" - "+l+":"+u);for(var h=Error.prototype.constructor.call(this,p),r=0;r<e.length;r++)this[e[r]]=h[e[r]];Error.captureStackTrace&&Error.captureStackTrace(this,a);try{d&&(this.lineNumber=l,this.endLineNumber=o,Object.defineProperty?(Object.defineProperty(this,"column",{value:u,enumerable:!0}),Object.defineProperty(this,"endColumn",{value:c,enumerable:!0})):(this.column=u,this.endColumn=c))}catch{}}a.prototype=new Error,n.default=a,t.exports=n.default})(E,E.exports);var K={},mt={exports:{}};(function(t,n){n.__esModule=!0;var e=S;n.default=function(a){a.registerHelper("blockHelperMissing",function(p,f){var d=f.inverse,l=f.fn;if(p===!0)return l(this);if(p===!1||p==null)return d(this);if(e.isArray(p))return p.length>0?(f.ids&&(f.ids=[f.name]),a.helpers.each(p,f)):d(this);if(f.data&&f.ids){var o=e.createFrame(f.data);o.contextPath=e.appendContextPath(f.data.contextPath,f.name),f={data:o}}return l(p,f)})},t.exports=n.default})(mt,mt.exports);var yt={exports:{}};(function(t,n){n.__esModule=!0;function e(d){return d&&d.__esModule?d:{default:d}}var a=S,p=E.exports,f=e(p);n.default=function(d){d.registerHelper("each",function(l,o){if(!o)throw new f.default("Must pass iterator to #each");var u=o.fn,c=o.inverse,h=0,r="",s=void 0,i=void 0;o.data&&o.ids&&(i=a.appendContextPath(o.data.contextPath,o.ids[0])+"."),a.isFunction(l)&&(l=l.call(this)),o.data&&(s=a.createFrame(o.data));function m(v,k,T){s&&(s.key=v,s.index=k,s.first=k===0,s.last=!!T,i&&(s.contextPath=i+v)),r=r+u(l[v],{data:s,blockParams:a.blockParams([l[v],v],[i+v,null])})}if(l&&typeof l=="object")if(a.isArray(l))for(var g=l.length;h<g;h++)h in l&&m(h,h,h===l.length-1);else if(O.Symbol&&l[O.Symbol.iterator]){for(var b=[],y=l[O.Symbol.iterator](),w=y.next();!w.done;w=y.next())b.push(w.value);l=b;for(var g=l.length;h<g;h++)m(h,h,h===l.length-1)}else(function(){var v=void 0;Object.keys(l).forEach(function(k){v!==void 0&&m(v,h-1),v=k,h++}),v!==void 0&&m(v,h-1,!0)})();return h===0&&(r=c(this)),r})},t.exports=n.default})(yt,yt.exports);var bt={exports:{}};(function(t,n){n.__esModule=!0;function e(f){return f&&f.__esModule?f:{default:f}}var a=E.exports,p=e(a);n.default=function(f){f.registerHelper("helperMissing",function(){if(arguments.length!==1)throw new p.default('Missing helper: "'+arguments[arguments.length-1].name+'"')})},t.exports=n.default})(bt,bt.exports);var vt={exports:{}};(function(t,n){n.__esModule=!0;function e(d){return d&&d.__esModule?d:{default:d}}var a=S,p=E.exports,f=e(p);n.default=function(d){d.registerHelper("if",function(l,o){if(arguments.length!=2)throw new f.default("#if requires exactly one argument");return a.isFunction(l)&&(l=l.call(this)),!o.hash.includeZero&&!l||a.isEmpty(l)?o.inverse(this):o.fn(this)}),d.registerHelper("unless",function(l,o){if(arguments.length!=2)throw new f.default("#unless requires exactly one argument");return d.helpers.if.call(this,l,{fn:o.inverse,inverse:o.fn,hash:o.hash})})},t.exports=n.default})(vt,vt.exports);var wt={exports:{}};(function(t,n){n.__esModule=!0,n.default=function(e){e.registerHelper("log",function(){for(var a=[void 0],p=arguments[arguments.length-1],f=0;f<arguments.length-1;f++)a.push(arguments[f]);var d=1;p.hash.level!=null?d=p.hash.level:p.data&&p.data.level!=null&&(d=p.data.level),a[0]=d,e.log.apply(e,a)})},t.exports=n.default})(wt,wt.exports);var kt={exports:{}};(function(t,n){n.__esModule=!0,n.default=function(e){e.registerHelper("lookup",function(a,p,f){return a&&f.lookupProperty(a,p)})},t.exports=n.default})(kt,kt.exports);var xt={exports:{}};(function(t,n){n.__esModule=!0;function e(d){return d&&d.__esModule?d:{default:d}}var a=S,p=E.exports,f=e(p);n.default=function(d){d.registerHelper("with",function(l,o){if(arguments.length!=2)throw new f.default("#with requires exactly one argument");a.isFunction(l)&&(l=l.call(this));var u=o.fn;if(a.isEmpty(l))return o.inverse(this);var c=o.data;return o.data&&o.ids&&(c=a.createFrame(o.data),c.contextPath=a.appendContextPath(o.data.contextPath,o.ids[0])),u(l,{data:c,blockParams:a.blockParams([l],[c&&c.contextPath])})})},t.exports=n.default})(xt,xt.exports);K.__esModule=!0;K.registerDefaultHelpers=Se;K.moveHelperToHooks=je;function P(t){return t&&t.__esModule?t:{default:t}}var le=mt.exports,ue=P(le),pe=yt.exports,de=P(pe),fe=bt.exports,he=P(fe),ge=vt.exports,me=P(ge),ye=wt.exports,be=P(ye),ve=kt.exports,we=P(ve),ke=xt.exports,xe=P(ke);function Se(t){ue.default(t),de.default(t),he.default(t),me.default(t),be.default(t),we.default(t),xe.default(t)}function je(t,n,e){t.helpers[n]&&(t.hooks[n]=t.helpers[n],e||delete t.helpers[n])}var Ct={},St={exports:{}};(function(t,n){n.__esModule=!0;var e=S;n.default=function(a){a.registerDecorator("inline",function(p,f,d,l){var o=p;return f.partials||(f.partials={},o=function(u,c){var h=d.partials;d.partials=e.extend({},h,f.partials);var r=p(u,c);return d.partials=h,r}),f.partials[l.args[0]]=l.fn,o})},t.exports=n.default})(St,St.exports);Ct.__esModule=!0;Ct.registerDefaultDecorators=Ee;function Te(t){return t&&t.__esModule?t:{default:t}}var Ie=St.exports,Fe=Te(Ie);function Ee(t){Fe.default(t)}var et={exports:{}};(function(t,n){n.__esModule=!0;var e=S,a={methodMap:["debug","info","warn","error"],level:"info",lookupLevel:function(f){if(typeof f=="string"){var d=e.indexOf(a.methodMap,f.toLowerCase());d>=0?f=d:f=parseInt(f,10)}return f},log:function(f){if(f=a.lookupLevel(f),typeof console!="undefined"&&a.lookupLevel(a.level)<=f){var d=a.methodMap[f];console[d]||(d="log");for(var l=arguments.length,o=Array(l>1?l-1:0),u=1;u<l;u++)o[u-1]=arguments[u];console[d].apply(console,o)}}};n.default=a,t.exports=n.default})(et,et.exports);var G={},Rt={};Rt.__esModule=!0;Rt.createNewLookupObject=_e;var Ae=S;function _e(){for(var t=arguments.length,n=Array(t),e=0;e<t;e++)n[e]=arguments[e];return Ae.extend.apply(void 0,[Object.create(null)].concat(n))}G.__esModule=!0;G.createProtoAccessControl=Be;G.resultIsAllowed=Ce;G.resetLoggedProperties=qe;function Oe(t){if(t&&t.__esModule)return t;var n={};if(t!=null)for(var e in t)Object.prototype.hasOwnProperty.call(t,e)&&(n[e]=t[e]);return n.default=t,n}var zt=Rt,Ne=et.exports,De=Oe(Ne),rt=Object.create(null);function Be(t){var n=Object.create(null);n.constructor=!1,n.__defineGetter__=!1,n.__defineSetter__=!1,n.__lookupGetter__=!1;var e=Object.create(null);return e.__proto__=!1,{properties:{whitelist:zt.createNewLookupObject(e,t.allowedProtoProperties),defaultValue:t.allowProtoPropertiesByDefault},methods:{whitelist:zt.createNewLookupObject(n,t.allowedProtoMethods),defaultValue:t.allowProtoMethodsByDefault}}}function Ce(t,n,e){return $t(typeof t=="function"?n.methods:n.properties,e)}function $t(t,n){return t.whitelist[n]!==void 0?t.whitelist[n]===!0:t.defaultValue!==void 0?t.defaultValue:(Re(n),!1)}function Re(t){rt[t]!==!0&&(rt[t]=!0,De.log("error",'Handlebars: Access has been denied to resolve the property "'+t+`" because it is not an "own property" of its parent.
+You can add a runtime option to disable the check or this warning:
+See https://handlebarsjs.com/api-reference/runtime-options.html#options-to-control-prototype-access for details`))}function qe(){Object.keys(rt).forEach(function(t){delete rt[t]})}A.__esModule=!0;A.HandlebarsEnvironment=jt;function nn(t){return t&&t.__esModule?t:{default:t}}var q=S,Pe=E.exports,ut=nn(Pe),Le=K,Me=Ct,He=et.exports,it=nn(He),Ge=G,Ue="4.7.7";A.VERSION=Ue;var Ve=8;A.COMPILER_REVISION=Ve;var ze=7;A.LAST_COMPATIBLE_COMPILER_REVISION=ze;var $e={1:"<= 1.0.rc.2",2:"== 1.0.0-rc.3",3:"== 1.0.0-rc.4",4:"== 1.x.x",5:"== 2.0.0-alpha.x",6:">= 2.0.0-beta.1",7:">= 4.0.0 <4.3.0",8:">= 4.3.0"};A.REVISION_CHANGES=$e;var pt="[object Object]";function jt(t,n,e){this.helpers=t||{},this.partials=n||{},this.decorators=e||{},Le.registerDefaultHelpers(this),Me.registerDefaultDecorators(this)}jt.prototype={constructor:jt,logger:it.default,log:it.default.log,registerHelper:function(n,e){if(q.toString.call(n)===pt){if(e)throw new ut.default("Arg not supported with multiple helpers");q.extend(this.helpers,n)}else this.helpers[n]=e},unregisterHelper:function(n){delete this.helpers[n]},registerPartial:function(n,e){if(q.toString.call(n)===pt)q.extend(this.partials,n);else{if(typeof e=="undefined")throw new ut.default('Attempting to register a partial called "'+n+'" as undefined');this.partials[n]=e}},unregisterPartial:function(n){delete this.partials[n]},registerDecorator:function(n,e){if(q.toString.call(n)===pt){if(e)throw new ut.default("Arg not supported with multiple decorators");q.extend(this.decorators,n)}else this.decorators[n]=e},unregisterDecorator:function(n){delete this.decorators[n]},resetLoggedPropertyAccesses:function(){Ge.resetLoggedProperties()}};var We=it.default.log;A.log=We;A.createFrame=q.createFrame;A.logger=it.default;var Tt={exports:{}};(function(t,n){n.__esModule=!0;function e(a){this.string=a}e.prototype.toString=e.prototype.toHTML=function(){return""+this.string},n.default=e,t.exports=n.default})(Tt,Tt.exports);var R={},qt={};qt.__esModule=!0;qt.wrapHelper=Ye;function Ye(t,n){if(typeof t!="function")return t;var e=function(){var p=arguments[arguments.length-1];return arguments[arguments.length-1]=n(p),t.apply(this,arguments)};return e}R.__esModule=!0;R.checkRevision=tr;R.template=nr;R.wrapProgram=tt;R.resolvePartial=er;R.invokePartial=rr;R.noop=en;function Xe(t){return t&&t.__esModule?t:{default:t}}function Ke(t){if(t&&t.__esModule)return t;var n={};if(t!=null)for(var e in t)Object.prototype.hasOwnProperty.call(t,e)&&(n[e]=t[e]);return n.default=t,n}var Je=S,N=Ke(Je),Qe=E.exports,D=Xe(Qe),B=A,Wt=K,Ze=qt,Yt=G;function tr(t){var n=t&&t[0]||1,e=B.COMPILER_REVISION;if(!(n>=B.LAST_COMPATIBLE_COMPILER_REVISION&&n<=B.COMPILER_REVISION))if(n<B.LAST_COMPATIBLE_COMPILER_REVISION){var a=B.REVISION_CHANGES[e],p=B.REVISION_CHANGES[n];throw new D.default("Template was precompiled with an older version of Handlebars than the current runtime. Please update your precompiler to a newer version ("+a+") or downgrade your runtime to an older version ("+p+").")}else throw new D.default("Template was precompiled with a newer version of Handlebars than the current runtime. Please update your runtime to a newer version ("+t[1]+").")}function nr(t,n){if(!n)throw new D.default("No environment passed to template");if(!t||!t.main)throw new D.default("Unknown template object: "+typeof t);t.main.decorator=t.main_d,n.VM.checkRevision(t.compiler);var e=t.compiler&&t.compiler[0]===7;function a(d,l,o){o.hash&&(l=N.extend({},l,o.hash),o.ids&&(o.ids[0]=!0)),d=n.VM.resolvePartial.call(this,d,l,o);var u=N.extend({},o,{hooks:this.hooks,protoAccessControl:this.protoAccessControl}),c=n.VM.invokePartial.call(this,d,l,u);if(c==null&&n.compile&&(o.partials[o.name]=n.compile(d,t.compilerOptions,n),c=o.partials[o.name](l,u)),c!=null){if(o.indent){for(var h=c.split(`
+`),r=0,s=h.length;r<s&&!(!h[r]&&r+1===s);r++)h[r]=o.indent+h[r];c=h.join(`
+`)}return c}else throw new D.default("The partial "+o.name+" could not be compiled when running in runtime-only mode")}var p={strict:function(l,o,u){if(!l||!(o in l))throw new D.default('"'+o+'" not defined in '+l,{loc:u});return p.lookupProperty(l,o)},lookupProperty:function(l,o){var u=l[o];if(u==null||Object.prototype.hasOwnProperty.call(l,o)||Yt.resultIsAllowed(u,p.protoAccessControl,o))return u},lookup:function(l,o){for(var u=l.length,c=0;c<u;c++){var h=l[c]&&p.lookupProperty(l[c],o);if(h!=null)return l[c][o]}},lambda:function(l,o){return typeof l=="function"?l.call(o):l},escapeExpression:N.escapeExpression,invokePartial:a,fn:function(l){var o=t[l];return o.decorator=t[l+"_d"],o},programs:[],program:function(l,o,u,c,h){var r=this.programs[l],s=this.fn(l);return o||h||c||u?r=tt(this,l,s,o,u,c,h):r||(r=this.programs[l]=tt(this,l,s)),r},data:function(l,o){for(;l&&o--;)l=l._parent;return l},mergeIfNeeded:function(l,o){var u=l||o;return l&&o&&l!==o&&(u=N.extend({},o,l)),u},nullContext:Object.seal({}),noop:n.VM.noop,compilerInfo:t.compiler};function f(d){var l=arguments.length<=1||arguments[1]===void 0?{}:arguments[1],o=l.data;f._setup(l),!l.partial&&t.useData&&(o=ir(d,o));var u=void 0,c=t.useBlockParams?[]:void 0;t.useDepths&&(l.depths?u=d!=l.depths[0]?[d].concat(l.depths):l.depths:u=[d]);function h(r){return""+t.main(p,r,p.helpers,p.partials,o,c,u)}return h=rn(t.main,h,p,l.depths||[],o,c),h(d,l)}return f.isTop=!0,f._setup=function(d){if(d.partial)p.protoAccessControl=d.protoAccessControl,p.helpers=d.helpers,p.partials=d.partials,p.decorators=d.decorators,p.hooks=d.hooks;else{var l=N.extend({},n.helpers,d.helpers);ar(l,p),p.helpers=l,t.usePartial&&(p.partials=p.mergeIfNeeded(d.partials,n.partials)),(t.usePartial||t.useDecorators)&&(p.decorators=N.extend({},n.decorators,d.decorators)),p.hooks={},p.protoAccessControl=Yt.createProtoAccessControl(d);var o=d.allowCallsToHelperMissing||e;Wt.moveHelperToHooks(p,"helperMissing",o),Wt.moveHelperToHooks(p,"blockHelperMissing",o)}},f._child=function(d,l,o,u){if(t.useBlockParams&&!o)throw new D.default("must pass block params");if(t.useDepths&&!u)throw new D.default("must pass parent depths");return tt(p,d,t[d],l,0,o,u)},f}function tt(t,n,e,a,p,f,d){function l(o){var u=arguments.length<=1||arguments[1]===void 0?{}:arguments[1],c=d;return d&&o!=d[0]&&!(o===t.nullContext&&d[0]===null)&&(c=[o].concat(d)),e(t,o,t.helpers,t.partials,u.data||a,f&&[u.blockParams].concat(f),c)}return l=rn(e,l,t,d,a,f),l.program=n,l.depth=d?d.length:0,l.blockParams=p||0,l}function er(t,n,e){return t?!t.call&&!e.name&&(e.name=t,t=e.partials[t]):e.name==="@partial-block"?t=e.data["partial-block"]:t=e.partials[e.name],t}function rr(t,n,e){var a=e.data&&e.data["partial-block"];e.partial=!0,e.ids&&(e.data.contextPath=e.ids[0]||e.data.contextPath);var p=void 0;if(e.fn&&e.fn!==en&&function(){e.data=B.createFrame(e.data);var f=e.fn;p=e.data["partial-block"]=function(l){var o=arguments.length<=1||arguments[1]===void 0?{}:arguments[1];return o.data=B.createFrame(o.data),o.data["partial-block"]=a,f(l,o)},f.partials&&(e.partials=N.extend({},e.partials,f.partials))}(),t===void 0&&p&&(t=p),t===void 0)throw new D.default("The partial "+e.name+" could not be found");if(t instanceof Function)return t(n,e)}function en(){return""}function ir(t,n){return(!n||!("root"in n))&&(n=n?B.createFrame(n):{},n.root=t),n}function rn(t,n,e,a,p,f){if(t.decorator){var d={};n=t.decorator(n,d,e,a&&a[0],p,f,a),N.extend(n,d)}return n}function ar(t,n){Object.keys(t).forEach(function(e){var a=t[e];t[e]=sr(a,n)})}function sr(t,n){var e=n.lookupProperty;return Ze.wrapHelper(t,function(a){return N.extend({lookupProperty:e},a)})}var at={exports:{}};(function(t,n){n.__esModule=!0,n.default=function(e){var a=typeof O!="undefined"?O:window,p=a.Handlebars;e.noConflict=function(){return a.Handlebars===e&&(a.Handlebars=p),e}},t.exports=n.default})(at,at.exports);(function(t,n){n.__esModule=!0;function e(y){return y&&y.__esModule?y:{default:y}}function a(y){if(y&&y.__esModule)return y;var w={};if(y!=null)for(var v in y)Object.prototype.hasOwnProperty.call(y,v)&&(w[v]=y[v]);return w.default=y,w}var p=A,f=a(p),d=Tt.exports,l=e(d),o=E.exports,u=e(o),c=S,h=a(c),r=R,s=a(r),i=at.exports,m=e(i);function g(){var y=new f.HandlebarsEnvironment;return h.extend(y,f),y.SafeString=l.default,y.Exception=u.default,y.Utils=h,y.escapeExpression=h.escapeExpression,y.VM=s,y.template=function(w){return s.template(w,y)},y}var b=g();b.create=g,m.default(b),b.default=b,n.default=b,t.exports=n.default})(ht,ht.exports);var st={exports:{}};(function(t,n){n.__esModule=!0;var e={helpers:{helperExpression:function(p){return p.type==="SubExpression"||(p.type==="MustacheStatement"||p.type==="BlockStatement")&&!!(p.params&&p.params.length||p.hash)},scopedId:function(p){return/^\.|this\b/.test(p.original)},simpleId:function(p){return p.parts.length===1&&!e.helpers.scopedId(p)&&!p.depth}}};n.default=e,t.exports=n.default})(st,st.exports);var J={},It={exports:{}};(function(t,n){n.__esModule=!0;var e=function(){var a={trace:function(){},yy:{},symbols_:{error:2,root:3,program:4,EOF:5,program_repetition0:6,statement:7,mustache:8,block:9,rawBlock:10,partial:11,partialBlock:12,content:13,COMMENT:14,CONTENT:15,openRawBlock:16,rawBlock_repetition0:17,END_RAW_BLOCK:18,OPEN_RAW_BLOCK:19,helperName:20,openRawBlock_repetition0:21,openRawBlock_option0:22,CLOSE_RAW_BLOCK:23,openBlock:24,block_option0:25,closeBlock:26,openInverse:27,block_option1:28,OPEN_BLOCK:29,openBlock_repetition0:30,openBlock_option0:31,openBlock_option1:32,CLOSE:33,OPEN_INVERSE:34,openInverse_repetition0:35,openInverse_option0:36,openInverse_option1:37,openInverseChain:38,OPEN_INVERSE_CHAIN:39,openInverseChain_repetition0:40,openInverseChain_option0:41,openInverseChain_option1:42,inverseAndProgram:43,INVERSE:44,inverseChain:45,inverseChain_option0:46,OPEN_ENDBLOCK:47,OPEN:48,mustache_repetition0:49,mustache_option0:50,OPEN_UNESCAPED:51,mustache_repetition1:52,mustache_option1:53,CLOSE_UNESCAPED:54,OPEN_PARTIAL:55,partialName:56,partial_repetition0:57,partial_option0:58,openPartialBlock:59,OPEN_PARTIAL_BLOCK:60,openPartialBlock_repetition0:61,openPartialBlock_option0:62,param:63,sexpr:64,OPEN_SEXPR:65,sexpr_repetition0:66,sexpr_option0:67,CLOSE_SEXPR:68,hash:69,hash_repetition_plus0:70,hashSegment:71,ID:72,EQUALS:73,blockParams:74,OPEN_BLOCK_PARAMS:75,blockParams_repetition_plus0:76,CLOSE_BLOCK_PARAMS:77,path:78,dataName:79,STRING:80,NUMBER:81,BOOLEAN:82,UNDEFINED:83,NULL:84,DATA:85,pathSegments:86,SEP:87,$accept:0,$end:1},terminals_:{2:"error",5:"EOF",14:"COMMENT",15:"CONTENT",18:"END_RAW_BLOCK",19:"OPEN_RAW_BLOCK",23:"CLOSE_RAW_BLOCK",29:"OPEN_BLOCK",33:"CLOSE",34:"OPEN_INVERSE",39:"OPEN_INVERSE_CHAIN",44:"INVERSE",47:"OPEN_ENDBLOCK",48:"OPEN",51:"OPEN_UNESCAPED",54:"CLOSE_UNESCAPED",55:"OPEN_PARTIAL",60:"OPEN_PARTIAL_BLOCK",65:"OPEN_SEXPR",68:"CLOSE_SEXPR",72:"ID",73:"EQUALS",75:"OPEN_BLOCK_PARAMS",77:"CLOSE_BLOCK_PARAMS",80:"STRING",81:"NUMBER",82:"BOOLEAN",83:"UNDEFINED",84:"NULL",85:"DATA",87:"SEP"},productions_:[0,[3,2],[4,1],[7,1],[7,1],[7,1],[7,1],[7,1],[7,1],[7,1],[13,1],[10,3],[16,5],[9,4],[9,4],[24,6],[27,6],[38,6],[43,2],[45,3],[45,1],[26,3],[8,5],[8,5],[11,5],[12,3],[59,5],[63,1],[63,1],[64,5],[69,1],[71,3],[74,3],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1],[56,1],[56,1],[79,2],[78,1],[86,3],[86,1],[6,0],[6,2],[17,0],[17,2],[21,0],[21,2],[22,0],[22,1],[25,0],[25,1],[28,0],[28,1],[30,0],[30,2],[31,0],[31,1],[32,0],[32,1],[35,0],[35,2],[36,0],[36,1],[37,0],[37,1],[40,0],[40,2],[41,0],[41,1],[42,0],[42,1],[46,0],[46,1],[49,0],[49,2],[50,0],[50,1],[52,0],[52,2],[53,0],[53,1],[57,0],[57,2],[58,0],[58,1],[61,0],[61,2],[62,0],[62,1],[66,0],[66,2],[67,0],[67,1],[70,1],[70,2],[76,1],[76,2]],performAction:function(l,o,u,c,h,r,s){var i=r.length-1;switch(h){case 1:return r[i-1];case 2:this.$=c.prepareProgram(r[i]);break;case 3:this.$=r[i];break;case 4:this.$=r[i];break;case 5:this.$=r[i];break;case 6:this.$=r[i];break;case 7:this.$=r[i];break;case 8:this.$=r[i];break;case 9:this.$={type:"CommentStatement",value:c.stripComment(r[i]),strip:c.stripFlags(r[i],r[i]),loc:c.locInfo(this._$)};break;case 10:this.$={type:"ContentStatement",original:r[i],value:r[i],loc:c.locInfo(this._$)};break;case 11:this.$=c.prepareRawBlock(r[i-2],r[i-1],r[i],this._$);break;case 12:this.$={path:r[i-3],params:r[i-2],hash:r[i-1]};break;case 13:this.$=c.prepareBlock(r[i-3],r[i-2],r[i-1],r[i],!1,this._$);break;case 14:this.$=c.prepareBlock(r[i-3],r[i-2],r[i-1],r[i],!0,this._$);break;case 15:this.$={open:r[i-5],path:r[i-4],params:r[i-3],hash:r[i-2],blockParams:r[i-1],strip:c.stripFlags(r[i-5],r[i])};break;case 16:this.$={path:r[i-4],params:r[i-3],hash:r[i-2],blockParams:r[i-1],strip:c.stripFlags(r[i-5],r[i])};break;case 17:this.$={path:r[i-4],params:r[i-3],hash:r[i-2],blockParams:r[i-1],strip:c.stripFlags(r[i-5],r[i])};break;case 18:this.$={strip:c.stripFlags(r[i-1],r[i-1]),program:r[i]};break;case 19:var m=c.prepareBlock(r[i-2],r[i-1],r[i],r[i],!1,this._$),g=c.prepareProgram([m],r[i-1].loc);g.chained=!0,this.$={strip:r[i-2].strip,program:g,chain:!0};break;case 20:this.$=r[i];break;case 21:this.$={path:r[i-1],strip:c.stripFlags(r[i-2],r[i])};break;case 22:this.$=c.prepareMustache(r[i-3],r[i-2],r[i-1],r[i-4],c.stripFlags(r[i-4],r[i]),this._$);break;case 23:this.$=c.prepareMustache(r[i-3],r[i-2],r[i-1],r[i-4],c.stripFlags(r[i-4],r[i]),this._$);break;case 24:this.$={type:"PartialStatement",name:r[i-3],params:r[i-2],hash:r[i-1],indent:"",strip:c.stripFlags(r[i-4],r[i]),loc:c.locInfo(this._$)};break;case 25:this.$=c.preparePartialBlock(r[i-2],r[i-1],r[i],this._$);break;case 26:this.$={path:r[i-3],params:r[i-2],hash:r[i-1],strip:c.stripFlags(r[i-4],r[i])};break;case 27:this.$=r[i];break;case 28:this.$=r[i];break;case 29:this.$={type:"SubExpression",path:r[i-3],params:r[i-2],hash:r[i-1],loc:c.locInfo(this._$)};break;case 30:this.$={type:"Hash",pairs:r[i],loc:c.locInfo(this._$)};break;case 31:this.$={type:"HashPair",key:c.id(r[i-2]),value:r[i],loc:c.locInfo(this._$)};break;case 32:this.$=c.id(r[i-1]);break;case 33:this.$=r[i];break;case 34:this.$=r[i];break;case 35:this.$={type:"StringLiteral",value:r[i],original:r[i],loc:c.locInfo(this._$)};break;case 36:this.$={type:"NumberLiteral",value:Number(r[i]),original:Number(r[i]),loc:c.locInfo(this._$)};break;case 37:this.$={type:"BooleanLiteral",value:r[i]==="true",original:r[i]==="true",loc:c.locInfo(this._$)};break;case 38:this.$={type:"UndefinedLiteral",original:void 0,value:void 0,loc:c.locInfo(this._$)};break;case 39:this.$={type:"NullLiteral",original:null,value:null,loc:c.locInfo(this._$)};break;case 40:this.$=r[i];break;case 41:this.$=r[i];break;case 42:this.$=c.preparePath(!0,r[i],this._$);break;case 43:this.$=c.preparePath(!1,r[i],this._$);break;case 44:r[i-2].push({part:c.id(r[i]),original:r[i],separator:r[i-1]}),this.$=r[i-2];break;case 45:this.$=[{part:c.id(r[i]),original:r[i]}];break;case 46:this.$=[];break;case 47:r[i-1].push(r[i]);break;case 48:this.$=[];break;case 49:r[i-1].push(r[i]);break;case 50:this.$=[];break;case 51:r[i-1].push(r[i]);break;case 58:this.$=[];break;case 59:r[i-1].push(r[i]);break;case 64:this.$=[];break;case 65:r[i-1].push(r[i]);break;case 70:this.$=[];break;case 71:r[i-1].push(r[i]);break;case 78:this.$=[];break;case 79:r[i-1].push(r[i]);break;case 82:this.$=[];break;case 83:r[i-1].push(r[i]);break;case 86:this.$=[];break;case 87:r[i-1].push(r[i]);break;case 90:this.$=[];break;case 91:r[i-1].push(r[i]);break;case 94:this.$=[];break;case 95:r[i-1].push(r[i]);break;case 98:this.$=[r[i]];break;case 99:r[i-1].push(r[i]);break;case 100:this.$=[r[i]];break;case 101:r[i-1].push(r[i]);break}},table:[{3:1,4:2,5:[2,46],6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{1:[3]},{5:[1,4]},{5:[2,2],7:5,8:6,9:7,10:8,11:9,12:10,13:11,14:[1,12],15:[1,20],16:17,19:[1,23],24:15,27:16,29:[1,21],34:[1,22],39:[2,2],44:[2,2],47:[2,2],48:[1,13],51:[1,14],55:[1,18],59:19,60:[1,24]},{1:[2,1]},{5:[2,47],14:[2,47],15:[2,47],19:[2,47],29:[2,47],34:[2,47],39:[2,47],44:[2,47],47:[2,47],48:[2,47],51:[2,47],55:[2,47],60:[2,47]},{5:[2,3],14:[2,3],15:[2,3],19:[2,3],29:[2,3],34:[2,3],39:[2,3],44:[2,3],47:[2,3],48:[2,3],51:[2,3],55:[2,3],60:[2,3]},{5:[2,4],14:[2,4],15:[2,4],19:[2,4],29:[2,4],34:[2,4],39:[2,4],44:[2,4],47:[2,4],48:[2,4],51:[2,4],55:[2,4],60:[2,4]},{5:[2,5],14:[2,5],15:[2,5],19:[2,5],29:[2,5],34:[2,5],39:[2,5],44:[2,5],47:[2,5],48:[2,5],51:[2,5],55:[2,5],60:[2,5]},{5:[2,6],14:[2,6],15:[2,6],19:[2,6],29:[2,6],34:[2,6],39:[2,6],44:[2,6],47:[2,6],48:[2,6],51:[2,6],55:[2,6],60:[2,6]},{5:[2,7],14:[2,7],15:[2,7],19:[2,7],29:[2,7],34:[2,7],39:[2,7],44:[2,7],47:[2,7],48:[2,7],51:[2,7],55:[2,7],60:[2,7]},{5:[2,8],14:[2,8],15:[2,8],19:[2,8],29:[2,8],34:[2,8],39:[2,8],44:[2,8],47:[2,8],48:[2,8],51:[2,8],55:[2,8],60:[2,8]},{5:[2,9],14:[2,9],15:[2,9],19:[2,9],29:[2,9],34:[2,9],39:[2,9],44:[2,9],47:[2,9],48:[2,9],51:[2,9],55:[2,9],60:[2,9]},{20:25,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:36,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{4:37,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],39:[2,46],44:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{4:38,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],44:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{15:[2,48],17:39,18:[2,48]},{20:41,56:40,64:42,65:[1,43],72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{4:44,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{5:[2,10],14:[2,10],15:[2,10],18:[2,10],19:[2,10],29:[2,10],34:[2,10],39:[2,10],44:[2,10],47:[2,10],48:[2,10],51:[2,10],55:[2,10],60:[2,10]},{20:45,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:46,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:47,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:41,56:48,64:42,65:[1,43],72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{33:[2,78],49:49,65:[2,78],72:[2,78],80:[2,78],81:[2,78],82:[2,78],83:[2,78],84:[2,78],85:[2,78]},{23:[2,33],33:[2,33],54:[2,33],65:[2,33],68:[2,33],72:[2,33],75:[2,33],80:[2,33],81:[2,33],82:[2,33],83:[2,33],84:[2,33],85:[2,33]},{23:[2,34],33:[2,34],54:[2,34],65:[2,34],68:[2,34],72:[2,34],75:[2,34],80:[2,34],81:[2,34],82:[2,34],83:[2,34],84:[2,34],85:[2,34]},{23:[2,35],33:[2,35],54:[2,35],65:[2,35],68:[2,35],72:[2,35],75:[2,35],80:[2,35],81:[2,35],82:[2,35],83:[2,35],84:[2,35],85:[2,35]},{23:[2,36],33:[2,36],54:[2,36],65:[2,36],68:[2,36],72:[2,36],75:[2,36],80:[2,36],81:[2,36],82:[2,36],83:[2,36],84:[2,36],85:[2,36]},{23:[2,37],33:[2,37],54:[2,37],65:[2,37],68:[2,37],72:[2,37],75:[2,37],80:[2,37],81:[2,37],82:[2,37],83:[2,37],84:[2,37],85:[2,37]},{23:[2,38],33:[2,38],54:[2,38],65:[2,38],68:[2,38],72:[2,38],75:[2,38],80:[2,38],81:[2,38],82:[2,38],83:[2,38],84:[2,38],85:[2,38]},{23:[2,39],33:[2,39],54:[2,39],65:[2,39],68:[2,39],72:[2,39],75:[2,39],80:[2,39],81:[2,39],82:[2,39],83:[2,39],84:[2,39],85:[2,39]},{23:[2,43],33:[2,43],54:[2,43],65:[2,43],68:[2,43],72:[2,43],75:[2,43],80:[2,43],81:[2,43],82:[2,43],83:[2,43],84:[2,43],85:[2,43],87:[1,50]},{72:[1,35],86:51},{23:[2,45],33:[2,45],54:[2,45],65:[2,45],68:[2,45],72:[2,45],75:[2,45],80:[2,45],81:[2,45],82:[2,45],83:[2,45],84:[2,45],85:[2,45],87:[2,45]},{52:52,54:[2,82],65:[2,82],72:[2,82],80:[2,82],81:[2,82],82:[2,82],83:[2,82],84:[2,82],85:[2,82]},{25:53,38:55,39:[1,57],43:56,44:[1,58],45:54,47:[2,54]},{28:59,43:60,44:[1,58],47:[2,56]},{13:62,15:[1,20],18:[1,61]},{33:[2,86],57:63,65:[2,86],72:[2,86],80:[2,86],81:[2,86],82:[2,86],83:[2,86],84:[2,86],85:[2,86]},{33:[2,40],65:[2,40],72:[2,40],80:[2,40],81:[2,40],82:[2,40],83:[2,40],84:[2,40],85:[2,40]},{33:[2,41],65:[2,41],72:[2,41],80:[2,41],81:[2,41],82:[2,41],83:[2,41],84:[2,41],85:[2,41]},{20:64,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{26:65,47:[1,66]},{30:67,33:[2,58],65:[2,58],72:[2,58],75:[2,58],80:[2,58],81:[2,58],82:[2,58],83:[2,58],84:[2,58],85:[2,58]},{33:[2,64],35:68,65:[2,64],72:[2,64],75:[2,64],80:[2,64],81:[2,64],82:[2,64],83:[2,64],84:[2,64],85:[2,64]},{21:69,23:[2,50],65:[2,50],72:[2,50],80:[2,50],81:[2,50],82:[2,50],83:[2,50],84:[2,50],85:[2,50]},{33:[2,90],61:70,65:[2,90],72:[2,90],80:[2,90],81:[2,90],82:[2,90],83:[2,90],84:[2,90],85:[2,90]},{20:74,33:[2,80],50:71,63:72,64:75,65:[1,43],69:73,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{72:[1,79]},{23:[2,42],33:[2,42],54:[2,42],65:[2,42],68:[2,42],72:[2,42],75:[2,42],80:[2,42],81:[2,42],82:[2,42],83:[2,42],84:[2,42],85:[2,42],87:[1,50]},{20:74,53:80,54:[2,84],63:81,64:75,65:[1,43],69:82,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{26:83,47:[1,66]},{47:[2,55]},{4:84,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],39:[2,46],44:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{47:[2,20]},{20:85,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{4:86,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{26:87,47:[1,66]},{47:[2,57]},{5:[2,11],14:[2,11],15:[2,11],19:[2,11],29:[2,11],34:[2,11],39:[2,11],44:[2,11],47:[2,11],48:[2,11],51:[2,11],55:[2,11],60:[2,11]},{15:[2,49],18:[2,49]},{20:74,33:[2,88],58:88,63:89,64:75,65:[1,43],69:90,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{65:[2,94],66:91,68:[2,94],72:[2,94],80:[2,94],81:[2,94],82:[2,94],83:[2,94],84:[2,94],85:[2,94]},{5:[2,25],14:[2,25],15:[2,25],19:[2,25],29:[2,25],34:[2,25],39:[2,25],44:[2,25],47:[2,25],48:[2,25],51:[2,25],55:[2,25],60:[2,25]},{20:92,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:74,31:93,33:[2,60],63:94,64:75,65:[1,43],69:95,70:76,71:77,72:[1,78],75:[2,60],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:74,33:[2,66],36:96,63:97,64:75,65:[1,43],69:98,70:76,71:77,72:[1,78],75:[2,66],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:74,22:99,23:[2,52],63:100,64:75,65:[1,43],69:101,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:74,33:[2,92],62:102,63:103,64:75,65:[1,43],69:104,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{33:[1,105]},{33:[2,79],65:[2,79],72:[2,79],80:[2,79],81:[2,79],82:[2,79],83:[2,79],84:[2,79],85:[2,79]},{33:[2,81]},{23:[2,27],33:[2,27],54:[2,27],65:[2,27],68:[2,27],72:[2,27],75:[2,27],80:[2,27],81:[2,27],82:[2,27],83:[2,27],84:[2,27],85:[2,27]},{23:[2,28],33:[2,28],54:[2,28],65:[2,28],68:[2,28],72:[2,28],75:[2,28],80:[2,28],81:[2,28],82:[2,28],83:[2,28],84:[2,28],85:[2,28]},{23:[2,30],33:[2,30],54:[2,30],68:[2,30],71:106,72:[1,107],75:[2,30]},{23:[2,98],33:[2,98],54:[2,98],68:[2,98],72:[2,98],75:[2,98]},{23:[2,45],33:[2,45],54:[2,45],65:[2,45],68:[2,45],72:[2,45],73:[1,108],75:[2,45],80:[2,45],81:[2,45],82:[2,45],83:[2,45],84:[2,45],85:[2,45],87:[2,45]},{23:[2,44],33:[2,44],54:[2,44],65:[2,44],68:[2,44],72:[2,44],75:[2,44],80:[2,44],81:[2,44],82:[2,44],83:[2,44],84:[2,44],85:[2,44],87:[2,44]},{54:[1,109]},{54:[2,83],65:[2,83],72:[2,83],80:[2,83],81:[2,83],82:[2,83],83:[2,83],84:[2,83],85:[2,83]},{54:[2,85]},{5:[2,13],14:[2,13],15:[2,13],19:[2,13],29:[2,13],34:[2,13],39:[2,13],44:[2,13],47:[2,13],48:[2,13],51:[2,13],55:[2,13],60:[2,13]},{38:55,39:[1,57],43:56,44:[1,58],45:111,46:110,47:[2,76]},{33:[2,70],40:112,65:[2,70],72:[2,70],75:[2,70],80:[2,70],81:[2,70],82:[2,70],83:[2,70],84:[2,70],85:[2,70]},{47:[2,18]},{5:[2,14],14:[2,14],15:[2,14],19:[2,14],29:[2,14],34:[2,14],39:[2,14],44:[2,14],47:[2,14],48:[2,14],51:[2,14],55:[2,14],60:[2,14]},{33:[1,113]},{33:[2,87],65:[2,87],72:[2,87],80:[2,87],81:[2,87],82:[2,87],83:[2,87],84:[2,87],85:[2,87]},{33:[2,89]},{20:74,63:115,64:75,65:[1,43],67:114,68:[2,96],69:116,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{33:[1,117]},{32:118,33:[2,62],74:119,75:[1,120]},{33:[2,59],65:[2,59],72:[2,59],75:[2,59],80:[2,59],81:[2,59],82:[2,59],83:[2,59],84:[2,59],85:[2,59]},{33:[2,61],75:[2,61]},{33:[2,68],37:121,74:122,75:[1,120]},{33:[2,65],65:[2,65],72:[2,65],75:[2,65],80:[2,65],81:[2,65],82:[2,65],83:[2,65],84:[2,65],85:[2,65]},{33:[2,67],75:[2,67]},{23:[1,123]},{23:[2,51],65:[2,51],72:[2,51],80:[2,51],81:[2,51],82:[2,51],83:[2,51],84:[2,51],85:[2,51]},{23:[2,53]},{33:[1,124]},{33:[2,91],65:[2,91],72:[2,91],80:[2,91],81:[2,91],82:[2,91],83:[2,91],84:[2,91],85:[2,91]},{33:[2,93]},{5:[2,22],14:[2,22],15:[2,22],19:[2,22],29:[2,22],34:[2,22],39:[2,22],44:[2,22],47:[2,22],48:[2,22],51:[2,22],55:[2,22],60:[2,22]},{23:[2,99],33:[2,99],54:[2,99],68:[2,99],72:[2,99],75:[2,99]},{73:[1,108]},{20:74,63:125,64:75,65:[1,43],72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{5:[2,23],14:[2,23],15:[2,23],19:[2,23],29:[2,23],34:[2,23],39:[2,23],44:[2,23],47:[2,23],48:[2,23],51:[2,23],55:[2,23],60:[2,23]},{47:[2,19]},{47:[2,77]},{20:74,33:[2,72],41:126,63:127,64:75,65:[1,43],69:128,70:76,71:77,72:[1,78],75:[2,72],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{5:[2,24],14:[2,24],15:[2,24],19:[2,24],29:[2,24],34:[2,24],39:[2,24],44:[2,24],47:[2,24],48:[2,24],51:[2,24],55:[2,24],60:[2,24]},{68:[1,129]},{65:[2,95],68:[2,95],72:[2,95],80:[2,95],81:[2,95],82:[2,95],83:[2,95],84:[2,95],85:[2,95]},{68:[2,97]},{5:[2,21],14:[2,21],15:[2,21],19:[2,21],29:[2,21],34:[2,21],39:[2,21],44:[2,21],47:[2,21],48:[2,21],51:[2,21],55:[2,21],60:[2,21]},{33:[1,130]},{33:[2,63]},{72:[1,132],76:131},{33:[1,133]},{33:[2,69]},{15:[2,12],18:[2,12]},{14:[2,26],15:[2,26],19:[2,26],29:[2,26],34:[2,26],47:[2,26],48:[2,26],51:[2,26],55:[2,26],60:[2,26]},{23:[2,31],33:[2,31],54:[2,31],68:[2,31],72:[2,31],75:[2,31]},{33:[2,74],42:134,74:135,75:[1,120]},{33:[2,71],65:[2,71],72:[2,71],75:[2,71],80:[2,71],81:[2,71],82:[2,71],83:[2,71],84:[2,71],85:[2,71]},{33:[2,73],75:[2,73]},{23:[2,29],33:[2,29],54:[2,29],65:[2,29],68:[2,29],72:[2,29],75:[2,29],80:[2,29],81:[2,29],82:[2,29],83:[2,29],84:[2,29],85:[2,29]},{14:[2,15],15:[2,15],19:[2,15],29:[2,15],34:[2,15],39:[2,15],44:[2,15],47:[2,15],48:[2,15],51:[2,15],55:[2,15],60:[2,15]},{72:[1,137],77:[1,136]},{72:[2,100],77:[2,100]},{14:[2,16],15:[2,16],19:[2,16],29:[2,16],34:[2,16],44:[2,16],47:[2,16],48:[2,16],51:[2,16],55:[2,16],60:[2,16]},{33:[1,138]},{33:[2,75]},{33:[2,32]},{72:[2,101],77:[2,101]},{14:[2,17],15:[2,17],19:[2,17],29:[2,17],34:[2,17],39:[2,17],44:[2,17],47:[2,17],48:[2,17],51:[2,17],55:[2,17],60:[2,17]}],defaultActions:{4:[2,1],54:[2,55],56:[2,20],60:[2,57],73:[2,81],82:[2,85],86:[2,18],90:[2,89],101:[2,53],104:[2,93],110:[2,19],111:[2,77],116:[2,97],119:[2,63],122:[2,69],135:[2,75],136:[2,32]},parseError:function(l,o){throw new Error(l)},parse:function(l){var o=this,u=[0],c=[null],h=[],r=this.table,s="",i=0,m=0;this.lexer.setInput(l),this.lexer.yy=this.yy,this.yy.lexer=this.lexer,this.yy.parser=this,typeof this.lexer.yylloc=="undefined"&&(this.lexer.yylloc={});var g=this.lexer.yylloc;h.push(g);var b=this.lexer.options&&this.lexer.options.ranges;typeof this.yy.parseError=="function"&&(this.parseError=this.yy.parseError);function y(){var M;return M=o.lexer.lex()||1,typeof M!="number"&&(M=o.symbols_[M]||M),M}for(var w,v,k,T,x={},I,F,V,Z;;){if(v=u[u.length-1],this.defaultActions[v]?k=this.defaultActions[v]:((w===null||typeof w=="undefined")&&(w=y()),k=r[v]&&r[v][w]),typeof k=="undefined"||!k.length||!k[0]){var ct="";{Z=[];for(I in r[v])this.terminals_[I]&&I>2&&Z.push("'"+this.terminals_[I]+"'");this.lexer.showPosition?ct="Parse error on line "+(i+1)+`:
+`+this.lexer.showPosition()+`
+Expecting `+Z.join(", ")+", got '"+(this.terminals_[w]||w)+"'":ct="Parse error on line "+(i+1)+": Unexpected "+(w==1?"end of input":"'"+(this.terminals_[w]||w)+"'"),this.parseError(ct,{text:this.lexer.match,token:this.terminals_[w]||w,line:this.lexer.yylineno,loc:g,expected:Z})}}if(k[0]instanceof Array&&k.length>1)throw new Error("Parse Error: multiple actions possible at state: "+v+", token: "+w);switch(k[0]){case 1:u.push(w),c.push(this.lexer.yytext),h.push(this.lexer.yylloc),u.push(k[1]),w=null,m=this.lexer.yyleng,s=this.lexer.yytext,i=this.lexer.yylineno,g=this.lexer.yylloc;break;case 2:if(F=this.productions_[k[1]][1],x.$=c[c.length-F],x._$={first_line:h[h.length-(F||1)].first_line,last_line:h[h.length-1].last_line,first_column:h[h.length-(F||1)].first_column,last_column:h[h.length-1].last_column},b&&(x._$.range=[h[h.length-(F||1)].range[0],h[h.length-1].range[1]]),T=this.performAction.call(x,s,m,i,this.yy,k[1],c,h),typeof T!="undefined")return T;F&&(u=u.slice(0,-1*F*2),c=c.slice(0,-1*F),h=h.slice(0,-1*F)),u.push(this.productions_[k[1]][0]),c.push(x.$),h.push(x._$),V=r[u[u.length-2]][u[u.length-1]],u.push(V);break;case 3:return!0}}return!0}},p=function(){var d={EOF:1,parseError:function(o,u){if(this.yy.parser)this.yy.parser.parseError(o,u);else throw new Error(o)},setInput:function(o){return this._input=o,this._more=this._less=this.done=!1,this.yylineno=this.yyleng=0,this.yytext=this.matched=this.match="",this.conditionStack=["INITIAL"],this.yylloc={first_line:1,first_column:0,last_line:1,last_column:0},this.options.ranges&&(this.yylloc.range=[0,0]),this.offset=0,this},input:function(){var o=this._input[0];this.yytext+=o,this.yyleng++,this.offset++,this.match+=o,this.matched+=o;var u=o.match(/(?:\r\n?|\n).*/g);return u?(this.yylineno++,this.yylloc.last_line++):this.yylloc.last_column++,this.options.ranges&&this.yylloc.range[1]++,this._input=this._input.slice(1),o},unput:function(o){var u=o.length,c=o.split(/(?:\r\n?|\n)/g);this._input=o+this._input,this.yytext=this.yytext.substr(0,this.yytext.length-u-1),this.offset-=u;var h=this.match.split(/(?:\r\n?|\n)/g);this.match=this.match.substr(0,this.match.length-1),this.matched=this.matched.substr(0,this.matched.length-1),c.length-1&&(this.yylineno-=c.length-1);var r=this.yylloc.range;return this.yylloc={first_line:this.yylloc.first_line,last_line:this.yylineno+1,first_column:this.yylloc.first_column,last_column:c?(c.length===h.length?this.yylloc.first_column:0)+h[h.length-c.length].length-c[0].length:this.yylloc.first_column-u},this.options.ranges&&(this.yylloc.range=[r[0],r[0]+this.yyleng-u]),this},more:function(){return this._more=!0,this},less:function(o){this.unput(this.match.slice(o))},pastInput:function(){var o=this.matched.substr(0,this.matched.length-this.match.length);return(o.length>20?"...":"")+o.substr(-20).replace(/\n/g,"")},upcomingInput:function(){var o=this.match;return o.length<20&&(o+=this._input.substr(0,20-o.length)),(o.substr(0,20)+(o.length>20?"...":"")).replace(/\n/g,"")},showPosition:function(){var o=this.pastInput(),u=new Array(o.length+1).join("-");return o+this.upcomingInput()+`
+`+u+"^"},next:function(){if(this.done)return this.EOF;this._input||(this.done=!0);var o,u,c,h,r;this._more||(this.yytext="",this.match="");for(var s=this._currentRules(),i=0;i<s.length&&(c=this._input.match(this.rules[s[i]]),!(c&&(!u||c[0].length>u[0].length)&&(u=c,h=i,!this.options.flex)));i++);return u?(r=u[0].match(/(?:\r\n?|\n).*/g),r&&(this.yylineno+=r.length),this.yylloc={first_line:this.yylloc.last_line,last_line:this.yylineno+1,first_column:this.yylloc.last_column,last_column:r?r[r.length-1].length-r[r.length-1].match(/\r?\n?/)[0].length:this.yylloc.last_column+u[0].length},this.yytext+=u[0],this.match+=u[0],this.matches=u,this.yyleng=this.yytext.length,this.options.ranges&&(this.yylloc.range=[this.offset,this.offset+=this.yyleng]),this._more=!1,this._input=this._input.slice(u[0].length),this.matched+=u[0],o=this.performAction.call(this,this.yy,this,s[h],this.conditionStack[this.conditionStack.length-1]),this.done&&this._input&&(this.done=!1),o||void 0):this._input===""?this.EOF:this.parseError("Lexical error on line "+(this.yylineno+1)+`. Unrecognized text.
+`+this.showPosition(),{text:"",token:null,line:this.yylineno})},lex:function(){var o=this.next();return typeof o!="undefined"?o:this.lex()},begin:function(o){this.conditionStack.push(o)},popState:function(){return this.conditionStack.pop()},_currentRules:function(){return this.conditions[this.conditionStack[this.conditionStack.length-1]].rules},topState:function(){return this.conditionStack[this.conditionStack.length-2]},pushState:function(o){this.begin(o)}};return d.options={},d.performAction=function(o,u,c,h){function r(s,i){return u.yytext=u.yytext.substring(s,u.yyleng-i+s)}switch(c){case 0:if(u.yytext.slice(-2)==="\\\\"?(r(0,1),this.begin("mu")):u.yytext.slice(-1)==="\\"?(r(0,1),this.begin("emu")):this.begin("mu"),u.yytext)return 15;break;case 1:return 15;case 2:return this.popState(),15;case 3:return this.begin("raw"),15;case 4:return this.popState(),this.conditionStack[this.conditionStack.length-1]==="raw"?15:(r(5,9),"END_RAW_BLOCK");case 5:return 15;case 6:return this.popState(),14;case 7:return 65;case 8:return 68;case 9:return 19;case 10:return this.popState(),this.begin("raw"),23;case 11:return 55;case 12:return 60;case 13:return 29;case 14:return 47;case 15:return this.popState(),44;case 16:return this.popState(),44;case 17:return 34;case 18:return 39;case 19:return 51;case 20:return 48;case 21:this.unput(u.yytext),this.popState(),this.begin("com");break;case 22:return this.popState(),14;case 23:return 48;case 24:return 73;case 25:return 72;case 26:return 72;case 27:return 87;case 28:break;case 29:return this.popState(),54;case 30:return this.popState(),33;case 31:return u.yytext=r(1,2).replace(/\\"/g,'"'),80;case 32:return u.yytext=r(1,2).replace(/\\'/g,"'"),80;case 33:return 85;case 34:return 82;case 35:return 82;case 36:return 83;case 37:return 84;case 38:return 81;case 39:return 75;case 40:return 77;case 41:return 72;case 42:return u.yytext=u.yytext.replace(/\\([\\\]])/g,"$1"),72;case 43:return"INVALID";case 44:return 5}},d.rules=[/^(?:[^\x00]*?(?=(\{\{)))/,/^(?:[^\x00]+)/,/^(?:[^\x00]{2,}?(?=(\{\{|\\\{\{|\\\\\{\{|$)))/,/^(?:\{\{\{\{(?=[^\/]))/,/^(?:\{\{\{\{\/[^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=[=}\s\/.])\}\}\}\})/,/^(?:[^\x00]+?(?=(\{\{\{\{)))/,/^(?:[\s\S]*?--(~)?\}\})/,/^(?:\()/,/^(?:\))/,/^(?:\{\{\{\{)/,/^(?:\}\}\}\})/,/^(?:\{\{(~)?>)/,/^(?:\{\{(~)?#>)/,/^(?:\{\{(~)?#\*?)/,/^(?:\{\{(~)?\/)/,/^(?:\{\{(~)?\^\s*(~)?\}\})/,/^(?:\{\{(~)?\s*else\s*(~)?\}\})/,/^(?:\{\{(~)?\^)/,/^(?:\{\{(~)?\s*else\b)/,/^(?:\{\{(~)?\{)/,/^(?:\{\{(~)?&)/,/^(?:\{\{(~)?!--)/,/^(?:\{\{(~)?![\s\S]*?\}\})/,/^(?:\{\{(~)?\*?)/,/^(?:=)/,/^(?:\.\.)/,/^(?:\.(?=([=~}\s\/.)|])))/,/^(?:[\/.])/,/^(?:\s+)/,/^(?:\}(~)?\}\})/,/^(?:(~)?\}\})/,/^(?:"(\\["]|[^"])*")/,/^(?:'(\\[']|[^'])*')/,/^(?:@)/,/^(?:true(?=([~}\s)])))/,/^(?:false(?=([~}\s)])))/,/^(?:undefined(?=([~}\s)])))/,/^(?:null(?=([~}\s)])))/,/^(?:-?[0-9]+(?:\.[0-9]+)?(?=([~}\s)])))/,/^(?:as\s+\|)/,/^(?:\|)/,/^(?:([^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=([=~}\s\/.)|]))))/,/^(?:\[(\\\]|[^\]])*\])/,/^(?:.)/,/^(?:$)/],d.conditions={mu:{rules:[7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44],inclusive:!1},emu:{rules:[2],inclusive:!1},com:{rules:[6],inclusive:!1},raw:{rules:[3,4,5],inclusive:!1},INITIAL:{rules:[0,1,44],inclusive:!0}},d}();a.lexer=p;function f(){this.yy={}}return f.prototype=a,a.Parser=f,new f}();n.default=e,t.exports=n.default})(It,It.exports);var Ft={exports:{}},ot={exports:{}};(function(t,n){n.__esModule=!0;function e(u){return u&&u.__esModule?u:{default:u}}var a=E.exports,p=e(a);function f(){this.parents=[]}f.prototype={constructor:f,mutating:!1,acceptKey:function(c,h){var r=this.accept(c[h]);if(this.mutating){if(r&&!f.prototype[r.type])throw new p.default('Unexpected node type "'+r.type+'" found when accepting '+h+" on "+c.type);c[h]=r}},acceptRequired:function(c,h){if(this.acceptKey(c,h),!c[h])throw new p.default(c.type+" requires "+h)},acceptArray:function(c){for(var h=0,r=c.length;h<r;h++)this.acceptKey(c,h),c[h]||(c.splice(h,1),h--,r--)},accept:function(c){if(!!c){if(!this[c.type])throw new p.default("Unknown type: "+c.type,c);this.current&&this.parents.unshift(this.current),this.current=c;var h=this[c.type](c);if(this.current=this.parents.shift(),!this.mutating||h)return h;if(h!==!1)return c}},Program:function(c){this.acceptArray(c.body)},MustacheStatement:d,Decorator:d,BlockStatement:l,DecoratorBlock:l,PartialStatement:o,PartialBlockStatement:function(c){o.call(this,c),this.acceptKey(c,"program")},ContentStatement:function(){},CommentStatement:function(){},SubExpression:d,PathExpression:function(){},StringLiteral:function(){},NumberLiteral:function(){},BooleanLiteral:function(){},UndefinedLiteral:function(){},NullLiteral:function(){},Hash:function(c){this.acceptArray(c.pairs)},HashPair:function(c){this.acceptRequired(c,"value")}};function d(u){this.acceptRequired(u,"path"),this.acceptArray(u.params),this.acceptKey(u,"hash")}function l(u){d.call(this,u),this.acceptKey(u,"program"),this.acceptKey(u,"inverse")}function o(u){this.acceptRequired(u,"name"),this.acceptArray(u.params),this.acceptKey(u,"hash")}n.default=f,t.exports=n.default})(ot,ot.exports);(function(t,n){n.__esModule=!0;function e(c){return c&&c.__esModule?c:{default:c}}var a=ot.exports,p=e(a);function f(){var c=arguments.length<=0||arguments[0]===void 0?{}:arguments[0];this.options=c}f.prototype=new p.default,f.prototype.Program=function(c){var h=!this.options.ignoreStandalone,r=!this.isRootSeen;this.isRootSeen=!0;for(var s=c.body,i=0,m=s.length;i<m;i++){var g=s[i],b=this.accept(g);if(!!b){var y=d(s,i,r),w=l(s,i,r),v=b.openStandalone&&y,k=b.closeStandalone&&w,T=b.inlineStandalone&&y&&w;b.close&&o(s,i,!0),b.open&&u(s,i,!0),h&&T&&(o(s,i),u(s,i)&&g.type==="PartialStatement"&&(g.indent=/([ \t]+$)/.exec(s[i-1].original)[1])),h&&v&&(o((g.program||g.inverse).body),u(s,i)),h&&k&&(o(s,i),u((g.inverse||g.program).body))}}return c},f.prototype.BlockStatement=f.prototype.DecoratorBlock=f.prototype.PartialBlockStatement=function(c){this.accept(c.program),this.accept(c.inverse);var h=c.program||c.inverse,r=c.program&&c.inverse,s=r,i=r;if(r&&r.chained)for(s=r.body[0].program;i.chained;)i=i.body[i.body.length-1].program;var m={open:c.openStrip.open,close:c.closeStrip.close,openStandalone:l(h.body),closeStandalone:d((s||h).body)};if(c.openStrip.close&&o(h.body,null,!0),r){var g=c.inverseStrip;g.open&&u(h.body,null,!0),g.close&&o(s.body,null,!0),c.closeStrip.open&&u(i.body,null,!0),!this.options.ignoreStandalone&&d(h.body)&&l(s.body)&&(u(h.body),o(s.body))}else c.closeStrip.open&&u(h.body,null,!0);return m},f.prototype.Decorator=f.prototype.MustacheStatement=function(c){return c.strip},f.prototype.PartialStatement=f.prototype.CommentStatement=function(c){var h=c.strip||{};return{inlineStandalone:!0,open:h.open,close:h.close}};function d(c,h,r){h===void 0&&(h=c.length);var s=c[h-1],i=c[h-2];if(!s)return r;if(s.type==="ContentStatement")return(i||!r?/\r?\n\s*?$/:/(^|\r?\n)\s*?$/).test(s.original)}function l(c,h,r){h===void 0&&(h=-1);var s=c[h+1],i=c[h+2];if(!s)return r;if(s.type==="ContentStatement")return(i||!r?/^\s*?\r?\n/:/^\s*?(\r?\n|$)/).test(s.original)}function o(c,h,r){var s=c[h==null?0:h+1];if(!(!s||s.type!=="ContentStatement"||!r&&s.rightStripped)){var i=s.value;s.value=s.value.replace(r?/^\s+/:/^[ \t]*\r?\n?/,""),s.rightStripped=s.value!==i}}function u(c,h,r){var s=c[h==null?c.length-1:h-1];if(!(!s||s.type!=="ContentStatement"||!r&&s.leftStripped)){var i=s.value;return s.value=s.value.replace(r?/\s+$/:/[ \t]+$/,""),s.leftStripped=s.value!==i,s.leftStripped}}n.default=f,t.exports=n.default})(Ft,Ft.exports);var _={};_.__esModule=!0;_.SourceLocation=lr;_.id=ur;_.stripFlags=pr;_.stripComment=dr;_.preparePath=fr;_.prepareMustache=hr;_.prepareRawBlock=gr;_.prepareBlock=mr;_.prepareProgram=yr;_.preparePartialBlock=br;function or(t){return t&&t.__esModule?t:{default:t}}var cr=E.exports,Pt=or(cr);function Lt(t,n){if(n=n.path?n.path.original:n,t.path.original!==n){var e={loc:t.path.loc};throw new Pt.default(t.path.original+" doesn't match "+n,e)}}function lr(t,n){this.source=t,this.start={line:n.first_line,column:n.first_column},this.end={line:n.last_line,column:n.last_column}}function ur(t){return/^\[.*\]$/.test(t)?t.substring(1,t.length-1):t}function pr(t,n){return{open:t.charAt(2)==="~",close:n.charAt(n.length-3)==="~"}}function dr(t){return t.replace(/^\{\{~?!-?-?/,"").replace(/-?-?~?\}\}$/,"")}function fr(t,n,e){e=this.locInfo(e);for(var a=t?"@":"",p=[],f=0,d=0,l=n.length;d<l;d++){var o=n[d].part,u=n[d].original!==o;if(a+=(n[d].separator||"")+o,!u&&(o===".."||o==="."||o==="this")){if(p.length>0)throw new Pt.default("Invalid path: "+a,{loc:e});o===".."&&f++}else p.push(o)}return{type:"PathExpression",data:t,depth:f,parts:p,original:a,loc:e}}function hr(t,n,e,a,p,f){var d=a.charAt(3)||a.charAt(2),l=d!=="{"&&d!=="&",o=/\*/.test(a);return{type:o?"Decorator":"MustacheStatement",path:t,params:n,hash:e,escaped:l,strip:p,loc:this.locInfo(f)}}function gr(t,n,e,a){Lt(t,e),a=this.locInfo(a);var p={type:"Program",body:n,strip:{},loc:a};return{type:"BlockStatement",path:t.path,params:t.params,hash:t.hash,program:p,openStrip:{},inverseStrip:{},closeStrip:{},loc:a}}function mr(t,n,e,a,p,f){a&&a.path&&Lt(t,a);var d=/\*/.test(t.open);n.blockParams=t.blockParams;var l=void 0,o=void 0;if(e){if(d)throw new Pt.default("Unexpected inverse block on decorator",e);e.chain&&(e.program.body[0].closeStrip=a.strip),o=e.strip,l=e.program}return p&&(p=l,l=n,n=p),{type:d?"DecoratorBlock":"BlockStatement",path:t.path,params:t.params,hash:t.hash,program:n,inverse:l,openStrip:t.strip,inverseStrip:o,closeStrip:a&&a.strip,loc:this.locInfo(f)}}function yr(t,n){if(!n&&t.length){var e=t[0].loc,a=t[t.length-1].loc;e&&a&&(n={source:e.source,start:{line:e.start.line,column:e.start.column},end:{line:a.end.line,column:a.end.column}})}return{type:"Program",body:t,strip:{},loc:n}}function br(t,n,e,a){return Lt(t,e),{type:"PartialBlockStatement",name:t.path,params:t.params,hash:t.hash,program:n,openStrip:t.strip,closeStrip:e&&e.strip,loc:this.locInfo(a)}}J.__esModule=!0;J.parseWithoutProcessing=sn;J.parse=Ir;function vr(t){if(t&&t.__esModule)return t;var n={};if(t!=null)for(var e in t)Object.prototype.hasOwnProperty.call(t,e)&&(n[e]=t[e]);return n.default=t,n}function an(t){return t&&t.__esModule?t:{default:t}}var wr=It.exports,Et=an(wr),kr=Ft.exports,xr=an(kr),Sr=_,jr=vr(Sr),Tr=S;J.parser=Et.default;var nt={};Tr.extend(nt,jr);function sn(t,n){if(t.type==="Program")return t;Et.default.yy=nt,nt.locInfo=function(a){return new nt.SourceLocation(n&&n.srcName,a)};var e=Et.default.parse(t);return e}function Ir(t,n){var e=sn(t,n),a=new xr.default(n);return a.accept(e)}var Q={};Q.__esModule=!0;Q.Compiler=At;Q.precompile=_r;Q.compile=Or;function on(t){return t&&t.__esModule?t:{default:t}}var Fr=E.exports,Y=on(Fr),X=S,Er=st.exports,z=on(Er),Ar=[].slice;function At(){}At.prototype={compiler:At,equals:function(n){var e=this.opcodes.length;if(n.opcodes.length!==e)return!1;for(var a=0;a<e;a++){var p=this.opcodes[a],f=n.opcodes[a];if(p.opcode!==f.opcode||!cn(p.args,f.args))return!1}e=this.children.length;for(var a=0;a<e;a++)if(!this.children[a].equals(n.children[a]))return!1;return!0},guid:0,compile:function(n,e){return this.sourceNode=[],this.opcodes=[],this.children=[],this.options=e,this.stringParams=e.stringParams,this.trackIds=e.trackIds,e.blockParams=e.blockParams||[],e.knownHelpers=X.extend(Object.create(null),{helperMissing:!0,blockHelperMissing:!0,each:!0,if:!0,unless:!0,with:!0,log:!0,lookup:!0},e.knownHelpers),this.accept(n)},compileProgram:function(n){var e=new this.compiler,a=e.compile(n,this.options),p=this.guid++;return this.usePartial=this.usePartial||a.usePartial,this.children[p]=a,this.useDepths=this.useDepths||a.useDepths,p},accept:function(n){if(!this[n.type])throw new Y.default("Unknown type: "+n.type,n);this.sourceNode.unshift(n);var e=this[n.type](n);return this.sourceNode.shift(),e},Program:function(n){this.options.blockParams.unshift(n.blockParams);for(var e=n.body,a=e.length,p=0;p<a;p++)this.accept(e[p]);return this.options.blockParams.shift(),this.isSimple=a===1,this.blockParams=n.blockParams?n.blockParams.length:0,this},BlockStatement:function(n){Xt(n);var e=n.program,a=n.inverse;e=e&&this.compileProgram(e),a=a&&this.compileProgram(a);var p=this.classifySexpr(n);p==="helper"?this.helperSexpr(n,e,a):p==="simple"?(this.simpleSexpr(n),this.opcode("pushProgram",e),this.opcode("pushProgram",a),this.opcode("emptyHash"),this.opcode("blockValue",n.path.original)):(this.ambiguousSexpr(n,e,a),this.opcode("pushProgram",e),this.opcode("pushProgram",a),this.opcode("emptyHash"),this.opcode("ambiguousBlockValue")),this.opcode("append")},DecoratorBlock:function(n){var e=n.program&&this.compileProgram(n.program),a=this.setupFullMustacheParams(n,e,void 0),p=n.path;this.useDecorators=!0,this.opcode("registerDecorator",a.length,p.original)},PartialStatement:function(n){this.usePartial=!0;var e=n.program;e&&(e=this.compileProgram(n.program));var a=n.params;if(a.length>1)throw new Y.default("Unsupported number of partial arguments: "+a.length,n);a.length||(this.options.explicitPartialContext?this.opcode("pushLiteral","undefined"):a.push({type:"PathExpression",parts:[],depth:0}));var p=n.name.original,f=n.name.type==="SubExpression";f&&this.accept(n.name),this.setupFullMustacheParams(n,e,void 0,!0);var d=n.indent||"";this.options.preventIndent&&d&&(this.opcode("appendContent",d),d=""),this.opcode("invokePartial",f,p,d),this.opcode("append")},PartialBlockStatement:function(n){this.PartialStatement(n)},MustacheStatement:function(n){this.SubExpression(n),n.escaped&&!this.options.noEscape?this.opcode("appendEscaped"):this.opcode("append")},Decorator:function(n){this.DecoratorBlock(n)},ContentStatement:function(n){n.value&&this.opcode("appendContent",n.value)},CommentStatement:function(){},SubExpression:function(n){Xt(n);var e=this.classifySexpr(n);e==="simple"?this.simpleSexpr(n):e==="helper"?this.helperSexpr(n):this.ambiguousSexpr(n)},ambiguousSexpr:function(n,e,a){var p=n.path,f=p.parts[0],d=e!=null||a!=null;this.opcode("getContext",p.depth),this.opcode("pushProgram",e),this.opcode("pushProgram",a),p.strict=!0,this.accept(p),this.opcode("invokeAmbiguous",f,d)},simpleSexpr:function(n){var e=n.path;e.strict=!0,this.accept(e),this.opcode("resolvePossibleLambda")},helperSexpr:function(n,e,a){var p=this.setupFullMustacheParams(n,e,a),f=n.path,d=f.parts[0];if(this.options.knownHelpers[d])this.opcode("invokeKnownHelper",p.length,d);else{if(this.options.knownHelpersOnly)throw new Y.default("You specified knownHelpersOnly, but used the unknown helper "+d,n);f.strict=!0,f.falsy=!0,this.accept(f),this.opcode("invokeHelper",p.length,f.original,z.default.helpers.simpleId(f))}},PathExpression:function(n){this.addDepth(n.depth),this.opcode("getContext",n.depth);var e=n.parts[0],a=z.default.helpers.scopedId(n),p=!n.depth&&!a&&this.blockParamIndex(e);p?this.opcode("lookupBlockParam",p,n.parts):e?n.data?(this.options.data=!0,this.opcode("lookupData",n.depth,n.parts,n.strict)):this.opcode("lookupOnContext",n.parts,n.falsy,n.strict,a):this.opcode("pushContext")},StringLiteral:function(n){this.opcode("pushString",n.value)},NumberLiteral:function(n){this.opcode("pushLiteral",n.value)},BooleanLiteral:function(n){this.opcode("pushLiteral",n.value)},UndefinedLiteral:function(){this.opcode("pushLiteral","undefined")},NullLiteral:function(){this.opcode("pushLiteral","null")},Hash:function(n){var e=n.pairs,a=0,p=e.length;for(this.opcode("pushHash");a<p;a++)this.pushParam(e[a].value);for(;a--;)this.opcode("assignToHash",e[a].key);this.opcode("popHash")},opcode:function(n){this.opcodes.push({opcode:n,args:Ar.call(arguments,1),loc:this.sourceNode[0].loc})},addDepth:function(n){!n||(this.useDepths=!0)},classifySexpr:function(n){var e=z.default.helpers.simpleId(n.path),a=e&&!!this.blockParamIndex(n.path.parts[0]),p=!a&&z.default.helpers.helperExpression(n),f=!a&&(p||e);if(f&&!p){var d=n.path.parts[0],l=this.options;l.knownHelpers[d]?p=!0:l.knownHelpersOnly&&(f=!1)}return p?"helper":f?"ambiguous":"simple"},pushParams:function(n){for(var e=0,a=n.length;e<a;e++)this.pushParam(n[e])},pushParam:function(n){var e=n.value!=null?n.value:n.original||"";if(this.stringParams)e.replace&&(e=e.replace(/^(\.?\.\/)*/g,"").replace(/\//g,".")),n.depth&&this.addDepth(n.depth),this.opcode("getContext",n.depth||0),this.opcode("pushStringParam",e,n.type),n.type==="SubExpression"&&this.accept(n);else{if(this.trackIds){var a=void 0;if(n.parts&&!z.default.helpers.scopedId(n)&&!n.depth&&(a=this.blockParamIndex(n.parts[0])),a){var p=n.parts.slice(1).join(".");this.opcode("pushId","BlockParam",a,p)}else e=n.original||e,e.replace&&(e=e.replace(/^this(?:\.|$)/,"").replace(/^\.\//,"").replace(/^\.$/,"")),this.opcode("pushId",n.type,e)}this.accept(n)}},setupFullMustacheParams:function(n,e,a,p){var f=n.params;return this.pushParams(f),this.opcode("pushProgram",e),this.opcode("pushProgram",a),n.hash?this.accept(n.hash):this.opcode("emptyHash",p),f},blockParamIndex:function(n){for(var e=0,a=this.options.blockParams.length;e<a;e++){var p=this.options.blockParams[e],f=p&&X.indexOf(p,n);if(p&&f>=0)return[e,f]}}};function _r(t,n,e){if(t==null||typeof t!="string"&&t.type!=="Program")throw new Y.default("You must pass a string or Handlebars AST to Handlebars.precompile. You passed "+t);n=n||{},"data"in n||(n.data=!0),n.compat&&(n.useDepths=!0);var a=e.parse(t,n),p=new e.Compiler().compile(a,n);return new e.JavaScriptCompiler().compile(p,n)}function Or(t,n,e){if(n===void 0&&(n={}),t==null||typeof t!="string"&&t.type!=="Program")throw new Y.default("You must pass a string or Handlebars AST to Handlebars.compile. You passed "+t);n=X.extend({},n),"data"in n||(n.data=!0),n.compat&&(n.useDepths=!0);var a=void 0;function p(){var d=e.parse(t,n),l=new e.Compiler().compile(d,n),o=new e.JavaScriptCompiler().compile(l,n,void 0,!0);return e.template(o)}function f(d,l){return a||(a=p()),a.call(this,d,l)}return f._setup=function(d){return a||(a=p()),a._setup(d)},f._child=function(d,l,o,u){return a||(a=p()),a._child(d,l,o,u)},f}function cn(t,n){if(t===n)return!0;if(X.isArray(t)&&X.isArray(n)&&t.length===n.length){for(var e=0;e<t.length;e++)if(!cn(t[e],n[e]))return!1;return!0}}function Xt(t){if(!t.path.parts){var n=t.path;t.path={type:"PathExpression",data:!1,depth:0,parts:[n.original+""],original:n.original+"",loc:n.loc}}}var _t={exports:{}},Ot={exports:{}};(function(t,n){n.__esModule=!0;var e=S,a=void 0;try{var p=require("source-map");a=p.SourceNode}catch{}a||(a=function(l,o,u,c){this.src="",c&&this.add(c)},a.prototype={add:function(o){e.isArray(o)&&(o=o.join("")),this.src+=o},prepend:function(o){e.isArray(o)&&(o=o.join("")),this.src=o+this.src},toStringWithSourceMap:function(){return{code:this.toString()}},toString:function(){return this.src}});function f(l,o,u){if(e.isArray(l)){for(var c=[],h=0,r=l.length;h<r;h++)c.push(o.wrap(l[h],u));return c}else if(typeof l=="boolean"||typeof l=="number")return l+"";return l}function d(l){this.srcFile=l,this.source=[]}d.prototype={isEmpty:function(){return!this.source.length},prepend:function(o,u){this.source.unshift(this.wrap(o,u))},push:function(o,u){this.source.push(this.wrap(o,u))},merge:function(){var o=this.empty();return this.each(function(u){o.add(["  ",u,`
+`])}),o},each:function(o){for(var u=0,c=this.source.length;u<c;u++)o(this.source[u])},empty:function(){var o=this.currentLocation||{start:{}};return new a(o.start.line,o.start.column,this.srcFile)},wrap:function(o){var u=arguments.length<=1||arguments[1]===void 0?this.currentLocation||{start:{}}:arguments[1];return o instanceof a?o:(o=f(o,this,u),new a(u.start.line,u.start.column,this.srcFile,o))},functionCall:function(o,u,c){return c=this.generateList(c),this.wrap([o,u?"."+u+"(":"(",c,")"])},quotedString:function(o){return'"'+(o+"").replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\n/g,"\\n").replace(/\r/g,"\\r").replace(/\u2028/g,"\\u2028").replace(/\u2029/g,"\\u2029")+'"'},objectLiteral:function(o){var u=this,c=[];Object.keys(o).forEach(function(r){var s=f(o[r],u);s!=="undefined"&&c.push([u.quotedString(r),":",s])});var h=this.generateList(c);return h.prepend("{"),h.add("}"),h},generateList:function(o){for(var u=this.empty(),c=0,h=o.length;c<h;c++)c&&u.add(","),u.add(f(o[c],this));return u},generateArray:function(o){var u=this.generateList(o);return u.prepend("["),u.add("]"),u}},n.default=d,t.exports=n.default})(Ot,Ot.exports);(function(t,n){n.__esModule=!0;function e(r){return r&&r.__esModule?r:{default:r}}var a=A,p=E.exports,f=e(p),d=S,l=Ot.exports,o=e(l);function u(r){this.value=r}function c(){}c.prototype={nameLookup:function(s,i){return this.internalNameLookup(s,i)},depthedLookup:function(s){return[this.aliasable("container.lookup"),"(depths, ",JSON.stringify(s),")"]},compilerInfo:function(){var s=a.COMPILER_REVISION,i=a.REVISION_CHANGES[s];return[s,i]},appendToBuffer:function(s,i,m){return d.isArray(s)||(s=[s]),s=this.source.wrap(s,i),this.environment.isSimple?["return ",s,";"]:m?["buffer += ",s,";"]:(s.appendToBuffer=!0,s)},initializeBuffer:function(){return this.quotedString("")},internalNameLookup:function(s,i){return this.lookupPropertyFunctionIsUsed=!0,["lookupProperty(",s,",",JSON.stringify(i),")"]},lookupPropertyFunctionIsUsed:!1,compile:function(s,i,m,g){this.environment=s,this.options=i,this.stringParams=this.options.stringParams,this.trackIds=this.options.trackIds,this.precompile=!g,this.name=this.environment.name,this.isChild=!!m,this.context=m||{decorators:[],programs:[],environments:[]},this.preamble(),this.stackSlot=0,this.stackVars=[],this.aliases={},this.registers={list:[]},this.hashes=[],this.compileStack=[],this.inlineStack=[],this.blockParams=[],this.compileChildren(s,i),this.useDepths=this.useDepths||s.useDepths||s.useDecorators||this.options.compat,this.useBlockParams=this.useBlockParams||s.useBlockParams;var b=s.opcodes,y=void 0,w=void 0,v=void 0,k=void 0;for(v=0,k=b.length;v<k;v++)y=b[v],this.source.currentLocation=y.loc,w=w||y.loc,this[y.opcode].apply(this,y.args);if(this.source.currentLocation=w,this.pushSource(""),this.stackSlot||this.inlineStack.length||this.compileStack.length)throw new f.default("Compile completed with content left on stack");this.decorators.isEmpty()?this.decorators=void 0:(this.useDecorators=!0,this.decorators.prepend(["var decorators = container.decorators, ",this.lookupPropertyFunctionVarDeclaration(),`;
+`]),this.decorators.push("return fn;"),g?this.decorators=Function.apply(this,["fn","props","container","depth0","data","blockParams","depths",this.decorators.merge()]):(this.decorators.prepend(`function(fn, props, container, depth0, data, blockParams, depths) {
+`),this.decorators.push(`}
+`),this.decorators=this.decorators.merge()));var T=this.createFunctionContext(g);if(this.isChild)return T;var x={compiler:this.compilerInfo(),main:T};this.decorators&&(x.main_d=this.decorators,x.useDecorators=!0);var I=this.context,F=I.programs,V=I.decorators;for(v=0,k=F.length;v<k;v++)F[v]&&(x[v]=F[v],V[v]&&(x[v+"_d"]=V[v],x.useDecorators=!0));return this.environment.usePartial&&(x.usePartial=!0),this.options.data&&(x.useData=!0),this.useDepths&&(x.useDepths=!0),this.useBlockParams&&(x.useBlockParams=!0),this.options.compat&&(x.compat=!0),g?x.compilerOptions=this.options:(x.compiler=JSON.stringify(x.compiler),this.source.currentLocation={start:{line:1,column:0}},x=this.objectLiteral(x),i.srcName?(x=x.toStringWithSourceMap({file:i.destName}),x.map=x.map&&x.map.toString()):x=x.toString()),x},preamble:function(){this.lastContext=0,this.source=new o.default(this.options.srcName),this.decorators=new o.default(this.options.srcName)},createFunctionContext:function(s){var i=this,m="",g=this.stackVars.concat(this.registers.list);g.length>0&&(m+=", "+g.join(", "));var b=0;Object.keys(this.aliases).forEach(function(v){var k=i.aliases[v];k.children&&k.referenceCount>1&&(m+=", alias"+ ++b+"="+v,k.children[0]="alias"+b)}),this.lookupPropertyFunctionIsUsed&&(m+=", "+this.lookupPropertyFunctionVarDeclaration());var y=["container","depth0","helpers","partials","data"];(this.useBlockParams||this.useDepths)&&y.push("blockParams"),this.useDepths&&y.push("depths");var w=this.mergeSource(m);return s?(y.push(w),Function.apply(this,y)):this.source.wrap(["function(",y.join(","),`) {
+  `,w,"}"])},mergeSource:function(s){var i=this.environment.isSimple,m=!this.forceBuffer,g=void 0,b=void 0,y=void 0,w=void 0;return this.source.each(function(v){v.appendToBuffer?(y?v.prepend("  + "):y=v,w=v):(y&&(b?y.prepend("buffer += "):g=!0,w.add(";"),y=w=void 0),b=!0,i||(m=!1))}),m?y?(y.prepend("return "),w.add(";")):b||this.source.push('return "";'):(s+=", buffer = "+(g?"":this.initializeBuffer()),y?(y.prepend("return buffer + "),w.add(";")):this.source.push("return buffer;")),s&&this.source.prepend("var "+s.substring(2)+(g?"":`;
+`)),this.source.merge()},lookupPropertyFunctionVarDeclaration:function(){return`
+      lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    }
+    `.trim()},blockValue:function(s){var i=this.aliasable("container.hooks.blockHelperMissing"),m=[this.contextName(0)];this.setupHelperArgs(s,0,m);var g=this.popStack();m.splice(1,0,g),this.push(this.source.functionCall(i,"call",m))},ambiguousBlockValue:function(){var s=this.aliasable("container.hooks.blockHelperMissing"),i=[this.contextName(0)];this.setupHelperArgs("",0,i,!0),this.flushInline();var m=this.topStack();i.splice(1,0,m),this.pushSource(["if (!",this.lastHelper,") { ",m," = ",this.source.functionCall(s,"call",i),"}"])},appendContent:function(s){this.pendingContent?s=this.pendingContent+s:this.pendingLocation=this.source.currentLocation,this.pendingContent=s},append:function(){if(this.isInline())this.replaceStack(function(i){return[" != null ? ",i,' : ""']}),this.pushSource(this.appendToBuffer(this.popStack()));else{var s=this.popStack();this.pushSource(["if (",s," != null) { ",this.appendToBuffer(s,void 0,!0)," }"]),this.environment.isSimple&&this.pushSource(["else { ",this.appendToBuffer("''",void 0,!0)," }"])}},appendEscaped:function(){this.pushSource(this.appendToBuffer([this.aliasable("container.escapeExpression"),"(",this.popStack(),")"]))},getContext:function(s){this.lastContext=s},pushContext:function(){this.pushStackLiteral(this.contextName(this.lastContext))},lookupOnContext:function(s,i,m,g){var b=0;!g&&this.options.compat&&!this.lastContext?this.push(this.depthedLookup(s[b++])):this.pushContext(),this.resolvePath("context",s,b,i,m)},lookupBlockParam:function(s,i){this.useBlockParams=!0,this.push(["blockParams[",s[0],"][",s[1],"]"]),this.resolvePath("context",i,1)},lookupData:function(s,i,m){s?this.pushStackLiteral("container.data(data, "+s+")"):this.pushStackLiteral("data"),this.resolvePath("data",i,0,!0,m)},resolvePath:function(s,i,m,g,b){var y=this;if(this.options.strict||this.options.assumeObjects){this.push(h(this.options.strict&&b,this,i,s));return}for(var w=i.length;m<w;m++)this.replaceStack(function(v){var k=y.nameLookup(v,i[m],s);return g?[" && ",k]:[" != null ? ",k," : ",v]})},resolvePossibleLambda:function(){this.push([this.aliasable("container.lambda"),"(",this.popStack(),", ",this.contextName(0),")"])},pushStringParam:function(s,i){this.pushContext(),this.pushString(i),i!=="SubExpression"&&(typeof s=="string"?this.pushString(s):this.pushStackLiteral(s))},emptyHash:function(s){this.trackIds&&this.push("{}"),this.stringParams&&(this.push("{}"),this.push("{}")),this.pushStackLiteral(s?"undefined":"{}")},pushHash:function(){this.hash&&this.hashes.push(this.hash),this.hash={values:{},types:[],contexts:[],ids:[]}},popHash:function(){var s=this.hash;this.hash=this.hashes.pop(),this.trackIds&&this.push(this.objectLiteral(s.ids)),this.stringParams&&(this.push(this.objectLiteral(s.contexts)),this.push(this.objectLiteral(s.types))),this.push(this.objectLiteral(s.values))},pushString:function(s){this.pushStackLiteral(this.quotedString(s))},pushLiteral:function(s){this.pushStackLiteral(s)},pushProgram:function(s){s!=null?this.pushStackLiteral(this.programExpression(s)):this.pushStackLiteral(null)},registerDecorator:function(s,i){var m=this.nameLookup("decorators",i,"decorator"),g=this.setupHelperArgs(i,s);this.decorators.push(["fn = ",this.decorators.functionCall(m,"",["fn","props","container",g])," || fn;"])},invokeHelper:function(s,i,m){var g=this.popStack(),b=this.setupHelper(s,i),y=[];m&&y.push(b.name),y.push(g),this.options.strict||y.push(this.aliasable("container.hooks.helperMissing"));var w=["(",this.itemsSeparatedBy(y,"||"),")"],v=this.source.functionCall(w,"call",b.callParams);this.push(v)},itemsSeparatedBy:function(s,i){var m=[];m.push(s[0]);for(var g=1;g<s.length;g++)m.push(i,s[g]);return m},invokeKnownHelper:function(s,i){var m=this.setupHelper(s,i);this.push(this.source.functionCall(m.name,"call",m.callParams))},invokeAmbiguous:function(s,i){this.useRegister("helper");var m=this.popStack();this.emptyHash();var g=this.setupHelper(0,s,i),b=this.lastHelper=this.nameLookup("helpers",s,"helper"),y=["(","(helper = ",b," || ",m,")"];this.options.strict||(y[0]="(helper = ",y.push(" != null ? helper : ",this.aliasable("container.hooks.helperMissing"))),this.push(["(",y,g.paramsInit?["),(",g.paramsInit]:[],"),","(typeof helper === ",this.aliasable('"function"')," ? ",this.source.functionCall("helper","call",g.callParams)," : helper))"])},invokePartial:function(s,i,m){var g=[],b=this.setupParams(i,1,g);s&&(i=this.popStack(),delete b.name),m&&(b.indent=JSON.stringify(m)),b.helpers="helpers",b.partials="partials",b.decorators="container.decorators",s?g.unshift(i):g.unshift(this.nameLookup("partials",i,"partial")),this.options.compat&&(b.depths="depths"),b=this.objectLiteral(b),g.push(b),this.push(this.source.functionCall("container.invokePartial","",g))},assignToHash:function(s){var i=this.popStack(),m=void 0,g=void 0,b=void 0;this.trackIds&&(b=this.popStack()),this.stringParams&&(g=this.popStack(),m=this.popStack());var y=this.hash;m&&(y.contexts[s]=m),g&&(y.types[s]=g),b&&(y.ids[s]=b),y.values[s]=i},pushId:function(s,i,m){s==="BlockParam"?this.pushStackLiteral("blockParams["+i[0]+"].path["+i[1]+"]"+(m?" + "+JSON.stringify("."+m):"")):s==="PathExpression"?this.pushString(i):s==="SubExpression"?this.pushStackLiteral("true"):this.pushStackLiteral("null")},compiler:c,compileChildren:function(s,i){for(var m=s.children,g=void 0,b=void 0,y=0,w=m.length;y<w;y++){g=m[y],b=new this.compiler;var v=this.matchExistingProgram(g);if(v==null){this.context.programs.push("");var k=this.context.programs.length;g.index=k,g.name="program"+k,this.context.programs[k]=b.compile(g,i,this.context,!this.precompile),this.context.decorators[k]=b.decorators,this.context.environments[k]=g,this.useDepths=this.useDepths||b.useDepths,this.useBlockParams=this.useBlockParams||b.useBlockParams,g.useDepths=this.useDepths,g.useBlockParams=this.useBlockParams}else g.index=v.index,g.name="program"+v.index,this.useDepths=this.useDepths||v.useDepths,this.useBlockParams=this.useBlockParams||v.useBlockParams}},matchExistingProgram:function(s){for(var i=0,m=this.context.environments.length;i<m;i++){var g=this.context.environments[i];if(g&&g.equals(s))return g}},programExpression:function(s){var i=this.environment.children[s],m=[i.index,"data",i.blockParams];return(this.useBlockParams||this.useDepths)&&m.push("blockParams"),this.useDepths&&m.push("depths"),"container.program("+m.join(", ")+")"},useRegister:function(s){this.registers[s]||(this.registers[s]=!0,this.registers.list.push(s))},push:function(s){return s instanceof u||(s=this.source.wrap(s)),this.inlineStack.push(s),s},pushStackLiteral:function(s){this.push(new u(s))},pushSource:function(s){this.pendingContent&&(this.source.push(this.appendToBuffer(this.source.quotedString(this.pendingContent),this.pendingLocation)),this.pendingContent=void 0),s&&this.source.push(s)},replaceStack:function(s){var i=["("],m=void 0,g=void 0,b=void 0;if(!this.isInline())throw new f.default("replaceStack on non-inline");var y=this.popStack(!0);if(y instanceof u)m=[y.value],i=["(",m],b=!0;else{g=!0;var w=this.incrStack();i=["((",this.push(w)," = ",y,")"],m=this.topStack()}var v=s.call(this,m);b||this.popStack(),g&&this.stackSlot--,this.push(i.concat(v,")"))},incrStack:function(){return this.stackSlot++,this.stackSlot>this.stackVars.length&&this.stackVars.push("stack"+this.stackSlot),this.topStackName()},topStackName:function(){return"stack"+this.stackSlot},flushInline:function(){var s=this.inlineStack;this.inlineStack=[];for(var i=0,m=s.length;i<m;i++){var g=s[i];if(g instanceof u)this.compileStack.push(g);else{var b=this.incrStack();this.pushSource([b," = ",g,";"]),this.compileStack.push(b)}}},isInline:function(){return this.inlineStack.length},popStack:function(s){var i=this.isInline(),m=(i?this.inlineStack:this.compileStack).pop();if(!s&&m instanceof u)return m.value;if(!i){if(!this.stackSlot)throw new f.default("Invalid stack pop");this.stackSlot--}return m},topStack:function(){var s=this.isInline()?this.inlineStack:this.compileStack,i=s[s.length-1];return i instanceof u?i.value:i},contextName:function(s){return this.useDepths&&s?"depths["+s+"]":"depth"+s},quotedString:function(s){return this.source.quotedString(s)},objectLiteral:function(s){return this.source.objectLiteral(s)},aliasable:function(s){var i=this.aliases[s];return i?(i.referenceCount++,i):(i=this.aliases[s]=this.source.wrap(s),i.aliasable=!0,i.referenceCount=1,i)},setupHelper:function(s,i,m){var g=[],b=this.setupHelperArgs(i,s,g,m),y=this.nameLookup("helpers",i,"helper"),w=this.aliasable(this.contextName(0)+" != null ? "+this.contextName(0)+" : (container.nullContext || {})");return{params:g,paramsInit:b,name:y,callParams:[w].concat(g)}},setupParams:function(s,i,m){var g={},b=[],y=[],w=[],v=!m,k=void 0;v&&(m=[]),g.name=this.quotedString(s),g.hash=this.popStack(),this.trackIds&&(g.hashIds=this.popStack()),this.stringParams&&(g.hashTypes=this.popStack(),g.hashContexts=this.popStack());var T=this.popStack(),x=this.popStack();(x||T)&&(g.fn=x||"container.noop",g.inverse=T||"container.noop");for(var I=i;I--;)k=this.popStack(),m[I]=k,this.trackIds&&(w[I]=this.popStack()),this.stringParams&&(y[I]=this.popStack(),b[I]=this.popStack());return v&&(g.args=this.source.generateArray(m)),this.trackIds&&(g.ids=this.source.generateArray(w)),this.stringParams&&(g.types=this.source.generateArray(y),g.contexts=this.source.generateArray(b)),this.options.data&&(g.data="data"),this.useBlockParams&&(g.blockParams="blockParams"),g},setupHelperArgs:function(s,i,m,g){var b=this.setupParams(s,i,m);return b.loc=JSON.stringify(this.source.currentLocation),b=this.objectLiteral(b),g?(this.useRegister("options"),m.push("options"),["options=",b]):m?(m.push(b),""):b}},function(){for(var r="break else new var case finally return void catch for switch while continue function this with default if throw delete in try do instanceof typeof abstract enum int short boolean export interface static byte extends long super char final native synchronized class float package throws const goto private transient debugger implements protected volatile double import public let yield await null true false".split(" "),s=c.RESERVED_WORDS={},i=0,m=r.length;i<m;i++)s[r[i]]=!0}(),c.isValidJavaScriptVariableName=function(r){return!c.RESERVED_WORDS[r]&&/^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(r)};function h(r,s,i,m){var g=s.popStack(),b=0,y=i.length;for(r&&y--;b<y;b++)g=s.nameLookup(g,i[b],m);return r?[s.aliasable("container.strict"),"(",g,", ",s.quotedString(i[b]),", ",JSON.stringify(s.source.currentLocation)," )"]:g}n.default=c,t.exports=n.default})(_t,_t.exports);(function(t,n){n.__esModule=!0;function e(y){return y&&y.__esModule?y:{default:y}}var a=ht.exports,p=e(a),f=st.exports,d=e(f),l=J,o=Q,u=_t.exports,c=e(u),h=ot.exports,r=e(h),s=at.exports,i=e(s),m=p.default.create;function g(){var y=m();return y.compile=function(w,v){return o.compile(w,v,y)},y.precompile=function(w,v){return o.precompile(w,v,y)},y.AST=d.default,y.Compiler=o.Compiler,y.JavaScriptCompiler=c.default,y.Parser=l.parser,y.parse=l.parse,y.parseWithoutProcessing=l.parseWithoutProcessing,y}var b=g();b.create=g,i.default(b),b.Visitor=r.default,b.default=b,n.default=b,t.exports=n.default})(ft,ft.exports);const Kt=`<h1><a href="https://github.com/Ayolland/borksy/compare/v5.14.1...v5.15.0">5.15.0</a> (2022-04-05)</h1>
+<h3>Features</h3>
+<ul>
+<li>update framework + simplify some imports (<a href="https://github.com/Ayolland/borksy/commit/527de69fb12fcd9967533b668885374472bd16c5">527de69</a>)</li>
+</ul>
+<h2><a href="https://github.com/Ayolland/borksy/compare/v5.14.0...v5.14.1">5.14.1</a> (2022-04-04)</h2>
 <h3>Bug Fixes</h3>
 <ul>
 <li>borksy not loading due to bad package update (<a href="https://github.com/Ayolland/borksy/commit/f6513dc38d2deebe8a5055be98959c5947ce662c">f6513dc</a>)</li>
@@ -349,105 +472,8 @@ var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropert
 <ul>
 <li>Initial version</li>
 </ul>
-`,V="borksy",z="5.14.1",$="Borksy Game Hacker: A tool for extending Bitsy games",W={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},Y={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},X="AYolland",K="MIT",J={url:"https://github.com/Ayolland/borksy/issues"},Q="https://ayolland.itch.io/borksy",Z={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},tt={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},nt={"@bitsy/hecks":"^20.1.2",eslint:"^8.12.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.5.0","eslint-plugin-import":"^2.25.2","eslint-plugin-prettier":"^4.0.0","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^27.5.1","jest-dev-server":"^6.0.0","jest-image-snapshot":"^4.5.1",prettier:"^2.6.2",puppeteer:"^13.5.2","rollup-plugin-visualizer":"^5.6.0",sass:"^1.49.11",vite:"2.7.x","vite-plugin-markdown":"^2.0.2","vite-plugin-string":"^1.1.2"};var et={private:!0,name:V,version:z,description:$,scripts:W,repository:Y,author:X,license:K,bugs:J,homepage:Q,jest:Z,release:tt,devDependencies:nt};const rt=`<p>Borksy is a hacking tool to be used in conjunction with <a href="https://ledoux.itch.io/bitsy">Bitsy Game Maker</a>! Use it to customize your games and add hacks without needing to manually cut-and-paste html.</p>
-<p>If you're not sure how to use this tool, check out the 'How To Use Borksy' section. If you're having issues, check the 'Troubleshooting/FAQs' section. If you're not familiar with how Bitsy can be extended, try exploring <a href="https://github.com/seleb/bitsy-hacks/">the Bitsy hacks repo</a>.</p>
-<p>Borksy Features:</p>
-<ul>
-<li>Multiple Bitsy version templates</li>
-<li>Preloaded Hacks Menu</li>
-<li>Editable hack options</li>
-<li>Customize HTML/CSS</li>
-<li>Customize page title / filename</li>
-<li>Field for extra JS / hacks</li>
-<li>Saves work to <code>localStorage</code> for persistence</li>
-<li>Updated default Bitsy font with more consistent unicode support</li>
-<li>Party Mode!</li>
-</ul>
-<p>Report any bugs you find <a href="https://github.com/Ayolland/borksy/issues">on GitHub</a>, or reach out to <a href="https://twitter.com/SeanSLeBlanc">Sean</a>!</p>
-`,at=`<ul>
-<li>If you're still using the exit-from-dialog or end-from-dialog hacks, make sure to check out and new the new locked exits functionality in Bitsy 7.0!</li>
-<li>You can access the Bitsy game variables from JavaScript using <code>window.scriptInterpreter.GetVariable(variableName)</code> and <code>window.scriptInterpreter.SetVariable(variableName)</code></li>
-<li>Using CSS to add a background image to your game can add a lot of polish for mimimal effort, especially on mobile.</li>
-<li>Borksy changes the canvas rendering of Bitsy game to display crisp pixel-edges. This can be commented out in the CSS if your prefer the default anti-aliasing.</li>
-<li>Remember, you can add hacks that aren't included in Borksy using the 'Additional JS' field.</li>
-</ul>
-`,it=`<p>In order to use Borksy, you need to already have a Bitsy game you wish to add functionality to.</p>
-<p>Borksy accepts the gamedata from Bitsy and combines that with a Bitsy template to create a modified HTML file with your Bitsy game as well as any hacks or modifications you chose to include. You'll need to copy the gamedata from the Bitsy editor and paste it into Borksy. The file Borksy saves is the file you will release as your game.</p>
-<p>Hacks are not guaranteed to work with each other, and particular hacks are not guaranteed to work with particular templates. Make sure you test the particular load-out of hacks you plan to use before developing with them.</p>
-<p>While Borksy uses your browser data to save your work, it is a good idea to save any modifications (hackOptions, additional JS, HTML modifications) somewhere on your computer separately, as there is no way for Borksy to load these from a saved Borksy game.</p>
-`,ot=`<p>If you haven't already, check out some of the other tools created to enhance Bitsy!</p>
-<ul>
-<li><a href="https://github.com/seleb/bitsy-hacks/" target="_blank" rel="noopener">Bitsy Hack Repo</a> - Almost All the Bitsy hacks</li>
-<li><a href="https://aloelazoe.itch.io/bitsy-3d" target="_blank" rel="noopener">Bitsy 3D</a> - Bitsy but in 3D!!!</li>
-<li><a href="https://vonbednar.itch.io/bitsy-x2" target="_blank" rel="noopener">Bitsy HD</a> - Bitsy but with 16x16 drawings</li>
-<li><a href="https://ruin.itch.io/image-to-bitsy" target="_blank" rel="noopener">Image To Bitsy</a> - Convert images into rooms</li>
-<li><a href="https://janosc.itch.io/rgbitsy" target="_blank" rel="noopener">RGBitsy</a> - Convert COLOR images to rooms!</li>
-<li><a href="https://janosc.itch.io/rgbsprite" target="_blank" rel="noopener">RGBsprite</a> - Convert color images to sprites/items/avatars!</li>
-<li><a href="https://tinybird.info/image-to-bitsy-hd/" target="_blank" rel="noopener">Image To Bitsy HD</a> - Convert images into rooms... in HD!</li>
-<li><a href="https://seansleblanc.itch.io/fontsy" target="_blank" rel="noopener">Fontsy</a> - Bitsy font editor</li>
-<li><a href="https://tommakesstuff.itch.io/spritesy" target="_blank" rel="noopener">Spritesy</a> - Tool for multiframe animations</li>
-<li><a href="https://voec.github.io/witchery/" target="_blank" rel="noopener">Overworld Witchery</a> - Create maps linking multiple rooms (May not work w/ Bitsy 6.0+ ?)</li>
-<li><a href="https://11808s8.itch.io/flipsy" target="_blank" rel="noopener">Flipsy</a> - Flip your room</li>
-<li><a href="https://brandonmakesthings.itch.io/shiftsy" target="_blank" rel="noopener">Shiftsy</a> - Shift your room a little</li>
-<li><a href="https://candle.itch.io/bitsy-audio" target="_blank" rel="noopener">Bitsy Audio</a> - Quick and Easy background audio</li>
-<li><a href="https://erikaverkaaik.itch.io/bitsy-museum-hack" target="_blank" rel="noopener">Bitsy Museum Hack</a> - Link multiple Bitsy games together</li>
-<li><a href="https://zenzoa.itch.io/palettsy" target="_blank" rel="noopener">Palettesy</a> - Bitsy Palette generator</li>
-<li><a href="https://seansleblanc.itch.io/bitsy-merge" target="_blank" rel="noopener">Bitsy Merge</a> - Combine multiple bitsy files together.</li>
-<li><a href="https://aloelazoe.itch.io/bitsy-savior" target="_blank" rel="noopener">Bitsy Savior</a> - Save your Bitsy game to a hacked file w/o copy-pasting!</li>
-</ul>
-<p>Check out <a href="https://itch.io/c/381992/that-good-good-bitsy-tools" target="_blank" rel="noopener">this list of tools/tips on itch</a> for even more!</p>
-`,st=`<ul>
-<li>
-<blockquote>
-<p>After I add hacks using Borksy, when I load my html file back into Bitsy, all my hacks are gone.</p>
-</blockquote>
-<p>Yes. Bitsy can't read hacks added through Borksy. So you need to edit your game in the Bitsy editor, and then modify it with Borksy. It is wise to keep a copy of your Bitsy game saved without any Borky modifications.</p>
-</li>
-<li>
-<blockquote>
-<p>My Borksy game won't download?</p>
-</blockquote>
-<p>Some game files can be too big for Borksy on certain browsers. If your game reaches a certain size, you may have to add hacks manually using a text-editor instead of using Borksy.</p>
-</li>
-<li>
-<blockquote>
-<p>What happened to X hack which used to be included in Borksy?</p>
-</blockquote>
-<p>Borksy simply pulls data from <a href="https://github.com/seleb/bitsy-hacks">the hacks repo</a>. If a hack you used is missing, try checking why it was removed there, or report an issue if you believe it's missing due to a bug.</p>
-</li>
-<li>
-<blockquote>
-<p>After using Borksy, the dialogue in my game isn't showing up, and instead there's just an empty dialogue box.</p>
-</blockquote>
-<p>If you're using a custom font, make sure that the font data is included when you paste your game data into Borksy. In Bitsy, the font data is hidden by default, even if you're using a custom font. In order for it be able to be copied, you'll need to click the 'font data' button on the button of the 'game data' window in Bitsy before copy your game data.</p>
-</li>
-<li>
-<blockquote>
-<p>My Bitsy HD game is not working after I use Borksy.</p>
-</blockquote>
-<p>Make sure you've selected a 'Borksy HD' option from the 'Bitsy Version' menu before you save out your Bitsy HD game.</p>
-</li>
-<li>
-<blockquote>
-<p>I'm using X hack and it's not working.</p>
-</blockquote>
-<p>Unfortunately, most hacks will only work with the latest Bitsy version. It's possible for there to be bugs or issues with the hack, or with Borksy, or even with Bitsy itself. Make sure and test the hacks and version of Bitsy you want to use for your game before you get too far into development.</p>
-</li>
-<li>
-<blockquote>
-<p>I don't see the hack I need in Borksy.</p>
-</blockquote>
-<p>You can add custom hacks or hacks from sources other than the hacks repo into your game using Borksy. You'll need to paste the hack into the 'Additional JS' field. This isn't too tricky, but you'll have to make sure you're pasting everything you need in.</p>
-</li>
-<li>
-<blockquote>
-<p>I need further help getting my game to work.</p>
-</blockquote>
-<p>The <a href="discordapp.com/invite/9rAjhtr">Bitsy discord</a> is a great place to get help with Bitsy or Borksy.</p>
-</li>
-</ul>
-`;var ct=`<!-- GAME CANVAS -->
-<canvas id='game'></canvas>`,lt=`[
+`,Nr="borksy",Dr="5.15.0",Br="Borksy Game Hacker: A tool for extending Bitsy games",Cr={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},Rr={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},qr="AYolland",Pr="MIT",Lr={url:"https://github.com/Ayolland/borksy/issues"},Mr="https://ayolland.itch.io/borksy",Hr={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},Gr={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},Ur={"@bitsy/hecks":"^20.1.2",eslint:"^8.12.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.5.0","eslint-plugin-import":"^2.25.2","eslint-plugin-prettier":"^4.0.0","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^27.5.1","jest-dev-server":"^6.0.0","jest-image-snapshot":"^4.5.1",prettier:"^2.6.2",puppeteer:"^13.5.2","rollup-plugin-visualizer":"^5.6.0",sass:"^1.49.11",vite:"^2.9.1","vite-plugin-markdown":"^2.0.2","vite-plugin-string":"^1.1.2"};var Vr={private:!0,name:Nr,version:Dr,description:Br,scripts:Cr,repository:Rr,author:qr,license:Pr,bugs:Lr,homepage:Mr,jest:Hr,release:Gr,devDependencies:Ur};const zr="modulepreload",Jt={},$r="./",j=function(n,e){return!e||e.length===0?n():Promise.all(e.map(a=>{if(a=`${$r}${a}`,a in Jt)return;Jt[a]=!0;const p=a.endsWith(".css"),f=p?'[rel="stylesheet"]':"";if(document.querySelector(`link[href="${a}"]${f}`))return;const d=document.createElement("link");if(d.rel=p?"stylesheet":zr,p||(d.as="script",d.crossOrigin=""),d.href=a,document.head.appendChild(d),p)return new Promise((l,o)=>{d.addEventListener("load",l),d.addEventListener("error",()=>o(new Error(`Unable to preload CSS for ${a}`)))})})).then(()=>n())};var H=[{data:()=>j(()=>import("./BitsyHD.5.1.224b5bed.js"),[]),bitsyVersion:"5.1",isHd:!0,description:"Bitsy HD (Bitsy 5.1)"},{data:()=>j(()=>import("./Bitsy.5.5.b578c1f1.js"),[]),bitsyVersion:"5.5",description:"Bitsy 5.5"},{data:()=>j(()=>import("./Bitsy.6.0.d01fe5ea.js"),[]),bitsyVersion:"6.0",description:"Bitsy 6.0"},{data:()=>j(()=>import("./Bitsy.6.3.f1de51df.js"),[]),bitsyVersion:"6.3",description:"Bitsy 6.3"},{data:()=>j(()=>import("./Bitsy.6.4.4364f87f.js"),[]),bitsyVersion:"6.4",description:"Bitsy 6.4"},{data:()=>j(()=>import("./Bitsy.6.5.bd486411.js"),[]),bitsyVersion:"6.5",description:"Bitsy 6.5"},{data:()=>j(()=>import("./Bitsy.7.0.005afbac.js"),[]),bitsyVersion:"7.0",description:"Bitsy 7.0"},{data:()=>j(()=>import("./Bitsy.7.2.e7deb823.js"),[]),bitsyVersion:"7.2",description:"Bitsy 7.2"},{data:()=>j(()=>import("./Bitsy.7.8.a8e1ddd6.js"),[]),bitsyVersion:"7.8",description:"Bitsy 7.8"},{data:()=>j(()=>import("./Bitsy.7.10.1cdc75c6.js"),[]),bitsyVersion:"7.10",description:"Bitsy 7.10"},{data:()=>j(()=>import("./BitsyHD.7.11.f9a8cfdc.js"),[]),bitsyVersion:"7.11",isHd:!0,description:"Bitsy HD (Bitsy 7.11)"},{data:()=>j(()=>import("./Bitsy.7.11.c7cee104.js"),[]),bitsyVersion:"7.11",description:"Bitsy 7.11"},{data:()=>j(()=>import("./BitsyHD.7.12.06a63c86.js"),[]),bitsyVersion:"7.12",isHd:!0,description:"Bitsy HD (Bitsy 7.12)"},{data:()=>j(()=>import("./Bitsy.7.12.7a7fbf49.js"),[]),bitsyVersion:"7.12",description:"Bitsy 7.12",isDefault:!0}].map(t=>Vt(lt({},t),{id:`Bitsy${t.isHd?"HD":""}${t.bitsyVersion.replace(/\./g,"")}`}));const $=Object.fromEntries(Object.entries({"../about/about.md":In,"../about/ayos-special-tips.md":An,"../about/how-to-use-borksy.md":Nn,"../about/other-tools.md":Cn,"../about/troubleshooting-faqs.md":Pn}).map(([t,n])=>[t.match(/.*\/(.*?)\.md/)[1],n.html])),ln=Object.fromEntries(Object.entries({"../defaults/body.txt":`<!-- GAME CANVAS -->
+<canvas id='game'></canvas>`,"../defaults/fontdata.txt":`[
 		/* num: 0 */
 		0,0,0,0,0,0,
 		0,0,0,0,0,0,
@@ -2760,7 +2786,7 @@ var R=Object.defineProperty,C=Object.defineProperties;var L=Object.getOwnPropert
 		0,1,0,0,1,0,
 		0,0,0,0,0,0,
 		0,0,0,0,0,0
-]`,ut=`BORK BORK BORK
+]`,"../defaults/gamedata.txt":`BORK BORK BORK
 
 # BITSY VERSION 7.12
 
@@ -2878,7 +2904,7 @@ NAME key dialog
 VAR a
 42
 
-`,I=`BORK BORK HD BORK
+`,"../defaults/gamedataHD.txt":`BORK BORK HD BORK
 
 # BITSY VERSION 5.1
 
@@ -3047,7 +3073,7 @@ DLG SPR_1
 Borksy: I'm in HD!! (If by HD you mean 16x16 2-bit graphics!)
 
 VAR a
-42`,dt=`html {
+42`,"../defaults/style.txt":`html {
 	margin: 0;
 	padding: 0;
 }
@@ -3073,7 +3099,7 @@ body {
 	image-rendering: -moz-crisp-edges; /* FF 6.0+ */
 	image-rendering: pixelated; /* Chrome, Safari */
 }
-`,pt=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",body:ct,fontdata:lt,gamedata:ut,gamedataHD:I,style:dt}),ft=`/**
+`}).map(([t,n])=>[t.match(/.*\/(.*?)\.txt/)[1],n])),Wr=Object.values({"../hacks/avatar-by-room.txt":`/**
 \u{1F465}
 @file avatar by room
 @summary change the avatar in certain rooms
@@ -3398,7 +3424,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.avatar_by_room = this.hacks.avatar_by_room || {}, window);
-`,ht=`/**
+`,"../hacks/backdrops.txt":`/**
 \u{1F5BC}
 @file backdrops
 @summary makes the game have a backdrop
@@ -3806,7 +3832,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.backdrops = this.hacks.backdrops || {}, window);
-`,gt=`/**
+`,"../hacks/basic-sfx.txt":`/**
 \u{1F508}
 @file basic sfx
 @summary "walk" and "talk" sound effect support
@@ -4140,7 +4166,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.basic_sfx = this.hacks.basic_sfx || {}, window);
-`,mt=`/**
+`,"../hacks/bitsymuse.txt":`/**
 \u{1F60C}
 @file bitsymuse
 @summary A variety of Bitsy sound and music handlers
@@ -4663,7 +4689,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.bitsymuse = this.hacks.bitsymuse || {}, window);
-`,yt=`/**
+`,"../hacks/canvas-replacement.txt":`/**
 \u{1F634}
 @file canvas replacement
 @summary WebGLazy bitsy integration (this one's mostly just for me)
@@ -4956,7 +4982,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.canvas_replacement = this.hacks.canvas_replacement || {}, window);
-`,bt=`/**
+`,"../hacks/character-portraits-animated.txt":`/**
 \u{1F640}
 @file character portraits animated
 @summary high quality anime gifs
@@ -6274,7 +6300,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.character_portraits_animated = this.hacks.character_portraits_animated || {}, window);
-`,vt=`/**
+`,"../hacks/character-portraits.txt":`/**
 \u{1F63D}
 @file character portraits
 @summary high quality anime jpegs (or pngs i guess)
@@ -6649,7 +6675,7 @@ exports.state = state;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.character_portraits = this.hacks.character_portraits || {}, window);
-`,wt=`/**
+`,"../hacks/close-on-ending.txt":`/**
 \u26D4\uFE0F
 @file close on ending
 @summary Prevents from playing past an ending
@@ -6900,7 +6926,7 @@ after('onExitDialog', function () {
 });
 
 })(window);
-`,kt=`/**
+`,"../hacks/corrupt.txt":`/**
 \u27BF
 @file corrupt
 @summary corrupts gamedata at runtime
@@ -7454,7 +7480,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.corrupt = this.hacks.corrupt || {}, window);
-`,xt=`/**
+`,"../hacks/custom-exit-effects.txt":`/**
 \u{1F39E}
 @file custom-exit-effects
 @summary make custom exit transition effects
@@ -7757,7 +7783,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["custom-exit-effects"] = this.hacks["custom-exit-effects"] || {}, window);
-`,St=`/**
+`,"../hacks/custom-keyhandlers.txt":`/**
 \u2328
 @file custom-keyhandlers
 @summary run custom code on key inputs
@@ -8049,7 +8075,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["custom-keyhandlers"] = this.hacks["custom-keyhandlers"] || {}, window);
-`,jt=`/**
+`,"../hacks/custom-text-effect.txt":`/**
 \u{1F170}
 @file custom text effect
 @summary make {custom}text effects{custom}
@@ -8517,7 +8543,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.custom_text_effect = this.hacks.custom_text_effect || {}, window);
-`,Tt=`/**
+`,"../hacks/dialog-audio-vocal-synth.txt":`/**
 \u{1F3BA}
 @file dialog audio vocal synth
 @summary animal crossing-style audio powered by the pink trombone vocal synth
@@ -9913,7 +9939,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.dialog_audio_vocal_synth = this.hacks.dialog_audio_vocal_synth || {}, window);
-`,It=`/**
+`,"../hacks/dialog-audio.txt":`/**
 \u{1F4AC}
 @file dialog audio
 @summary animal crossing-style audio
@@ -10185,7 +10211,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.dialog_audio = this.hacks.dialog_audio || {}, window);
-`,Ft=`/**
+`,"../hacks/dialog-box-transition.txt":`/**
 \u{1F501}
 @file dialog box transition
 @summary adds an easing transition animation to display the dialog box text
@@ -10467,7 +10493,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.dialog_box_transition = this.hacks.dialog_box_transition || {}, window);
-`,At=`/**
+`,"../hacks/dialog-choices.txt":`/**
 \u{1F500}
 @file dialog choices
 @summary dialog choices
@@ -11207,7 +11233,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.dialog_choices = this.hacks.dialog_choices || {}, window);
-`,Et=`/**
+`,"../hacks/dialog-jump.txt":`/**
 \u{1F680}
 @file dialog jump
 @summary jump from one dialog entry to another
@@ -11568,7 +11594,7 @@ addDualDialogTag('jump', function (environment, parameters) {
 });
 
 })(window);
-`,Ot=`/**
+`,"../hacks/dialog-pause.txt":`/**
 \u{1F4AC}
 @file dialog pause
 @summary add pauses in between printing text
@@ -11849,7 +11875,7 @@ addDialogTag('pause', function (environment, parameters, onReturn) {
 });
 
 })(window);
-`,Nt=`/**
+`,"../hacks/dialog-prompt.txt":`/**
 \u2328
 @file dialog prompt
 @summary prompt the user for text input in dialog
@@ -12333,7 +12359,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.dialog_prompt = this.hacks.dialog_prompt || {}, window);
-`,Dt=`/**
+`,"../hacks/direction-in-dialog.txt":`/**
 \u{1F51D}
 @file direction in dialog
 @summary provides a variable with player direction
@@ -12581,7 +12607,7 @@ before('startDialog', function () {
 });
 
 })(window);
-`,Bt=`/**
+`,"../hacks/directional-avatar.txt":`/**
 \u2194
 @file directional avatar
 @summary flips the player's sprite based on directional movement
@@ -13055,7 +13081,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.directional_avatar = this.hacks.directional_avatar || {}, window);
-`,_t=`/**
+`,"../hacks/dynamic-background.txt":`/**
 \u{1F5BC}
 @file dynamic background
 @summary HTML background matching bitsy background
@@ -13350,7 +13376,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.dynamic_background = this.hacks.dynamic_background || {}, window);
-`,qt=`/**
+`,"../hacks/edit-dialog-from-dialog.txt":`/**
 \u{1F4DD}
 @file edit dialog from dialog
 @summary edit dialog from dialog (yes really)
@@ -13713,7 +13739,7 @@ function editDialog(environment, parameters) {
 addDeferredDialogTag('dialog', editDialog);
 
 })(window);
-`,Rt=`/**
+`,"../hacks/edit-image-from-dialog.txt":`/**
 \u{1F58C}
 @file edit image from dialog
 @summary edit sprites, items, and tiles from dialog
@@ -14288,7 +14314,7 @@ addDualDialogTag('image', editImage);
 addDualDialogTag('imagePal', editPalette);
 
 })(window);
-`,Ct=`/**
+`,"../hacks/edit-player-from-dialog.txt":`/**
 \u{1F46F}\u200D\u2642\uFE0F
 @file edit player from dialog
 @summary change which sprite is controlled by the player
@@ -14665,7 +14691,7 @@ addDualDialogTag('player', function (environment, parameters) {
 });
 
 })(window);
-`,Lt=`/**
+`,"../hacks/edit-room-from-dialog.txt":`/**
 \u{1F3E0}
 @file edit room from dialog
 @summary modify the content of a room from dialog
@@ -15738,7 +15764,7 @@ function copyBoxAt(mapId, targetId, x1, y1, x2, y2, copyRoomId, pasteXPos, paste
 }
 
 })(window);
-`,Pt=`/**
+`,"../hacks/end-from-dialog.txt":`/**
 \u{1F51A}
 @file end-from-dialog
 @summary trigger an ending from dialog, including narration text
@@ -16114,7 +16140,7 @@ addDualDialogTag('end', function (environment, parameters) {
 });
 
 })(window);
-`,Mt=`/**
+`,"../hacks/exit-from-dialog.txt":`/**
 \u{1F6AA}
 @file exit-from-dialog
 @summary exit to another room from dialog, including conditionals
@@ -16548,7 +16574,7 @@ function getExitParams(parameters) {
 // End of (exit) dialog function mod
 
 })(window);
-`,Ht=`/**
+`,"../hacks/external-game-data.txt":`/**
 \u{1F6F0}
 @file external-game-data
 @summary separate Bitsy game data from your (modded) HTML for easier development
@@ -16875,7 +16901,7 @@ function dos2unix(text) {
 }
 
 })(window);
-`,Gt=`/**
+`,"../hacks/favicon-from-sprite.txt":`/**
 \u{1F310}
 @file favicon-from-sprite
 @summary generate a browser favicon (tab icon) from a Bitsy sprite, including animation!
@@ -17246,7 +17272,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["favicon-from-sprite"] = this.hacks["favicon-from-sprite"] || {}, window);
-`,Ut=`/**
+`,"../hacks/follower.txt":`/**
 \u{1F495}
 @file follower
 @summary make sprites follow the player
@@ -17843,7 +17869,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.follower = this.hacks.follower || {}, window);
-`,Vt=`/**
+`,"../hacks/gamepad-input.txt":`/**
 \u{1F3AE}
 @file gamepad input
 @summary HTML5 gamepad support
@@ -18438,7 +18464,7 @@ after('update', function () {
 });
 
 })(window);
-`,zt=`/**
+`,"../hacks/gravity.txt":`/**
 \u{1F342}
 @file gravity
 @summary Pseudo-platforming/gravity/physics
@@ -19413,7 +19439,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.gravity = this.hacks.gravity || {}, window);
-`,$t=`/**
+`,"../hacks/itsy-bitsy.txt":`/**
 \u{1F577}
 @file itsy-bitsy
 @summary for when bitsy's not small enough
@@ -19683,7 +19709,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["itsy-bitsy"] = this.hacks["itsy-bitsy"] || {}, window);
-`,Wt=`/**
+`,"../hacks/javascript-dialog.txt":`/**
 \u2615
 @file javascript dialog
 @summary execute arbitrary javascript from dialog
@@ -20054,7 +20080,7 @@ function executeJs(environment, parameters) {
 addDualDialogTag('js', executeJs);
 
 })(window);
-`,Yt=`/**
+`,"../hacks/logic-operators-extended.txt":`/**
 \u{1F500}
 @file logic-operators-extended
 @summary adds conditional logic operators
@@ -20322,7 +20348,7 @@ inject(
 );
 
 })(window);
-`,Xt=`/**
+`,"../hacks/long-dialog.txt":`/**
 \u{1F4DC}
 @file long dialog
 @summary put more words onscreen
@@ -20760,7 +20786,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.long_dialog = this.hacks.long_dialog || {}, window);
-`,Kt=`/**
+`,"../hacks/multi-sprite-avatar.txt":`/**
 \u{1F468}\u200D\u{1F468}\u200D\u{1F467}\u200D\u{1F467}
 @file multi-sprite avatar
 @summary make the player big
@@ -21180,7 +21206,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["multi-sprite_avatar"] = this.hacks["multi-sprite_avatar"] || {}, window);
-`,Jt=`/**
+`,"../hacks/noclip.txt":`/**
 \u{1F4CE}
 @file noclip
 @summary walk through wall tiles, sprites, items, exits, and endings
@@ -21539,7 +21565,7 @@ hackOptions.ondown = {
 };
 
 })(window);
-`,Qt=`/**
+`,"../hacks/online.txt":`/**
 \u{1F504}
 @file online
 @summary multiplayer bitsy
@@ -22447,7 +22473,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.online = this.hacks.online || {}, window);
-`,Zt=`/**
+`,"../hacks/opaque-tiles.txt":`/**
 \u2B1B
 @file opaque tiles
 @summary tiles which hide the player
@@ -22717,7 +22743,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.opaque_tiles = this.hacks.opaque_tiles || {}, window);
-`,tn=`/**
+`,"../hacks/paragraph-break.txt":`/**
 \u{1F4C3}
 @file paragraph-break
 @summary Adds paragraph breaks to the dialogue parser
@@ -23023,7 +23049,7 @@ addDialogTag('p', function (environment, parameters, onReturn) {
 // End of (p) paragraph break mod
 
 })(window);
-`,nn=`/**
+`,"../hacks/permanent-items.txt":`/**
 \u23F3
 @file permanent items
 @summary prevent some items from being picked up
@@ -23310,7 +23336,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.permanent_items = this.hacks.permanent_items || {}, window);
-`,en=`/**
+`,"../hacks/push-sprites.txt":`/**
 \u27A1
 @file push sprites
 @summary sokoban-style sprite pushing
@@ -24200,7 +24226,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["push-sprites"] = this.hacks["push-sprites"] || {}, window);
-`,rn=`/**
+`,"../hacks/replace-drawing.txt":`/**
 \u{1F3AD}
 @file replace drawing
 @summary add name-tags to replace drawings when the game is loading
@@ -24479,7 +24505,7 @@ after('parseWorld', function () {
 });
 
 })(window);
-`,an=`/**
+`,"../hacks/save.txt":`/**
 \u{1F4BE}
 @file save
 @summary save/load your game
@@ -25041,7 +25067,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.save = this.hacks.save || {}, window);
-`,on=`/**
+`,"../hacks/smooth-moves.txt":`/**
 \u{1F3C3}
 @file smooth moves
 @summary ease the player's movement
@@ -25350,7 +25376,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.smooth_moves = this.hacks.smooth_moves || {}, window);
-`,sn=`/**
+`,"../hacks/solid-items.txt":`/**
 \u{1F6D1}
 @file solid items
 @summary treat some items like sprites that can be placed multiple times
@@ -25643,7 +25669,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.solid_items = this.hacks.solid_items || {}, window);
-`,cn=`/**
+`,"../hacks/sprite-effects.txt":`/**
 \u{1F483}
 @file sprite effects
 @summary like text effects, but for sprites
@@ -26178,7 +26204,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.sprite_effects = this.hacks.sprite_effects || {}, window);
-`,ln=`/**
+`,"../hacks/stopwatch.txt":`/**
 \u23F1\uFE0F
 @file stopwatch
 @summary time player actions
@@ -26648,7 +26674,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.stopwatch = this.hacks.stopwatch || {}, window);
-`,un=`/**
+`,"../hacks/text-to-speech.txt":`/**
 \u{1F5E3}
 @file text-to-speech
 @summary text-to-speech for bitsy dialog
@@ -27137,7 +27163,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["text-to-speech"] = this.hacks["text-to-speech"] || {}, window);
-`,dn=`/**
+`,"../hacks/tracery-processing.txt":`/**
 \u{1F3F0}
 @file tracery processing
 @summary process all dialog text with a tracery grammar
@@ -28258,7 +28284,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.tracery_processing = this.hacks.tracery_processing || {}, window);
-`,pn=`/**
+`,"../hacks/transitions.txt":`/**
 \u{1F39E}
 @file transitions
 @summary customizable WebGL transitions
@@ -28679,7 +28705,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.transitions = this.hacks.transitions || {}, window);
-`,fn=`/**
+`,"../hacks/transparent-background.txt":`/**
 \u{1F533}
 @file transparent background
 @summary makes the game have a transparent background
@@ -28991,7 +29017,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.transparent_background = this.hacks.transparent_background || {}, window);
-`,hn=`/**
+`,"../hacks/transparent-dialog.txt":`/**
 \u{1F441}\uFE0F\u200D\u{1F5E8}\uFE0F
 @file transparent dialog
 @summary makes the dialog box have a transparent background
@@ -29221,7 +29247,7 @@ after('renderClearInstruction', function (bufferId, buffer, paletteIndex) {
 });
 
 })(window);
-`,gn=`/**
+`,"../hacks/transparent-sprites.txt":`/**
 \u{1F3C1}
 @file transparent sprites
 @summary makes all sprites have transparent backgrounds
@@ -29486,7 +29512,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.transparent_sprites = this.hacks.transparent_sprites || {}, window);
-`,mn=`/**
+`,"../hacks/twine-bitsy-comms.txt":`/**
 \u{1F4B1}
 @file twine bitsy comms
 @summary interprocess communication for twine and bitsy
@@ -29957,7 +29983,7 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks["twine-bitsy-comms"] = this.hacks["twine-bitsy-comms"] || {}, window);
-`,yn=`/**
+`,"../hacks/unique-items.txt":`/**
 \u2744
 @file unique items
 @summary items which, when picked up, remove all other instances of that item from the game
@@ -30208,9 +30234,9 @@ exports.hackOptions = hackOptions;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.unique_items = this.hacks.unique_items || {}, window);
-`,bn=[ft,ht,gt,mt,yt,bt,vt,wt,kt,xt,St,jt,Tt,It,Ft,At,Et,Ot,Nt,Dt,Bt,_t,qt,Rt,Ct,Lt,Pt,Mt,Ht,Gt,Ut,Vt,zt,$t,Wt,Yt,Xt,Kt,Jt,Qt,Zt,tn,nn,en,rn,an,on,sn,cn,ln,un,dn,pn,fn,hn,gn,mn,yn];const vn="modulepreload",F={},wn="./",c=function(n,e){return!e||e.length===0?n():Promise.all(e.map(a=>{if(a=`${wn}${a}`,a in F)return;F[a]=!0;const r=a.endsWith(".css"),i=r?'[rel="stylesheet"]':"";if(document.querySelector(`link[href="${a}"]${i}`))return;const o=document.createElement("link");if(o.rel=r?"stylesheet":vn,r||(o.as="script",o.crossOrigin=""),o.href=a,document.head.appendChild(o),r)return new Promise((s,l)=>{o.addEventListener("load",s),o.addEventListener("error",l)})})).then(()=>n())};var f=[{data:()=>c(()=>import("./BitsyHD.5.1.224b5bed.js"),[]),bitsyVersion:"5.1",isHd:!0,description:"Bitsy HD (Bitsy 5.1)"},{data:()=>c(()=>import("./Bitsy.5.5.b578c1f1.js"),[]),bitsyVersion:"5.5",description:"Bitsy 5.5"},{data:()=>c(()=>import("./Bitsy.6.0.d01fe5ea.js"),[]),bitsyVersion:"6.0",description:"Bitsy 6.0"},{data:()=>c(()=>import("./Bitsy.6.3.f1de51df.js"),[]),bitsyVersion:"6.3",description:"Bitsy 6.3"},{data:()=>c(()=>import("./Bitsy.6.4.4364f87f.js"),[]),bitsyVersion:"6.4",description:"Bitsy 6.4"},{data:()=>c(()=>import("./Bitsy.6.5.bd486411.js"),[]),bitsyVersion:"6.5",description:"Bitsy 6.5"},{data:()=>c(()=>import("./Bitsy.7.0.005afbac.js"),[]),bitsyVersion:"7.0",description:"Bitsy 7.0"},{data:()=>c(()=>import("./Bitsy.7.2.e7deb823.js"),[]),bitsyVersion:"7.2",description:"Bitsy 7.2"},{data:()=>c(()=>import("./Bitsy.7.8.a8e1ddd6.js"),[]),bitsyVersion:"7.8",description:"Bitsy 7.8"},{data:()=>c(()=>import("./Bitsy.7.10.1cdc75c6.js"),[]),bitsyVersion:"7.10",description:"Bitsy 7.10"},{data:()=>c(()=>import("./BitsyHD.7.11.f9a8cfdc.js"),[]),bitsyVersion:"7.11",isHd:!0,description:"Bitsy HD (Bitsy 7.11)"},{data:()=>c(()=>import("./Bitsy.7.11.c7cee104.js"),[]),bitsyVersion:"7.11",description:"Bitsy 7.11"},{data:()=>c(()=>import("./BitsyHD.7.12.06a63c86.js"),[]),bitsyVersion:"7.12",isHd:!0,description:"Bitsy HD (Bitsy 7.12)"},{data:()=>c(()=>import("./Bitsy.7.12.7a7fbf49.js"),[]),bitsyVersion:"7.12",description:"Bitsy 7.12",isDefault:!0}].map(t=>j(m({},t),{id:`Bitsy${t.isHd?"HD":""}${t.bitsyVersion.replace(/\./g,"")}`}));const b=bn.map(t=>{const[n]=t.match(/^(\/\*\*[\S\s]*?\*\/)$/gm),e=n.split(`
-`).slice(1,-1),a=e[0],r=e.find(d=>d.startsWith("@file")).split("@file ")[1],i=e.find(d=>d.startsWith("@author")).split("@author ")[1],o=e.find(d=>d.startsWith("@summary")).split("@summary ")[1],s=e.slice(e.findIndex(d=>d.startsWith("@description"))+1).join(`
-`).replace(/Copy-paste .* after the bitsy source\.?/g,"Include hack").replace(/hackOptions below/g,"hackOptions above"),[,l]=t.match(/var hackOptions.*= {\n+([^]+?)\n+};$/m)||[];return{metadata:{emoji:a,id:r.replace(/\s/g,"-"),name:r,author:i,summary:o,description:s},options:l,data:t}});function kn(){const t=document.querySelector("select#template");t.innerHTML="";for(let n=f.length-1;n>=0;n--){const{id:e,description:a}=f[n],r=n===f.length-1;t.innerHTML+=`<option value="${e}" ${r?"data-default-option":""}>${a}${r?" (latest)":""}</option>`}}function xn(t,n){console.log(n),G.exports.saveAs(new Blob([n],{type:"text/html;charset=utf-8"}),t),console.log(`File '${t}' downloaded`)}function A(t,n=10){const e=t.toString(),a=e.length>n?"...":"";return e.substring(0,n)+a}function Sn(t){return t.toLowerCase().replace(/-(.)/g,(n,e)=>e.toUpperCase())}function jn(t){return t.replace(/[^\w\s]/gi,"")}function Tn(t,n){const e=new RegExp(n,"g");t.value=t.value.replace(e,"")}function h(t,n){t.dataset.cleanRegex&&Tn(t,t.dataset.cleanRegex);let e;t.type==="checkbox"?e=t.checked:n===void 0?e=t.value:(e=n,t.value=n);const{name:a}=t;localStorage.setItem(a,e),console.log(`Key: '${a}' saved to localStorage: ${A(e)}`)}function v(t){const{name:n}=t,e=localStorage.getItem(n);if(e===null){console.log(` Attempted to get key: ${n} from localStorage, but nothing was found.`);return}if(t.type==="checkbox"){const a=e==="true";t.checked=a}else t.value=e;console.log(` Got key: ${n} from localStorage: ${A(e)}`)}function w(t){const{value:n}=t.currentTarget,e=f.find(a=>a.id===n);if(!e){document.querySelector("#template").value=f.find(a=>a.isDefault).id,w(t);return}e.isHd?document.querySelector("#mascot").classList.add("borksyHD"):document.querySelector("#mascot").classList.remove("borksyHD"),e.bitsyVersion===y.bitsyVersion?(document.querySelector("#legacy-version-warning").style.display="none",document.querySelector('[data-header="Bitsy Version"] > summary').textContent="Bitsy Version"):(document.querySelector("#legacy-version-warning").style.display=null,document.querySelector('[data-header="Bitsy Version"] > summary').textContent="\u2757 Bitsy Version \u2757"),e.data()}function p(t){const{name:n}=t;let e;switch(n){case"template":e=In;break}t.addEventListener("change",()=>{h(t),e==null||e(t)})}function In(t){const n=t.value.split(".")[0]==="BitsyHD",e=localStorage.getItem("gamedata")==null,a=I;if(n&&e&&a!==void 0){const i=document.querySelector("#gamedata");i.value=a,h(i)}}function E(t){const n=document.querySelector(`[data-associated-hack="${t.dataset.hack}"]`);n&&O(n,t)}function O(t,n){n.checked===!0?t.classList.add("included"):t.classList.remove("included")}function Fn(t){h(t),E(t)}function An(t){t.addEventListener("change",()=>{Fn(t)})}function En(){return Array.from(document.querySelectorAll("[data-borksy-replace-single]")).reduce((t,n)=>(t[n.dataset.borksyReplaceSingle]=n.value,t),{})}function On(){return b.reduce((t,n)=>{const e=document.querySelector(`#${n.metadata.id}`);if(!(e.checked||e.value==="true"))return t;let r=n.data;if(n.options){const i=document.querySelector(`#${n.metadata.id}-options`).value;r=r.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m,`$1 {
-${i}
-}$2`)}return`${t}${r}
-`},"")}let k=!1;async function N(){if(!k){k=!0;try{Array.from(document.querySelectorAll("[data-save]")).forEach(i=>h(i));const t=document.querySelector("#template").value,n=m({"BORKSY-VERSION":et.version,"HACKS-VERSION":y.version,HACKS:On()},En());console.log(n);const e=document.querySelector("#filename").value,r=H.exports.compile((await f.find(i=>i.id===t).data()).default)(n);xn(`${e}.html`,r)}finally{k=!1}}}function D(){const{body:t}=document;t.classList.contains("party")?(t.classList.remove("party"),window.alert("\u{1F63E} Party Mode Deactivated. Everyone out. \u{1F63E}")):(t.classList.add("party"),window.alert("\u2728\u{1F308} Party Mode Activated! \u{1F308}\u2728"))}function g(t){const n=document.createElement("div");return n.innerHTML=t,n.children}function Nn(){var s;const t=document.querySelector("#about_content");t.innerHTML=rt.replace("HACKS_BITSY_VERSION",y.bitsyVersion);const n=document.createElement("section");n.id="last-update",n.innerHTML=(s=T.match(/(<h[12][^]+?)<h[12]/m))==null?void 0:s[1].replace(/<h[12]>([^]+?)<\/h[12]>/g,"<h2>What's new in v$1</h2>"),t.prepend(n);const e=u("How To Use Borksy");e.append(...g(it)),t.appendChild(e);const a=u("Troubleshooting / FAQs");a.classList.add("faq"),a.append(...g(st)),t.appendChild(a);const r=u("Other Bitsy Tools");r.append(...g(ot)),t.appendChild(r);const i=u("AYo's Special Tips");i.append(...g(at)),t.appendChild(i);const o=u("Changelog");o.append(...g(T)),t.appendChild(o)}function Dn(t){t.value=t.dataset.default,p(t)}function Bn(t){const n=t.id.replace(/-options$/,""),{options:e}=b.find(a=>a.metadata.id===n);t.value=e,p(t)}function _n(t){let n=t.dataset.default;n=n==="true",t.type==="checkbox"?t.checked=n:t.value=n,p(t)}function qn(t){const n=t.dataset.default,e=pt[n];if(!e)throw new Error(`Could not find file ${n}`);t.value=e,p(t)}function Rn(t){Pn(t.dataset.default)}function Cn(t){const{options:n}=t;for(let e=n.length-1;e>=0;e--)if(n[e].dataset.defaultOption!==void 0){t.selectedIndex=e;break}p(t)}function B(t=!0){Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{const e=localStorage.getItem(n.name),a=typeof n.dataset.default!="undefined",r=e!==null;if(a&&(!r||!t)){const{defaultType:i}=n.dataset;switch(i){case"string":Dn(n);break;case"boolean":_n(n);break;case"textfile":qn(n);break;case"font":Rn(n);break;case"option":Cn(n);break;case"hackOptions":Bn(n);break;default:throw new Error("Unknown type")}}else r?v(n):n.value="",p(n);E(n)}),console.log(`Defaults loaded. Forced? ${!t}`)}function _(){let t;try{t=window.confirm("Are you sure you want to erase all data and restore defaults?")}catch{t=!0}!t||(Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{localStorage.removeItem(n.name)}),console.log("Cookies removed"),B(!1),document.querySelector("#mascot").classList.remove("borksyHD"))}function Ln(){const t={x:6,y:8},n={x:16,y:16},e=1,a=document.createElement("canvas");a.width=(t.x+e)*n.x+e,a.height=(t.y+e)*n.y+e;const r=a.getContext("2d");let i=[];r.drawImage(this,0,0);for(let o=0;o<n.y;++o)for(let s=0;s<n.x;++s){const l=r.getImageData(s*(t.x+e)+e,o*(t.y+e)+e,t.x,t.y);i.push(l.data)}for(let o=0;o<i.length;++o){const s=[];for(let l=0;l<i[o].length;l+=4)s.push(i[o][l]>255/2?1:0);i[o]=s}i=i.flat(),h(document.querySelector("#fontdata"),`[/*${document.querySelector("#fontfilename").value}*/${i.toString()}]`)}function Pn(t){let n;typeof t=="object"?n=t.target.result:(n=`fonts/${t}`,Mn(t));const e=new Image;e.onload=Ln,e.src=n}function Mn(t){const n=document.querySelector("#fontfilename");n.value!==t&&(n.value=t,h(n))}function Hn(t,n){t.dataset.save=!0,t.dataset.default=!1,t.dataset.defaultType="boolean",t.dataset.hack=n}function Gn(t){const n=u(`${t.metadata.emoji} ${t.metadata.name} (by ${t.metadata.author})`);n.dataset.associatedHack=t.metadata.id;const e=document.createElement("p");e.textContent=t.metadata.summary,n.append(e);const a=document.createElement("label");a.className="horizontal";const r=document.createElement("input");if(r.type="checkbox",r.name=t.metadata.name,r.id=t.metadata.id,Hn(r,t.metadata.id),v(r),O(n,r),An(r),a.append(r),a.append(`Include "${jn(t.metadata.name)}" hack`),n.append(a),t.options){const i=u("Options"),o=document.createElement("label");o.dataset.pre=`var ${Sn(t.metadata.id)}Options = {`,o.dataset.post="};";const s=document.createElement("textarea");s.rows=5,s.cols=50,s.textContent=t.options,s.name=`${t.metadata.name}.options`,s.id=`${t.metadata.id}-options`,s.dataset.save=!0,s.dataset.default=t.metadata.id,s.dataset.defaultType="hackOptions",v(s),p(s),o.append(s),i.append(o),n.append(i)}if(t.metadata.description){const i=u("README"),o=document.createElement("pre");o.textContent=t.metadata.description,i.append(o),n.append(i)}return n}function Un(){const t=document.querySelector("#hacks-section");b.forEach(n=>{t.appendChild(Gn(n))})}function u(t){const n=document.createElement("details");return n.className="collapsible",n.dataset.collapse="",n.dataset.header=t,q(n),n}function Vn(){Array.from(document.querySelectorAll("[data-collapsible]")).forEach(q),console.log("HACK IT UP YO"),Un(),document.querySelector("#preloader").remove()}function q(t){const n=document.createElement("summary");n.textContent=t.dataset.header,n.className="collapsible_header",t.prepend(n)}function zn(){window.addEventListener("keydown",t=>{if(t.ctrlKey||t.metaKey)switch(String.fromCharCode(t.which).toLowerCase()){case"s":t.preventDefault(),N();break;case"d":t.preventDefault(),_();break;case"p":t.preventDefault(),D();break}})}document.querySelector("#download-button").addEventListener("click",N);document.querySelector("#restore-button").addEventListener("click",_);document.querySelector("#mascot").addEventListener("click",D);document.querySelector("#template").addEventListener("change",w);Vn();Nn();kn();B();zn();w({currentTarget:document.querySelector("#template")});
+`}),Mt=Wr.map(t=>{const[n]=t.match(/^(\/\*\*[\S\s]*?\*\/)$/gm),e=n.split(`
+`).slice(1,-1),a=e[0],p=e.find(u=>u.startsWith("@file")).split("@file ")[1],f=e.find(u=>u.startsWith("@author")).split("@author ")[1],d=e.find(u=>u.startsWith("@summary")).split("@summary ")[1],l=e.slice(e.findIndex(u=>u.startsWith("@description"))+1).join(`
+`).replace(/Copy-paste .* after the bitsy source\.?/g,"Include hack").replace(/hackOptions below/g,"hackOptions above"),[,o]=t.match(/var hackOptions.*= {\n+([^]+?)\n+};$/m)||[];return{metadata:{emoji:a,id:p.replace(/\s/g,"-"),name:p,author:f,summary:d,description:l},options:o,data:t}});function Yr(){const t=document.querySelector("select#template");t.innerHTML="";for(let n=H.length-1;n>=0;n--){const{id:e,description:a}=H[n],p=n===H.length-1;t.innerHTML+=`<option value="${e}" ${p?"data-default-option":""}>${a}${p?" (latest)":""}</option>`}}function Xr(t,n){console.log(n),Qt.exports.saveAs(new Blob([n],{type:"text/html;charset=utf-8"}),t),console.log(`File '${t}' downloaded`)}function un(t,n=10){const e=t.toString(),a=e.length>n?"...":"";return e.substring(0,n)+a}function Kr(t){return t.toLowerCase().replace(/-(.)/g,(n,e)=>e.toUpperCase())}function Jr(t){return t.replace(/[^\w\s]/gi,"")}function Qr(t,n){const e=new RegExp(n,"g");t.value=t.value.replace(e,"")}function U(t,n){t.dataset.cleanRegex&&Qr(t,t.dataset.cleanRegex);let e;t.type==="checkbox"?e=t.checked:n===void 0?e=t.value:(e=n,t.value=n);const{name:a}=t;localStorage.setItem(a,e),console.log(`Key: '${a}' saved to localStorage: ${un(e)}`)}function Nt(t){const{name:n}=t,e=localStorage.getItem(n);if(e===null){console.log(` Attempted to get key: ${n} from localStorage, but nothing was found.`);return}if(t.type==="checkbox"){const a=e==="true";t.checked=a}else t.value=e;console.log(` Got key: ${n} from localStorage: ${un(e)}`)}function Ht(t){const{value:n}=t.currentTarget,e=H.find(a=>a.id===n);if(!e){document.querySelector("#template").value=H.find(a=>a.isDefault).id,Ht(t);return}e.isHd?document.querySelector("#mascot").classList.add("borksyHD"):document.querySelector("#mascot").classList.remove("borksyHD"),e.bitsyVersion===Dt.bitsyVersion?(document.querySelector("#legacy-version-warning").style.display="none",document.querySelector('[data-header="Bitsy Version"] > summary').textContent="Bitsy Version"):(document.querySelector("#legacy-version-warning").style.display=null,document.querySelector('[data-header="Bitsy Version"] > summary').textContent="\u2757 Bitsy Version \u2757"),e.data()}function L(t){const{name:n}=t;let e;switch(n){case"template":e=Zr;break}t.addEventListener("change",()=>{U(t),e==null||e(t)})}function Zr(t){const n=t.value.split(".")[0]==="BitsyHD",e=localStorage.getItem("gamedata")==null,a=ln.gamedataHD;if(n&&e&&a!==void 0){const f=document.querySelector("#gamedata");f.value=a,U(f)}}function pn(t){const n=document.querySelector(`[data-associated-hack="${t.dataset.hack}"]`);n&&dn(n,t)}function dn(t,n){n.checked===!0?t.classList.add("included"):t.classList.remove("included")}function ti(t){U(t),pn(t)}function ni(t){t.addEventListener("change",()=>{ti(t)})}function ei(){return Array.from(document.querySelectorAll("[data-borksy-replace-single]")).reduce((t,n)=>(t[n.dataset.borksyReplaceSingle]=n.value,t),{})}function ri(){return Mt.reduce((t,n)=>{const e=document.querySelector(`#${n.metadata.id}`);if(!(e.checked||e.value==="true"))return t;let p=n.data;if(n.options){const f=document.querySelector(`#${n.metadata.id}-options`).value;p=p.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m,`$1 {
+${f}
+}$2`)}return`${t}${p}
+`},"")}let dt=!1;async function fn(){if(!dt){dt=!0;try{Array.from(document.querySelectorAll("[data-save]")).forEach(f=>U(f));const t=document.querySelector("#template").value,n=lt({"BORKSY-VERSION":Vr.version,"HACKS-VERSION":Dt.version,HACKS:ri()},ei());console.log(n);const e=document.querySelector("#filename").value,p=ft.exports.compile((await H.find(f=>f.id===t).data()).default)(n);Xr(`${e}.html`,p)}finally{dt=!1}}}function hn(){const{body:t}=document;t.classList.contains("party")?(t.classList.remove("party"),window.alert("\u{1F63E} Party Mode Deactivated. Everyone out. \u{1F63E}")):(t.classList.add("party"),window.alert("\u2728\u{1F308} Party Mode Activated! \u{1F308}\u2728"))}function W(t){const n=document.createElement("div");return n.innerHTML=t,n.children}function ii(){var l;const t=document.querySelector("#about_content");t.innerHTML=$.about.replace("HACKS_BITSY_VERSION",Dt.bitsyVersion);const n=document.createElement("section");n.id="last-update",n.innerHTML=(l=Kt.match(/(<h[12][^]+?)<h[12]/m))==null?void 0:l[1].replace(/<h[12]>([^]+?)<\/h[12]>/g,"<h2>What's new in v$1</h2>"),t.prepend(n);const e=C("How To Use Borksy");e.append(...W($["how-to-use-borksy"])),t.appendChild(e);const a=C("Troubleshooting / FAQs");a.classList.add("faq"),a.append(...W($["troubleshooting-faqs"])),t.appendChild(a);const p=C("Other Bitsy Tools");p.append(...W($["other-tools"])),t.appendChild(p);const f=C("AYo's Special Tips");f.append(...W($["ayos-special-tips"])),t.appendChild(f);const d=C("Changelog");d.append(...W(Kt)),t.appendChild(d)}function ai(t){t.value=t.dataset.default,L(t)}function si(t){const n=t.id.replace(/-options$/,""),{options:e}=Mt.find(a=>a.metadata.id===n);t.value=e,L(t)}function oi(t){let n=t.dataset.default;n=n==="true",t.type==="checkbox"?t.checked=n:t.value=n,L(t)}function ci(t){const n=t.dataset.default,e=ln[n];if(!e)throw new Error(`Could not find file ${n}`);t.value=e,L(t)}function li(t){di(t.dataset.default)}function ui(t){const{options:n}=t;for(let e=n.length-1;e>=0;e--)if(n[e].dataset.defaultOption!==void 0){t.selectedIndex=e;break}L(t)}function gn(t=!0){Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{const e=localStorage.getItem(n.name),a=typeof n.dataset.default!="undefined",p=e!==null;if(a&&(!p||!t)){const{defaultType:f}=n.dataset;switch(f){case"string":ai(n);break;case"boolean":oi(n);break;case"textfile":ci(n);break;case"font":li(n);break;case"option":ui(n);break;case"hackOptions":si(n);break;default:throw new Error("Unknown type")}}else p?Nt(n):n.value="",L(n);pn(n)}),console.log(`Defaults loaded. Forced? ${!t}`)}function mn(){let t;try{t=window.confirm("Are you sure you want to erase all data and restore defaults?")}catch{t=!0}!t||(Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{localStorage.removeItem(n.name)}),console.log("Cookies removed"),gn(!1),document.querySelector("#mascot").classList.remove("borksyHD"))}function pi(){const t={x:6,y:8},n={x:16,y:16},e=1,a=document.createElement("canvas");a.width=(t.x+e)*n.x+e,a.height=(t.y+e)*n.y+e;const p=a.getContext("2d");let f=[];p.drawImage(this,0,0);for(let d=0;d<n.y;++d)for(let l=0;l<n.x;++l){const o=p.getImageData(l*(t.x+e)+e,d*(t.y+e)+e,t.x,t.y);f.push(o.data)}for(let d=0;d<f.length;++d){const l=[];for(let o=0;o<f[d].length;o+=4)l.push(f[d][o]>255/2?1:0);f[d]=l}f=f.flat(),U(document.querySelector("#fontdata"),`[/*${document.querySelector("#fontfilename").value}*/${f.toString()}]`)}function di(t){let n;typeof t=="object"?n=t.target.result:(n=`fonts/${t}`,fi(t));const e=new Image;e.onload=pi,e.src=n}function fi(t){const n=document.querySelector("#fontfilename");n.value!==t&&(n.value=t,U(n))}function hi(t,n){t.dataset.save=!0,t.dataset.default=!1,t.dataset.defaultType="boolean",t.dataset.hack=n}function gi(t){const n=C(`${t.metadata.emoji} ${t.metadata.name} (by ${t.metadata.author})`);n.dataset.associatedHack=t.metadata.id;const e=document.createElement("p");e.textContent=t.metadata.summary,n.append(e);const a=document.createElement("label");a.className="horizontal";const p=document.createElement("input");if(p.type="checkbox",p.name=t.metadata.name,p.id=t.metadata.id,hi(p,t.metadata.id),Nt(p),dn(n,p),ni(p),a.append(p),a.append(`Include "${Jr(t.metadata.name)}" hack`),n.append(a),t.options){const f=C("Options"),d=document.createElement("label");d.dataset.pre=`var ${Kr(t.metadata.id)}Options = {`,d.dataset.post="};";const l=document.createElement("textarea");l.rows=5,l.cols=50,l.textContent=t.options,l.name=`${t.metadata.name}.options`,l.id=`${t.metadata.id}-options`,l.dataset.save=!0,l.dataset.default=t.metadata.id,l.dataset.defaultType="hackOptions",Nt(l),L(l),d.append(l),f.append(d),n.append(f)}if(t.metadata.description){const f=C("README"),d=document.createElement("pre");d.textContent=t.metadata.description,f.append(d),n.append(f)}return n}function mi(){const t=document.querySelector("#hacks-section");Mt.forEach(n=>{t.appendChild(gi(n))})}function C(t){const n=document.createElement("details");return n.className="collapsible",n.dataset.collapse="",n.dataset.header=t,yn(n),n}function yi(){Array.from(document.querySelectorAll("[data-collapsible]")).forEach(yn),console.log("HACK IT UP YO"),mi(),document.querySelector("#preloader").remove()}function yn(t){const n=document.createElement("summary");n.textContent=t.dataset.header,n.className="collapsible_header",t.prepend(n)}function bi(){window.addEventListener("keydown",t=>{if(t.ctrlKey||t.metaKey)switch(String.fromCharCode(t.which).toLowerCase()){case"s":t.preventDefault(),fn();break;case"d":t.preventDefault(),mn();break;case"p":t.preventDefault(),hn();break}})}document.querySelector("#download-button").addEventListener("click",fn);document.querySelector("#restore-button").addEventListener("click",mn);document.querySelector("#mascot").addEventListener("click",hn);document.querySelector("#template").addEventListener("change",Ht);yi();ii();Yr();gn();bi();Ht({currentTarget:document.querySelector("#template")});
