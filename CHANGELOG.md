@@ -1,3 +1,10 @@
+## [5.15.1](https://github.com/Ayolland/borksy/compare/v5.15.0...v5.15.1) (2022-04-05)
+
+
+### Bug Fixes
+
+* missing borksy petting ([fc703b4](https://github.com/Ayolland/borksy/commit/fc703b4b22383ff86492bcfc91c46c48c172a3e6))
+
 # [5.15.0](https://github.com/Ayolland/borksy/compare/v5.14.1...v5.15.0) (2022-04-05)
 
 
