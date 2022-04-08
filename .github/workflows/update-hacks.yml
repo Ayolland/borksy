@@ -16,6 +16,8 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: 'feat: update hacks'
+      - run: npm run build
+      - run: npm test
       - uses: cycjimmy/semantic-release-action@v3
         id: semantic
         env:
