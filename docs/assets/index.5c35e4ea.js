@@ -1,4 +1,4 @@
-var bn=Object.defineProperty,vn=Object.defineProperties;var wn=Object.getOwnPropertyDescriptors;var Gt=Object.getOwnPropertySymbols;var kn=Object.prototype.hasOwnProperty,xn=Object.prototype.propertyIsEnumerable;var Ut=(t,n,e)=>n in t?bn(t,n,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[n]=e,lt=(t,n)=>{for(var e in n||(n={}))kn.call(n,e)&&Ut(t,e,n[e]);if(Gt)for(var e of Gt(n))xn.call(n,e)&&Ut(t,e,n[e]);return t},Vt=(t,n)=>vn(t,wn(n));const Sn=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const p of document.querySelectorAll('link[rel="modulepreload"]'))i(p);new MutationObserver(p=>{for(const f of p)if(f.type==="childList")for(const d of f.addedNodes)d.tagName==="LINK"&&d.rel==="modulepreload"&&i(d)}).observe(document,{childList:!0,subtree:!0});function e(p){const f={};return p.integrity&&(f.integrity=p.integrity),p.referrerpolicy&&(f.referrerPolicy=p.referrerpolicy),p.crossorigin==="use-credentials"?f.credentials="include":p.crossorigin==="anonymous"?f.credentials="omit":f.credentials="same-origin",f}function i(p){if(p.ep)return;p.ep=!0;const f=e(p);fetch(p.href,f)}};Sn();const jn={},Tn=`<p>Borksy is a hacking tool to be used in conjunction with <a href="https://ledoux.itch.io/bitsy">Bitsy Game Maker</a>! Use it to customize your games and add hacks without needing to manually cut-and-paste html.</p>
+var bn=Object.defineProperty,vn=Object.defineProperties;var wn=Object.getOwnPropertyDescriptors;var Gt=Object.getOwnPropertySymbols;var kn=Object.prototype.hasOwnProperty,xn=Object.prototype.propertyIsEnumerable;var Ut=(t,n,e)=>n in t?bn(t,n,{enumerable:!0,configurable:!0,writable:!0,value:e}):t[n]=e,lt=(t,n)=>{for(var e in n||(n={}))kn.call(n,e)&&Ut(t,e,n[e]);if(Gt)for(var e of Gt(n))xn.call(n,e)&&Ut(t,e,n[e]);return t},Vt=(t,n)=>vn(t,wn(n));const Sn=function(){const n=document.createElement("link").relList;if(n&&n.supports&&n.supports("modulepreload"))return;for(const p of document.querySelectorAll('link[rel="modulepreload"]'))a(p);new MutationObserver(p=>{for(const f of p)if(f.type==="childList")for(const d of f.addedNodes)d.tagName==="LINK"&&d.rel==="modulepreload"&&a(d)}).observe(document,{childList:!0,subtree:!0});function e(p){const f={};return p.integrity&&(f.integrity=p.integrity),p.referrerpolicy&&(f.referrerPolicy=p.referrerpolicy),p.crossorigin==="use-credentials"?f.credentials="include":p.crossorigin==="anonymous"?f.credentials="omit":f.credentials="same-origin",f}function a(p){if(p.ep)return;p.ep=!0;const f=e(p);fetch(p.href,f)}};Sn();const jn={},Tn=`<p>Borksy is a hacking tool to be used in conjunction with <a href="https://ledoux.itch.io/bitsy">Bitsy Game Maker</a>! Use it to customize your games and add hacks without needing to manually cut-and-paste html.</p>
 <p>If you're not sure how to use this tool, check out the 'How To Use Borksy' section. If you're having issues, check the 'Troubleshooting/FAQs' section. If you're not familiar with how Bitsy can be extended, try exploring <a href="https://github.com/seleb/bitsy-hacks/">the Bitsy hacks repo</a>.</p>
 <p>Borksy Features:</p>
 <ul>
@@ -95,20 +95,20 @@ var bn=Object.defineProperty,vn=Object.defineProperties;var wn=Object.getOwnProp
 <p>The <a href="discordapp.com/invite/9rAjhtr">Bitsy discord</a> is a great place to get help with Bitsy or Borksy.</p>
 </li>
 </ul>
-`;var Pn=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",attributes:Rn,html:qn});const Ln="@bitsy/hecks",Mn="a collection of re-usable scripts for bitsy game maker",Hn=["bitsy","hacks"],Gn="index.mjs",Un="20.2.0",Vn="7.12",zn={build:"rollup -c",test:"jest --runInBand",lint:"eslint ./src/**/*.js",postversion:"npm run build"},$n="Sean S. LeBlanc <sean.s.leblanc@gmail.com>",Wn="MIT (individual hacks have their own license specified)",Yn={type:"git",url:"git://github.com/seleb/bitsy-hacks.git"},Xn={"@seansleblanc/pink-trombone":"^1.0.1","input-gamepads.js":"^3.0.4",kitsy:"^1.1.0",omggif:"^1.0.10",rollup:"^2.56.3","rollup-plugin-commonjs":"^10.1.0","rollup-plugin-node-resolve":"^5.2.0","tracery-grammar":"^2.7.4",webglazy:"^3.1.2"},Kn={"@babel/plugin-transform-runtime":"^7.15.0","@babel/preset-env":"^7.15.0","@babel/runtime":"^7.15.3",doctrine:"^3.0.0",eslint:"^8.2.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.3.0","eslint-plugin-import":"^2.24.2","eslint-plugin-prettier":"^4.0.0",jest:"^27.0.6","jest-image-snapshot":"^4.5.1",prettier:"^2.4.1",puppeteer:"^13.1.2"},Jn={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"]},Qn={branches:["+([0-9])?(.{+([0-9]),x}).x","main"],plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["dist/*.js","README.md","CHANGELOG.md","package.json","package-lock.json"]}]]};var Dt={name:Ln,description:Mn,keywords:Hn,main:Gn,version:Un,bitsyVersion:Vn,scripts:zn,author:$n,license:Wn,repository:Yn,dependencies:Xn,devDependencies:Kn,jest:Jn,release:Qn},O=typeof globalThis!="undefined"?globalThis:typeof window!="undefined"?window:typeof global!="undefined"?global:typeof self!="undefined"?self:{},Qt={exports:{}};(function(t,n){(function(e,i){i()})(O,function(){function e(u,c){return typeof c=="undefined"?c={autoBom:!1}:typeof c!="object"&&(console.warn("Deprecated: Expected third argument to be a object"),c={autoBom:!c}),c.autoBom&&/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(u.type)?new Blob(["\uFEFF",u],{type:u.type}):u}function i(u,c,h){var r=new XMLHttpRequest;r.open("GET",u),r.responseType="blob",r.onload=function(){o(r.response,c,h)},r.onerror=function(){console.error("could not download file")},r.send()}function p(u){var c=new XMLHttpRequest;c.open("HEAD",u,!1);try{c.send()}catch{}return 200<=c.status&&299>=c.status}function f(u){try{u.dispatchEvent(new MouseEvent("click"))}catch{var c=document.createEvent("MouseEvents");c.initMouseEvent("click",!0,!0,window,0,0,0,80,20,!1,!1,!1,!1,0,null),u.dispatchEvent(c)}}var d=typeof window=="object"&&window.window===window?window:typeof self=="object"&&self.self===self?self:typeof O=="object"&&O.global===O?O:void 0,l=d.navigator&&/Macintosh/.test(navigator.userAgent)&&/AppleWebKit/.test(navigator.userAgent)&&!/Safari/.test(navigator.userAgent),o=d.saveAs||(typeof window!="object"||window!==d?function(){}:"download"in HTMLAnchorElement.prototype&&!l?function(u,c,h){var r=d.URL||d.webkitURL,s=document.createElement("a");c=c||u.name||"download",s.download=c,s.rel="noopener",typeof u=="string"?(s.href=u,s.origin===location.origin?f(s):p(s.href)?i(u,c,h):f(s,s.target="_blank")):(s.href=r.createObjectURL(u),setTimeout(function(){r.revokeObjectURL(s.href)},4e4),setTimeout(function(){f(s)},0))}:"msSaveOrOpenBlob"in navigator?function(u,c,h){if(c=c||u.name||"download",typeof u!="string")navigator.msSaveOrOpenBlob(e(u,h),c);else if(p(u))i(u,c,h);else{var r=document.createElement("a");r.href=u,r.target="_blank",setTimeout(function(){f(r)})}}:function(u,c,h,r){if(r=r||open("","_blank"),r&&(r.document.title=r.document.body.innerText="downloading..."),typeof u=="string")return i(u,c,h);var s=u.type==="application/octet-stream",a=/constructor/i.test(d.HTMLElement)||d.safari,m=/CriOS\/[\d]+/.test(navigator.userAgent);if((m||s&&a||l)&&typeof FileReader!="undefined"){var g=new FileReader;g.onloadend=function(){var w=g.result;w=m?w:w.replace(/^data:[^;]*;/,"data:attachment/file;"),r?r.location.href=w:location=w,r=null},g.readAsDataURL(u)}else{var b=d.URL||d.webkitURL,y=b.createObjectURL(u);r?r.location=y:location.href=y,r=null,setTimeout(function(){b.revokeObjectURL(y)},4e4)}});d.saveAs=o.saveAs=o,t.exports=o})})(Qt);var ft={exports:{}},ht={exports:{}},A={},S={};S.__esModule=!0;S.extend=Zt;S.indexOf=re;S.escapeExpression=ae;S.isEmpty=ie;S.createFrame=se;S.blockParams=oe;S.appendContextPath=ce;var Zn={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","`":"&#x60;","=":"&#x3D;"},te=/[&<>"'`=]/g,ne=/[&<>"'`=]/;function ee(t){return Zn[t]}function Zt(t){for(var n=1;n<arguments.length;n++)for(var e in arguments[n])Object.prototype.hasOwnProperty.call(arguments[n],e)&&(t[e]=arguments[n][e]);return t}var Bt=Object.prototype.toString;S.toString=Bt;var gt=function(n){return typeof n=="function"};gt(/x/)&&(S.isFunction=gt=function(t){return typeof t=="function"&&Bt.call(t)==="[object Function]"});S.isFunction=gt;var tn=Array.isArray||function(t){return t&&typeof t=="object"?Bt.call(t)==="[object Array]":!1};S.isArray=tn;function re(t,n){for(var e=0,i=t.length;e<i;e++)if(t[e]===n)return e;return-1}function ae(t){if(typeof t!="string"){if(t&&t.toHTML)return t.toHTML();if(t==null)return"";if(!t)return t+"";t=""+t}return ne.test(t)?t.replace(te,ee):t}function ie(t){return!t&&t!==0?!0:!!(tn(t)&&t.length===0)}function se(t){var n=Zt({},t);return n._parent=t,n}function oe(t,n){return t.path=n,t}function ce(t,n){return(t?t+".":"")+n}var E={exports:{}};(function(t,n){n.__esModule=!0;var e=["description","fileName","lineNumber","endLineNumber","message","name","number","stack"];function i(p,f){var d=f&&f.loc,l=void 0,o=void 0,u=void 0,c=void 0;d&&(l=d.start.line,o=d.end.line,u=d.start.column,c=d.end.column,p+=" - "+l+":"+u);for(var h=Error.prototype.constructor.call(this,p),r=0;r<e.length;r++)this[e[r]]=h[e[r]];Error.captureStackTrace&&Error.captureStackTrace(this,i);try{d&&(this.lineNumber=l,this.endLineNumber=o,Object.defineProperty?(Object.defineProperty(this,"column",{value:u,enumerable:!0}),Object.defineProperty(this,"endColumn",{value:c,enumerable:!0})):(this.column=u,this.endColumn=c))}catch{}}i.prototype=new Error,n.default=i,t.exports=n.default})(E,E.exports);var K={},mt={exports:{}};(function(t,n){n.__esModule=!0;var e=S;n.default=function(i){i.registerHelper("blockHelperMissing",function(p,f){var d=f.inverse,l=f.fn;if(p===!0)return l(this);if(p===!1||p==null)return d(this);if(e.isArray(p))return p.length>0?(f.ids&&(f.ids=[f.name]),i.helpers.each(p,f)):d(this);if(f.data&&f.ids){var o=e.createFrame(f.data);o.contextPath=e.appendContextPath(f.data.contextPath,f.name),f={data:o}}return l(p,f)})},t.exports=n.default})(mt,mt.exports);var yt={exports:{}};(function(t,n){n.__esModule=!0;function e(d){return d&&d.__esModule?d:{default:d}}var i=S,p=E.exports,f=e(p);n.default=function(d){d.registerHelper("each",function(l,o){if(!o)throw new f.default("Must pass iterator to #each");var u=o.fn,c=o.inverse,h=0,r="",s=void 0,a=void 0;o.data&&o.ids&&(a=i.appendContextPath(o.data.contextPath,o.ids[0])+"."),i.isFunction(l)&&(l=l.call(this)),o.data&&(s=i.createFrame(o.data));function m(v,k,T){s&&(s.key=v,s.index=k,s.first=k===0,s.last=!!T,a&&(s.contextPath=a+v)),r=r+u(l[v],{data:s,blockParams:i.blockParams([l[v],v],[a+v,null])})}if(l&&typeof l=="object")if(i.isArray(l))for(var g=l.length;h<g;h++)h in l&&m(h,h,h===l.length-1);else if(O.Symbol&&l[O.Symbol.iterator]){for(var b=[],y=l[O.Symbol.iterator](),w=y.next();!w.done;w=y.next())b.push(w.value);l=b;for(var g=l.length;h<g;h++)m(h,h,h===l.length-1)}else(function(){var v=void 0;Object.keys(l).forEach(function(k){v!==void 0&&m(v,h-1),v=k,h++}),v!==void 0&&m(v,h-1,!0)})();return h===0&&(r=c(this)),r})},t.exports=n.default})(yt,yt.exports);var bt={exports:{}};(function(t,n){n.__esModule=!0;function e(f){return f&&f.__esModule?f:{default:f}}var i=E.exports,p=e(i);n.default=function(f){f.registerHelper("helperMissing",function(){if(arguments.length!==1)throw new p.default('Missing helper: "'+arguments[arguments.length-1].name+'"')})},t.exports=n.default})(bt,bt.exports);var vt={exports:{}};(function(t,n){n.__esModule=!0;function e(d){return d&&d.__esModule?d:{default:d}}var i=S,p=E.exports,f=e(p);n.default=function(d){d.registerHelper("if",function(l,o){if(arguments.length!=2)throw new f.default("#if requires exactly one argument");return i.isFunction(l)&&(l=l.call(this)),!o.hash.includeZero&&!l||i.isEmpty(l)?o.inverse(this):o.fn(this)}),d.registerHelper("unless",function(l,o){if(arguments.length!=2)throw new f.default("#unless requires exactly one argument");return d.helpers.if.call(this,l,{fn:o.inverse,inverse:o.fn,hash:o.hash})})},t.exports=n.default})(vt,vt.exports);var wt={exports:{}};(function(t,n){n.__esModule=!0,n.default=function(e){e.registerHelper("log",function(){for(var i=[void 0],p=arguments[arguments.length-1],f=0;f<arguments.length-1;f++)i.push(arguments[f]);var d=1;p.hash.level!=null?d=p.hash.level:p.data&&p.data.level!=null&&(d=p.data.level),i[0]=d,e.log.apply(e,i)})},t.exports=n.default})(wt,wt.exports);var kt={exports:{}};(function(t,n){n.__esModule=!0,n.default=function(e){e.registerHelper("lookup",function(i,p,f){return i&&f.lookupProperty(i,p)})},t.exports=n.default})(kt,kt.exports);var xt={exports:{}};(function(t,n){n.__esModule=!0;function e(d){return d&&d.__esModule?d:{default:d}}var i=S,p=E.exports,f=e(p);n.default=function(d){d.registerHelper("with",function(l,o){if(arguments.length!=2)throw new f.default("#with requires exactly one argument");i.isFunction(l)&&(l=l.call(this));var u=o.fn;if(i.isEmpty(l))return o.inverse(this);var c=o.data;return o.data&&o.ids&&(c=i.createFrame(o.data),c.contextPath=i.appendContextPath(o.data.contextPath,o.ids[0])),u(l,{data:c,blockParams:i.blockParams([l],[c&&c.contextPath])})})},t.exports=n.default})(xt,xt.exports);K.__esModule=!0;K.registerDefaultHelpers=Se;K.moveHelperToHooks=je;function P(t){return t&&t.__esModule?t:{default:t}}var le=mt.exports,ue=P(le),pe=yt.exports,de=P(pe),fe=bt.exports,he=P(fe),ge=vt.exports,me=P(ge),ye=wt.exports,be=P(ye),ve=kt.exports,we=P(ve),ke=xt.exports,xe=P(ke);function Se(t){ue.default(t),de.default(t),he.default(t),me.default(t),be.default(t),we.default(t),xe.default(t)}function je(t,n,e){t.helpers[n]&&(t.hooks[n]=t.helpers[n],e||delete t.helpers[n])}var Ct={},St={exports:{}};(function(t,n){n.__esModule=!0;var e=S;n.default=function(i){i.registerDecorator("inline",function(p,f,d,l){var o=p;return f.partials||(f.partials={},o=function(u,c){var h=d.partials;d.partials=e.extend({},h,f.partials);var r=p(u,c);return d.partials=h,r}),f.partials[l.args[0]]=l.fn,o})},t.exports=n.default})(St,St.exports);Ct.__esModule=!0;Ct.registerDefaultDecorators=Ee;function Te(t){return t&&t.__esModule?t:{default:t}}var Ie=St.exports,Fe=Te(Ie);function Ee(t){Fe.default(t)}var et={exports:{}};(function(t,n){n.__esModule=!0;var e=S,i={methodMap:["debug","info","warn","error"],level:"info",lookupLevel:function(f){if(typeof f=="string"){var d=e.indexOf(i.methodMap,f.toLowerCase());d>=0?f=d:f=parseInt(f,10)}return f},log:function(f){if(f=i.lookupLevel(f),typeof console!="undefined"&&i.lookupLevel(i.level)<=f){var d=i.methodMap[f];console[d]||(d="log");for(var l=arguments.length,o=Array(l>1?l-1:0),u=1;u<l;u++)o[u-1]=arguments[u];console[d].apply(console,o)}}};n.default=i,t.exports=n.default})(et,et.exports);var G={},Rt={};Rt.__esModule=!0;Rt.createNewLookupObject=_e;var Ae=S;function _e(){for(var t=arguments.length,n=Array(t),e=0;e<t;e++)n[e]=arguments[e];return Ae.extend.apply(void 0,[Object.create(null)].concat(n))}G.__esModule=!0;G.createProtoAccessControl=Be;G.resultIsAllowed=Ce;G.resetLoggedProperties=qe;function Oe(t){if(t&&t.__esModule)return t;var n={};if(t!=null)for(var e in t)Object.prototype.hasOwnProperty.call(t,e)&&(n[e]=t[e]);return n.default=t,n}var zt=Rt,Ne=et.exports,De=Oe(Ne),rt=Object.create(null);function Be(t){var n=Object.create(null);n.constructor=!1,n.__defineGetter__=!1,n.__defineSetter__=!1,n.__lookupGetter__=!1;var e=Object.create(null);return e.__proto__=!1,{properties:{whitelist:zt.createNewLookupObject(e,t.allowedProtoProperties),defaultValue:t.allowProtoPropertiesByDefault},methods:{whitelist:zt.createNewLookupObject(n,t.allowedProtoMethods),defaultValue:t.allowProtoMethodsByDefault}}}function Ce(t,n,e){return $t(typeof t=="function"?n.methods:n.properties,e)}function $t(t,n){return t.whitelist[n]!==void 0?t.whitelist[n]===!0:t.defaultValue!==void 0?t.defaultValue:(Re(n),!1)}function Re(t){rt[t]!==!0&&(rt[t]=!0,De.log("error",'Handlebars: Access has been denied to resolve the property "'+t+`" because it is not an "own property" of its parent.
+`;var Pn=Object.freeze({__proto__:null,[Symbol.toStringTag]:"Module",attributes:Rn,html:qn});const Ln="@bitsy/hecks",Mn="a collection of re-usable scripts for bitsy game maker",Hn=["bitsy","hacks"],Gn="index.mjs",Un="20.2.1",Vn="7.12",zn={build:"rollup -c",test:"jest --runInBand",lint:"eslint ./src/**/*.js",postversion:"npm run build"},$n="Sean S. LeBlanc <sean.s.leblanc@gmail.com>",Wn="MIT (individual hacks have their own license specified)",Yn={type:"git",url:"git://github.com/seleb/bitsy-hacks.git"},Xn={"@seansleblanc/pink-trombone":"^1.0.1","input-gamepads.js":"^3.0.4",kitsy:"^1.1.0",omggif:"^1.0.10",rollup:"^2.56.3","rollup-plugin-commonjs":"^10.1.0","rollup-plugin-node-resolve":"^5.2.0","tracery-grammar":"^2.7.4",webglazy:"^3.1.2"},Kn={"@babel/plugin-transform-runtime":"^7.15.0","@babel/preset-env":"^7.15.0","@babel/runtime":"^7.15.3",doctrine:"^3.0.0",eslint:"^8.2.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.3.0","eslint-plugin-import":"^2.24.2","eslint-plugin-prettier":"^4.0.0",jest:"^27.0.6","jest-image-snapshot":"^4.5.1",prettier:"^2.4.1",puppeteer:"^13.1.2"},Jn={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"]},Qn={branches:["+([0-9])?(.{+([0-9]),x}).x","main"],plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["dist/*.js","README.md","CHANGELOG.md","package.json","package-lock.json"]}]]};var Dt={name:Ln,description:Mn,keywords:Hn,main:Gn,version:Un,bitsyVersion:Vn,scripts:zn,author:$n,license:Wn,repository:Yn,dependencies:Xn,devDependencies:Kn,jest:Jn,release:Qn},O=typeof globalThis!="undefined"?globalThis:typeof window!="undefined"?window:typeof global!="undefined"?global:typeof self!="undefined"?self:{},Qt={exports:{}};(function(t,n){(function(e,a){a()})(O,function(){function e(u,c){return typeof c=="undefined"?c={autoBom:!1}:typeof c!="object"&&(console.warn("Deprecated: Expected third argument to be a object"),c={autoBom:!c}),c.autoBom&&/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(u.type)?new Blob(["\uFEFF",u],{type:u.type}):u}function a(u,c,h){var r=new XMLHttpRequest;r.open("GET",u),r.responseType="blob",r.onload=function(){o(r.response,c,h)},r.onerror=function(){console.error("could not download file")},r.send()}function p(u){var c=new XMLHttpRequest;c.open("HEAD",u,!1);try{c.send()}catch{}return 200<=c.status&&299>=c.status}function f(u){try{u.dispatchEvent(new MouseEvent("click"))}catch{var c=document.createEvent("MouseEvents");c.initMouseEvent("click",!0,!0,window,0,0,0,80,20,!1,!1,!1,!1,0,null),u.dispatchEvent(c)}}var d=typeof window=="object"&&window.window===window?window:typeof self=="object"&&self.self===self?self:typeof O=="object"&&O.global===O?O:void 0,l=d.navigator&&/Macintosh/.test(navigator.userAgent)&&/AppleWebKit/.test(navigator.userAgent)&&!/Safari/.test(navigator.userAgent),o=d.saveAs||(typeof window!="object"||window!==d?function(){}:"download"in HTMLAnchorElement.prototype&&!l?function(u,c,h){var r=d.URL||d.webkitURL,s=document.createElement("a");c=c||u.name||"download",s.download=c,s.rel="noopener",typeof u=="string"?(s.href=u,s.origin===location.origin?f(s):p(s.href)?a(u,c,h):f(s,s.target="_blank")):(s.href=r.createObjectURL(u),setTimeout(function(){r.revokeObjectURL(s.href)},4e4),setTimeout(function(){f(s)},0))}:"msSaveOrOpenBlob"in navigator?function(u,c,h){if(c=c||u.name||"download",typeof u!="string")navigator.msSaveOrOpenBlob(e(u,h),c);else if(p(u))a(u,c,h);else{var r=document.createElement("a");r.href=u,r.target="_blank",setTimeout(function(){f(r)})}}:function(u,c,h,r){if(r=r||open("","_blank"),r&&(r.document.title=r.document.body.innerText="downloading..."),typeof u=="string")return a(u,c,h);var s=u.type==="application/octet-stream",i=/constructor/i.test(d.HTMLElement)||d.safari,m=/CriOS\/[\d]+/.test(navigator.userAgent);if((m||s&&i||l)&&typeof FileReader!="undefined"){var g=new FileReader;g.onloadend=function(){var w=g.result;w=m?w:w.replace(/^data:[^;]*;/,"data:attachment/file;"),r?r.location.href=w:location=w,r=null},g.readAsDataURL(u)}else{var b=d.URL||d.webkitURL,y=b.createObjectURL(u);r?r.location=y:location.href=y,r=null,setTimeout(function(){b.revokeObjectURL(y)},4e4)}});d.saveAs=o.saveAs=o,t.exports=o})})(Qt);var ft={exports:{}},ht={exports:{}},A={},S={};S.__esModule=!0;S.extend=Zt;S.indexOf=re;S.escapeExpression=ie;S.isEmpty=ae;S.createFrame=se;S.blockParams=oe;S.appendContextPath=ce;var Zn={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","`":"&#x60;","=":"&#x3D;"},te=/[&<>"'`=]/g,ne=/[&<>"'`=]/;function ee(t){return Zn[t]}function Zt(t){for(var n=1;n<arguments.length;n++)for(var e in arguments[n])Object.prototype.hasOwnProperty.call(arguments[n],e)&&(t[e]=arguments[n][e]);return t}var Bt=Object.prototype.toString;S.toString=Bt;var gt=function(n){return typeof n=="function"};gt(/x/)&&(S.isFunction=gt=function(t){return typeof t=="function"&&Bt.call(t)==="[object Function]"});S.isFunction=gt;var tn=Array.isArray||function(t){return t&&typeof t=="object"?Bt.call(t)==="[object Array]":!1};S.isArray=tn;function re(t,n){for(var e=0,a=t.length;e<a;e++)if(t[e]===n)return e;return-1}function ie(t){if(typeof t!="string"){if(t&&t.toHTML)return t.toHTML();if(t==null)return"";if(!t)return t+"";t=""+t}return ne.test(t)?t.replace(te,ee):t}function ae(t){return!t&&t!==0?!0:!!(tn(t)&&t.length===0)}function se(t){var n=Zt({},t);return n._parent=t,n}function oe(t,n){return t.path=n,t}function ce(t,n){return(t?t+".":"")+n}var E={exports:{}};(function(t,n){n.__esModule=!0;var e=["description","fileName","lineNumber","endLineNumber","message","name","number","stack"];function a(p,f){var d=f&&f.loc,l=void 0,o=void 0,u=void 0,c=void 0;d&&(l=d.start.line,o=d.end.line,u=d.start.column,c=d.end.column,p+=" - "+l+":"+u);for(var h=Error.prototype.constructor.call(this,p),r=0;r<e.length;r++)this[e[r]]=h[e[r]];Error.captureStackTrace&&Error.captureStackTrace(this,a);try{d&&(this.lineNumber=l,this.endLineNumber=o,Object.defineProperty?(Object.defineProperty(this,"column",{value:u,enumerable:!0}),Object.defineProperty(this,"endColumn",{value:c,enumerable:!0})):(this.column=u,this.endColumn=c))}catch{}}a.prototype=new Error,n.default=a,t.exports=n.default})(E,E.exports);var K={},mt={exports:{}};(function(t,n){n.__esModule=!0;var e=S;n.default=function(a){a.registerHelper("blockHelperMissing",function(p,f){var d=f.inverse,l=f.fn;if(p===!0)return l(this);if(p===!1||p==null)return d(this);if(e.isArray(p))return p.length>0?(f.ids&&(f.ids=[f.name]),a.helpers.each(p,f)):d(this);if(f.data&&f.ids){var o=e.createFrame(f.data);o.contextPath=e.appendContextPath(f.data.contextPath,f.name),f={data:o}}return l(p,f)})},t.exports=n.default})(mt,mt.exports);var yt={exports:{}};(function(t,n){n.__esModule=!0;function e(d){return d&&d.__esModule?d:{default:d}}var a=S,p=E.exports,f=e(p);n.default=function(d){d.registerHelper("each",function(l,o){if(!o)throw new f.default("Must pass iterator to #each");var u=o.fn,c=o.inverse,h=0,r="",s=void 0,i=void 0;o.data&&o.ids&&(i=a.appendContextPath(o.data.contextPath,o.ids[0])+"."),a.isFunction(l)&&(l=l.call(this)),o.data&&(s=a.createFrame(o.data));function m(v,k,T){s&&(s.key=v,s.index=k,s.first=k===0,s.last=!!T,i&&(s.contextPath=i+v)),r=r+u(l[v],{data:s,blockParams:a.blockParams([l[v],v],[i+v,null])})}if(l&&typeof l=="object")if(a.isArray(l))for(var g=l.length;h<g;h++)h in l&&m(h,h,h===l.length-1);else if(O.Symbol&&l[O.Symbol.iterator]){for(var b=[],y=l[O.Symbol.iterator](),w=y.next();!w.done;w=y.next())b.push(w.value);l=b;for(var g=l.length;h<g;h++)m(h,h,h===l.length-1)}else(function(){var v=void 0;Object.keys(l).forEach(function(k){v!==void 0&&m(v,h-1),v=k,h++}),v!==void 0&&m(v,h-1,!0)})();return h===0&&(r=c(this)),r})},t.exports=n.default})(yt,yt.exports);var bt={exports:{}};(function(t,n){n.__esModule=!0;function e(f){return f&&f.__esModule?f:{default:f}}var a=E.exports,p=e(a);n.default=function(f){f.registerHelper("helperMissing",function(){if(arguments.length!==1)throw new p.default('Missing helper: "'+arguments[arguments.length-1].name+'"')})},t.exports=n.default})(bt,bt.exports);var vt={exports:{}};(function(t,n){n.__esModule=!0;function e(d){return d&&d.__esModule?d:{default:d}}var a=S,p=E.exports,f=e(p);n.default=function(d){d.registerHelper("if",function(l,o){if(arguments.length!=2)throw new f.default("#if requires exactly one argument");return a.isFunction(l)&&(l=l.call(this)),!o.hash.includeZero&&!l||a.isEmpty(l)?o.inverse(this):o.fn(this)}),d.registerHelper("unless",function(l,o){if(arguments.length!=2)throw new f.default("#unless requires exactly one argument");return d.helpers.if.call(this,l,{fn:o.inverse,inverse:o.fn,hash:o.hash})})},t.exports=n.default})(vt,vt.exports);var wt={exports:{}};(function(t,n){n.__esModule=!0,n.default=function(e){e.registerHelper("log",function(){for(var a=[void 0],p=arguments[arguments.length-1],f=0;f<arguments.length-1;f++)a.push(arguments[f]);var d=1;p.hash.level!=null?d=p.hash.level:p.data&&p.data.level!=null&&(d=p.data.level),a[0]=d,e.log.apply(e,a)})},t.exports=n.default})(wt,wt.exports);var kt={exports:{}};(function(t,n){n.__esModule=!0,n.default=function(e){e.registerHelper("lookup",function(a,p,f){return a&&f.lookupProperty(a,p)})},t.exports=n.default})(kt,kt.exports);var xt={exports:{}};(function(t,n){n.__esModule=!0;function e(d){return d&&d.__esModule?d:{default:d}}var a=S,p=E.exports,f=e(p);n.default=function(d){d.registerHelper("with",function(l,o){if(arguments.length!=2)throw new f.default("#with requires exactly one argument");a.isFunction(l)&&(l=l.call(this));var u=o.fn;if(a.isEmpty(l))return o.inverse(this);var c=o.data;return o.data&&o.ids&&(c=a.createFrame(o.data),c.contextPath=a.appendContextPath(o.data.contextPath,o.ids[0])),u(l,{data:c,blockParams:a.blockParams([l],[c&&c.contextPath])})})},t.exports=n.default})(xt,xt.exports);K.__esModule=!0;K.registerDefaultHelpers=Se;K.moveHelperToHooks=je;function P(t){return t&&t.__esModule?t:{default:t}}var le=mt.exports,ue=P(le),pe=yt.exports,de=P(pe),fe=bt.exports,he=P(fe),ge=vt.exports,me=P(ge),ye=wt.exports,be=P(ye),ve=kt.exports,we=P(ve),ke=xt.exports,xe=P(ke);function Se(t){ue.default(t),de.default(t),he.default(t),me.default(t),be.default(t),we.default(t),xe.default(t)}function je(t,n,e){t.helpers[n]&&(t.hooks[n]=t.helpers[n],e||delete t.helpers[n])}var Ct={},St={exports:{}};(function(t,n){n.__esModule=!0;var e=S;n.default=function(a){a.registerDecorator("inline",function(p,f,d,l){var o=p;return f.partials||(f.partials={},o=function(u,c){var h=d.partials;d.partials=e.extend({},h,f.partials);var r=p(u,c);return d.partials=h,r}),f.partials[l.args[0]]=l.fn,o})},t.exports=n.default})(St,St.exports);Ct.__esModule=!0;Ct.registerDefaultDecorators=Ee;function Te(t){return t&&t.__esModule?t:{default:t}}var Ie=St.exports,Fe=Te(Ie);function Ee(t){Fe.default(t)}var et={exports:{}};(function(t,n){n.__esModule=!0;var e=S,a={methodMap:["debug","info","warn","error"],level:"info",lookupLevel:function(f){if(typeof f=="string"){var d=e.indexOf(a.methodMap,f.toLowerCase());d>=0?f=d:f=parseInt(f,10)}return f},log:function(f){if(f=a.lookupLevel(f),typeof console!="undefined"&&a.lookupLevel(a.level)<=f){var d=a.methodMap[f];console[d]||(d="log");for(var l=arguments.length,o=Array(l>1?l-1:0),u=1;u<l;u++)o[u-1]=arguments[u];console[d].apply(console,o)}}};n.default=a,t.exports=n.default})(et,et.exports);var G={},Rt={};Rt.__esModule=!0;Rt.createNewLookupObject=_e;var Ae=S;function _e(){for(var t=arguments.length,n=Array(t),e=0;e<t;e++)n[e]=arguments[e];return Ae.extend.apply(void 0,[Object.create(null)].concat(n))}G.__esModule=!0;G.createProtoAccessControl=Be;G.resultIsAllowed=Ce;G.resetLoggedProperties=qe;function Oe(t){if(t&&t.__esModule)return t;var n={};if(t!=null)for(var e in t)Object.prototype.hasOwnProperty.call(t,e)&&(n[e]=t[e]);return n.default=t,n}var zt=Rt,Ne=et.exports,De=Oe(Ne),rt=Object.create(null);function Be(t){var n=Object.create(null);n.constructor=!1,n.__defineGetter__=!1,n.__defineSetter__=!1,n.__lookupGetter__=!1;var e=Object.create(null);return e.__proto__=!1,{properties:{whitelist:zt.createNewLookupObject(e,t.allowedProtoProperties),defaultValue:t.allowProtoPropertiesByDefault},methods:{whitelist:zt.createNewLookupObject(n,t.allowedProtoMethods),defaultValue:t.allowProtoMethodsByDefault}}}function Ce(t,n,e){return $t(typeof t=="function"?n.methods:n.properties,e)}function $t(t,n){return t.whitelist[n]!==void 0?t.whitelist[n]===!0:t.defaultValue!==void 0?t.defaultValue:(Re(n),!1)}function Re(t){rt[t]!==!0&&(rt[t]=!0,De.log("error",'Handlebars: Access has been denied to resolve the property "'+t+`" because it is not an "own property" of its parent.
 You can add a runtime option to disable the check or this warning:
-See https://handlebarsjs.com/api-reference/runtime-options.html#options-to-control-prototype-access for details`))}function qe(){Object.keys(rt).forEach(function(t){delete rt[t]})}A.__esModule=!0;A.HandlebarsEnvironment=jt;function nn(t){return t&&t.__esModule?t:{default:t}}var q=S,Pe=E.exports,ut=nn(Pe),Le=K,Me=Ct,He=et.exports,at=nn(He),Ge=G,Ue="4.7.7";A.VERSION=Ue;var Ve=8;A.COMPILER_REVISION=Ve;var ze=7;A.LAST_COMPATIBLE_COMPILER_REVISION=ze;var $e={1:"<= 1.0.rc.2",2:"== 1.0.0-rc.3",3:"== 1.0.0-rc.4",4:"== 1.x.x",5:"== 2.0.0-alpha.x",6:">= 2.0.0-beta.1",7:">= 4.0.0 <4.3.0",8:">= 4.3.0"};A.REVISION_CHANGES=$e;var pt="[object Object]";function jt(t,n,e){this.helpers=t||{},this.partials=n||{},this.decorators=e||{},Le.registerDefaultHelpers(this),Me.registerDefaultDecorators(this)}jt.prototype={constructor:jt,logger:at.default,log:at.default.log,registerHelper:function(n,e){if(q.toString.call(n)===pt){if(e)throw new ut.default("Arg not supported with multiple helpers");q.extend(this.helpers,n)}else this.helpers[n]=e},unregisterHelper:function(n){delete this.helpers[n]},registerPartial:function(n,e){if(q.toString.call(n)===pt)q.extend(this.partials,n);else{if(typeof e=="undefined")throw new ut.default('Attempting to register a partial called "'+n+'" as undefined');this.partials[n]=e}},unregisterPartial:function(n){delete this.partials[n]},registerDecorator:function(n,e){if(q.toString.call(n)===pt){if(e)throw new ut.default("Arg not supported with multiple decorators");q.extend(this.decorators,n)}else this.decorators[n]=e},unregisterDecorator:function(n){delete this.decorators[n]},resetLoggedPropertyAccesses:function(){Ge.resetLoggedProperties()}};var We=at.default.log;A.log=We;A.createFrame=q.createFrame;A.logger=at.default;var Tt={exports:{}};(function(t,n){n.__esModule=!0;function e(i){this.string=i}e.prototype.toString=e.prototype.toHTML=function(){return""+this.string},n.default=e,t.exports=n.default})(Tt,Tt.exports);var R={},qt={};qt.__esModule=!0;qt.wrapHelper=Ye;function Ye(t,n){if(typeof t!="function")return t;var e=function(){var p=arguments[arguments.length-1];return arguments[arguments.length-1]=n(p),t.apply(this,arguments)};return e}R.__esModule=!0;R.checkRevision=tr;R.template=nr;R.wrapProgram=tt;R.resolvePartial=er;R.invokePartial=rr;R.noop=en;function Xe(t){return t&&t.__esModule?t:{default:t}}function Ke(t){if(t&&t.__esModule)return t;var n={};if(t!=null)for(var e in t)Object.prototype.hasOwnProperty.call(t,e)&&(n[e]=t[e]);return n.default=t,n}var Je=S,N=Ke(Je),Qe=E.exports,D=Xe(Qe),B=A,Wt=K,Ze=qt,Yt=G;function tr(t){var n=t&&t[0]||1,e=B.COMPILER_REVISION;if(!(n>=B.LAST_COMPATIBLE_COMPILER_REVISION&&n<=B.COMPILER_REVISION))if(n<B.LAST_COMPATIBLE_COMPILER_REVISION){var i=B.REVISION_CHANGES[e],p=B.REVISION_CHANGES[n];throw new D.default("Template was precompiled with an older version of Handlebars than the current runtime. Please update your precompiler to a newer version ("+i+") or downgrade your runtime to an older version ("+p+").")}else throw new D.default("Template was precompiled with a newer version of Handlebars than the current runtime. Please update your runtime to a newer version ("+t[1]+").")}function nr(t,n){if(!n)throw new D.default("No environment passed to template");if(!t||!t.main)throw new D.default("Unknown template object: "+typeof t);t.main.decorator=t.main_d,n.VM.checkRevision(t.compiler);var e=t.compiler&&t.compiler[0]===7;function i(d,l,o){o.hash&&(l=N.extend({},l,o.hash),o.ids&&(o.ids[0]=!0)),d=n.VM.resolvePartial.call(this,d,l,o);var u=N.extend({},o,{hooks:this.hooks,protoAccessControl:this.protoAccessControl}),c=n.VM.invokePartial.call(this,d,l,u);if(c==null&&n.compile&&(o.partials[o.name]=n.compile(d,t.compilerOptions,n),c=o.partials[o.name](l,u)),c!=null){if(o.indent){for(var h=c.split(`
+See https://handlebarsjs.com/api-reference/runtime-options.html#options-to-control-prototype-access for details`))}function qe(){Object.keys(rt).forEach(function(t){delete rt[t]})}A.__esModule=!0;A.HandlebarsEnvironment=jt;function nn(t){return t&&t.__esModule?t:{default:t}}var q=S,Pe=E.exports,ut=nn(Pe),Le=K,Me=Ct,He=et.exports,it=nn(He),Ge=G,Ue="4.7.7";A.VERSION=Ue;var Ve=8;A.COMPILER_REVISION=Ve;var ze=7;A.LAST_COMPATIBLE_COMPILER_REVISION=ze;var $e={1:"<= 1.0.rc.2",2:"== 1.0.0-rc.3",3:"== 1.0.0-rc.4",4:"== 1.x.x",5:"== 2.0.0-alpha.x",6:">= 2.0.0-beta.1",7:">= 4.0.0 <4.3.0",8:">= 4.3.0"};A.REVISION_CHANGES=$e;var pt="[object Object]";function jt(t,n,e){this.helpers=t||{},this.partials=n||{},this.decorators=e||{},Le.registerDefaultHelpers(this),Me.registerDefaultDecorators(this)}jt.prototype={constructor:jt,logger:it.default,log:it.default.log,registerHelper:function(n,e){if(q.toString.call(n)===pt){if(e)throw new ut.default("Arg not supported with multiple helpers");q.extend(this.helpers,n)}else this.helpers[n]=e},unregisterHelper:function(n){delete this.helpers[n]},registerPartial:function(n,e){if(q.toString.call(n)===pt)q.extend(this.partials,n);else{if(typeof e=="undefined")throw new ut.default('Attempting to register a partial called "'+n+'" as undefined');this.partials[n]=e}},unregisterPartial:function(n){delete this.partials[n]},registerDecorator:function(n,e){if(q.toString.call(n)===pt){if(e)throw new ut.default("Arg not supported with multiple decorators");q.extend(this.decorators,n)}else this.decorators[n]=e},unregisterDecorator:function(n){delete this.decorators[n]},resetLoggedPropertyAccesses:function(){Ge.resetLoggedProperties()}};var We=it.default.log;A.log=We;A.createFrame=q.createFrame;A.logger=it.default;var Tt={exports:{}};(function(t,n){n.__esModule=!0;function e(a){this.string=a}e.prototype.toString=e.prototype.toHTML=function(){return""+this.string},n.default=e,t.exports=n.default})(Tt,Tt.exports);var R={},qt={};qt.__esModule=!0;qt.wrapHelper=Ye;function Ye(t,n){if(typeof t!="function")return t;var e=function(){var p=arguments[arguments.length-1];return arguments[arguments.length-1]=n(p),t.apply(this,arguments)};return e}R.__esModule=!0;R.checkRevision=tr;R.template=nr;R.wrapProgram=tt;R.resolvePartial=er;R.invokePartial=rr;R.noop=en;function Xe(t){return t&&t.__esModule?t:{default:t}}function Ke(t){if(t&&t.__esModule)return t;var n={};if(t!=null)for(var e in t)Object.prototype.hasOwnProperty.call(t,e)&&(n[e]=t[e]);return n.default=t,n}var Je=S,N=Ke(Je),Qe=E.exports,D=Xe(Qe),B=A,Wt=K,Ze=qt,Yt=G;function tr(t){var n=t&&t[0]||1,e=B.COMPILER_REVISION;if(!(n>=B.LAST_COMPATIBLE_COMPILER_REVISION&&n<=B.COMPILER_REVISION))if(n<B.LAST_COMPATIBLE_COMPILER_REVISION){var a=B.REVISION_CHANGES[e],p=B.REVISION_CHANGES[n];throw new D.default("Template was precompiled with an older version of Handlebars than the current runtime. Please update your precompiler to a newer version ("+a+") or downgrade your runtime to an older version ("+p+").")}else throw new D.default("Template was precompiled with a newer version of Handlebars than the current runtime. Please update your runtime to a newer version ("+t[1]+").")}function nr(t,n){if(!n)throw new D.default("No environment passed to template");if(!t||!t.main)throw new D.default("Unknown template object: "+typeof t);t.main.decorator=t.main_d,n.VM.checkRevision(t.compiler);var e=t.compiler&&t.compiler[0]===7;function a(d,l,o){o.hash&&(l=N.extend({},l,o.hash),o.ids&&(o.ids[0]=!0)),d=n.VM.resolvePartial.call(this,d,l,o);var u=N.extend({},o,{hooks:this.hooks,protoAccessControl:this.protoAccessControl}),c=n.VM.invokePartial.call(this,d,l,u);if(c==null&&n.compile&&(o.partials[o.name]=n.compile(d,t.compilerOptions,n),c=o.partials[o.name](l,u)),c!=null){if(o.indent){for(var h=c.split(`
 `),r=0,s=h.length;r<s&&!(!h[r]&&r+1===s);r++)h[r]=o.indent+h[r];c=h.join(`
-`)}return c}else throw new D.default("The partial "+o.name+" could not be compiled when running in runtime-only mode")}var p={strict:function(l,o,u){if(!l||!(o in l))throw new D.default('"'+o+'" not defined in '+l,{loc:u});return p.lookupProperty(l,o)},lookupProperty:function(l,o){var u=l[o];if(u==null||Object.prototype.hasOwnProperty.call(l,o)||Yt.resultIsAllowed(u,p.protoAccessControl,o))return u},lookup:function(l,o){for(var u=l.length,c=0;c<u;c++){var h=l[c]&&p.lookupProperty(l[c],o);if(h!=null)return l[c][o]}},lambda:function(l,o){return typeof l=="function"?l.call(o):l},escapeExpression:N.escapeExpression,invokePartial:i,fn:function(l){var o=t[l];return o.decorator=t[l+"_d"],o},programs:[],program:function(l,o,u,c,h){var r=this.programs[l],s=this.fn(l);return o||h||c||u?r=tt(this,l,s,o,u,c,h):r||(r=this.programs[l]=tt(this,l,s)),r},data:function(l,o){for(;l&&o--;)l=l._parent;return l},mergeIfNeeded:function(l,o){var u=l||o;return l&&o&&l!==o&&(u=N.extend({},o,l)),u},nullContext:Object.seal({}),noop:n.VM.noop,compilerInfo:t.compiler};function f(d){var l=arguments.length<=1||arguments[1]===void 0?{}:arguments[1],o=l.data;f._setup(l),!l.partial&&t.useData&&(o=ar(d,o));var u=void 0,c=t.useBlockParams?[]:void 0;t.useDepths&&(l.depths?u=d!=l.depths[0]?[d].concat(l.depths):l.depths:u=[d]);function h(r){return""+t.main(p,r,p.helpers,p.partials,o,c,u)}return h=rn(t.main,h,p,l.depths||[],o,c),h(d,l)}return f.isTop=!0,f._setup=function(d){if(d.partial)p.protoAccessControl=d.protoAccessControl,p.helpers=d.helpers,p.partials=d.partials,p.decorators=d.decorators,p.hooks=d.hooks;else{var l=N.extend({},n.helpers,d.helpers);ir(l,p),p.helpers=l,t.usePartial&&(p.partials=p.mergeIfNeeded(d.partials,n.partials)),(t.usePartial||t.useDecorators)&&(p.decorators=N.extend({},n.decorators,d.decorators)),p.hooks={},p.protoAccessControl=Yt.createProtoAccessControl(d);var o=d.allowCallsToHelperMissing||e;Wt.moveHelperToHooks(p,"helperMissing",o),Wt.moveHelperToHooks(p,"blockHelperMissing",o)}},f._child=function(d,l,o,u){if(t.useBlockParams&&!o)throw new D.default("must pass block params");if(t.useDepths&&!u)throw new D.default("must pass parent depths");return tt(p,d,t[d],l,0,o,u)},f}function tt(t,n,e,i,p,f,d){function l(o){var u=arguments.length<=1||arguments[1]===void 0?{}:arguments[1],c=d;return d&&o!=d[0]&&!(o===t.nullContext&&d[0]===null)&&(c=[o].concat(d)),e(t,o,t.helpers,t.partials,u.data||i,f&&[u.blockParams].concat(f),c)}return l=rn(e,l,t,d,i,f),l.program=n,l.depth=d?d.length:0,l.blockParams=p||0,l}function er(t,n,e){return t?!t.call&&!e.name&&(e.name=t,t=e.partials[t]):e.name==="@partial-block"?t=e.data["partial-block"]:t=e.partials[e.name],t}function rr(t,n,e){var i=e.data&&e.data["partial-block"];e.partial=!0,e.ids&&(e.data.contextPath=e.ids[0]||e.data.contextPath);var p=void 0;if(e.fn&&e.fn!==en&&function(){e.data=B.createFrame(e.data);var f=e.fn;p=e.data["partial-block"]=function(l){var o=arguments.length<=1||arguments[1]===void 0?{}:arguments[1];return o.data=B.createFrame(o.data),o.data["partial-block"]=i,f(l,o)},f.partials&&(e.partials=N.extend({},e.partials,f.partials))}(),t===void 0&&p&&(t=p),t===void 0)throw new D.default("The partial "+e.name+" could not be found");if(t instanceof Function)return t(n,e)}function en(){return""}function ar(t,n){return(!n||!("root"in n))&&(n=n?B.createFrame(n):{},n.root=t),n}function rn(t,n,e,i,p,f){if(t.decorator){var d={};n=t.decorator(n,d,e,i&&i[0],p,f,i),N.extend(n,d)}return n}function ir(t,n){Object.keys(t).forEach(function(e){var i=t[e];t[e]=sr(i,n)})}function sr(t,n){var e=n.lookupProperty;return Ze.wrapHelper(t,function(i){return N.extend({lookupProperty:e},i)})}var it={exports:{}};(function(t,n){n.__esModule=!0,n.default=function(e){var i=typeof O!="undefined"?O:window,p=i.Handlebars;e.noConflict=function(){return i.Handlebars===e&&(i.Handlebars=p),e}},t.exports=n.default})(it,it.exports);(function(t,n){n.__esModule=!0;function e(y){return y&&y.__esModule?y:{default:y}}function i(y){if(y&&y.__esModule)return y;var w={};if(y!=null)for(var v in y)Object.prototype.hasOwnProperty.call(y,v)&&(w[v]=y[v]);return w.default=y,w}var p=A,f=i(p),d=Tt.exports,l=e(d),o=E.exports,u=e(o),c=S,h=i(c),r=R,s=i(r),a=it.exports,m=e(a);function g(){var y=new f.HandlebarsEnvironment;return h.extend(y,f),y.SafeString=l.default,y.Exception=u.default,y.Utils=h,y.escapeExpression=h.escapeExpression,y.VM=s,y.template=function(w){return s.template(w,y)},y}var b=g();b.create=g,m.default(b),b.default=b,n.default=b,t.exports=n.default})(ht,ht.exports);var st={exports:{}};(function(t,n){n.__esModule=!0;var e={helpers:{helperExpression:function(p){return p.type==="SubExpression"||(p.type==="MustacheStatement"||p.type==="BlockStatement")&&!!(p.params&&p.params.length||p.hash)},scopedId:function(p){return/^\.|this\b/.test(p.original)},simpleId:function(p){return p.parts.length===1&&!e.helpers.scopedId(p)&&!p.depth}}};n.default=e,t.exports=n.default})(st,st.exports);var J={},It={exports:{}};(function(t,n){n.__esModule=!0;var e=function(){var i={trace:function(){},yy:{},symbols_:{error:2,root:3,program:4,EOF:5,program_repetition0:6,statement:7,mustache:8,block:9,rawBlock:10,partial:11,partialBlock:12,content:13,COMMENT:14,CONTENT:15,openRawBlock:16,rawBlock_repetition0:17,END_RAW_BLOCK:18,OPEN_RAW_BLOCK:19,helperName:20,openRawBlock_repetition0:21,openRawBlock_option0:22,CLOSE_RAW_BLOCK:23,openBlock:24,block_option0:25,closeBlock:26,openInverse:27,block_option1:28,OPEN_BLOCK:29,openBlock_repetition0:30,openBlock_option0:31,openBlock_option1:32,CLOSE:33,OPEN_INVERSE:34,openInverse_repetition0:35,openInverse_option0:36,openInverse_option1:37,openInverseChain:38,OPEN_INVERSE_CHAIN:39,openInverseChain_repetition0:40,openInverseChain_option0:41,openInverseChain_option1:42,inverseAndProgram:43,INVERSE:44,inverseChain:45,inverseChain_option0:46,OPEN_ENDBLOCK:47,OPEN:48,mustache_repetition0:49,mustache_option0:50,OPEN_UNESCAPED:51,mustache_repetition1:52,mustache_option1:53,CLOSE_UNESCAPED:54,OPEN_PARTIAL:55,partialName:56,partial_repetition0:57,partial_option0:58,openPartialBlock:59,OPEN_PARTIAL_BLOCK:60,openPartialBlock_repetition0:61,openPartialBlock_option0:62,param:63,sexpr:64,OPEN_SEXPR:65,sexpr_repetition0:66,sexpr_option0:67,CLOSE_SEXPR:68,hash:69,hash_repetition_plus0:70,hashSegment:71,ID:72,EQUALS:73,blockParams:74,OPEN_BLOCK_PARAMS:75,blockParams_repetition_plus0:76,CLOSE_BLOCK_PARAMS:77,path:78,dataName:79,STRING:80,NUMBER:81,BOOLEAN:82,UNDEFINED:83,NULL:84,DATA:85,pathSegments:86,SEP:87,$accept:0,$end:1},terminals_:{2:"error",5:"EOF",14:"COMMENT",15:"CONTENT",18:"END_RAW_BLOCK",19:"OPEN_RAW_BLOCK",23:"CLOSE_RAW_BLOCK",29:"OPEN_BLOCK",33:"CLOSE",34:"OPEN_INVERSE",39:"OPEN_INVERSE_CHAIN",44:"INVERSE",47:"OPEN_ENDBLOCK",48:"OPEN",51:"OPEN_UNESCAPED",54:"CLOSE_UNESCAPED",55:"OPEN_PARTIAL",60:"OPEN_PARTIAL_BLOCK",65:"OPEN_SEXPR",68:"CLOSE_SEXPR",72:"ID",73:"EQUALS",75:"OPEN_BLOCK_PARAMS",77:"CLOSE_BLOCK_PARAMS",80:"STRING",81:"NUMBER",82:"BOOLEAN",83:"UNDEFINED",84:"NULL",85:"DATA",87:"SEP"},productions_:[0,[3,2],[4,1],[7,1],[7,1],[7,1],[7,1],[7,1],[7,1],[7,1],[13,1],[10,3],[16,5],[9,4],[9,4],[24,6],[27,6],[38,6],[43,2],[45,3],[45,1],[26,3],[8,5],[8,5],[11,5],[12,3],[59,5],[63,1],[63,1],[64,5],[69,1],[71,3],[74,3],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1],[56,1],[56,1],[79,2],[78,1],[86,3],[86,1],[6,0],[6,2],[17,0],[17,2],[21,0],[21,2],[22,0],[22,1],[25,0],[25,1],[28,0],[28,1],[30,0],[30,2],[31,0],[31,1],[32,0],[32,1],[35,0],[35,2],[36,0],[36,1],[37,0],[37,1],[40,0],[40,2],[41,0],[41,1],[42,0],[42,1],[46,0],[46,1],[49,0],[49,2],[50,0],[50,1],[52,0],[52,2],[53,0],[53,1],[57,0],[57,2],[58,0],[58,1],[61,0],[61,2],[62,0],[62,1],[66,0],[66,2],[67,0],[67,1],[70,1],[70,2],[76,1],[76,2]],performAction:function(l,o,u,c,h,r,s){var a=r.length-1;switch(h){case 1:return r[a-1];case 2:this.$=c.prepareProgram(r[a]);break;case 3:this.$=r[a];break;case 4:this.$=r[a];break;case 5:this.$=r[a];break;case 6:this.$=r[a];break;case 7:this.$=r[a];break;case 8:this.$=r[a];break;case 9:this.$={type:"CommentStatement",value:c.stripComment(r[a]),strip:c.stripFlags(r[a],r[a]),loc:c.locInfo(this._$)};break;case 10:this.$={type:"ContentStatement",original:r[a],value:r[a],loc:c.locInfo(this._$)};break;case 11:this.$=c.prepareRawBlock(r[a-2],r[a-1],r[a],this._$);break;case 12:this.$={path:r[a-3],params:r[a-2],hash:r[a-1]};break;case 13:this.$=c.prepareBlock(r[a-3],r[a-2],r[a-1],r[a],!1,this._$);break;case 14:this.$=c.prepareBlock(r[a-3],r[a-2],r[a-1],r[a],!0,this._$);break;case 15:this.$={open:r[a-5],path:r[a-4],params:r[a-3],hash:r[a-2],blockParams:r[a-1],strip:c.stripFlags(r[a-5],r[a])};break;case 16:this.$={path:r[a-4],params:r[a-3],hash:r[a-2],blockParams:r[a-1],strip:c.stripFlags(r[a-5],r[a])};break;case 17:this.$={path:r[a-4],params:r[a-3],hash:r[a-2],blockParams:r[a-1],strip:c.stripFlags(r[a-5],r[a])};break;case 18:this.$={strip:c.stripFlags(r[a-1],r[a-1]),program:r[a]};break;case 19:var m=c.prepareBlock(r[a-2],r[a-1],r[a],r[a],!1,this._$),g=c.prepareProgram([m],r[a-1].loc);g.chained=!0,this.$={strip:r[a-2].strip,program:g,chain:!0};break;case 20:this.$=r[a];break;case 21:this.$={path:r[a-1],strip:c.stripFlags(r[a-2],r[a])};break;case 22:this.$=c.prepareMustache(r[a-3],r[a-2],r[a-1],r[a-4],c.stripFlags(r[a-4],r[a]),this._$);break;case 23:this.$=c.prepareMustache(r[a-3],r[a-2],r[a-1],r[a-4],c.stripFlags(r[a-4],r[a]),this._$);break;case 24:this.$={type:"PartialStatement",name:r[a-3],params:r[a-2],hash:r[a-1],indent:"",strip:c.stripFlags(r[a-4],r[a]),loc:c.locInfo(this._$)};break;case 25:this.$=c.preparePartialBlock(r[a-2],r[a-1],r[a],this._$);break;case 26:this.$={path:r[a-3],params:r[a-2],hash:r[a-1],strip:c.stripFlags(r[a-4],r[a])};break;case 27:this.$=r[a];break;case 28:this.$=r[a];break;case 29:this.$={type:"SubExpression",path:r[a-3],params:r[a-2],hash:r[a-1],loc:c.locInfo(this._$)};break;case 30:this.$={type:"Hash",pairs:r[a],loc:c.locInfo(this._$)};break;case 31:this.$={type:"HashPair",key:c.id(r[a-2]),value:r[a],loc:c.locInfo(this._$)};break;case 32:this.$=c.id(r[a-1]);break;case 33:this.$=r[a];break;case 34:this.$=r[a];break;case 35:this.$={type:"StringLiteral",value:r[a],original:r[a],loc:c.locInfo(this._$)};break;case 36:this.$={type:"NumberLiteral",value:Number(r[a]),original:Number(r[a]),loc:c.locInfo(this._$)};break;case 37:this.$={type:"BooleanLiteral",value:r[a]==="true",original:r[a]==="true",loc:c.locInfo(this._$)};break;case 38:this.$={type:"UndefinedLiteral",original:void 0,value:void 0,loc:c.locInfo(this._$)};break;case 39:this.$={type:"NullLiteral",original:null,value:null,loc:c.locInfo(this._$)};break;case 40:this.$=r[a];break;case 41:this.$=r[a];break;case 42:this.$=c.preparePath(!0,r[a],this._$);break;case 43:this.$=c.preparePath(!1,r[a],this._$);break;case 44:r[a-2].push({part:c.id(r[a]),original:r[a],separator:r[a-1]}),this.$=r[a-2];break;case 45:this.$=[{part:c.id(r[a]),original:r[a]}];break;case 46:this.$=[];break;case 47:r[a-1].push(r[a]);break;case 48:this.$=[];break;case 49:r[a-1].push(r[a]);break;case 50:this.$=[];break;case 51:r[a-1].push(r[a]);break;case 58:this.$=[];break;case 59:r[a-1].push(r[a]);break;case 64:this.$=[];break;case 65:r[a-1].push(r[a]);break;case 70:this.$=[];break;case 71:r[a-1].push(r[a]);break;case 78:this.$=[];break;case 79:r[a-1].push(r[a]);break;case 82:this.$=[];break;case 83:r[a-1].push(r[a]);break;case 86:this.$=[];break;case 87:r[a-1].push(r[a]);break;case 90:this.$=[];break;case 91:r[a-1].push(r[a]);break;case 94:this.$=[];break;case 95:r[a-1].push(r[a]);break;case 98:this.$=[r[a]];break;case 99:r[a-1].push(r[a]);break;case 100:this.$=[r[a]];break;case 101:r[a-1].push(r[a]);break}},table:[{3:1,4:2,5:[2,46],6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{1:[3]},{5:[1,4]},{5:[2,2],7:5,8:6,9:7,10:8,11:9,12:10,13:11,14:[1,12],15:[1,20],16:17,19:[1,23],24:15,27:16,29:[1,21],34:[1,22],39:[2,2],44:[2,2],47:[2,2],48:[1,13],51:[1,14],55:[1,18],59:19,60:[1,24]},{1:[2,1]},{5:[2,47],14:[2,47],15:[2,47],19:[2,47],29:[2,47],34:[2,47],39:[2,47],44:[2,47],47:[2,47],48:[2,47],51:[2,47],55:[2,47],60:[2,47]},{5:[2,3],14:[2,3],15:[2,3],19:[2,3],29:[2,3],34:[2,3],39:[2,3],44:[2,3],47:[2,3],48:[2,3],51:[2,3],55:[2,3],60:[2,3]},{5:[2,4],14:[2,4],15:[2,4],19:[2,4],29:[2,4],34:[2,4],39:[2,4],44:[2,4],47:[2,4],48:[2,4],51:[2,4],55:[2,4],60:[2,4]},{5:[2,5],14:[2,5],15:[2,5],19:[2,5],29:[2,5],34:[2,5],39:[2,5],44:[2,5],47:[2,5],48:[2,5],51:[2,5],55:[2,5],60:[2,5]},{5:[2,6],14:[2,6],15:[2,6],19:[2,6],29:[2,6],34:[2,6],39:[2,6],44:[2,6],47:[2,6],48:[2,6],51:[2,6],55:[2,6],60:[2,6]},{5:[2,7],14:[2,7],15:[2,7],19:[2,7],29:[2,7],34:[2,7],39:[2,7],44:[2,7],47:[2,7],48:[2,7],51:[2,7],55:[2,7],60:[2,7]},{5:[2,8],14:[2,8],15:[2,8],19:[2,8],29:[2,8],34:[2,8],39:[2,8],44:[2,8],47:[2,8],48:[2,8],51:[2,8],55:[2,8],60:[2,8]},{5:[2,9],14:[2,9],15:[2,9],19:[2,9],29:[2,9],34:[2,9],39:[2,9],44:[2,9],47:[2,9],48:[2,9],51:[2,9],55:[2,9],60:[2,9]},{20:25,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:36,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{4:37,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],39:[2,46],44:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{4:38,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],44:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{15:[2,48],17:39,18:[2,48]},{20:41,56:40,64:42,65:[1,43],72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{4:44,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{5:[2,10],14:[2,10],15:[2,10],18:[2,10],19:[2,10],29:[2,10],34:[2,10],39:[2,10],44:[2,10],47:[2,10],48:[2,10],51:[2,10],55:[2,10],60:[2,10]},{20:45,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:46,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:47,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:41,56:48,64:42,65:[1,43],72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{33:[2,78],49:49,65:[2,78],72:[2,78],80:[2,78],81:[2,78],82:[2,78],83:[2,78],84:[2,78],85:[2,78]},{23:[2,33],33:[2,33],54:[2,33],65:[2,33],68:[2,33],72:[2,33],75:[2,33],80:[2,33],81:[2,33],82:[2,33],83:[2,33],84:[2,33],85:[2,33]},{23:[2,34],33:[2,34],54:[2,34],65:[2,34],68:[2,34],72:[2,34],75:[2,34],80:[2,34],81:[2,34],82:[2,34],83:[2,34],84:[2,34],85:[2,34]},{23:[2,35],33:[2,35],54:[2,35],65:[2,35],68:[2,35],72:[2,35],75:[2,35],80:[2,35],81:[2,35],82:[2,35],83:[2,35],84:[2,35],85:[2,35]},{23:[2,36],33:[2,36],54:[2,36],65:[2,36],68:[2,36],72:[2,36],75:[2,36],80:[2,36],81:[2,36],82:[2,36],83:[2,36],84:[2,36],85:[2,36]},{23:[2,37],33:[2,37],54:[2,37],65:[2,37],68:[2,37],72:[2,37],75:[2,37],80:[2,37],81:[2,37],82:[2,37],83:[2,37],84:[2,37],85:[2,37]},{23:[2,38],33:[2,38],54:[2,38],65:[2,38],68:[2,38],72:[2,38],75:[2,38],80:[2,38],81:[2,38],82:[2,38],83:[2,38],84:[2,38],85:[2,38]},{23:[2,39],33:[2,39],54:[2,39],65:[2,39],68:[2,39],72:[2,39],75:[2,39],80:[2,39],81:[2,39],82:[2,39],83:[2,39],84:[2,39],85:[2,39]},{23:[2,43],33:[2,43],54:[2,43],65:[2,43],68:[2,43],72:[2,43],75:[2,43],80:[2,43],81:[2,43],82:[2,43],83:[2,43],84:[2,43],85:[2,43],87:[1,50]},{72:[1,35],86:51},{23:[2,45],33:[2,45],54:[2,45],65:[2,45],68:[2,45],72:[2,45],75:[2,45],80:[2,45],81:[2,45],82:[2,45],83:[2,45],84:[2,45],85:[2,45],87:[2,45]},{52:52,54:[2,82],65:[2,82],72:[2,82],80:[2,82],81:[2,82],82:[2,82],83:[2,82],84:[2,82],85:[2,82]},{25:53,38:55,39:[1,57],43:56,44:[1,58],45:54,47:[2,54]},{28:59,43:60,44:[1,58],47:[2,56]},{13:62,15:[1,20],18:[1,61]},{33:[2,86],57:63,65:[2,86],72:[2,86],80:[2,86],81:[2,86],82:[2,86],83:[2,86],84:[2,86],85:[2,86]},{33:[2,40],65:[2,40],72:[2,40],80:[2,40],81:[2,40],82:[2,40],83:[2,40],84:[2,40],85:[2,40]},{33:[2,41],65:[2,41],72:[2,41],80:[2,41],81:[2,41],82:[2,41],83:[2,41],84:[2,41],85:[2,41]},{20:64,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{26:65,47:[1,66]},{30:67,33:[2,58],65:[2,58],72:[2,58],75:[2,58],80:[2,58],81:[2,58],82:[2,58],83:[2,58],84:[2,58],85:[2,58]},{33:[2,64],35:68,65:[2,64],72:[2,64],75:[2,64],80:[2,64],81:[2,64],82:[2,64],83:[2,64],84:[2,64],85:[2,64]},{21:69,23:[2,50],65:[2,50],72:[2,50],80:[2,50],81:[2,50],82:[2,50],83:[2,50],84:[2,50],85:[2,50]},{33:[2,90],61:70,65:[2,90],72:[2,90],80:[2,90],81:[2,90],82:[2,90],83:[2,90],84:[2,90],85:[2,90]},{20:74,33:[2,80],50:71,63:72,64:75,65:[1,43],69:73,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{72:[1,79]},{23:[2,42],33:[2,42],54:[2,42],65:[2,42],68:[2,42],72:[2,42],75:[2,42],80:[2,42],81:[2,42],82:[2,42],83:[2,42],84:[2,42],85:[2,42],87:[1,50]},{20:74,53:80,54:[2,84],63:81,64:75,65:[1,43],69:82,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{26:83,47:[1,66]},{47:[2,55]},{4:84,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],39:[2,46],44:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{47:[2,20]},{20:85,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{4:86,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{26:87,47:[1,66]},{47:[2,57]},{5:[2,11],14:[2,11],15:[2,11],19:[2,11],29:[2,11],34:[2,11],39:[2,11],44:[2,11],47:[2,11],48:[2,11],51:[2,11],55:[2,11],60:[2,11]},{15:[2,49],18:[2,49]},{20:74,33:[2,88],58:88,63:89,64:75,65:[1,43],69:90,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{65:[2,94],66:91,68:[2,94],72:[2,94],80:[2,94],81:[2,94],82:[2,94],83:[2,94],84:[2,94],85:[2,94]},{5:[2,25],14:[2,25],15:[2,25],19:[2,25],29:[2,25],34:[2,25],39:[2,25],44:[2,25],47:[2,25],48:[2,25],51:[2,25],55:[2,25],60:[2,25]},{20:92,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:74,31:93,33:[2,60],63:94,64:75,65:[1,43],69:95,70:76,71:77,72:[1,78],75:[2,60],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:74,33:[2,66],36:96,63:97,64:75,65:[1,43],69:98,70:76,71:77,72:[1,78],75:[2,66],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:74,22:99,23:[2,52],63:100,64:75,65:[1,43],69:101,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:74,33:[2,92],62:102,63:103,64:75,65:[1,43],69:104,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{33:[1,105]},{33:[2,79],65:[2,79],72:[2,79],80:[2,79],81:[2,79],82:[2,79],83:[2,79],84:[2,79],85:[2,79]},{33:[2,81]},{23:[2,27],33:[2,27],54:[2,27],65:[2,27],68:[2,27],72:[2,27],75:[2,27],80:[2,27],81:[2,27],82:[2,27],83:[2,27],84:[2,27],85:[2,27]},{23:[2,28],33:[2,28],54:[2,28],65:[2,28],68:[2,28],72:[2,28],75:[2,28],80:[2,28],81:[2,28],82:[2,28],83:[2,28],84:[2,28],85:[2,28]},{23:[2,30],33:[2,30],54:[2,30],68:[2,30],71:106,72:[1,107],75:[2,30]},{23:[2,98],33:[2,98],54:[2,98],68:[2,98],72:[2,98],75:[2,98]},{23:[2,45],33:[2,45],54:[2,45],65:[2,45],68:[2,45],72:[2,45],73:[1,108],75:[2,45],80:[2,45],81:[2,45],82:[2,45],83:[2,45],84:[2,45],85:[2,45],87:[2,45]},{23:[2,44],33:[2,44],54:[2,44],65:[2,44],68:[2,44],72:[2,44],75:[2,44],80:[2,44],81:[2,44],82:[2,44],83:[2,44],84:[2,44],85:[2,44],87:[2,44]},{54:[1,109]},{54:[2,83],65:[2,83],72:[2,83],80:[2,83],81:[2,83],82:[2,83],83:[2,83],84:[2,83],85:[2,83]},{54:[2,85]},{5:[2,13],14:[2,13],15:[2,13],19:[2,13],29:[2,13],34:[2,13],39:[2,13],44:[2,13],47:[2,13],48:[2,13],51:[2,13],55:[2,13],60:[2,13]},{38:55,39:[1,57],43:56,44:[1,58],45:111,46:110,47:[2,76]},{33:[2,70],40:112,65:[2,70],72:[2,70],75:[2,70],80:[2,70],81:[2,70],82:[2,70],83:[2,70],84:[2,70],85:[2,70]},{47:[2,18]},{5:[2,14],14:[2,14],15:[2,14],19:[2,14],29:[2,14],34:[2,14],39:[2,14],44:[2,14],47:[2,14],48:[2,14],51:[2,14],55:[2,14],60:[2,14]},{33:[1,113]},{33:[2,87],65:[2,87],72:[2,87],80:[2,87],81:[2,87],82:[2,87],83:[2,87],84:[2,87],85:[2,87]},{33:[2,89]},{20:74,63:115,64:75,65:[1,43],67:114,68:[2,96],69:116,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{33:[1,117]},{32:118,33:[2,62],74:119,75:[1,120]},{33:[2,59],65:[2,59],72:[2,59],75:[2,59],80:[2,59],81:[2,59],82:[2,59],83:[2,59],84:[2,59],85:[2,59]},{33:[2,61],75:[2,61]},{33:[2,68],37:121,74:122,75:[1,120]},{33:[2,65],65:[2,65],72:[2,65],75:[2,65],80:[2,65],81:[2,65],82:[2,65],83:[2,65],84:[2,65],85:[2,65]},{33:[2,67],75:[2,67]},{23:[1,123]},{23:[2,51],65:[2,51],72:[2,51],80:[2,51],81:[2,51],82:[2,51],83:[2,51],84:[2,51],85:[2,51]},{23:[2,53]},{33:[1,124]},{33:[2,91],65:[2,91],72:[2,91],80:[2,91],81:[2,91],82:[2,91],83:[2,91],84:[2,91],85:[2,91]},{33:[2,93]},{5:[2,22],14:[2,22],15:[2,22],19:[2,22],29:[2,22],34:[2,22],39:[2,22],44:[2,22],47:[2,22],48:[2,22],51:[2,22],55:[2,22],60:[2,22]},{23:[2,99],33:[2,99],54:[2,99],68:[2,99],72:[2,99],75:[2,99]},{73:[1,108]},{20:74,63:125,64:75,65:[1,43],72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{5:[2,23],14:[2,23],15:[2,23],19:[2,23],29:[2,23],34:[2,23],39:[2,23],44:[2,23],47:[2,23],48:[2,23],51:[2,23],55:[2,23],60:[2,23]},{47:[2,19]},{47:[2,77]},{20:74,33:[2,72],41:126,63:127,64:75,65:[1,43],69:128,70:76,71:77,72:[1,78],75:[2,72],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{5:[2,24],14:[2,24],15:[2,24],19:[2,24],29:[2,24],34:[2,24],39:[2,24],44:[2,24],47:[2,24],48:[2,24],51:[2,24],55:[2,24],60:[2,24]},{68:[1,129]},{65:[2,95],68:[2,95],72:[2,95],80:[2,95],81:[2,95],82:[2,95],83:[2,95],84:[2,95],85:[2,95]},{68:[2,97]},{5:[2,21],14:[2,21],15:[2,21],19:[2,21],29:[2,21],34:[2,21],39:[2,21],44:[2,21],47:[2,21],48:[2,21],51:[2,21],55:[2,21],60:[2,21]},{33:[1,130]},{33:[2,63]},{72:[1,132],76:131},{33:[1,133]},{33:[2,69]},{15:[2,12],18:[2,12]},{14:[2,26],15:[2,26],19:[2,26],29:[2,26],34:[2,26],47:[2,26],48:[2,26],51:[2,26],55:[2,26],60:[2,26]},{23:[2,31],33:[2,31],54:[2,31],68:[2,31],72:[2,31],75:[2,31]},{33:[2,74],42:134,74:135,75:[1,120]},{33:[2,71],65:[2,71],72:[2,71],75:[2,71],80:[2,71],81:[2,71],82:[2,71],83:[2,71],84:[2,71],85:[2,71]},{33:[2,73],75:[2,73]},{23:[2,29],33:[2,29],54:[2,29],65:[2,29],68:[2,29],72:[2,29],75:[2,29],80:[2,29],81:[2,29],82:[2,29],83:[2,29],84:[2,29],85:[2,29]},{14:[2,15],15:[2,15],19:[2,15],29:[2,15],34:[2,15],39:[2,15],44:[2,15],47:[2,15],48:[2,15],51:[2,15],55:[2,15],60:[2,15]},{72:[1,137],77:[1,136]},{72:[2,100],77:[2,100]},{14:[2,16],15:[2,16],19:[2,16],29:[2,16],34:[2,16],44:[2,16],47:[2,16],48:[2,16],51:[2,16],55:[2,16],60:[2,16]},{33:[1,138]},{33:[2,75]},{33:[2,32]},{72:[2,101],77:[2,101]},{14:[2,17],15:[2,17],19:[2,17],29:[2,17],34:[2,17],39:[2,17],44:[2,17],47:[2,17],48:[2,17],51:[2,17],55:[2,17],60:[2,17]}],defaultActions:{4:[2,1],54:[2,55],56:[2,20],60:[2,57],73:[2,81],82:[2,85],86:[2,18],90:[2,89],101:[2,53],104:[2,93],110:[2,19],111:[2,77],116:[2,97],119:[2,63],122:[2,69],135:[2,75],136:[2,32]},parseError:function(l,o){throw new Error(l)},parse:function(l){var o=this,u=[0],c=[null],h=[],r=this.table,s="",a=0,m=0;this.lexer.setInput(l),this.lexer.yy=this.yy,this.yy.lexer=this.lexer,this.yy.parser=this,typeof this.lexer.yylloc=="undefined"&&(this.lexer.yylloc={});var g=this.lexer.yylloc;h.push(g);var b=this.lexer.options&&this.lexer.options.ranges;typeof this.yy.parseError=="function"&&(this.parseError=this.yy.parseError);function y(){var M;return M=o.lexer.lex()||1,typeof M!="number"&&(M=o.symbols_[M]||M),M}for(var w,v,k,T,x={},I,F,V,Z;;){if(v=u[u.length-1],this.defaultActions[v]?k=this.defaultActions[v]:((w===null||typeof w=="undefined")&&(w=y()),k=r[v]&&r[v][w]),typeof k=="undefined"||!k.length||!k[0]){var ct="";{Z=[];for(I in r[v])this.terminals_[I]&&I>2&&Z.push("'"+this.terminals_[I]+"'");this.lexer.showPosition?ct="Parse error on line "+(a+1)+`:
+`)}return c}else throw new D.default("The partial "+o.name+" could not be compiled when running in runtime-only mode")}var p={strict:function(l,o,u){if(!l||!(o in l))throw new D.default('"'+o+'" not defined in '+l,{loc:u});return p.lookupProperty(l,o)},lookupProperty:function(l,o){var u=l[o];if(u==null||Object.prototype.hasOwnProperty.call(l,o)||Yt.resultIsAllowed(u,p.protoAccessControl,o))return u},lookup:function(l,o){for(var u=l.length,c=0;c<u;c++){var h=l[c]&&p.lookupProperty(l[c],o);if(h!=null)return l[c][o]}},lambda:function(l,o){return typeof l=="function"?l.call(o):l},escapeExpression:N.escapeExpression,invokePartial:a,fn:function(l){var o=t[l];return o.decorator=t[l+"_d"],o},programs:[],program:function(l,o,u,c,h){var r=this.programs[l],s=this.fn(l);return o||h||c||u?r=tt(this,l,s,o,u,c,h):r||(r=this.programs[l]=tt(this,l,s)),r},data:function(l,o){for(;l&&o--;)l=l._parent;return l},mergeIfNeeded:function(l,o){var u=l||o;return l&&o&&l!==o&&(u=N.extend({},o,l)),u},nullContext:Object.seal({}),noop:n.VM.noop,compilerInfo:t.compiler};function f(d){var l=arguments.length<=1||arguments[1]===void 0?{}:arguments[1],o=l.data;f._setup(l),!l.partial&&t.useData&&(o=ir(d,o));var u=void 0,c=t.useBlockParams?[]:void 0;t.useDepths&&(l.depths?u=d!=l.depths[0]?[d].concat(l.depths):l.depths:u=[d]);function h(r){return""+t.main(p,r,p.helpers,p.partials,o,c,u)}return h=rn(t.main,h,p,l.depths||[],o,c),h(d,l)}return f.isTop=!0,f._setup=function(d){if(d.partial)p.protoAccessControl=d.protoAccessControl,p.helpers=d.helpers,p.partials=d.partials,p.decorators=d.decorators,p.hooks=d.hooks;else{var l=N.extend({},n.helpers,d.helpers);ar(l,p),p.helpers=l,t.usePartial&&(p.partials=p.mergeIfNeeded(d.partials,n.partials)),(t.usePartial||t.useDecorators)&&(p.decorators=N.extend({},n.decorators,d.decorators)),p.hooks={},p.protoAccessControl=Yt.createProtoAccessControl(d);var o=d.allowCallsToHelperMissing||e;Wt.moveHelperToHooks(p,"helperMissing",o),Wt.moveHelperToHooks(p,"blockHelperMissing",o)}},f._child=function(d,l,o,u){if(t.useBlockParams&&!o)throw new D.default("must pass block params");if(t.useDepths&&!u)throw new D.default("must pass parent depths");return tt(p,d,t[d],l,0,o,u)},f}function tt(t,n,e,a,p,f,d){function l(o){var u=arguments.length<=1||arguments[1]===void 0?{}:arguments[1],c=d;return d&&o!=d[0]&&!(o===t.nullContext&&d[0]===null)&&(c=[o].concat(d)),e(t,o,t.helpers,t.partials,u.data||a,f&&[u.blockParams].concat(f),c)}return l=rn(e,l,t,d,a,f),l.program=n,l.depth=d?d.length:0,l.blockParams=p||0,l}function er(t,n,e){return t?!t.call&&!e.name&&(e.name=t,t=e.partials[t]):e.name==="@partial-block"?t=e.data["partial-block"]:t=e.partials[e.name],t}function rr(t,n,e){var a=e.data&&e.data["partial-block"];e.partial=!0,e.ids&&(e.data.contextPath=e.ids[0]||e.data.contextPath);var p=void 0;if(e.fn&&e.fn!==en&&function(){e.data=B.createFrame(e.data);var f=e.fn;p=e.data["partial-block"]=function(l){var o=arguments.length<=1||arguments[1]===void 0?{}:arguments[1];return o.data=B.createFrame(o.data),o.data["partial-block"]=a,f(l,o)},f.partials&&(e.partials=N.extend({},e.partials,f.partials))}(),t===void 0&&p&&(t=p),t===void 0)throw new D.default("The partial "+e.name+" could not be found");if(t instanceof Function)return t(n,e)}function en(){return""}function ir(t,n){return(!n||!("root"in n))&&(n=n?B.createFrame(n):{},n.root=t),n}function rn(t,n,e,a,p,f){if(t.decorator){var d={};n=t.decorator(n,d,e,a&&a[0],p,f,a),N.extend(n,d)}return n}function ar(t,n){Object.keys(t).forEach(function(e){var a=t[e];t[e]=sr(a,n)})}function sr(t,n){var e=n.lookupProperty;return Ze.wrapHelper(t,function(a){return N.extend({lookupProperty:e},a)})}var at={exports:{}};(function(t,n){n.__esModule=!0,n.default=function(e){var a=typeof O!="undefined"?O:window,p=a.Handlebars;e.noConflict=function(){return a.Handlebars===e&&(a.Handlebars=p),e}},t.exports=n.default})(at,at.exports);(function(t,n){n.__esModule=!0;function e(y){return y&&y.__esModule?y:{default:y}}function a(y){if(y&&y.__esModule)return y;var w={};if(y!=null)for(var v in y)Object.prototype.hasOwnProperty.call(y,v)&&(w[v]=y[v]);return w.default=y,w}var p=A,f=a(p),d=Tt.exports,l=e(d),o=E.exports,u=e(o),c=S,h=a(c),r=R,s=a(r),i=at.exports,m=e(i);function g(){var y=new f.HandlebarsEnvironment;return h.extend(y,f),y.SafeString=l.default,y.Exception=u.default,y.Utils=h,y.escapeExpression=h.escapeExpression,y.VM=s,y.template=function(w){return s.template(w,y)},y}var b=g();b.create=g,m.default(b),b.default=b,n.default=b,t.exports=n.default})(ht,ht.exports);var st={exports:{}};(function(t,n){n.__esModule=!0;var e={helpers:{helperExpression:function(p){return p.type==="SubExpression"||(p.type==="MustacheStatement"||p.type==="BlockStatement")&&!!(p.params&&p.params.length||p.hash)},scopedId:function(p){return/^\.|this\b/.test(p.original)},simpleId:function(p){return p.parts.length===1&&!e.helpers.scopedId(p)&&!p.depth}}};n.default=e,t.exports=n.default})(st,st.exports);var J={},It={exports:{}};(function(t,n){n.__esModule=!0;var e=function(){var a={trace:function(){},yy:{},symbols_:{error:2,root:3,program:4,EOF:5,program_repetition0:6,statement:7,mustache:8,block:9,rawBlock:10,partial:11,partialBlock:12,content:13,COMMENT:14,CONTENT:15,openRawBlock:16,rawBlock_repetition0:17,END_RAW_BLOCK:18,OPEN_RAW_BLOCK:19,helperName:20,openRawBlock_repetition0:21,openRawBlock_option0:22,CLOSE_RAW_BLOCK:23,openBlock:24,block_option0:25,closeBlock:26,openInverse:27,block_option1:28,OPEN_BLOCK:29,openBlock_repetition0:30,openBlock_option0:31,openBlock_option1:32,CLOSE:33,OPEN_INVERSE:34,openInverse_repetition0:35,openInverse_option0:36,openInverse_option1:37,openInverseChain:38,OPEN_INVERSE_CHAIN:39,openInverseChain_repetition0:40,openInverseChain_option0:41,openInverseChain_option1:42,inverseAndProgram:43,INVERSE:44,inverseChain:45,inverseChain_option0:46,OPEN_ENDBLOCK:47,OPEN:48,mustache_repetition0:49,mustache_option0:50,OPEN_UNESCAPED:51,mustache_repetition1:52,mustache_option1:53,CLOSE_UNESCAPED:54,OPEN_PARTIAL:55,partialName:56,partial_repetition0:57,partial_option0:58,openPartialBlock:59,OPEN_PARTIAL_BLOCK:60,openPartialBlock_repetition0:61,openPartialBlock_option0:62,param:63,sexpr:64,OPEN_SEXPR:65,sexpr_repetition0:66,sexpr_option0:67,CLOSE_SEXPR:68,hash:69,hash_repetition_plus0:70,hashSegment:71,ID:72,EQUALS:73,blockParams:74,OPEN_BLOCK_PARAMS:75,blockParams_repetition_plus0:76,CLOSE_BLOCK_PARAMS:77,path:78,dataName:79,STRING:80,NUMBER:81,BOOLEAN:82,UNDEFINED:83,NULL:84,DATA:85,pathSegments:86,SEP:87,$accept:0,$end:1},terminals_:{2:"error",5:"EOF",14:"COMMENT",15:"CONTENT",18:"END_RAW_BLOCK",19:"OPEN_RAW_BLOCK",23:"CLOSE_RAW_BLOCK",29:"OPEN_BLOCK",33:"CLOSE",34:"OPEN_INVERSE",39:"OPEN_INVERSE_CHAIN",44:"INVERSE",47:"OPEN_ENDBLOCK",48:"OPEN",51:"OPEN_UNESCAPED",54:"CLOSE_UNESCAPED",55:"OPEN_PARTIAL",60:"OPEN_PARTIAL_BLOCK",65:"OPEN_SEXPR",68:"CLOSE_SEXPR",72:"ID",73:"EQUALS",75:"OPEN_BLOCK_PARAMS",77:"CLOSE_BLOCK_PARAMS",80:"STRING",81:"NUMBER",82:"BOOLEAN",83:"UNDEFINED",84:"NULL",85:"DATA",87:"SEP"},productions_:[0,[3,2],[4,1],[7,1],[7,1],[7,1],[7,1],[7,1],[7,1],[7,1],[13,1],[10,3],[16,5],[9,4],[9,4],[24,6],[27,6],[38,6],[43,2],[45,3],[45,1],[26,3],[8,5],[8,5],[11,5],[12,3],[59,5],[63,1],[63,1],[64,5],[69,1],[71,3],[74,3],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1],[20,1],[56,1],[56,1],[79,2],[78,1],[86,3],[86,1],[6,0],[6,2],[17,0],[17,2],[21,0],[21,2],[22,0],[22,1],[25,0],[25,1],[28,0],[28,1],[30,0],[30,2],[31,0],[31,1],[32,0],[32,1],[35,0],[35,2],[36,0],[36,1],[37,0],[37,1],[40,0],[40,2],[41,0],[41,1],[42,0],[42,1],[46,0],[46,1],[49,0],[49,2],[50,0],[50,1],[52,0],[52,2],[53,0],[53,1],[57,0],[57,2],[58,0],[58,1],[61,0],[61,2],[62,0],[62,1],[66,0],[66,2],[67,0],[67,1],[70,1],[70,2],[76,1],[76,2]],performAction:function(l,o,u,c,h,r,s){var i=r.length-1;switch(h){case 1:return r[i-1];case 2:this.$=c.prepareProgram(r[i]);break;case 3:this.$=r[i];break;case 4:this.$=r[i];break;case 5:this.$=r[i];break;case 6:this.$=r[i];break;case 7:this.$=r[i];break;case 8:this.$=r[i];break;case 9:this.$={type:"CommentStatement",value:c.stripComment(r[i]),strip:c.stripFlags(r[i],r[i]),loc:c.locInfo(this._$)};break;case 10:this.$={type:"ContentStatement",original:r[i],value:r[i],loc:c.locInfo(this._$)};break;case 11:this.$=c.prepareRawBlock(r[i-2],r[i-1],r[i],this._$);break;case 12:this.$={path:r[i-3],params:r[i-2],hash:r[i-1]};break;case 13:this.$=c.prepareBlock(r[i-3],r[i-2],r[i-1],r[i],!1,this._$);break;case 14:this.$=c.prepareBlock(r[i-3],r[i-2],r[i-1],r[i],!0,this._$);break;case 15:this.$={open:r[i-5],path:r[i-4],params:r[i-3],hash:r[i-2],blockParams:r[i-1],strip:c.stripFlags(r[i-5],r[i])};break;case 16:this.$={path:r[i-4],params:r[i-3],hash:r[i-2],blockParams:r[i-1],strip:c.stripFlags(r[i-5],r[i])};break;case 17:this.$={path:r[i-4],params:r[i-3],hash:r[i-2],blockParams:r[i-1],strip:c.stripFlags(r[i-5],r[i])};break;case 18:this.$={strip:c.stripFlags(r[i-1],r[i-1]),program:r[i]};break;case 19:var m=c.prepareBlock(r[i-2],r[i-1],r[i],r[i],!1,this._$),g=c.prepareProgram([m],r[i-1].loc);g.chained=!0,this.$={strip:r[i-2].strip,program:g,chain:!0};break;case 20:this.$=r[i];break;case 21:this.$={path:r[i-1],strip:c.stripFlags(r[i-2],r[i])};break;case 22:this.$=c.prepareMustache(r[i-3],r[i-2],r[i-1],r[i-4],c.stripFlags(r[i-4],r[i]),this._$);break;case 23:this.$=c.prepareMustache(r[i-3],r[i-2],r[i-1],r[i-4],c.stripFlags(r[i-4],r[i]),this._$);break;case 24:this.$={type:"PartialStatement",name:r[i-3],params:r[i-2],hash:r[i-1],indent:"",strip:c.stripFlags(r[i-4],r[i]),loc:c.locInfo(this._$)};break;case 25:this.$=c.preparePartialBlock(r[i-2],r[i-1],r[i],this._$);break;case 26:this.$={path:r[i-3],params:r[i-2],hash:r[i-1],strip:c.stripFlags(r[i-4],r[i])};break;case 27:this.$=r[i];break;case 28:this.$=r[i];break;case 29:this.$={type:"SubExpression",path:r[i-3],params:r[i-2],hash:r[i-1],loc:c.locInfo(this._$)};break;case 30:this.$={type:"Hash",pairs:r[i],loc:c.locInfo(this._$)};break;case 31:this.$={type:"HashPair",key:c.id(r[i-2]),value:r[i],loc:c.locInfo(this._$)};break;case 32:this.$=c.id(r[i-1]);break;case 33:this.$=r[i];break;case 34:this.$=r[i];break;case 35:this.$={type:"StringLiteral",value:r[i],original:r[i],loc:c.locInfo(this._$)};break;case 36:this.$={type:"NumberLiteral",value:Number(r[i]),original:Number(r[i]),loc:c.locInfo(this._$)};break;case 37:this.$={type:"BooleanLiteral",value:r[i]==="true",original:r[i]==="true",loc:c.locInfo(this._$)};break;case 38:this.$={type:"UndefinedLiteral",original:void 0,value:void 0,loc:c.locInfo(this._$)};break;case 39:this.$={type:"NullLiteral",original:null,value:null,loc:c.locInfo(this._$)};break;case 40:this.$=r[i];break;case 41:this.$=r[i];break;case 42:this.$=c.preparePath(!0,r[i],this._$);break;case 43:this.$=c.preparePath(!1,r[i],this._$);break;case 44:r[i-2].push({part:c.id(r[i]),original:r[i],separator:r[i-1]}),this.$=r[i-2];break;case 45:this.$=[{part:c.id(r[i]),original:r[i]}];break;case 46:this.$=[];break;case 47:r[i-1].push(r[i]);break;case 48:this.$=[];break;case 49:r[i-1].push(r[i]);break;case 50:this.$=[];break;case 51:r[i-1].push(r[i]);break;case 58:this.$=[];break;case 59:r[i-1].push(r[i]);break;case 64:this.$=[];break;case 65:r[i-1].push(r[i]);break;case 70:this.$=[];break;case 71:r[i-1].push(r[i]);break;case 78:this.$=[];break;case 79:r[i-1].push(r[i]);break;case 82:this.$=[];break;case 83:r[i-1].push(r[i]);break;case 86:this.$=[];break;case 87:r[i-1].push(r[i]);break;case 90:this.$=[];break;case 91:r[i-1].push(r[i]);break;case 94:this.$=[];break;case 95:r[i-1].push(r[i]);break;case 98:this.$=[r[i]];break;case 99:r[i-1].push(r[i]);break;case 100:this.$=[r[i]];break;case 101:r[i-1].push(r[i]);break}},table:[{3:1,4:2,5:[2,46],6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{1:[3]},{5:[1,4]},{5:[2,2],7:5,8:6,9:7,10:8,11:9,12:10,13:11,14:[1,12],15:[1,20],16:17,19:[1,23],24:15,27:16,29:[1,21],34:[1,22],39:[2,2],44:[2,2],47:[2,2],48:[1,13],51:[1,14],55:[1,18],59:19,60:[1,24]},{1:[2,1]},{5:[2,47],14:[2,47],15:[2,47],19:[2,47],29:[2,47],34:[2,47],39:[2,47],44:[2,47],47:[2,47],48:[2,47],51:[2,47],55:[2,47],60:[2,47]},{5:[2,3],14:[2,3],15:[2,3],19:[2,3],29:[2,3],34:[2,3],39:[2,3],44:[2,3],47:[2,3],48:[2,3],51:[2,3],55:[2,3],60:[2,3]},{5:[2,4],14:[2,4],15:[2,4],19:[2,4],29:[2,4],34:[2,4],39:[2,4],44:[2,4],47:[2,4],48:[2,4],51:[2,4],55:[2,4],60:[2,4]},{5:[2,5],14:[2,5],15:[2,5],19:[2,5],29:[2,5],34:[2,5],39:[2,5],44:[2,5],47:[2,5],48:[2,5],51:[2,5],55:[2,5],60:[2,5]},{5:[2,6],14:[2,6],15:[2,6],19:[2,6],29:[2,6],34:[2,6],39:[2,6],44:[2,6],47:[2,6],48:[2,6],51:[2,6],55:[2,6],60:[2,6]},{5:[2,7],14:[2,7],15:[2,7],19:[2,7],29:[2,7],34:[2,7],39:[2,7],44:[2,7],47:[2,7],48:[2,7],51:[2,7],55:[2,7],60:[2,7]},{5:[2,8],14:[2,8],15:[2,8],19:[2,8],29:[2,8],34:[2,8],39:[2,8],44:[2,8],47:[2,8],48:[2,8],51:[2,8],55:[2,8],60:[2,8]},{5:[2,9],14:[2,9],15:[2,9],19:[2,9],29:[2,9],34:[2,9],39:[2,9],44:[2,9],47:[2,9],48:[2,9],51:[2,9],55:[2,9],60:[2,9]},{20:25,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:36,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{4:37,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],39:[2,46],44:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{4:38,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],44:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{15:[2,48],17:39,18:[2,48]},{20:41,56:40,64:42,65:[1,43],72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{4:44,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{5:[2,10],14:[2,10],15:[2,10],18:[2,10],19:[2,10],29:[2,10],34:[2,10],39:[2,10],44:[2,10],47:[2,10],48:[2,10],51:[2,10],55:[2,10],60:[2,10]},{20:45,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:46,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:47,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:41,56:48,64:42,65:[1,43],72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{33:[2,78],49:49,65:[2,78],72:[2,78],80:[2,78],81:[2,78],82:[2,78],83:[2,78],84:[2,78],85:[2,78]},{23:[2,33],33:[2,33],54:[2,33],65:[2,33],68:[2,33],72:[2,33],75:[2,33],80:[2,33],81:[2,33],82:[2,33],83:[2,33],84:[2,33],85:[2,33]},{23:[2,34],33:[2,34],54:[2,34],65:[2,34],68:[2,34],72:[2,34],75:[2,34],80:[2,34],81:[2,34],82:[2,34],83:[2,34],84:[2,34],85:[2,34]},{23:[2,35],33:[2,35],54:[2,35],65:[2,35],68:[2,35],72:[2,35],75:[2,35],80:[2,35],81:[2,35],82:[2,35],83:[2,35],84:[2,35],85:[2,35]},{23:[2,36],33:[2,36],54:[2,36],65:[2,36],68:[2,36],72:[2,36],75:[2,36],80:[2,36],81:[2,36],82:[2,36],83:[2,36],84:[2,36],85:[2,36]},{23:[2,37],33:[2,37],54:[2,37],65:[2,37],68:[2,37],72:[2,37],75:[2,37],80:[2,37],81:[2,37],82:[2,37],83:[2,37],84:[2,37],85:[2,37]},{23:[2,38],33:[2,38],54:[2,38],65:[2,38],68:[2,38],72:[2,38],75:[2,38],80:[2,38],81:[2,38],82:[2,38],83:[2,38],84:[2,38],85:[2,38]},{23:[2,39],33:[2,39],54:[2,39],65:[2,39],68:[2,39],72:[2,39],75:[2,39],80:[2,39],81:[2,39],82:[2,39],83:[2,39],84:[2,39],85:[2,39]},{23:[2,43],33:[2,43],54:[2,43],65:[2,43],68:[2,43],72:[2,43],75:[2,43],80:[2,43],81:[2,43],82:[2,43],83:[2,43],84:[2,43],85:[2,43],87:[1,50]},{72:[1,35],86:51},{23:[2,45],33:[2,45],54:[2,45],65:[2,45],68:[2,45],72:[2,45],75:[2,45],80:[2,45],81:[2,45],82:[2,45],83:[2,45],84:[2,45],85:[2,45],87:[2,45]},{52:52,54:[2,82],65:[2,82],72:[2,82],80:[2,82],81:[2,82],82:[2,82],83:[2,82],84:[2,82],85:[2,82]},{25:53,38:55,39:[1,57],43:56,44:[1,58],45:54,47:[2,54]},{28:59,43:60,44:[1,58],47:[2,56]},{13:62,15:[1,20],18:[1,61]},{33:[2,86],57:63,65:[2,86],72:[2,86],80:[2,86],81:[2,86],82:[2,86],83:[2,86],84:[2,86],85:[2,86]},{33:[2,40],65:[2,40],72:[2,40],80:[2,40],81:[2,40],82:[2,40],83:[2,40],84:[2,40],85:[2,40]},{33:[2,41],65:[2,41],72:[2,41],80:[2,41],81:[2,41],82:[2,41],83:[2,41],84:[2,41],85:[2,41]},{20:64,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{26:65,47:[1,66]},{30:67,33:[2,58],65:[2,58],72:[2,58],75:[2,58],80:[2,58],81:[2,58],82:[2,58],83:[2,58],84:[2,58],85:[2,58]},{33:[2,64],35:68,65:[2,64],72:[2,64],75:[2,64],80:[2,64],81:[2,64],82:[2,64],83:[2,64],84:[2,64],85:[2,64]},{21:69,23:[2,50],65:[2,50],72:[2,50],80:[2,50],81:[2,50],82:[2,50],83:[2,50],84:[2,50],85:[2,50]},{33:[2,90],61:70,65:[2,90],72:[2,90],80:[2,90],81:[2,90],82:[2,90],83:[2,90],84:[2,90],85:[2,90]},{20:74,33:[2,80],50:71,63:72,64:75,65:[1,43],69:73,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{72:[1,79]},{23:[2,42],33:[2,42],54:[2,42],65:[2,42],68:[2,42],72:[2,42],75:[2,42],80:[2,42],81:[2,42],82:[2,42],83:[2,42],84:[2,42],85:[2,42],87:[1,50]},{20:74,53:80,54:[2,84],63:81,64:75,65:[1,43],69:82,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{26:83,47:[1,66]},{47:[2,55]},{4:84,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],39:[2,46],44:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{47:[2,20]},{20:85,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{4:86,6:3,14:[2,46],15:[2,46],19:[2,46],29:[2,46],34:[2,46],47:[2,46],48:[2,46],51:[2,46],55:[2,46],60:[2,46]},{26:87,47:[1,66]},{47:[2,57]},{5:[2,11],14:[2,11],15:[2,11],19:[2,11],29:[2,11],34:[2,11],39:[2,11],44:[2,11],47:[2,11],48:[2,11],51:[2,11],55:[2,11],60:[2,11]},{15:[2,49],18:[2,49]},{20:74,33:[2,88],58:88,63:89,64:75,65:[1,43],69:90,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{65:[2,94],66:91,68:[2,94],72:[2,94],80:[2,94],81:[2,94],82:[2,94],83:[2,94],84:[2,94],85:[2,94]},{5:[2,25],14:[2,25],15:[2,25],19:[2,25],29:[2,25],34:[2,25],39:[2,25],44:[2,25],47:[2,25],48:[2,25],51:[2,25],55:[2,25],60:[2,25]},{20:92,72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:74,31:93,33:[2,60],63:94,64:75,65:[1,43],69:95,70:76,71:77,72:[1,78],75:[2,60],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:74,33:[2,66],36:96,63:97,64:75,65:[1,43],69:98,70:76,71:77,72:[1,78],75:[2,66],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:74,22:99,23:[2,52],63:100,64:75,65:[1,43],69:101,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{20:74,33:[2,92],62:102,63:103,64:75,65:[1,43],69:104,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{33:[1,105]},{33:[2,79],65:[2,79],72:[2,79],80:[2,79],81:[2,79],82:[2,79],83:[2,79],84:[2,79],85:[2,79]},{33:[2,81]},{23:[2,27],33:[2,27],54:[2,27],65:[2,27],68:[2,27],72:[2,27],75:[2,27],80:[2,27],81:[2,27],82:[2,27],83:[2,27],84:[2,27],85:[2,27]},{23:[2,28],33:[2,28],54:[2,28],65:[2,28],68:[2,28],72:[2,28],75:[2,28],80:[2,28],81:[2,28],82:[2,28],83:[2,28],84:[2,28],85:[2,28]},{23:[2,30],33:[2,30],54:[2,30],68:[2,30],71:106,72:[1,107],75:[2,30]},{23:[2,98],33:[2,98],54:[2,98],68:[2,98],72:[2,98],75:[2,98]},{23:[2,45],33:[2,45],54:[2,45],65:[2,45],68:[2,45],72:[2,45],73:[1,108],75:[2,45],80:[2,45],81:[2,45],82:[2,45],83:[2,45],84:[2,45],85:[2,45],87:[2,45]},{23:[2,44],33:[2,44],54:[2,44],65:[2,44],68:[2,44],72:[2,44],75:[2,44],80:[2,44],81:[2,44],82:[2,44],83:[2,44],84:[2,44],85:[2,44],87:[2,44]},{54:[1,109]},{54:[2,83],65:[2,83],72:[2,83],80:[2,83],81:[2,83],82:[2,83],83:[2,83],84:[2,83],85:[2,83]},{54:[2,85]},{5:[2,13],14:[2,13],15:[2,13],19:[2,13],29:[2,13],34:[2,13],39:[2,13],44:[2,13],47:[2,13],48:[2,13],51:[2,13],55:[2,13],60:[2,13]},{38:55,39:[1,57],43:56,44:[1,58],45:111,46:110,47:[2,76]},{33:[2,70],40:112,65:[2,70],72:[2,70],75:[2,70],80:[2,70],81:[2,70],82:[2,70],83:[2,70],84:[2,70],85:[2,70]},{47:[2,18]},{5:[2,14],14:[2,14],15:[2,14],19:[2,14],29:[2,14],34:[2,14],39:[2,14],44:[2,14],47:[2,14],48:[2,14],51:[2,14],55:[2,14],60:[2,14]},{33:[1,113]},{33:[2,87],65:[2,87],72:[2,87],80:[2,87],81:[2,87],82:[2,87],83:[2,87],84:[2,87],85:[2,87]},{33:[2,89]},{20:74,63:115,64:75,65:[1,43],67:114,68:[2,96],69:116,70:76,71:77,72:[1,78],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{33:[1,117]},{32:118,33:[2,62],74:119,75:[1,120]},{33:[2,59],65:[2,59],72:[2,59],75:[2,59],80:[2,59],81:[2,59],82:[2,59],83:[2,59],84:[2,59],85:[2,59]},{33:[2,61],75:[2,61]},{33:[2,68],37:121,74:122,75:[1,120]},{33:[2,65],65:[2,65],72:[2,65],75:[2,65],80:[2,65],81:[2,65],82:[2,65],83:[2,65],84:[2,65],85:[2,65]},{33:[2,67],75:[2,67]},{23:[1,123]},{23:[2,51],65:[2,51],72:[2,51],80:[2,51],81:[2,51],82:[2,51],83:[2,51],84:[2,51],85:[2,51]},{23:[2,53]},{33:[1,124]},{33:[2,91],65:[2,91],72:[2,91],80:[2,91],81:[2,91],82:[2,91],83:[2,91],84:[2,91],85:[2,91]},{33:[2,93]},{5:[2,22],14:[2,22],15:[2,22],19:[2,22],29:[2,22],34:[2,22],39:[2,22],44:[2,22],47:[2,22],48:[2,22],51:[2,22],55:[2,22],60:[2,22]},{23:[2,99],33:[2,99],54:[2,99],68:[2,99],72:[2,99],75:[2,99]},{73:[1,108]},{20:74,63:125,64:75,65:[1,43],72:[1,35],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{5:[2,23],14:[2,23],15:[2,23],19:[2,23],29:[2,23],34:[2,23],39:[2,23],44:[2,23],47:[2,23],48:[2,23],51:[2,23],55:[2,23],60:[2,23]},{47:[2,19]},{47:[2,77]},{20:74,33:[2,72],41:126,63:127,64:75,65:[1,43],69:128,70:76,71:77,72:[1,78],75:[2,72],78:26,79:27,80:[1,28],81:[1,29],82:[1,30],83:[1,31],84:[1,32],85:[1,34],86:33},{5:[2,24],14:[2,24],15:[2,24],19:[2,24],29:[2,24],34:[2,24],39:[2,24],44:[2,24],47:[2,24],48:[2,24],51:[2,24],55:[2,24],60:[2,24]},{68:[1,129]},{65:[2,95],68:[2,95],72:[2,95],80:[2,95],81:[2,95],82:[2,95],83:[2,95],84:[2,95],85:[2,95]},{68:[2,97]},{5:[2,21],14:[2,21],15:[2,21],19:[2,21],29:[2,21],34:[2,21],39:[2,21],44:[2,21],47:[2,21],48:[2,21],51:[2,21],55:[2,21],60:[2,21]},{33:[1,130]},{33:[2,63]},{72:[1,132],76:131},{33:[1,133]},{33:[2,69]},{15:[2,12],18:[2,12]},{14:[2,26],15:[2,26],19:[2,26],29:[2,26],34:[2,26],47:[2,26],48:[2,26],51:[2,26],55:[2,26],60:[2,26]},{23:[2,31],33:[2,31],54:[2,31],68:[2,31],72:[2,31],75:[2,31]},{33:[2,74],42:134,74:135,75:[1,120]},{33:[2,71],65:[2,71],72:[2,71],75:[2,71],80:[2,71],81:[2,71],82:[2,71],83:[2,71],84:[2,71],85:[2,71]},{33:[2,73],75:[2,73]},{23:[2,29],33:[2,29],54:[2,29],65:[2,29],68:[2,29],72:[2,29],75:[2,29],80:[2,29],81:[2,29],82:[2,29],83:[2,29],84:[2,29],85:[2,29]},{14:[2,15],15:[2,15],19:[2,15],29:[2,15],34:[2,15],39:[2,15],44:[2,15],47:[2,15],48:[2,15],51:[2,15],55:[2,15],60:[2,15]},{72:[1,137],77:[1,136]},{72:[2,100],77:[2,100]},{14:[2,16],15:[2,16],19:[2,16],29:[2,16],34:[2,16],44:[2,16],47:[2,16],48:[2,16],51:[2,16],55:[2,16],60:[2,16]},{33:[1,138]},{33:[2,75]},{33:[2,32]},{72:[2,101],77:[2,101]},{14:[2,17],15:[2,17],19:[2,17],29:[2,17],34:[2,17],39:[2,17],44:[2,17],47:[2,17],48:[2,17],51:[2,17],55:[2,17],60:[2,17]}],defaultActions:{4:[2,1],54:[2,55],56:[2,20],60:[2,57],73:[2,81],82:[2,85],86:[2,18],90:[2,89],101:[2,53],104:[2,93],110:[2,19],111:[2,77],116:[2,97],119:[2,63],122:[2,69],135:[2,75],136:[2,32]},parseError:function(l,o){throw new Error(l)},parse:function(l){var o=this,u=[0],c=[null],h=[],r=this.table,s="",i=0,m=0;this.lexer.setInput(l),this.lexer.yy=this.yy,this.yy.lexer=this.lexer,this.yy.parser=this,typeof this.lexer.yylloc=="undefined"&&(this.lexer.yylloc={});var g=this.lexer.yylloc;h.push(g);var b=this.lexer.options&&this.lexer.options.ranges;typeof this.yy.parseError=="function"&&(this.parseError=this.yy.parseError);function y(){var M;return M=o.lexer.lex()||1,typeof M!="number"&&(M=o.symbols_[M]||M),M}for(var w,v,k,T,x={},I,F,V,Z;;){if(v=u[u.length-1],this.defaultActions[v]?k=this.defaultActions[v]:((w===null||typeof w=="undefined")&&(w=y()),k=r[v]&&r[v][w]),typeof k=="undefined"||!k.length||!k[0]){var ct="";{Z=[];for(I in r[v])this.terminals_[I]&&I>2&&Z.push("'"+this.terminals_[I]+"'");this.lexer.showPosition?ct="Parse error on line "+(i+1)+`:
 `+this.lexer.showPosition()+`
-Expecting `+Z.join(", ")+", got '"+(this.terminals_[w]||w)+"'":ct="Parse error on line "+(a+1)+": Unexpected "+(w==1?"end of input":"'"+(this.terminals_[w]||w)+"'"),this.parseError(ct,{text:this.lexer.match,token:this.terminals_[w]||w,line:this.lexer.yylineno,loc:g,expected:Z})}}if(k[0]instanceof Array&&k.length>1)throw new Error("Parse Error: multiple actions possible at state: "+v+", token: "+w);switch(k[0]){case 1:u.push(w),c.push(this.lexer.yytext),h.push(this.lexer.yylloc),u.push(k[1]),w=null,m=this.lexer.yyleng,s=this.lexer.yytext,a=this.lexer.yylineno,g=this.lexer.yylloc;break;case 2:if(F=this.productions_[k[1]][1],x.$=c[c.length-F],x._$={first_line:h[h.length-(F||1)].first_line,last_line:h[h.length-1].last_line,first_column:h[h.length-(F||1)].first_column,last_column:h[h.length-1].last_column},b&&(x._$.range=[h[h.length-(F||1)].range[0],h[h.length-1].range[1]]),T=this.performAction.call(x,s,m,a,this.yy,k[1],c,h),typeof T!="undefined")return T;F&&(u=u.slice(0,-1*F*2),c=c.slice(0,-1*F),h=h.slice(0,-1*F)),u.push(this.productions_[k[1]][0]),c.push(x.$),h.push(x._$),V=r[u[u.length-2]][u[u.length-1]],u.push(V);break;case 3:return!0}}return!0}},p=function(){var d={EOF:1,parseError:function(o,u){if(this.yy.parser)this.yy.parser.parseError(o,u);else throw new Error(o)},setInput:function(o){return this._input=o,this._more=this._less=this.done=!1,this.yylineno=this.yyleng=0,this.yytext=this.matched=this.match="",this.conditionStack=["INITIAL"],this.yylloc={first_line:1,first_column:0,last_line:1,last_column:0},this.options.ranges&&(this.yylloc.range=[0,0]),this.offset=0,this},input:function(){var o=this._input[0];this.yytext+=o,this.yyleng++,this.offset++,this.match+=o,this.matched+=o;var u=o.match(/(?:\r\n?|\n).*/g);return u?(this.yylineno++,this.yylloc.last_line++):this.yylloc.last_column++,this.options.ranges&&this.yylloc.range[1]++,this._input=this._input.slice(1),o},unput:function(o){var u=o.length,c=o.split(/(?:\r\n?|\n)/g);this._input=o+this._input,this.yytext=this.yytext.substr(0,this.yytext.length-u-1),this.offset-=u;var h=this.match.split(/(?:\r\n?|\n)/g);this.match=this.match.substr(0,this.match.length-1),this.matched=this.matched.substr(0,this.matched.length-1),c.length-1&&(this.yylineno-=c.length-1);var r=this.yylloc.range;return this.yylloc={first_line:this.yylloc.first_line,last_line:this.yylineno+1,first_column:this.yylloc.first_column,last_column:c?(c.length===h.length?this.yylloc.first_column:0)+h[h.length-c.length].length-c[0].length:this.yylloc.first_column-u},this.options.ranges&&(this.yylloc.range=[r[0],r[0]+this.yyleng-u]),this},more:function(){return this._more=!0,this},less:function(o){this.unput(this.match.slice(o))},pastInput:function(){var o=this.matched.substr(0,this.matched.length-this.match.length);return(o.length>20?"...":"")+o.substr(-20).replace(/\n/g,"")},upcomingInput:function(){var o=this.match;return o.length<20&&(o+=this._input.substr(0,20-o.length)),(o.substr(0,20)+(o.length>20?"...":"")).replace(/\n/g,"")},showPosition:function(){var o=this.pastInput(),u=new Array(o.length+1).join("-");return o+this.upcomingInput()+`
-`+u+"^"},next:function(){if(this.done)return this.EOF;this._input||(this.done=!0);var o,u,c,h,r;this._more||(this.yytext="",this.match="");for(var s=this._currentRules(),a=0;a<s.length&&(c=this._input.match(this.rules[s[a]]),!(c&&(!u||c[0].length>u[0].length)&&(u=c,h=a,!this.options.flex)));a++);return u?(r=u[0].match(/(?:\r\n?|\n).*/g),r&&(this.yylineno+=r.length),this.yylloc={first_line:this.yylloc.last_line,last_line:this.yylineno+1,first_column:this.yylloc.last_column,last_column:r?r[r.length-1].length-r[r.length-1].match(/\r?\n?/)[0].length:this.yylloc.last_column+u[0].length},this.yytext+=u[0],this.match+=u[0],this.matches=u,this.yyleng=this.yytext.length,this.options.ranges&&(this.yylloc.range=[this.offset,this.offset+=this.yyleng]),this._more=!1,this._input=this._input.slice(u[0].length),this.matched+=u[0],o=this.performAction.call(this,this.yy,this,s[h],this.conditionStack[this.conditionStack.length-1]),this.done&&this._input&&(this.done=!1),o||void 0):this._input===""?this.EOF:this.parseError("Lexical error on line "+(this.yylineno+1)+`. Unrecognized text.
-`+this.showPosition(),{text:"",token:null,line:this.yylineno})},lex:function(){var o=this.next();return typeof o!="undefined"?o:this.lex()},begin:function(o){this.conditionStack.push(o)},popState:function(){return this.conditionStack.pop()},_currentRules:function(){return this.conditions[this.conditionStack[this.conditionStack.length-1]].rules},topState:function(){return this.conditionStack[this.conditionStack.length-2]},pushState:function(o){this.begin(o)}};return d.options={},d.performAction=function(o,u,c,h){function r(s,a){return u.yytext=u.yytext.substring(s,u.yyleng-a+s)}switch(c){case 0:if(u.yytext.slice(-2)==="\\\\"?(r(0,1),this.begin("mu")):u.yytext.slice(-1)==="\\"?(r(0,1),this.begin("emu")):this.begin("mu"),u.yytext)return 15;break;case 1:return 15;case 2:return this.popState(),15;case 3:return this.begin("raw"),15;case 4:return this.popState(),this.conditionStack[this.conditionStack.length-1]==="raw"?15:(r(5,9),"END_RAW_BLOCK");case 5:return 15;case 6:return this.popState(),14;case 7:return 65;case 8:return 68;case 9:return 19;case 10:return this.popState(),this.begin("raw"),23;case 11:return 55;case 12:return 60;case 13:return 29;case 14:return 47;case 15:return this.popState(),44;case 16:return this.popState(),44;case 17:return 34;case 18:return 39;case 19:return 51;case 20:return 48;case 21:this.unput(u.yytext),this.popState(),this.begin("com");break;case 22:return this.popState(),14;case 23:return 48;case 24:return 73;case 25:return 72;case 26:return 72;case 27:return 87;case 28:break;case 29:return this.popState(),54;case 30:return this.popState(),33;case 31:return u.yytext=r(1,2).replace(/\\"/g,'"'),80;case 32:return u.yytext=r(1,2).replace(/\\'/g,"'"),80;case 33:return 85;case 34:return 82;case 35:return 82;case 36:return 83;case 37:return 84;case 38:return 81;case 39:return 75;case 40:return 77;case 41:return 72;case 42:return u.yytext=u.yytext.replace(/\\([\\\]])/g,"$1"),72;case 43:return"INVALID";case 44:return 5}},d.rules=[/^(?:[^\x00]*?(?=(\{\{)))/,/^(?:[^\x00]+)/,/^(?:[^\x00]{2,}?(?=(\{\{|\\\{\{|\\\\\{\{|$)))/,/^(?:\{\{\{\{(?=[^\/]))/,/^(?:\{\{\{\{\/[^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=[=}\s\/.])\}\}\}\})/,/^(?:[^\x00]+?(?=(\{\{\{\{)))/,/^(?:[\s\S]*?--(~)?\}\})/,/^(?:\()/,/^(?:\))/,/^(?:\{\{\{\{)/,/^(?:\}\}\}\})/,/^(?:\{\{(~)?>)/,/^(?:\{\{(~)?#>)/,/^(?:\{\{(~)?#\*?)/,/^(?:\{\{(~)?\/)/,/^(?:\{\{(~)?\^\s*(~)?\}\})/,/^(?:\{\{(~)?\s*else\s*(~)?\}\})/,/^(?:\{\{(~)?\^)/,/^(?:\{\{(~)?\s*else\b)/,/^(?:\{\{(~)?\{)/,/^(?:\{\{(~)?&)/,/^(?:\{\{(~)?!--)/,/^(?:\{\{(~)?![\s\S]*?\}\})/,/^(?:\{\{(~)?\*?)/,/^(?:=)/,/^(?:\.\.)/,/^(?:\.(?=([=~}\s\/.)|])))/,/^(?:[\/.])/,/^(?:\s+)/,/^(?:\}(~)?\}\})/,/^(?:(~)?\}\})/,/^(?:"(\\["]|[^"])*")/,/^(?:'(\\[']|[^'])*')/,/^(?:@)/,/^(?:true(?=([~}\s)])))/,/^(?:false(?=([~}\s)])))/,/^(?:undefined(?=([~}\s)])))/,/^(?:null(?=([~}\s)])))/,/^(?:-?[0-9]+(?:\.[0-9]+)?(?=([~}\s)])))/,/^(?:as\s+\|)/,/^(?:\|)/,/^(?:([^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=([=~}\s\/.)|]))))/,/^(?:\[(\\\]|[^\]])*\])/,/^(?:.)/,/^(?:$)/],d.conditions={mu:{rules:[7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44],inclusive:!1},emu:{rules:[2],inclusive:!1},com:{rules:[6],inclusive:!1},raw:{rules:[3,4,5],inclusive:!1},INITIAL:{rules:[0,1,44],inclusive:!0}},d}();i.lexer=p;function f(){this.yy={}}return f.prototype=i,i.Parser=f,new f}();n.default=e,t.exports=n.default})(It,It.exports);var Ft={exports:{}},ot={exports:{}};(function(t,n){n.__esModule=!0;function e(u){return u&&u.__esModule?u:{default:u}}var i=E.exports,p=e(i);function f(){this.parents=[]}f.prototype={constructor:f,mutating:!1,acceptKey:function(c,h){var r=this.accept(c[h]);if(this.mutating){if(r&&!f.prototype[r.type])throw new p.default('Unexpected node type "'+r.type+'" found when accepting '+h+" on "+c.type);c[h]=r}},acceptRequired:function(c,h){if(this.acceptKey(c,h),!c[h])throw new p.default(c.type+" requires "+h)},acceptArray:function(c){for(var h=0,r=c.length;h<r;h++)this.acceptKey(c,h),c[h]||(c.splice(h,1),h--,r--)},accept:function(c){if(!!c){if(!this[c.type])throw new p.default("Unknown type: "+c.type,c);this.current&&this.parents.unshift(this.current),this.current=c;var h=this[c.type](c);if(this.current=this.parents.shift(),!this.mutating||h)return h;if(h!==!1)return c}},Program:function(c){this.acceptArray(c.body)},MustacheStatement:d,Decorator:d,BlockStatement:l,DecoratorBlock:l,PartialStatement:o,PartialBlockStatement:function(c){o.call(this,c),this.acceptKey(c,"program")},ContentStatement:function(){},CommentStatement:function(){},SubExpression:d,PathExpression:function(){},StringLiteral:function(){},NumberLiteral:function(){},BooleanLiteral:function(){},UndefinedLiteral:function(){},NullLiteral:function(){},Hash:function(c){this.acceptArray(c.pairs)},HashPair:function(c){this.acceptRequired(c,"value")}};function d(u){this.acceptRequired(u,"path"),this.acceptArray(u.params),this.acceptKey(u,"hash")}function l(u){d.call(this,u),this.acceptKey(u,"program"),this.acceptKey(u,"inverse")}function o(u){this.acceptRequired(u,"name"),this.acceptArray(u.params),this.acceptKey(u,"hash")}n.default=f,t.exports=n.default})(ot,ot.exports);(function(t,n){n.__esModule=!0;function e(c){return c&&c.__esModule?c:{default:c}}var i=ot.exports,p=e(i);function f(){var c=arguments.length<=0||arguments[0]===void 0?{}:arguments[0];this.options=c}f.prototype=new p.default,f.prototype.Program=function(c){var h=!this.options.ignoreStandalone,r=!this.isRootSeen;this.isRootSeen=!0;for(var s=c.body,a=0,m=s.length;a<m;a++){var g=s[a],b=this.accept(g);if(!!b){var y=d(s,a,r),w=l(s,a,r),v=b.openStandalone&&y,k=b.closeStandalone&&w,T=b.inlineStandalone&&y&&w;b.close&&o(s,a,!0),b.open&&u(s,a,!0),h&&T&&(o(s,a),u(s,a)&&g.type==="PartialStatement"&&(g.indent=/([ \t]+$)/.exec(s[a-1].original)[1])),h&&v&&(o((g.program||g.inverse).body),u(s,a)),h&&k&&(o(s,a),u((g.inverse||g.program).body))}}return c},f.prototype.BlockStatement=f.prototype.DecoratorBlock=f.prototype.PartialBlockStatement=function(c){this.accept(c.program),this.accept(c.inverse);var h=c.program||c.inverse,r=c.program&&c.inverse,s=r,a=r;if(r&&r.chained)for(s=r.body[0].program;a.chained;)a=a.body[a.body.length-1].program;var m={open:c.openStrip.open,close:c.closeStrip.close,openStandalone:l(h.body),closeStandalone:d((s||h).body)};if(c.openStrip.close&&o(h.body,null,!0),r){var g=c.inverseStrip;g.open&&u(h.body,null,!0),g.close&&o(s.body,null,!0),c.closeStrip.open&&u(a.body,null,!0),!this.options.ignoreStandalone&&d(h.body)&&l(s.body)&&(u(h.body),o(s.body))}else c.closeStrip.open&&u(h.body,null,!0);return m},f.prototype.Decorator=f.prototype.MustacheStatement=function(c){return c.strip},f.prototype.PartialStatement=f.prototype.CommentStatement=function(c){var h=c.strip||{};return{inlineStandalone:!0,open:h.open,close:h.close}};function d(c,h,r){h===void 0&&(h=c.length);var s=c[h-1],a=c[h-2];if(!s)return r;if(s.type==="ContentStatement")return(a||!r?/\r?\n\s*?$/:/(^|\r?\n)\s*?$/).test(s.original)}function l(c,h,r){h===void 0&&(h=-1);var s=c[h+1],a=c[h+2];if(!s)return r;if(s.type==="ContentStatement")return(a||!r?/^\s*?\r?\n/:/^\s*?(\r?\n|$)/).test(s.original)}function o(c,h,r){var s=c[h==null?0:h+1];if(!(!s||s.type!=="ContentStatement"||!r&&s.rightStripped)){var a=s.value;s.value=s.value.replace(r?/^\s+/:/^[ \t]*\r?\n?/,""),s.rightStripped=s.value!==a}}function u(c,h,r){var s=c[h==null?c.length-1:h-1];if(!(!s||s.type!=="ContentStatement"||!r&&s.leftStripped)){var a=s.value;return s.value=s.value.replace(r?/\s+$/:/[ \t]+$/,""),s.leftStripped=s.value!==a,s.leftStripped}}n.default=f,t.exports=n.default})(Ft,Ft.exports);var _={};_.__esModule=!0;_.SourceLocation=lr;_.id=ur;_.stripFlags=pr;_.stripComment=dr;_.preparePath=fr;_.prepareMustache=hr;_.prepareRawBlock=gr;_.prepareBlock=mr;_.prepareProgram=yr;_.preparePartialBlock=br;function or(t){return t&&t.__esModule?t:{default:t}}var cr=E.exports,Pt=or(cr);function Lt(t,n){if(n=n.path?n.path.original:n,t.path.original!==n){var e={loc:t.path.loc};throw new Pt.default(t.path.original+" doesn't match "+n,e)}}function lr(t,n){this.source=t,this.start={line:n.first_line,column:n.first_column},this.end={line:n.last_line,column:n.last_column}}function ur(t){return/^\[.*\]$/.test(t)?t.substring(1,t.length-1):t}function pr(t,n){return{open:t.charAt(2)==="~",close:n.charAt(n.length-3)==="~"}}function dr(t){return t.replace(/^\{\{~?!-?-?/,"").replace(/-?-?~?\}\}$/,"")}function fr(t,n,e){e=this.locInfo(e);for(var i=t?"@":"",p=[],f=0,d=0,l=n.length;d<l;d++){var o=n[d].part,u=n[d].original!==o;if(i+=(n[d].separator||"")+o,!u&&(o===".."||o==="."||o==="this")){if(p.length>0)throw new Pt.default("Invalid path: "+i,{loc:e});o===".."&&f++}else p.push(o)}return{type:"PathExpression",data:t,depth:f,parts:p,original:i,loc:e}}function hr(t,n,e,i,p,f){var d=i.charAt(3)||i.charAt(2),l=d!=="{"&&d!=="&",o=/\*/.test(i);return{type:o?"Decorator":"MustacheStatement",path:t,params:n,hash:e,escaped:l,strip:p,loc:this.locInfo(f)}}function gr(t,n,e,i){Lt(t,e),i=this.locInfo(i);var p={type:"Program",body:n,strip:{},loc:i};return{type:"BlockStatement",path:t.path,params:t.params,hash:t.hash,program:p,openStrip:{},inverseStrip:{},closeStrip:{},loc:i}}function mr(t,n,e,i,p,f){i&&i.path&&Lt(t,i);var d=/\*/.test(t.open);n.blockParams=t.blockParams;var l=void 0,o=void 0;if(e){if(d)throw new Pt.default("Unexpected inverse block on decorator",e);e.chain&&(e.program.body[0].closeStrip=i.strip),o=e.strip,l=e.program}return p&&(p=l,l=n,n=p),{type:d?"DecoratorBlock":"BlockStatement",path:t.path,params:t.params,hash:t.hash,program:n,inverse:l,openStrip:t.strip,inverseStrip:o,closeStrip:i&&i.strip,loc:this.locInfo(f)}}function yr(t,n){if(!n&&t.length){var e=t[0].loc,i=t[t.length-1].loc;e&&i&&(n={source:e.source,start:{line:e.start.line,column:e.start.column},end:{line:i.end.line,column:i.end.column}})}return{type:"Program",body:t,strip:{},loc:n}}function br(t,n,e,i){return Lt(t,e),{type:"PartialBlockStatement",name:t.path,params:t.params,hash:t.hash,program:n,openStrip:t.strip,closeStrip:e&&e.strip,loc:this.locInfo(i)}}J.__esModule=!0;J.parseWithoutProcessing=sn;J.parse=Ir;function vr(t){if(t&&t.__esModule)return t;var n={};if(t!=null)for(var e in t)Object.prototype.hasOwnProperty.call(t,e)&&(n[e]=t[e]);return n.default=t,n}function an(t){return t&&t.__esModule?t:{default:t}}var wr=It.exports,Et=an(wr),kr=Ft.exports,xr=an(kr),Sr=_,jr=vr(Sr),Tr=S;J.parser=Et.default;var nt={};Tr.extend(nt,jr);function sn(t,n){if(t.type==="Program")return t;Et.default.yy=nt,nt.locInfo=function(i){return new nt.SourceLocation(n&&n.srcName,i)};var e=Et.default.parse(t);return e}function Ir(t,n){var e=sn(t,n),i=new xr.default(n);return i.accept(e)}var Q={};Q.__esModule=!0;Q.Compiler=At;Q.precompile=_r;Q.compile=Or;function on(t){return t&&t.__esModule?t:{default:t}}var Fr=E.exports,Y=on(Fr),X=S,Er=st.exports,z=on(Er),Ar=[].slice;function At(){}At.prototype={compiler:At,equals:function(n){var e=this.opcodes.length;if(n.opcodes.length!==e)return!1;for(var i=0;i<e;i++){var p=this.opcodes[i],f=n.opcodes[i];if(p.opcode!==f.opcode||!cn(p.args,f.args))return!1}e=this.children.length;for(var i=0;i<e;i++)if(!this.children[i].equals(n.children[i]))return!1;return!0},guid:0,compile:function(n,e){return this.sourceNode=[],this.opcodes=[],this.children=[],this.options=e,this.stringParams=e.stringParams,this.trackIds=e.trackIds,e.blockParams=e.blockParams||[],e.knownHelpers=X.extend(Object.create(null),{helperMissing:!0,blockHelperMissing:!0,each:!0,if:!0,unless:!0,with:!0,log:!0,lookup:!0},e.knownHelpers),this.accept(n)},compileProgram:function(n){var e=new this.compiler,i=e.compile(n,this.options),p=this.guid++;return this.usePartial=this.usePartial||i.usePartial,this.children[p]=i,this.useDepths=this.useDepths||i.useDepths,p},accept:function(n){if(!this[n.type])throw new Y.default("Unknown type: "+n.type,n);this.sourceNode.unshift(n);var e=this[n.type](n);return this.sourceNode.shift(),e},Program:function(n){this.options.blockParams.unshift(n.blockParams);for(var e=n.body,i=e.length,p=0;p<i;p++)this.accept(e[p]);return this.options.blockParams.shift(),this.isSimple=i===1,this.blockParams=n.blockParams?n.blockParams.length:0,this},BlockStatement:function(n){Xt(n);var e=n.program,i=n.inverse;e=e&&this.compileProgram(e),i=i&&this.compileProgram(i);var p=this.classifySexpr(n);p==="helper"?this.helperSexpr(n,e,i):p==="simple"?(this.simpleSexpr(n),this.opcode("pushProgram",e),this.opcode("pushProgram",i),this.opcode("emptyHash"),this.opcode("blockValue",n.path.original)):(this.ambiguousSexpr(n,e,i),this.opcode("pushProgram",e),this.opcode("pushProgram",i),this.opcode("emptyHash"),this.opcode("ambiguousBlockValue")),this.opcode("append")},DecoratorBlock:function(n){var e=n.program&&this.compileProgram(n.program),i=this.setupFullMustacheParams(n,e,void 0),p=n.path;this.useDecorators=!0,this.opcode("registerDecorator",i.length,p.original)},PartialStatement:function(n){this.usePartial=!0;var e=n.program;e&&(e=this.compileProgram(n.program));var i=n.params;if(i.length>1)throw new Y.default("Unsupported number of partial arguments: "+i.length,n);i.length||(this.options.explicitPartialContext?this.opcode("pushLiteral","undefined"):i.push({type:"PathExpression",parts:[],depth:0}));var p=n.name.original,f=n.name.type==="SubExpression";f&&this.accept(n.name),this.setupFullMustacheParams(n,e,void 0,!0);var d=n.indent||"";this.options.preventIndent&&d&&(this.opcode("appendContent",d),d=""),this.opcode("invokePartial",f,p,d),this.opcode("append")},PartialBlockStatement:function(n){this.PartialStatement(n)},MustacheStatement:function(n){this.SubExpression(n),n.escaped&&!this.options.noEscape?this.opcode("appendEscaped"):this.opcode("append")},Decorator:function(n){this.DecoratorBlock(n)},ContentStatement:function(n){n.value&&this.opcode("appendContent",n.value)},CommentStatement:function(){},SubExpression:function(n){Xt(n);var e=this.classifySexpr(n);e==="simple"?this.simpleSexpr(n):e==="helper"?this.helperSexpr(n):this.ambiguousSexpr(n)},ambiguousSexpr:function(n,e,i){var p=n.path,f=p.parts[0],d=e!=null||i!=null;this.opcode("getContext",p.depth),this.opcode("pushProgram",e),this.opcode("pushProgram",i),p.strict=!0,this.accept(p),this.opcode("invokeAmbiguous",f,d)},simpleSexpr:function(n){var e=n.path;e.strict=!0,this.accept(e),this.opcode("resolvePossibleLambda")},helperSexpr:function(n,e,i){var p=this.setupFullMustacheParams(n,e,i),f=n.path,d=f.parts[0];if(this.options.knownHelpers[d])this.opcode("invokeKnownHelper",p.length,d);else{if(this.options.knownHelpersOnly)throw new Y.default("You specified knownHelpersOnly, but used the unknown helper "+d,n);f.strict=!0,f.falsy=!0,this.accept(f),this.opcode("invokeHelper",p.length,f.original,z.default.helpers.simpleId(f))}},PathExpression:function(n){this.addDepth(n.depth),this.opcode("getContext",n.depth);var e=n.parts[0],i=z.default.helpers.scopedId(n),p=!n.depth&&!i&&this.blockParamIndex(e);p?this.opcode("lookupBlockParam",p,n.parts):e?n.data?(this.options.data=!0,this.opcode("lookupData",n.depth,n.parts,n.strict)):this.opcode("lookupOnContext",n.parts,n.falsy,n.strict,i):this.opcode("pushContext")},StringLiteral:function(n){this.opcode("pushString",n.value)},NumberLiteral:function(n){this.opcode("pushLiteral",n.value)},BooleanLiteral:function(n){this.opcode("pushLiteral",n.value)},UndefinedLiteral:function(){this.opcode("pushLiteral","undefined")},NullLiteral:function(){this.opcode("pushLiteral","null")},Hash:function(n){var e=n.pairs,i=0,p=e.length;for(this.opcode("pushHash");i<p;i++)this.pushParam(e[i].value);for(;i--;)this.opcode("assignToHash",e[i].key);this.opcode("popHash")},opcode:function(n){this.opcodes.push({opcode:n,args:Ar.call(arguments,1),loc:this.sourceNode[0].loc})},addDepth:function(n){!n||(this.useDepths=!0)},classifySexpr:function(n){var e=z.default.helpers.simpleId(n.path),i=e&&!!this.blockParamIndex(n.path.parts[0]),p=!i&&z.default.helpers.helperExpression(n),f=!i&&(p||e);if(f&&!p){var d=n.path.parts[0],l=this.options;l.knownHelpers[d]?p=!0:l.knownHelpersOnly&&(f=!1)}return p?"helper":f?"ambiguous":"simple"},pushParams:function(n){for(var e=0,i=n.length;e<i;e++)this.pushParam(n[e])},pushParam:function(n){var e=n.value!=null?n.value:n.original||"";if(this.stringParams)e.replace&&(e=e.replace(/^(\.?\.\/)*/g,"").replace(/\//g,".")),n.depth&&this.addDepth(n.depth),this.opcode("getContext",n.depth||0),this.opcode("pushStringParam",e,n.type),n.type==="SubExpression"&&this.accept(n);else{if(this.trackIds){var i=void 0;if(n.parts&&!z.default.helpers.scopedId(n)&&!n.depth&&(i=this.blockParamIndex(n.parts[0])),i){var p=n.parts.slice(1).join(".");this.opcode("pushId","BlockParam",i,p)}else e=n.original||e,e.replace&&(e=e.replace(/^this(?:\.|$)/,"").replace(/^\.\//,"").replace(/^\.$/,"")),this.opcode("pushId",n.type,e)}this.accept(n)}},setupFullMustacheParams:function(n,e,i,p){var f=n.params;return this.pushParams(f),this.opcode("pushProgram",e),this.opcode("pushProgram",i),n.hash?this.accept(n.hash):this.opcode("emptyHash",p),f},blockParamIndex:function(n){for(var e=0,i=this.options.blockParams.length;e<i;e++){var p=this.options.blockParams[e],f=p&&X.indexOf(p,n);if(p&&f>=0)return[e,f]}}};function _r(t,n,e){if(t==null||typeof t!="string"&&t.type!=="Program")throw new Y.default("You must pass a string or Handlebars AST to Handlebars.precompile. You passed "+t);n=n||{},"data"in n||(n.data=!0),n.compat&&(n.useDepths=!0);var i=e.parse(t,n),p=new e.Compiler().compile(i,n);return new e.JavaScriptCompiler().compile(p,n)}function Or(t,n,e){if(n===void 0&&(n={}),t==null||typeof t!="string"&&t.type!=="Program")throw new Y.default("You must pass a string or Handlebars AST to Handlebars.compile. You passed "+t);n=X.extend({},n),"data"in n||(n.data=!0),n.compat&&(n.useDepths=!0);var i=void 0;function p(){var d=e.parse(t,n),l=new e.Compiler().compile(d,n),o=new e.JavaScriptCompiler().compile(l,n,void 0,!0);return e.template(o)}function f(d,l){return i||(i=p()),i.call(this,d,l)}return f._setup=function(d){return i||(i=p()),i._setup(d)},f._child=function(d,l,o,u){return i||(i=p()),i._child(d,l,o,u)},f}function cn(t,n){if(t===n)return!0;if(X.isArray(t)&&X.isArray(n)&&t.length===n.length){for(var e=0;e<t.length;e++)if(!cn(t[e],n[e]))return!1;return!0}}function Xt(t){if(!t.path.parts){var n=t.path;t.path={type:"PathExpression",data:!1,depth:0,parts:[n.original+""],original:n.original+"",loc:n.loc}}}var _t={exports:{}},Ot={exports:{}};(function(t,n){n.__esModule=!0;var e=S,i=void 0;try{var p=require("source-map");i=p.SourceNode}catch{}i||(i=function(l,o,u,c){this.src="",c&&this.add(c)},i.prototype={add:function(o){e.isArray(o)&&(o=o.join("")),this.src+=o},prepend:function(o){e.isArray(o)&&(o=o.join("")),this.src=o+this.src},toStringWithSourceMap:function(){return{code:this.toString()}},toString:function(){return this.src}});function f(l,o,u){if(e.isArray(l)){for(var c=[],h=0,r=l.length;h<r;h++)c.push(o.wrap(l[h],u));return c}else if(typeof l=="boolean"||typeof l=="number")return l+"";return l}function d(l){this.srcFile=l,this.source=[]}d.prototype={isEmpty:function(){return!this.source.length},prepend:function(o,u){this.source.unshift(this.wrap(o,u))},push:function(o,u){this.source.push(this.wrap(o,u))},merge:function(){var o=this.empty();return this.each(function(u){o.add(["  ",u,`
-`])}),o},each:function(o){for(var u=0,c=this.source.length;u<c;u++)o(this.source[u])},empty:function(){var o=this.currentLocation||{start:{}};return new i(o.start.line,o.start.column,this.srcFile)},wrap:function(o){var u=arguments.length<=1||arguments[1]===void 0?this.currentLocation||{start:{}}:arguments[1];return o instanceof i?o:(o=f(o,this,u),new i(u.start.line,u.start.column,this.srcFile,o))},functionCall:function(o,u,c){return c=this.generateList(c),this.wrap([o,u?"."+u+"(":"(",c,")"])},quotedString:function(o){return'"'+(o+"").replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\n/g,"\\n").replace(/\r/g,"\\r").replace(/\u2028/g,"\\u2028").replace(/\u2029/g,"\\u2029")+'"'},objectLiteral:function(o){var u=this,c=[];Object.keys(o).forEach(function(r){var s=f(o[r],u);s!=="undefined"&&c.push([u.quotedString(r),":",s])});var h=this.generateList(c);return h.prepend("{"),h.add("}"),h},generateList:function(o){for(var u=this.empty(),c=0,h=o.length;c<h;c++)c&&u.add(","),u.add(f(o[c],this));return u},generateArray:function(o){var u=this.generateList(o);return u.prepend("["),u.add("]"),u}},n.default=d,t.exports=n.default})(Ot,Ot.exports);(function(t,n){n.__esModule=!0;function e(r){return r&&r.__esModule?r:{default:r}}var i=A,p=E.exports,f=e(p),d=S,l=Ot.exports,o=e(l);function u(r){this.value=r}function c(){}c.prototype={nameLookup:function(s,a){return this.internalNameLookup(s,a)},depthedLookup:function(s){return[this.aliasable("container.lookup"),"(depths, ",JSON.stringify(s),")"]},compilerInfo:function(){var s=i.COMPILER_REVISION,a=i.REVISION_CHANGES[s];return[s,a]},appendToBuffer:function(s,a,m){return d.isArray(s)||(s=[s]),s=this.source.wrap(s,a),this.environment.isSimple?["return ",s,";"]:m?["buffer += ",s,";"]:(s.appendToBuffer=!0,s)},initializeBuffer:function(){return this.quotedString("")},internalNameLookup:function(s,a){return this.lookupPropertyFunctionIsUsed=!0,["lookupProperty(",s,",",JSON.stringify(a),")"]},lookupPropertyFunctionIsUsed:!1,compile:function(s,a,m,g){this.environment=s,this.options=a,this.stringParams=this.options.stringParams,this.trackIds=this.options.trackIds,this.precompile=!g,this.name=this.environment.name,this.isChild=!!m,this.context=m||{decorators:[],programs:[],environments:[]},this.preamble(),this.stackSlot=0,this.stackVars=[],this.aliases={},this.registers={list:[]},this.hashes=[],this.compileStack=[],this.inlineStack=[],this.blockParams=[],this.compileChildren(s,a),this.useDepths=this.useDepths||s.useDepths||s.useDecorators||this.options.compat,this.useBlockParams=this.useBlockParams||s.useBlockParams;var b=s.opcodes,y=void 0,w=void 0,v=void 0,k=void 0;for(v=0,k=b.length;v<k;v++)y=b[v],this.source.currentLocation=y.loc,w=w||y.loc,this[y.opcode].apply(this,y.args);if(this.source.currentLocation=w,this.pushSource(""),this.stackSlot||this.inlineStack.length||this.compileStack.length)throw new f.default("Compile completed with content left on stack");this.decorators.isEmpty()?this.decorators=void 0:(this.useDecorators=!0,this.decorators.prepend(["var decorators = container.decorators, ",this.lookupPropertyFunctionVarDeclaration(),`;
+Expecting `+Z.join(", ")+", got '"+(this.terminals_[w]||w)+"'":ct="Parse error on line "+(i+1)+": Unexpected "+(w==1?"end of input":"'"+(this.terminals_[w]||w)+"'"),this.parseError(ct,{text:this.lexer.match,token:this.terminals_[w]||w,line:this.lexer.yylineno,loc:g,expected:Z})}}if(k[0]instanceof Array&&k.length>1)throw new Error("Parse Error: multiple actions possible at state: "+v+", token: "+w);switch(k[0]){case 1:u.push(w),c.push(this.lexer.yytext),h.push(this.lexer.yylloc),u.push(k[1]),w=null,m=this.lexer.yyleng,s=this.lexer.yytext,i=this.lexer.yylineno,g=this.lexer.yylloc;break;case 2:if(F=this.productions_[k[1]][1],x.$=c[c.length-F],x._$={first_line:h[h.length-(F||1)].first_line,last_line:h[h.length-1].last_line,first_column:h[h.length-(F||1)].first_column,last_column:h[h.length-1].last_column},b&&(x._$.range=[h[h.length-(F||1)].range[0],h[h.length-1].range[1]]),T=this.performAction.call(x,s,m,i,this.yy,k[1],c,h),typeof T!="undefined")return T;F&&(u=u.slice(0,-1*F*2),c=c.slice(0,-1*F),h=h.slice(0,-1*F)),u.push(this.productions_[k[1]][0]),c.push(x.$),h.push(x._$),V=r[u[u.length-2]][u[u.length-1]],u.push(V);break;case 3:return!0}}return!0}},p=function(){var d={EOF:1,parseError:function(o,u){if(this.yy.parser)this.yy.parser.parseError(o,u);else throw new Error(o)},setInput:function(o){return this._input=o,this._more=this._less=this.done=!1,this.yylineno=this.yyleng=0,this.yytext=this.matched=this.match="",this.conditionStack=["INITIAL"],this.yylloc={first_line:1,first_column:0,last_line:1,last_column:0},this.options.ranges&&(this.yylloc.range=[0,0]),this.offset=0,this},input:function(){var o=this._input[0];this.yytext+=o,this.yyleng++,this.offset++,this.match+=o,this.matched+=o;var u=o.match(/(?:\r\n?|\n).*/g);return u?(this.yylineno++,this.yylloc.last_line++):this.yylloc.last_column++,this.options.ranges&&this.yylloc.range[1]++,this._input=this._input.slice(1),o},unput:function(o){var u=o.length,c=o.split(/(?:\r\n?|\n)/g);this._input=o+this._input,this.yytext=this.yytext.substr(0,this.yytext.length-u-1),this.offset-=u;var h=this.match.split(/(?:\r\n?|\n)/g);this.match=this.match.substr(0,this.match.length-1),this.matched=this.matched.substr(0,this.matched.length-1),c.length-1&&(this.yylineno-=c.length-1);var r=this.yylloc.range;return this.yylloc={first_line:this.yylloc.first_line,last_line:this.yylineno+1,first_column:this.yylloc.first_column,last_column:c?(c.length===h.length?this.yylloc.first_column:0)+h[h.length-c.length].length-c[0].length:this.yylloc.first_column-u},this.options.ranges&&(this.yylloc.range=[r[0],r[0]+this.yyleng-u]),this},more:function(){return this._more=!0,this},less:function(o){this.unput(this.match.slice(o))},pastInput:function(){var o=this.matched.substr(0,this.matched.length-this.match.length);return(o.length>20?"...":"")+o.substr(-20).replace(/\n/g,"")},upcomingInput:function(){var o=this.match;return o.length<20&&(o+=this._input.substr(0,20-o.length)),(o.substr(0,20)+(o.length>20?"...":"")).replace(/\n/g,"")},showPosition:function(){var o=this.pastInput(),u=new Array(o.length+1).join("-");return o+this.upcomingInput()+`
+`+u+"^"},next:function(){if(this.done)return this.EOF;this._input||(this.done=!0);var o,u,c,h,r;this._more||(this.yytext="",this.match="");for(var s=this._currentRules(),i=0;i<s.length&&(c=this._input.match(this.rules[s[i]]),!(c&&(!u||c[0].length>u[0].length)&&(u=c,h=i,!this.options.flex)));i++);return u?(r=u[0].match(/(?:\r\n?|\n).*/g),r&&(this.yylineno+=r.length),this.yylloc={first_line:this.yylloc.last_line,last_line:this.yylineno+1,first_column:this.yylloc.last_column,last_column:r?r[r.length-1].length-r[r.length-1].match(/\r?\n?/)[0].length:this.yylloc.last_column+u[0].length},this.yytext+=u[0],this.match+=u[0],this.matches=u,this.yyleng=this.yytext.length,this.options.ranges&&(this.yylloc.range=[this.offset,this.offset+=this.yyleng]),this._more=!1,this._input=this._input.slice(u[0].length),this.matched+=u[0],o=this.performAction.call(this,this.yy,this,s[h],this.conditionStack[this.conditionStack.length-1]),this.done&&this._input&&(this.done=!1),o||void 0):this._input===""?this.EOF:this.parseError("Lexical error on line "+(this.yylineno+1)+`. Unrecognized text.
+`+this.showPosition(),{text:"",token:null,line:this.yylineno})},lex:function(){var o=this.next();return typeof o!="undefined"?o:this.lex()},begin:function(o){this.conditionStack.push(o)},popState:function(){return this.conditionStack.pop()},_currentRules:function(){return this.conditions[this.conditionStack[this.conditionStack.length-1]].rules},topState:function(){return this.conditionStack[this.conditionStack.length-2]},pushState:function(o){this.begin(o)}};return d.options={},d.performAction=function(o,u,c,h){function r(s,i){return u.yytext=u.yytext.substring(s,u.yyleng-i+s)}switch(c){case 0:if(u.yytext.slice(-2)==="\\\\"?(r(0,1),this.begin("mu")):u.yytext.slice(-1)==="\\"?(r(0,1),this.begin("emu")):this.begin("mu"),u.yytext)return 15;break;case 1:return 15;case 2:return this.popState(),15;case 3:return this.begin("raw"),15;case 4:return this.popState(),this.conditionStack[this.conditionStack.length-1]==="raw"?15:(r(5,9),"END_RAW_BLOCK");case 5:return 15;case 6:return this.popState(),14;case 7:return 65;case 8:return 68;case 9:return 19;case 10:return this.popState(),this.begin("raw"),23;case 11:return 55;case 12:return 60;case 13:return 29;case 14:return 47;case 15:return this.popState(),44;case 16:return this.popState(),44;case 17:return 34;case 18:return 39;case 19:return 51;case 20:return 48;case 21:this.unput(u.yytext),this.popState(),this.begin("com");break;case 22:return this.popState(),14;case 23:return 48;case 24:return 73;case 25:return 72;case 26:return 72;case 27:return 87;case 28:break;case 29:return this.popState(),54;case 30:return this.popState(),33;case 31:return u.yytext=r(1,2).replace(/\\"/g,'"'),80;case 32:return u.yytext=r(1,2).replace(/\\'/g,"'"),80;case 33:return 85;case 34:return 82;case 35:return 82;case 36:return 83;case 37:return 84;case 38:return 81;case 39:return 75;case 40:return 77;case 41:return 72;case 42:return u.yytext=u.yytext.replace(/\\([\\\]])/g,"$1"),72;case 43:return"INVALID";case 44:return 5}},d.rules=[/^(?:[^\x00]*?(?=(\{\{)))/,/^(?:[^\x00]+)/,/^(?:[^\x00]{2,}?(?=(\{\{|\\\{\{|\\\\\{\{|$)))/,/^(?:\{\{\{\{(?=[^\/]))/,/^(?:\{\{\{\{\/[^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=[=}\s\/.])\}\}\}\})/,/^(?:[^\x00]+?(?=(\{\{\{\{)))/,/^(?:[\s\S]*?--(~)?\}\})/,/^(?:\()/,/^(?:\))/,/^(?:\{\{\{\{)/,/^(?:\}\}\}\})/,/^(?:\{\{(~)?>)/,/^(?:\{\{(~)?#>)/,/^(?:\{\{(~)?#\*?)/,/^(?:\{\{(~)?\/)/,/^(?:\{\{(~)?\^\s*(~)?\}\})/,/^(?:\{\{(~)?\s*else\s*(~)?\}\})/,/^(?:\{\{(~)?\^)/,/^(?:\{\{(~)?\s*else\b)/,/^(?:\{\{(~)?\{)/,/^(?:\{\{(~)?&)/,/^(?:\{\{(~)?!--)/,/^(?:\{\{(~)?![\s\S]*?\}\})/,/^(?:\{\{(~)?\*?)/,/^(?:=)/,/^(?:\.\.)/,/^(?:\.(?=([=~}\s\/.)|])))/,/^(?:[\/.])/,/^(?:\s+)/,/^(?:\}(~)?\}\})/,/^(?:(~)?\}\})/,/^(?:"(\\["]|[^"])*")/,/^(?:'(\\[']|[^'])*')/,/^(?:@)/,/^(?:true(?=([~}\s)])))/,/^(?:false(?=([~}\s)])))/,/^(?:undefined(?=([~}\s)])))/,/^(?:null(?=([~}\s)])))/,/^(?:-?[0-9]+(?:\.[0-9]+)?(?=([~}\s)])))/,/^(?:as\s+\|)/,/^(?:\|)/,/^(?:([^\s!"#%-,\.\/;->@\[-\^`\{-~]+(?=([=~}\s\/.)|]))))/,/^(?:\[(\\\]|[^\]])*\])/,/^(?:.)/,/^(?:$)/],d.conditions={mu:{rules:[7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44],inclusive:!1},emu:{rules:[2],inclusive:!1},com:{rules:[6],inclusive:!1},raw:{rules:[3,4,5],inclusive:!1},INITIAL:{rules:[0,1,44],inclusive:!0}},d}();a.lexer=p;function f(){this.yy={}}return f.prototype=a,a.Parser=f,new f}();n.default=e,t.exports=n.default})(It,It.exports);var Ft={exports:{}},ot={exports:{}};(function(t,n){n.__esModule=!0;function e(u){return u&&u.__esModule?u:{default:u}}var a=E.exports,p=e(a);function f(){this.parents=[]}f.prototype={constructor:f,mutating:!1,acceptKey:function(c,h){var r=this.accept(c[h]);if(this.mutating){if(r&&!f.prototype[r.type])throw new p.default('Unexpected node type "'+r.type+'" found when accepting '+h+" on "+c.type);c[h]=r}},acceptRequired:function(c,h){if(this.acceptKey(c,h),!c[h])throw new p.default(c.type+" requires "+h)},acceptArray:function(c){for(var h=0,r=c.length;h<r;h++)this.acceptKey(c,h),c[h]||(c.splice(h,1),h--,r--)},accept:function(c){if(!!c){if(!this[c.type])throw new p.default("Unknown type: "+c.type,c);this.current&&this.parents.unshift(this.current),this.current=c;var h=this[c.type](c);if(this.current=this.parents.shift(),!this.mutating||h)return h;if(h!==!1)return c}},Program:function(c){this.acceptArray(c.body)},MustacheStatement:d,Decorator:d,BlockStatement:l,DecoratorBlock:l,PartialStatement:o,PartialBlockStatement:function(c){o.call(this,c),this.acceptKey(c,"program")},ContentStatement:function(){},CommentStatement:function(){},SubExpression:d,PathExpression:function(){},StringLiteral:function(){},NumberLiteral:function(){},BooleanLiteral:function(){},UndefinedLiteral:function(){},NullLiteral:function(){},Hash:function(c){this.acceptArray(c.pairs)},HashPair:function(c){this.acceptRequired(c,"value")}};function d(u){this.acceptRequired(u,"path"),this.acceptArray(u.params),this.acceptKey(u,"hash")}function l(u){d.call(this,u),this.acceptKey(u,"program"),this.acceptKey(u,"inverse")}function o(u){this.acceptRequired(u,"name"),this.acceptArray(u.params),this.acceptKey(u,"hash")}n.default=f,t.exports=n.default})(ot,ot.exports);(function(t,n){n.__esModule=!0;function e(c){return c&&c.__esModule?c:{default:c}}var a=ot.exports,p=e(a);function f(){var c=arguments.length<=0||arguments[0]===void 0?{}:arguments[0];this.options=c}f.prototype=new p.default,f.prototype.Program=function(c){var h=!this.options.ignoreStandalone,r=!this.isRootSeen;this.isRootSeen=!0;for(var s=c.body,i=0,m=s.length;i<m;i++){var g=s[i],b=this.accept(g);if(!!b){var y=d(s,i,r),w=l(s,i,r),v=b.openStandalone&&y,k=b.closeStandalone&&w,T=b.inlineStandalone&&y&&w;b.close&&o(s,i,!0),b.open&&u(s,i,!0),h&&T&&(o(s,i),u(s,i)&&g.type==="PartialStatement"&&(g.indent=/([ \t]+$)/.exec(s[i-1].original)[1])),h&&v&&(o((g.program||g.inverse).body),u(s,i)),h&&k&&(o(s,i),u((g.inverse||g.program).body))}}return c},f.prototype.BlockStatement=f.prototype.DecoratorBlock=f.prototype.PartialBlockStatement=function(c){this.accept(c.program),this.accept(c.inverse);var h=c.program||c.inverse,r=c.program&&c.inverse,s=r,i=r;if(r&&r.chained)for(s=r.body[0].program;i.chained;)i=i.body[i.body.length-1].program;var m={open:c.openStrip.open,close:c.closeStrip.close,openStandalone:l(h.body),closeStandalone:d((s||h).body)};if(c.openStrip.close&&o(h.body,null,!0),r){var g=c.inverseStrip;g.open&&u(h.body,null,!0),g.close&&o(s.body,null,!0),c.closeStrip.open&&u(i.body,null,!0),!this.options.ignoreStandalone&&d(h.body)&&l(s.body)&&(u(h.body),o(s.body))}else c.closeStrip.open&&u(h.body,null,!0);return m},f.prototype.Decorator=f.prototype.MustacheStatement=function(c){return c.strip},f.prototype.PartialStatement=f.prototype.CommentStatement=function(c){var h=c.strip||{};return{inlineStandalone:!0,open:h.open,close:h.close}};function d(c,h,r){h===void 0&&(h=c.length);var s=c[h-1],i=c[h-2];if(!s)return r;if(s.type==="ContentStatement")return(i||!r?/\r?\n\s*?$/:/(^|\r?\n)\s*?$/).test(s.original)}function l(c,h,r){h===void 0&&(h=-1);var s=c[h+1],i=c[h+2];if(!s)return r;if(s.type==="ContentStatement")return(i||!r?/^\s*?\r?\n/:/^\s*?(\r?\n|$)/).test(s.original)}function o(c,h,r){var s=c[h==null?0:h+1];if(!(!s||s.type!=="ContentStatement"||!r&&s.rightStripped)){var i=s.value;s.value=s.value.replace(r?/^\s+/:/^[ \t]*\r?\n?/,""),s.rightStripped=s.value!==i}}function u(c,h,r){var s=c[h==null?c.length-1:h-1];if(!(!s||s.type!=="ContentStatement"||!r&&s.leftStripped)){var i=s.value;return s.value=s.value.replace(r?/\s+$/:/[ \t]+$/,""),s.leftStripped=s.value!==i,s.leftStripped}}n.default=f,t.exports=n.default})(Ft,Ft.exports);var _={};_.__esModule=!0;_.SourceLocation=lr;_.id=ur;_.stripFlags=pr;_.stripComment=dr;_.preparePath=fr;_.prepareMustache=hr;_.prepareRawBlock=gr;_.prepareBlock=mr;_.prepareProgram=yr;_.preparePartialBlock=br;function or(t){return t&&t.__esModule?t:{default:t}}var cr=E.exports,Pt=or(cr);function Lt(t,n){if(n=n.path?n.path.original:n,t.path.original!==n){var e={loc:t.path.loc};throw new Pt.default(t.path.original+" doesn't match "+n,e)}}function lr(t,n){this.source=t,this.start={line:n.first_line,column:n.first_column},this.end={line:n.last_line,column:n.last_column}}function ur(t){return/^\[.*\]$/.test(t)?t.substring(1,t.length-1):t}function pr(t,n){return{open:t.charAt(2)==="~",close:n.charAt(n.length-3)==="~"}}function dr(t){return t.replace(/^\{\{~?!-?-?/,"").replace(/-?-?~?\}\}$/,"")}function fr(t,n,e){e=this.locInfo(e);for(var a=t?"@":"",p=[],f=0,d=0,l=n.length;d<l;d++){var o=n[d].part,u=n[d].original!==o;if(a+=(n[d].separator||"")+o,!u&&(o===".."||o==="."||o==="this")){if(p.length>0)throw new Pt.default("Invalid path: "+a,{loc:e});o===".."&&f++}else p.push(o)}return{type:"PathExpression",data:t,depth:f,parts:p,original:a,loc:e}}function hr(t,n,e,a,p,f){var d=a.charAt(3)||a.charAt(2),l=d!=="{"&&d!=="&",o=/\*/.test(a);return{type:o?"Decorator":"MustacheStatement",path:t,params:n,hash:e,escaped:l,strip:p,loc:this.locInfo(f)}}function gr(t,n,e,a){Lt(t,e),a=this.locInfo(a);var p={type:"Program",body:n,strip:{},loc:a};return{type:"BlockStatement",path:t.path,params:t.params,hash:t.hash,program:p,openStrip:{},inverseStrip:{},closeStrip:{},loc:a}}function mr(t,n,e,a,p,f){a&&a.path&&Lt(t,a);var d=/\*/.test(t.open);n.blockParams=t.blockParams;var l=void 0,o=void 0;if(e){if(d)throw new Pt.default("Unexpected inverse block on decorator",e);e.chain&&(e.program.body[0].closeStrip=a.strip),o=e.strip,l=e.program}return p&&(p=l,l=n,n=p),{type:d?"DecoratorBlock":"BlockStatement",path:t.path,params:t.params,hash:t.hash,program:n,inverse:l,openStrip:t.strip,inverseStrip:o,closeStrip:a&&a.strip,loc:this.locInfo(f)}}function yr(t,n){if(!n&&t.length){var e=t[0].loc,a=t[t.length-1].loc;e&&a&&(n={source:e.source,start:{line:e.start.line,column:e.start.column},end:{line:a.end.line,column:a.end.column}})}return{type:"Program",body:t,strip:{},loc:n}}function br(t,n,e,a){return Lt(t,e),{type:"PartialBlockStatement",name:t.path,params:t.params,hash:t.hash,program:n,openStrip:t.strip,closeStrip:e&&e.strip,loc:this.locInfo(a)}}J.__esModule=!0;J.parseWithoutProcessing=sn;J.parse=Ir;function vr(t){if(t&&t.__esModule)return t;var n={};if(t!=null)for(var e in t)Object.prototype.hasOwnProperty.call(t,e)&&(n[e]=t[e]);return n.default=t,n}function an(t){return t&&t.__esModule?t:{default:t}}var wr=It.exports,Et=an(wr),kr=Ft.exports,xr=an(kr),Sr=_,jr=vr(Sr),Tr=S;J.parser=Et.default;var nt={};Tr.extend(nt,jr);function sn(t,n){if(t.type==="Program")return t;Et.default.yy=nt,nt.locInfo=function(a){return new nt.SourceLocation(n&&n.srcName,a)};var e=Et.default.parse(t);return e}function Ir(t,n){var e=sn(t,n),a=new xr.default(n);return a.accept(e)}var Q={};Q.__esModule=!0;Q.Compiler=At;Q.precompile=_r;Q.compile=Or;function on(t){return t&&t.__esModule?t:{default:t}}var Fr=E.exports,Y=on(Fr),X=S,Er=st.exports,z=on(Er),Ar=[].slice;function At(){}At.prototype={compiler:At,equals:function(n){var e=this.opcodes.length;if(n.opcodes.length!==e)return!1;for(var a=0;a<e;a++){var p=this.opcodes[a],f=n.opcodes[a];if(p.opcode!==f.opcode||!cn(p.args,f.args))return!1}e=this.children.length;for(var a=0;a<e;a++)if(!this.children[a].equals(n.children[a]))return!1;return!0},guid:0,compile:function(n,e){return this.sourceNode=[],this.opcodes=[],this.children=[],this.options=e,this.stringParams=e.stringParams,this.trackIds=e.trackIds,e.blockParams=e.blockParams||[],e.knownHelpers=X.extend(Object.create(null),{helperMissing:!0,blockHelperMissing:!0,each:!0,if:!0,unless:!0,with:!0,log:!0,lookup:!0},e.knownHelpers),this.accept(n)},compileProgram:function(n){var e=new this.compiler,a=e.compile(n,this.options),p=this.guid++;return this.usePartial=this.usePartial||a.usePartial,this.children[p]=a,this.useDepths=this.useDepths||a.useDepths,p},accept:function(n){if(!this[n.type])throw new Y.default("Unknown type: "+n.type,n);this.sourceNode.unshift(n);var e=this[n.type](n);return this.sourceNode.shift(),e},Program:function(n){this.options.blockParams.unshift(n.blockParams);for(var e=n.body,a=e.length,p=0;p<a;p++)this.accept(e[p]);return this.options.blockParams.shift(),this.isSimple=a===1,this.blockParams=n.blockParams?n.blockParams.length:0,this},BlockStatement:function(n){Xt(n);var e=n.program,a=n.inverse;e=e&&this.compileProgram(e),a=a&&this.compileProgram(a);var p=this.classifySexpr(n);p==="helper"?this.helperSexpr(n,e,a):p==="simple"?(this.simpleSexpr(n),this.opcode("pushProgram",e),this.opcode("pushProgram",a),this.opcode("emptyHash"),this.opcode("blockValue",n.path.original)):(this.ambiguousSexpr(n,e,a),this.opcode("pushProgram",e),this.opcode("pushProgram",a),this.opcode("emptyHash"),this.opcode("ambiguousBlockValue")),this.opcode("append")},DecoratorBlock:function(n){var e=n.program&&this.compileProgram(n.program),a=this.setupFullMustacheParams(n,e,void 0),p=n.path;this.useDecorators=!0,this.opcode("registerDecorator",a.length,p.original)},PartialStatement:function(n){this.usePartial=!0;var e=n.program;e&&(e=this.compileProgram(n.program));var a=n.params;if(a.length>1)throw new Y.default("Unsupported number of partial arguments: "+a.length,n);a.length||(this.options.explicitPartialContext?this.opcode("pushLiteral","undefined"):a.push({type:"PathExpression",parts:[],depth:0}));var p=n.name.original,f=n.name.type==="SubExpression";f&&this.accept(n.name),this.setupFullMustacheParams(n,e,void 0,!0);var d=n.indent||"";this.options.preventIndent&&d&&(this.opcode("appendContent",d),d=""),this.opcode("invokePartial",f,p,d),this.opcode("append")},PartialBlockStatement:function(n){this.PartialStatement(n)},MustacheStatement:function(n){this.SubExpression(n),n.escaped&&!this.options.noEscape?this.opcode("appendEscaped"):this.opcode("append")},Decorator:function(n){this.DecoratorBlock(n)},ContentStatement:function(n){n.value&&this.opcode("appendContent",n.value)},CommentStatement:function(){},SubExpression:function(n){Xt(n);var e=this.classifySexpr(n);e==="simple"?this.simpleSexpr(n):e==="helper"?this.helperSexpr(n):this.ambiguousSexpr(n)},ambiguousSexpr:function(n,e,a){var p=n.path,f=p.parts[0],d=e!=null||a!=null;this.opcode("getContext",p.depth),this.opcode("pushProgram",e),this.opcode("pushProgram",a),p.strict=!0,this.accept(p),this.opcode("invokeAmbiguous",f,d)},simpleSexpr:function(n){var e=n.path;e.strict=!0,this.accept(e),this.opcode("resolvePossibleLambda")},helperSexpr:function(n,e,a){var p=this.setupFullMustacheParams(n,e,a),f=n.path,d=f.parts[0];if(this.options.knownHelpers[d])this.opcode("invokeKnownHelper",p.length,d);else{if(this.options.knownHelpersOnly)throw new Y.default("You specified knownHelpersOnly, but used the unknown helper "+d,n);f.strict=!0,f.falsy=!0,this.accept(f),this.opcode("invokeHelper",p.length,f.original,z.default.helpers.simpleId(f))}},PathExpression:function(n){this.addDepth(n.depth),this.opcode("getContext",n.depth);var e=n.parts[0],a=z.default.helpers.scopedId(n),p=!n.depth&&!a&&this.blockParamIndex(e);p?this.opcode("lookupBlockParam",p,n.parts):e?n.data?(this.options.data=!0,this.opcode("lookupData",n.depth,n.parts,n.strict)):this.opcode("lookupOnContext",n.parts,n.falsy,n.strict,a):this.opcode("pushContext")},StringLiteral:function(n){this.opcode("pushString",n.value)},NumberLiteral:function(n){this.opcode("pushLiteral",n.value)},BooleanLiteral:function(n){this.opcode("pushLiteral",n.value)},UndefinedLiteral:function(){this.opcode("pushLiteral","undefined")},NullLiteral:function(){this.opcode("pushLiteral","null")},Hash:function(n){var e=n.pairs,a=0,p=e.length;for(this.opcode("pushHash");a<p;a++)this.pushParam(e[a].value);for(;a--;)this.opcode("assignToHash",e[a].key);this.opcode("popHash")},opcode:function(n){this.opcodes.push({opcode:n,args:Ar.call(arguments,1),loc:this.sourceNode[0].loc})},addDepth:function(n){!n||(this.useDepths=!0)},classifySexpr:function(n){var e=z.default.helpers.simpleId(n.path),a=e&&!!this.blockParamIndex(n.path.parts[0]),p=!a&&z.default.helpers.helperExpression(n),f=!a&&(p||e);if(f&&!p){var d=n.path.parts[0],l=this.options;l.knownHelpers[d]?p=!0:l.knownHelpersOnly&&(f=!1)}return p?"helper":f?"ambiguous":"simple"},pushParams:function(n){for(var e=0,a=n.length;e<a;e++)this.pushParam(n[e])},pushParam:function(n){var e=n.value!=null?n.value:n.original||"";if(this.stringParams)e.replace&&(e=e.replace(/^(\.?\.\/)*/g,"").replace(/\//g,".")),n.depth&&this.addDepth(n.depth),this.opcode("getContext",n.depth||0),this.opcode("pushStringParam",e,n.type),n.type==="SubExpression"&&this.accept(n);else{if(this.trackIds){var a=void 0;if(n.parts&&!z.default.helpers.scopedId(n)&&!n.depth&&(a=this.blockParamIndex(n.parts[0])),a){var p=n.parts.slice(1).join(".");this.opcode("pushId","BlockParam",a,p)}else e=n.original||e,e.replace&&(e=e.replace(/^this(?:\.|$)/,"").replace(/^\.\//,"").replace(/^\.$/,"")),this.opcode("pushId",n.type,e)}this.accept(n)}},setupFullMustacheParams:function(n,e,a,p){var f=n.params;return this.pushParams(f),this.opcode("pushProgram",e),this.opcode("pushProgram",a),n.hash?this.accept(n.hash):this.opcode("emptyHash",p),f},blockParamIndex:function(n){for(var e=0,a=this.options.blockParams.length;e<a;e++){var p=this.options.blockParams[e],f=p&&X.indexOf(p,n);if(p&&f>=0)return[e,f]}}};function _r(t,n,e){if(t==null||typeof t!="string"&&t.type!=="Program")throw new Y.default("You must pass a string or Handlebars AST to Handlebars.precompile. You passed "+t);n=n||{},"data"in n||(n.data=!0),n.compat&&(n.useDepths=!0);var a=e.parse(t,n),p=new e.Compiler().compile(a,n);return new e.JavaScriptCompiler().compile(p,n)}function Or(t,n,e){if(n===void 0&&(n={}),t==null||typeof t!="string"&&t.type!=="Program")throw new Y.default("You must pass a string or Handlebars AST to Handlebars.compile. You passed "+t);n=X.extend({},n),"data"in n||(n.data=!0),n.compat&&(n.useDepths=!0);var a=void 0;function p(){var d=e.parse(t,n),l=new e.Compiler().compile(d,n),o=new e.JavaScriptCompiler().compile(l,n,void 0,!0);return e.template(o)}function f(d,l){return a||(a=p()),a.call(this,d,l)}return f._setup=function(d){return a||(a=p()),a._setup(d)},f._child=function(d,l,o,u){return a||(a=p()),a._child(d,l,o,u)},f}function cn(t,n){if(t===n)return!0;if(X.isArray(t)&&X.isArray(n)&&t.length===n.length){for(var e=0;e<t.length;e++)if(!cn(t[e],n[e]))return!1;return!0}}function Xt(t){if(!t.path.parts){var n=t.path;t.path={type:"PathExpression",data:!1,depth:0,parts:[n.original+""],original:n.original+"",loc:n.loc}}}var _t={exports:{}},Ot={exports:{}};(function(t,n){n.__esModule=!0;var e=S,a=void 0;try{var p=require("source-map");a=p.SourceNode}catch{}a||(a=function(l,o,u,c){this.src="",c&&this.add(c)},a.prototype={add:function(o){e.isArray(o)&&(o=o.join("")),this.src+=o},prepend:function(o){e.isArray(o)&&(o=o.join("")),this.src=o+this.src},toStringWithSourceMap:function(){return{code:this.toString()}},toString:function(){return this.src}});function f(l,o,u){if(e.isArray(l)){for(var c=[],h=0,r=l.length;h<r;h++)c.push(o.wrap(l[h],u));return c}else if(typeof l=="boolean"||typeof l=="number")return l+"";return l}function d(l){this.srcFile=l,this.source=[]}d.prototype={isEmpty:function(){return!this.source.length},prepend:function(o,u){this.source.unshift(this.wrap(o,u))},push:function(o,u){this.source.push(this.wrap(o,u))},merge:function(){var o=this.empty();return this.each(function(u){o.add(["  ",u,`
+`])}),o},each:function(o){for(var u=0,c=this.source.length;u<c;u++)o(this.source[u])},empty:function(){var o=this.currentLocation||{start:{}};return new a(o.start.line,o.start.column,this.srcFile)},wrap:function(o){var u=arguments.length<=1||arguments[1]===void 0?this.currentLocation||{start:{}}:arguments[1];return o instanceof a?o:(o=f(o,this,u),new a(u.start.line,u.start.column,this.srcFile,o))},functionCall:function(o,u,c){return c=this.generateList(c),this.wrap([o,u?"."+u+"(":"(",c,")"])},quotedString:function(o){return'"'+(o+"").replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\n/g,"\\n").replace(/\r/g,"\\r").replace(/\u2028/g,"\\u2028").replace(/\u2029/g,"\\u2029")+'"'},objectLiteral:function(o){var u=this,c=[];Object.keys(o).forEach(function(r){var s=f(o[r],u);s!=="undefined"&&c.push([u.quotedString(r),":",s])});var h=this.generateList(c);return h.prepend("{"),h.add("}"),h},generateList:function(o){for(var u=this.empty(),c=0,h=o.length;c<h;c++)c&&u.add(","),u.add(f(o[c],this));return u},generateArray:function(o){var u=this.generateList(o);return u.prepend("["),u.add("]"),u}},n.default=d,t.exports=n.default})(Ot,Ot.exports);(function(t,n){n.__esModule=!0;function e(r){return r&&r.__esModule?r:{default:r}}var a=A,p=E.exports,f=e(p),d=S,l=Ot.exports,o=e(l);function u(r){this.value=r}function c(){}c.prototype={nameLookup:function(s,i){return this.internalNameLookup(s,i)},depthedLookup:function(s){return[this.aliasable("container.lookup"),"(depths, ",JSON.stringify(s),")"]},compilerInfo:function(){var s=a.COMPILER_REVISION,i=a.REVISION_CHANGES[s];return[s,i]},appendToBuffer:function(s,i,m){return d.isArray(s)||(s=[s]),s=this.source.wrap(s,i),this.environment.isSimple?["return ",s,";"]:m?["buffer += ",s,";"]:(s.appendToBuffer=!0,s)},initializeBuffer:function(){return this.quotedString("")},internalNameLookup:function(s,i){return this.lookupPropertyFunctionIsUsed=!0,["lookupProperty(",s,",",JSON.stringify(i),")"]},lookupPropertyFunctionIsUsed:!1,compile:function(s,i,m,g){this.environment=s,this.options=i,this.stringParams=this.options.stringParams,this.trackIds=this.options.trackIds,this.precompile=!g,this.name=this.environment.name,this.isChild=!!m,this.context=m||{decorators:[],programs:[],environments:[]},this.preamble(),this.stackSlot=0,this.stackVars=[],this.aliases={},this.registers={list:[]},this.hashes=[],this.compileStack=[],this.inlineStack=[],this.blockParams=[],this.compileChildren(s,i),this.useDepths=this.useDepths||s.useDepths||s.useDecorators||this.options.compat,this.useBlockParams=this.useBlockParams||s.useBlockParams;var b=s.opcodes,y=void 0,w=void 0,v=void 0,k=void 0;for(v=0,k=b.length;v<k;v++)y=b[v],this.source.currentLocation=y.loc,w=w||y.loc,this[y.opcode].apply(this,y.args);if(this.source.currentLocation=w,this.pushSource(""),this.stackSlot||this.inlineStack.length||this.compileStack.length)throw new f.default("Compile completed with content left on stack");this.decorators.isEmpty()?this.decorators=void 0:(this.useDecorators=!0,this.decorators.prepend(["var decorators = container.decorators, ",this.lookupPropertyFunctionVarDeclaration(),`;
 `]),this.decorators.push("return fn;"),g?this.decorators=Function.apply(this,["fn","props","container","depth0","data","blockParams","depths",this.decorators.merge()]):(this.decorators.prepend(`function(fn, props, container, depth0, data, blockParams, depths) {
 `),this.decorators.push(`}
-`),this.decorators=this.decorators.merge()));var T=this.createFunctionContext(g);if(this.isChild)return T;var x={compiler:this.compilerInfo(),main:T};this.decorators&&(x.main_d=this.decorators,x.useDecorators=!0);var I=this.context,F=I.programs,V=I.decorators;for(v=0,k=F.length;v<k;v++)F[v]&&(x[v]=F[v],V[v]&&(x[v+"_d"]=V[v],x.useDecorators=!0));return this.environment.usePartial&&(x.usePartial=!0),this.options.data&&(x.useData=!0),this.useDepths&&(x.useDepths=!0),this.useBlockParams&&(x.useBlockParams=!0),this.options.compat&&(x.compat=!0),g?x.compilerOptions=this.options:(x.compiler=JSON.stringify(x.compiler),this.source.currentLocation={start:{line:1,column:0}},x=this.objectLiteral(x),a.srcName?(x=x.toStringWithSourceMap({file:a.destName}),x.map=x.map&&x.map.toString()):x=x.toString()),x},preamble:function(){this.lastContext=0,this.source=new o.default(this.options.srcName),this.decorators=new o.default(this.options.srcName)},createFunctionContext:function(s){var a=this,m="",g=this.stackVars.concat(this.registers.list);g.length>0&&(m+=", "+g.join(", "));var b=0;Object.keys(this.aliases).forEach(function(v){var k=a.aliases[v];k.children&&k.referenceCount>1&&(m+=", alias"+ ++b+"="+v,k.children[0]="alias"+b)}),this.lookupPropertyFunctionIsUsed&&(m+=", "+this.lookupPropertyFunctionVarDeclaration());var y=["container","depth0","helpers","partials","data"];(this.useBlockParams||this.useDepths)&&y.push("blockParams"),this.useDepths&&y.push("depths");var w=this.mergeSource(m);return s?(y.push(w),Function.apply(this,y)):this.source.wrap(["function(",y.join(","),`) {
-  `,w,"}"])},mergeSource:function(s){var a=this.environment.isSimple,m=!this.forceBuffer,g=void 0,b=void 0,y=void 0,w=void 0;return this.source.each(function(v){v.appendToBuffer?(y?v.prepend("  + "):y=v,w=v):(y&&(b?y.prepend("buffer += "):g=!0,w.add(";"),y=w=void 0),b=!0,a||(m=!1))}),m?y?(y.prepend("return "),w.add(";")):b||this.source.push('return "";'):(s+=", buffer = "+(g?"":this.initializeBuffer()),y?(y.prepend("return buffer + "),w.add(";")):this.source.push("return buffer;")),s&&this.source.prepend("var "+s.substring(2)+(g?"":`;
+`),this.decorators=this.decorators.merge()));var T=this.createFunctionContext(g);if(this.isChild)return T;var x={compiler:this.compilerInfo(),main:T};this.decorators&&(x.main_d=this.decorators,x.useDecorators=!0);var I=this.context,F=I.programs,V=I.decorators;for(v=0,k=F.length;v<k;v++)F[v]&&(x[v]=F[v],V[v]&&(x[v+"_d"]=V[v],x.useDecorators=!0));return this.environment.usePartial&&(x.usePartial=!0),this.options.data&&(x.useData=!0),this.useDepths&&(x.useDepths=!0),this.useBlockParams&&(x.useBlockParams=!0),this.options.compat&&(x.compat=!0),g?x.compilerOptions=this.options:(x.compiler=JSON.stringify(x.compiler),this.source.currentLocation={start:{line:1,column:0}},x=this.objectLiteral(x),i.srcName?(x=x.toStringWithSourceMap({file:i.destName}),x.map=x.map&&x.map.toString()):x=x.toString()),x},preamble:function(){this.lastContext=0,this.source=new o.default(this.options.srcName),this.decorators=new o.default(this.options.srcName)},createFunctionContext:function(s){var i=this,m="",g=this.stackVars.concat(this.registers.list);g.length>0&&(m+=", "+g.join(", "));var b=0;Object.keys(this.aliases).forEach(function(v){var k=i.aliases[v];k.children&&k.referenceCount>1&&(m+=", alias"+ ++b+"="+v,k.children[0]="alias"+b)}),this.lookupPropertyFunctionIsUsed&&(m+=", "+this.lookupPropertyFunctionVarDeclaration());var y=["container","depth0","helpers","partials","data"];(this.useBlockParams||this.useDepths)&&y.push("blockParams"),this.useDepths&&y.push("depths");var w=this.mergeSource(m);return s?(y.push(w),Function.apply(this,y)):this.source.wrap(["function(",y.join(","),`) {
+  `,w,"}"])},mergeSource:function(s){var i=this.environment.isSimple,m=!this.forceBuffer,g=void 0,b=void 0,y=void 0,w=void 0;return this.source.each(function(v){v.appendToBuffer?(y?v.prepend("  + "):y=v,w=v):(y&&(b?y.prepend("buffer += "):g=!0,w.add(";"),y=w=void 0),b=!0,i||(m=!1))}),m?y?(y.prepend("return "),w.add(";")):b||this.source.push('return "";'):(s+=", buffer = "+(g?"":this.initializeBuffer()),y?(y.prepend("return buffer + "),w.add(";")):this.source.push("return buffer;")),s&&this.source.prepend("var "+s.substring(2)+(g?"":`;
 `)),this.source.merge()},lookupPropertyFunctionVarDeclaration:function(){return`
       lookupProperty = container.lookupProperty || function(parent, propertyName) {
         if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
@@ -116,7 +116,7 @@ Expecting `+Z.join(", ")+", got '"+(this.terminals_[w]||w)+"'":ct="Parse error o
         }
         return undefined
     }
-    `.trim()},blockValue:function(s){var a=this.aliasable("container.hooks.blockHelperMissing"),m=[this.contextName(0)];this.setupHelperArgs(s,0,m);var g=this.popStack();m.splice(1,0,g),this.push(this.source.functionCall(a,"call",m))},ambiguousBlockValue:function(){var s=this.aliasable("container.hooks.blockHelperMissing"),a=[this.contextName(0)];this.setupHelperArgs("",0,a,!0),this.flushInline();var m=this.topStack();a.splice(1,0,m),this.pushSource(["if (!",this.lastHelper,") { ",m," = ",this.source.functionCall(s,"call",a),"}"])},appendContent:function(s){this.pendingContent?s=this.pendingContent+s:this.pendingLocation=this.source.currentLocation,this.pendingContent=s},append:function(){if(this.isInline())this.replaceStack(function(a){return[" != null ? ",a,' : ""']}),this.pushSource(this.appendToBuffer(this.popStack()));else{var s=this.popStack();this.pushSource(["if (",s," != null) { ",this.appendToBuffer(s,void 0,!0)," }"]),this.environment.isSimple&&this.pushSource(["else { ",this.appendToBuffer("''",void 0,!0)," }"])}},appendEscaped:function(){this.pushSource(this.appendToBuffer([this.aliasable("container.escapeExpression"),"(",this.popStack(),")"]))},getContext:function(s){this.lastContext=s},pushContext:function(){this.pushStackLiteral(this.contextName(this.lastContext))},lookupOnContext:function(s,a,m,g){var b=0;!g&&this.options.compat&&!this.lastContext?this.push(this.depthedLookup(s[b++])):this.pushContext(),this.resolvePath("context",s,b,a,m)},lookupBlockParam:function(s,a){this.useBlockParams=!0,this.push(["blockParams[",s[0],"][",s[1],"]"]),this.resolvePath("context",a,1)},lookupData:function(s,a,m){s?this.pushStackLiteral("container.data(data, "+s+")"):this.pushStackLiteral("data"),this.resolvePath("data",a,0,!0,m)},resolvePath:function(s,a,m,g,b){var y=this;if(this.options.strict||this.options.assumeObjects){this.push(h(this.options.strict&&b,this,a,s));return}for(var w=a.length;m<w;m++)this.replaceStack(function(v){var k=y.nameLookup(v,a[m],s);return g?[" && ",k]:[" != null ? ",k," : ",v]})},resolvePossibleLambda:function(){this.push([this.aliasable("container.lambda"),"(",this.popStack(),", ",this.contextName(0),")"])},pushStringParam:function(s,a){this.pushContext(),this.pushString(a),a!=="SubExpression"&&(typeof s=="string"?this.pushString(s):this.pushStackLiteral(s))},emptyHash:function(s){this.trackIds&&this.push("{}"),this.stringParams&&(this.push("{}"),this.push("{}")),this.pushStackLiteral(s?"undefined":"{}")},pushHash:function(){this.hash&&this.hashes.push(this.hash),this.hash={values:{},types:[],contexts:[],ids:[]}},popHash:function(){var s=this.hash;this.hash=this.hashes.pop(),this.trackIds&&this.push(this.objectLiteral(s.ids)),this.stringParams&&(this.push(this.objectLiteral(s.contexts)),this.push(this.objectLiteral(s.types))),this.push(this.objectLiteral(s.values))},pushString:function(s){this.pushStackLiteral(this.quotedString(s))},pushLiteral:function(s){this.pushStackLiteral(s)},pushProgram:function(s){s!=null?this.pushStackLiteral(this.programExpression(s)):this.pushStackLiteral(null)},registerDecorator:function(s,a){var m=this.nameLookup("decorators",a,"decorator"),g=this.setupHelperArgs(a,s);this.decorators.push(["fn = ",this.decorators.functionCall(m,"",["fn","props","container",g])," || fn;"])},invokeHelper:function(s,a,m){var g=this.popStack(),b=this.setupHelper(s,a),y=[];m&&y.push(b.name),y.push(g),this.options.strict||y.push(this.aliasable("container.hooks.helperMissing"));var w=["(",this.itemsSeparatedBy(y,"||"),")"],v=this.source.functionCall(w,"call",b.callParams);this.push(v)},itemsSeparatedBy:function(s,a){var m=[];m.push(s[0]);for(var g=1;g<s.length;g++)m.push(a,s[g]);return m},invokeKnownHelper:function(s,a){var m=this.setupHelper(s,a);this.push(this.source.functionCall(m.name,"call",m.callParams))},invokeAmbiguous:function(s,a){this.useRegister("helper");var m=this.popStack();this.emptyHash();var g=this.setupHelper(0,s,a),b=this.lastHelper=this.nameLookup("helpers",s,"helper"),y=["(","(helper = ",b," || ",m,")"];this.options.strict||(y[0]="(helper = ",y.push(" != null ? helper : ",this.aliasable("container.hooks.helperMissing"))),this.push(["(",y,g.paramsInit?["),(",g.paramsInit]:[],"),","(typeof helper === ",this.aliasable('"function"')," ? ",this.source.functionCall("helper","call",g.callParams)," : helper))"])},invokePartial:function(s,a,m){var g=[],b=this.setupParams(a,1,g);s&&(a=this.popStack(),delete b.name),m&&(b.indent=JSON.stringify(m)),b.helpers="helpers",b.partials="partials",b.decorators="container.decorators",s?g.unshift(a):g.unshift(this.nameLookup("partials",a,"partial")),this.options.compat&&(b.depths="depths"),b=this.objectLiteral(b),g.push(b),this.push(this.source.functionCall("container.invokePartial","",g))},assignToHash:function(s){var a=this.popStack(),m=void 0,g=void 0,b=void 0;this.trackIds&&(b=this.popStack()),this.stringParams&&(g=this.popStack(),m=this.popStack());var y=this.hash;m&&(y.contexts[s]=m),g&&(y.types[s]=g),b&&(y.ids[s]=b),y.values[s]=a},pushId:function(s,a,m){s==="BlockParam"?this.pushStackLiteral("blockParams["+a[0]+"].path["+a[1]+"]"+(m?" + "+JSON.stringify("."+m):"")):s==="PathExpression"?this.pushString(a):s==="SubExpression"?this.pushStackLiteral("true"):this.pushStackLiteral("null")},compiler:c,compileChildren:function(s,a){for(var m=s.children,g=void 0,b=void 0,y=0,w=m.length;y<w;y++){g=m[y],b=new this.compiler;var v=this.matchExistingProgram(g);if(v==null){this.context.programs.push("");var k=this.context.programs.length;g.index=k,g.name="program"+k,this.context.programs[k]=b.compile(g,a,this.context,!this.precompile),this.context.decorators[k]=b.decorators,this.context.environments[k]=g,this.useDepths=this.useDepths||b.useDepths,this.useBlockParams=this.useBlockParams||b.useBlockParams,g.useDepths=this.useDepths,g.useBlockParams=this.useBlockParams}else g.index=v.index,g.name="program"+v.index,this.useDepths=this.useDepths||v.useDepths,this.useBlockParams=this.useBlockParams||v.useBlockParams}},matchExistingProgram:function(s){for(var a=0,m=this.context.environments.length;a<m;a++){var g=this.context.environments[a];if(g&&g.equals(s))return g}},programExpression:function(s){var a=this.environment.children[s],m=[a.index,"data",a.blockParams];return(this.useBlockParams||this.useDepths)&&m.push("blockParams"),this.useDepths&&m.push("depths"),"container.program("+m.join(", ")+")"},useRegister:function(s){this.registers[s]||(this.registers[s]=!0,this.registers.list.push(s))},push:function(s){return s instanceof u||(s=this.source.wrap(s)),this.inlineStack.push(s),s},pushStackLiteral:function(s){this.push(new u(s))},pushSource:function(s){this.pendingContent&&(this.source.push(this.appendToBuffer(this.source.quotedString(this.pendingContent),this.pendingLocation)),this.pendingContent=void 0),s&&this.source.push(s)},replaceStack:function(s){var a=["("],m=void 0,g=void 0,b=void 0;if(!this.isInline())throw new f.default("replaceStack on non-inline");var y=this.popStack(!0);if(y instanceof u)m=[y.value],a=["(",m],b=!0;else{g=!0;var w=this.incrStack();a=["((",this.push(w)," = ",y,")"],m=this.topStack()}var v=s.call(this,m);b||this.popStack(),g&&this.stackSlot--,this.push(a.concat(v,")"))},incrStack:function(){return this.stackSlot++,this.stackSlot>this.stackVars.length&&this.stackVars.push("stack"+this.stackSlot),this.topStackName()},topStackName:function(){return"stack"+this.stackSlot},flushInline:function(){var s=this.inlineStack;this.inlineStack=[];for(var a=0,m=s.length;a<m;a++){var g=s[a];if(g instanceof u)this.compileStack.push(g);else{var b=this.incrStack();this.pushSource([b," = ",g,";"]),this.compileStack.push(b)}}},isInline:function(){return this.inlineStack.length},popStack:function(s){var a=this.isInline(),m=(a?this.inlineStack:this.compileStack).pop();if(!s&&m instanceof u)return m.value;if(!a){if(!this.stackSlot)throw new f.default("Invalid stack pop");this.stackSlot--}return m},topStack:function(){var s=this.isInline()?this.inlineStack:this.compileStack,a=s[s.length-1];return a instanceof u?a.value:a},contextName:function(s){return this.useDepths&&s?"depths["+s+"]":"depth"+s},quotedString:function(s){return this.source.quotedString(s)},objectLiteral:function(s){return this.source.objectLiteral(s)},aliasable:function(s){var a=this.aliases[s];return a?(a.referenceCount++,a):(a=this.aliases[s]=this.source.wrap(s),a.aliasable=!0,a.referenceCount=1,a)},setupHelper:function(s,a,m){var g=[],b=this.setupHelperArgs(a,s,g,m),y=this.nameLookup("helpers",a,"helper"),w=this.aliasable(this.contextName(0)+" != null ? "+this.contextName(0)+" : (container.nullContext || {})");return{params:g,paramsInit:b,name:y,callParams:[w].concat(g)}},setupParams:function(s,a,m){var g={},b=[],y=[],w=[],v=!m,k=void 0;v&&(m=[]),g.name=this.quotedString(s),g.hash=this.popStack(),this.trackIds&&(g.hashIds=this.popStack()),this.stringParams&&(g.hashTypes=this.popStack(),g.hashContexts=this.popStack());var T=this.popStack(),x=this.popStack();(x||T)&&(g.fn=x||"container.noop",g.inverse=T||"container.noop");for(var I=a;I--;)k=this.popStack(),m[I]=k,this.trackIds&&(w[I]=this.popStack()),this.stringParams&&(y[I]=this.popStack(),b[I]=this.popStack());return v&&(g.args=this.source.generateArray(m)),this.trackIds&&(g.ids=this.source.generateArray(w)),this.stringParams&&(g.types=this.source.generateArray(y),g.contexts=this.source.generateArray(b)),this.options.data&&(g.data="data"),this.useBlockParams&&(g.blockParams="blockParams"),g},setupHelperArgs:function(s,a,m,g){var b=this.setupParams(s,a,m);return b.loc=JSON.stringify(this.source.currentLocation),b=this.objectLiteral(b),g?(this.useRegister("options"),m.push("options"),["options=",b]):m?(m.push(b),""):b}},function(){for(var r="break else new var case finally return void catch for switch while continue function this with default if throw delete in try do instanceof typeof abstract enum int short boolean export interface static byte extends long super char final native synchronized class float package throws const goto private transient debugger implements protected volatile double import public let yield await null true false".split(" "),s=c.RESERVED_WORDS={},a=0,m=r.length;a<m;a++)s[r[a]]=!0}(),c.isValidJavaScriptVariableName=function(r){return!c.RESERVED_WORDS[r]&&/^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(r)};function h(r,s,a,m){var g=s.popStack(),b=0,y=a.length;for(r&&y--;b<y;b++)g=s.nameLookup(g,a[b],m);return r?[s.aliasable("container.strict"),"(",g,", ",s.quotedString(a[b]),", ",JSON.stringify(s.source.currentLocation)," )"]:g}n.default=c,t.exports=n.default})(_t,_t.exports);(function(t,n){n.__esModule=!0;function e(y){return y&&y.__esModule?y:{default:y}}var i=ht.exports,p=e(i),f=st.exports,d=e(f),l=J,o=Q,u=_t.exports,c=e(u),h=ot.exports,r=e(h),s=it.exports,a=e(s),m=p.default.create;function g(){var y=m();return y.compile=function(w,v){return o.compile(w,v,y)},y.precompile=function(w,v){return o.precompile(w,v,y)},y.AST=d.default,y.Compiler=o.Compiler,y.JavaScriptCompiler=c.default,y.Parser=l.parser,y.parse=l.parse,y.parseWithoutProcessing=l.parseWithoutProcessing,y}var b=g();b.create=g,a.default(b),b.Visitor=r.default,b.default=b,n.default=b,t.exports=n.default})(ft,ft.exports);const Kt=`<h1><a href="https://github.com/Ayolland/borksy/compare/v5.15.1...v5.16.0">5.16.0</a> (2022-04-08)</h1>
+    `.trim()},blockValue:function(s){var i=this.aliasable("container.hooks.blockHelperMissing"),m=[this.contextName(0)];this.setupHelperArgs(s,0,m);var g=this.popStack();m.splice(1,0,g),this.push(this.source.functionCall(i,"call",m))},ambiguousBlockValue:function(){var s=this.aliasable("container.hooks.blockHelperMissing"),i=[this.contextName(0)];this.setupHelperArgs("",0,i,!0),this.flushInline();var m=this.topStack();i.splice(1,0,m),this.pushSource(["if (!",this.lastHelper,") { ",m," = ",this.source.functionCall(s,"call",i),"}"])},appendContent:function(s){this.pendingContent?s=this.pendingContent+s:this.pendingLocation=this.source.currentLocation,this.pendingContent=s},append:function(){if(this.isInline())this.replaceStack(function(i){return[" != null ? ",i,' : ""']}),this.pushSource(this.appendToBuffer(this.popStack()));else{var s=this.popStack();this.pushSource(["if (",s," != null) { ",this.appendToBuffer(s,void 0,!0)," }"]),this.environment.isSimple&&this.pushSource(["else { ",this.appendToBuffer("''",void 0,!0)," }"])}},appendEscaped:function(){this.pushSource(this.appendToBuffer([this.aliasable("container.escapeExpression"),"(",this.popStack(),")"]))},getContext:function(s){this.lastContext=s},pushContext:function(){this.pushStackLiteral(this.contextName(this.lastContext))},lookupOnContext:function(s,i,m,g){var b=0;!g&&this.options.compat&&!this.lastContext?this.push(this.depthedLookup(s[b++])):this.pushContext(),this.resolvePath("context",s,b,i,m)},lookupBlockParam:function(s,i){this.useBlockParams=!0,this.push(["blockParams[",s[0],"][",s[1],"]"]),this.resolvePath("context",i,1)},lookupData:function(s,i,m){s?this.pushStackLiteral("container.data(data, "+s+")"):this.pushStackLiteral("data"),this.resolvePath("data",i,0,!0,m)},resolvePath:function(s,i,m,g,b){var y=this;if(this.options.strict||this.options.assumeObjects){this.push(h(this.options.strict&&b,this,i,s));return}for(var w=i.length;m<w;m++)this.replaceStack(function(v){var k=y.nameLookup(v,i[m],s);return g?[" && ",k]:[" != null ? ",k," : ",v]})},resolvePossibleLambda:function(){this.push([this.aliasable("container.lambda"),"(",this.popStack(),", ",this.contextName(0),")"])},pushStringParam:function(s,i){this.pushContext(),this.pushString(i),i!=="SubExpression"&&(typeof s=="string"?this.pushString(s):this.pushStackLiteral(s))},emptyHash:function(s){this.trackIds&&this.push("{}"),this.stringParams&&(this.push("{}"),this.push("{}")),this.pushStackLiteral(s?"undefined":"{}")},pushHash:function(){this.hash&&this.hashes.push(this.hash),this.hash={values:{},types:[],contexts:[],ids:[]}},popHash:function(){var s=this.hash;this.hash=this.hashes.pop(),this.trackIds&&this.push(this.objectLiteral(s.ids)),this.stringParams&&(this.push(this.objectLiteral(s.contexts)),this.push(this.objectLiteral(s.types))),this.push(this.objectLiteral(s.values))},pushString:function(s){this.pushStackLiteral(this.quotedString(s))},pushLiteral:function(s){this.pushStackLiteral(s)},pushProgram:function(s){s!=null?this.pushStackLiteral(this.programExpression(s)):this.pushStackLiteral(null)},registerDecorator:function(s,i){var m=this.nameLookup("decorators",i,"decorator"),g=this.setupHelperArgs(i,s);this.decorators.push(["fn = ",this.decorators.functionCall(m,"",["fn","props","container",g])," || fn;"])},invokeHelper:function(s,i,m){var g=this.popStack(),b=this.setupHelper(s,i),y=[];m&&y.push(b.name),y.push(g),this.options.strict||y.push(this.aliasable("container.hooks.helperMissing"));var w=["(",this.itemsSeparatedBy(y,"||"),")"],v=this.source.functionCall(w,"call",b.callParams);this.push(v)},itemsSeparatedBy:function(s,i){var m=[];m.push(s[0]);for(var g=1;g<s.length;g++)m.push(i,s[g]);return m},invokeKnownHelper:function(s,i){var m=this.setupHelper(s,i);this.push(this.source.functionCall(m.name,"call",m.callParams))},invokeAmbiguous:function(s,i){this.useRegister("helper");var m=this.popStack();this.emptyHash();var g=this.setupHelper(0,s,i),b=this.lastHelper=this.nameLookup("helpers",s,"helper"),y=["(","(helper = ",b," || ",m,")"];this.options.strict||(y[0]="(helper = ",y.push(" != null ? helper : ",this.aliasable("container.hooks.helperMissing"))),this.push(["(",y,g.paramsInit?["),(",g.paramsInit]:[],"),","(typeof helper === ",this.aliasable('"function"')," ? ",this.source.functionCall("helper","call",g.callParams)," : helper))"])},invokePartial:function(s,i,m){var g=[],b=this.setupParams(i,1,g);s&&(i=this.popStack(),delete b.name),m&&(b.indent=JSON.stringify(m)),b.helpers="helpers",b.partials="partials",b.decorators="container.decorators",s?g.unshift(i):g.unshift(this.nameLookup("partials",i,"partial")),this.options.compat&&(b.depths="depths"),b=this.objectLiteral(b),g.push(b),this.push(this.source.functionCall("container.invokePartial","",g))},assignToHash:function(s){var i=this.popStack(),m=void 0,g=void 0,b=void 0;this.trackIds&&(b=this.popStack()),this.stringParams&&(g=this.popStack(),m=this.popStack());var y=this.hash;m&&(y.contexts[s]=m),g&&(y.types[s]=g),b&&(y.ids[s]=b),y.values[s]=i},pushId:function(s,i,m){s==="BlockParam"?this.pushStackLiteral("blockParams["+i[0]+"].path["+i[1]+"]"+(m?" + "+JSON.stringify("."+m):"")):s==="PathExpression"?this.pushString(i):s==="SubExpression"?this.pushStackLiteral("true"):this.pushStackLiteral("null")},compiler:c,compileChildren:function(s,i){for(var m=s.children,g=void 0,b=void 0,y=0,w=m.length;y<w;y++){g=m[y],b=new this.compiler;var v=this.matchExistingProgram(g);if(v==null){this.context.programs.push("");var k=this.context.programs.length;g.index=k,g.name="program"+k,this.context.programs[k]=b.compile(g,i,this.context,!this.precompile),this.context.decorators[k]=b.decorators,this.context.environments[k]=g,this.useDepths=this.useDepths||b.useDepths,this.useBlockParams=this.useBlockParams||b.useBlockParams,g.useDepths=this.useDepths,g.useBlockParams=this.useBlockParams}else g.index=v.index,g.name="program"+v.index,this.useDepths=this.useDepths||v.useDepths,this.useBlockParams=this.useBlockParams||v.useBlockParams}},matchExistingProgram:function(s){for(var i=0,m=this.context.environments.length;i<m;i++){var g=this.context.environments[i];if(g&&g.equals(s))return g}},programExpression:function(s){var i=this.environment.children[s],m=[i.index,"data",i.blockParams];return(this.useBlockParams||this.useDepths)&&m.push("blockParams"),this.useDepths&&m.push("depths"),"container.program("+m.join(", ")+")"},useRegister:function(s){this.registers[s]||(this.registers[s]=!0,this.registers.list.push(s))},push:function(s){return s instanceof u||(s=this.source.wrap(s)),this.inlineStack.push(s),s},pushStackLiteral:function(s){this.push(new u(s))},pushSource:function(s){this.pendingContent&&(this.source.push(this.appendToBuffer(this.source.quotedString(this.pendingContent),this.pendingLocation)),this.pendingContent=void 0),s&&this.source.push(s)},replaceStack:function(s){var i=["("],m=void 0,g=void 0,b=void 0;if(!this.isInline())throw new f.default("replaceStack on non-inline");var y=this.popStack(!0);if(y instanceof u)m=[y.value],i=["(",m],b=!0;else{g=!0;var w=this.incrStack();i=["((",this.push(w)," = ",y,")"],m=this.topStack()}var v=s.call(this,m);b||this.popStack(),g&&this.stackSlot--,this.push(i.concat(v,")"))},incrStack:function(){return this.stackSlot++,this.stackSlot>this.stackVars.length&&this.stackVars.push("stack"+this.stackSlot),this.topStackName()},topStackName:function(){return"stack"+this.stackSlot},flushInline:function(){var s=this.inlineStack;this.inlineStack=[];for(var i=0,m=s.length;i<m;i++){var g=s[i];if(g instanceof u)this.compileStack.push(g);else{var b=this.incrStack();this.pushSource([b," = ",g,";"]),this.compileStack.push(b)}}},isInline:function(){return this.inlineStack.length},popStack:function(s){var i=this.isInline(),m=(i?this.inlineStack:this.compileStack).pop();if(!s&&m instanceof u)return m.value;if(!i){if(!this.stackSlot)throw new f.default("Invalid stack pop");this.stackSlot--}return m},topStack:function(){var s=this.isInline()?this.inlineStack:this.compileStack,i=s[s.length-1];return i instanceof u?i.value:i},contextName:function(s){return this.useDepths&&s?"depths["+s+"]":"depth"+s},quotedString:function(s){return this.source.quotedString(s)},objectLiteral:function(s){return this.source.objectLiteral(s)},aliasable:function(s){var i=this.aliases[s];return i?(i.referenceCount++,i):(i=this.aliases[s]=this.source.wrap(s),i.aliasable=!0,i.referenceCount=1,i)},setupHelper:function(s,i,m){var g=[],b=this.setupHelperArgs(i,s,g,m),y=this.nameLookup("helpers",i,"helper"),w=this.aliasable(this.contextName(0)+" != null ? "+this.contextName(0)+" : (container.nullContext || {})");return{params:g,paramsInit:b,name:y,callParams:[w].concat(g)}},setupParams:function(s,i,m){var g={},b=[],y=[],w=[],v=!m,k=void 0;v&&(m=[]),g.name=this.quotedString(s),g.hash=this.popStack(),this.trackIds&&(g.hashIds=this.popStack()),this.stringParams&&(g.hashTypes=this.popStack(),g.hashContexts=this.popStack());var T=this.popStack(),x=this.popStack();(x||T)&&(g.fn=x||"container.noop",g.inverse=T||"container.noop");for(var I=i;I--;)k=this.popStack(),m[I]=k,this.trackIds&&(w[I]=this.popStack()),this.stringParams&&(y[I]=this.popStack(),b[I]=this.popStack());return v&&(g.args=this.source.generateArray(m)),this.trackIds&&(g.ids=this.source.generateArray(w)),this.stringParams&&(g.types=this.source.generateArray(y),g.contexts=this.source.generateArray(b)),this.options.data&&(g.data="data"),this.useBlockParams&&(g.blockParams="blockParams"),g},setupHelperArgs:function(s,i,m,g){var b=this.setupParams(s,i,m);return b.loc=JSON.stringify(this.source.currentLocation),b=this.objectLiteral(b),g?(this.useRegister("options"),m.push("options"),["options=",b]):m?(m.push(b),""):b}},function(){for(var r="break else new var case finally return void catch for switch while continue function this with default if throw delete in try do instanceof typeof abstract enum int short boolean export interface static byte extends long super char final native synchronized class float package throws const goto private transient debugger implements protected volatile double import public let yield await null true false".split(" "),s=c.RESERVED_WORDS={},i=0,m=r.length;i<m;i++)s[r[i]]=!0}(),c.isValidJavaScriptVariableName=function(r){return!c.RESERVED_WORDS[r]&&/^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(r)};function h(r,s,i,m){var g=s.popStack(),b=0,y=i.length;for(r&&y--;b<y;b++)g=s.nameLookup(g,i[b],m);return r?[s.aliasable("container.strict"),"(",g,", ",s.quotedString(i[b]),", ",JSON.stringify(s.source.currentLocation)," )"]:g}n.default=c,t.exports=n.default})(_t,_t.exports);(function(t,n){n.__esModule=!0;function e(y){return y&&y.__esModule?y:{default:y}}var a=ht.exports,p=e(a),f=st.exports,d=e(f),l=J,o=Q,u=_t.exports,c=e(u),h=ot.exports,r=e(h),s=at.exports,i=e(s),m=p.default.create;function g(){var y=m();return y.compile=function(w,v){return o.compile(w,v,y)},y.precompile=function(w,v){return o.precompile(w,v,y)},y.AST=d.default,y.Compiler=o.Compiler,y.JavaScriptCompiler=c.default,y.Parser=l.parser,y.parse=l.parse,y.parseWithoutProcessing=l.parseWithoutProcessing,y}var b=g();b.create=g,i.default(b),b.Visitor=r.default,b.default=b,n.default=b,t.exports=n.default})(ft,ft.exports);const Kt=`<h1><a href="https://github.com/Ayolland/borksy/compare/v5.15.1...v5.16.0">5.16.0</a> (2022-04-08)</h1>
 <h3>Features</h3>
 <ul>
 <li>update hacks (<a href="https://github.com/Ayolland/borksy/commit/6c3bb46048bc1e9492ab06949007a155b0bffea3">6c3bb46</a>)</li>
@@ -482,7 +482,7 @@ Expecting `+Z.join(", ")+", got '"+(this.terminals_[w]||w)+"'":ct="Parse error o
 <ul>
 <li>Initial version</li>
 </ul>
-`,Nr="borksy",Dr="5.16.0",Br="Borksy Game Hacker: A tool for extending Bitsy games",Cr={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},Rr={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},qr="AYolland",Pr="MIT",Lr={url:"https://github.com/Ayolland/borksy/issues"},Mr="https://ayolland.itch.io/borksy",Hr={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},Gr={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},Ur={"@bitsy/hecks":"^20.2.0",eslint:"^8.12.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.5.0","eslint-plugin-import":"^2.26.0","eslint-plugin-prettier":"^4.0.0","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^27.5.1","jest-dev-server":"^6.0.0","jest-image-snapshot":"^4.5.1",prettier:"^2.6.2",puppeteer:"^13.5.2","rollup-plugin-visualizer":"^5.6.0",sass:"^1.50.0",vite:"^2.9.1","vite-plugin-markdown":"^2.0.2","vite-plugin-string":"^1.1.2"};var Vr={private:!0,name:Nr,version:Dr,description:Br,scripts:Cr,repository:Rr,author:qr,license:Pr,bugs:Lr,homepage:Mr,jest:Hr,release:Gr,devDependencies:Ur};const zr="modulepreload",Jt={},$r="./",j=function(n,e){return!e||e.length===0?n():Promise.all(e.map(i=>{if(i=`${$r}${i}`,i in Jt)return;Jt[i]=!0;const p=i.endsWith(".css"),f=p?'[rel="stylesheet"]':"";if(document.querySelector(`link[href="${i}"]${f}`))return;const d=document.createElement("link");if(d.rel=p?"stylesheet":zr,p||(d.as="script",d.crossOrigin=""),d.href=i,document.head.appendChild(d),p)return new Promise((l,o)=>{d.addEventListener("load",l),d.addEventListener("error",()=>o(new Error(`Unable to preload CSS for ${i}`)))})})).then(()=>n())};var H=[{data:()=>j(()=>import("./BitsyHD.5.1.224b5bed.js"),[]),bitsyVersion:"5.1",isHd:!0,description:"Bitsy HD (Bitsy 5.1)"},{data:()=>j(()=>import("./Bitsy.5.5.b578c1f1.js"),[]),bitsyVersion:"5.5",description:"Bitsy 5.5"},{data:()=>j(()=>import("./Bitsy.6.0.d01fe5ea.js"),[]),bitsyVersion:"6.0",description:"Bitsy 6.0"},{data:()=>j(()=>import("./Bitsy.6.3.f1de51df.js"),[]),bitsyVersion:"6.3",description:"Bitsy 6.3"},{data:()=>j(()=>import("./Bitsy.6.4.4364f87f.js"),[]),bitsyVersion:"6.4",description:"Bitsy 6.4"},{data:()=>j(()=>import("./Bitsy.6.5.bd486411.js"),[]),bitsyVersion:"6.5",description:"Bitsy 6.5"},{data:()=>j(()=>import("./Bitsy.7.0.005afbac.js"),[]),bitsyVersion:"7.0",description:"Bitsy 7.0"},{data:()=>j(()=>import("./Bitsy.7.2.e7deb823.js"),[]),bitsyVersion:"7.2",description:"Bitsy 7.2"},{data:()=>j(()=>import("./Bitsy.7.8.a8e1ddd6.js"),[]),bitsyVersion:"7.8",description:"Bitsy 7.8"},{data:()=>j(()=>import("./Bitsy.7.10.1cdc75c6.js"),[]),bitsyVersion:"7.10",description:"Bitsy 7.10"},{data:()=>j(()=>import("./BitsyHD.7.11.f9a8cfdc.js"),[]),bitsyVersion:"7.11",isHd:!0,description:"Bitsy HD (Bitsy 7.11)"},{data:()=>j(()=>import("./Bitsy.7.11.c7cee104.js"),[]),bitsyVersion:"7.11",description:"Bitsy 7.11"},{data:()=>j(()=>import("./BitsyHD.7.12.06a63c86.js"),[]),bitsyVersion:"7.12",isHd:!0,description:"Bitsy HD (Bitsy 7.12)"},{data:()=>j(()=>import("./Bitsy.7.12.7a7fbf49.js"),[]),bitsyVersion:"7.12",description:"Bitsy 7.12",isDefault:!0}].map(t=>Vt(lt({},t),{id:`Bitsy${t.isHd?"HD":""}${t.bitsyVersion.replace(/\./g,"")}`}));const $=Object.fromEntries(Object.entries({"../about/about.md":In,"../about/ayos-special-tips.md":An,"../about/how-to-use-borksy.md":Nn,"../about/other-tools.md":Cn,"../about/troubleshooting-faqs.md":Pn}).map(([t,n])=>[t.match(/.*\/(.*?)\.md/)[1],n.html])),ln=Object.fromEntries(Object.entries({"../defaults/body.txt":`<!-- GAME CANVAS -->
+`,Nr="borksy",Dr="5.16.0",Br="Borksy Game Hacker: A tool for extending Bitsy games",Cr={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},Rr={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},qr="AYolland",Pr="MIT",Lr={url:"https://github.com/Ayolland/borksy/issues"},Mr="https://ayolland.itch.io/borksy",Hr={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},Gr={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},Ur={"@bitsy/hecks":"^20.2.1",eslint:"^8.12.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.5.0","eslint-plugin-import":"^2.26.0","eslint-plugin-prettier":"^4.0.0","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^27.5.1","jest-dev-server":"^6.0.0","jest-image-snapshot":"^4.5.1",prettier:"^2.6.2",puppeteer:"^13.5.2","rollup-plugin-visualizer":"^5.6.0",sass:"^1.50.0",vite:"^2.9.1","vite-plugin-markdown":"^2.0.2","vite-plugin-string":"^1.1.2"};var Vr={private:!0,name:Nr,version:Dr,description:Br,scripts:Cr,repository:Rr,author:qr,license:Pr,bugs:Lr,homepage:Mr,jest:Hr,release:Gr,devDependencies:Ur};const zr="modulepreload",Jt={},$r="./",j=function(n,e){return!e||e.length===0?n():Promise.all(e.map(a=>{if(a=`${$r}${a}`,a in Jt)return;Jt[a]=!0;const p=a.endsWith(".css"),f=p?'[rel="stylesheet"]':"";if(document.querySelector(`link[href="${a}"]${f}`))return;const d=document.createElement("link");if(d.rel=p?"stylesheet":zr,p||(d.as="script",d.crossOrigin=""),d.href=a,document.head.appendChild(d),p)return new Promise((l,o)=>{d.addEventListener("load",l),d.addEventListener("error",()=>o(new Error(`Unable to preload CSS for ${a}`)))})})).then(()=>n())};var H=[{data:()=>j(()=>import("./BitsyHD.5.1.224b5bed.js"),[]),bitsyVersion:"5.1",isHd:!0,description:"Bitsy HD (Bitsy 5.1)"},{data:()=>j(()=>import("./Bitsy.5.5.b578c1f1.js"),[]),bitsyVersion:"5.5",description:"Bitsy 5.5"},{data:()=>j(()=>import("./Bitsy.6.0.d01fe5ea.js"),[]),bitsyVersion:"6.0",description:"Bitsy 6.0"},{data:()=>j(()=>import("./Bitsy.6.3.f1de51df.js"),[]),bitsyVersion:"6.3",description:"Bitsy 6.3"},{data:()=>j(()=>import("./Bitsy.6.4.4364f87f.js"),[]),bitsyVersion:"6.4",description:"Bitsy 6.4"},{data:()=>j(()=>import("./Bitsy.6.5.bd486411.js"),[]),bitsyVersion:"6.5",description:"Bitsy 6.5"},{data:()=>j(()=>import("./Bitsy.7.0.005afbac.js"),[]),bitsyVersion:"7.0",description:"Bitsy 7.0"},{data:()=>j(()=>import("./Bitsy.7.2.e7deb823.js"),[]),bitsyVersion:"7.2",description:"Bitsy 7.2"},{data:()=>j(()=>import("./Bitsy.7.8.a8e1ddd6.js"),[]),bitsyVersion:"7.8",description:"Bitsy 7.8"},{data:()=>j(()=>import("./Bitsy.7.10.1cdc75c6.js"),[]),bitsyVersion:"7.10",description:"Bitsy 7.10"},{data:()=>j(()=>import("./BitsyHD.7.11.f9a8cfdc.js"),[]),bitsyVersion:"7.11",isHd:!0,description:"Bitsy HD (Bitsy 7.11)"},{data:()=>j(()=>import("./Bitsy.7.11.c7cee104.js"),[]),bitsyVersion:"7.11",description:"Bitsy 7.11"},{data:()=>j(()=>import("./BitsyHD.7.12.06a63c86.js"),[]),bitsyVersion:"7.12",isHd:!0,description:"Bitsy HD (Bitsy 7.12)"},{data:()=>j(()=>import("./Bitsy.7.12.7a7fbf49.js"),[]),bitsyVersion:"7.12",description:"Bitsy 7.12",isDefault:!0}].map(t=>Vt(lt({},t),{id:`Bitsy${t.isHd?"HD":""}${t.bitsyVersion.replace(/\./g,"")}`}));const $=Object.fromEntries(Object.entries({"../about/about.md":In,"../about/ayos-special-tips.md":An,"../about/how-to-use-borksy.md":Nn,"../about/other-tools.md":Cn,"../about/troubleshooting-faqs.md":Pn}).map(([t,n])=>[t.match(/.*\/(.*?)\.md/)[1],n.html])),ln=Object.fromEntries(Object.entries({"../defaults/body.txt":`<!-- GAME CANVAS -->
 <canvas id='game'></canvas>`,"../defaults/fontdata.txt":`[
 		/* num: 0 */
 		0,0,0,0,0,0,
@@ -3115,7 +3115,7 @@ body {
 @summary change the avatar in certain rooms
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -3288,7 +3288,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -3330,6 +3330,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -3355,7 +3356,7 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -3453,7 +3454,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary makes the game have a backdrop
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -3630,7 +3631,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -3672,6 +3673,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -3699,7 +3701,7 @@ var after = kitsy.after;
 @summary makes all sprites have transparent backgrounds
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -3728,6 +3730,35 @@ before('renderer.GetDrawingFrame', function (drawing, frameIndex) {
 });
 // send -1 instead of background colour index if transparent
 inject(/bitsyDrawPixel\\(backgroundColor, x, y\\)/, 'bitsyDrawPixel(window.makeTransparent ? -1 : backgroundColor, x, y)');
+// make sure transitions render using regular room logic
+inject(
+	/(function createRoomPixelBuffer\\(room\\) {)/,
+	\`$1
+var buffer = drawingBuffers[screenBufferId];
+var s = buffer.scale;
+buffer.scale = 1;
+drawRoom(room);
+renderDrawingBuffer(screenBufferId, buffer);
+const data = buffer.canvas.getContext('2d').getImageData(0, 0, buffer.width, buffer.height).data;
+var pixelBuffer = [];
+for (var y = 0; y < buffer.height; ++y) {
+for (var x = 0; x < buffer.width; ++x) {
+	var idx = (y*buffer.width + x)*4;
+	var r = data[idx + 0];
+	var g = data[idx + 1];
+	var b = data[idx + 2];
+	var p = getPal(getRoomPal(curRoom)).findIndex(i => r === i[0] && g === i[1] && b === i[2]);
+	pixelBuffer.push(tileColorStartIndex + p);
+}
+}
+buffer.scale = s;
+invalidateDrawingBuffer(buffer);
+return pixelBuffer;
+\`
+);
+// make sure tiles are available when drawing rooms
+inject(/(var tileBuffer = drawingBuffers\\[tileId\\];)/, 'hackForEditor_GetImageFromTileId(tileId); $1');
+
 // overwrite transparent pixel
 after('renderPixelInstruction', function (bufferId, buffer, paletteIndex, x, y) {
 	if (paletteIndex !== -1) return;
@@ -3751,7 +3782,7 @@ after('renderPixelInstruction', function (bufferId, buffer, paletteIndex, x, y) 
 @summary makes the game have a transparent background
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -3861,7 +3892,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary "walk" and "talk" sound effect support
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -4029,7 +4060,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -4071,6 +4102,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -4096,7 +4128,7 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -4195,7 +4227,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary A variety of Bitsy sound and music handlers
 @license MIT
 @author David Mowatt
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -4397,7 +4429,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -4439,6 +4471,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -4562,7 +4595,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -4718,7 +4751,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary WebGLazy bitsy integration (this one's mostly just for me)
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -4917,7 +4950,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -4959,6 +4992,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -5011,7 +5045,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary high quality anime gifs
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -5978,7 +6012,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -6020,6 +6054,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -6095,7 +6130,7 @@ function addDialogTag(tag, fn) {
 @summary high quality anime jpegs (or pngs i guess)
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -6329,7 +6364,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary high quality anime jpegs (or pngs i guess)
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -6525,7 +6560,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -6567,6 +6602,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -6704,7 +6740,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary Prevents from playing past an ending
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -6863,7 +6899,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -6905,6 +6941,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -6955,7 +6992,7 @@ after('onExitDialog', function () {
 @summary corrupts gamedata at runtime
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -7011,7 +7048,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -7073,7 +7110,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 @description
@@ -7291,7 +7328,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -7333,6 +7370,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -7509,7 +7547,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make custom exit transition effects
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -7704,7 +7742,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -7746,6 +7784,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -7793,8 +7832,6 @@ function lerpPalettes(start, end, delta) {
 }
 
 before('startExportedGame', function () {
-	// recreate the transition manager so the injected code is used
-	bitsy.transition = new bitsy.TransitionManager();
 	// make the custom effects available
 	Object.entries(hackOptions).forEach(function (entry) {
 		bitsy.transition.RegisterTransitionEffect(entry[0], entry[1]);
@@ -7812,7 +7849,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary run custom code on key inputs
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -7996,7 +8033,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -8038,6 +8075,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -8104,7 +8142,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make {custom}text effects{custom}
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -8451,7 +8489,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -8493,6 +8531,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -8572,7 +8611,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary animal crossing-style audio powered by the pink trombone vocal synth
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -9452,7 +9491,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -9494,6 +9533,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -9569,7 +9609,7 @@ function addDialogTag(tag, fn) {
 @summary animal crossing-style audio
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -9626,7 +9666,7 @@ before('dialogBuffer.DoNextChar', function () {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -9968,7 +10008,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary animal crossing-style audio
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -10154,7 +10194,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -10196,6 +10236,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -10240,7 +10281,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary adds an easing transition animation to display the dialog box text
 @license MIT
 @author Delacannon
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -10396,7 +10437,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -10438,6 +10479,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -10522,7 +10564,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary dialog choices
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -10759,7 +10801,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -10801,6 +10843,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -10933,7 +10976,7 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -10977,7 +11020,7 @@ addDialogTag('p', function (environment, parameters, onReturn) {
 @summary put more words onscreen
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -11262,7 +11305,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary jump from one dialog entry to another
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -11432,7 +11475,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -11474,6 +11517,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -11623,7 +11667,7 @@ addDualDialogTag('jump', function (environment, parameters) {
 @summary add pauses in between printing text
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -11779,7 +11823,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -11821,6 +11865,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -11904,7 +11949,7 @@ addDialogTag('pause', function (environment, parameters, onReturn) {
 @summary prompt the user for text input in dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -12097,7 +12142,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -12139,6 +12184,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -12221,7 +12267,7 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -12388,7 +12434,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary provides a variable with player direction
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -12550,7 +12596,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -12592,6 +12638,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -12636,7 +12683,7 @@ before('startDialog', function () {
 @summary flips the player's sprite based on directional movement
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -12673,7 +12720,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -12735,7 +12782,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 @description
@@ -12937,7 +12984,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -12979,6 +13026,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -13110,7 +13158,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary HTML background matching bitsy background
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -13276,7 +13324,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -13318,6 +13366,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -13343,7 +13392,7 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -13405,7 +13454,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary edit dialog from dialog (yes really)
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -13570,7 +13619,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -13612,6 +13661,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -13697,7 +13747,7 @@ function addDeferredDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -13768,7 +13818,7 @@ addDeferredDialogTag('dialog', editDialog);
 @summary edit sprites, items, and tiles from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -13831,7 +13881,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -13893,7 +13943,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 @description
@@ -14087,7 +14137,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -14129,6 +14179,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -14343,7 +14394,7 @@ addDualDialogTag('imagePal', editPalette);
 @summary change which sprite is controlled by the player
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -14510,7 +14561,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -14552,6 +14603,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -14675,7 +14727,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -14720,7 +14772,7 @@ addDualDialogTag('player', function (environment, parameters) {
 @summary modify the content of a room from dialog
 @license MIT
 @author Dana Holdampf
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -15006,7 +15058,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -15048,6 +15100,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -15171,7 +15224,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -15793,7 +15846,7 @@ function copyBoxAt(mapId, targetId, x1, y1, x2, y2, copyRoomId, pasteXPos, paste
 @summary trigger an ending from dialog, including narration text
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -15983,7 +16036,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -16025,6 +16078,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -16169,7 +16223,7 @@ addDualDialogTag('end', function (environment, parameters) {
 @summary exit to another room from dialog, including conditionals
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -16359,7 +16413,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -16401,6 +16455,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -16524,7 +16579,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -16603,7 +16658,7 @@ function getExitParams(parameters) {
 @summary separate Bitsy game data from your (modded) HTML for easier development
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -16781,7 +16836,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -16823,6 +16878,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -16930,7 +16986,7 @@ function dos2unix(text) {
 @summary generate a browser favicon (tab icon) from a Bitsy sprite, including animation!
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -17096,7 +17152,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -17138,6 +17194,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -17163,7 +17220,7 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -17301,7 +17358,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make sprites follow the player
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -17490,7 +17547,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -17532,6 +17589,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -17655,7 +17713,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -17898,7 +17956,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary HTML5 gamepad support
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -17918,334 +17976,334 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
-var Buttons;
-(function (Buttons) {
-    // XBOX360 wired controller configuration
-    Buttons[Buttons["A"] = 0] = "A";
-    Buttons[Buttons["X"] = 2] = "X";
-    Buttons[Buttons["B"] = 1] = "B";
-    Buttons[Buttons["Y"] = 3] = "Y";
-    Buttons[Buttons["LB"] = 4] = "LB";
-    Buttons[Buttons["RB"] = 5] = "RB";
-    Buttons[Buttons["LT"] = 6] = "LT";
-    Buttons[Buttons["RT"] = 7] = "RT";
-    Buttons[Buttons["BACK"] = 8] = "BACK";
-    Buttons[Buttons["START"] = 9] = "START";
-    Buttons[Buttons["LHAT"] = 10] = "LHAT";
-    Buttons[Buttons["RHAT"] = 11] = "RHAT";
-    Buttons[Buttons["DPAD_UP"] = 12] = "DPAD_UP";
-    Buttons[Buttons["DPAD_DOWN"] = 13] = "DPAD_DOWN";
-    Buttons[Buttons["DPAD_LEFT"] = 14] = "DPAD_LEFT";
-    Buttons[Buttons["DPAD_RIGHT"] = 15] = "DPAD_RIGHT";
-})(Buttons || (Buttons = {}));
-var Axes;
-(function (Axes) {
-    Axes[Axes["LSTICK_H"] = 0] = "LSTICK_H";
-    Axes[Axes["LSTICK_V"] = 1] = "LSTICK_V";
-    Axes[Axes["RSTICK_H"] = 2] = "RSTICK_H";
-    Axes[Axes["RSTICK_V"] = 3] = "RSTICK_V";
-})(Axes || (Axes = {}));
-var nullGamepad = {
-    original: {
-        axes: [],
-        buttons: [],
-        connected: false,
-    },
-    disabled: true,
-    down: {},
-    justDown: {},
-    justUp: {},
-    axesPrev: {},
-};
-var Gamepads = /** @class */ (function () {
-    /**
-    * initialize gamepads
-    */
-    function Gamepads() {
-        var _this = this;
-        // settings
-        /** if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead */
-        this.deadZone = 0.25;
-        /** if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1 instead */
-        this.snapZone = 0.25;
-        /** axis values between \`deadZone\` and \`snapZone\` will be run through this function
-        *
-        * defaults to normalizing between the two thresholds */
-        this.interpolate = function (value) {
-            var v = Math.max(0, Math.min(1, (value - _this.deadZone) / (1.0 - _this.snapZone - _this.deadZone)));
-            return v;
-        };
-        // internal vars
-        this.players = {};
-        this.available = false;
-        this.pollEveryFrame = false;
-        this.connected = false;
-        /**
-        * update gamepads (clears arrays, polls connections, etc.)
-        */
-        this.pollconnections = function () {
-            _this.connected = false;
-            // assume existing players' gamepads aren't enabled until they're found
-            Object.values(_this.players).forEach(function (player) {
-                player.disabled = true;
-            });
-            var gps = navigator.getGamepads();
-            for (var i = 0; i < gps.length; ++i) {
-                var gp = gps[i];
-                if (gp) {
-                    if (gp.connected) {
-                        if (_this.players[gp.index] == null) {
-                            // new player
-                            _this.players[gp.index] = {
-                                disabled: false,
-                                original: gp,
-                                down: {},
-                                justDown: {},
-                                justUp: {},
-                                axesPrev: {},
-                            };
-                        }
-                        else {
-                            // returning player, just assign the gamepad
-                            _this.players[gp.index].original = gp;
-                        }
-                        _this.connected = true;
-                        _this.players[gp.index].disabled = false;
-                    }
-                    else {
-                        delete _this.players[gp.index];
-                    }
-                }
-            }
-        };
-        /**
-        * update gamepads (clears arrays, polls connections, etc.)
-        */
-        this.update = function () {
-            // store the previous axis values
-            // has to be done before pollConnections since that will get the new axis values
-            Object.keys(_this.players).forEach(function (i) {
-                var _a;
-                var p = _this.getPlayer(i);
-                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.axes) {
-                    p.axesPrev = p.original.axes.slice();
-                }
-            });
-            // poll connections and update gamepad states every frame because chrome's a lazy bum
-            if (_this.pollEveryFrame) {
-                _this.pollconnections();
-            }
-            Object.keys(_this.players).forEach(function (i) {
-                var _a;
-                var p = _this.getPlayer(i);
-                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.buttons) {
-                    for (var j = 0; j < p.original.buttons.length; ++j) {
-                        if (p.original.buttons[j].pressed) {
-                            p.justDown[j] = !(p.down[j] === true);
-                            p.down[j] = true;
-                            p.justUp[j] = false;
-                        }
-                        else {
-                            p.justUp[j] = p.down[j] === true;
-                            p.down[j] = false;
-                            p.justDown[j] = false;
-                        }
-                    }
-                }
-            });
-        };
-        /**
-        * @returns \`player\`'s gamepad
-        *
-        * if one doesn't exist, returns an object with gamepad properties reflecting a null state
-        */
-        this.getPlayer = function (player) {
-            var _a, _b, _c;
-            if (((_b = (_a = _this.players[player]) === null || _a === void 0 ? void 0 : _a.original) === null || _b === void 0 ? void 0 : _b.connected) && !((_c = _this.players[player]) === null || _c === void 0 ? void 0 : _c.disabled)) {
-                return _this.players[player];
-            }
-            return nullGamepad;
-        };
-        /**
-        * @returns an array representing \`length\` axes for \`player\` at \`offset\`
-        *
-        * if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead
-        * if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1/-1 instead
-        * otherwise, returns the axis value normalized between \`deadZone\` and \`(1-snapZone)\`
-        * @param {Number} offset axis index
-        * @param {Number} length number of axes to return
-        * @param {Number} player player index (\`undefined\` for "sum of all")
-        * @param {boolean} prev if \`true\` uses axis values from previous update
-        */
-        this.getAxes = function (offset, length, player, prev) {
-            if (offset === void 0) { offset = 0; }
-            if (length === void 0) { length = 2; }
-            if (prev === void 0) { prev = false; }
-            var axes = [];
-            for (var i = 0; i < length; ++i) {
-                axes[i] = 0;
-            }
-            if (player === undefined) {
-                Object.keys(_this.players).forEach(function (i) {
-                    var a = _this.getAxes(offset, length, i, prev);
-                    for (var j = 0; j < a.length; ++j) {
-                        axes[j] += a[j];
-                    }
-                });
-            }
-            else {
-                var p = _this.getPlayer(player);
-                if (p === null || p === void 0 ? void 0 : p.original) {
-                    var axesSource = prev ? p.axesPrev : p.original.axes;
-                    var a = Object.values(axesSource).slice(offset, offset + length);
-                    for (var i = 0; i < a.length; ++i) {
-                        if (Math.abs(a[i]) < _this.deadZone) {
-                            axes[i] += 0;
-                        }
-                        else if (Math.abs(1.0 - a[i]) < _this.snapZone) {
-                            axes[i] += 1;
-                        }
-                        else if (Math.abs(-1.0 - a[i]) < _this.snapZone) {
-                            axes[i] -= 1;
-                        }
-                        else {
-                            axes[i] += Math.sign(a[i]) * _this.interpolate(Math.abs(a[i]));
-                        }
-                    }
-                }
-            }
-            return axes;
-        };
-        /**
-       * @returns equivalent to \`getAxes(axis, 1, player, prev)[0]\`
-       */
-        this.getAxis = function (axis, player, prev) { return _this.getAxes(axis, 1, player, prev)[0]; };
-        /**
-        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\`
-        * @param {Number} axis axis index
-        * @param {Number} threshold threshold (-1 to 1)
-        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))
-        * @param {Number} player player index (\`undefined\` for "any")
-        * @param {boolean} prev if \`true\` uses axis values from previous update
-        */
-        this.axisPast = function (axis, threshold, direction, player, prev) {
-            if (!threshold) {
-                throw new Error('must specify a non-zero threshold');
-            }
-            if (!direction) {
-                direction = threshold > 0 ? 1 : -1;
-            }
-            var a = _this.getAxis(axis, player, prev);
-            return direction < 0 ? a < threshold : a > threshold;
-        };
-        /**
-        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\` and WAS NOT in previous update
-        * @param {Number} axis axis index
-        * @param {Number} threshold threshold (-1 to 1)
-        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.axisJustPast = function (axis, threshold, direction, player) { return _this.axisPast(axis, threshold, direction, player, false)
-            && !_this.axisPast(axis, threshold, direction, player, true); };
-        /**
-        * @returns \`[x,y]\` representing the dpad for \`player\`
-        * @param {Number} player player index (\`undefined\` for "sum of all")
-        */
-        this.getDpad = function (player) {
-            var x = 0;
-            var y = 0;
-            if (player === undefined) {
-                Object.keys(_this.players).forEach(function (i) {
-                    var _a = _this.getDpad(i), ix = _a[0], iy = _a[1];
-                    x += ix;
-                    y += iy;
-                });
-            }
-            else {
-                if (_this.isDown(Buttons.DPAD_RIGHT, player)) {
-                    x += 1;
-                }
-                if (_this.isDown(Buttons.DPAD_LEFT, player)) {
-                    x -= 1;
-                }
-                if (_this.isDown(Buttons.DPAD_UP, player)) {
-                    y += 1;
-                }
-                if (_this.isDown(Buttons.DPAD_DOWN, player)) {
-                    y -= 1;
-                }
-            }
-            return [x, y];
-        };
-        /**
-        * @returns \`true\` if \`player\`'s \`btn\` is currently down
-        * @param {Number} btn button index
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.isDown = function (btn, player) {
-            if (btn === undefined) {
-                throw new Error('must specify a button');
-            }
-            if (player === undefined) {
-                return Object.keys(_this.players).some(function (i) { return _this.isDown(btn, i); });
-            }
-            return _this.getPlayer(player).down[btn];
-        };
-        /**
-        * @returns equivalent to \`!isDown(btn, player)\`
-        * @param {Number} btn button index
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.isUp = function (btn, player) { return !_this.isDown(btn, player); };
-        /**
-        * @returns \`true\` if \`player\`'s \`btn\` is currently down and WAS NOT in previous update
-        * @param {Number} btn button index
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.isJustDown = function (btn, player) {
-            if (btn === undefined) {
-                throw new Error('must specify a button');
-            }
-            if (player === undefined) {
-                return Object.keys(_this.players).some(function (i) { return _this.isJustDown(btn, i); });
-            }
-            return _this.getPlayer(player).justDown[btn];
-        };
-        /**
-        * @returns \`true\` if \`player\`'s \`btn\` is currently NOT down and WAS down in previous update
-        * @param {Number} btn button index
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.isJustUp = function (btn, player) {
-            if (btn === undefined) {
-                throw new Error('must specify a button');
-            }
-            if (player === undefined) {
-                return Object.keys(_this.players).some(function (i) { return _this.isJustUp(btn, i); });
-            }
-            return _this.getPlayer(player).justUp[btn];
-        };
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        // @ts-ignore
-        if (navigator.getGamepads) {
-            this.available = true;
-        }
-        else if (navigator.webkitGetGamepads) {
-            navigator.getGamepads = navigator.webkitGetGamepads;
-            this.available = true;
-        }
-        if (this.available) {
-            if (navigator.userAgent.includes('Firefox')) {
-                // listen to connection events for firefox
-                window.addEventListener('gamepadconnected', this.pollconnections.bind(this));
-                window.addEventListener('gamepaddisconnected', this.pollconnections.bind(this));
-            }
-            else {
-                this.pollEveryFrame = true;
-            }
-        }
-    }
-    return Gamepads;
+var Buttons;\r
+(function (Buttons) {\r
+    // XBOX360 wired controller configuration\r
+    Buttons[Buttons["A"] = 0] = "A";\r
+    Buttons[Buttons["X"] = 2] = "X";\r
+    Buttons[Buttons["B"] = 1] = "B";\r
+    Buttons[Buttons["Y"] = 3] = "Y";\r
+    Buttons[Buttons["LB"] = 4] = "LB";\r
+    Buttons[Buttons["RB"] = 5] = "RB";\r
+    Buttons[Buttons["LT"] = 6] = "LT";\r
+    Buttons[Buttons["RT"] = 7] = "RT";\r
+    Buttons[Buttons["BACK"] = 8] = "BACK";\r
+    Buttons[Buttons["START"] = 9] = "START";\r
+    Buttons[Buttons["LHAT"] = 10] = "LHAT";\r
+    Buttons[Buttons["RHAT"] = 11] = "RHAT";\r
+    Buttons[Buttons["DPAD_UP"] = 12] = "DPAD_UP";\r
+    Buttons[Buttons["DPAD_DOWN"] = 13] = "DPAD_DOWN";\r
+    Buttons[Buttons["DPAD_LEFT"] = 14] = "DPAD_LEFT";\r
+    Buttons[Buttons["DPAD_RIGHT"] = 15] = "DPAD_RIGHT";\r
+})(Buttons || (Buttons = {}));\r
+var Axes;\r
+(function (Axes) {\r
+    Axes[Axes["LSTICK_H"] = 0] = "LSTICK_H";\r
+    Axes[Axes["LSTICK_V"] = 1] = "LSTICK_V";\r
+    Axes[Axes["RSTICK_H"] = 2] = "RSTICK_H";\r
+    Axes[Axes["RSTICK_V"] = 3] = "RSTICK_V";\r
+})(Axes || (Axes = {}));\r
+var nullGamepad = {\r
+    original: {\r
+        axes: [],\r
+        buttons: [],\r
+        connected: false,\r
+    },\r
+    disabled: true,\r
+    down: {},\r
+    justDown: {},\r
+    justUp: {},\r
+    axesPrev: {},\r
+};\r
+var Gamepads = /** @class */ (function () {\r
+    /**\r
+    * initialize gamepads\r
+    */\r
+    function Gamepads() {\r
+        var _this = this;\r
+        // settings\r
+        /** if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead */\r
+        this.deadZone = 0.25;\r
+        /** if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1 instead */\r
+        this.snapZone = 0.25;\r
+        /** axis values between \`deadZone\` and \`snapZone\` will be run through this function\r
+        *\r
+        * defaults to normalizing between the two thresholds */\r
+        this.interpolate = function (value) {\r
+            var v = Math.max(0, Math.min(1, (value - _this.deadZone) / (1.0 - _this.snapZone - _this.deadZone)));\r
+            return v;\r
+        };\r
+        // internal vars\r
+        this.players = {};\r
+        this.available = false;\r
+        this.pollEveryFrame = false;\r
+        this.connected = false;\r
+        /**\r
+        * update gamepads (clears arrays, polls connections, etc.)\r
+        */\r
+        this.pollconnections = function () {\r
+            _this.connected = false;\r
+            // assume existing players' gamepads aren't enabled until they're found\r
+            Object.values(_this.players).forEach(function (player) {\r
+                player.disabled = true;\r
+            });\r
+            var gps = navigator.getGamepads();\r
+            for (var i = 0; i < gps.length; ++i) {\r
+                var gp = gps[i];\r
+                if (gp) {\r
+                    if (gp.connected) {\r
+                        if (_this.players[gp.index] == null) {\r
+                            // new player\r
+                            _this.players[gp.index] = {\r
+                                disabled: false,\r
+                                original: gp,\r
+                                down: {},\r
+                                justDown: {},\r
+                                justUp: {},\r
+                                axesPrev: {},\r
+                            };\r
+                        }\r
+                        else {\r
+                            // returning player, just assign the gamepad\r
+                            _this.players[gp.index].original = gp;\r
+                        }\r
+                        _this.connected = true;\r
+                        _this.players[gp.index].disabled = false;\r
+                    }\r
+                    else {\r
+                        delete _this.players[gp.index];\r
+                    }\r
+                }\r
+            }\r
+        };\r
+        /**\r
+        * update gamepads (clears arrays, polls connections, etc.)\r
+        */\r
+        this.update = function () {\r
+            // store the previous axis values\r
+            // has to be done before pollConnections since that will get the new axis values\r
+            Object.keys(_this.players).forEach(function (i) {\r
+                var _a;\r
+                var p = _this.getPlayer(i);\r
+                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.axes) {\r
+                    p.axesPrev = p.original.axes.slice();\r
+                }\r
+            });\r
+            // poll connections and update gamepad states every frame because chrome's a lazy bum\r
+            if (_this.pollEveryFrame) {\r
+                _this.pollconnections();\r
+            }\r
+            Object.keys(_this.players).forEach(function (i) {\r
+                var _a;\r
+                var p = _this.getPlayer(i);\r
+                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.buttons) {\r
+                    for (var j = 0; j < p.original.buttons.length; ++j) {\r
+                        if (p.original.buttons[j].pressed) {\r
+                            p.justDown[j] = !(p.down[j] === true);\r
+                            p.down[j] = true;\r
+                            p.justUp[j] = false;\r
+                        }\r
+                        else {\r
+                            p.justUp[j] = p.down[j] === true;\r
+                            p.down[j] = false;\r
+                            p.justDown[j] = false;\r
+                        }\r
+                    }\r
+                }\r
+            });\r
+        };\r
+        /**\r
+        * @returns \`player\`'s gamepad\r
+        *\r
+        * if one doesn't exist, returns an object with gamepad properties reflecting a null state\r
+        */\r
+        this.getPlayer = function (player) {\r
+            var _a, _b, _c;\r
+            if (((_b = (_a = _this.players[player]) === null || _a === void 0 ? void 0 : _a.original) === null || _b === void 0 ? void 0 : _b.connected) && !((_c = _this.players[player]) === null || _c === void 0 ? void 0 : _c.disabled)) {\r
+                return _this.players[player];\r
+            }\r
+            return nullGamepad;\r
+        };\r
+        /**\r
+        * @returns an array representing \`length\` axes for \`player\` at \`offset\`\r
+        *\r
+        * if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead\r
+        * if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1/-1 instead\r
+        * otherwise, returns the axis value normalized between \`deadZone\` and \`(1-snapZone)\`\r
+        * @param {Number} offset axis index\r
+        * @param {Number} length number of axes to return\r
+        * @param {Number} player player index (\`undefined\` for "sum of all")\r
+        * @param {boolean} prev if \`true\` uses axis values from previous update\r
+        */\r
+        this.getAxes = function (offset, length, player, prev) {\r
+            if (offset === void 0) { offset = 0; }\r
+            if (length === void 0) { length = 2; }\r
+            if (prev === void 0) { prev = false; }\r
+            var axes = [];\r
+            for (var i = 0; i < length; ++i) {\r
+                axes[i] = 0;\r
+            }\r
+            if (player === undefined) {\r
+                Object.keys(_this.players).forEach(function (i) {\r
+                    var a = _this.getAxes(offset, length, i, prev);\r
+                    for (var j = 0; j < a.length; ++j) {\r
+                        axes[j] += a[j];\r
+                    }\r
+                });\r
+            }\r
+            else {\r
+                var p = _this.getPlayer(player);\r
+                if (p === null || p === void 0 ? void 0 : p.original) {\r
+                    var axesSource = prev ? p.axesPrev : p.original.axes;\r
+                    var a = Object.values(axesSource).slice(offset, offset + length);\r
+                    for (var i = 0; i < a.length; ++i) {\r
+                        if (Math.abs(a[i]) < _this.deadZone) {\r
+                            axes[i] += 0;\r
+                        }\r
+                        else if (Math.abs(1.0 - a[i]) < _this.snapZone) {\r
+                            axes[i] += 1;\r
+                        }\r
+                        else if (Math.abs(-1.0 - a[i]) < _this.snapZone) {\r
+                            axes[i] -= 1;\r
+                        }\r
+                        else {\r
+                            axes[i] += Math.sign(a[i]) * _this.interpolate(Math.abs(a[i]));\r
+                        }\r
+                    }\r
+                }\r
+            }\r
+            return axes;\r
+        };\r
+        /**\r
+       * @returns equivalent to \`getAxes(axis, 1, player, prev)[0]\`\r
+       */\r
+        this.getAxis = function (axis, player, prev) { return _this.getAxes(axis, 1, player, prev)[0]; };\r
+        /**\r
+        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\`\r
+        * @param {Number} axis axis index\r
+        * @param {Number} threshold threshold (-1 to 1)\r
+        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        * @param {boolean} prev if \`true\` uses axis values from previous update\r
+        */\r
+        this.axisPast = function (axis, threshold, direction, player, prev) {\r
+            if (!threshold) {\r
+                throw new Error('must specify a non-zero threshold');\r
+            }\r
+            if (!direction) {\r
+                direction = threshold > 0 ? 1 : -1;\r
+            }\r
+            var a = _this.getAxis(axis, player, prev);\r
+            return direction < 0 ? a < threshold : a > threshold;\r
+        };\r
+        /**\r
+        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\` and WAS NOT in previous update\r
+        * @param {Number} axis axis index\r
+        * @param {Number} threshold threshold (-1 to 1)\r
+        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.axisJustPast = function (axis, threshold, direction, player) { return _this.axisPast(axis, threshold, direction, player, false)\r
+            && !_this.axisPast(axis, threshold, direction, player, true); };\r
+        /**\r
+        * @returns \`[x,y]\` representing the dpad for \`player\`\r
+        * @param {Number} player player index (\`undefined\` for "sum of all")\r
+        */\r
+        this.getDpad = function (player) {\r
+            var x = 0;\r
+            var y = 0;\r
+            if (player === undefined) {\r
+                Object.keys(_this.players).forEach(function (i) {\r
+                    var _a = _this.getDpad(i), ix = _a[0], iy = _a[1];\r
+                    x += ix;\r
+                    y += iy;\r
+                });\r
+            }\r
+            else {\r
+                if (_this.isDown(Buttons.DPAD_RIGHT, player)) {\r
+                    x += 1;\r
+                }\r
+                if (_this.isDown(Buttons.DPAD_LEFT, player)) {\r
+                    x -= 1;\r
+                }\r
+                if (_this.isDown(Buttons.DPAD_UP, player)) {\r
+                    y += 1;\r
+                }\r
+                if (_this.isDown(Buttons.DPAD_DOWN, player)) {\r
+                    y -= 1;\r
+                }\r
+            }\r
+            return [x, y];\r
+        };\r
+        /**\r
+        * @returns \`true\` if \`player\`'s \`btn\` is currently down\r
+        * @param {Number} btn button index\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.isDown = function (btn, player) {\r
+            if (btn === undefined) {\r
+                throw new Error('must specify a button');\r
+            }\r
+            if (player === undefined) {\r
+                return Object.keys(_this.players).some(function (i) { return _this.isDown(btn, i); });\r
+            }\r
+            return _this.getPlayer(player).down[btn];\r
+        };\r
+        /**\r
+        * @returns equivalent to \`!isDown(btn, player)\`\r
+        * @param {Number} btn button index\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.isUp = function (btn, player) { return !_this.isDown(btn, player); };\r
+        /**\r
+        * @returns \`true\` if \`player\`'s \`btn\` is currently down and WAS NOT in previous update\r
+        * @param {Number} btn button index\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.isJustDown = function (btn, player) {\r
+            if (btn === undefined) {\r
+                throw new Error('must specify a button');\r
+            }\r
+            if (player === undefined) {\r
+                return Object.keys(_this.players).some(function (i) { return _this.isJustDown(btn, i); });\r
+            }\r
+            return _this.getPlayer(player).justDown[btn];\r
+        };\r
+        /**\r
+        * @returns \`true\` if \`player\`'s \`btn\` is currently NOT down and WAS down in previous update\r
+        * @param {Number} btn button index\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.isJustUp = function (btn, player) {\r
+            if (btn === undefined) {\r
+                throw new Error('must specify a button');\r
+            }\r
+            if (player === undefined) {\r
+                return Object.keys(_this.players).some(function (i) { return _this.isJustUp(btn, i); });\r
+            }\r
+            return _this.getPlayer(player).justUp[btn];\r
+        };\r
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore\r
+        // @ts-ignore\r
+        if (navigator.getGamepads) {\r
+            this.available = true;\r
+        }\r
+        else if (navigator.webkitGetGamepads) {\r
+            navigator.getGamepads = navigator.webkitGetGamepads;\r
+            this.available = true;\r
+        }\r
+        if (this.available) {\r
+            if (navigator.userAgent.includes('Firefox')) {\r
+                // listen to connection events for firefox\r
+                window.addEventListener('gamepadconnected', this.pollconnections.bind(this));\r
+                window.addEventListener('gamepaddisconnected', this.pollconnections.bind(this));\r
+            }\r
+            else {\r
+                this.pollEveryFrame = true;\r
+            }\r
+        }\r
+    }\r
+    return Gamepads;\r
 }());
 
 /**
@@ -18383,7 +18441,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -18425,6 +18483,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -18493,7 +18552,7 @@ after('update', function () {
 @summary Pseudo-platforming/gravity/physics
 @license MIT
 @author Cole Sea
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -18611,7 +18670,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -18673,7 +18732,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 @description
@@ -18875,7 +18934,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -18917,6 +18976,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -19468,7 +19528,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary for when bitsy's not small enough
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -19635,7 +19695,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -19677,6 +19737,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -19738,7 +19799,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary execute arbitrary javascript from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -19930,7 +19991,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -19972,6 +20033,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -20108,7 +20170,7 @@ addDualDialogTag('js', executeJs);
 @file logic-operators-extended
 @summary adds conditional logic operators
 @author @mildmojo
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -20273,7 +20335,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -20315,6 +20377,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -20377,7 +20440,7 @@ inject(
 @summary put more words onscreen
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -20557,7 +20620,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -20599,6 +20662,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -20731,7 +20795,7 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -20815,7 +20879,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make the player big
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -21012,7 +21076,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -21054,6 +21118,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -21177,7 +21242,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -21358,7 +21423,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary walk through wall tiles, sprites, items, exits, and endings
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -21536,7 +21601,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -21578,6 +21643,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -21605,7 +21671,7 @@ var after = kitsy.after;
 @summary run custom code on key inputs
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -21717,7 +21783,7 @@ hackOptions.ondown = {
 @summary multiplayer bitsy
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 @description
@@ -21895,7 +21961,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -21937,6 +22003,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -22060,7 +22127,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -22124,7 +22191,7 @@ function getImage(name, map) {
 @summary edit dialog from dialog (yes really)
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -22191,7 +22258,7 @@ addDeferredDialogTag('dialog', editDialog);
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 @description
@@ -22260,7 +22327,7 @@ function setSpriteData(id, frame, newData) {
 @summary edit sprites, items, and tiles from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -22405,7 +22472,7 @@ addDualDialogTag('imagePal', editPalette);
 @summary execute arbitrary javascript from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -22625,7 +22692,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary tiles which hide the player
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -22790,7 +22857,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -22832,6 +22899,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -22895,7 +22963,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -23067,7 +23135,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -23109,6 +23177,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -23201,7 +23270,7 @@ addDialogTag('p', function (environment, parameters, onReturn) {
 @summary prevent some items from being picked up
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -23363,7 +23432,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -23405,6 +23474,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -23488,7 +23558,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary sokoban-style sprite pushing
 @license MIT
 @author jan0sc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -23682,7 +23752,7 @@ bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -23744,7 +23814,7 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 @description
@@ -23946,7 +24016,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -23988,6 +24058,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -24378,7 +24449,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary add name-tags to replace drawings when the game is loading
 @license MIT
 @author Elkie Nova
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -24551,7 +24622,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -24593,6 +24664,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -24657,7 +24729,7 @@ after('parseWorld', function () {
 @summary save/load your game
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -24848,7 +24920,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -24890,6 +24962,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -25013,7 +25086,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -25219,7 +25292,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary ease the player's movement
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -25385,7 +25458,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -25427,6 +25500,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -25528,7 +25602,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary treat some items like sprites that can be placed multiple times
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -25691,7 +25765,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -25733,6 +25807,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -25821,7 +25896,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary like text effects, but for sprites
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -26032,7 +26107,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -26074,6 +26149,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -26197,7 +26273,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -26356,7 +26432,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary time player actions
 @license MIT
 @author Lenny Magner
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -26554,7 +26630,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -26596,6 +26672,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -26719,7 +26796,7 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -26826,7 +26903,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary text-to-speech for bitsy dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -27014,7 +27091,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -27056,6 +27133,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -27315,7 +27393,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary process all dialog text with a tracery grammar
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -28347,7 +28425,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -28389,6 +28467,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -28436,7 +28515,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary customizable WebGL transitions
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -28655,7 +28734,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -28697,6 +28776,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -28724,7 +28804,7 @@ var after = kitsy.after;
 @summary WebGLazy bitsy integration (this one's mostly just for me)
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -28857,7 +28937,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary makes the game have a transparent background
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -29024,7 +29104,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -29066,6 +29146,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -29093,7 +29174,7 @@ var after = kitsy.after;
 @summary makes all sprites have transparent backgrounds
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -29122,6 +29203,35 @@ before('renderer.GetDrawingFrame', function (drawing, frameIndex) {
 });
 // send -1 instead of background colour index if transparent
 inject(/bitsyDrawPixel\\(backgroundColor, x, y\\)/, 'bitsyDrawPixel(window.makeTransparent ? -1 : backgroundColor, x, y)');
+// make sure transitions render using regular room logic
+inject(
+	/(function createRoomPixelBuffer\\(room\\) {)/,
+	\`$1
+var buffer = drawingBuffers[screenBufferId];
+var s = buffer.scale;
+buffer.scale = 1;
+drawRoom(room);
+renderDrawingBuffer(screenBufferId, buffer);
+const data = buffer.canvas.getContext('2d').getImageData(0, 0, buffer.width, buffer.height).data;
+var pixelBuffer = [];
+for (var y = 0; y < buffer.height; ++y) {
+for (var x = 0; x < buffer.width; ++x) {
+	var idx = (y*buffer.width + x)*4;
+	var r = data[idx + 0];
+	var g = data[idx + 1];
+	var b = data[idx + 2];
+	var p = getPal(getRoomPal(curRoom)).findIndex(i => r === i[0] && g === i[1] && b === i[2]);
+	pixelBuffer.push(tileColorStartIndex + p);
+}
+}
+buffer.scale = s;
+invalidateDrawingBuffer(buffer);
+return pixelBuffer;
+\`
+);
+// make sure tiles are available when drawing rooms
+inject(/(var tileBuffer = drawingBuffers\\[tileId\\];)/, 'hackForEditor_GetImageFromTileId(tileId); $1');
+
 // overwrite transparent pixel
 after('renderPixelInstruction', function (bufferId, buffer, paletteIndex, x, y) {
 	if (paletteIndex !== -1) return;
@@ -29169,7 +29279,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary makes the dialog box have a transparent background
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -29321,7 +29431,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -29363,6 +29473,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -29399,7 +29510,7 @@ after('renderClearInstruction', function (bufferId, buffer, paletteIndex) {
 @summary makes all sprites have transparent backgrounds
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -29562,7 +29673,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -29604,6 +29715,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -29636,6 +29748,35 @@ before('renderer.GetDrawingFrame', function (drawing, frameIndex) {
 });
 // send -1 instead of background colour index if transparent
 inject(/bitsyDrawPixel\\(backgroundColor, x, y\\)/, 'bitsyDrawPixel(window.makeTransparent ? -1 : backgroundColor, x, y)');
+// make sure transitions render using regular room logic
+inject(
+	/(function createRoomPixelBuffer\\(room\\) {)/,
+	\`$1
+var buffer = drawingBuffers[screenBufferId];
+var s = buffer.scale;
+buffer.scale = 1;
+drawRoom(room);
+renderDrawingBuffer(screenBufferId, buffer);
+const data = buffer.canvas.getContext('2d').getImageData(0, 0, buffer.width, buffer.height).data;
+var pixelBuffer = [];
+for (var y = 0; y < buffer.height; ++y) {
+for (var x = 0; x < buffer.width; ++x) {
+	var idx = (y*buffer.width + x)*4;
+	var r = data[idx + 0];
+	var g = data[idx + 1];
+	var b = data[idx + 2];
+	var p = getPal(getRoomPal(curRoom)).findIndex(i => r === i[0] && g === i[1] && b === i[2]);
+	pixelBuffer.push(tileColorStartIndex + p);
+}
+}
+buffer.scale = s;
+invalidateDrawingBuffer(buffer);
+return pixelBuffer;
+\`
+);
+// make sure tiles are available when drawing rooms
+inject(/(var tileBuffer = drawingBuffers\\[tileId\\];)/, 'hackForEditor_GetImageFromTileId(tileId); $1');
+
 // overwrite transparent pixel
 after('renderPixelInstruction', function (bufferId, buffer, paletteIndex, x, y) {
 	if (paletteIndex !== -1) return;
@@ -29664,7 +29805,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary interprocess communication for twine and bitsy
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -29898,7 +30039,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -29940,6 +30081,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -30135,7 +30277,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary items which, when picked up, remove all other instances of that item from the game
 @license MIT
 @author Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 
@@ -30298,7 +30440,7 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 20.2.0
+@version 20.2.1
 @requires Bitsy 7.12
 
 */
@@ -30340,6 +30482,7 @@ if (!hooked) {
 		bitsy.dialogRenderer = bitsy.dialogModule.CreateRenderer();
 		bitsy.dialogBuffer = bitsy.dialogModule.CreateBuffer();
 		bitsy.renderer = new bitsy.TileRenderer(bitsy.tilesize);
+		bitsy.transition = new bitsy.TransitionManager();
 
 		// Hook everything
 		kitsy.applyHooks();
@@ -30381,8 +30524,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 })(this.hacks.unique_items = this.hacks.unique_items || {}, window);
 `}),Mt=Wr.map(t=>{const[n]=t.match(/^(\/\*\*[\S\s]*?\*\/)$/gm),e=n.split(`
-`).slice(1,-1),i=e[0],p=e.find(u=>u.startsWith("@file")).split("@file ")[1],f=e.find(u=>u.startsWith("@author")).split("@author ")[1],d=e.find(u=>u.startsWith("@summary")).split("@summary ")[1],l=e.slice(e.findIndex(u=>u.startsWith("@description"))+1).join(`
-`).replace(/Copy-paste .* after the bitsy source\.?/g,"Include hack").replace(/hackOptions below/g,"hackOptions above"),[,o]=t.match(/var hackOptions.*= {\n+([^]+?)\n+};$/m)||[];return{metadata:{emoji:i,id:p.replace(/\s/g,"-"),name:p,author:f,summary:d,description:l},options:o,data:t}});function Yr(){const t=document.querySelector("select#template");t.innerHTML="";for(let n=H.length-1;n>=0;n--){const{id:e,description:i}=H[n],p=n===H.length-1;t.innerHTML+=`<option value="${e}" ${p?"data-default-option":""}>${i}${p?" (latest)":""}</option>`}}function Xr(t,n){console.log(n),Qt.exports.saveAs(new Blob([n],{type:"text/html;charset=utf-8"}),t),console.log(`File '${t}' downloaded`)}function un(t,n=10){const e=t.toString(),i=e.length>n?"...":"";return e.substring(0,n)+i}function Kr(t){return t.toLowerCase().replace(/-(.)/g,(n,e)=>e.toUpperCase())}function Jr(t){return t.replace(/[^\w\s]/gi,"")}function Qr(t,n){const e=new RegExp(n,"g");t.value=t.value.replace(e,"")}function U(t,n){t.dataset.cleanRegex&&Qr(t,t.dataset.cleanRegex);let e;t.type==="checkbox"?e=t.checked:n===void 0?e=t.value:(e=n,t.value=n);const{name:i}=t;localStorage.setItem(i,e),console.log(`Key: '${i}' saved to localStorage: ${un(e)}`)}function Nt(t){const{name:n}=t,e=localStorage.getItem(n);if(e===null){console.log(` Attempted to get key: ${n} from localStorage, but nothing was found.`);return}if(t.type==="checkbox"){const i=e==="true";t.checked=i}else t.value=e;console.log(` Got key: ${n} from localStorage: ${un(e)}`)}function Ht(t){const{value:n}=t.currentTarget,e=H.find(i=>i.id===n);if(!e){document.querySelector("#template").value=H.find(i=>i.isDefault).id,Ht(t);return}e.isHd?document.querySelector("#mascot").classList.add("borksyHD"):document.querySelector("#mascot").classList.remove("borksyHD"),e.bitsyVersion===Dt.bitsyVersion?(document.querySelector("#legacy-version-warning").style.display="none",document.querySelector('[data-header="Bitsy Version"] > summary').textContent="Bitsy Version"):(document.querySelector("#legacy-version-warning").style.display=null,document.querySelector('[data-header="Bitsy Version"] > summary').textContent="\u2757 Bitsy Version \u2757"),e.data()}function L(t){const{name:n}=t;let e;switch(n){case"template":e=Zr;break}t.addEventListener("change",()=>{U(t),e==null||e(t)})}function Zr(t){const n=t.value.split(".")[0]==="BitsyHD",e=localStorage.getItem("gamedata")==null,i=ln.gamedataHD;if(n&&e&&i!==void 0){const f=document.querySelector("#gamedata");f.value=i,U(f)}}function pn(t){const n=document.querySelector(`[data-associated-hack="${t.dataset.hack}"]`);n&&dn(n,t)}function dn(t,n){n.checked===!0?t.classList.add("included"):t.classList.remove("included")}function ta(t){U(t),pn(t)}function na(t){t.addEventListener("change",()=>{ta(t)})}function ea(){return Array.from(document.querySelectorAll("[data-borksy-replace-single]")).reduce((t,n)=>(t[n.dataset.borksyReplaceSingle]=n.value,t),{})}function ra(){return Mt.reduce((t,n)=>{const e=document.querySelector(`#${n.metadata.id}`);if(!(e.checked||e.value==="true"))return t;let p=n.data;if(n.options){const f=document.querySelector(`#${n.metadata.id}-options`).value;p=p.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m,`$1 {
+`).slice(1,-1),a=e[0],p=e.find(u=>u.startsWith("@file")).split("@file ")[1],f=e.find(u=>u.startsWith("@author")).split("@author ")[1],d=e.find(u=>u.startsWith("@summary")).split("@summary ")[1],l=e.slice(e.findIndex(u=>u.startsWith("@description"))+1).join(`
+`).replace(/Copy-paste .* after the bitsy source\.?/g,"Include hack").replace(/hackOptions below/g,"hackOptions above"),[,o]=t.match(/var hackOptions.*= {\n+([^]+?)\n+};$/m)||[];return{metadata:{emoji:a,id:p.replace(/\s/g,"-"),name:p,author:f,summary:d,description:l},options:o,data:t}});function Yr(){const t=document.querySelector("select#template");t.innerHTML="";for(let n=H.length-1;n>=0;n--){const{id:e,description:a}=H[n],p=n===H.length-1;t.innerHTML+=`<option value="${e}" ${p?"data-default-option":""}>${a}${p?" (latest)":""}</option>`}}function Xr(t,n){console.log(n),Qt.exports.saveAs(new Blob([n],{type:"text/html;charset=utf-8"}),t),console.log(`File '${t}' downloaded`)}function un(t,n=10){const e=t.toString(),a=e.length>n?"...":"";return e.substring(0,n)+a}function Kr(t){return t.toLowerCase().replace(/-(.)/g,(n,e)=>e.toUpperCase())}function Jr(t){return t.replace(/[^\w\s]/gi,"")}function Qr(t,n){const e=new RegExp(n,"g");t.value=t.value.replace(e,"")}function U(t,n){t.dataset.cleanRegex&&Qr(t,t.dataset.cleanRegex);let e;t.type==="checkbox"?e=t.checked:n===void 0?e=t.value:(e=n,t.value=n);const{name:a}=t;localStorage.setItem(a,e),console.log(`Key: '${a}' saved to localStorage: ${un(e)}`)}function Nt(t){const{name:n}=t,e=localStorage.getItem(n);if(e===null){console.log(` Attempted to get key: ${n} from localStorage, but nothing was found.`);return}if(t.type==="checkbox"){const a=e==="true";t.checked=a}else t.value=e;console.log(` Got key: ${n} from localStorage: ${un(e)}`)}function Ht(t){const{value:n}=t.currentTarget,e=H.find(a=>a.id===n);if(!e){document.querySelector("#template").value=H.find(a=>a.isDefault).id,Ht(t);return}e.isHd?document.querySelector("#mascot").classList.add("borksyHD"):document.querySelector("#mascot").classList.remove("borksyHD"),e.bitsyVersion===Dt.bitsyVersion?(document.querySelector("#legacy-version-warning").style.display="none",document.querySelector('[data-header="Bitsy Version"] > summary').textContent="Bitsy Version"):(document.querySelector("#legacy-version-warning").style.display=null,document.querySelector('[data-header="Bitsy Version"] > summary').textContent="\u2757 Bitsy Version \u2757"),e.data()}function L(t){const{name:n}=t;let e;switch(n){case"template":e=Zr;break}t.addEventListener("change",()=>{U(t),e==null||e(t)})}function Zr(t){const n=t.value.split(".")[0]==="BitsyHD",e=localStorage.getItem("gamedata")==null,a=ln.gamedataHD;if(n&&e&&a!==void 0){const f=document.querySelector("#gamedata");f.value=a,U(f)}}function pn(t){const n=document.querySelector(`[data-associated-hack="${t.dataset.hack}"]`);n&&dn(n,t)}function dn(t,n){n.checked===!0?t.classList.add("included"):t.classList.remove("included")}function ti(t){U(t),pn(t)}function ni(t){t.addEventListener("change",()=>{ti(t)})}function ei(){return Array.from(document.querySelectorAll("[data-borksy-replace-single]")).reduce((t,n)=>(t[n.dataset.borksyReplaceSingle]=n.value,t),{})}function ri(){return Mt.reduce((t,n)=>{const e=document.querySelector(`#${n.metadata.id}`);if(!(e.checked||e.value==="true"))return t;let p=n.data;if(n.options){const f=document.querySelector(`#${n.metadata.id}-options`).value;p=p.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m,`$1 {
 ${f}
 }$2`)}return`${t}${p}
-`},"")}let dt=!1;async function fn(){if(!dt){dt=!0;try{Array.from(document.querySelectorAll("[data-save]")).forEach(f=>U(f));const t=document.querySelector("#template").value,n=lt({"BORKSY-VERSION":Vr.version,"HACKS-VERSION":Dt.version,HACKS:ra()},ea());console.log(n);const e=document.querySelector("#filename").value,p=ft.exports.compile((await H.find(f=>f.id===t).data()).default)(n);Xr(`${e}.html`,p)}finally{dt=!1}}}function hn(){const{body:t}=document;t.classList.contains("party")?(t.classList.remove("party"),window.alert("\u{1F63E} Party Mode Deactivated. Everyone out. \u{1F63E}")):(t.classList.add("party"),window.alert("\u2728\u{1F308} Party Mode Activated! \u{1F308}\u2728"))}function W(t){const n=document.createElement("div");return n.innerHTML=t,n.children}function aa(){var l;const t=document.querySelector("#about_content");t.innerHTML=$.about.replace("HACKS_BITSY_VERSION",Dt.bitsyVersion);const n=document.createElement("section");n.id="last-update",n.innerHTML=(l=Kt.match(/(<h[12][^]+?)<h[12]/m))==null?void 0:l[1].replace(/<h[12]>([^]+?)<\/h[12]>/g,"<h2>What's new in v$1</h2>"),t.prepend(n);const e=C("How To Use Borksy");e.append(...W($["how-to-use-borksy"])),t.appendChild(e);const i=C("Troubleshooting / FAQs");i.classList.add("faq"),i.append(...W($["troubleshooting-faqs"])),t.appendChild(i);const p=C("Other Bitsy Tools");p.append(...W($["other-tools"])),t.appendChild(p);const f=C("AYo's Special Tips");f.append(...W($["ayos-special-tips"])),t.appendChild(f);const d=C("Changelog");d.append(...W(Kt)),t.appendChild(d)}function ia(t){t.value=t.dataset.default,L(t)}function sa(t){const n=t.id.replace(/-options$/,""),{options:e}=Mt.find(i=>i.metadata.id===n);t.value=e,L(t)}function oa(t){let n=t.dataset.default;n=n==="true",t.type==="checkbox"?t.checked=n:t.value=n,L(t)}function ca(t){const n=t.dataset.default,e=ln[n];if(!e)throw new Error(`Could not find file ${n}`);t.value=e,L(t)}function la(t){da(t.dataset.default)}function ua(t){const{options:n}=t;for(let e=n.length-1;e>=0;e--)if(n[e].dataset.defaultOption!==void 0){t.selectedIndex=e;break}L(t)}function gn(t=!0){Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{const e=localStorage.getItem(n.name),i=typeof n.dataset.default!="undefined",p=e!==null;if(i&&(!p||!t)){const{defaultType:f}=n.dataset;switch(f){case"string":ia(n);break;case"boolean":oa(n);break;case"textfile":ca(n);break;case"font":la(n);break;case"option":ua(n);break;case"hackOptions":sa(n);break;default:throw new Error("Unknown type")}}else p?Nt(n):n.value="",L(n);pn(n)}),console.log(`Defaults loaded. Forced? ${!t}`)}function mn(){let t;try{t=window.confirm("Are you sure you want to erase all data and restore defaults?")}catch{t=!0}!t||(Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{localStorage.removeItem(n.name)}),console.log("Cookies removed"),gn(!1),document.querySelector("#mascot").classList.remove("borksyHD"))}function pa(){const t={x:6,y:8},n={x:16,y:16},e=1,i=document.createElement("canvas");i.width=(t.x+e)*n.x+e,i.height=(t.y+e)*n.y+e;const p=i.getContext("2d");let f=[];p.drawImage(this,0,0);for(let d=0;d<n.y;++d)for(let l=0;l<n.x;++l){const o=p.getImageData(l*(t.x+e)+e,d*(t.y+e)+e,t.x,t.y);f.push(o.data)}for(let d=0;d<f.length;++d){const l=[];for(let o=0;o<f[d].length;o+=4)l.push(f[d][o]>255/2?1:0);f[d]=l}f=f.flat(),U(document.querySelector("#fontdata"),`[/*${document.querySelector("#fontfilename").value}*/${f.toString()}]`)}function da(t){let n;typeof t=="object"?n=t.target.result:(n=`fonts/${t}`,fa(t));const e=new Image;e.onload=pa,e.src=n}function fa(t){const n=document.querySelector("#fontfilename");n.value!==t&&(n.value=t,U(n))}function ha(t,n){t.dataset.save=!0,t.dataset.default=!1,t.dataset.defaultType="boolean",t.dataset.hack=n}function ga(t){const n=C(`${t.metadata.emoji} ${t.metadata.name} (by ${t.metadata.author})`);n.dataset.associatedHack=t.metadata.id;const e=document.createElement("p");e.textContent=t.metadata.summary,n.append(e);const i=document.createElement("label");i.className="horizontal";const p=document.createElement("input");if(p.type="checkbox",p.name=t.metadata.name,p.id=t.metadata.id,ha(p,t.metadata.id),Nt(p),dn(n,p),na(p),i.append(p),i.append(`Include "${Jr(t.metadata.name)}" hack`),n.append(i),t.options){const f=C("Options"),d=document.createElement("label");d.dataset.pre=`var ${Kr(t.metadata.id)}Options = {`,d.dataset.post="};";const l=document.createElement("textarea");l.rows=5,l.cols=50,l.textContent=t.options,l.name=`${t.metadata.name}.options`,l.id=`${t.metadata.id}-options`,l.dataset.save=!0,l.dataset.default=t.metadata.id,l.dataset.defaultType="hackOptions",Nt(l),L(l),d.append(l),f.append(d),n.append(f)}if(t.metadata.description){const f=C("README"),d=document.createElement("pre");d.textContent=t.metadata.description,f.append(d),n.append(f)}return n}function ma(){const t=document.querySelector("#hacks-section");Mt.forEach(n=>{t.appendChild(ga(n))})}function C(t){const n=document.createElement("details");return n.className="collapsible",n.dataset.collapse="",n.dataset.header=t,yn(n),n}function ya(){Array.from(document.querySelectorAll("[data-collapsible]")).forEach(yn),console.log("HACK IT UP YO"),ma(),document.querySelector("#preloader").remove()}function yn(t){const n=document.createElement("summary");n.textContent=t.dataset.header,n.className="collapsible_header",t.prepend(n)}function ba(){window.addEventListener("keydown",t=>{if(t.ctrlKey||t.metaKey)switch(String.fromCharCode(t.which).toLowerCase()){case"s":t.preventDefault(),fn();break;case"d":t.preventDefault(),mn();break;case"p":t.preventDefault(),hn();break}})}document.querySelector("#download-button").addEventListener("click",fn);document.querySelector("#restore-button").addEventListener("click",mn);document.querySelector("#mascot").addEventListener("click",hn);document.querySelector("#template").addEventListener("change",Ht);ya();aa();Yr();gn();ba();Ht({currentTarget:document.querySelector("#template")});
+`},"")}let dt=!1;async function fn(){if(!dt){dt=!0;try{Array.from(document.querySelectorAll("[data-save]")).forEach(f=>U(f));const t=document.querySelector("#template").value,n=lt({"BORKSY-VERSION":Vr.version,"HACKS-VERSION":Dt.version,HACKS:ri()},ei());console.log(n);const e=document.querySelector("#filename").value,p=ft.exports.compile((await H.find(f=>f.id===t).data()).default)(n);Xr(`${e}.html`,p)}finally{dt=!1}}}function hn(){const{body:t}=document;t.classList.contains("party")?(t.classList.remove("party"),window.alert("\u{1F63E} Party Mode Deactivated. Everyone out. \u{1F63E}")):(t.classList.add("party"),window.alert("\u2728\u{1F308} Party Mode Activated! \u{1F308}\u2728"))}function W(t){const n=document.createElement("div");return n.innerHTML=t,n.children}function ii(){var l;const t=document.querySelector("#about_content");t.innerHTML=$.about.replace("HACKS_BITSY_VERSION",Dt.bitsyVersion);const n=document.createElement("section");n.id="last-update",n.innerHTML=(l=Kt.match(/(<h[12][^]+?)<h[12]/m))==null?void 0:l[1].replace(/<h[12]>([^]+?)<\/h[12]>/g,"<h2>What's new in v$1</h2>"),t.prepend(n);const e=C("How To Use Borksy");e.append(...W($["how-to-use-borksy"])),t.appendChild(e);const a=C("Troubleshooting / FAQs");a.classList.add("faq"),a.append(...W($["troubleshooting-faqs"])),t.appendChild(a);const p=C("Other Bitsy Tools");p.append(...W($["other-tools"])),t.appendChild(p);const f=C("AYo's Special Tips");f.append(...W($["ayos-special-tips"])),t.appendChild(f);const d=C("Changelog");d.append(...W(Kt)),t.appendChild(d)}function ai(t){t.value=t.dataset.default,L(t)}function si(t){const n=t.id.replace(/-options$/,""),{options:e}=Mt.find(a=>a.metadata.id===n);t.value=e,L(t)}function oi(t){let n=t.dataset.default;n=n==="true",t.type==="checkbox"?t.checked=n:t.value=n,L(t)}function ci(t){const n=t.dataset.default,e=ln[n];if(!e)throw new Error(`Could not find file ${n}`);t.value=e,L(t)}function li(t){di(t.dataset.default)}function ui(t){const{options:n}=t;for(let e=n.length-1;e>=0;e--)if(n[e].dataset.defaultOption!==void 0){t.selectedIndex=e;break}L(t)}function gn(t=!0){Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{const e=localStorage.getItem(n.name),a=typeof n.dataset.default!="undefined",p=e!==null;if(a&&(!p||!t)){const{defaultType:f}=n.dataset;switch(f){case"string":ai(n);break;case"boolean":oi(n);break;case"textfile":ci(n);break;case"font":li(n);break;case"option":ui(n);break;case"hackOptions":si(n);break;default:throw new Error("Unknown type")}}else p?Nt(n):n.value="",L(n);pn(n)}),console.log(`Defaults loaded. Forced? ${!t}`)}function mn(){let t;try{t=window.confirm("Are you sure you want to erase all data and restore defaults?")}catch{t=!0}!t||(Array.from(document.querySelectorAll("[data-save]")).forEach(n=>{localStorage.removeItem(n.name)}),console.log("Cookies removed"),gn(!1),document.querySelector("#mascot").classList.remove("borksyHD"))}function pi(){const t={x:6,y:8},n={x:16,y:16},e=1,a=document.createElement("canvas");a.width=(t.x+e)*n.x+e,a.height=(t.y+e)*n.y+e;const p=a.getContext("2d");let f=[];p.drawImage(this,0,0);for(let d=0;d<n.y;++d)for(let l=0;l<n.x;++l){const o=p.getImageData(l*(t.x+e)+e,d*(t.y+e)+e,t.x,t.y);f.push(o.data)}for(let d=0;d<f.length;++d){const l=[];for(let o=0;o<f[d].length;o+=4)l.push(f[d][o]>255/2?1:0);f[d]=l}f=f.flat(),U(document.querySelector("#fontdata"),`[/*${document.querySelector("#fontfilename").value}*/${f.toString()}]`)}function di(t){let n;typeof t=="object"?n=t.target.result:(n=`fonts/${t}`,fi(t));const e=new Image;e.onload=pi,e.src=n}function fi(t){const n=document.querySelector("#fontfilename");n.value!==t&&(n.value=t,U(n))}function hi(t,n){t.dataset.save=!0,t.dataset.default=!1,t.dataset.defaultType="boolean",t.dataset.hack=n}function gi(t){const n=C(`${t.metadata.emoji} ${t.metadata.name} (by ${t.metadata.author})`);n.dataset.associatedHack=t.metadata.id;const e=document.createElement("p");e.textContent=t.metadata.summary,n.append(e);const a=document.createElement("label");a.className="horizontal";const p=document.createElement("input");if(p.type="checkbox",p.name=t.metadata.name,p.id=t.metadata.id,hi(p,t.metadata.id),Nt(p),dn(n,p),ni(p),a.append(p),a.append(`Include "${Jr(t.metadata.name)}" hack`),n.append(a),t.options){const f=C("Options"),d=document.createElement("label");d.dataset.pre=`var ${Kr(t.metadata.id)}Options = {`,d.dataset.post="};";const l=document.createElement("textarea");l.rows=5,l.cols=50,l.textContent=t.options,l.name=`${t.metadata.name}.options`,l.id=`${t.metadata.id}-options`,l.dataset.save=!0,l.dataset.default=t.metadata.id,l.dataset.defaultType="hackOptions",Nt(l),L(l),d.append(l),f.append(d),n.append(f)}if(t.metadata.description){const f=C("README"),d=document.createElement("pre");d.textContent=t.metadata.description,f.append(d),n.append(f)}return n}function mi(){const t=document.querySelector("#hacks-section");Mt.forEach(n=>{t.appendChild(gi(n))})}function C(t){const n=document.createElement("details");return n.className="collapsible",n.dataset.collapse="",n.dataset.header=t,yn(n),n}function yi(){Array.from(document.querySelectorAll("[data-collapsible]")).forEach(yn),console.log("HACK IT UP YO"),mi(),document.querySelector("#preloader").remove()}function yn(t){const n=document.createElement("summary");n.textContent=t.dataset.header,n.className="collapsible_header",t.prepend(n)}function bi(){window.addEventListener("keydown",t=>{if(t.ctrlKey||t.metaKey)switch(String.fromCharCode(t.which).toLowerCase()){case"s":t.preventDefault(),fn();break;case"d":t.preventDefault(),mn();break;case"p":t.preventDefault(),hn();break}})}document.querySelector("#download-button").addEventListener("click",fn);document.querySelector("#restore-button").addEventListener("click",mn);document.querySelector("#mascot").addEventListener("click",hn);document.querySelector("#template").addEventListener("change",Ht);yi();ii();Yr();gn();bi();Ht({currentTarget:document.querySelector("#template")});
