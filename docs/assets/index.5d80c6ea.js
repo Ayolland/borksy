@@ -116,7 +116,12 @@ Expecting `+Z.join(", ")+", got '"+(this.terminals_[w]||w)+"'":ct="Parse error o
         }
         return undefined
     }
-    `.trim()},blockValue:function(s){var i=this.aliasable("container.hooks.blockHelperMissing"),m=[this.contextName(0)];this.setupHelperArgs(s,0,m);var g=this.popStack();m.splice(1,0,g),this.push(this.source.functionCall(i,"call",m))},ambiguousBlockValue:function(){var s=this.aliasable("container.hooks.blockHelperMissing"),i=[this.contextName(0)];this.setupHelperArgs("",0,i,!0),this.flushInline();var m=this.topStack();i.splice(1,0,m),this.pushSource(["if (!",this.lastHelper,") { ",m," = ",this.source.functionCall(s,"call",i),"}"])},appendContent:function(s){this.pendingContent?s=this.pendingContent+s:this.pendingLocation=this.source.currentLocation,this.pendingContent=s},append:function(){if(this.isInline())this.replaceStack(function(i){return[" != null ? ",i,' : ""']}),this.pushSource(this.appendToBuffer(this.popStack()));else{var s=this.popStack();this.pushSource(["if (",s," != null) { ",this.appendToBuffer(s,void 0,!0)," }"]),this.environment.isSimple&&this.pushSource(["else { ",this.appendToBuffer("''",void 0,!0)," }"])}},appendEscaped:function(){this.pushSource(this.appendToBuffer([this.aliasable("container.escapeExpression"),"(",this.popStack(),")"]))},getContext:function(s){this.lastContext=s},pushContext:function(){this.pushStackLiteral(this.contextName(this.lastContext))},lookupOnContext:function(s,i,m,g){var b=0;!g&&this.options.compat&&!this.lastContext?this.push(this.depthedLookup(s[b++])):this.pushContext(),this.resolvePath("context",s,b,i,m)},lookupBlockParam:function(s,i){this.useBlockParams=!0,this.push(["blockParams[",s[0],"][",s[1],"]"]),this.resolvePath("context",i,1)},lookupData:function(s,i,m){s?this.pushStackLiteral("container.data(data, "+s+")"):this.pushStackLiteral("data"),this.resolvePath("data",i,0,!0,m)},resolvePath:function(s,i,m,g,b){var y=this;if(this.options.strict||this.options.assumeObjects){this.push(h(this.options.strict&&b,this,i,s));return}for(var w=i.length;m<w;m++)this.replaceStack(function(v){var k=y.nameLookup(v,i[m],s);return g?[" && ",k]:[" != null ? ",k," : ",v]})},resolvePossibleLambda:function(){this.push([this.aliasable("container.lambda"),"(",this.popStack(),", ",this.contextName(0),")"])},pushStringParam:function(s,i){this.pushContext(),this.pushString(i),i!=="SubExpression"&&(typeof s=="string"?this.pushString(s):this.pushStackLiteral(s))},emptyHash:function(s){this.trackIds&&this.push("{}"),this.stringParams&&(this.push("{}"),this.push("{}")),this.pushStackLiteral(s?"undefined":"{}")},pushHash:function(){this.hash&&this.hashes.push(this.hash),this.hash={values:{},types:[],contexts:[],ids:[]}},popHash:function(){var s=this.hash;this.hash=this.hashes.pop(),this.trackIds&&this.push(this.objectLiteral(s.ids)),this.stringParams&&(this.push(this.objectLiteral(s.contexts)),this.push(this.objectLiteral(s.types))),this.push(this.objectLiteral(s.values))},pushString:function(s){this.pushStackLiteral(this.quotedString(s))},pushLiteral:function(s){this.pushStackLiteral(s)},pushProgram:function(s){s!=null?this.pushStackLiteral(this.programExpression(s)):this.pushStackLiteral(null)},registerDecorator:function(s,i){var m=this.nameLookup("decorators",i,"decorator"),g=this.setupHelperArgs(i,s);this.decorators.push(["fn = ",this.decorators.functionCall(m,"",["fn","props","container",g])," || fn;"])},invokeHelper:function(s,i,m){var g=this.popStack(),b=this.setupHelper(s,i),y=[];m&&y.push(b.name),y.push(g),this.options.strict||y.push(this.aliasable("container.hooks.helperMissing"));var w=["(",this.itemsSeparatedBy(y,"||"),")"],v=this.source.functionCall(w,"call",b.callParams);this.push(v)},itemsSeparatedBy:function(s,i){var m=[];m.push(s[0]);for(var g=1;g<s.length;g++)m.push(i,s[g]);return m},invokeKnownHelper:function(s,i){var m=this.setupHelper(s,i);this.push(this.source.functionCall(m.name,"call",m.callParams))},invokeAmbiguous:function(s,i){this.useRegister("helper");var m=this.popStack();this.emptyHash();var g=this.setupHelper(0,s,i),b=this.lastHelper=this.nameLookup("helpers",s,"helper"),y=["(","(helper = ",b," || ",m,")"];this.options.strict||(y[0]="(helper = ",y.push(" != null ? helper : ",this.aliasable("container.hooks.helperMissing"))),this.push(["(",y,g.paramsInit?["),(",g.paramsInit]:[],"),","(typeof helper === ",this.aliasable('"function"')," ? ",this.source.functionCall("helper","call",g.callParams)," : helper))"])},invokePartial:function(s,i,m){var g=[],b=this.setupParams(i,1,g);s&&(i=this.popStack(),delete b.name),m&&(b.indent=JSON.stringify(m)),b.helpers="helpers",b.partials="partials",b.decorators="container.decorators",s?g.unshift(i):g.unshift(this.nameLookup("partials",i,"partial")),this.options.compat&&(b.depths="depths"),b=this.objectLiteral(b),g.push(b),this.push(this.source.functionCall("container.invokePartial","",g))},assignToHash:function(s){var i=this.popStack(),m=void 0,g=void 0,b=void 0;this.trackIds&&(b=this.popStack()),this.stringParams&&(g=this.popStack(),m=this.popStack());var y=this.hash;m&&(y.contexts[s]=m),g&&(y.types[s]=g),b&&(y.ids[s]=b),y.values[s]=i},pushId:function(s,i,m){s==="BlockParam"?this.pushStackLiteral("blockParams["+i[0]+"].path["+i[1]+"]"+(m?" + "+JSON.stringify("."+m):"")):s==="PathExpression"?this.pushString(i):s==="SubExpression"?this.pushStackLiteral("true"):this.pushStackLiteral("null")},compiler:c,compileChildren:function(s,i){for(var m=s.children,g=void 0,b=void 0,y=0,w=m.length;y<w;y++){g=m[y],b=new this.compiler;var v=this.matchExistingProgram(g);if(v==null){this.context.programs.push("");var k=this.context.programs.length;g.index=k,g.name="program"+k,this.context.programs[k]=b.compile(g,i,this.context,!this.precompile),this.context.decorators[k]=b.decorators,this.context.environments[k]=g,this.useDepths=this.useDepths||b.useDepths,this.useBlockParams=this.useBlockParams||b.useBlockParams,g.useDepths=this.useDepths,g.useBlockParams=this.useBlockParams}else g.index=v.index,g.name="program"+v.index,this.useDepths=this.useDepths||v.useDepths,this.useBlockParams=this.useBlockParams||v.useBlockParams}},matchExistingProgram:function(s){for(var i=0,m=this.context.environments.length;i<m;i++){var g=this.context.environments[i];if(g&&g.equals(s))return g}},programExpression:function(s){var i=this.environment.children[s],m=[i.index,"data",i.blockParams];return(this.useBlockParams||this.useDepths)&&m.push("blockParams"),this.useDepths&&m.push("depths"),"container.program("+m.join(", ")+")"},useRegister:function(s){this.registers[s]||(this.registers[s]=!0,this.registers.list.push(s))},push:function(s){return s instanceof u||(s=this.source.wrap(s)),this.inlineStack.push(s),s},pushStackLiteral:function(s){this.push(new u(s))},pushSource:function(s){this.pendingContent&&(this.source.push(this.appendToBuffer(this.source.quotedString(this.pendingContent),this.pendingLocation)),this.pendingContent=void 0),s&&this.source.push(s)},replaceStack:function(s){var i=["("],m=void 0,g=void 0,b=void 0;if(!this.isInline())throw new f.default("replaceStack on non-inline");var y=this.popStack(!0);if(y instanceof u)m=[y.value],i=["(",m],b=!0;else{g=!0;var w=this.incrStack();i=["((",this.push(w)," = ",y,")"],m=this.topStack()}var v=s.call(this,m);b||this.popStack(),g&&this.stackSlot--,this.push(i.concat(v,")"))},incrStack:function(){return this.stackSlot++,this.stackSlot>this.stackVars.length&&this.stackVars.push("stack"+this.stackSlot),this.topStackName()},topStackName:function(){return"stack"+this.stackSlot},flushInline:function(){var s=this.inlineStack;this.inlineStack=[];for(var i=0,m=s.length;i<m;i++){var g=s[i];if(g instanceof u)this.compileStack.push(g);else{var b=this.incrStack();this.pushSource([b," = ",g,";"]),this.compileStack.push(b)}}},isInline:function(){return this.inlineStack.length},popStack:function(s){var i=this.isInline(),m=(i?this.inlineStack:this.compileStack).pop();if(!s&&m instanceof u)return m.value;if(!i){if(!this.stackSlot)throw new f.default("Invalid stack pop");this.stackSlot--}return m},topStack:function(){var s=this.isInline()?this.inlineStack:this.compileStack,i=s[s.length-1];return i instanceof u?i.value:i},contextName:function(s){return this.useDepths&&s?"depths["+s+"]":"depth"+s},quotedString:function(s){return this.source.quotedString(s)},objectLiteral:function(s){return this.source.objectLiteral(s)},aliasable:function(s){var i=this.aliases[s];return i?(i.referenceCount++,i):(i=this.aliases[s]=this.source.wrap(s),i.aliasable=!0,i.referenceCount=1,i)},setupHelper:function(s,i,m){var g=[],b=this.setupHelperArgs(i,s,g,m),y=this.nameLookup("helpers",i,"helper"),w=this.aliasable(this.contextName(0)+" != null ? "+this.contextName(0)+" : (container.nullContext || {})");return{params:g,paramsInit:b,name:y,callParams:[w].concat(g)}},setupParams:function(s,i,m){var g={},b=[],y=[],w=[],v=!m,k=void 0;v&&(m=[]),g.name=this.quotedString(s),g.hash=this.popStack(),this.trackIds&&(g.hashIds=this.popStack()),this.stringParams&&(g.hashTypes=this.popStack(),g.hashContexts=this.popStack());var T=this.popStack(),x=this.popStack();(x||T)&&(g.fn=x||"container.noop",g.inverse=T||"container.noop");for(var I=i;I--;)k=this.popStack(),m[I]=k,this.trackIds&&(w[I]=this.popStack()),this.stringParams&&(y[I]=this.popStack(),b[I]=this.popStack());return v&&(g.args=this.source.generateArray(m)),this.trackIds&&(g.ids=this.source.generateArray(w)),this.stringParams&&(g.types=this.source.generateArray(y),g.contexts=this.source.generateArray(b)),this.options.data&&(g.data="data"),this.useBlockParams&&(g.blockParams="blockParams"),g},setupHelperArgs:function(s,i,m,g){var b=this.setupParams(s,i,m);return b.loc=JSON.stringify(this.source.currentLocation),b=this.objectLiteral(b),g?(this.useRegister("options"),m.push("options"),["options=",b]):m?(m.push(b),""):b}},function(){for(var r="break else new var case finally return void catch for switch while continue function this with default if throw delete in try do instanceof typeof abstract enum int short boolean export interface static byte extends long super char final native synchronized class float package throws const goto private transient debugger implements protected volatile double import public let yield await null true false".split(" "),s=c.RESERVED_WORDS={},i=0,m=r.length;i<m;i++)s[r[i]]=!0}(),c.isValidJavaScriptVariableName=function(r){return!c.RESERVED_WORDS[r]&&/^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(r)};function h(r,s,i,m){var g=s.popStack(),b=0,y=i.length;for(r&&y--;b<y;b++)g=s.nameLookup(g,i[b],m);return r?[s.aliasable("container.strict"),"(",g,", ",s.quotedString(i[b]),", ",JSON.stringify(s.source.currentLocation)," )"]:g}n.default=c,t.exports=n.default})(_t,_t.exports);(function(t,n){n.__esModule=!0;function e(y){return y&&y.__esModule?y:{default:y}}var a=ht.exports,p=e(a),f=st.exports,d=e(f),l=J,o=Q,u=_t.exports,c=e(u),h=ot.exports,r=e(h),s=at.exports,i=e(s),m=p.default.create;function g(){var y=m();return y.compile=function(w,v){return o.compile(w,v,y)},y.precompile=function(w,v){return o.precompile(w,v,y)},y.AST=d.default,y.Compiler=o.Compiler,y.JavaScriptCompiler=c.default,y.Parser=l.parser,y.parse=l.parse,y.parseWithoutProcessing=l.parseWithoutProcessing,y}var b=g();b.create=g,i.default(b),b.Visitor=r.default,b.default=b,n.default=b,t.exports=n.default})(ft,ft.exports);const Kt=`<h1><a href="https://github.com/Ayolland/borksy/compare/v5.16.0...v5.17.0">5.17.0</a> (2022-04-09)</h1>
+    `.trim()},blockValue:function(s){var i=this.aliasable("container.hooks.blockHelperMissing"),m=[this.contextName(0)];this.setupHelperArgs(s,0,m);var g=this.popStack();m.splice(1,0,g),this.push(this.source.functionCall(i,"call",m))},ambiguousBlockValue:function(){var s=this.aliasable("container.hooks.blockHelperMissing"),i=[this.contextName(0)];this.setupHelperArgs("",0,i,!0),this.flushInline();var m=this.topStack();i.splice(1,0,m),this.pushSource(["if (!",this.lastHelper,") { ",m," = ",this.source.functionCall(s,"call",i),"}"])},appendContent:function(s){this.pendingContent?s=this.pendingContent+s:this.pendingLocation=this.source.currentLocation,this.pendingContent=s},append:function(){if(this.isInline())this.replaceStack(function(i){return[" != null ? ",i,' : ""']}),this.pushSource(this.appendToBuffer(this.popStack()));else{var s=this.popStack();this.pushSource(["if (",s," != null) { ",this.appendToBuffer(s,void 0,!0)," }"]),this.environment.isSimple&&this.pushSource(["else { ",this.appendToBuffer("''",void 0,!0)," }"])}},appendEscaped:function(){this.pushSource(this.appendToBuffer([this.aliasable("container.escapeExpression"),"(",this.popStack(),")"]))},getContext:function(s){this.lastContext=s},pushContext:function(){this.pushStackLiteral(this.contextName(this.lastContext))},lookupOnContext:function(s,i,m,g){var b=0;!g&&this.options.compat&&!this.lastContext?this.push(this.depthedLookup(s[b++])):this.pushContext(),this.resolvePath("context",s,b,i,m)},lookupBlockParam:function(s,i){this.useBlockParams=!0,this.push(["blockParams[",s[0],"][",s[1],"]"]),this.resolvePath("context",i,1)},lookupData:function(s,i,m){s?this.pushStackLiteral("container.data(data, "+s+")"):this.pushStackLiteral("data"),this.resolvePath("data",i,0,!0,m)},resolvePath:function(s,i,m,g,b){var y=this;if(this.options.strict||this.options.assumeObjects){this.push(h(this.options.strict&&b,this,i,s));return}for(var w=i.length;m<w;m++)this.replaceStack(function(v){var k=y.nameLookup(v,i[m],s);return g?[" && ",k]:[" != null ? ",k," : ",v]})},resolvePossibleLambda:function(){this.push([this.aliasable("container.lambda"),"(",this.popStack(),", ",this.contextName(0),")"])},pushStringParam:function(s,i){this.pushContext(),this.pushString(i),i!=="SubExpression"&&(typeof s=="string"?this.pushString(s):this.pushStackLiteral(s))},emptyHash:function(s){this.trackIds&&this.push("{}"),this.stringParams&&(this.push("{}"),this.push("{}")),this.pushStackLiteral(s?"undefined":"{}")},pushHash:function(){this.hash&&this.hashes.push(this.hash),this.hash={values:{},types:[],contexts:[],ids:[]}},popHash:function(){var s=this.hash;this.hash=this.hashes.pop(),this.trackIds&&this.push(this.objectLiteral(s.ids)),this.stringParams&&(this.push(this.objectLiteral(s.contexts)),this.push(this.objectLiteral(s.types))),this.push(this.objectLiteral(s.values))},pushString:function(s){this.pushStackLiteral(this.quotedString(s))},pushLiteral:function(s){this.pushStackLiteral(s)},pushProgram:function(s){s!=null?this.pushStackLiteral(this.programExpression(s)):this.pushStackLiteral(null)},registerDecorator:function(s,i){var m=this.nameLookup("decorators",i,"decorator"),g=this.setupHelperArgs(i,s);this.decorators.push(["fn = ",this.decorators.functionCall(m,"",["fn","props","container",g])," || fn;"])},invokeHelper:function(s,i,m){var g=this.popStack(),b=this.setupHelper(s,i),y=[];m&&y.push(b.name),y.push(g),this.options.strict||y.push(this.aliasable("container.hooks.helperMissing"));var w=["(",this.itemsSeparatedBy(y,"||"),")"],v=this.source.functionCall(w,"call",b.callParams);this.push(v)},itemsSeparatedBy:function(s,i){var m=[];m.push(s[0]);for(var g=1;g<s.length;g++)m.push(i,s[g]);return m},invokeKnownHelper:function(s,i){var m=this.setupHelper(s,i);this.push(this.source.functionCall(m.name,"call",m.callParams))},invokeAmbiguous:function(s,i){this.useRegister("helper");var m=this.popStack();this.emptyHash();var g=this.setupHelper(0,s,i),b=this.lastHelper=this.nameLookup("helpers",s,"helper"),y=["(","(helper = ",b," || ",m,")"];this.options.strict||(y[0]="(helper = ",y.push(" != null ? helper : ",this.aliasable("container.hooks.helperMissing"))),this.push(["(",y,g.paramsInit?["),(",g.paramsInit]:[],"),","(typeof helper === ",this.aliasable('"function"')," ? ",this.source.functionCall("helper","call",g.callParams)," : helper))"])},invokePartial:function(s,i,m){var g=[],b=this.setupParams(i,1,g);s&&(i=this.popStack(),delete b.name),m&&(b.indent=JSON.stringify(m)),b.helpers="helpers",b.partials="partials",b.decorators="container.decorators",s?g.unshift(i):g.unshift(this.nameLookup("partials",i,"partial")),this.options.compat&&(b.depths="depths"),b=this.objectLiteral(b),g.push(b),this.push(this.source.functionCall("container.invokePartial","",g))},assignToHash:function(s){var i=this.popStack(),m=void 0,g=void 0,b=void 0;this.trackIds&&(b=this.popStack()),this.stringParams&&(g=this.popStack(),m=this.popStack());var y=this.hash;m&&(y.contexts[s]=m),g&&(y.types[s]=g),b&&(y.ids[s]=b),y.values[s]=i},pushId:function(s,i,m){s==="BlockParam"?this.pushStackLiteral("blockParams["+i[0]+"].path["+i[1]+"]"+(m?" + "+JSON.stringify("."+m):"")):s==="PathExpression"?this.pushString(i):s==="SubExpression"?this.pushStackLiteral("true"):this.pushStackLiteral("null")},compiler:c,compileChildren:function(s,i){for(var m=s.children,g=void 0,b=void 0,y=0,w=m.length;y<w;y++){g=m[y],b=new this.compiler;var v=this.matchExistingProgram(g);if(v==null){this.context.programs.push("");var k=this.context.programs.length;g.index=k,g.name="program"+k,this.context.programs[k]=b.compile(g,i,this.context,!this.precompile),this.context.decorators[k]=b.decorators,this.context.environments[k]=g,this.useDepths=this.useDepths||b.useDepths,this.useBlockParams=this.useBlockParams||b.useBlockParams,g.useDepths=this.useDepths,g.useBlockParams=this.useBlockParams}else g.index=v.index,g.name="program"+v.index,this.useDepths=this.useDepths||v.useDepths,this.useBlockParams=this.useBlockParams||v.useBlockParams}},matchExistingProgram:function(s){for(var i=0,m=this.context.environments.length;i<m;i++){var g=this.context.environments[i];if(g&&g.equals(s))return g}},programExpression:function(s){var i=this.environment.children[s],m=[i.index,"data",i.blockParams];return(this.useBlockParams||this.useDepths)&&m.push("blockParams"),this.useDepths&&m.push("depths"),"container.program("+m.join(", ")+")"},useRegister:function(s){this.registers[s]||(this.registers[s]=!0,this.registers.list.push(s))},push:function(s){return s instanceof u||(s=this.source.wrap(s)),this.inlineStack.push(s),s},pushStackLiteral:function(s){this.push(new u(s))},pushSource:function(s){this.pendingContent&&(this.source.push(this.appendToBuffer(this.source.quotedString(this.pendingContent),this.pendingLocation)),this.pendingContent=void 0),s&&this.source.push(s)},replaceStack:function(s){var i=["("],m=void 0,g=void 0,b=void 0;if(!this.isInline())throw new f.default("replaceStack on non-inline");var y=this.popStack(!0);if(y instanceof u)m=[y.value],i=["(",m],b=!0;else{g=!0;var w=this.incrStack();i=["((",this.push(w)," = ",y,")"],m=this.topStack()}var v=s.call(this,m);b||this.popStack(),g&&this.stackSlot--,this.push(i.concat(v,")"))},incrStack:function(){return this.stackSlot++,this.stackSlot>this.stackVars.length&&this.stackVars.push("stack"+this.stackSlot),this.topStackName()},topStackName:function(){return"stack"+this.stackSlot},flushInline:function(){var s=this.inlineStack;this.inlineStack=[];for(var i=0,m=s.length;i<m;i++){var g=s[i];if(g instanceof u)this.compileStack.push(g);else{var b=this.incrStack();this.pushSource([b," = ",g,";"]),this.compileStack.push(b)}}},isInline:function(){return this.inlineStack.length},popStack:function(s){var i=this.isInline(),m=(i?this.inlineStack:this.compileStack).pop();if(!s&&m instanceof u)return m.value;if(!i){if(!this.stackSlot)throw new f.default("Invalid stack pop");this.stackSlot--}return m},topStack:function(){var s=this.isInline()?this.inlineStack:this.compileStack,i=s[s.length-1];return i instanceof u?i.value:i},contextName:function(s){return this.useDepths&&s?"depths["+s+"]":"depth"+s},quotedString:function(s){return this.source.quotedString(s)},objectLiteral:function(s){return this.source.objectLiteral(s)},aliasable:function(s){var i=this.aliases[s];return i?(i.referenceCount++,i):(i=this.aliases[s]=this.source.wrap(s),i.aliasable=!0,i.referenceCount=1,i)},setupHelper:function(s,i,m){var g=[],b=this.setupHelperArgs(i,s,g,m),y=this.nameLookup("helpers",i,"helper"),w=this.aliasable(this.contextName(0)+" != null ? "+this.contextName(0)+" : (container.nullContext || {})");return{params:g,paramsInit:b,name:y,callParams:[w].concat(g)}},setupParams:function(s,i,m){var g={},b=[],y=[],w=[],v=!m,k=void 0;v&&(m=[]),g.name=this.quotedString(s),g.hash=this.popStack(),this.trackIds&&(g.hashIds=this.popStack()),this.stringParams&&(g.hashTypes=this.popStack(),g.hashContexts=this.popStack());var T=this.popStack(),x=this.popStack();(x||T)&&(g.fn=x||"container.noop",g.inverse=T||"container.noop");for(var I=i;I--;)k=this.popStack(),m[I]=k,this.trackIds&&(w[I]=this.popStack()),this.stringParams&&(y[I]=this.popStack(),b[I]=this.popStack());return v&&(g.args=this.source.generateArray(m)),this.trackIds&&(g.ids=this.source.generateArray(w)),this.stringParams&&(g.types=this.source.generateArray(y),g.contexts=this.source.generateArray(b)),this.options.data&&(g.data="data"),this.useBlockParams&&(g.blockParams="blockParams"),g},setupHelperArgs:function(s,i,m,g){var b=this.setupParams(s,i,m);return b.loc=JSON.stringify(this.source.currentLocation),b=this.objectLiteral(b),g?(this.useRegister("options"),m.push("options"),["options=",b]):m?(m.push(b),""):b}},function(){for(var r="break else new var case finally return void catch for switch while continue function this with default if throw delete in try do instanceof typeof abstract enum int short boolean export interface static byte extends long super char final native synchronized class float package throws const goto private transient debugger implements protected volatile double import public let yield await null true false".split(" "),s=c.RESERVED_WORDS={},i=0,m=r.length;i<m;i++)s[r[i]]=!0}(),c.isValidJavaScriptVariableName=function(r){return!c.RESERVED_WORDS[r]&&/^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(r)};function h(r,s,i,m){var g=s.popStack(),b=0,y=i.length;for(r&&y--;b<y;b++)g=s.nameLookup(g,i[b],m);return r?[s.aliasable("container.strict"),"(",g,", ",s.quotedString(i[b]),", ",JSON.stringify(s.source.currentLocation)," )"]:g}n.default=c,t.exports=n.default})(_t,_t.exports);(function(t,n){n.__esModule=!0;function e(y){return y&&y.__esModule?y:{default:y}}var a=ht.exports,p=e(a),f=st.exports,d=e(f),l=J,o=Q,u=_t.exports,c=e(u),h=ot.exports,r=e(h),s=at.exports,i=e(s),m=p.default.create;function g(){var y=m();return y.compile=function(w,v){return o.compile(w,v,y)},y.precompile=function(w,v){return o.precompile(w,v,y)},y.AST=d.default,y.Compiler=o.Compiler,y.JavaScriptCompiler=c.default,y.Parser=l.parser,y.parse=l.parse,y.parseWithoutProcessing=l.parseWithoutProcessing,y}var b=g();b.create=g,i.default(b),b.Visitor=r.default,b.default=b,n.default=b,t.exports=n.default})(ft,ft.exports);const Kt=`<h2><a href="https://github.com/Ayolland/borksy/compare/v5.17.0...v5.17.1">5.17.1</a> (2022-04-09)</h2>
+<h3>Bug Fixes</h3>
+<ul>
+<li>auto-publish not working (<a href="https://github.com/Ayolland/borksy/commit/c1f3c05b8f1b11dd0888684e7e1e64ab533b46a9">c1f3c05</a>)</li>
+</ul>
+<h1><a href="https://github.com/Ayolland/borksy/compare/v5.16.0...v5.17.0">5.17.0</a> (2022-04-09)</h1>
 <h3>Features</h3>
 <ul>
 <li>update hacks (<a href="https://github.com/Ayolland/borksy/commit/b355f2aee0f356afeab85af5d50e97f51afe62dc">b355f2a</a>)</li>
@@ -487,7 +492,7 @@ Expecting `+Z.join(", ")+", got '"+(this.terminals_[w]||w)+"'":ct="Parse error o
 <ul>
 <li>Initial version</li>
 </ul>
-`,Nr="borksy",Dr="5.17.0",Br="Borksy Game Hacker: A tool for extending Bitsy games",Cr={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},Rr={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},qr="AYolland",Pr="MIT",Lr={url:"https://github.com/Ayolland/borksy/issues"},Mr="https://ayolland.itch.io/borksy",Hr={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},Gr={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},Ur={"@bitsy/hecks":"^20.2.1",eslint:"^8.12.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.5.0","eslint-plugin-import":"^2.26.0","eslint-plugin-prettier":"^4.0.0","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^27.5.1","jest-dev-server":"^6.0.0","jest-image-snapshot":"^4.5.1",prettier:"^2.6.2",puppeteer:"^13.5.2","rollup-plugin-visualizer":"^5.6.0",sass:"^1.50.0",vite:"^2.9.1","vite-plugin-markdown":"^2.0.2","vite-plugin-string":"^1.1.2"};var Vr={private:!0,name:Nr,version:Dr,description:Br,scripts:Cr,repository:Rr,author:qr,license:Pr,bugs:Lr,homepage:Mr,jest:Hr,release:Gr,devDependencies:Ur};const zr="modulepreload",Jt={},$r="./",j=function(n,e){return!e||e.length===0?n():Promise.all(e.map(a=>{if(a=`${$r}${a}`,a in Jt)return;Jt[a]=!0;const p=a.endsWith(".css"),f=p?'[rel="stylesheet"]':"";if(document.querySelector(`link[href="${a}"]${f}`))return;const d=document.createElement("link");if(d.rel=p?"stylesheet":zr,p||(d.as="script",d.crossOrigin=""),d.href=a,document.head.appendChild(d),p)return new Promise((l,o)=>{d.addEventListener("load",l),d.addEventListener("error",()=>o(new Error(`Unable to preload CSS for ${a}`)))})})).then(()=>n())};var H=[{data:()=>j(()=>import("./BitsyHD.5.1.224b5bed.js"),[]),bitsyVersion:"5.1",isHd:!0,description:"Bitsy HD (Bitsy 5.1)"},{data:()=>j(()=>import("./Bitsy.5.5.b578c1f1.js"),[]),bitsyVersion:"5.5",description:"Bitsy 5.5"},{data:()=>j(()=>import("./Bitsy.6.0.d01fe5ea.js"),[]),bitsyVersion:"6.0",description:"Bitsy 6.0"},{data:()=>j(()=>import("./Bitsy.6.3.f1de51df.js"),[]),bitsyVersion:"6.3",description:"Bitsy 6.3"},{data:()=>j(()=>import("./Bitsy.6.4.4364f87f.js"),[]),bitsyVersion:"6.4",description:"Bitsy 6.4"},{data:()=>j(()=>import("./Bitsy.6.5.bd486411.js"),[]),bitsyVersion:"6.5",description:"Bitsy 6.5"},{data:()=>j(()=>import("./Bitsy.7.0.005afbac.js"),[]),bitsyVersion:"7.0",description:"Bitsy 7.0"},{data:()=>j(()=>import("./Bitsy.7.2.e7deb823.js"),[]),bitsyVersion:"7.2",description:"Bitsy 7.2"},{data:()=>j(()=>import("./Bitsy.7.8.a8e1ddd6.js"),[]),bitsyVersion:"7.8",description:"Bitsy 7.8"},{data:()=>j(()=>import("./Bitsy.7.10.1cdc75c6.js"),[]),bitsyVersion:"7.10",description:"Bitsy 7.10"},{data:()=>j(()=>import("./BitsyHD.7.11.f9a8cfdc.js"),[]),bitsyVersion:"7.11",isHd:!0,description:"Bitsy HD (Bitsy 7.11)"},{data:()=>j(()=>import("./Bitsy.7.11.c7cee104.js"),[]),bitsyVersion:"7.11",description:"Bitsy 7.11"},{data:()=>j(()=>import("./BitsyHD.7.12.06a63c86.js"),[]),bitsyVersion:"7.12",isHd:!0,description:"Bitsy HD (Bitsy 7.12)"},{data:()=>j(()=>import("./Bitsy.7.12.7a7fbf49.js"),[]),bitsyVersion:"7.12",description:"Bitsy 7.12",isDefault:!0}].map(t=>Vt(lt({},t),{id:`Bitsy${t.isHd?"HD":""}${t.bitsyVersion.replace(/\./g,"")}`}));const $=Object.fromEntries(Object.entries({"../about/about.md":In,"../about/ayos-special-tips.md":An,"../about/how-to-use-borksy.md":Nn,"../about/other-tools.md":Cn,"../about/troubleshooting-faqs.md":Pn}).map(([t,n])=>[t.match(/.*\/(.*?)\.md/)[1],n.html])),ln=Object.fromEntries(Object.entries({"../defaults/body.txt":`<!-- GAME CANVAS -->
+`,Nr="borksy",Dr="5.17.1",Br="Borksy Game Hacker: A tool for extending Bitsy games",Cr={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},Rr={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},qr="AYolland",Pr="MIT",Lr={url:"https://github.com/Ayolland/borksy/issues"},Mr="https://ayolland.itch.io/borksy",Hr={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},Gr={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},Ur={"@bitsy/hecks":"^20.2.1",eslint:"^8.12.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.5.0","eslint-plugin-import":"^2.26.0","eslint-plugin-prettier":"^4.0.0","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^27.5.1","jest-dev-server":"^6.0.0","jest-image-snapshot":"^4.5.1",prettier:"^2.6.2",puppeteer:"^13.5.2","rollup-plugin-visualizer":"^5.6.0",sass:"^1.50.0",vite:"^2.9.1","vite-plugin-markdown":"^2.0.2","vite-plugin-string":"^1.1.2"};var Vr={private:!0,name:Nr,version:Dr,description:Br,scripts:Cr,repository:Rr,author:qr,license:Pr,bugs:Lr,homepage:Mr,jest:Hr,release:Gr,devDependencies:Ur};const zr="modulepreload",Jt={},$r="./",j=function(n,e){return!e||e.length===0?n():Promise.all(e.map(a=>{if(a=`${$r}${a}`,a in Jt)return;Jt[a]=!0;const p=a.endsWith(".css"),f=p?'[rel="stylesheet"]':"";if(document.querySelector(`link[href="${a}"]${f}`))return;const d=document.createElement("link");if(d.rel=p?"stylesheet":zr,p||(d.as="script",d.crossOrigin=""),d.href=a,document.head.appendChild(d),p)return new Promise((l,o)=>{d.addEventListener("load",l),d.addEventListener("error",()=>o(new Error(`Unable to preload CSS for ${a}`)))})})).then(()=>n())};var H=[{data:()=>j(()=>import("./BitsyHD.5.1.224b5bed.js"),[]),bitsyVersion:"5.1",isHd:!0,description:"Bitsy HD (Bitsy 5.1)"},{data:()=>j(()=>import("./Bitsy.5.5.b578c1f1.js"),[]),bitsyVersion:"5.5",description:"Bitsy 5.5"},{data:()=>j(()=>import("./Bitsy.6.0.d01fe5ea.js"),[]),bitsyVersion:"6.0",description:"Bitsy 6.0"},{data:()=>j(()=>import("./Bitsy.6.3.f1de51df.js"),[]),bitsyVersion:"6.3",description:"Bitsy 6.3"},{data:()=>j(()=>import("./Bitsy.6.4.4364f87f.js"),[]),bitsyVersion:"6.4",description:"Bitsy 6.4"},{data:()=>j(()=>import("./Bitsy.6.5.bd486411.js"),[]),bitsyVersion:"6.5",description:"Bitsy 6.5"},{data:()=>j(()=>import("./Bitsy.7.0.005afbac.js"),[]),bitsyVersion:"7.0",description:"Bitsy 7.0"},{data:()=>j(()=>import("./Bitsy.7.2.e7deb823.js"),[]),bitsyVersion:"7.2",description:"Bitsy 7.2"},{data:()=>j(()=>import("./Bitsy.7.8.a8e1ddd6.js"),[]),bitsyVersion:"7.8",description:"Bitsy 7.8"},{data:()=>j(()=>import("./Bitsy.7.10.1cdc75c6.js"),[]),bitsyVersion:"7.10",description:"Bitsy 7.10"},{data:()=>j(()=>import("./BitsyHD.7.11.f9a8cfdc.js"),[]),bitsyVersion:"7.11",isHd:!0,description:"Bitsy HD (Bitsy 7.11)"},{data:()=>j(()=>import("./Bitsy.7.11.c7cee104.js"),[]),bitsyVersion:"7.11",description:"Bitsy 7.11"},{data:()=>j(()=>import("./BitsyHD.7.12.06a63c86.js"),[]),bitsyVersion:"7.12",isHd:!0,description:"Bitsy HD (Bitsy 7.12)"},{data:()=>j(()=>import("./Bitsy.7.12.7a7fbf49.js"),[]),bitsyVersion:"7.12",description:"Bitsy 7.12",isDefault:!0}].map(t=>Vt(lt({},t),{id:`Bitsy${t.isHd?"HD":""}${t.bitsyVersion.replace(/\./g,"")}`}));const $=Object.fromEntries(Object.entries({"../about/about.md":In,"../about/ayos-special-tips.md":An,"../about/how-to-use-borksy.md":Nn,"../about/other-tools.md":Cn,"../about/troubleshooting-faqs.md":Pn}).map(([t,n])=>[t.match(/.*\/(.*?)\.md/)[1],n.html])),ln=Object.fromEntries(Object.entries({"../defaults/body.txt":`<!-- GAME CANVAS -->
 <canvas id='game'></canvas>`,"../defaults/fontdata.txt":`[
 		/* num: 0 */
 		0,0,0,0,0,0,
@@ -17981,334 +17986,334 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
-var Buttons;\r
-(function (Buttons) {\r
-    // XBOX360 wired controller configuration\r
-    Buttons[Buttons["A"] = 0] = "A";\r
-    Buttons[Buttons["X"] = 2] = "X";\r
-    Buttons[Buttons["B"] = 1] = "B";\r
-    Buttons[Buttons["Y"] = 3] = "Y";\r
-    Buttons[Buttons["LB"] = 4] = "LB";\r
-    Buttons[Buttons["RB"] = 5] = "RB";\r
-    Buttons[Buttons["LT"] = 6] = "LT";\r
-    Buttons[Buttons["RT"] = 7] = "RT";\r
-    Buttons[Buttons["BACK"] = 8] = "BACK";\r
-    Buttons[Buttons["START"] = 9] = "START";\r
-    Buttons[Buttons["LHAT"] = 10] = "LHAT";\r
-    Buttons[Buttons["RHAT"] = 11] = "RHAT";\r
-    Buttons[Buttons["DPAD_UP"] = 12] = "DPAD_UP";\r
-    Buttons[Buttons["DPAD_DOWN"] = 13] = "DPAD_DOWN";\r
-    Buttons[Buttons["DPAD_LEFT"] = 14] = "DPAD_LEFT";\r
-    Buttons[Buttons["DPAD_RIGHT"] = 15] = "DPAD_RIGHT";\r
-})(Buttons || (Buttons = {}));\r
-var Axes;\r
-(function (Axes) {\r
-    Axes[Axes["LSTICK_H"] = 0] = "LSTICK_H";\r
-    Axes[Axes["LSTICK_V"] = 1] = "LSTICK_V";\r
-    Axes[Axes["RSTICK_H"] = 2] = "RSTICK_H";\r
-    Axes[Axes["RSTICK_V"] = 3] = "RSTICK_V";\r
-})(Axes || (Axes = {}));\r
-var nullGamepad = {\r
-    original: {\r
-        axes: [],\r
-        buttons: [],\r
-        connected: false,\r
-    },\r
-    disabled: true,\r
-    down: {},\r
-    justDown: {},\r
-    justUp: {},\r
-    axesPrev: {},\r
-};\r
-var Gamepads = /** @class */ (function () {\r
-    /**\r
-    * initialize gamepads\r
-    */\r
-    function Gamepads() {\r
-        var _this = this;\r
-        // settings\r
-        /** if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead */\r
-        this.deadZone = 0.25;\r
-        /** if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1 instead */\r
-        this.snapZone = 0.25;\r
-        /** axis values between \`deadZone\` and \`snapZone\` will be run through this function\r
-        *\r
-        * defaults to normalizing between the two thresholds */\r
-        this.interpolate = function (value) {\r
-            var v = Math.max(0, Math.min(1, (value - _this.deadZone) / (1.0 - _this.snapZone - _this.deadZone)));\r
-            return v;\r
-        };\r
-        // internal vars\r
-        this.players = {};\r
-        this.available = false;\r
-        this.pollEveryFrame = false;\r
-        this.connected = false;\r
-        /**\r
-        * update gamepads (clears arrays, polls connections, etc.)\r
-        */\r
-        this.pollconnections = function () {\r
-            _this.connected = false;\r
-            // assume existing players' gamepads aren't enabled until they're found\r
-            Object.values(_this.players).forEach(function (player) {\r
-                player.disabled = true;\r
-            });\r
-            var gps = navigator.getGamepads();\r
-            for (var i = 0; i < gps.length; ++i) {\r
-                var gp = gps[i];\r
-                if (gp) {\r
-                    if (gp.connected) {\r
-                        if (_this.players[gp.index] == null) {\r
-                            // new player\r
-                            _this.players[gp.index] = {\r
-                                disabled: false,\r
-                                original: gp,\r
-                                down: {},\r
-                                justDown: {},\r
-                                justUp: {},\r
-                                axesPrev: {},\r
-                            };\r
-                        }\r
-                        else {\r
-                            // returning player, just assign the gamepad\r
-                            _this.players[gp.index].original = gp;\r
-                        }\r
-                        _this.connected = true;\r
-                        _this.players[gp.index].disabled = false;\r
-                    }\r
-                    else {\r
-                        delete _this.players[gp.index];\r
-                    }\r
-                }\r
-            }\r
-        };\r
-        /**\r
-        * update gamepads (clears arrays, polls connections, etc.)\r
-        */\r
-        this.update = function () {\r
-            // store the previous axis values\r
-            // has to be done before pollConnections since that will get the new axis values\r
-            Object.keys(_this.players).forEach(function (i) {\r
-                var _a;\r
-                var p = _this.getPlayer(i);\r
-                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.axes) {\r
-                    p.axesPrev = p.original.axes.slice();\r
-                }\r
-            });\r
-            // poll connections and update gamepad states every frame because chrome's a lazy bum\r
-            if (_this.pollEveryFrame) {\r
-                _this.pollconnections();\r
-            }\r
-            Object.keys(_this.players).forEach(function (i) {\r
-                var _a;\r
-                var p = _this.getPlayer(i);\r
-                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.buttons) {\r
-                    for (var j = 0; j < p.original.buttons.length; ++j) {\r
-                        if (p.original.buttons[j].pressed) {\r
-                            p.justDown[j] = !(p.down[j] === true);\r
-                            p.down[j] = true;\r
-                            p.justUp[j] = false;\r
-                        }\r
-                        else {\r
-                            p.justUp[j] = p.down[j] === true;\r
-                            p.down[j] = false;\r
-                            p.justDown[j] = false;\r
-                        }\r
-                    }\r
-                }\r
-            });\r
-        };\r
-        /**\r
-        * @returns \`player\`'s gamepad\r
-        *\r
-        * if one doesn't exist, returns an object with gamepad properties reflecting a null state\r
-        */\r
-        this.getPlayer = function (player) {\r
-            var _a, _b, _c;\r
-            if (((_b = (_a = _this.players[player]) === null || _a === void 0 ? void 0 : _a.original) === null || _b === void 0 ? void 0 : _b.connected) && !((_c = _this.players[player]) === null || _c === void 0 ? void 0 : _c.disabled)) {\r
-                return _this.players[player];\r
-            }\r
-            return nullGamepad;\r
-        };\r
-        /**\r
-        * @returns an array representing \`length\` axes for \`player\` at \`offset\`\r
-        *\r
-        * if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead\r
-        * if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1/-1 instead\r
-        * otherwise, returns the axis value normalized between \`deadZone\` and \`(1-snapZone)\`\r
-        * @param {Number} offset axis index\r
-        * @param {Number} length number of axes to return\r
-        * @param {Number} player player index (\`undefined\` for "sum of all")\r
-        * @param {boolean} prev if \`true\` uses axis values from previous update\r
-        */\r
-        this.getAxes = function (offset, length, player, prev) {\r
-            if (offset === void 0) { offset = 0; }\r
-            if (length === void 0) { length = 2; }\r
-            if (prev === void 0) { prev = false; }\r
-            var axes = [];\r
-            for (var i = 0; i < length; ++i) {\r
-                axes[i] = 0;\r
-            }\r
-            if (player === undefined) {\r
-                Object.keys(_this.players).forEach(function (i) {\r
-                    var a = _this.getAxes(offset, length, i, prev);\r
-                    for (var j = 0; j < a.length; ++j) {\r
-                        axes[j] += a[j];\r
-                    }\r
-                });\r
-            }\r
-            else {\r
-                var p = _this.getPlayer(player);\r
-                if (p === null || p === void 0 ? void 0 : p.original) {\r
-                    var axesSource = prev ? p.axesPrev : p.original.axes;\r
-                    var a = Object.values(axesSource).slice(offset, offset + length);\r
-                    for (var i = 0; i < a.length; ++i) {\r
-                        if (Math.abs(a[i]) < _this.deadZone) {\r
-                            axes[i] += 0;\r
-                        }\r
-                        else if (Math.abs(1.0 - a[i]) < _this.snapZone) {\r
-                            axes[i] += 1;\r
-                        }\r
-                        else if (Math.abs(-1.0 - a[i]) < _this.snapZone) {\r
-                            axes[i] -= 1;\r
-                        }\r
-                        else {\r
-                            axes[i] += Math.sign(a[i]) * _this.interpolate(Math.abs(a[i]));\r
-                        }\r
-                    }\r
-                }\r
-            }\r
-            return axes;\r
-        };\r
-        /**\r
-       * @returns equivalent to \`getAxes(axis, 1, player, prev)[0]\`\r
-       */\r
-        this.getAxis = function (axis, player, prev) { return _this.getAxes(axis, 1, player, prev)[0]; };\r
-        /**\r
-        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\`\r
-        * @param {Number} axis axis index\r
-        * @param {Number} threshold threshold (-1 to 1)\r
-        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        * @param {boolean} prev if \`true\` uses axis values from previous update\r
-        */\r
-        this.axisPast = function (axis, threshold, direction, player, prev) {\r
-            if (!threshold) {\r
-                throw new Error('must specify a non-zero threshold');\r
-            }\r
-            if (!direction) {\r
-                direction = threshold > 0 ? 1 : -1;\r
-            }\r
-            var a = _this.getAxis(axis, player, prev);\r
-            return direction < 0 ? a < threshold : a > threshold;\r
-        };\r
-        /**\r
-        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\` and WAS NOT in previous update\r
-        * @param {Number} axis axis index\r
-        * @param {Number} threshold threshold (-1 to 1)\r
-        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.axisJustPast = function (axis, threshold, direction, player) { return _this.axisPast(axis, threshold, direction, player, false)\r
-            && !_this.axisPast(axis, threshold, direction, player, true); };\r
-        /**\r
-        * @returns \`[x,y]\` representing the dpad for \`player\`\r
-        * @param {Number} player player index (\`undefined\` for "sum of all")\r
-        */\r
-        this.getDpad = function (player) {\r
-            var x = 0;\r
-            var y = 0;\r
-            if (player === undefined) {\r
-                Object.keys(_this.players).forEach(function (i) {\r
-                    var _a = _this.getDpad(i), ix = _a[0], iy = _a[1];\r
-                    x += ix;\r
-                    y += iy;\r
-                });\r
-            }\r
-            else {\r
-                if (_this.isDown(Buttons.DPAD_RIGHT, player)) {\r
-                    x += 1;\r
-                }\r
-                if (_this.isDown(Buttons.DPAD_LEFT, player)) {\r
-                    x -= 1;\r
-                }\r
-                if (_this.isDown(Buttons.DPAD_UP, player)) {\r
-                    y += 1;\r
-                }\r
-                if (_this.isDown(Buttons.DPAD_DOWN, player)) {\r
-                    y -= 1;\r
-                }\r
-            }\r
-            return [x, y];\r
-        };\r
-        /**\r
-        * @returns \`true\` if \`player\`'s \`btn\` is currently down\r
-        * @param {Number} btn button index\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.isDown = function (btn, player) {\r
-            if (btn === undefined) {\r
-                throw new Error('must specify a button');\r
-            }\r
-            if (player === undefined) {\r
-                return Object.keys(_this.players).some(function (i) { return _this.isDown(btn, i); });\r
-            }\r
-            return _this.getPlayer(player).down[btn];\r
-        };\r
-        /**\r
-        * @returns equivalent to \`!isDown(btn, player)\`\r
-        * @param {Number} btn button index\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.isUp = function (btn, player) { return !_this.isDown(btn, player); };\r
-        /**\r
-        * @returns \`true\` if \`player\`'s \`btn\` is currently down and WAS NOT in previous update\r
-        * @param {Number} btn button index\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.isJustDown = function (btn, player) {\r
-            if (btn === undefined) {\r
-                throw new Error('must specify a button');\r
-            }\r
-            if (player === undefined) {\r
-                return Object.keys(_this.players).some(function (i) { return _this.isJustDown(btn, i); });\r
-            }\r
-            return _this.getPlayer(player).justDown[btn];\r
-        };\r
-        /**\r
-        * @returns \`true\` if \`player\`'s \`btn\` is currently NOT down and WAS down in previous update\r
-        * @param {Number} btn button index\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.isJustUp = function (btn, player) {\r
-            if (btn === undefined) {\r
-                throw new Error('must specify a button');\r
-            }\r
-            if (player === undefined) {\r
-                return Object.keys(_this.players).some(function (i) { return _this.isJustUp(btn, i); });\r
-            }\r
-            return _this.getPlayer(player).justUp[btn];\r
-        };\r
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore\r
-        // @ts-ignore\r
-        if (navigator.getGamepads) {\r
-            this.available = true;\r
-        }\r
-        else if (navigator.webkitGetGamepads) {\r
-            navigator.getGamepads = navigator.webkitGetGamepads;\r
-            this.available = true;\r
-        }\r
-        if (this.available) {\r
-            if (navigator.userAgent.includes('Firefox')) {\r
-                // listen to connection events for firefox\r
-                window.addEventListener('gamepadconnected', this.pollconnections.bind(this));\r
-                window.addEventListener('gamepaddisconnected', this.pollconnections.bind(this));\r
-            }\r
-            else {\r
-                this.pollEveryFrame = true;\r
-            }\r
-        }\r
-    }\r
-    return Gamepads;\r
+var Buttons;
+(function (Buttons) {
+    // XBOX360 wired controller configuration
+    Buttons[Buttons["A"] = 0] = "A";
+    Buttons[Buttons["X"] = 2] = "X";
+    Buttons[Buttons["B"] = 1] = "B";
+    Buttons[Buttons["Y"] = 3] = "Y";
+    Buttons[Buttons["LB"] = 4] = "LB";
+    Buttons[Buttons["RB"] = 5] = "RB";
+    Buttons[Buttons["LT"] = 6] = "LT";
+    Buttons[Buttons["RT"] = 7] = "RT";
+    Buttons[Buttons["BACK"] = 8] = "BACK";
+    Buttons[Buttons["START"] = 9] = "START";
+    Buttons[Buttons["LHAT"] = 10] = "LHAT";
+    Buttons[Buttons["RHAT"] = 11] = "RHAT";
+    Buttons[Buttons["DPAD_UP"] = 12] = "DPAD_UP";
+    Buttons[Buttons["DPAD_DOWN"] = 13] = "DPAD_DOWN";
+    Buttons[Buttons["DPAD_LEFT"] = 14] = "DPAD_LEFT";
+    Buttons[Buttons["DPAD_RIGHT"] = 15] = "DPAD_RIGHT";
+})(Buttons || (Buttons = {}));
+var Axes;
+(function (Axes) {
+    Axes[Axes["LSTICK_H"] = 0] = "LSTICK_H";
+    Axes[Axes["LSTICK_V"] = 1] = "LSTICK_V";
+    Axes[Axes["RSTICK_H"] = 2] = "RSTICK_H";
+    Axes[Axes["RSTICK_V"] = 3] = "RSTICK_V";
+})(Axes || (Axes = {}));
+var nullGamepad = {
+    original: {
+        axes: [],
+        buttons: [],
+        connected: false,
+    },
+    disabled: true,
+    down: {},
+    justDown: {},
+    justUp: {},
+    axesPrev: {},
+};
+var Gamepads = /** @class */ (function () {
+    /**
+    * initialize gamepads
+    */
+    function Gamepads() {
+        var _this = this;
+        // settings
+        /** if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead */
+        this.deadZone = 0.25;
+        /** if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1 instead */
+        this.snapZone = 0.25;
+        /** axis values between \`deadZone\` and \`snapZone\` will be run through this function
+        *
+        * defaults to normalizing between the two thresholds */
+        this.interpolate = function (value) {
+            var v = Math.max(0, Math.min(1, (value - _this.deadZone) / (1.0 - _this.snapZone - _this.deadZone)));
+            return v;
+        };
+        // internal vars
+        this.players = {};
+        this.available = false;
+        this.pollEveryFrame = false;
+        this.connected = false;
+        /**
+        * update gamepads (clears arrays, polls connections, etc.)
+        */
+        this.pollconnections = function () {
+            _this.connected = false;
+            // assume existing players' gamepads aren't enabled until they're found
+            Object.values(_this.players).forEach(function (player) {
+                player.disabled = true;
+            });
+            var gps = navigator.getGamepads();
+            for (var i = 0; i < gps.length; ++i) {
+                var gp = gps[i];
+                if (gp) {
+                    if (gp.connected) {
+                        if (_this.players[gp.index] == null) {
+                            // new player
+                            _this.players[gp.index] = {
+                                disabled: false,
+                                original: gp,
+                                down: {},
+                                justDown: {},
+                                justUp: {},
+                                axesPrev: {},
+                            };
+                        }
+                        else {
+                            // returning player, just assign the gamepad
+                            _this.players[gp.index].original = gp;
+                        }
+                        _this.connected = true;
+                        _this.players[gp.index].disabled = false;
+                    }
+                    else {
+                        delete _this.players[gp.index];
+                    }
+                }
+            }
+        };
+        /**
+        * update gamepads (clears arrays, polls connections, etc.)
+        */
+        this.update = function () {
+            // store the previous axis values
+            // has to be done before pollConnections since that will get the new axis values
+            Object.keys(_this.players).forEach(function (i) {
+                var _a;
+                var p = _this.getPlayer(i);
+                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.axes) {
+                    p.axesPrev = p.original.axes.slice();
+                }
+            });
+            // poll connections and update gamepad states every frame because chrome's a lazy bum
+            if (_this.pollEveryFrame) {
+                _this.pollconnections();
+            }
+            Object.keys(_this.players).forEach(function (i) {
+                var _a;
+                var p = _this.getPlayer(i);
+                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.buttons) {
+                    for (var j = 0; j < p.original.buttons.length; ++j) {
+                        if (p.original.buttons[j].pressed) {
+                            p.justDown[j] = !(p.down[j] === true);
+                            p.down[j] = true;
+                            p.justUp[j] = false;
+                        }
+                        else {
+                            p.justUp[j] = p.down[j] === true;
+                            p.down[j] = false;
+                            p.justDown[j] = false;
+                        }
+                    }
+                }
+            });
+        };
+        /**
+        * @returns \`player\`'s gamepad
+        *
+        * if one doesn't exist, returns an object with gamepad properties reflecting a null state
+        */
+        this.getPlayer = function (player) {
+            var _a, _b, _c;
+            if (((_b = (_a = _this.players[player]) === null || _a === void 0 ? void 0 : _a.original) === null || _b === void 0 ? void 0 : _b.connected) && !((_c = _this.players[player]) === null || _c === void 0 ? void 0 : _c.disabled)) {
+                return _this.players[player];
+            }
+            return nullGamepad;
+        };
+        /**
+        * @returns an array representing \`length\` axes for \`player\` at \`offset\`
+        *
+        * if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead
+        * if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1/-1 instead
+        * otherwise, returns the axis value normalized between \`deadZone\` and \`(1-snapZone)\`
+        * @param {Number} offset axis index
+        * @param {Number} length number of axes to return
+        * @param {Number} player player index (\`undefined\` for "sum of all")
+        * @param {boolean} prev if \`true\` uses axis values from previous update
+        */
+        this.getAxes = function (offset, length, player, prev) {
+            if (offset === void 0) { offset = 0; }
+            if (length === void 0) { length = 2; }
+            if (prev === void 0) { prev = false; }
+            var axes = [];
+            for (var i = 0; i < length; ++i) {
+                axes[i] = 0;
+            }
+            if (player === undefined) {
+                Object.keys(_this.players).forEach(function (i) {
+                    var a = _this.getAxes(offset, length, i, prev);
+                    for (var j = 0; j < a.length; ++j) {
+                        axes[j] += a[j];
+                    }
+                });
+            }
+            else {
+                var p = _this.getPlayer(player);
+                if (p === null || p === void 0 ? void 0 : p.original) {
+                    var axesSource = prev ? p.axesPrev : p.original.axes;
+                    var a = Object.values(axesSource).slice(offset, offset + length);
+                    for (var i = 0; i < a.length; ++i) {
+                        if (Math.abs(a[i]) < _this.deadZone) {
+                            axes[i] += 0;
+                        }
+                        else if (Math.abs(1.0 - a[i]) < _this.snapZone) {
+                            axes[i] += 1;
+                        }
+                        else if (Math.abs(-1.0 - a[i]) < _this.snapZone) {
+                            axes[i] -= 1;
+                        }
+                        else {
+                            axes[i] += Math.sign(a[i]) * _this.interpolate(Math.abs(a[i]));
+                        }
+                    }
+                }
+            }
+            return axes;
+        };
+        /**
+       * @returns equivalent to \`getAxes(axis, 1, player, prev)[0]\`
+       */
+        this.getAxis = function (axis, player, prev) { return _this.getAxes(axis, 1, player, prev)[0]; };
+        /**
+        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\`
+        * @param {Number} axis axis index
+        * @param {Number} threshold threshold (-1 to 1)
+        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))
+        * @param {Number} player player index (\`undefined\` for "any")
+        * @param {boolean} prev if \`true\` uses axis values from previous update
+        */
+        this.axisPast = function (axis, threshold, direction, player, prev) {
+            if (!threshold) {
+                throw new Error('must specify a non-zero threshold');
+            }
+            if (!direction) {
+                direction = threshold > 0 ? 1 : -1;
+            }
+            var a = _this.getAxis(axis, player, prev);
+            return direction < 0 ? a < threshold : a > threshold;
+        };
+        /**
+        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\` and WAS NOT in previous update
+        * @param {Number} axis axis index
+        * @param {Number} threshold threshold (-1 to 1)
+        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.axisJustPast = function (axis, threshold, direction, player) { return _this.axisPast(axis, threshold, direction, player, false)
+            && !_this.axisPast(axis, threshold, direction, player, true); };
+        /**
+        * @returns \`[x,y]\` representing the dpad for \`player\`
+        * @param {Number} player player index (\`undefined\` for "sum of all")
+        */
+        this.getDpad = function (player) {
+            var x = 0;
+            var y = 0;
+            if (player === undefined) {
+                Object.keys(_this.players).forEach(function (i) {
+                    var _a = _this.getDpad(i), ix = _a[0], iy = _a[1];
+                    x += ix;
+                    y += iy;
+                });
+            }
+            else {
+                if (_this.isDown(Buttons.DPAD_RIGHT, player)) {
+                    x += 1;
+                }
+                if (_this.isDown(Buttons.DPAD_LEFT, player)) {
+                    x -= 1;
+                }
+                if (_this.isDown(Buttons.DPAD_UP, player)) {
+                    y += 1;
+                }
+                if (_this.isDown(Buttons.DPAD_DOWN, player)) {
+                    y -= 1;
+                }
+            }
+            return [x, y];
+        };
+        /**
+        * @returns \`true\` if \`player\`'s \`btn\` is currently down
+        * @param {Number} btn button index
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.isDown = function (btn, player) {
+            if (btn === undefined) {
+                throw new Error('must specify a button');
+            }
+            if (player === undefined) {
+                return Object.keys(_this.players).some(function (i) { return _this.isDown(btn, i); });
+            }
+            return _this.getPlayer(player).down[btn];
+        };
+        /**
+        * @returns equivalent to \`!isDown(btn, player)\`
+        * @param {Number} btn button index
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.isUp = function (btn, player) { return !_this.isDown(btn, player); };
+        /**
+        * @returns \`true\` if \`player\`'s \`btn\` is currently down and WAS NOT in previous update
+        * @param {Number} btn button index
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.isJustDown = function (btn, player) {
+            if (btn === undefined) {
+                throw new Error('must specify a button');
+            }
+            if (player === undefined) {
+                return Object.keys(_this.players).some(function (i) { return _this.isJustDown(btn, i); });
+            }
+            return _this.getPlayer(player).justDown[btn];
+        };
+        /**
+        * @returns \`true\` if \`player\`'s \`btn\` is currently NOT down and WAS down in previous update
+        * @param {Number} btn button index
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.isJustUp = function (btn, player) {
+            if (btn === undefined) {
+                throw new Error('must specify a button');
+            }
+            if (player === undefined) {
+                return Object.keys(_this.players).some(function (i) { return _this.isJustUp(btn, i); });
+            }
+            return _this.getPlayer(player).justUp[btn];
+        };
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        if (navigator.getGamepads) {
+            this.available = true;
+        }
+        else if (navigator.webkitGetGamepads) {
+            navigator.getGamepads = navigator.webkitGetGamepads;
+            this.available = true;
+        }
+        if (this.available) {
+            if (navigator.userAgent.includes('Firefox')) {
+                // listen to connection events for firefox
+                window.addEventListener('gamepadconnected', this.pollconnections.bind(this));
+                window.addEventListener('gamepaddisconnected', this.pollconnections.bind(this));
+            }
+            else {
+                this.pollEveryFrame = true;
+            }
+        }
+    }
+    return Gamepads;
 }());
 
 /**

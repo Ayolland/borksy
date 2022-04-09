@@ -1,3 +1,10 @@
+## [5.17.1](https://github.com/Ayolland/borksy/compare/v5.17.0...v5.17.1) (2022-04-09)
+
+
+### Bug Fixes
+
+* auto-publish not working ([c1f3c05](https://github.com/Ayolland/borksy/commit/c1f3c05b8f1b11dd0888684e7e1e64ab533b46a9))
+
 # [5.17.0](https://github.com/Ayolland/borksy/compare/v5.16.0...v5.17.0) (2022-04-09)
 
 
