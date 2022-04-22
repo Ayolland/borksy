@@ -26,6 +26,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           persist-credentials: false
+          ref: main
       - uses: actions/setup-node@v3
       - run: npm ci
       - uses: cycjimmy/semantic-release-action@v3
