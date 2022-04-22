@@ -1,3 +1,15 @@
+# [5.18.0](https://github.com/Ayolland/borksy/compare/v5.17.1...v5.18.0) (2022-04-22)
+
+
+### Bug Fixes
+
+* typos ([cfad0fe](https://github.com/Ayolland/borksy/commit/cfad0fe479a8357a092c7b74eab940a48452a5aa))
+
+
+### Features
+
+* update hacks ([03ad87c](https://github.com/Ayolland/borksy/commit/03ad87c37624ca0f5b2e25aaad77811c77b2e6e6))
+
 ## [5.17.1](https://github.com/Ayolland/borksy/compare/v5.17.0...v5.17.1) (2022-04-09)
 
 
