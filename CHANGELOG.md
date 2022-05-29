@@ -1,3 +1,10 @@
+## [5.19.1](https://github.com/Ayolland/borksy/compare/v5.19.0...v5.19.1) (2022-05-29)
+
+
+### Bug Fixes
+
+* clarify commercial use ([49477aa](https://github.com/Ayolland/borksy/commit/49477aaa953dbbc095a47041e637a23f4e765322))
+
 # [5.19.0](https://github.com/Ayolland/borksy/compare/v5.18.0...v5.19.0) (2022-04-24)
 
 
