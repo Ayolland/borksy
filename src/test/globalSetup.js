@@ -5,5 +5,6 @@ module.exports = async () => {
 		command: 'npm run serve -- --port 5000',
 		protocol: 'http',
 		port: 5000,
+		launchTimeout: 10000,
 	});
 };
