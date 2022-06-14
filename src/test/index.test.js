@@ -45,7 +45,8 @@ describe('Borksy', () => {
 			},
 		]);
 
-		await page.client().send('Page.setDownloadBehavior', { behavior: 'allow', downloadPath: path.resolve(__dirname) });
+		// eslint-disable-next-line no-underscore-dangle
+		await page._client().send('Page.setDownloadBehavior', { behavior: 'allow', downloadPath: path.resolve(__dirname) });
 		await page.goto('http://localhost:5000', {
 			waitUntil: 'networkidle2',
 		});
