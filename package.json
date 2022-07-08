@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "borksy",
-  "version": "5.20.0",
+  "version": "5.21.0",
   "description": "Borksy Game Hacker: A tool for extending Bitsy games",
   "scripts": {
     "postversion": "npm run build",
@@ -51,7 +51,7 @@
     ]
   },
   "devDependencies": {
-    "@bitsy/hecks": "^20.2.4",
+    "@bitsy/hecks": "^20.2.5",
     "eslint": "^8.19.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
