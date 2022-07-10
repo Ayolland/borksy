@@ -189,6 +189,7 @@ requestAnimationFrame(() => {
 		// move dog onto wall to demonstrate `isTransparent` check
 		await page.evaluate(() => {
 			window.sprite.a.x = 1;
+			window.drawRoom(window.room[window.state.room], { redrawAll: true });
 		});
 		await page.waitForTimeout(100);
 		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: true });
