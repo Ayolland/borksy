@@ -31,7 +31,6 @@ Bitsy templates are stored in [`./src/template/`](./src/template). To add a new 
      - `var scale = 4;` -> `var scale = 2;`
      - `var tilesize = 8;` -> `var tilesize = 16;`
 5. Place game file in template folder with name `Bitsy.<version>.txt`
-6. Add import/export to [`index`](./src/template/index.js) in template folder for new file
 
 ## Release
 

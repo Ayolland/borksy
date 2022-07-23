@@ -3,11 +3,24 @@ import { saveAs } from 'file-saver';
 import { compile } from 'handlebars';
 import { html as htmlChangelog } from '../../CHANGELOG.md';
 import pkg from '../../package.json';
-import templates from '../template';
 
 const html = Object.fromEntries(Object.entries(import.meta.globEager('../about/*.md')).map(([key, value]) => [key.match(/.*\/(.*?)\.md/)[1], value.html]));
 const defaults = Object.fromEntries(Object.entries(import.meta.globEager('../defaults/*.txt', { as: 'raw' })).map(([key, value]) => [key.match(/.*\/(.*?)\.txt/)[1], value]));
 const hacksRaw = Object.values(import.meta.globEager('../hacks/*.txt', { as: 'raw' }));
+const templates = Object.entries(import.meta.glob('../template/*.hbs'))
+	.sort(([a], [b]) => a.replace('HD', '0').localeCompare(b.replace('HD', '0'), 'en', { sensitivity: 'base', numeric: true }))
+	.map(([file, data], idx, arr) => {
+		const [bitsyVersion] = file.match(/(?:\d\.)+\d+(?=\.hbs)/);
+		const isHd = file.includes('HD');
+		return {
+			data,
+			bitsyVersion,
+			isHd,
+			description: isHd ? `Bitsy HD (Bitsy ${bitsyVersion})` : `Bitsy ${bitsyVersion}`,
+			id: `Bitsy${isHd ? 'HD' : ''}${bitsyVersion.replace(/\./g, '')}`,
+			isDefault: idx === arr.length - 1,
+		};
+	});
 
 const hacks = hacksRaw.map(hack => {
 	const [header] = hack.match(/^(\/\*\*[\S\s]*?\*\/)$/gm);
