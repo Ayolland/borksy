@@ -8,7 +8,7 @@ const html = Object.fromEntries(Object.entries(import.meta.globEager('../about/*
 const defaults = Object.fromEntries(Object.entries(import.meta.globEager('../defaults/*.txt', { as: 'raw' })).map(([key, value]) => [key.match(/.*\/(.*?)\.txt/)[1], value]));
 const hacksRaw = Object.values(import.meta.globEager('../hacks/*.txt', { as: 'raw' }));
 const templates = Object.entries(import.meta.glob('../template/*.hbs'))
-	.sort(([a], [b]) => a.replace('HD', '0').localeCompare(b.replace('HD', '0'), 'en', { sensitivity: 'base', numeric: true }))
+	.sort(([a], [b]) => a.replace('HD', '_').localeCompare(b.replace('HD', '_'), 'en', { sensitivity: 'base', numeric: true }))
 	.map(([file, data], idx, arr) => {
 		const [bitsyVersion] = file.match(/(?:\d\.)+\d+(?=\.hbs)/);
 		const isHd = file.includes('HD');
