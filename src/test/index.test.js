@@ -34,6 +34,9 @@ describe('Borksy', () => {
 			headless: true,
 		});
 		page = await browser.newPage();
+		await page.evaluateOnNewDocument(() => {
+			localStorage.clear();
+		});
 		await page.emulateMediaFeatures([
 			{
 				name: 'prefers-color-scheme',
