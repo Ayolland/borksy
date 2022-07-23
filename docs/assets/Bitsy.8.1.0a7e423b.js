@@ -5,7 +5,7 @@ var t=`<!DOCTYPE HTML>
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy 8.0 -->
+<!-- Bitsy 8.1 -->
 <head>
 
 <meta charset="UTF-8">
@@ -775,6 +775,8 @@ function BitsySystem(name) {
 
 		self._poke(self._buttonBlock, self.BTN_MENU,
 			(input.isRestartComboPressed()) ? 1 : 0);
+
+		input.resetTapReleased();
 	}
 
 	function updateSound(dt) {
@@ -4413,6 +4415,10 @@ function exitFunc(environment, parameters, onReturn) {
 			initRoom(state.room);
 		}
 
+		if (dialogRenderer) {
+			dialogRenderer.updateTextboxPosition();
+		}
+
 		// resume dialog script
 		onReturn(state.room);
 	};
@@ -6545,6 +6551,10 @@ var DialogRenderer = function() {
 		shouldDrawArrow = true;
 	}
 
+	this.updateTextboxPosition = function() {
+		shouldUpdateTextboxSettings = true;
+	};
+
 	// this.CharsPerRow = function() {
 	// 	return textboxInfo.charsPerRow;
 	// }
@@ -7602,7 +7612,7 @@ function setTitle(titleSrc) {
 /* VERSION */
 var version = {
 	major: 8, // major changes
-	minor: 0, // smaller changes
+	minor: 1, // smaller changes
 	devBuildPhase: "RELEASE",
 };
 function getEngineVersion() {
@@ -9102,6 +9112,24 @@ function drawRoomForeground(room, frameIndex, redrawAnimatedOnly) {
 	}
 }
 
+function drawRoomForegroundTile(room, frameIndex, x, y) {
+	// draw items
+	for (var i = 0; i < room.items.length; i++) {
+		var itm = room.items[i];
+		if (itm.x === x && itm.y === y) {
+			drawItem(getItemFrame(item[itm.id], frameIndex), itm.x, itm.y);
+		}
+	}
+
+	// draw sprites
+	for (id in sprite) {
+		var spr = sprite[id];
+		if (id != playerId && spr.room === room.id && spr.x === x && spr.y === y) {
+			drawSprite(getSpriteFrame(spr, frameIndex), spr.x, spr.y);
+		}
+	}
+}
+
 function drawRoom(room, args) {
 	if (room === undefined || isNarrating) {
 		// protect against invalid rooms
@@ -9116,6 +9144,8 @@ function drawRoom(room, args) {
 	// if *only* redrawing the avatar, first clear its previous position
 	if (redrawAvatar) {
 		setTile(bitsy.MAP2, playerPrevX, playerPrevY, 0);
+		// also redraw any sprite or item that might be "under" the player (todo: possible perf issue?)
+		drawRoomForegroundTile(room, frameIndex, playerPrevX, playerPrevY);
 	}
 
 	// draw background & foreground tiles
@@ -11616,5 +11646,4 @@ CHAR 9835
 </body>
 
 
-</html>
-`;export{t as default};
+</html>`;export{t as default};

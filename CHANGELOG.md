@@ -1,3 +1,18 @@
+# [5.23.0](https://github.com/Ayolland/borksy/compare/v5.22.0...v5.23.0) (2022-07-23)
+
+
+### Bug Fixes
+
+* sort HD templates to bottom ([0cc3414](https://github.com/Ayolland/borksy/commit/0cc341428861b4af525d39612ef334e4fb331961))
+
+
+### Features
+
+* replace 8.0 templates with 8.1 templates ([838f4fc](https://github.com/Ayolland/borksy/commit/838f4fcf0916e730f793119bde5b1d12606c5686))
+* simplify template imports ([4ed38b8](https://github.com/Ayolland/borksy/commit/4ed38b89ad713e5a47d2a7c1ee61c23aad41d85f))
+* update default gamedata for 8.1 ([b0ce70a](https://github.com/Ayolland/borksy/commit/b0ce70a004a1871ca49d65f0ecb8d2c5ee867fcc))
+* update hacks for bitsy 8.1 ([5a32ba9](https://github.com/Ayolland/borksy/commit/5a32ba9ee07f45aca1c23d676fd74b77c8c42649))
+
 # [5.22.0](https://github.com/Ayolland/borksy/compare/v5.21.0...v5.22.0) (2022-07-10)
 
 
