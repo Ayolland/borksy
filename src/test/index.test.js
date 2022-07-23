@@ -69,12 +69,12 @@ describe('Borksy', () => {
 	});
 
 	sit('should load', async () => {
-		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: true });
+		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 	});
 
 	sit('should collapse sections when clicked', async () => {
 		await page.click('#about .collapsible_header');
-		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: true });
+		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 	});
 
 	sit('should allow game to be customized', async () => {
@@ -82,7 +82,7 @@ describe('Borksy', () => {
 		await page.click('form > .collapsible:first-of-type > .collapsible_header'); // open title
 		await page.type('#title', 'Custom Title');
 		await page.type('#filename', 'Custom Filename');
-		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: true });
+		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 
 		// remove collision on walls
 		await page.click('form > .collapsible:nth-of-type(3) > .collapsible_header'); // open gamedata
@@ -98,14 +98,14 @@ describe('Borksy', () => {
 		await page.keyboard.press('ArrowDown');
 		await page.keyboard.up('Shift');
 		await page.keyboard.press('Backspace');
-		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: true });
+		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 
 		// enable transparent sprites hack
 		await page.click('#hacks-section > .collapsible_header'); // open hacks
 		await page.click('.collapsible[data-associated-hack="transparent-sprites"] > .collapsible_header'); // open transparent sprites
 		await page.click('.collapsible[data-associated-hack="transparent-sprites"] input[type="checkbox"]'); // click checkbox
 		await page.click('.collapsible[data-associated-hack="transparent-sprites"] .collapsible:first-of-type > .collapsible_header'); // open hack options
-		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: true });
+		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 
 		// customize `isTransparent` check in `gameOptions`
 		await page.focus('.collapsible[data-associated-hack="transparent-sprites"] [data-default-type="hackOptions"]');
@@ -114,12 +114,12 @@ describe('Borksy', () => {
 		await page.keyboard.up('Control');
 		await page.keyboard.press('End');
 		await page.keyboard.type('\n\treturn drawing === player();');
-		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: true });
+		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 	});
 
 	sit('should include hack READMEs', async () => {
 		await page.click('.collapsible[data-associated-hack="transparent-sprites"] .collapsible:last-of-type > .collapsible_header');
-		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: true });
+		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 	});
 
 	sit('should allow custom javascript to be added', async () => {
@@ -137,7 +137,7 @@ requestAnimationFrame(() => {
 	window.animationTime = 3000;
 });
 `);
-		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: true });
+		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 	});
 
 	sit('should allow game to be downloaded', async () => {
@@ -159,12 +159,12 @@ requestAnimationFrame(() => {
 		await page.waitForTimeout(100);
 		await page.keyboard.up('ArrowRight'); // complete title dialog
 		await page.waitForTimeout(100);
-		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: true });
+		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 		await page.keyboard.down('ArrowRight'); // end title dialog
 		await page.waitForTimeout(100);
 		await page.keyboard.up('ArrowRight'); // end title dialog
 		await page.waitForTimeout(100);
-		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: true });
+		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 	});
 
 	sit('should produce a game with hacks applied', async () => {
@@ -182,7 +182,7 @@ requestAnimationFrame(() => {
 		await page.keyboard.up('ArrowLeft');
 		await page.waitForTimeout(100);
 		await page.waitForTimeout(2000); // wait long enough for second animation frame
-		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: true });
+		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 	});
 
 	sit('should include customized hackOptions', async () => {
@@ -192,6 +192,6 @@ requestAnimationFrame(() => {
 			window.drawRoom(window.room[window.state.room], { redrawAll: true });
 		});
 		await page.waitForTimeout(100);
-		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: true });
+		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 	});
 });
