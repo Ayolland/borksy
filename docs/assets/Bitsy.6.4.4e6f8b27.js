@@ -1,11 +1,11 @@
-var t=`<!DOCTYPE HTML>
+const t=`<!DOCTYPE HTML>
 <html>
 
 <!-- HEADER -->
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy 6.3 -->
+<!-- Bitsy 6.4 -->
 <head>
 
 <meta charset="UTF-8">
@@ -3674,7 +3674,7 @@ var spriteStartLocations = {};
 /* VERSION */
 var version = {
 	major: 6, // major changes
-	minor: 3 // smaller changes
+	minor: 4 // smaller changes
 };
 function getEngineVersion() {
 	return version.major + "." + version.minor;
@@ -4025,7 +4025,7 @@ function stopGame() {
     		existingTouchTrigger.removeEventListener('touchmove', input.ontouchmove);
     		existingTouchTrigger.removeEventListener('touchend', input.ontouchend);
 
-    	  existingTouchTrigger.parentElement.removeChild(existingTouchTrigger);
+    		existingTouchTrigger.parentElement.removeChild(existingTouchTrigger);
     	}
 	}
 

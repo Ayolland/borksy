@@ -1,11 +1,11 @@
-var t=`<!DOCTYPE HTML>
+const t=`<!DOCTYPE HTML>
 <html>
 
 <!-- HEADER -->
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy 7.12 -->
+<!-- Bitsy HD ~> Bitsy 7.11 -->
 <head>
 
 <meta charset="UTF-8">
@@ -277,12 +277,12 @@ var updateInterval = null;
 
 function initSystem() {
 	// temp hack for the editor? unless??
-	drawingBuffers[screenBufferId] = createDrawingBuffer(width, height, scale);
+	drawingBuffers[screenBufferId] = createDrawingBuffer(256, 256, scale);
 	drawingBuffers[textboxBufferId] = createDrawingBuffer(0, 0, textScale);
 }
 
 function loadGame(gameData, defaultFontData) {
-	drawingBuffers[screenBufferId] = createDrawingBuffer(width, height, scale);
+	drawingBuffers[screenBufferId] = createDrawingBuffer(256, 256, scale);
 	drawingBuffers[textboxBufferId] = createDrawingBuffer(0, 0, textScale);
 
 	document.addEventListener('keydown', input.onkeydown);
@@ -878,8 +878,8 @@ var TransitionManager = function() {
 			}
 
 			bitsyDrawBegin(0);
-			for (var y = 0; y < height; y++) {
-				for (var x = 0; x < width; x++) {
+			for (var y = 0; y < 256; y++) {
+				for (var x = 0; x < 256; x++) {
 					var color = transitionEffects[curEffect].pixelEffectFunc(transitionStart, transitionEnd, x, y, (step / maxStep));
 					bitsyDrawPixel(color, x, y);
 				}
@@ -1162,7 +1162,7 @@ var TransitionManager = function() {
 	function createRoomPixelBuffer(room) {
 		var pixelBuffer = [];
 
-		for (var i = 0; i < width * height; i++) {
+		for (var i = 0; i < 256 * 256; i++) {
 			pixelBuffer.push(tileColorStartIndex);
 		}
 
@@ -1172,7 +1172,7 @@ var TransitionManager = function() {
 			for (var y = 0; y < tilesize; y++) {
 				for (var x = 0; x < tilesize; x++) {
 					var color = tileColorStartIndex + (frameData[y][x] === 1 ? colorIndex : 0);
-					pixelBuffer[(((ty * tilesize) + y) * width) + ((tx * tilesize) + x)] = color;
+					pixelBuffer[(((ty * tilesize) + y) * 256) + ((tx * tilesize) + x)] = color;
 				}
 			}
 		}
@@ -1236,11 +1236,11 @@ var TransitionManager = function() {
 
 // todo : is this wrapper still useful?
 var PostProcessImage = function(imageData) {
-	this.Width = width;
-	this.Height = height;
+	this.Width = 256;
+	this.Height = 256;
 
 	this.GetPixel = function(x, y) {
-		return imageData[(y * width) + x];
+		return imageData[(y * 256) + x];
 	};
 
 	this.GetData = function() {
@@ -3805,9 +3805,9 @@ var DialogRenderer = function() {
 	var textboxInfo = {
 		width : 104,
 		height : 8+4+2+5, //8 for text, 4 for top-bottom padding, 2 for line padding, 5 for arrow
-		top : 12,
-		left : 12,
-		bottom : 12, //for drawing it from the bottom
+		top : 12*2,
+		left : 12*2,
+		bottom : 12*2, //for drawing it from the bottom
 		font_scale : 0.5, // we draw font at half-size compared to everything else
 		padding_vert : 2,
 		padding_horz : 4,
@@ -4665,12 +4665,9 @@ var ArabicHandler = function() {
 /* NEW TEXT EFFECTS */
 var TextEffects = {};
 
-function positiveModulo(number, divisor) {
-	return ((number % divisor) + divisor) % divisor;
-}
 var RainbowEffect = function() {
 	this.DoEffect = function(char, time) {
-		char.color = rainbowColorStartIndex + Math.floor(positiveModulo((time / 100) - char.col * 0.5, rainbowColorCount));
+		char.color = rainbowColorStartIndex + Math.floor(((time / 100) - char.col * 0.5) % rainbowColorCount);
 	}
 };
 TextEffects["rbw"] = new RainbowEffect();
@@ -4915,7 +4912,7 @@ var spriteStartLocations = {};
 /* VERSION */
 var version = {
 	major: 7, // major changes
-	minor: 12, // smaller changes
+	minor: 11, // smaller changes
 	devBuildPhase: "RELEASE",
 };
 function getEngineVersion() {
@@ -4961,11 +4958,11 @@ function clearGameData() {
 	textDirection = TextDirection.LeftToRight;
 }
 
-var scale = 4; //this is stupid but necessary
-var tilesize = 8;
+var width = 256;
+var height = 256;
+var scale = 2; //this is stupid but necessary
+var tilesize = 16;
 var mapsize = 16;
-var width = mapsize * tilesize;
-var height = mapsize * tilesize;
 
 var curRoom = "0";
 
@@ -5489,7 +5486,7 @@ function isWallLeft() {
 }
 
 function isWallRight() {
-	return (player().x + 1 >= mapsize) || isWall( player().x + 1, player().y );
+	return (player().x + 1 >= 16) || isWall( player().x + 1, player().y );
 }
 
 function isWallUp() {
@@ -5497,7 +5494,7 @@ function isWallUp() {
 }
 
 function isWallDown() {
-	return (player().y + 1 >= mapsize) || isWall( player().x, player().y + 1 );
+	return (player().y + 1 >= 16) || isWall( player().x, player().y + 1 );
 }
 
 function isWall(x,y,roomId) {
@@ -5950,9 +5947,9 @@ function serializeDrawing(drwId) {
 }
 
 function isExitValid(e) {
-	var hasValidStartPos = e.x >= 0 && e.x < mapsize && e.y >= 0 && e.y < mapsize;
+	var hasValidStartPos = e.x >= 0 && e.x < 16 && e.y >= 0 && e.y < 16;
 	var hasDest = e.dest != null;
-	var hasValidRoomDest = (e.dest.room != null && e.dest.x >= 0 && e.dest.x < mapsize && e.dest.y >= 0 && e.dest.y < mapsize);
+	var hasValidRoomDest = (e.dest.room != null && e.dest.x >= 0 && e.dest.x < 16 && e.dest.y >= 0 && e.dest.y < 16);
 	return hasValidStartPos && hasDest && hasValidRoomDest;
 }
 

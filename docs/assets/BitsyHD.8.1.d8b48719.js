@@ -1,11 +1,11 @@
-var t=`<!DOCTYPE HTML>
+const t=`<!DOCTYPE HTML>
 <html>
 
 <!-- HEADER -->
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy 8.1 -->
+<!-- Bitsy HD ~> Bitsy 8.1 -->
 <head>
 
 <meta charset="UTF-8">
@@ -626,11 +626,11 @@ function bitsyLog(message, category) {
 }
 
 /* GLOBALS */
-var tilesize = 8;
+var tilesize = 16;
 var mapsize = 16;
 var width = mapsize * tilesize;
 var height = mapsize * tilesize;
-var scale = 4;
+var scale = 2;
 var textScale = 2;
 
 /* SYSTEM */
@@ -6330,9 +6330,9 @@ var DialogRenderer = function() {
 	var textboxInfo = {
 		width : 104,
 		height : 8+4+2+5, //8 for text, 4 for top-bottom padding, 2 for line padding, 5 for arrow
-		top : 12,
-		left : 12,
-		bottom : 12, //for drawing it from the bottom
+		top : 12 * 2,
+		left : 12 * 2,
+		bottom : 12 * 2, //for drawing it from the bottom
 		padding_vert : 2,
 		padding_horz : 4,
 		arrow_height : 5,
@@ -11646,4 +11646,5 @@ CHAR 9835
 </body>
 
 
-</html>`;export{t as default};
+</html>
+`;export{t as default};

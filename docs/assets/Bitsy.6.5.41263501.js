@@ -1,11 +1,11 @@
-var t=`<!DOCTYPE HTML>
+const t=`<!DOCTYPE HTML>
 <html>
 
 <!-- HEADER -->
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy 7.8 -->
+<!-- Bitsy 6.5 -->
 <head>
 
 <meta charset="UTF-8">
@@ -23,369 +23,8 @@ var t=`<!DOCTYPE HTML>
 <!-- SCRIPTS -->
 <script>
 function startExportedGame() {
-	attachCanvas(document.getElementById("game"));
-	loadGame(document.getElementById("exportedGameData").text.slice(1));
-}
-<\/script>
-
-<script>
-/* logging */
-var DebugLogCategory = {
-	bitsy : false,
-	editor : false,
-};
-
-/* input */
-var key = {
-	left : 37,
-	right : 39,
-	up : 38,
-	down : 40,
-	space : 32,
-	enter : 13,
-	w : 87,
-	a : 65,
-	s : 83,
-	d : 68,
-	r : 82,
-	shift : 16,
-	ctrl : 17,
-	alt : 18,
-	cmd : 224
-};
-
-var InputManager = function() {
-	var self = this;
-
-	var pressed;
-	var ignored;
-	var newKeyPress;
-	var touchState;
-
-	var SwipeDir = {
-		None : -1,
-		Up : 0,
-		Down : 1,
-		Left : 2,
-		Right : 3,
-	};
-
-	function resetAll() {
-		pressed = {};
-		ignored = {};
-		newKeyPress = false;
-
-		touchState = {
-			isDown : false,
-			startX : 0,
-			startY : 0,
-			curX : 0,
-			curY : 0,
-			swipeDistance : 30,
-			swipeDirection : SwipeDir.None,
-			tapReleased : false
-		};
-	}
-	resetAll();
-
-	function stopWindowScrolling(e) {
-		if(e.keyCode == key.left || e.keyCode == key.right || e.keyCode == key.up || e.keyCode == key.down || !isPlayerEmbeddedInEditor)
-			e.preventDefault();
-	}
-
-	function tryRestartGame(e) {
-		/* RESTART GAME */
-		if ( e.keyCode === key.r && ( e.getModifierState("Control") || e.getModifierState("Meta") ) ) {
-			if ( confirm("Restart the game?") ) {
-				reset_cur_game();
-			}
-		}
-	}
-
-	function eventIsModifier(event) {
-		return (event.keyCode == key.shift || event.keyCode == key.ctrl || event.keyCode == key.alt || event.keyCode == key.cmd);
-	}
-
-	function isModifierKeyDown() {
-		return ( self.isKeyDown(key.shift) || self.isKeyDown(key.ctrl) || self.isKeyDown(key.alt) || self.isKeyDown(key.cmd) );
-	}
-
-	this.ignoreHeldKeys = function() {
-		for (var key in pressed) {
-			if (pressed[key]) { // only ignore keys that are actually held
-				ignored[key] = true;
-				// bitsyLog("IGNORE -- " + key);
-			}
-		}
-	}
-
-	this.onkeydown = function(event) {
-		// bitsyLog("KEYDOWN -- " + event.keyCode);
-
-		stopWindowScrolling(event);
-
-		tryRestartGame(event);
-
-		// Special keys being held down can interfere with keyup events and lock movement
-		// so just don't collect input when they're held
-		{
-			if (isModifierKeyDown()) {
-				return;
-			}
-
-			if (eventIsModifier(event)) {
-				resetAll();
-			}
-		}
-
-		if (ignored[event.keyCode]) {
-			return;
-		}
-
-		if (!self.isKeyDown(event.keyCode)) {
-			newKeyPress = true;
-		}
-
-		pressed[event.keyCode] = true;
-		ignored[event.keyCode] = false;
-	}
-
-	this.onkeyup = function(event) {
-		// bitsyLog("KEYUP -- " + event.keyCode);
-		pressed[event.keyCode] = false;
-		ignored[event.keyCode] = false;
-	}
-
-	this.ontouchstart = function(event) {
-		event.preventDefault();
-
-		if( event.changedTouches.length > 0 ) {
-			touchState.isDown = true;
-
-			touchState.startX = touchState.curX = event.changedTouches[0].clientX;
-			touchState.startY = touchState.curY = event.changedTouches[0].clientY;
-
-			touchState.swipeDirection = SwipeDir.None;
-		}
-	}
-
-	this.ontouchmove = function(event) {
-		event.preventDefault();
-
-		if( touchState.isDown && event.changedTouches.length > 0 ) {
-			touchState.curX = event.changedTouches[0].clientX;
-			touchState.curY = event.changedTouches[0].clientY;
-
-			var prevDirection = touchState.swipeDirection;
-
-			if( touchState.curX - touchState.startX <= -touchState.swipeDistance ) {
-				touchState.swipeDirection = SwipeDir.Left;
-			}
-			else if( touchState.curX - touchState.startX >= touchState.swipeDistance ) {
-				touchState.swipeDirection = SwipeDir.Right;
-			}
-			else if( touchState.curY - touchState.startY <= -touchState.swipeDistance ) {
-				touchState.swipeDirection = SwipeDir.Up;
-			}
-			else if( touchState.curY - touchState.startY >= touchState.swipeDistance ) {
-				touchState.swipeDirection = SwipeDir.Down;
-			}
-
-			if( touchState.swipeDirection != prevDirection ) {
-				// reset center so changing directions is easier
-				touchState.startX = touchState.curX;
-				touchState.startY = touchState.curY;
-			}
-		}
-	}
-
-	this.ontouchend = function(event) {
-		event.preventDefault();
-
-		touchState.isDown = false;
-
-		if( touchState.swipeDirection == SwipeDir.None ) {
-			// tap!
-			touchState.tapReleased = true;
-		}
-
-		touchState.swipeDirection = SwipeDir.None;
-	}
-
-	this.isKeyDown = function(keyCode) {
-		return pressed[keyCode] != null && pressed[keyCode] == true && (ignored[keyCode] == null || ignored[keyCode] == false);
-	}
-
-	this.anyKeyPressed = function() {
-		return newKeyPress;
-	}
-
-	this.resetKeyPressed = function() {
-		newKeyPress = false;
-	}
-
-	this.swipeLeft = function() {
-		return touchState.swipeDirection == SwipeDir.Left;
-	}
-
-	this.swipeRight = function() {
-		return touchState.swipeDirection == SwipeDir.Right;
-	}
-
-	this.swipeUp = function() {
-		return touchState.swipeDirection == SwipeDir.Up;
-	}
-
-	this.swipeDown = function() {
-		return touchState.swipeDirection == SwipeDir.Down;
-	}
-
-	this.isTapReleased = function() {
-		return touchState.tapReleased;
-	}
-
-	this.resetTapReleased = function() {
-		touchState.tapReleased = false;
-	}
-
-	this.onblur = function() {
-		// bitsyLog("~~~ BLUR ~~");
-		resetAll();
-	}
-}
-
-var input = new InputManager();
-
-/* events */
-var onLoadFunction = null;
-var onQuitFunction = null;
-var onUpdateFunction = null;
-var updateInterval = null;
-
-function loadGame(gameData) {
-	document.addEventListener('keydown', input.onkeydown);
-	document.addEventListener('keyup', input.onkeyup);
-
-	if (isPlayerEmbeddedInEditor) {
-		canvas.addEventListener('touchstart', input.ontouchstart, {passive:false});
-		canvas.addEventListener('touchmove', input.ontouchmove, {passive:false});
-		canvas.addEventListener('touchend', input.ontouchend, {passive:false});
-	}
-	else {
-		// creates a 'touchTrigger' element that covers the entire screen and can universally have touch event listeners added w/o issue.
-
-		// we're checking for existing touchTriggers both at game start and end, so it's slightly redundant.
-		var existingTouchTrigger = document.querySelector('#touchTrigger');
-
-		if (existingTouchTrigger === null) {
-			var touchTrigger = document.createElement("div");
-			touchTrigger.setAttribute("id","touchTrigger");
-
-			// afaik css in js is necessary here to force a fullscreen element
-			touchTrigger.setAttribute(
-				"style","position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden;"
-			);
-
-			document.body.appendChild(touchTrigger);
-
-			touchTrigger.addEventListener('touchstart', input.ontouchstart);
-			touchTrigger.addEventListener('touchmove', input.ontouchmove);
-			touchTrigger.addEventListener('touchend', input.ontouchend);
-		}
-	}
-
-	window.onblur = input.onblur;
-
-	if (onLoadFunction) {
-		onLoadFunction(gameData);
-	}
-
-	updateInterval = setInterval(
-		function() {
-			if (onUpdateFunction) {
-				onUpdateFunction();
-			}
-
-			input.resetKeyPressed();
-			input.resetTapReleased();
-		},
-		16);
-}
-
-function quitGame() {
-	document.removeEventListener('keydown', input.onkeydown);
-	document.removeEventListener('keyup', input.onkeyup);
-
-	if (isPlayerEmbeddedInEditor) {
-		canvas.removeEventListener('touchstart', input.ontouchstart);
-		canvas.removeEventListener('touchmove', input.ontouchmove);
-		canvas.removeEventListener('touchend', input.ontouchend);
-	}
-	else {
-		//check for touchTrigger and removes it
-
-		var existingTouchTrigger = document.querySelector('#touchTrigger');
-
-		if (existingTouchTrigger !== null) {
-			existingTouchTrigger.removeEventListener('touchstart', input.ontouchstart);
-			existingTouchTrigger.removeEventListener('touchmove', input.ontouchmove);
-			existingTouchTrigger.removeEventListener('touchend', input.ontouchend);
-
-			existingTouchTrigger.parentElement.removeChild(existingTouchTrigger);
-		}
-	}
-
-	window.onblur = null;
-
-	if (onQuitFunction) {
-		onQuitFunction();
-	}
-
-	clearInterval(updateInterval);
-}
-
-/* ==== */
-function bitsyLog(message, category) {
-	if (!category) {
-		category = "bitsy";
-	}
-
-	if (DebugLogCategory[category] === true) {
-		console.log(category + "::" + message);
-	}
-}
-
-// todo : should 0 be used for any instead of null/undefined?
-function bitsyButton(buttonCode) {
-	switch (buttonCode) {
-		case 0: // UP
-			return (input.isKeyDown(key.up) || input.isKeyDown(key.w) || input.swipeUp());
-		case 1: // DOWN
-			return (input.isKeyDown(key.down) || input.isKeyDown(key.s) || input.swipeDown());
-		case 2: // LEFT
-			return (input.isKeyDown(key.left) || input.isKeyDown(key.a) || input.swipeLeft());
-		case 3: // RIGHT
-			return ((input.isKeyDown(key.right) || input.isKeyDown(key.d) || input.swipeRight()));
-	}
-
-	// if no code is supplied, check any key
-	return input.isKeyDown(key.up) || input.isKeyDown(key.w) ||
-		input.isKeyDown(key.down) || input.isKeyDown(key.s) ||
-		input.isKeyDown(key.left) || input.isKeyDown(key.a) ||
-		input.isKeyDown(key.right) || input.isKeyDown(key.d) ||
-		input.isTapReleased();
-}
-
-function bitsyOnLoad(fn) {
-	onLoadFunction = fn;
-}
-
-function bitsyOnQuit(fn) {
-	onQuitFunction = fn;
-}
-
-function bitsyOnUpdate(fn) {
-	onUpdateFunction = fn;
+	attachCanvas( document.getElementById("game") );
+	load_game( document.getElementById("exportedGameData").text.slice(1) );
 }
 <\/script>
 
@@ -410,7 +49,7 @@ function componentToHex(c) {
     return hex.length == 1 ? "0" + hex : hex;
 }
 function rgbToHex(r, g, b) {
-    return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
 function hslToHex(h,s,l) {
@@ -530,7 +169,7 @@ function hslToRgb(h, s, l) {
     b = hue2rgb(p, q, h - 1/3);
   }
 
-  return [ Math.floor(r * 255), Math.floor(g * 255), Math.floor(b * 255) ];
+  return [ r * 255, g * 255, b * 255 ];
 }
 
 /**
@@ -580,7 +219,7 @@ var TransitionManager = function() {
 	var prevStep = -1; // used to avoid running post-process effect constantly
 
 	this.BeginTransition = function(startRoom,startX,startY,endRoom,endX,endY,effectName) {
-		// bitsyLog("--- START ROOM TRANSITION ---");
+		// console.log("--- START ROOM TRANSITION ---");
 
 		curEffect = effectName;
 
@@ -639,7 +278,7 @@ var TransitionManager = function() {
 		var step = Math.floor(transitionDelta * maxStep);
 
 		if (step != prevStep) {
-			// bitsyLog("step! " + step + " " + transitionDelta);
+			// console.log("step! " + step + " " + transitionDelta);
 			for (var y = 0; y < effectImage.Height; y++) {
 				for (var x = 0; x < effectImage.Width; x++) {
 					var color = transitionEffects[curEffect].pixelEffectFunc(transitionStart,transitionEnd,x,y,(step / maxStep));
@@ -658,24 +297,11 @@ var TransitionManager = function() {
 			transitionEnd = null;
 			effectImage = null;
 			prevStep = -1;
-
-			if (transitionCompleteCallback != null) {
-				transitionCompleteCallback();
-			}
-			transitionCompleteCallback = null;
 		}
 	}
 
 	this.IsTransitionActive = function() {
 		return isTransitioning;
-	}
-
-	// todo : should this be part of the constructor?
-	var transitionCompleteCallback = null;
-	this.OnTransitionComplete = function(callback) {
-		if (isTransitioning) { // TODO : safety check necessary?
-			transitionCompleteCallback = callback;
-		}
 	}
 
 	var transitionEffects = {};
@@ -967,8 +593,8 @@ var PostProcessUtilities = {
 		return { r:r, g:g, b:b, a:a };
 	},
 	SetPixelColor : function(image,x,y,colorRgba) {
-		for (var yDelta = 0; yDelta < scale; yDelta++) {
-			for (var xDelta = 0; xDelta < scale; xDelta++) {
+		for (var yDelta = 0; yDelta <= scale; yDelta++) {
+			for (var xDelta = 0; xDelta <= scale; xDelta++) {
 				var pixelIndex = (((y * scale) + yDelta) * image.width * 4) + (((x * scale) + xDelta) * 4);
 				image.data[pixelIndex + 0] = colorRgba.r;
 				image.data[pixelIndex + 1] = colorRgba.g;
@@ -1094,10 +720,7 @@ function Font(fontData) {
 	var width = 6; // default size so if you have NO font or an invalid font it displays boxes
 	var height = 8;
 	var chardata = {};
-
-	// create invalid char data at default size in case the font is missing
 	var invalidCharData = {};
-	updateInvalidCharData();
 
 	this.getName = function() {
 		return name;
@@ -1140,37 +763,9 @@ function Font(fontData) {
 		return codeList;
 	}
 
-	function createCharData() {
-		return { 
-			width: width,
-			height: height,
-			offset: {
-				x: 0,
-				y: 0
-			},
-			spacing: width,
-			data: [],
-		};
-	}
-
-	function updateInvalidCharData() {
-		invalidCharData = createCharData();
-		for (var y = 0; y < height; y++) {
-			for (var x = 0; x < width; x++) {
-				if (x < width-1 && y < height-1) {
-					invalidCharData.data.push(1);
-				}
-				else {
-					invalidCharData.data.push(0);
-				}
-			}
-		}
-	}
-
 	function parseFont(fontData) {
-		if (fontData == null) {
+		if (fontData == null)
 			return;
-		}
 
 		var lines = fontData.split("\\n");
 
@@ -1202,7 +797,16 @@ function Font(fontData) {
 
 					curCharLineCount = 0;
 					curCharCode = parseInt(args[1]);
-					chardata[curCharCode] = createCharData();
+					chardata[curCharCode] = { 
+						width: width,
+						height: height,
+						offset: {
+							x: 0,
+							y: 0
+						},
+						spacing: width,
+						data: []
+					};
 				}
 			}
 			else {
@@ -1249,8 +853,27 @@ function Font(fontData) {
 			}
 		}
 
-		// re-init invalid character box at the actual font size once it's loaded
-		updateInvalidCharData();
+		// init invalid character box
+		invalidCharData = { 
+			width: width,
+			height: height,
+			offset: {
+				x: 0,
+				y: 0
+			},
+			spacing: width, // TODO : name?
+			data: []
+		};
+		for (var y = 0; y < height; y++) {
+			for (var x = 0; x < width; x++) {
+				if (x < width-1 && y < height-1) {
+					invalidCharData.data.push(1);
+				}
+				else {
+					invalidCharData.data.push(0);
+				}
+			}
+		}
 	}
 
 	parseFont(fontData);
@@ -1278,31 +901,23 @@ var Interpreter = function() {
 
 	// TODO -- maybe this should return a string instead othe actual script??
 	this.Compile = function(scriptName, scriptStr) {
-		// bitsyLog("COMPILE");
-		var script = parser.Parse(scriptStr, scriptName);
-		env.SetScript(scriptName, script);
+		// console.log("COMPILE");
+		var script = parser.Parse( scriptStr );
+		env.SetScript( scriptName, script );
 	}
-	this.Run = function(scriptName, exitHandler, objectContext) { // Runs pre-compiled script
-		var localEnv = new LocalEnvironment(env);
+	this.Run = function(scriptName, exitHandler) { // Runs pre-compiled script
+		// console.log("RUN");
+		// console.log(env.GetScript( scriptName ));
+		env.GetScript( scriptName )
+			.Eval( env, function(result) { OnScriptReturn(result, exitHandler); } );
 
-		if (objectContext) {
-			localEnv.SetObject(objectContext); // PROTO : should this be folded into the constructor?
-		}
-
-		var script = env.GetScript(scriptName);
-
-		script.Eval( localEnv, function(result) { OnScriptReturn(localEnv, exitHandler); } );
+		// console.log("SERIALIZE!!!!");
+		// console.log( env.GetScript( scriptName ).Serialize() );
 	}
-	this.Interpret = function(scriptStr, exitHandler, objectContext) { // Compiles and runs code immediately
-		// bitsyLog("INTERPRET");
-		var localEnv = new LocalEnvironment(env);
-
-		if (objectContext) {
-			localEnv.SetObject(objectContext); // PROTO : should this be folded into the constructor?
-		}
-
-		var script = parser.Parse(scriptStr, "anonymous");
-		script.Eval( localEnv, function(result) { OnScriptReturn(localEnv, exitHandler); } );
+	this.Interpret = function(scriptStr, exitHandler) { // Compiles and runs code immediately
+		// console.log("INTERPRET");
+		var script = parser.Parse( scriptStr );
+		script.Eval( env, function(result) { OnScriptReturn(result, exitHandler); } );
 	}
 	this.HasScript = function(name) { return env.HasScript(name); };
 
@@ -1311,38 +926,27 @@ var Interpreter = function() {
 		parser = new Parser( env );
 	}
 
-	this.Parse = function(scriptStr, rootId) { // parses a script but doesn't save it
-		return parser.Parse(scriptStr, rootId);
+	this.Parse = function(scriptStr) { // parses a script but doesn't save it
+		return parser.Parse( scriptStr );
 	}
-
-	// TODO : add back in if needed later...
-	// this.CompatibilityParse = function(scriptStr, compatibilityFlags) {
-	// 	env.compatibilityFlags = compatibilityFlags;
-
-	// 	var result = parser.Parse(scriptStr);
-
-	// 	delete env.compatibilityFlags;
-
-	// 	return result;
-	// }
-
 	this.Eval = function(scriptTree, exitHandler) { // runs a script stored externally
-		var localEnv = new LocalEnvironment(env); // TODO : does this need an object context?
-		scriptTree.Eval(
-			localEnv,
-			function(result) {
-				OnScriptReturn(result, exitHandler);
-			});
+		scriptTree.Eval( env, function(result) { OnScriptReturn(result, exitHandler); } );
 	}
 
 	function OnScriptReturn(result, exitHandler) {
+		if (isReturnObject(result)) {
+			result = result.result; // pull out the contained result
+		}
+
+		// console.log("RESULT " + result);
+
 		if (exitHandler != null) {
 			exitHandler(result);
 		}
 	}
 
 	this.CreateExpression = function(expStr) {
-		return parser.CreateExpression(expStr);
+		return parser.CreateExpression( expStr );
 	}
 
 	this.SetVariable = function(name,value,useHandler) {
@@ -1366,20 +970,14 @@ var Interpreter = function() {
 		return env.GetVariable(name);
 	}
 
-	function DebugVisualizeScriptTree(scriptTree) {
+	this.DebugVisualizeScriptTree = function(scriptName) {
 		var printVisitor = {
 			Visit : function(node,depth) {
-				bitsyLog("-".repeat(depth) + "- " + node.ToString());
+				console.log("-".repeat(depth) + "- " + node.ToString());
 			},
 		};
 
-		scriptTree.VisitAll( printVisitor );
-	}
-
-	this.DebugVisualizeScriptTree = DebugVisualizeScriptTree;
-
-	this.DebugVisualizeScript = function(scriptName) {
-		DebugVisualizeScriptTree(env.GetScript(scriptName));
+		env.GetScript( scriptName ).VisitAll( printVisitor );
 	}
 }
 
@@ -1387,176 +985,49 @@ var Interpreter = function() {
 var Utils = function() {
 	// for editor ui
 	this.CreateDialogBlock = function(children,doIndentFirstLine) {
-		if (doIndentFirstLine === undefined) {
-			doIndentFirstLine = true;
-		}
-
-		var block = new DialogBlockNode(doIndentFirstLine);
-
-		for (var i = 0; i < children.length; i++) {
-			block.AddChild(children[i]);
+		if(doIndentFirstLine === undefined) doIndentFirstLine = true;
+		var block = new BlockNode( BlockMode.Dialog, doIndentFirstLine );
+		for(var i = 0; i < children.length; i++) {
+			block.AddChild( children[i] );
 		}
 		return block;
 	}
 
-	this.CreateOptionBlock = function() {
-		var block = new DialogBlockNode(false);
-		block.AddChild(new FuncNode("print", [new LiteralNode(" ")]));
-		return block;
-	}
-
-	this.CreateItemConditionPair = function() {
-		var itemFunc = this.CreateFunctionBlock("item", ["0"]);
-		var condition = new ExpNode("==", itemFunc, new LiteralNode(1));
-		var result = new DialogBlockNode(true);
-		result.AddChild(new FuncNode("print", [new LiteralNode(" ")]));
-		var conditionPair = new ConditionPairNode(condition, result);
-		return conditionPair;
-	}
-
-	this.CreateVariableConditionPair = function() {
-		var varNode = this.CreateVariableNode("a");
-		var condition = new ExpNode("==", varNode, new LiteralNode(1));
-		var result = new DialogBlockNode(true);
-		result.AddChild(new FuncNode("print", [new LiteralNode(" ")]));
-		var conditionPair = new ConditionPairNode(condition, result);
-		return conditionPair;
-	}
-
-	this.CreateDefaultConditionPair = function() {
-		var condition = this.CreateElseNode();
-		var result = new DialogBlockNode(true);
-		result.AddChild(new FuncNode("print", [new LiteralNode(" ")]));
-		var conditionPair = new ConditionPairNode(condition, result);
-		return conditionPair;
-	}
-
-	this.CreateEmptyPrintFunc = function() {
-		return new FuncNode("print", [new LiteralNode("...")]);
-	}
-
-	this.CreateFunctionBlock = function(name, initParamValues) {
-		var parameters = [];
-		for (var i = 0; i < initParamValues.length; i++) {
-			parameters.push(new LiteralNode(initParamValues[i]));
-		}
-
-		var node = new FuncNode(name, parameters);
-		var block = new CodeBlockNode();
-		block.AddChild(node);
-		return block;
-	}
-
-	// TODO : rename ParseStringToLiteralNode?
-	this.CreateLiteralNode = function(str) {
-		if (str === "true") {
-			return new LiteralNode(true);
-		}
-		else if (str === "false") {
-			return new LiteralNode(false);
-		}
-		else if (!isNaN(parseFloat(str))) {
-			return new LiteralNode(parseFloat(str));
-		}
-		else {
-			return new LiteralNode(str);
-		}
-	}
-
-	this.CreateVariableNode = function(variableName) {
-		return new VarNode(variableName);
-	}
-
-	this.CreatePropertyNode = function(propertyName, literalValue) {
-		var varNode = new VarNode(propertyName);
-		var valNode = new LiteralNode(literalValue);
-		var node = new FuncNode("property", [varNode, valNode]);
-		var block = new CodeBlockNode();
-		block.AddChild(node);
-		return block;
-	}
-
-	this.CreateElseNode = function() {
-		return new ElseNode();
-	}
-
-	this.CreateStringLiteralNode = function(str) {
-		return new LiteralNode(str);
-	}
-
-	// TODO : need to split up code & dialog blocks :|
-	this.CreateCodeBlock = function() {
-		return new CodeBlockNode();
-	}
-
-	this.ChangeSequenceType = function(oldSequence, type) {
+	this.ChangeSequenceType = function(oldSequence,type) {
 		if(type === "sequence") {
-			return new SequenceNode(oldSequence.children);
+			return new SequenceNode( oldSequence.options );
 		}
 		else if(type === "cycle") {
-			return new CycleNode(oldSequence.children);
+			return new CycleNode( oldSequence.options );
 		}
 		else if(type === "shuffle") {
-			return new ShuffleNode(oldSequence.children);
+			return new ShuffleNode( oldSequence.options );
 		}
 		return oldSequence;
 	}
 
 	this.CreateSequenceBlock = function() {
-		var option1 = new DialogBlockNode( false /*doIndentFirstLine*/ );
-		option1.AddChild(new FuncNode("print", [new LiteralNode("...")]));
-
-		var option2 = new DialogBlockNode( false /*doIndentFirstLine*/ );
-		option2.AddChild(new FuncNode("print", [new LiteralNode("...")]));
-
+		var option1 = new BlockNode( BlockMode.Dialog, false /*doIndentFirstLine*/ );
+		var option2 = new BlockNode( BlockMode.Dialog, false /*doIndentFirstLine*/ );
 		var sequence = new SequenceNode( [ option1, option2 ] );
-		var block = new CodeBlockNode();
-		block.AddChild( sequence );
-		return block;
-	}
-
-	this.CreateCycleBlock = function() {
-		var option1 = new DialogBlockNode( false /*doIndentFirstLine*/ );
-		option1.AddChild(new FuncNode("print", [new LiteralNode("...")]));
-
-		var option2 = new DialogBlockNode( false /*doIndentFirstLine*/ );
-		option2.AddChild(new FuncNode("print", [new LiteralNode("...")]));
-
-		var sequence = new CycleNode( [ option1, option2 ] );
-		var block = new CodeBlockNode();
-		block.AddChild( sequence );
-		return block;
-	}
-
-	this.CreateShuffleBlock = function() {
-		var option1 = new DialogBlockNode( false /*doIndentFirstLine*/ );
-		option1.AddChild(new FuncNode("print", [new LiteralNode("...")]));
-
-		var option2 = new DialogBlockNode( false /*doIndentFirstLine*/ );
-		option2.AddChild(new FuncNode("print", [new LiteralNode("...")]));
-
-		var sequence = new ShuffleNode( [ option1, option2 ] );
-		var block = new CodeBlockNode();
+		var block = new BlockNode( BlockMode.Code );
 		block.AddChild( sequence );
 		return block;
 	}
 
 	this.CreateIfBlock = function() {
-		var leftNode = new CodeBlockNode();
+		var leftNode = new BlockNode( BlockMode.Code );
 		leftNode.AddChild( new FuncNode("item", [new LiteralNode("0")] ) );
 		var rightNode = new LiteralNode( 1 );
 		var condition1 = new ExpNode("==", leftNode, rightNode );
 
 		var condition2 = new ElseNode();
 
-		var result1 = new DialogBlockNode();
-		result1.AddChild(new FuncNode("print", [new LiteralNode("...")]));
-
-		var result2 = new DialogBlockNode();
-		result2.AddChild(new FuncNode("print", [new LiteralNode("...")]));
+		var result1 = new BlockNode( BlockMode.Dialog );
+		var result2 = new BlockNode( BlockMode.Dialog );
 
 		var ifNode = new IfNode( [ condition1, condition2 ], [ result1, result2 ] );
-		var block = new CodeBlockNode();
+		var block = new BlockNode( BlockMode.Code );
 		block.AddChild( ifNode );
 		return block;
 	}
@@ -1575,7 +1046,6 @@ var Utils = function() {
 		}
 		else {
 			scriptStr += lines[i];
-			i++;
 		}
 		return { script:scriptStr, index:i };
 	}
@@ -1607,55 +1077,65 @@ var Utils = function() {
 		}
 		return dialogStr;
 	}
-
-	this.SerializeDialogNodeList = function(nodeList) {
-		var tempBlock = new DialogBlockNode(false);
-		 // set children directly to avoid breaking the parenting chain for this temp operation
-		tempBlock.children = nodeList;
-		return tempBlock.Serialize();
-	}
-
-	this.GetOperatorList = function() {
-		return [Sym.Set].concat(Sym.Operators);
-	}
-
-	this.IsInlineCode = function(node) {
-		return isInlineCode(node);
-	}
 }
 
 
 /* BUILT-IN FUNCTIONS */ // TODO: better way to encapsulate these?
 function deprecatedFunc(environment,parameters,onReturn) {
-	bitsyLog("BITSY SCRIPT WARNING: Tried to use deprecated function");
+	console.log("BITSY SCRIPT WARNING: Tried to use deprecated function");
 	onReturn(null);
 }
 
-function printFunc(environment, parameters, onReturn) {
-	if (parameters[0] != undefined && parameters[0] != null) {
+// TODO : vNext
+// function returnFunc(environment,parameters,onReturn) {
+// 	var ret = { isReturn: true, result: null };
+// 	if (parameters.length > 0 && parameters[0] != undefined && parameters[0] != null) {
+// 		ret.result = parameters[0];
+// 	}
+// 	onReturn(ret);
+// }
+
+// TODO : vNext
+// // TODO : this is kind of hacky
+// // - needs to work with names too
+// function changeAvatarFunc(environment,parameters,onReturn) {
+// 	if( parameters[0] != undefined && parameters[0] != null ) {
+// 		sprite["A"].drw = "SPR_" + parameters[0];
+// 	}
+// 	onReturn(null);
+// }
+
+function printFunc(environment,parameters,onReturn) {
+	// console.log("PRINT FUNC");
+	// console.log(parameters);
+	if( parameters[0] != undefined && parameters[0] != null ) {
+		// console.log(parameters[0]);
+		// console.log(parameters[0].toString());
+		// var textStr = parameters[0].toString();
 		var textStr = "" + parameters[0];
-		environment.GetDialogBuffer().AddText(textStr);
-		environment.GetDialogBuffer().AddScriptReturn(function() { onReturn(null); });
+		// console.log(textStr);
+		var onFinishHandler = function() {
+			// console.log("FINISHED PRINTING ---- SCRIPT");
+			onReturn(null);
+		}; // called when dialog is finished printing
+		environment.GetDialogBuffer().AddText( textStr, onFinishHandler );
 	}
 	else {
 		onReturn(null);
 	}
 }
 
-function linebreakFunc(environment, parameters, onReturn) {
-	// bitsyLog("LINEBREAK FUNC");
+function linebreakFunc(environment,parameters,onReturn) {
+	// console.log("LINEBREAK FUNC");
 	environment.GetDialogBuffer().AddLinebreak();
-	environment.GetDialogBuffer().AddScriptReturn(function() { onReturn(null); });
+	onReturn(null);
 }
 
-function pagebreakFunc(environment, parameters, onReturn) {
-	environment.GetDialogBuffer().AddPagebreak(function() { onReturn(null); });
-}
-
-function printDrawingFunc(environment, parameters, onReturn) {
+function printDrawingFunc(environment,parameters,onReturn) {
 	var drawingId = parameters[0];
-	environment.GetDialogBuffer().AddDrawing(drawingId);
-	environment.GetDialogBuffer().AddScriptReturn(function() { onReturn(null); });
+	environment.GetDialogBuffer().AddDrawing( drawingId, function() {
+		onReturn(null);
+	});
 }
 
 function printSpriteFunc(environment,parameters,onReturn) {
@@ -1691,25 +1171,10 @@ function printFontFunc(environment, parameters, onReturn) {
 
 function itemFunc(environment,parameters,onReturn) {
 	var itemId = parameters[0];
-
-	if (names.item.has(itemId)) {
-		// id is actually a name
-		itemId = names.item.get(itemId);
-	}
-
-	var curItemCount = player().inventory[itemId] ? player().inventory[itemId] : 0;
-
-	if (parameters.length > 1) {
-		// TODO : is it a good idea to force inventory to be >= 0?
-		player().inventory[itemId] = Math.max(0, parseInt(parameters[1]));
-		curItemCount = player().inventory[itemId];
-
-		if (onInventoryChanged != null) {
-			onInventoryChanged(itemId);
-		}
-	}
-
-	onReturn(curItemCount);
+	if(names.item.has(itemId)) itemId = names.item.get(itemId); // id is actually a name
+	var itemCount = player().inventory[itemId] ? player().inventory[itemId] : 0; // TODO : ultimately the environment should include a reference to the game state
+	// console.log("ITEM FUNC " + itemId + " " + itemCount);
+	onReturn(itemCount);
 }
 
 function addOrRemoveTextEffect(environment,name) {
@@ -1750,79 +1215,9 @@ function shakyFunc(environment,parameters,onReturn) {
 	onReturn(null);
 }
 
-function propertyFunc(environment, parameters, onReturn) {
-	var outValue = null;
-
-	if (parameters.length > 0 && parameters[0]) {
-		var propertyName = parameters[0];
-
-		if (environment.HasProperty(propertyName)) {
-			// TODO : in a future update I can handle the case of initializing a new property
-			// after which we can move this block outside the HasProperty check
-			if (parameters.length > 1) {
-				var inValue = parameters[1];
-				environment.SetProperty(propertyName, inValue);
-			}
-
-			outValue = environment.GetProperty(propertyName);
-		}
-	}
-
-	bitsyLog("PROPERTY! " + propertyName + " " + outValue);
-
-	onReturn(outValue);
-}
-
-function endFunc(environment,parameters,onReturn) {
-	isEnding = true;
-	isNarrating = true;
-	dialogRenderer.SetCentered(true);
-	onReturn(null);
-}
-
-function exitFunc(environment,parameters,onReturn) {
-	var destRoom = parameters[0];
-
-	if (names.room.has(destRoom)) {
-		// it's a name, not an id! (note: these could cause trouble if people names things weird)
-		destRoom = names.room.get(destRoom);
-	}
-
-	var destX = parseInt(parameters[1]);
-	var destY = parseInt(parameters[2]);
-
-	if (parameters.length >= 4) {
-		var transitionEffect = parameters[3];
-
-		transition.BeginTransition(
-			player().room,
-			player().x,
-			player().y,
-			destRoom,
-			destX,
-			destY,
-			transitionEffect);
-		transition.UpdateTransition(0);
-	}
-
-	player().room = destRoom;
-	player().x = destX;
-	player().y = destY;
-	curRoom = destRoom;
-	initRoom(curRoom);
-
-	// TODO : this doesn't play nice with pagebreak because it thinks the dialog is finished!
-	if (transition.IsTransitionActive()) {
-		transition.OnTransitionComplete(function() { onReturn(null); });
-	}
-	else {
-		onReturn(null);
-	}
-}
-
 /* BUILT-IN OPERATORS */
 function setExp(environment,left,right,onReturn) {
-	// bitsyLog("SET " + left.name);
+	// console.log("SET " + left.name);
 
 	if(left.type != "variable") {
 		// not a variable! return null and hope for the best D:
@@ -1832,16 +1227,16 @@ function setExp(environment,left,right,onReturn) {
 
 	right.Eval(environment,function(rVal) {
 		environment.SetVariable( left.name, rVal );
-		// bitsyLog("VAL " + environment.GetVariable( left.name ) );
+		// console.log("VAL " + environment.GetVariable( left.name ) );
 		left.Eval(environment,function(lVal) {
 			onReturn( lVal );
 		});
 	});
 }
 function equalExp(environment,left,right,onReturn) {
-	// bitsyLog("EVAL EQUAL");
-	// bitsyLog(left);
-	// bitsyLog(right);
+	// console.log("EVAL EQUAL");
+	// console.log(left);
+	// console.log(right);
 	right.Eval(environment,function(rVal){
 		left.Eval(environment,function(lVal){
 			onReturn( lVal === rVal );
@@ -1926,18 +1321,16 @@ var Environment = function() {
 	functionMap.set("printTile", printTileFunc);
 	functionMap.set("printItem", printItemFunc);
 	functionMap.set("debugOnlyPrintFont", printFontFunc); // DEBUG ONLY
-	functionMap.set("end", endFunc);
-	functionMap.set("exit", exitFunc);
-	functionMap.set("pg", pagebreakFunc);
-	functionMap.set("property", propertyFunc);
+
+	// TODO : vNext
+	// functionMap.set("changeAvatar", changeAvatarFunc);
+	// functionMap.set("return", returnFunc);
 
 	this.HasFunction = function(name) { return functionMap.has(name); };
-	this.EvalFunction = function(name,parameters,onReturn,env) {
-		if (env == undefined || env == null) {
-			env = this;
-		}
-
-		functionMap.get(name)(env, parameters, onReturn);
+	this.EvalFunction = function(name,parameters,onReturn) {
+		// console.log(functionMap);
+		// console.log(name);
+		functionMap.get( name )( this, parameters, onReturn );
 	}
 
 	var variableMap = new Map();
@@ -1945,20 +1338,18 @@ var Environment = function() {
 	this.HasVariable = function(name) { return variableMap.has(name); };
 	this.GetVariable = function(name) { return variableMap.get(name); };
 	this.SetVariable = function(name,value,useHandler) {
-		// bitsyLog("SET VARIABLE " + name + " = " + value);
+		// console.log("SET VARIABLE " + name + " = " + value);
 		if(useHandler === undefined) useHandler = true;
 		variableMap.set(name, value);
-		if(onVariableChangeHandler != null && useHandler){
+		if(onVariableChangeHandler != null && useHandler)
 			onVariableChangeHandler(name);
-		}
 	};
 	this.DeleteVariable = function(name,useHandler) {
 		if(useHandler === undefined) useHandler = true;
 		if(variableMap.has(name)) {
 			variableMap.delete(name);
-			if(onVariableChangeHandler != null && useHandler) {
+			if(onVariableChangeHandler != null && useHandler)
 				onVariableChangeHandler(name);
-			}
 		}
 	};
 
@@ -1993,85 +1384,12 @@ var Environment = function() {
 	}
 }
 
-// Local environment for a single run of a script: knows local context
-var LocalEnvironment = function(parentEnvironment) {
-	// this.SetDialogBuffer // not allowed in local environment?
-	this.GetDialogBuffer = function() { return parentEnvironment.GetDialogBuffer(); };
-
-	this.HasFunction = function(name) { return parentEnvironment.HasFunction(name); };
-	this.EvalFunction = function(name,parameters,onReturn,env) {
-		if (env == undefined || env == null) {
-			env = this;
-		}
-
-		parentEnvironment.EvalFunction(name,parameters,onReturn,env);
-	}
-
-	this.HasVariable = function(name) { return parentEnvironment.HasVariable(name); };
-	this.GetVariable = function(name) { return parentEnvironment.GetVariable(name); };
-	this.SetVariable = function(name,value,useHandler) { parentEnvironment.SetVariable(name,value,useHandler); };
-	// this.DeleteVariable // not needed in local environment?
-
-	this.HasOperator = function(sym) { return parentEnvironment.HasOperator(sym); };
-	this.EvalOperator = function(sym,left,right,onReturn,env) {
-		if (env == undefined || env == null) {
-			env = this;
-		}
-
-		parentEnvironment.EvalOperator(sym,left,right,onReturn,env);
-	};
-
-	// TODO : I don't *think* any of this is required by the local environment
-	// this.HasScript
-	// this.GetScript
-	// this.SetScript
-
-	// TODO : pretty sure these debug methods aren't required by the local environment either
-	// this.SetOnVariableChangeHandler
-	// this.GetVariableNames
-
-	/* Here's where specific local context data goes:
-	 * this includes access to the object running the script
-	 * and any properties it may have (so far only "locked")
-	 */
-
-	// The local environment knows what object called it -- currently only used to access properties
-	var curObject = null;
-	this.HasObject = function() { return curObject != undefined && curObject != null; }
-	this.SetObject = function(object) { curObject = object; }
-	this.GetObject = function() { return curObject; }
-
-	// accessors for properties of the object that's running the script
-	this.HasProperty = function(name) {
-		if (curObject && curObject.property && curObject.property.hasOwnProperty(name)) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	};
-	this.GetProperty = function(name) {
-		if (curObject && curObject.property && curObject.property.hasOwnProperty(name)) {
-			return curObject.property[name]; // TODO : should these be getters and setters instead?
-		}
-		else {
-			return null;
-		}
-	};
-	this.SetProperty = function(name, value) {
-		// NOTE : for now, we need to gaurd against creating new properties
-		if (curObject && curObject.property && curObject.property.hasOwnProperty(name)) {
-			curObject.property[name] = value;
-		}
-	};
-}
-
 function leadingWhitespace(depth) {
 	var str = "";
 	for(var i = 0; i < depth; i++) {
 		str += "  "; // two spaces per indent
 	}
-	// bitsyLog("WHITESPACE " + depth + " ::" + str + "::");
+	// console.log("WHITESPACE " + depth + " ::" + str + "::");
 	return str;
 }
 
@@ -2079,21 +1397,9 @@ function leadingWhitespace(depth) {
 var TreeRelationship = function() {
 	this.parent = null;
 	this.children = [];
-
 	this.AddChild = function(node) {
-		this.children.push(node);
+		this.children.push( node );
 		node.parent = this;
-	};
-
-	this.AddChildren = function(nodeList) {
-		for (var i = 0; i < nodeList.length; i++) {
-			this.AddChild(nodeList[i]);
-		}
-	};
-
-	this.SetChildren = function(nodeList) {
-		this.children = [];
-		this.AddChildren(nodeList);
 	};
 
 	this.VisitAll = function(visitor, depth) {
@@ -2101,54 +1407,56 @@ var TreeRelationship = function() {
 			depth = 0;
 		}
 
-		visitor.Visit(this, depth);
-		for (var i = 0; i < this.children.length; i++) {
+		visitor.Visit( this, depth );
+		for( var i = 0; i < this.children.length; i++ ) {
 			this.children[i].VisitAll( visitor, depth + 1 );
 		}
 	};
-
-	this.rootId = null; // for debugging
-	this.GetId = function() {
-		// bitsyLog(this);
-		if (this.rootId != null) {
-			return this.rootId;
-		}
-		else if (this.parent != null) {
-			var parentId = this.parent.GetId();
-			if (parentId != null) {
-				return parentId + "_" + this.parent.children.indexOf(this);
-			}
-		}
-		else {
-			return null;
-		}
-	}
 }
 
-var DialogBlockNode = function(doIndentFirstLine) {
+function isReturnObject(val) {
+	return typeof val === "object" && val != null
+				&& val.isReturn != undefined && val.isReturn != null
+				&& val.isReturn;
+}
+
+var BlockMode = {
+	Code : "code",
+	Dialog : "dialog"
+};
+
+var BlockNode = function(mode, doIndentFirstLine) {
 	Object.assign( this, new TreeRelationship() );
 	// Object.assign( this, new Runnable() );
-	this.type = "dialog_block";
+	this.type = "block";
+	this.mode = mode;
 
-	this.Eval = function(environment, onReturn) {
-		// bitsyLog("EVAL BLOCK " + this.children.length);
+	this.Eval = function(environment,onReturn) {
+		// console.log("EVAL BLOCK " + this.children.length);
 
-		if (isPlayerEmbeddedInEditor && events != undefined && events != null) {
-			events.Raise("script_node_enter", { id: this.GetId() });
+		if( this.onEnter != null ) {
+			this.onEnter();
 		}
 
 		var lastVal = null;
 		var i = 0;
 
-		function evalChildren(children, done) {
+		function evalChildren(children,done) {
 			if (i < children.length) {
-				// bitsyLog(">> CHILD " + i);
-				children[i].Eval(environment, function(val) {
-					// bitsyLog("<< CHILD " + i);
-					lastVal = val;
-					i++;
-					evalChildren(children,done);
-				});
+				// console.log(">> CHILD " + i);
+				children[i].Eval( environment, function(val) {
+					// console.log("<< CHILD " + i);
+
+					if (isReturnObject(val)) { // early return
+						lastVal = val;
+						done();
+					}
+					else {
+						lastVal = val;
+						i++;
+						evalChildren(children,done);
+					}
+				} );
 			}
 			else {
 				done();
@@ -2156,251 +1464,139 @@ var DialogBlockNode = function(doIndentFirstLine) {
 		};
 
 		var self = this;
-		evalChildren(this.children, function() {
-			if (isPlayerEmbeddedInEditor && events != undefined && events != null) {
-				events.Raise("script_node_exit", { id: self.GetId() });
+		evalChildren( this.children, function() {
+			if( self.onExit != null ) {
+				self.onExit();
 			}
-
 			onReturn(lastVal);
-		});
+		} );
 	}
 
-	if (doIndentFirstLine === undefined) {
-		doIndentFirstLine = true; // This is just for serialization
-	}
+	if(doIndentFirstLine === undefined) doIndentFirstLine = true; // This is just for serialization
 
 	this.Serialize = function(depth) {
-		if (depth === undefined) {
-			depth = 0;
-		}
+		if(depth === undefined) depth = 0;
+
+		// console.log("SERIALIZE BLOCK!!!");
+		// console.log(depth);
+		// console.log(doIndentFirstLine);
 
 		var str = "";
 		var lastNode = null;
-
+		if (this.mode === BlockMode.Code) str += "{"; // todo: increase scope of Sym?
 		for (var i = 0; i < this.children.length; i++) {
 
 			var curNode = this.children[i];
+
+			if(curNode.type === "block" && lastNode && lastNode.type === "block" && !isBlockWithNoNewline(curNode) && !isBlockWithNoNewline(lastNode))
+				str += "\\n";
 
 			var shouldIndentFirstLine = (i == 0 && doIndentFirstLine);
 			var shouldIndentAfterLinebreak = (lastNode && lastNode.type === "function" && lastNode.name === "br");
-
-			if (shouldIndentFirstLine || shouldIndentAfterLinebreak) {
+			if(this.mode === BlockMode.Dialog && (shouldIndentFirstLine || shouldIndentAfterLinebreak))
 				str += leadingWhitespace(depth);
-			}
-
 			str += curNode.Serialize(depth);
-
 			lastNode = curNode;
 		}
-
+		if (this.mode === BlockMode.Code) str += "}";
 		return str;
 	}
 
 	this.ToString = function() {
-		return this.type + " " + this.GetId();
+		return this.type + " " + this.mode;
 	};
 }
 
-var CodeBlockNode = function() {
-	Object.assign( this, new TreeRelationship() );
-	this.type = "code_block";
-
-	this.Eval = function(environment, onReturn) {
-		// bitsyLog("EVAL BLOCK " + this.children.length);
-
-		if (isPlayerEmbeddedInEditor && events != undefined && events != null) {
-			events.Raise("script_node_enter", { id: this.GetId() });
-		}
-
-		var lastVal = null;
-		var i = 0;
-
-		function evalChildren(children, done) {
-			if (i < children.length) {
-				// bitsyLog(">> CHILD " + i);
-				children[i].Eval(environment, function(val) {
-					// bitsyLog("<< CHILD " + i);
-					lastVal = val;
-					i++;
-					evalChildren(children,done);
-				});
-			}
-			else {
-				done();
-			}
-		};
-
-		var self = this;
-		evalChildren(this.children, function() {
-			if (isPlayerEmbeddedInEditor && events != undefined && events != null) {
-				events.Raise("script_node_exit", { id: self.GetId() });
-			}
-
-			onReturn(lastVal);
-		});
-	}
-
-	this.Serialize = function(depth) {
-		if(depth === undefined) {
-			depth = 0;
-		}
-
-		// bitsyLog("SERIALIZE BLOCK!!!");
-		// bitsyLog(depth);
-		// bitsyLog(doIndentFirstLine);
-
-		var str = "{"; // todo: increase scope of Sym?
-
-		// TODO : do code blocks ever have more than one child anymore????
-		for (var i = 0; i < this.children.length; i++) {
-			var curNode = this.children[i];
-			str += curNode.Serialize(depth);
-		}
-
-		str += "}";
-
-		return str;
-	}
-
-	this.ToString = function() {
-		return this.type + " " + this.GetId();
-	};
+function isBlockWithNoNewline(node) {
+	return isTextEffectBlock(node) || isMultilineListBlock(node);
 }
 
-function isInlineCode(node) {
-	return isTextEffectBlock(node) || isUndefinedBlock(node) || isMultilineListBlock(node);
-}
-
-function isUndefinedBlock(node) {
-	return node.type === "code_block" && node.children.length > 0 && node.children[0].type === "undefined";
-}
-
-var textEffectBlockNames = ["clr1", "clr2", "clr3", "wvy", "shk", "rbw", "printSprite", "printItem", "printTile", "print", "say", "br"];
 function isTextEffectBlock(node) {
-	if (node.type === "code_block") {
-		if (node.children.length > 0 && node.children[0].type === "function") {
+	if(node.type === "block") {
+		if(node.children.length > 0 && node.children[0].type === "function") {
 			var func = node.children[0];
-			return textEffectBlockNames.indexOf(func.name) != -1;
+			if(func.name === "clr1" || func.name === "clr2" || func.name === "clr3" || func.name === "wvy" || func.name === "shk" || func.name === "rbw") {
+				return true;
+			}
 		}
 	}
 	return false;
 }
 
-var listBlockTypes = ["sequence", "cycle", "shuffle", "if"];
 function isMultilineListBlock(node) {
-	if (node.type === "code_block") {
-		if (node.children.length > 0) {
+	if(node.type === "block") {
+		if(node.children.length > 0) {
 			var child = node.children[0];
-			return listBlockTypes.indexOf(child.type) != -1;
+			if(child.type === "sequence" || child.type === "cycle" || child.type === "shuffle" || child.type === "if") {
+				return true;
+			}
 		}
 	}
 	return false;
 }
 
-// for round-tripping undefined code through the parser (useful for hacks!)
-var UndefinedNode = function(sourceStr) {
-	Object.assign(this, new TreeRelationship());
-	this.type = "undefined";
-	this.source = sourceStr;
-
-	this.Eval = function(environment,onReturn) {
-		addOrRemoveTextEffect(environment, "_debug_highlight");
-		printFunc(environment, ["{" + sourceStr + "}"], function() {
-			onReturn(null);
-		});
-		addOrRemoveTextEffect(environment, "_debug_highlight");
-	}
-
-	this.Serialize = function(depth) {
-		return this.source;
-	}
-
-	this.ToString = function() {
-		return "undefined" + " " + this.GetId();
-	}
-}
-
-var FuncNode = function(name,args) {
+var FuncNode = function(name,arguments) {
 	Object.assign( this, new TreeRelationship() );
 	// Object.assign( this, new Runnable() );
 	this.type = "function";
 	this.name = name;
-	this.args = args;
+	this.arguments = arguments;
 
 	this.Eval = function(environment,onReturn) {
-		if (isPlayerEmbeddedInEditor && events != undefined && events != null) {
-			events.Raise("script_node_enter", { id: this.GetId() });
-		}
 
-		var self = this; // hack to deal with scope (TODO : move up higher?)
+		if( this.onEnter != null ) this.onEnter();
 
+		// console.log("FUNC");
+		// console.log(this.arguments);
 		var argumentValues = [];
 		var i = 0;
-
-		function evalArgs(args, done) {
-			// TODO : really hacky way to make we get the first
-			// symbol's NAME instead of its variable value
-			// if we are trying to do something with a property
-			if (self.name === "property" && i === 0 && i < args.length) {
-				if (args[i].type === "variable") {
-					argumentValues.push(args[i].name);
-					i++;
-				}
-				else {
-					// first argument for a property MUST be a variable symbol
-					// -- so skip everything if it's not!
-					i = args.length;
-				}
-			}
-
-			if (i < args.length) {
+		function evalArgs(arguments,done) {
+			if(i < arguments.length) {
 				// Evaluate each argument
-				args[i].Eval(
-					environment,
-					function(val) {
-						argumentValues.push(val);
-						i++;
-						evalArgs(args, done);
-					});
+				arguments[i].Eval( environment, function(val) {
+					argumentValues.push( val );
+					i++;
+					evalArgs(arguments,done);
+				} );
 			}
 			else {
 				done();
 			}
 		};
+		var self = this; // hack to deal with scope
+		evalArgs( this.arguments, function() {
+			// Then evaluate the function
+			// console.log("ARGS");
+			// console.log(argumentValues);
 
-		evalArgs(
-			this.args,
-			function() {
-				if (isPlayerEmbeddedInEditor && events != undefined && events != null) {
-					events.Raise("script_node_exit", { id: self.GetId() });
-				}
+			if( self.onExit != null ) self.onExit();
 
-				environment.EvalFunction(self.name, argumentValues, onReturn);
-			});
+			environment.EvalFunction( self.name, argumentValues, onReturn );
+		} );
 	}
 
 	this.Serialize = function(depth) {
-		var isDialogBlock = this.parent.type === "dialog_block";
-		if (isDialogBlock && this.name === "print") {
+		var isDialogBlock = this.parent.mode && this.parent.mode === BlockMode.Dialog;
+		if(isDialogBlock && this.name === "print") {
 			// TODO this could cause problems with "real" print functions
-			return this.args[0].value; // first argument should be the text of the {print} func
+			return this.arguments[0].value; // first argument should be the text of the {print} func
 		}
-		else if (isDialogBlock && this.name === "br") {
+		else if(isDialogBlock && this.name === "br") {
 			return "\\n";
 		}
 		else {
 			var str = "";
 			str += this.name;
-			for(var i = 0; i < this.args.length; i++) {
+			for(var i = 0; i < this.arguments.length; i++) {
 				str += " ";
-				str += this.args[i].Serialize(depth);
+				str += this.arguments[i].Serialize(depth);
 			}
 			return str;
 		}
 	}
 
 	this.ToString = function() {
-		return this.type + " " + this.name + " " + this.GetId();
+		return this.type + " " + this.name;
 	};
 }
 
@@ -2417,25 +1613,18 @@ var LiteralNode = function(value) {
 	this.Serialize = function(depth) {
 		var str = "";
 
-		if (this.value === null) {
+		if(this.value === null)
 			return str;
-		}
 
-		if (typeof this.value === "string") {
-			str += '"';
-		}
-
+		if(typeof this.value === "string") str += '"';
 		str += this.value;
-
-		if (typeof this.value === "string") {
-			str += '"';
-		}
+		if(typeof this.value === "string") str += '"';
 
 		return str;
 	}
 
 	this.ToString = function() {
-		return this.type + " " + this.value + " " + this.GetId();
+		return this.type + " " + this.value;
 	};
 }
 
@@ -2446,7 +1635,7 @@ var VarNode = function(name) {
 	this.name = name;
 
 	this.Eval = function(environment,onReturn) {
-		// bitsyLog("EVAL " + this.name + " " + environment.HasVariable(this.name) + " " + environment.GetVariable(this.name));
+		// console.log("EVAL " + this.name + " " + environment.HasVariable(this.name) + " " + environment.GetVariable(this.name));
 		if( environment.HasVariable(this.name) )
 			onReturn( environment.GetVariable( this.name ) );
 		else
@@ -2459,7 +1648,7 @@ var VarNode = function(name) {
 	}
 
 	this.ToString = function() {
-		return this.type + " " + this.name + " " + this.GetId();
+		return this.type + " " + this.name;
 	};
 }
 
@@ -2471,11 +1660,11 @@ var ExpNode = function(operator, left, right) {
 	this.right = right;
 
 	this.Eval = function(environment,onReturn) {
-		// bitsyLog("EVAL " + this.operator);
+		// console.log("EVAL " + this.operator);
 		var self = this; // hack to deal with scope
 		environment.EvalOperator( this.operator, this.left, this.right, 
 			function(val){
-				// bitsyLog("EVAL EXP " + self.operator + " " + val);
+				// console.log("EVAL EXP " + self.operator + " " + val);
 				onReturn(val);
 			} );
 		// NOTE : sadly this pushes a lot of complexity down onto the actual operator methods
@@ -2484,19 +1673,11 @@ var ExpNode = function(operator, left, right) {
 	this.Serialize = function(depth) {
 		var isNegativeNumber = this.operator === "-" && this.left.type === "literal" && this.left.value === null;
 
-		if (!isNegativeNumber) {
+		if(!isNegativeNumber) {
 			var str = "";
-
-			if (this.left != undefined && this.left != null) {
-				str += this.left.Serialize(depth) + " ";
-			}
-
-			str += this.operator;
-
-			if (this.right != undefined && this.right != null) {
-				str += " " + this.right.Serialize(depth);
-			}
-
+			str += this.left.Serialize(depth);
+			str += " " + this.operator + " ";
+			str += this.right.Serialize(depth);
 			return str;
 		}
 		else {
@@ -2517,7 +1698,7 @@ var ExpNode = function(operator, left, right) {
 	};
 
 	this.ToString = function() {
-		return this.type + " " + this.operator + " " + this.GetId();
+		return this.type + " " + this.operator;
 	};
 }
 
@@ -2525,10 +1706,10 @@ var SequenceBase = function() {
 	this.Serialize = function(depth) {
 		var str = "";
 		str += this.type + "\\n";
-		for (var i = 0; i < this.children.length; i++) {
-			str += leadingWhitespace(depth + 1) + Sym.List + " ";
-			str += this.children[i].Serialize(depth + 2);
-			str += "\\n";
+		for (var i = 0; i < this.options.length; i++) {
+			// console.log("SERIALIZE SEQUENCE ");
+			// console.log(depth);
+			str += leadingWhitespace(depth + 1) + Sym.List + " " + this.options[i].Serialize(depth + 2) + "\\n";
 		}
 		str += leadingWhitespace(depth);
 		return str;
@@ -2539,132 +1720,129 @@ var SequenceBase = function() {
 			depth = 0;
 		}
 
-		visitor.Visit(this, depth);
-		for (var i = 0; i < this.children.length; i++) {
-			this.children[i].VisitAll( visitor, depth + 1 );
+		visitor.Visit( this, depth );
+		for( var i = 0; i < this.options.length; i++ ) {
+			this.options[i].VisitAll( visitor, depth + 1 );
 		}
 	};
 
 	this.ToString = function() {
-		return this.type + " " + this.GetId();
+		return this.type;
 	};
 }
 
 var SequenceNode = function(options) {
-	Object.assign(this, new TreeRelationship());
-	Object.assign(this, new SequenceBase());
+	Object.assign( this, new TreeRelationship() );
+	Object.assign( this, new SequenceBase() );
 	this.type = "sequence";
-	this.AddChildren(options);
+	this.options = options;
 
 	var index = 0;
-	this.Eval = function(environment, onReturn) {
-		// bitsyLog("SEQUENCE " + index);
-		this.children[index].Eval(environment, onReturn);
+	this.Eval = function(environment,onReturn) {
+		// console.log("SEQUENCE " + index);
+		this.options[index].Eval( environment, onReturn );
 
 		var next = index + 1;
-		if (next < this.children.length) {
+		if(next < this.options.length)
 			index = next;
-		}
 	}
 }
 
 var CycleNode = function(options) {
-	Object.assign(this, new TreeRelationship());
-	Object.assign(this, new SequenceBase());
+	Object.assign( this, new TreeRelationship() );
+	Object.assign( this, new SequenceBase() );
 	this.type = "cycle";
-	this.AddChildren(options);
+	this.options = options;
 
 	var index = 0;
-	this.Eval = function(environment, onReturn) {
-		// bitsyLog("CYCLE " + index);
-		this.children[index].Eval(environment, onReturn);
+	this.Eval = function(environment,onReturn) {
+		// console.log("CYCLE " + index);
+		this.options[index].Eval( environment, onReturn );
 
 		var next = index + 1;
-		if (next < this.children.length) {
+		if(next < this.options.length)
 			index = next;
-		}
-		else {
+		else
 			index = 0;
-		}
 	}
 }
 
 var ShuffleNode = function(options) {
-	Object.assign(this, new TreeRelationship());
-	Object.assign(this, new SequenceBase());
+	Object.assign( this, new TreeRelationship() );
+	Object.assign( this, new SequenceBase() );
 	this.type = "shuffle";
-	this.AddChildren(options);
+	this.options = options;
 
 	var optionsShuffled = [];
 	function shuffle(options) {
 		optionsShuffled = [];
 		var optionsUnshuffled = options.slice();
-		while (optionsUnshuffled.length > 0) {
-			var i = Math.floor(Math.random() * optionsUnshuffled.length);
-			optionsShuffled.push(optionsUnshuffled.splice(i,1)[0]);
+		while(optionsUnshuffled.length > 0) {
+			var i = Math.floor( Math.random() * optionsUnshuffled.length );
+			optionsShuffled.push( optionsUnshuffled.splice(i,1)[0] );
 		}
 	}
-	shuffle(this.children);
+	shuffle(this.options);
 
 	var index = 0;
-	this.Eval = function(environment, onReturn) {
-		optionsShuffled[index].Eval(environment, onReturn);
+	this.Eval = function(environment,onReturn) {
+		// OLD RANDOM VERSION
+		// var index = Math.floor(Math.random() * this.options.length);
+		// this.options[index].Eval( environment, onReturn );
+
+		optionsShuffled[index].Eval( environment, onReturn );
 		
 		index++;
-		if (index >= this.children.length) {
-			shuffle(this.children);
+		if (index >= this.options.length) {
+			shuffle(this.options);
 			index = 0;
 		}
 	}
 }
 
-// TODO : rename? ConditionalNode?
 var IfNode = function(conditions, results, isSingleLine) {
-	Object.assign(this, new TreeRelationship());
+	Object.assign( this, new TreeRelationship() );
 	this.type = "if";
+	this.conditions = conditions;
+	this.results = results;
 
-	for (var i = 0; i < conditions.length; i++) {
-		this.AddChild(new ConditionPairNode(conditions[i], results[i]));
-	}
-
-	var self = this;
-	this.Eval = function(environment, onReturn) {
-		// bitsyLog("EVAL IF");
+	this.Eval = function(environment,onReturn) {
+		// console.log("EVAL IF");
 		var i = 0;
+		var self = this;
 		function TestCondition() {
-			self.children[i].Eval(environment, function(result) {
-				if (result.conditionValue == true) {
-					onReturn(result.resultValue);
+			// console.log("EVAL " + i);
+			self.conditions[i].Eval(environment, function(val) {
+				// console.log(val);
+				if(val == true) {
+					self.results[i].Eval(environment, onReturn);
 				}
-				else if (i+1 < self.children.length) {
+				else if(i+1 < self.conditions.length) {
 					i++;
-					TestCondition();
+					TestCondition(); // test next condition
 				}
 				else {
-					onReturn(null);
+					onReturn(null); // out of conditions and none were true
 				}
 			});
 		};
 		TestCondition();
 	}
 
-	if (isSingleLine === undefined) {
-		isSingleLine = false; // This is just for serialization
-	}
+	if(isSingleLine === undefined) isSingleLine = false; // This is just for serialization
 
 	this.Serialize = function(depth) {
 		var str = "";
 		if(isSingleLine) {
-			// HACKY - should I even keep this mode???
-			str += this.children[0].children[0].Serialize() + " ? " + this.children[0].children[1].Serialize();
-			if (this.children.length > 1 && this.children[1].children[0].type === Sym.Else) {
-				str += " " + Sym.ElseExp + " " + this.children[1].children[1].Serialize();
-			}
+			str += this.conditions[0].Serialize() + " ? " + this.results[0].Serialize();
+			if(this.conditions.length > 1 && this.conditions[1].type === "else")
+				str += " : " + this.results[1].Serialize();
 		}
 		else {
 			str += "\\n";
-			for (var i = 0; i < this.children.length; i++) {
-				str += this.children[i].Serialize(depth);
+			for (var i = 0; i < this.conditions.length; i++) {
+				str += leadingWhitespace(depth + 1) + Sym.List + " " + this.conditions[i].Serialize(depth) + " ?\\n";
+				str += this.results[i].Serialize(depth + 2) + "\\n";
 			}
 			str += leadingWhitespace(depth);
 		}
@@ -2680,84 +1858,40 @@ var IfNode = function(conditions, results, isSingleLine) {
 			depth = 0;
 		}
 
-		visitor.Visit(this, depth);
-
-		for (var i = 0; i < this.children.length; i++) {
-			this.children[i].VisitAll(visitor, depth + 1);
+		visitor.Visit( this, depth );
+		for( var i = 0; i < this.conditions.length; i++ ) {
+			this.conditions[i].VisitAll( visitor, depth + 1 );
+		}
+		for( var i = 0; i < this.results.length; i++ ) {
+			this.results[i].VisitAll( visitor, depth + 1 );
 		}
 	};
 
 	this.ToString = function() {
-		return this.type + " " + this.mode + " " + this.GetId();
+		return this.type + " " + this.mode;
 	};
-}
-
-var ConditionPairNode = function(condition, result) {
-	Object.assign(this, new TreeRelationship());
-
-	this.type = "condition_pair";
-
-	this.AddChild(condition);
-	this.AddChild(result);
-
-	var self = this;
-
-	this.Eval = function(environment, onReturn) {
-		self.children[0].Eval(environment, function(conditionSuccess) {
-			if (conditionSuccess) {
-				self.children[1].Eval(environment, function(resultValue) {
-					onReturn({ conditionValue:true, resultValue:resultValue });
-				});
-			}
-			else {
-				onReturn({ conditionValue:false });
-			}
-		});
-	}
-
-	this.Serialize = function(depth) {
-		var str = "";
-		str += leadingWhitespace(depth + 1);
-		str += Sym.List + " " + this.children[0].Serialize(depth) + " " + Sym.ConditionEnd + Sym.Linebreak;
-		str += this.children[1].Serialize(depth + 2) + Sym.Linebreak;
-		return str;
-	}
-
-	this.VisitAll = function(visitor, depth) {
-		if (depth == undefined || depth == null) {
-			depth = 0;
-		}
-
-		visitor.Visit(this, depth);
-
-		for (var i = 0; i < this.children.length; i++) {
-			this.children[i].VisitAll(visitor, depth + 1);
-		}
-	}
-
-	this.ToString = function() {
-		return this.type + " " + this.GetId();
-	}
 }
 
 var ElseNode = function() {
 	Object.assign( this, new TreeRelationship() );
-	this.type = Sym.Else;
+	this.type = "else";
 
-	this.Eval = function(environment, onReturn) {
+	this.Eval = function(environment,onReturn) {
 		onReturn(true);
 	}
 
 	this.Serialize = function() {
-		return Sym.Else;
+		return "else";
 	}
 
 	this.ToString = function() {
-		return this.type + " " + this.mode + " " + this.GetId();
+		return this.type + " " + this.mode;
 	};
 }
 
 var Sym = {
+	// DialogOpen : "/\\"",
+	// DialogClose : "\\"/",
 	DialogOpen : '"""',
 	DialogClose : '"""',
 	CodeOpen : "{",
@@ -2765,38 +1899,35 @@ var Sym = {
 	Linebreak : "\\n", // just call it "break" ?
 	Separator : ":",
 	List : "-",
-	String : '"',
-	ConditionEnd : "?",
-	Else : "else",
-	ElseExp : ":", // special shorthand for expressions (deprecate?)
-	Set : "=",
-	Operators : ["==", ">=", "<=", ">", "<", "-", "+", "/", "*"], // operators need to be in reverse order of precedence
+	String : '"'
 };
 
 var Parser = function(env) {
 	var environment = env;
 
-	this.Parse = function(scriptStr, rootId) {
-		var rootNode = new DialogBlockNode();
-		rootNode.rootId = rootId;
-		var state = new ParserState(rootNode, scriptStr);
+	this.Parse = function(scriptStr) {
+		// console.log("NEW PARSE!!!!!!");
 
-		bitsyLog(scriptStr);
-		bitsyLog(state.Source());
+		// TODO : make this work for single-line, no dialog block scripts
 
-		if (state.MatchAhead(Sym.DialogOpen)) {
+		var state = new ParserState( new BlockNode(BlockMode.Dialog), scriptStr );
+
+		if( state.MatchAhead(Sym.DialogOpen) ) {
 			// multi-line dialog block
-			var dialogStr = state.ConsumeBlock(Sym.DialogOpen + Sym.Linebreak, Sym.Linebreak + Sym.DialogClose);
-			rootNode = new DialogBlockNode();
-			rootNode.rootId = rootId; // hacky!!
-			state = new ParserState(rootNode, dialogStr);
-			state = ParseDialog(state);
+			var dialogStr = state.ConsumeBlock( Sym.DialogOpen, Sym.DialogClose );
+			state = new ParserState( new BlockNode(BlockMode.Dialog), dialogStr );
+			state = ParseDialog( state );
 		}
+		// else if( state.MatchAhead(Sym.CodeOpen) ) { // NOTE: This causes problems when you lead with a code block
+		// 	// code-block: should this ever happen?
+		// 	state = ParseCodeBlock( state );
+		// }
 		else {
 			// single-line dialog block
-			state = ParseDialog(state);
+			state = ParseDialog( state );
 		}
 
+		// console.log( state.rootNode );
 		return state.rootNode;
 	};
 
@@ -2812,188 +1943,168 @@ var Parser = function(env) {
 		this.Char = function() { return sourceStr[i]; };
 		this.Step = function(n) { if(n===undefined) n=1; i += n; };
 		this.MatchAhead = function(str) {
-			// bitsyLog(str);
+			// console.log(str);
 			str = "" + str; // hack to turn single chars into strings
-			// bitsyLog(str);
-			// bitsyLog(str.length);
-			for (var j = 0; j < str.length; j++) {
-				if (i + j >= sourceStr.length) {
+			// console.log(str);
+			// console.log(str.length);
+			for(var j = 0; j < str.length; j++) {
+				if( i + j >= sourceStr.length )
 					return false;
-				}
-				else if (str[j] != sourceStr[i+j]) {
+				else if( str[j] != sourceStr[i+j] )
 					return false;
-				}
 			}
 			return true;
 		}
 		this.Peak = function(end) {
 			var str = "";
 			var j = i;
-			// bitsyLog(j);
-			while (j < sourceStr.length && end.indexOf(sourceStr[j]) == -1) {
+			// console.log(j);
+			while(j < sourceStr.length && end.indexOf( sourceStr[j] ) == -1 ) {
 				str += sourceStr[j];
 				j++;
 			}
-			// bitsyLog("PEAK ::" + str + "::");
+			// console.log("PEAK ::" + str + "::");
 			return str;
 		}
-		this.ConsumeBlock = function(open, close, includeSymbols) {
-			if (includeSymbols === undefined || includeSymbols === null) {
-				includeSymbols = false;
-			}
-
+		this.ConsumeBlock = function( open, close ) {
 			var startIndex = i;
 
 			var matchCount = 0;
-			if (this.MatchAhead(open)) {
+			if( this.MatchAhead( open ) ) {
 				matchCount++;
-				this.Step(open.length);
+				this.Step( open.length );
 			}
 
-			while (matchCount > 0 && !this.Done()) {
-				if (this.MatchAhead(close)) {
+			while( matchCount > 0 && !this.Done() ) {
+				if( this.MatchAhead( close ) ) {
 					matchCount--;
 					this.Step( close.length );
 				}
-				else if (this.MatchAhead(open)) {
+				else if( this.MatchAhead( open ) ) {
 					matchCount++;
-					this.Step(open.length);
+					this.Step( open.length );
 				}
 				else {
 					this.Step();
 				}
 			}
 
-			if (includeSymbols) {
-				return sourceStr.slice(startIndex, i);
-			}
-			else {
-				return sourceStr.slice(startIndex + open.length, i - close.length);
-			}
-		}
+			// console.log("!!! " + startIndex + " " + i);
 
-		this.Print = function() { bitsyLog(sourceStr); };
+			return sourceStr.slice( startIndex + open.length, i - close.length );
+		}
+		this.Print = function() { console.log(sourceStr); };
 		this.Source = function() { return sourceStr; };
 	};
 
-	/*
-		ParseDialog():
-		This function adds {print} nodes and linebreak {br} nodes to display text,
-		interleaved with bracketed code nodes for functions and flow control,
-		such as text effects {shk} {wvy} or sequences like {cycle} and {shuffle}.
-		The parsing of those code blocks is handled by ParseCode.
-
-		Note on parsing newline characters:
-		- there should be an implicit linebreak {br} after each dialog line
-		- a "dialog line" is defined as any line that either:
-			- 1) contains dialog text (any text outside of a code block)
-			- 2) is entirely empty (no text, no code)
-			- *or* 3) contains a list block (sequence, cycle, shuffle, or conditional)
-		- lines *only* containing {code} blocks are not dialog lines
-
-		NOTE TO SELF: all the state I'm storing in here feels like
-		evidence that the parsing system kind of broke down at this point :(
-		Maybe it would feel better if I move into the "state" object
-	*/
 	function ParseDialog(state) {
-		var curLineNodeList = [];
-		var curText = "";
-		var curLineIsEmpty = true;
-		var curLineContainsDialogText = false;
-		var prevLineIsDialogLine = false;
+		// console.log("PARSE DIALOG");
+		state.Print();
 
-		var curLineIsDialogLine = function() {
-			return curLineContainsDialogText || curLineIsEmpty;
-		}
+		// for linebreak logic: add linebreaks after lines with dialog or empty lines (if it's not the very first line)
+		var hasBlock = false;
+		var hasDialog = false;
+		var isFirstLine = true;
 
-		var resetLineStateForNewLine = function() {
-			prevLineIsDialogLine = curLineIsDialogLine();
-			curLineContainsDialogText = false;
-			curLineIsEmpty = true;
-			curText = "";
-			curLineNodeList = [];
-		}
+		// console.log("---- PARSE DIALOG ----");
 
-		var tryAddTextNodeToList = function() {
-			if (curText.length > 0) {
-				var printNode = new FuncNode("print", [new LiteralNode(curText)]);
-				curLineNodeList.push(printNode);
+		var text = "";
+		var addTextNode = function() {
+			// console.log("TEXT " + text.length);
+			if (text.length > 0) {
+				// console.log("TEXT " + text);
+				// console.log("text!!");
+				// console.log([text]);
 
-				curText = "";
-				curLineIsEmpty = false;
-				curLineContainsDialogText = true;
+				state.curNode.AddChild( new FuncNode( "print", [new LiteralNode(text)] ) );
+				text = "";
+
+				hasDialog = true;
 			}
 		}
 
-		var addCodeNodeToList = function() {
-			var codeSource = state.ConsumeBlock(Sym.CodeOpen, Sym.CodeClose);
-			var codeState = new ParserState(new CodeBlockNode(), codeSource);
-			codeState = ParseCode(codeState);
-			var codeBlockNode = codeState.rootNode;
-			curLineNodeList.push(codeBlockNode);
+		while ( !state.Done() ) {
 
-			curLineIsEmpty = false;
+			if( state.MatchAhead(Sym.CodeOpen) ) {
+				addTextNode();
+				state = ParseCodeBlock( state );
 
-			// lists count as dialog text, because they can contain it
-			if (isMultilineListBlock(codeBlockNode)) {
-				curLineContainsDialogText = true;
+				// console.log("CODE");
+
+				var len = state.curNode.children.length;
+				if(len > 0 && state.curNode.children[len-1].type === "block") {
+					var block = state.curNode.children[len-1];
+					if(isMultilineListBlock(block))
+						hasDialog = true; // hack to get correct newline behavior for multiline blocks
+				}
+
+				hasBlock = true;
 			}
-		}
+			// NOTE: nested dialog blocks disabled for now
+			// else if( state.MatchAhead(Sym.DialogOpen) ) {
+			// 	addTextNode();
+			// 	state = ParseDialogBlock( state ); // These can be nested (should they though???)
 
-		var tryAddLinebreakNodeToList = function() {
-			if (prevLineIsDialogLine) {
-				var linebreakNode = new FuncNode("br", []);
-				curLineNodeList.unshift(linebreakNode);
-			}
-		}
-
-		var addLineNodesToParent = function() {
-			for (var i = 0; i < curLineNodeList.length; i++) {
-				state.curNode.AddChild(curLineNodeList[i]);
-			}
-		}
-
-		while (!state.Done()) {
-			if (state.MatchAhead(Sym.CodeOpen)) { // process code block
-				// add any buffered text to a print node, and parse the code
-				tryAddTextNodeToList();
-				addCodeNodeToList();
-			}
-			else if (state.MatchAhead(Sym.Linebreak)) { // process new line
-				// add any buffered text to a print node, 
-				// and add a linebreak if we are between two dialog lines
-				tryAddTextNodeToList();
-				tryAddLinebreakNodeToList();
-
-				// since we've reached the end of a line
-				// add stored nodes for this line to the parent node we are building,
-				// and reset state for the next line
-				addLineNodesToParent();
-				resetLineStateForNewLine();
-
-				state.Step();
-			}
+			// 	hasBlock = true;
+			// }
 			else {
-				// continue adding text to the current text buffer
-				curText += state.Char();
+				if ( state.MatchAhead(Sym.Linebreak) ) {
+					addTextNode();
+
+					/*
+					NOTES:
+					linebreaks SHOULD happen on
+					- lines with text (including the first or last line)
+					- empty lines (that are NOT the first or last line)
+					linebreaks should NOT happen on
+					- lines with only CODE blocks
+					- empty FIRST or LAST lines
+
+					also, apparently:
+					- NEVER line break on the last line
+					*/
+					var isLastLine = (state.Index() + 1) == state.Count();
+					// console.log("block " + hasBlock);
+					// console.log("dialog " + hasDialog);
+					var isEmptyLine = !hasBlock && !hasDialog;
+					// console.log("empty " + isEmptyLine);
+					var isValidEmptyLine = isEmptyLine && !(isFirstLine || isLastLine);
+					// console.log("valid empty " + isValidEmptyLine);
+					var shouldAddLinebreak = (hasDialog || isValidEmptyLine) && !isLastLine; // last clause is a hack (but it works - why?)
+					// console.log("LINEBREAK? " + shouldAddLinebreak);
+					if( shouldAddLinebreak ) {
+						// console.log("NEWLINE");
+						// console.log("empty? " + isEmptyLine);
+						// console.log("dialog? " + hasDialog);
+						state.curNode.AddChild( new FuncNode( "br", [] ) ); // use function or character?
+					}
+
+					// linebreak logic
+					isFirstLine = false;
+					hasBlock = false;
+					hasDialog = false;
+
+					text = "";
+				}
+				else {
+					text += state.Char();
+				}
 				state.Step();
 			}
+
 		}
+		addTextNode();
 
-		// to make sure we don't leave anything behind:
-		// add buffered text to a print node and add all nodes
-		// to the current parent node
-		tryAddTextNodeToList();
-		tryAddLinebreakNodeToList();
-		addLineNodesToParent();
+		// console.log("---- PARSE DIALOG ----");
 
+		// console.log(state);
 		return state;
 	}
 
 	function ParseDialogBlock(state) {
 		var dialogStr = state.ConsumeBlock( Sym.DialogOpen, Sym.DialogClose );
 
-		var dialogState = new ParserState(new DialogBlockNode(), dialogStr);
+		var dialogState = new ParserState( new BlockNode(BlockMode.Dialog), dialogStr );
 		dialogState = ParseDialog( dialogState );
 
 		state.curNode.AddChild( dialogState.rootNode );
@@ -3001,274 +2112,164 @@ var Parser = function(env) {
 		return state;
 	}
 
-	/*
-		ParseConditional():
-		A conditional contains a list of conditions that can be
-		evaluated to true or false, followed by more dialog
-		that will be evaluated if the condition is true. The first
-		true condition is the one that gets evaluated.
-	*/
-	function ParseConditional(state) {
+	function ParseIf(state) {
 		var conditionStrings = [];
 		var resultStrings = [];
 		var curIndex = -1;
-		var requiredLeadingWhitespace = -1;
+		var isNewline = true;
+		var isConditionDone = false;
+		var codeBlockCount = 0;
 
-		// TODO : very similar to sequence parsing - can we share anything?
-		function parseConditionalItemLine(state) {
-			var lineText = "";
-			var whitespaceCount = 0;
-			var isNewCondition = false;
-			var encounteredNonWhitespace = false;
-			var encounteredConditionEnd = false;
+		while( !state.Done() ) {
+			if(state.Char() === Sym.CodeOpen)
+				codeBlockCount++;
+			else if(state.Char() === Sym.CodeClose)
+				codeBlockCount--;
 
-			while (!state.Done() && !(state.Char() === Sym.Linebreak)) {
-				// count whitespace until we hit the first non-whitespace character
-				if (!encounteredNonWhitespace) {
-					if (state.Char() === " " || state.Char() === "\\t") {
-						whitespaceCount++;
-					}
-					else {
-						encounteredNonWhitespace = true;
+			var isWhitespace = (state.Char() === " " || state.Char() === "\\t");
+			var isSkippableWhitespace = isNewline && isWhitespace;
+			var isNewListItem = isNewline && (codeBlockCount <= 0) && (state.Char() === Sym.List);
 
-						if (state.Char() === Sym.List) {
-							isNewCondition = true;
-							whitespaceCount += 2; // count the list seperator AND the following extra space
-						}
-					}
-				}
-
-				// if this is the condition, we need to track whether we've
-				// reached the end of the condition
-				if (isNewCondition && !encounteredConditionEnd) {
-					if (state.Char() === Sym.ConditionEnd) {
-						encounteredConditionEnd = true;
-					}
-				}
-
-				// add characters one at a time, unless it's a code block
-				// since code blocks can contain additional sequences inside
-				// them that will mess up our list item detection
-				if (state.Char() === Sym.CodeOpen) {
-					lineText += state.ConsumeBlock(Sym.CodeOpen, Sym.CodeClose, true /*includeSymbols*/);
-				}
-				else {
-					if (!encounteredConditionEnd) { // skip all characters including & after the condition end
-						lineText += state.Char();
-					}
-					state.Step();
-				}
-			}
-
-			if (state.Char() === Sym.Linebreak) {
-				state.Step();
-			}
-
-			return { text:lineText, whitespace:whitespaceCount, isNewCondition:isNewCondition };
-		}
-
-		// TODO : this is copied from sequence parsing; share?
-		function trimLeadingWhitespace(text, trimLength) {
-			var textSplit = text.split(Sym.linebreak);
-			textSplit = textSplit.map(function(line) { return line.slice(trimLength) });
-			return textSplit.join(Sym.linebreak);
-		}
-
-		while (!state.Done()) {
-			var lineResults = parseConditionalItemLine(state);
-
-			if (lineResults.isNewCondition) {
-				requiredLeadingWhitespace = lineResults.whitespace;
+			if(isNewListItem) {
 				curIndex++;
+				isConditionDone = false;
 				conditionStrings[curIndex] = "";
 				resultStrings[curIndex] = "";
 			}
-
-			// to avoid extra newlines in nested conditionals, only count lines
-			// that at least match the whitespace count of the initial line
-			// NOTE: see the comment in sequence parsing for more details
-			if (lineResults.whitespace >= requiredLeadingWhitespace) {
-				var trimmedText = trimLeadingWhitespace(lineResults.text, requiredLeadingWhitespace);
-
-				if (lineResults.isNewCondition) {
-					conditionStrings[curIndex] += trimmedText;
+			else if(curIndex > -1) {
+				if(!isConditionDone) {
+					if(state.Char() === "?" || state.Char() === "\\n") { // TODO: use Sym
+						// end of condition
+						isConditionDone = true;
+					}
+					else {
+						// read in condition
+						conditionStrings[curIndex] += state.Char();
+					}
 				}
 				else {
-					resultStrings[curIndex] += trimmedText + Sym.Linebreak;
+					// read in result
+					if(!isSkippableWhitespace)
+						resultStrings[curIndex] += state.Char();
 				}
 			}
+
+			isNewline = (state.Char() === Sym.Linebreak) || isSkippableWhitespace || isNewListItem;
+
+			state.Step();
 		}
 
-		// hack: cut off the trailing newlines from all the result strings
-		resultStrings = resultStrings.map(function(result) { return result.slice(0,-1); });
+		// console.log("PARSE IF:");
+		// console.log(conditionStrings);
+		// console.log(resultStrings);
 
 		var conditions = [];
-		for (var i = 0; i < conditionStrings.length; i++) {
+		for(var i = 0; i < conditionStrings.length; i++) {
 			var str = conditionStrings[i].trim();
-			if (str === Sym.Else) {
-				conditions.push(new ElseNode());
+			if(str === "else") {
+				conditions.push( new ElseNode() );
 			}
 			else {
-				var exp = CreateExpression(str);
-				conditions.push(exp);
+				var exp = CreateExpression( str );
+				conditions.push( exp );
 			}
 		}
 
 		var results = [];
-		for (var i = 0; i < resultStrings.length; i++) {
+		for(var i = 0; i < resultStrings.length; i++) {
 			var str = resultStrings[i];
-			var dialogBlockState = new ParserState(new DialogBlockNode(), str);
-			dialogBlockState = ParseDialog(dialogBlockState);
+			var dialogBlockState = new ParserState( new BlockNode(BlockMode.Dialog), str );
+			dialogBlockState = ParseDialog( dialogBlockState );
 			var dialogBlock = dialogBlockState.rootNode;
-			results.push(dialogBlock);
+			results.push( dialogBlock );
 		}
 
-		state.curNode.AddChild(new IfNode(conditions, results));
+		state.curNode.AddChild( new IfNode( conditions, results ) );
 
 		return state;
 	}
 
 	function IsSequence(str) {
-		// bitsyLog("IsSequence? " + str);
+		// console.log("IsSequence? " + str);
 		return str === "sequence" || str === "cycle" || str === "shuffle";
 	}
 
-	/*
-		ParseSequence():
-		Sequence nodes contain a list of dialog block nodes. The order those
-		nodes are evaluated is determined by the type of sequence:
-		- sequence: each child node evaluated once in order
-		- cycle: repeats from the beginning after all nodes evaluate
-		- shuffle: evaluate in a random order
-
-		Each item in a sequence is sepearated by a "-" character.
-		The seperator must come at the beginning of the line,
-		but may be preceded by whitespace (in any amount).
-
-		About whitespace: Whitespace at the start of a line
-		is ignored if it less than or equal to the count of
-		whitespace that preceded the list separator ("-") at
-		the start of that item. (The count also includes the
-		seperator and the extra space after the seperator.)
-	 */
+	// TODO: don't forget about eating whitespace
 	function ParseSequence(state, sequenceType) {
+		// console.log("SEQUENCE " + sequenceType);
+		state.Print();
+
+		var isNewline = false;
 		var itemStrings = [];
 		var curItemIndex = -1; // -1 indicates not reading an item yet
-		var requiredLeadingWhitespace = -1;
+		var codeBlockCount = 0;
 
-		function parseSequenceItemLine(state) {
-			var lineText = "";
-			var whitespaceCount = 0;
-			var isNewListItem = false;
-			var encounteredNonWhitespace = false;
+		while( !state.Done() ) {
+			if(state.Char() === Sym.CodeOpen)
+				codeBlockCount++;
+			else if(state.Char() === Sym.CodeClose)
+				codeBlockCount--;
 
-			while (!state.Done() && !(state.Char() === Sym.Linebreak)) {
-				// count whitespace until we hit the first non-whitespace character
-				if (!encounteredNonWhitespace) {
-					if (state.Char() === " " || state.Char() === "\\t") {
-						whitespaceCount++;
-					}
-					else {
-						encounteredNonWhitespace = true;
+			var isWhitespace = (state.Char() === " " || state.Char() === "\\t");
+			var isSkippableWhitespace = isNewline && isWhitespace;
+			var isNewListItem = isNewline && (codeBlockCount <= 0) && (state.Char() === Sym.List);
 
-						if (state.Char() === Sym.List) {
-							isNewListItem = true;
-							whitespaceCount += 2; // count the list seperator AND the following extra space
-						}
-					}
-				}
-
-				// add characters one at a time, unless it's a code block
-				// since code blocks can contain additional sequences inside
-				// them that will mess up our list item detection
-				if (state.Char() === Sym.CodeOpen) {
-					lineText += state.ConsumeBlock(Sym.CodeOpen, Sym.CodeClose, true /*includeSymbols*/);
-				}
-				else {
-					lineText += state.Char();
-					state.Step();
-				}
-			}
-
-			if (state.Char() === Sym.Linebreak) {
-				state.Step();
-			}
-
-			return { text:lineText, whitespace:whitespaceCount, isNewListItem:isNewListItem };
-		}
-
-		function trimLeadingWhitespace(text, trimLength) {
-			// the split and join is necessary because a single "line"
-			// can contain sequences that may contain newlines of their own
-			// (we treat them all as one "line" for sequence parsing purposes)
-			var textSplit = text.split(Sym.linebreak);
-			textSplit = textSplit.map(function(line) { return line.slice(trimLength) });
-			return textSplit.join(Sym.linebreak);
-		}
-
-		while (!state.Done()) {
-			var lineResults = parseSequenceItemLine(state);
-
-			if (lineResults.isNewListItem) {
-				requiredLeadingWhitespace = lineResults.whitespace;
+			if(isNewListItem) {
+				// console.log("found next list item");
 				curItemIndex++;
 				itemStrings[curItemIndex] = "";
 			}
-
-			// to avoid double counting closing lines (empty ones ending in a curly brace)
-			// we only allow lines that have at least as much whitespace as the start of the list item
-			// TODO : I think right now this leads to a bug if the list item's indentation is less than
-			// its parent code block... hopefully that won't be a big deal for now
-			// (NOTE: I think the bug could be fixed by only applying this to the FINAL line of an item, but
-			// that would require more consideration and testing)
-			if (lineResults.whitespace >= requiredLeadingWhitespace) {
-				var trimmedText = trimLeadingWhitespace(lineResults.text, requiredLeadingWhitespace);
-				itemStrings[curItemIndex] += trimmedText + Sym.Linebreak;
+			else if(curItemIndex > -1) {
+				if(!isSkippableWhitespace)
+					itemStrings[curItemIndex] += state.Char();
 			}
-		}
 
-		// a bit hacky: cut off the trailing newlines from all the items
-		itemStrings = itemStrings.map(function(item) { return item.slice(0,-1); });
+			isNewline = (state.Char() === Sym.Linebreak) || isSkippableWhitespace || isNewListItem;
+
+			// console.log(state.Char());
+			state.Step();
+		}
+		// console.log(itemStrings);
+		// console.log("SEQUENCE DONE");
 
 		var options = [];
-		for (var i = 0; i < itemStrings.length; i++) {
+		for(var i = 0; i < itemStrings.length; i++) {
 			var str = itemStrings[i];
-			var dialogBlockState = new ParserState(new DialogBlockNode(false /* doIndentFirstLine */), str);
-			dialogBlockState = ParseDialog(dialogBlockState);
+			var dialogBlockState = new ParserState( new BlockNode( BlockMode.Dialog, false /* doIndentFirstLine */ ), str );
+			dialogBlockState = ParseDialog( dialogBlockState );
 			var dialogBlock = dialogBlockState.rootNode;
-			options.push(dialogBlock);
+			options.push( dialogBlock );
 		}
 
-		if (sequenceType === "sequence") {
-			state.curNode.AddChild(new SequenceNode(options));
-		}
-		else if (sequenceType === "cycle") {
-			state.curNode.AddChild(new CycleNode(options));
-		}
-		else if (sequenceType === "shuffle") {
-			state.curNode.AddChild(new ShuffleNode(options));
-		}
+		// console.log(options);
+
+		if(sequenceType === "sequence")
+			state.curNode.AddChild( new SequenceNode( options ) );
+		else if(sequenceType === "cycle")
+			state.curNode.AddChild( new CycleNode( options ) );
+		else if(sequenceType === "shuffle")
+			state.curNode.AddChild( new ShuffleNode( options ) );
 
 		return state;
 	}
 
 	function ParseFunction(state, funcName) {
-		bitsyLog("~~~ PARSE FUNCTION " + funcName);
+		console.log("~~~ PARSE FUNCTION " + funcName);
 
 		var args = [];
 
 		var curSymbol = "";
 		function OnSymbolEnd() {
 			curSymbol = curSymbol.trim();
-			// bitsyLog("PARAMTER " + curSymbol);
+			// console.log("PARAMTER " + curSymbol);
 			args.push( StringToValue(curSymbol) );
-			// bitsyLog(args);
+			// console.log(args);
 			curSymbol = "";
 		}
 
 		while( !( state.Char() === "\\n" || state.Done() ) ) {
 			if( state.MatchAhead(Sym.CodeOpen) ) {
-				var codeBlockState = new ParserState(new CodeBlockNode(), state.ConsumeBlock(Sym.CodeOpen, Sym.CodeClose));
+				var codeBlockState = new ParserState( new BlockNode(BlockMode.Code), state.ConsumeBlock( Sym.CodeOpen, Sym.CodeClose ) );
 				codeBlockState = ParseCode( codeBlockState );
 				var codeBlock = codeBlockState.rootNode;
 				args.push( codeBlock );
@@ -3277,7 +2278,7 @@ var Parser = function(env) {
 			else if( state.MatchAhead(Sym.String) ) {
 				/* STRING LITERAL */
 				var str = state.ConsumeBlock(Sym.String, Sym.String);
-				// bitsyLog("STRING " + str);
+				// console.log("STRING " + str);
 				args.push( new LiteralNode(str) );
 				curSymbol = "";
 			}
@@ -3302,7 +2303,7 @@ var Parser = function(env) {
 	function IsValidVariableName(str) {
 		var reg = /^[a-zA-Z_$][a-zA-Z_$0-9]*$/;
 		var isValid = reg.test(str);
-		// bitsyLog("VALID variable??? " + isValid);
+		// console.log("VALID variable??? " + isValid);
 		return isValid;
 	}
 
@@ -3310,20 +2311,20 @@ var Parser = function(env) {
 		if(valStr[0] === Sym.CodeOpen) {
 			// CODE BLOCK!!!
 			var codeStr = (new ParserState( null, valStr )).ConsumeBlock(Sym.CodeOpen, Sym.CodeClose); //hacky
-			var codeBlockState = new ParserState(new CodeBlockNode(), codeStr);
+			var codeBlockState = new ParserState( new BlockNode( BlockMode.Code ), codeStr );
 			codeBlockState = ParseCode( codeBlockState );
 			return codeBlockState.rootNode;
 		}
 		else if(valStr[0] === Sym.String) {
 			// STRING!!
-			// bitsyLog("STRING");
+			// console.log("STRING");
 			var str = "";
 			var i = 1;
 			while (i < valStr.length && valStr[i] != Sym.String) {
 				str += valStr[i];
 				i++;
 			}
-			// bitsyLog(str);
+			// console.log(str);
 			return new LiteralNode( str );
 		}
 		else if(valStr === "true") {
@@ -3336,12 +2337,12 @@ var Parser = function(env) {
 		}
 		else if( !isNaN(parseFloat(valStr)) ) {
 			// NUMBER!!
-			// bitsyLog("NUMBER!!! " + valStr);
+			// console.log("NUMBER!!! " + valStr);
 			return new LiteralNode( parseFloat(valStr) );
 		}
 		else if(IsValidVariableName(valStr)) {
 			// VARIABLE!!
-			// bitsyLog("VARIABLE");
+			// console.log("VARIABLE");
 			return new VarNode(valStr); // TODO : check for valid potential variables
 		}
 		else {
@@ -3350,7 +2351,13 @@ var Parser = function(env) {
 		}
 	}
 
+	var setSymbol = "=";
+	var ifSymbol = "?";
+	var elseSymbol = ":";
+	var operatorSymbols = ["==", ">=", "<=", ">", "<", "-", "+", "/", "*"]; // operators need to be in reverse order of precedence
 	function CreateExpression(expStr) {
+		console.log("CREATE EXPRESSION --- " + expStr);
+
 		expStr = expStr.trim();
 
 		function IsInsideString(index) {
@@ -3382,40 +2389,40 @@ var Parser = function(env) {
 		var operator = null;
 
 		// set is special because other operator can look like it, and it has to go first in the order of operations
-		var setIndex = expStr.indexOf(Sym.Set);
+		var setIndex = expStr.indexOf(setSymbol);
 		if( setIndex > -1 && !IsInsideString(setIndex) && !IsInsideCode(setIndex) ) { // it might be a set operator
 			if( expStr[setIndex+1] != "=" && expStr[setIndex-1] != ">" && expStr[setIndex-1] != "<" ) {
 				// ok it actually IS a set operator and not ==, >=, or <=
-				operator = Sym.Set;
+				operator = setSymbol;
 				var variableName = expStr.substring(0,setIndex).trim(); // TODO : valid variable name testing
 				var left = IsValidVariableName(variableName) ? new VarNode( variableName ) : new LiteralNode(null);
-				var right = CreateExpression( expStr.substring(setIndex+Sym.Set.length) );
+				var right = CreateExpression( expStr.substring(setIndex+setSymbol.length) );
 				var exp = new ExpNode( operator, left, right );
 				return exp;
 			}
 		}
 
 		// special if "expression" for single-line if statements
-		var ifIndex = expStr.indexOf(Sym.ConditionEnd);
+		var ifIndex = expStr.indexOf(ifSymbol);
 		if( ifIndex > -1 && !IsInsideString(ifIndex) && !IsInsideCode(ifIndex) ) {
-			operator = Sym.ConditionEnd;
+			operator = ifSymbol;
 			var conditionStr = expStr.substring(0,ifIndex).trim();
 			var conditions = [ CreateExpression(conditionStr) ];
 
-			var resultStr = expStr.substring(ifIndex+Sym.ConditionEnd.length);
+			var resultStr = expStr.substring(ifIndex+ifSymbol.length);
 			var results = [];
 			function AddResult(str) {
-				var dialogBlockState = new ParserState(new DialogBlockNode(), str);
+				var dialogBlockState = new ParserState( new BlockNode(BlockMode.Dialog), str );
 				dialogBlockState = ParseDialog( dialogBlockState );
 				var dialogBlock = dialogBlockState.rootNode;
 				results.push( dialogBlock );
 			}
 
-			var elseIndex = resultStr.indexOf(Sym.ElseExp); // does this need to test for strings?
+			var elseIndex = resultStr.indexOf(elseSymbol); // does this need to test for strings?
 			if(elseIndex > -1) {
 				conditions.push( new ElseNode() );
 
-				var elseStr = resultStr.substring(elseIndex+Sym.ElseExp.length);
+				var elseStr = resultStr.substring(elseIndex+elseSymbol.length);
 				var resultStr = resultStr.substring(0,elseIndex);
 
 				AddResult( resultStr.trim() );
@@ -3428,8 +2435,8 @@ var Parser = function(env) {
 			return new IfNode( conditions, results, true /*isSingleLine*/ );
 		}
 
-		for( var i = 0; (operator == null) && (i < Sym.Operators.length); i++ ) {
-			var opSym = Sym.Operators[i];
+		for( var i = 0; (operator == null) && (i < operatorSymbols.length); i++ ) {
+			var opSym = operatorSymbols[i];
 			var opIndex = expStr.indexOf( opSym );
 			if( opIndex > -1 && !IsInsideString(opIndex) && !IsInsideCode(opIndex) ) {
 				operator = opSym;
@@ -3452,86 +2459,70 @@ var Parser = function(env) {
 
 	function IsExpression(str) {
 		var tempState = new ParserState(null, str); // hacky
-		var textOutsideCodeBlocks = "";
+		var nonWhitespaceCount = 0;
 
 		while (!tempState.Done()) {
-			if (tempState.MatchAhead(Sym.CodeOpen)) {
-				tempState.ConsumeBlock(Sym.CodeOpen, Sym.CodeClose);
+			if( IsWhitespace(tempState.Char()) ) {
+				tempState.Step(); // consume whitespace
+			}
+			else if( tempState.MatchAhead(Sym.CodeOpen) ) {
+				tempState.ConsumeBlock( Sym.CodeOpen, Sym.CodeClose );
 			}
 			else {
-				textOutsideCodeBlocks += tempState.Char();
+				nonWhitespaceCount++;
 				tempState.Step();
 			}
 		}
 
-		var containsAnyExpressionOperators = (textOutsideCodeBlocks.indexOf(Sym.ConditionEnd) != -1) ||
-				(textOutsideCodeBlocks.indexOf(Sym.Set) != -1) ||
-				(Sym.Operators.some(function(opSym) { return textOutsideCodeBlocks.indexOf(opSym) != -1; }));
-
-		return containsAnyExpressionOperators;
-	}
-
-	function IsLiteral(str) {
-		var isBool = str === "true" || str === "false";
-		var isNum = !isNaN(parseFloat(str));
-		var isStr = str[0] === '"' && str[str.length-1] === '"';
-		var isVar = IsValidVariableName(str);
-		var isEmpty = str.length === 0;
-		return isBool || isNum || isStr || isVar || isEmpty;
+		var isExpression = nonWhitespaceCount > 0;
+		return isExpression;
 	}
 
 	function ParseExpression(state) {
 		var line = state.Source(); // state.Peak( [Sym.Linebreak] ); // TODO : remove the linebreak thing
-		// bitsyLog("EXPRESSION " + line);
-		var exp = CreateExpression(line);
-		// bitsyLog(exp);
-		state.curNode.AddChild(exp);
-		state.Step(line.length);
+		// console.log("EXPRESSION " + line);
+		var exp = CreateExpression( line );
+		// console.log(exp);
+		state.curNode.AddChild( exp );
+		state.Step( line.length );
 		return state;
 	}
 
-	function IsConditionalBlock(state) {
-		var peakToFirstListSymbol = state.Peak([Sym.List]);
-
-		var foundListSymbol = peakToFirstListSymbol < state.Source().length;
-
-		var areAllCharsBeforeListWhitespace = true;
-		for (var i = 0; i < peakToFirstListSymbol.length; i++) {
-			if (!IsWhitespace(peakToFirstListSymbol[i])) {
-				areAllCharsBeforeListWhitespace = false;
-			}
-		}
-
-		var peakToFirstConditionSymbol = state.Peak([Sym.ConditionEnd]);
-		peakToFirstConditionSymbol = peakToFirstConditionSymbol.slice(peakToFirstListSymbol.length);
-		var hasNoLinebreakBetweenListAndConditionEnd = peakToFirstConditionSymbol.indexOf(Sym.Linebreak) == -1;
-
-		return foundListSymbol && 
-			areAllCharsBeforeListWhitespace && 
-			hasNoLinebreakBetweenListAndConditionEnd;
-	}
-
 	function ParseCode(state) {
-		if (IsConditionalBlock(state)) {
-			state = ParseConditional(state);
+		console.log("PARSE CODE --- " + state.Source());
+
+		// skip leading whitespace
+		while (IsWhitespace(state.Char())) {
+			state.Step();
 		}
-		else if (environment.HasFunction(state.Peak([" "]))) { // TODO --- what about newlines???
-			var funcName = state.Peak([" "]);
-			state.Step(funcName.length);
-			state = ParseFunction(state, funcName);
+
+		if( state.Char() === Sym.List && (state.Peak([]).indexOf("?") > -1) ) { // TODO : symbols? matchahead?
+			// console.log("PEAK IF " + state.Peak( ["?"] ));
+			state = ParseIf( state );
 		}
-		else if (IsSequence(state.Peak([" ", Sym.Linebreak]))) {
-			var sequenceType = state.Peak([" ", Sym.Linebreak]);
-			state.Step(sequenceType.length);
-			state = ParseSequence(state, sequenceType);
+		else if( environment.HasFunction( state.Peak( [" "] ) ) ) { // TODO --- what about newlines???
+			var funcName = state.Peak( [" "] );
+			state.Step( funcName.length );
+			state = ParseFunction( state, funcName );
 		}
-		else if (IsLiteral(state.Source()) || IsExpression(state.Source())) {
+		else if( IsSequence( state.Peak( [" ", Sym.Linebreak] ) ) ) {
+			var sequenceType = state.Peak( [" ", Sym.Linebreak] );
+			state.Step( sequenceType.length );
+			state = ParseSequence( state, sequenceType );
+		}
+		else if (IsExpression(state.Source())) {
 			state = ParseExpression(state);
 		}
 		else {
-			var undefinedSrc = state.Peak([]);
-			var undefinedNode = new UndefinedNode(undefinedSrc);
-			state.curNode.AddChild(undefinedNode);
+			// multi-line code block
+			while (!state.Done()) {
+				if( state.MatchAhead(Sym.CodeOpen) ) {
+					state = ParseCodeBlock( state );
+				}
+				else {
+					state.Step();
+				}
+			}
 		}
 
 		// just go to the end now
@@ -3544,9 +2535,15 @@ var Parser = function(env) {
 
 	function ParseCodeBlock(state) {
 		var codeStr = state.ConsumeBlock( Sym.CodeOpen, Sym.CodeClose );
-		var codeState = new ParserState(new CodeBlockNode(), codeStr);
+
+		// console.log("PARSE CODE");
+		// console.log(codeStr);
+
+		var codeState = new ParserState( new BlockNode(BlockMode.Code), codeStr );
 		codeState = ParseCode( codeState );
+		
 		state.curNode.AddChild( codeState.rootNode );
+
 		return state;
 	}
 
@@ -3649,7 +2646,7 @@ var DialogRenderer = function() {
 		0,0,1,0,0
 	];
 	this.DrawNextArrow = function() {
-		// bitsyLog("draw arrow!");
+		// console.log("draw arrow!");
 		var top = (textboxInfo.height-5) * scale;
 		var left = (textboxInfo.width-(5+4)) * scale;
 		if (textDirection === TextDirection.RightToLeft) { // RTL hack
@@ -3732,22 +2729,20 @@ var DialogRenderer = function() {
 	};
 
 	var effectTime = 0; // TODO this variable should live somewhere better
-	this.Draw = function(buffer, dt) {
+	this.Draw = function(buffer,dt) {
 		effectTime += dt;
 
 		this.ClearTextbox();
 
-		buffer.ForEachActiveChar(this.DrawChar);
+		buffer.ForEachActiveChar( this.DrawChar );
 
-		if (buffer.CanContinue()) {
+		if( buffer.CanContinue() )
 			this.DrawNextArrow();
-		}
 
 		this.DrawTextbox();
 
-		if (buffer.DidPageFinishThisFrame() && onPageFinish != null) {
+		if( buffer.DidPageFinishThisFrame() && onPageFinish != null )
 			onPageFinish();
-		}
 	};
 
 	/* this is a hook for GIF rendering */
@@ -3796,7 +2791,7 @@ var DialogBuffer = function() {
 		for (var i = 0; i < rowCount; i++) {
 			var row = this.CurPage()[i];
 			var charCount = (i == rowIndex) ? charIndex+1 : row.length;
-			// bitsyLog(charCount);
+			// console.log(charCount);
 
 			var leftPos = 0;
 			if (textDirection === TextDirection.RightToLeft) {
@@ -3809,7 +2804,7 @@ var DialogBuffer = function() {
 					if (textDirection === TextDirection.RightToLeft) {
 						leftPos -= char.spacing;
 					}
-					// bitsyLog(j + " " + leftPos);
+					// console.log(j + " " + leftPos);
 
 					// handler( char, i /*rowIndex*/, j /*colIndex*/ );
 					handler(char, i /*rowIndex*/, j /*colIndex*/, leftPos)
@@ -3829,8 +2824,6 @@ var DialogBuffer = function() {
 		charIndex = 0;
 		isDialogReadyToContinue = false;
 
-		afterManualPagebreak = false;
-
 		activeTextEffects = [];
 
 		onDialogEndCallbacks = [];
@@ -3839,6 +2832,8 @@ var DialogBuffer = function() {
 	};
 
 	this.DoNextChar = function() {
+		// console.log("DO NEXT CHAR");
+
 		nextCharTimer = 0; //reset timer
 
 		//time to update characters
@@ -3855,17 +2850,13 @@ var DialogBuffer = function() {
 			//the page is full!
 			isDialogReadyToContinue = true;
 			didPageFinishThisFrame = true;
+
+			// console.log("WAITING FOR INPUT");
 		}
 
-		if (this.CurChar() != null) {
-			if (this.CurChar().isPageBreak) {
-				// special case for page break marker character!
-				isDialogReadyToContinue = true;
-				didPageFinishThisFrame = true;
-			}
-			
+		// console.log(this.CurChar());
+		if(this.CurChar() != null)
 			this.CurChar().OnPrint(); // make sure we hit the callback before we run out of text
-		}
 	};
 
 	this.Update = function(dt) {
@@ -3884,7 +2875,7 @@ var DialogBuffer = function() {
 	};
 
 	this.Skip = function() {
-		bitsyLog("SKIPPP");
+		console.log("SKIPPP");
 		didPageFinishThisFrame = false;
 		didFlipPageThisFrame = false;
 		// add new characters until you get to the end of the current line of dialog
@@ -3917,29 +2908,14 @@ var DialogBuffer = function() {
 		}
 	}
 
-	var afterManualPagebreak = false; // is it bad to track this state like this?
-
 	this.Continue = function() {
-		bitsyLog("CONTINUE");
-
-		// if we used a page break character to continue we need
-		// to run whatever is in the script afterwards! // TODO : make this comment better
-		if (this.CurChar().isPageBreak) {
-			// hacky: always treat a page break as the end of dialog
-			// if there's more dialog later we re-activate the dialog buffer
-			this.EndDialog();
-			afterManualPagebreak = true;
-			this.CurChar().OnContinue();
-			return false;
-		}
+		console.log("CONTINUE");
 		if (pageIndex + 1 < this.CurPageCount()) {
-			bitsyLog("FLIP PAGE!");
 			//start next page
 			this.FlipPage();
 			return true; /* hasMoreDialog */
 		}
 		else {
-			bitsyLog("END DIALOG!");
 			//end dialog mode
 			this.EndDialog();
 			return false; /* hasMoreDialog */
@@ -3970,17 +2946,17 @@ var DialogBuffer = function() {
 		this.row = 0;
 
 		this.SetPosition = function(row,col) {
-			// bitsyLog("SET POS");
-			// bitsyLog(this);
+			// console.log("SET POS");
+			// console.log(this);
 			this.row = row;
 			this.col = col;
 		}
 
 		this.ApplyEffects = function(time) {
-			// bitsyLog("APPLY EFFECTS! " + time);
+			// console.log("APPLY EFFECTS! " + time);
 			for(var i = 0; i < this.effectList.length; i++) {
 				var effectName = this.effectList[i];
-				// bitsyLog("FX " + effectName);
+				// console.log("FX " + effectName);
 				TextEffects[ effectName ].DoEffect( this, time );
 			}
 		}
@@ -3991,7 +2967,7 @@ var DialogBuffer = function() {
 		}
 		this.OnPrint = function() {
 			if (printHandler != null) {
-				// bitsyLog("PRINT HANDLER ---- DIALOG BUFFER");
+				console.log("PRINT HANDLER ---- DIALOG BUFFER");
 				printHandler();
 				printHandler = null; // only call handler once (hacky)
 			}
@@ -4025,7 +3001,7 @@ var DialogBuffer = function() {
 		var imageData = renderer.GetImageSource(drawingId)[0];
 		var imageDataFlat = [];
 		for (var i = 0; i < imageData.length; i++) {
-			// bitsyLog(imageData[i]);
+			// console.log(imageData[i]);
 			imageDataFlat = imageDataFlat.concat(imageData[i]);
 		}
 
@@ -4033,37 +3009,6 @@ var DialogBuffer = function() {
 		this.width = 8;
 		this.height = 8;
 		this.spacing = 8;
-	}
-
-	function DialogScriptControlChar() {
-		Object.assign(this, new DialogChar([]));
-
-		this.width = 0;
-		this.height = 0;
-		this.spacing = 0;
-	}
-
-	// is a control character really the best way to handle page breaks?
-	function DialogPageBreakChar() {
-		Object.assign(this, new DialogChar([]));
-
-		this.width = 0;
-		this.height = 0;
-		this.spacing = 0;
-
-		this.isPageBreak = true;
-
-		var continueHandler = null;
-
-		this.SetContinueHandler = function(handler) {
-			continueHandler = handler;
-		}
-
-		this.OnContinue = function() {
-			if (continueHandler) {
-				continueHandler();
-			}
-		}
 	}
 
 	function AddWordToCharArray(charArray,word,effectList) {
@@ -4092,73 +3037,50 @@ var DialogBuffer = function() {
 
 	var pixelsPerRow = 192; // hard-coded fun times!!!
 
-	this.AddScriptReturn = function(onReturnHandler) {
-		var curPageIndex = buffer.length - 1;
-		var curRowIndex = buffer[curPageIndex].length - 1;
-		var curRowArr = buffer[curPageIndex][curRowIndex];
-
-		var controlChar = new DialogScriptControlChar();
-		controlChar.SetPrintHandler(onReturnHandler);
-
-		curRowArr.push(controlChar);
-
-		isActive = true;
-	}
-
-	this.AddDrawing = function(drawingId) {
-		// bitsyLog("DRAWING ID " + drawingId);
+	this.AddDrawing = function(drawingId, onFinishHandler) {
+		// console.log("DRAWING ID " + drawingId);
 
 		var curPageIndex = buffer.length - 1;
 		var curRowIndex = buffer[curPageIndex].length - 1;
 		var curRowArr = buffer[curPageIndex][curRowIndex];
 
-		var drawingChar = new DialogDrawingChar(drawingId, activeTextEffects);
+		var drawingChar = new DialogDrawingChar(drawingId, activeTextEffects)
+		drawingChar.SetPrintHandler( onFinishHandler );
 
 		var rowLength = GetCharArrayWidth(curRowArr);
 
 		// TODO : clean up copy-pasted code here :/
-		if (afterManualPagebreak) {
-			this.FlipPage(); // hacky
-
-			buffer[curPageIndex][curRowIndex] = curRowArr;
-			buffer.push([]);
-			curPageIndex++;
-			buffer[curPageIndex].push([]);
-			curRowIndex = 0;
-			curRowArr = buffer[curPageIndex][curRowIndex];
-			curRowArr.push(drawingChar);
-
-			afterManualPagebreak = false;
-		}
-		else if (rowLength + drawingChar.spacing  <= pixelsPerRow || rowLength <= 0) {
+		if (rowLength + drawingChar.spacing  <= pixelsPerRow || rowLength <= 0)
+		{
 			//stay on same row
-			curRowArr.push(drawingChar);
+			curRowArr.push( drawingChar );
 		}
-		else if (curRowIndex == 0) {
+		else if (curRowIndex == 0)
+		{
 			//start next row
-			buffer[curPageIndex][curRowIndex] = curRowArr;
-			buffer[curPageIndex].push([]);
+			buffer[ curPageIndex ][ curRowIndex ] = curRowArr;
+			buffer[ curPageIndex ].push( [] );
 			curRowIndex++;
-			curRowArr = buffer[curPageIndex][curRowIndex];
-			curRowArr.push(drawingChar);
+			curRowArr = buffer[ curPageIndex ][ curRowIndex ];
+			curRowArr.push( drawingChar );
 		}
 		else {
 			//start next page
-			buffer[curPageIndex][curRowIndex] = curRowArr;
-			buffer.push([]);
+			buffer[ curPageIndex ][ curRowIndex ] = curRowArr;
+			buffer.push( [] );
 			curPageIndex++;
-			buffer[curPageIndex].push([]);
+			buffer[ curPageIndex ].push( [] );
 			curRowIndex = 0;
-			curRowArr = buffer[curPageIndex][curRowIndex];
-			curRowArr.push(drawingChar);
+			curRowArr = buffer[ curPageIndex ][ curRowIndex ];
+			curRowArr.push( drawingChar );
 		}
 
 		isActive = true; // this feels like a bad way to do this???
 	}
 
 	// TODO : convert this into something that takes DialogChar arrays
-	this.AddText = function(textStr) {
-		bitsyLog("ADD TEXT " + textStr);
+	this.AddText = function(textStr,onFinishHandler) {
+		// console.log("ADD TEXT " + textStr);
 
 		//process dialog so it's easier to display
 		var words = textStr.split(" ");
@@ -4178,106 +3100,69 @@ var DialogBuffer = function() {
 			}
 
 			var wordWithPrecedingSpace = ((i == 0) ? "" : " ") + word;
-			var wordLength = GetStringWidth(wordWithPrecedingSpace);
+			var wordLength = GetStringWidth( wordWithPrecedingSpace );
 
 			var rowLength = GetCharArrayWidth(curRowArr);
 
-			if (afterManualPagebreak) {
-				this.FlipPage();
-
-				// hacky copied bit for page breaks
-				buffer[curPageIndex][curRowIndex] = curRowArr;
-				buffer.push([]);
-				curPageIndex++;
-				buffer[curPageIndex].push([]);
-				curRowIndex = 0;
-				curRowArr = buffer[curPageIndex][curRowIndex];
-				curRowArr = AddWordToCharArray(curRowArr, word, activeTextEffects);
-
-				afterManualPagebreak = false;
-			}
-			else if (rowLength + wordLength <= pixelsPerRow || rowLength <= 0) {
+			if (rowLength + wordLength <= pixelsPerRow || rowLength <= 0) {
 				//stay on same row
-				curRowArr = AddWordToCharArray(curRowArr, wordWithPrecedingSpace, activeTextEffects);
+				curRowArr = AddWordToCharArray( curRowArr, wordWithPrecedingSpace, activeTextEffects );
 			}
 			else if (curRowIndex == 0) {
 				//start next row
-				buffer[curPageIndex][curRowIndex] = curRowArr;
-				buffer[curPageIndex].push([]);
+				buffer[ curPageIndex ][ curRowIndex ] = curRowArr;
+				buffer[ curPageIndex ].push( [] );
 				curRowIndex++;
-				curRowArr = buffer[curPageIndex][curRowIndex];
-				curRowArr = AddWordToCharArray(curRowArr, word, activeTextEffects);
+				curRowArr = buffer[ curPageIndex ][ curRowIndex ];
+				curRowArr = AddWordToCharArray( curRowArr, word, activeTextEffects );
 			}
 			else {
 				//start next page
-				buffer[curPageIndex][curRowIndex] = curRowArr;
-				buffer.push([]);
+				buffer[ curPageIndex ][ curRowIndex ] = curRowArr;
+				buffer.push( [] );
 				curPageIndex++;
-				buffer[curPageIndex].push([]);
+				buffer[ curPageIndex ].push( [] );
 				curRowIndex = 0;
-				curRowArr = buffer[curPageIndex][curRowIndex];
-				curRowArr = AddWordToCharArray(curRowArr, word, activeTextEffects);
+				curRowArr = buffer[ curPageIndex ][ curRowIndex ];
+				curRowArr = AddWordToCharArray( curRowArr, word, activeTextEffects );
 			}
 		}
 
 		//destroy any empty stuff
-		var lastPage = buffer[buffer.length-1];
-		var lastRow = lastPage[lastPage.length-1];
-		if (lastRow.length == 0) {
-			lastPage.splice(lastPage.length-1, 1);
-		}
-		if (lastPage.length == 0) {
-			buffer.splice(buffer.length-1, 1);
-		}
+		var lastPage = buffer[ buffer.length-1 ];
+		var lastRow = lastPage[ lastPage.length-1 ];
+		if( lastRow.length == 0 )
+			lastPage.splice( lastPage.length-1, 1 );
+		if( lastPage.length == 0 )
+			buffer.splice( buffer.length-1, 1 );
 
 		//finish up 
-		lastPage = buffer[buffer.length-1];
-		lastRow = lastPage[lastPage.length-1];
-		if (lastRow.length > 0) {
-			var lastChar = lastRow[lastRow.length-1];
+		lastPage = buffer[ buffer.length-1 ];
+		lastRow = lastPage[ lastPage.length-1 ];
+		if( lastRow.length > 0 ) {
+			var lastChar = lastRow[ lastRow.length-1 ];
+			lastChar.SetPrintHandler( onFinishHandler );
 		}
 
-		// bitsyLog(buffer);
+		console.log(buffer);
 
 		isActive = true;
 	};
 
 	this.AddLinebreak = function() {
-		var lastPage = buffer[buffer.length-1];
-		if (lastPage.length <= 1) {
-			// bitsyLog("LINEBREAK - NEW ROW ");
+		var lastPage = buffer[ buffer.length-1 ];
+		if( lastPage.length <= 1 ) {
+			console.log("LINEBREAK - NEW ROW ");
 			// add new row
-			lastPage.push([]);
+			lastPage.push( [] );
 		}
 		else {
 			// add new page
-			buffer.push([[]]);
+			buffer.push( [[]] );
 		}
-		// bitsyLog(buffer);
+		console.log(buffer);
 
 		isActive = true;
-	}
-
-	this.AddPagebreak = function(onReturnHandler) {
-		var curPageIndex = buffer.length - 1;
-		var curRowIndex = buffer[curPageIndex].length - 1;
-		var curRowArr = buffer[curPageIndex][curRowIndex];
-
-		// need to actually create a whole new page if following another pagebreak character
-		if (this.CurChar() && this.CurChar().isPageBreak) {
-			buffer.push([]);
-			curPageIndex++;
-			buffer[curPageIndex].push([]);
-			curRowIndex = 0;
-			curRowArr = buffer[curPageIndex][curRowIndex];
-		}
-
-		var pagebreakChar = new DialogPageBreakChar();
-		pagebreakChar.SetContinueHandler(onReturnHandler);
-
-		curRowArr.push(pagebreakChar);
-
-		isActive = true;		
 	}
 
 	/* new text effects */
@@ -4465,10 +3350,10 @@ var TextEffects = new Map();
 
 var RainbowEffect = function() { // TODO - should it be an object or just a method?
 	this.DoEffect = function(char,time) {
-		// bitsyLog("RAINBOW!!!");
-		// bitsyLog(char);
-		// bitsyLog(char.color);
-		// bitsyLog(char.col);
+		// console.log("RAINBOW!!!");
+		// console.log(char);
+		// console.log(char.color);
+		// console.log(char.col);
 
 		var h = Math.abs( Math.sin( (time / 600) - (char.col / 8) ) );
 		var rgb = hslToRgb( h, 1, 0.5 );
@@ -4484,7 +3369,7 @@ var ColorEffect = function(index) {
 	this.DoEffect = function(char) {
 		var pal = getPal( curPal() );
 		var color = pal[ parseInt( index ) ];
-		// bitsyLog(color);
+		// console.log(color);
 		char.color.r = color[0];
 		char.color.g = color[1];
 		char.color.b = color[2];
@@ -4520,16 +3405,6 @@ var ShakyEffect = function() {
 };
 TextEffects["shk"] = new ShakyEffect();
 
-var DebugHighlightEffect = function() {
-	this.DoEffect = function(char) {
-		char.color.r = 255;
-		char.color.g = 255;
-		char.color.b = 0;
-		char.color.a = 255;
-	}
-}
-TextEffects["_debug_highlight"] = new DebugHighlightEffect();
-
 } // Dialog()
 <\/script>
 
@@ -4547,7 +3422,7 @@ TODO
 
 function Renderer(tilesize, scale) {
 
-bitsyLog("!!!!! NEW RENDERER");
+console.log("!!!!! NEW RENDERER");
 
 var imageStore = { // TODO : rename to imageCache
 	source: {},
@@ -4589,7 +3464,7 @@ var debugRenderCount = 0;
 // TODO : change image store path from (pal > col > draw) to (draw > pal > col)
 function renderImage(drawing, paletteId) {
 	// debugRenderCount++;
-	// bitsyLog("RENDER COUNT " + debugRenderCount);
+	// console.log("RENDER COUNT " + debugRenderCount);
 
 	var col = drawing.col;
 	var colStr = "" + col;
@@ -4617,7 +3492,7 @@ function renderImage(drawing, paletteId) {
 }
 
 function imageDataFromImageSource(imageSource, pal, col) {
-	//bitsyLog(imageSource);
+	//console.log(imageSource);
 
 	var img = context.createImageData(tilesize*scale,tilesize*scale);
 
@@ -4726,10 +3601,6 @@ this.AttachContext = function(ctx) {
 	context = ctx;
 }
 
-this.ClearCache = function() {
-	imageStore.render = {};
-}
-
 } // Renderer()
 <\/script>
 
@@ -4739,6 +3610,7 @@ var canvas;
 var context; // TODO : remove if safe?
 var ctx;
 
+var title = "";
 var room = {};
 var tile = {};
 var sprite = {};
@@ -4750,16 +3622,9 @@ var palette = { //start off with a default palette
 			colors : [[0,0,0],[255,255,255],[255,255,255]]
 		}
 	};
+var ending = {};
 var variable = {}; // these are starting variable values -- they don't update (or I don't think they will)
 var playerId = "A";
-
-var titleDialogId = "title";
-function getTitle() {
-	return dialog[titleDialogId].src;
-}
-function setTitle(titleSrc) {
-	dialog[titleDialogId] = { src:titleSrc, name:null };
-}
 
 var defaultFontName = "ascii_small";
 var fontName = defaultFontName;
@@ -4774,34 +3639,42 @@ var names = {
 	tile : new Map(), // Note: Not currently enabled in the UI
 	sprite : new Map(),
 	item : new Map(),
-	dialog : new Map(),
+	/*dialog : new Map()*/ // TODO
+	/*ending : new Map()*/ // TODO
 };
 function updateNamesFromCurData() {
-
-	function createNameMap(objectStore) {
-		var map = new Map();
-		for (id in objectStore) {
-			if (objectStore[id].name != undefined && objectStore[id].name != null) {
-				map.set(objectStore[id].name, id);
-			}
+	names.room = new Map();
+	for(id in room) {
+		if(room[id].name != undefined && room[id].name != null) {
+			names.room.set( room[id].name, id );
 		}
-		return map;
 	}
-
-	names.room = createNameMap(room);
-	names.tile = createNameMap(tile);
-	names.sprite = createNameMap(sprite);
-	names.item = createNameMap(item);
-	names.dialog = createNameMap(dialog);
+	names.tile = new Map();
+	for(id in tile) {
+		if(tile[id].name != undefined && tile[id].name != null) {
+			names.tile.set( tile[id].name, id );
+		}
+	}
+	names.sprite = new Map();
+	for(id in sprite) {
+		if(sprite[id].name != undefined && sprite[id].name != null) {
+			names.sprite.set( sprite[id].name, id );
+		}
+	}
+	names.item = new Map();
+	for(id in item) {
+		if(item[id].name != undefined && item[id].name != null) {
+			names.item.set( item[id].name, id );
+		}
+	}
 }
 
 var spriteStartLocations = {};
 
 /* VERSION */
 var version = {
-	major: 7, // major changes
-	minor: 8, // smaller changes
-	devBuildPhase: "RELEASE",
+	major: 6, // major changes
+	minor: 5 // smaller changes
 };
 function getEngineVersion() {
 	return version.major + "." + version.minor;
@@ -4822,6 +3695,7 @@ var editorDevFlags = {
 };
 
 function clearGameData() {
+	title = "";
 	room = {};
 	tile = {};
 	sprite = {};
@@ -4833,6 +3707,7 @@ function clearGameData() {
 			colors : [[0,0,0],[255,255,255],[255,255,255]]
 		}
 	};
+	ending = {};
 	isEnding = false; //todo - correct place for this?
 	variable = {};
 
@@ -4840,13 +3715,11 @@ function clearGameData() {
 
 	spriteStartLocations = {};
 
-	// hacky to have this multiple times...
 	names = {
 		room : new Map(),
 		tile : new Map(),
 		sprite : new Map(),
-		item : new Map(),
-		dialog : new Map(),
+		item : new Map()
 	};
 
 	fontName = defaultFontName; // TODO : reset font manager too?
@@ -4861,14 +3734,37 @@ var mapsize = 16;
 
 var curRoom = "0";
 
+var key = {
+	left : 37,
+	right : 39,
+	up : 38,
+	down : 40,
+	space : 32,
+	enter : 13,
+	w : 87,
+	a : 65,
+	s : 83,
+	d : 68,
+	r : 82,
+	shift : 16,
+	ctrl : 17,
+	alt : 18,
+	cmd : 224
+};
+
 var prevTime = 0;
 var deltaTime = 0;
 
-// engine event hooks for the editor
+//methods used to trigger gif recording
+var didPlayerMoveThisFrame = false;
+var onPlayerMoved = null;
+// var didDialogUpdateThisFrame = false;
+var onDialogUpdate = null;
+
+//inventory update UI handles
 var onInventoryChanged = null;
 var onVariableChanged = null;
 var onGameReset = null;
-var onInitRoom = null;
 
 var isPlayerEmbeddedInEditor = false;
 
@@ -4876,7 +3772,7 @@ var renderer = new Renderer(tilesize, scale);
 
 function getGameNameFromURL() {
 	var game = window.location.hash.substring(1);
-	// bitsyLog("game name --- " + game);
+	// console.log("game name --- " + game);
 	return game;
 }
 
@@ -4909,6 +3805,8 @@ function load_game(game_data, startWithTitle) {
 
 	setInitialVariables();
 
+	// setInterval(updateLoadingScreen, 300); // hack test
+
 	onready(startWithTitle);
 }
 
@@ -4926,13 +3824,49 @@ function reset_cur_game() {
 	}
 }
 
+var update_interval = null;
 function onready(startWithTitle) {
-	if (startWithTitle === undefined || startWithTitle === null) {
-		startWithTitle = true;
+	if(startWithTitle === undefined || startWithTitle === null) startWithTitle = true;
+
+	clearInterval(loading_interval);
+
+	input = new InputManager();
+
+	document.addEventListener('keydown', input.onkeydown);
+	document.addEventListener('keyup', input.onkeyup);
+
+	if (isPlayerEmbeddedInEditor) {
+		canvas.addEventListener('touchstart', input.ontouchstart, {passive:false});
+		canvas.addEventListener('touchmove', input.ontouchmove, {passive:false});
+		canvas.addEventListener('touchend', input.ontouchend, {passive:false});
+	}
+	else {
+		// creates a 'touchTrigger' element that covers the entire screen and can universally have touch event listeners added w/o issue.
+
+		// we're checking for existing touchTriggers both at game start and end, so it's slightly redundant.
+	  	var existingTouchTrigger = document.querySelector('#touchTrigger');
+	  	if (existingTouchTrigger === null){
+	  	  var touchTrigger = document.createElement("div");
+	  	  touchTrigger.setAttribute("id","touchTrigger");
+
+	  	  // afaik css in js is necessary here to force a fullscreen element
+	  	  touchTrigger.setAttribute(
+	  	    "style","position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden;"
+	  	  );
+	  	  document.body.appendChild(touchTrigger);
+
+	  	  touchTrigger.addEventListener('touchstart', input.ontouchstart);
+	  	  touchTrigger.addEventListener('touchmove', input.ontouchmove);
+	  	  touchTrigger.addEventListener('touchend', input.ontouchend);
+	  	}
 	}
 
-	if (startWithTitle) { // used by editor 
-		startNarrating(getTitle());
+	window.onblur = input.onblur;
+
+	update_interval = setInterval(update,16);
+
+	if(startWithTitle) { // used by editor 
+		startNarrating(title);
 	}
 }
 
@@ -4953,6 +3887,112 @@ function setInitialVariables() {
 	scriptInterpreter.SetOnVariableChangeHandler( onVariableChanged );
 }
 
+// TODO: this is likely broken
+function breadthFirstSearch(map, from, to) {
+	from.trail = [];
+	var visited = [];
+	var queue = [from];
+	visited.push( posToString(from) );
+
+	//console.log( "~ bfs ~");
+	//console.log( posToString(from) + " to " + posToString(to) );
+
+	while ( queue.length > 0 ) {
+
+		//grab pos from queue and mark as visited
+		var curPos = queue.shift();
+
+		//console.log( posToString(curPos) );
+		//console.log( ".. " + pathToString(curPos.trail) );
+		//console.log( visited );
+
+		if (curPos.x == to.x && curPos.y == to.y) {
+			//found a path!
+			var path = curPos.trail.splice(0);
+			path.push( curPos );
+			return path;
+		}
+
+		//look at neighbors
+		neighbors(curPos).forEach( function(n) {
+			var inBounds = (n.x >= 0 && n.x < 16 && n.y >= 0 && n.y < 16);
+			if (inBounds) {
+				var noCollision = map[n.y][n.x] <= 0;
+				var notVisited = visited.indexOf( posToString(n) ) == -1;
+				if (noCollision && notVisited) {
+					n.trail = curPos.trail.slice();
+					n.trail.push(curPos);
+					queue.push( n );
+					visited.push( posToString(n) );
+				}
+			}
+		});
+
+	}
+
+	return []; // no path found
+}
+
+function posToString(pos) {
+	return pos.x + "," + pos.y;
+}
+
+function pathToString(path) {
+	var s = "";
+	for (i in path) {
+		s += posToString(path[i]) + " ";
+	}
+	return s;
+}
+
+function neighbors(pos) {
+	var neighborList = [];
+	neighborList.push( {x:pos.x+1, y:pos.y+0} );
+	neighborList.push( {x:pos.x-1, y:pos.y+0} );
+	neighborList.push( {x:pos.x+0, y:pos.y+1} );
+	neighborList.push( {x:pos.x+0, y:pos.y-1} );
+	return neighborList;
+}
+
+function collisionMap(roomId) {
+	var map = [
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+	];
+
+	for (r in room[roomId].tilemap) {
+		var row = room[roomId].tilemap[r];
+		for (var c = 0; c < row.length; c++) {
+			if (room[roomId].walls.indexOf( row[x] ) != -1) {
+				map[r][c] = 1;
+			}
+		}
+	}
+
+	for (id in sprite) {
+		var spr = sprite[id];
+		if (spr.room === roomId) {
+			map[spr.y][spr.x] = 2;
+		}
+	}
+
+	return map;
+}
+
 function getOffset(evt) {
 	var offset = { x:0, y:0 };
 
@@ -4969,7 +4009,32 @@ function getOffset(evt) {
 }
 
 function stopGame() {
-	bitsyLog("stop GAME!");
+	console.log("stop GAME!");
+
+	document.removeEventListener('keydown', input.onkeydown);
+	document.removeEventListener('keyup', input.onkeyup);
+
+	if (isPlayerEmbeddedInEditor) {
+		canvas.removeEventListener('touchstart', input.ontouchstart);
+		canvas.removeEventListener('touchmove', input.ontouchmove);
+		canvas.removeEventListener('touchend', input.ontouchend);
+	}
+	else {
+		//check for touchTrigger and removes it
+
+    		var existingTouchTrigger = document.querySelector('#touchTrigger');
+    		if (existingTouchTrigger !== null){
+    			existingTouchTrigger.removeEventListener('touchstart', input.ontouchstart);
+    			existingTouchTrigger.removeEventListener('touchmove', input.ontouchmove);
+    			existingTouchTrigger.removeEventListener('touchend', input.ontouchend);
+
+    			existingTouchTrigger.parentElement.removeChild(existingTouchTrigger);
+    		}
+	}
+
+	window.onblur = null;
+
+	clearInterval(update_interval);
 }
 
 /* loading animation */
@@ -5027,6 +4092,7 @@ var loading_anim_data = [
 ];
 var loading_anim_frame = 0;
 var loading_anim_speed = 500;
+var loading_interval = null;
 
 function loadingAnimation() {
 	//create image
@@ -5098,6 +4164,9 @@ function update() {
 			dialogRenderer.Draw( dialogBuffer, deltaTime );
 			dialogBuffer.Update( deltaTime );
 		}
+		else if (!isEnding) {
+			moveSprites(); // TODO : I probably need to remove this..
+		}
 
 		// keep moving avatar if player holds down button
 		if( !dialogBuffer.IsActive() && !isEnding )
@@ -5115,21 +4184,31 @@ function update() {
 	}
 
 	prevTime = curTime;
+
+	//for gif recording
+	if (didPlayerMoveThisFrame && onPlayerMoved != null) {
+		onPlayerMoved();
+	}
+	didPlayerMoveThisFrame = false;
+
+	/* hacky replacement */
+	if (onDialogUpdate != null) {
+		dialogRenderer.SetPageFinishHandler( onDialogUpdate );
+	}
+
+	input.resetKeyPressed();
+	input.resetTapReleased();
 }
 
-var isAnyButtonHeld = false;
-var isIgnoringInput = false;
-
 function updateInput() {
-	if (dialogBuffer.IsActive()) {
-		if (!isAnyButtonHeld && bitsyButton()) {
+	if( dialogBuffer.IsActive() ) {
+		if (input.anyKeyPressed() || input.isTapReleased()) {
 			/* CONTINUE DIALOG */
 			if (dialogBuffer.CanContinue()) {
 				var hasMoreDialog = dialogBuffer.Continue();
-				if (!hasMoreDialog) {
+				if(!hasMoreDialog) {
 					// ignore currently held keys UNTIL they are released (stops player from insta-moving)
-					isIgnoringInput = true;
-					curPlayerDirection = Direction.None;
+					input.ignoreHeldKeys();
 				}
 			}
 			else {
@@ -5137,43 +4216,37 @@ function updateInput() {
 			}
 		}
 	}
-	else if (isEnding) {
-		if (!isAnyButtonHeld && bitsyButton()) {
+	else if ( isEnding ) {
+		if (input.anyKeyPressed() || input.isTapReleased()) {
 			/* RESTART GAME */
 			reset_cur_game();
 		}
 	}
-	else if (!isIgnoringInput) {
+	else {
 		/* WALK */
 		var prevPlayerDirection = curPlayerDirection;
 
-		if (bitsyButton(0)) {
-			curPlayerDirection = Direction.Up;
-		}
-		else if (bitsyButton(1)) {
-			curPlayerDirection = Direction.Down;
-		}
-		else if (bitsyButton(2)) {
+		if ( input.isKeyDown( key.left ) || input.isKeyDown( key.a ) || input.swipeLeft() ) {
 			curPlayerDirection = Direction.Left;
 		}
-		else if (bitsyButton(3)) {
+		else if ( input.isKeyDown( key.right ) || input.isKeyDown( key.d ) || input.swipeRight() ) {
 			curPlayerDirection = Direction.Right;
+		}
+		else if ( input.isKeyDown( key.up ) || input.isKeyDown( key.w ) || input.swipeUp() ) {
+			curPlayerDirection = Direction.Up;
+		}
+		else if ( input.isKeyDown( key.down ) || input.isKeyDown( key.s ) || input.swipeDown() ) {
+			curPlayerDirection = Direction.Down;
 		}
 		else {
 			curPlayerDirection = Direction.None;
 		}
 
 		if (curPlayerDirection != Direction.None && curPlayerDirection != prevPlayerDirection) {
-			movePlayer(curPlayerDirection);
+			movePlayer( curPlayerDirection );
 			playerHoldToMoveTimer = 500;
 		}
 	}
-
-	if (!bitsyButton()) {
-		isIgnoringInput = false;
-	}
-
-	isAnyButtonHeld = bitsyButton();
 }
 
 var animationCounter = 0;
@@ -5236,6 +4309,71 @@ function resetAllAnimations() {
 	}
 }
 
+var moveCounter = 0;
+var moveTime = 200;
+function moveSprites() {
+	moveCounter += deltaTime;
+
+	if (moveCounter >= moveTime) {
+
+		for (id in sprite) {
+			var spr = sprite[id];
+			if (spr.walkingPath.length > 0) {
+				//move sprite
+				var nextPos = spr.walkingPath.shift();
+				spr.x = nextPos.x;
+				spr.y = nextPos.y;
+
+
+				var end = getEnding( spr.room, spr.x, spr.y );
+				var ext = getExit( spr.room, spr.x, spr.y );
+				var itmIndex = getItemIndex( spr.room, spr.x, spr.y );
+				if (end) { //if the sprite hits an ending
+					if (id === playerId) { // only the player can end the game
+						startNarrating( ending[end.id], true /*isEnding*/ );
+					}
+				}
+				else if (ext) { //if the sprite hits an exit
+					//move it to another scene
+					spr.room = ext.dest.room;
+					spr.x = ext.dest.x;
+					spr.y = ext.dest.y;
+					if (id === playerId) {
+						//if the player changes scenes, change the visible scene
+						curRoom = ext.dest.room;
+					}
+				}
+				else if(itmIndex > -1) {
+					var itm = room[ spr.room ].items[ itmIndex ];
+					room[ spr.room ].items.splice( itmIndex, 1 );
+					if( spr.inventory[ itm.id ] ) {
+						spr.inventory[ itm.id ] += 1;
+					}
+					else {
+						spr.inventory[ itm.id ] = 1;
+					}
+
+					if (onInventoryChanged != null) {
+						onInventoryChanged( itm.id );
+					}
+
+					if (id === playerId) {
+						startItemDialog( itm.id  /*itemId*/ );
+					}
+
+					// stop moving : is this a good idea?
+					spr.walkingPath = [];
+				}
+
+				if (id === playerId) didPlayerMoveThisFrame = true;
+			}
+		}
+
+		moveCounter = 0;
+	}
+
+}
+
 function getSpriteAt(x,y) {
 	for (id in sprite) {
 		var spr = sprite[id];
@@ -5259,6 +4397,199 @@ var Direction = {
 var curPlayerDirection = Direction.None;
 var playerHoldToMoveTimer = 0;
 
+var InputManager = function() {
+	var self = this;
+
+	var pressed;
+	var ignored;
+	var newKeyPress;
+	var touchState;
+
+	function resetAll() {
+		pressed = {};
+		ignored = {};
+		newKeyPress = false;
+
+		touchState = {
+			isDown : false,
+			startX : 0,
+			startY : 0,
+			curX : 0,
+			curY : 0,
+			swipeDistance : 30,
+			swipeDirection : Direction.None,
+			tapReleased : false
+		};
+	}
+	resetAll();
+
+	function stopWindowScrolling(e) {
+		if(e.keyCode == key.left || e.keyCode == key.right || e.keyCode == key.up || e.keyCode == key.down || !isPlayerEmbeddedInEditor)
+			e.preventDefault();
+	}
+
+	function tryRestartGame(e) {
+		/* RESTART GAME */
+		if ( e.keyCode === key.r && ( e.getModifierState("Control") || e.getModifierState("Meta") ) ) {
+			if ( confirm("Restart the game?") ) {
+				reset_cur_game();
+			}
+		}
+	}
+
+	function eventIsModifier(event) {
+		return (event.keyCode == key.shift || event.keyCode == key.ctrl || event.keyCode == key.alt || event.keyCode == key.cmd);
+	}
+
+	function isModifierKeyDown() {
+		return ( self.isKeyDown(key.shift) || self.isKeyDown(key.ctrl) || self.isKeyDown(key.alt) || self.isKeyDown(key.cmd) );
+	}
+
+	this.ignoreHeldKeys = function() {
+		for (var key in pressed) {
+			if (pressed[key]) { // only ignore keys that are actually held
+				ignored[key] = true;
+				// console.log("IGNORE -- " + key);
+			}
+		}
+	}
+
+	this.onkeydown = function(event) {
+		// console.log("KEYDOWN -- " + event.keyCode);
+
+		stopWindowScrolling(event);
+
+		tryRestartGame(event);
+
+		// Special keys being held down can interfere with keyup events and lock movement
+		// so just don't collect input when they're held
+		{
+			if (isModifierKeyDown()) {
+				return;
+			}
+
+			if (eventIsModifier(event)) {
+				resetAll();
+			}
+		}
+
+		if (ignored[event.keyCode]) {
+			return;
+		}
+
+		if (!self.isKeyDown(event.keyCode)) {
+			newKeyPress = true;
+		}
+
+		pressed[event.keyCode] = true;
+		ignored[event.keyCode] = false;
+	}
+
+	this.onkeyup = function(event) {
+		// console.log("KEYUP -- " + event.keyCode);
+		pressed[event.keyCode] = false;
+		ignored[event.keyCode] = false;
+	}
+
+	this.ontouchstart = function(event) {
+		event.preventDefault();
+
+		if( event.changedTouches.length > 0 ) {
+			touchState.isDown = true;
+
+			touchState.startX = touchState.curX = event.changedTouches[0].clientX;
+			touchState.startY = touchState.curY = event.changedTouches[0].clientY;
+
+			touchState.swipeDirection = Direction.None;
+		}
+	}
+
+	this.ontouchmove = function(event) {
+		event.preventDefault();
+
+		if( touchState.isDown && event.changedTouches.length > 0 ) {
+			touchState.curX = event.changedTouches[0].clientX;
+			touchState.curY = event.changedTouches[0].clientY;
+
+			var prevDirection = touchState.swipeDirection;
+
+			if( touchState.curX - touchState.startX <= -touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Left;
+			}
+			else if( touchState.curX - touchState.startX >= touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Right;
+			}
+			else if( touchState.curY - touchState.startY <= -touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Up;
+			}
+			else if( touchState.curY - touchState.startY >= touchState.swipeDistance ) {
+				touchState.swipeDirection = Direction.Down;
+			}
+
+			if( touchState.swipeDirection != prevDirection ) {
+				// reset center so changing directions is easier
+				touchState.startX = touchState.curX;
+				touchState.startY = touchState.curY;
+			}
+		}
+	}
+
+	this.ontouchend = function(event) {
+		event.preventDefault();
+
+		touchState.isDown = false;
+
+		if( touchState.swipeDirection == Direction.None ) {
+			// tap!
+			touchState.tapReleased = true;
+		}
+
+		touchState.swipeDirection = Direction.None;
+	}
+
+	this.isKeyDown = function(keyCode) {
+		return pressed[keyCode] != null && pressed[keyCode] == true && (ignored[keyCode] == null || ignored[keyCode] == false);
+	}
+
+	this.anyKeyPressed = function() {
+		return newKeyPress;
+	}
+
+	this.resetKeyPressed = function() {
+		newKeyPress = false;
+	}
+
+	this.swipeLeft = function() {
+		return touchState.swipeDirection == Direction.Left;
+	}
+
+	this.swipeRight = function() {
+		return touchState.swipeDirection == Direction.Right;
+	}
+
+	this.swipeUp = function() {
+		return touchState.swipeDirection == Direction.Up;
+	}
+
+	this.swipeDown = function() {
+		return touchState.swipeDirection == Direction.Down;
+	}
+
+	this.isTapReleased = function() {
+		return touchState.tapReleased;
+	}
+
+	this.resetTapReleased = function() {
+		touchState.tapReleased = false;
+	}
+
+	this.onblur = function() {
+		// console.log("~~~ BLUR ~~");
+		resetAll();
+	}
+}
+var input = null;
+
 function movePlayer(direction) {
 	if (player().room == null || !Object.keys(room).includes(player().room)) {
 		return; // player room is missing or invalid.. can't move them!
@@ -5268,53 +4599,63 @@ function movePlayer(direction) {
 
 	if ( curPlayerDirection == Direction.Left && !(spr = getSpriteLeft()) && !isWallLeft()) {
 		player().x -= 1;
+		didPlayerMoveThisFrame = true;
 	}
 	else if ( curPlayerDirection == Direction.Right && !(spr = getSpriteRight()) && !isWallRight()) {
 		player().x += 1;
+		didPlayerMoveThisFrame = true;
 	}
 	else if ( curPlayerDirection == Direction.Up && !(spr = getSpriteUp()) && !isWallUp()) {
 		player().y -= 1;
+		didPlayerMoveThisFrame = true;
 	}
 	else if ( curPlayerDirection == Direction.Down && !(spr = getSpriteDown()) && !isWallDown()) {
 		player().y += 1;
+		didPlayerMoveThisFrame = true;
 	}
 	
 	var ext = getExit( player().room, player().x, player().y );
 	var end = getEnding( player().room, player().x, player().y );
+	// TODO : vNext
+	// var eff = getEffect( player().room, player().x, player().y );
 	var itmIndex = getItemIndex( player().room, player().x, player().y );
 
 	// do items first, because you can pick up an item AND go through a door
 	if (itmIndex > -1) {
-		var itm = room[player().room].items[itmIndex];
-		var itemRoom = player().room;
+		// TODO pick up items (what about touch?)
+		// console.log("HIT ITM ");
+		// console.log( itmIndex );
+		var itm = room[ player().room ].items[ itmIndex ];
+		// console.log(itm);
+		room[ player().room ].items.splice( itmIndex, 1 );
+		if( player().inventory[ itm.id ] ) {
+			player().inventory[ itm.id ] += 1;
+		}
+		else {
+			player().inventory[ itm.id ] = 1;
+		}
 
-		startItemDialog(itm.id, function() {
-			// remove item from room
-			room[itemRoom].items.splice(itmIndex, 1);
+		if(onInventoryChanged != null) {
+			onInventoryChanged( itm.id );
+		}
 
-			// update player inventory
-			if (player().inventory[itm.id]) {
-				player().inventory[itm.id] += 1;
-			}
-			else {
-				player().inventory[itm.id] = 1;
-			}
+		startItemDialog( itm.id  /*itemId*/ );
 
-			// show inventory change in UI
-			if (onInventoryChanged != null) {
-				onInventoryChanged(itm.id);
-			}
-		});
+		// console.log( player().inventory );
 	}
 
 	if (end) {
-		startEndingDialog(end);
+		startNarrating( ending[end.id], true /*isEnding*/ );
 	}
 	else if (ext) {
 		movePlayerThroughExit(ext);
 	}
+	// TODO : vNext
+	// else if (eff) {
+	// 	startDialog( script[eff.id].source, eff.id );
+	// }
 	else if (spr) {
-		startSpriteDialog(spr /*spriteId*/);
+		startSpriteDialog( spr /*spriteId*/ );
 	}
 }
 
@@ -5331,44 +4672,22 @@ function movePlayerThroughExit(ext) {
 		player().x = ext.dest.x;
 		player().y = ext.dest.y;
 		curRoom = ext.dest.room;
-
-		initRoom(curRoom);
 	};
 
-	if (ext.dlg != undefined && ext.dlg != null) {
-		// TODO : I need to simplify dialog code,
-		// so I don't have to get the ID and the source str
-		// every time!
-		startDialog(
-			dialog[ext.dlg].src,
-			ext.dlg,
-			function(result) {
-				var isLocked = ext.property && ext.property.locked === true;
-				if (!isLocked) {
-					GoToDest();
-				}
-			},
-			ext);
-	}
-	else {
-		GoToDest();
-	}
-}
+	// TODO : vNext
+	// if(ext.script_id != null && script[ext.script_id]){
+	// 	var scriptSourceStr = script[ext.script_id].source;
+	// 	startDialog(scriptSourceStr, ext.script_id, function(isExitUnlocked) {
+	// 		if (isExitUnlocked == true) {
+	// 			GoToDest();
+	// 		}
+	// 	});
+	// }
+	// else {
+	// 	GoToDest();
+	// }
 
-function initRoom(roomId) {
-	// init exit properties
-	for (var i = 0; i < room[roomId].exits.length; i++) {
-		room[roomId].exits[i].property = { locked:false };
-	}
-
-	// init ending properties
-	for (var i = 0; i < room[roomId].endings.length; i++) {
-		room[roomId].endings[i].property = { locked:false };
-	}
-
-	if (onInitRoom) {
-		onInitRoom(roomId);
-	}
+	GoToDest();
 }
 
 function getItemIndex( roomId, x, y ) {
@@ -5461,8 +4780,19 @@ function getEnding(roomId,x,y) {
 	return null;
 }
 
+// TODO : vNext
+// function getEffect(roomId,x,y) {
+// 	for (i in room[roomId].effects) {
+// 		var e = room[roomId].effects[i];
+// 		if (x == e.x && y == e.y) {
+// 			return e;
+// 		}
+// 	}
+// 	return null;
+// }
+
 function getTile(x,y) {
-	// bitsyLog(x + " " + y);
+	// console.log(x + " " + y);
 	var t = getRoom().tilemap[y][x];
 	return t;
 }
@@ -5489,26 +4819,23 @@ function isSpriteOffstage(id) {
 }
 
 function parseWorld(file) {
+	// console.log("~~~ PARSE WORLD ~~~");
+	// console.log(file);
+
+	// var parseTimer = new Timer();
+
 	spriteStartLocations = {};
 
 	resetFlags();
 
 	var versionNumber = 0;
 
-	// flags to keep track of which compatibility conversions
-	// need to be applied to this game data
-	var compatibilityFlags = {
-		convertSayToPrint : false,
-		combineEndingsWithDialog : false,
-		convertImplicitSpriteDialogIds : false,
-	};
-
 	var lines = file.split("\\n");
 	var i = 0;
 	while (i < lines.length) {
 		var curLine = lines[i];
 
-		// bitsyLog(lines[i]);
+		// console.log(lines[i]);
 
 		if (i == 0) {
 			i = parseTitle(lines, i);
@@ -5517,15 +4844,6 @@ function parseWorld(file) {
 			// collect version number (from a comment.. hacky I know)
 			if (curLine.indexOf("# BITSY VERSION ") != -1) {
 				versionNumber = parseFloat(curLine.replace("# BITSY VERSION ", ""));
-
-				if (versionNumber < 5.0) {
-					compatibilityFlags.convertSayToPrint = true;
-				}
-
-				if (versionNumber < 7.0) {
-					compatibilityFlags.combineEndingsWithDialog = true;
-					compatibilityFlags.convertImplicitSpriteDialogIds = true;
-				}
 			}
 
 			//skip blank lines & comments
@@ -5535,7 +4853,7 @@ function parseWorld(file) {
 			i = parsePalette(lines, i);
 		}
 		else if (getType(curLine) === "ROOM" || getType(curLine) === "SET") { //SET for back compat
-			i = parseRoom(lines, i, compatibilityFlags);
+			i = parseRoom(lines, i);
 		}
 		else if (getType(curLine) === "TIL") {
 			i = parseTile(lines, i);
@@ -5550,12 +4868,15 @@ function parseWorld(file) {
 			i = parseDrawing(lines, i);
 		}
 		else if (getType(curLine) === "DLG") {
-			i = parseDialog(lines, i, compatibilityFlags);
+			i = parseDialog(lines, i);
 		}
-		else if (getType(curLine) === "END" && compatibilityFlags.combineEndingsWithDialog) {
-			// parse endings for back compat
-			i = parseEnding(lines, i, compatibilityFlags);
+		else if (getType(curLine) === "END") {
+			i = parseEnding(lines, i);
 		}
+		// TODO: vNext
+		// else if (getType(curLine) === "PRG") {
+		// 	i = parseScript(lines, i);
+		// }
 		else if (getType(curLine) === "VAR") {
 			i = parseVariable(lines, i);
 		}
@@ -5592,50 +4913,15 @@ function parseWorld(file) {
 		curRoom = null;
 	}
 
-	if (curRoom != null) {
-		initRoom(curRoom);
-	}
+	console.log("START ROOM " + curRoom);
 
 	renderer.SetPalettes(palette);
 
-	scriptCompatibility(compatibilityFlags);
+	// console.log(names);
+
+	// console.log("~~~~~ PARSE TIME " + parseTimer.Milliseconds());
 
 	return versionNumber;
-}
-
-function scriptCompatibility(compatibilityFlags) {
-	if (compatibilityFlags.convertSayToPrint) {
-		bitsyLog("CONVERT SAY TO PRINT!");
-
-		var PrintFunctionVisitor = function() {
-			var didChange = false;
-			this.DidChange = function() { return didChange; };
-
-			this.Visit = function(node) {
-				if (node.type != "function") {
-					return;
-				}
-
-				if (node.name === "say") {
-					node.name = "print";
-					didChange = true;
-				}
-			};
-		};
-
-		for (dlgId in dialog) {
-			var dialogScript = scriptInterpreter.Parse(dialog[dlgId].src);
-			var visitor = new PrintFunctionVisitor();
-			dialogScript.VisitAll(visitor);
-			if (visitor.DidChange()) {
-				var newDialog = dialogScript.Serialize();
-				if (newDialog.indexOf("\\n") > -1) {
-					newDialog = '"""\\n' + newDialog + '\\n"""';
-				}
-				dialog[dlgId].src = newDialog;
-			}
-		}
-	}
 }
 
 //TODO this is in progress and doesn't support all features
@@ -5645,13 +4931,10 @@ function serializeWorld(skipFonts) {
 
 	var worldStr = "";
 	/* TITLE */
-	worldStr += getTitle() + "\\n";
+	worldStr += title + "\\n";
 	worldStr += "\\n";
 	/* VERSION */
 	worldStr += "# BITSY VERSION " + getEngineVersion() + "\\n"; // add version as a comment for debugging purposes
-	if (version.devBuildPhase != "RELEASE") {
-		worldStr += "# DEVELOPMENT BUILD -- " + version.devBuildPhase;
-	}
 	worldStr += "\\n";
 	/* FLAGS */
 	for (f in flags) {
@@ -5737,9 +5020,10 @@ function serializeWorld(skipFonts) {
 					if (e.transition_effect != undefined && e.transition_effect != null) {
 						worldStr += " FX " + e.transition_effect;
 					}
-					if (e.dlg != undefined && e.dlg != null) {
-						worldStr += " DLG " + e.dlg;
-					}
+					// TODO : vNext
+					// if (e.script_id != undefined && e.script_id != null) {
+					// 	worldStr += " PRG " + e.script_id;
+					// }
 					worldStr += "\\n";
 				}
 			}
@@ -5753,6 +5037,15 @@ function serializeWorld(skipFonts) {
 				worldStr += "\\n";
 			}
 		}
+		// TODO : vNext
+		// if (room[id].effects.length > 0) {
+		// 	/* EFFECTS */
+		// 	for (j in room[id].effects) {
+		// 		var e = room[id].effects[j];
+		// 		worldStr += "EFF " + e.id + " " + e.x + "," + e.y;
+		// 		worldStr += "\\n";
+		// 	}
+		// }
 		if (room[id].pal != null && room[id].pal != "default") {
 			/* PALETTE */
 			worldStr += "PAL " + room[id].pal + "\\n";
@@ -5822,15 +5115,31 @@ function serializeWorld(skipFonts) {
 	}
 	/* DIALOG */
 	for (id in dialog) {
-		if (id != titleDialogId) {
-			worldStr += "DLG " + id + "\\n";
-			worldStr += dialog[id].src + "\\n";
-			if (dialog[id].name != null) {
-				worldStr += "NAME " + dialog[id].name + "\\n";
-			}
-			worldStr += "\\n";
-		}
+		worldStr += "DLG " + id + "\\n";
+		worldStr += dialog[id] + "\\n";
+		worldStr += "\\n";
 	}
+	/* ENDINGS */
+	for (id in ending) {
+		worldStr += "END " + id + "\\n";
+		worldStr += ending[id] + "\\n";
+		worldStr += "\\n";
+	}
+	// TODO : vNext
+	// /* SCRIPTS */
+	// for (id in script) {
+	// 	if (script[id].type == ScriptType.Dialogue) {
+	// 		worldStr += "DLG " + id + "\\n";
+	// 	}
+	// 	else if (script[id].type == ScriptType.Ending) {
+	// 		worldStr += "END " + id + "\\n";
+	// 	}
+	// 	else {
+	// 		worldStr += "PRG " + id + "\\n";
+	// 	}
+	// 	worldStr += script[id].source + "\\n";
+	// 	worldStr += "\\n";
+	// }
 	/* VARIABLES */
 	for (id in variable) {
 		worldStr += "VAR " + id + "\\n";
@@ -5871,13 +5180,13 @@ function isExitValid(e) {
 
 function placeSprites() {
 	for (id in spriteStartLocations) {
-		//bitsyLog(id);
-		//bitsyLog( spriteStartLocations[id] );
-		//bitsyLog(sprite[id]);
+		//console.log(id);
+		//console.log( spriteStartLocations[id] );
+		//console.log(sprite[id]);
 		sprite[id].room = spriteStartLocations[id].room;
 		sprite[id].x = spriteStartLocations[id].x;
 		sprite[id].y = spriteStartLocations[id].y;
-		//bitsyLog(sprite[id]);
+		//console.log(sprite[id]);
 	}
 }
 
@@ -5899,16 +5208,12 @@ function getCoord(line,arg) {
 }
 
 function parseTitle(lines, i) {
-	var results = scriptUtils.ReadDialogScript(lines,i);
-	setTitle(results.script);
-	i = results.index;
-
+	title = lines[i];
 	i++;
-
 	return i;
 }
 
-function parseRoom(lines, i, compatibilityFlags) {
+function parseRoom(lines, i) {
 	var id = getId(lines[i]);
 	room[id] = {
 		id : id,
@@ -5916,6 +5221,7 @@ function parseRoom(lines, i, compatibilityFlags) {
 		walls : [],
 		exits : [],
 		endings : [],
+		// effects : [], // TODO vNext
 		items : [],
 		pal : null,
 		name : null
@@ -5950,7 +5256,7 @@ function parseRoom(lines, i, compatibilityFlags) {
 	}
 
 	while (i < lines.length && lines[i].length > 0) { //look for empty line
-		// bitsyLog(getType(lines[i]));
+		// console.log(getType(lines[i]));
 		if (getType(lines[i]) === "SPR") {
 			/* NOTE SPRITE START LOCATIONS */
 			var sprId = getId(lines[i]);
@@ -6013,7 +5319,8 @@ function parseRoom(lines, i, compatibilityFlags) {
 					y : parseInt(destCoords[1])
 				},
 				transition_effect : null,
-				dlg: null,
+				// TODO : vNext
+				// script_id : null,
 			};
 
 			// optional arguments
@@ -6023,10 +5330,11 @@ function parseRoom(lines, i, compatibilityFlags) {
 					ext.transition_effect = exitArgs[exitArgIndex+1];
 					exitArgIndex += 2;
 				}
-				else if (exitArgs[exitArgIndex] == "DLG") {
-					ext.dlg = exitArgs[exitArgIndex+1];
-					exitArgIndex += 2;
-				}
+				// TODO : vNext
+				// else if (exitArgs[exitArgIndex] == "PRG") {
+				// 	ext.script_id = exitArgs[exitArgIndex+1];
+				// 	exitArgIndex += 2;
+				// }
 				else {
 					exitArgIndex += 1;
 				}
@@ -6036,22 +5344,27 @@ function parseRoom(lines, i, compatibilityFlags) {
 		}
 		else if (getType(lines[i]) === "END") {
 			/* ADD ENDING */
-			var endId = getId(lines[i]);
-
-			// compatibility with when endings were stored separate from other dialog
-			if (compatibilityFlags.combineEndingsWithDialog) {
-				endId = "end_" + endId;
-			}
-
-			var endCoords = getCoord(lines[i], 2);
+			var endId = getId( lines[i] );
+			var endCoords = getCoord( lines[i], 2 );
 			var end = {
 				id : endId,
-				x : parseInt(endCoords[0]),
-				y : parseInt(endCoords[1])
+				x : parseInt( endCoords[0] ),
+				y : parseInt( endCoords[1] )
 			};
-
 			room[id].endings.push(end);
 		}
+		// TODO : vNext
+		// else if (getType(lines[i]) === "EFF") {
+		// 	/* ADD EFFECT */
+		// 	var effectId = getId( lines[i] );
+		// 	var effectCoords = getCoord( lines[i], 2 );
+		// 	var effect = {
+		// 		id : effectId,
+		// 		x : parseInt( effectCoords[0] ),
+		// 		y : parseInt( effectCoords[1] ),
+		// 	};
+		// 	room[id].effects.push(effect);
+		// }
 		else if (getType(lines[i]) === "PAL") {
 			/* CHOOSE PALETTE (that's not default) */
 			room[id].pal = getId(lines[i]);
@@ -6059,12 +5372,10 @@ function parseRoom(lines, i, compatibilityFlags) {
 		else if (getType(lines[i]) === "NAME") {
 			var name = lines[i].split(/\\s(.+)/)[1];
 			room[id].name = name;
-			names.room.set(name, id);
+			names.room.set( name, id);
 		}
-
 		i++;
 	}
-
 	return i;
 }
 
@@ -6075,7 +5386,7 @@ function parsePalette(lines,i) { //todo this has to go first right now :(
 	var name = null;
 	while (i < lines.length && lines[i].length > 0) { //look for empty line
 		var args = lines[i].split(" ");
-		if (args[0] === "NAME") {
+		if(args[0] === "NAME") {
 			name = lines[i].split(/\\s(.+)/)[1];
 		}
 		else {
@@ -6097,67 +5408,87 @@ function parsePalette(lines,i) { //todo this has to go first right now :(
 
 function parseTile(lines, i) {
 	var id = getId(lines[i]);
-	var tileData = createDrawingData("TIL", id);
+	var drwId = null;
+	var name = null;
 
 	i++;
 
-	// read & store tile image source
-	i = parseDrawingCore(lines, i, tileData.drw);
+	if (getType(lines[i]) === "DRW") { //load existing drawing
+		drwId = getId(lines[i]);
+		i++;
+	}
+	else {
+		// store tile source
+		drwId = "TIL_" + id;
+		i = parseDrawingCore( lines, i, drwId );
+	}
 
-	// update animation info
-	tileData.animation.frameCount = renderer.GetFrameCount(tileData.drw);
-	tileData.animation.isAnimated = tileData.animation.frameCount > 1;
-
-	// read other properties
-	while (i < lines.length && lines[i].length > 0) { // look for empty line
+	//other properties
+	var colorIndex = 1; // default palette color index is 1
+	var isWall = null; // null indicates it can vary from room to room (original version)
+	while (i < lines.length && lines[i].length > 0) { //look for empty line
 		if (getType(lines[i]) === "COL") {
-			tileData.col = parseInt(getId(lines[i]));
+			colorIndex = parseInt( getId(lines[i]) );
 		}
 		else if (getType(lines[i]) === "NAME") {
 			/* NAME */
-			tileData.name = lines[i].split(/\\s(.+)/)[1];
-			names.tile.set(tileData.name, id);
+			name = lines[i].split(/\\s(.+)/)[1];
+			names.tile.set( name, id );
 		}
 		else if (getType(lines[i]) === "WAL") {
-			var wallArg = getArg(lines[i], 1);
-			if (wallArg === "true") {
-				tileData.isWall = true;
+			var wallArg = getArg( lines[i], 1 );
+			if( wallArg === "true" ) {
+				isWall = true;
 			}
-			else if (wallArg === "false") {
-				tileData.isWall = false;
+			else if( wallArg === "false" ) {
+				isWall = false;
 			}
 		}
-
 		i++;
 	}
 
-	// store tile data
-	tile[id] = tileData;
+	//tile data
+	tile[id] = {
+		id : id,
+		drw : drwId, //drawing id
+		col : colorIndex,
+		animation : {
+			isAnimated : (renderer.GetFrameCount(drwId) > 1),
+			frameIndex : 0,
+			frameCount : renderer.GetFrameCount(drwId)
+		},
+		name : name,
+		isWall : isWall
+	};
 
 	return i;
 }
 
 function parseSprite(lines, i) {
 	var id = getId(lines[i]);
-	var type = (id === "A") ? "AVA" : "SPR";
-	var spriteData = createDrawingData(type, id);
-
-	bitsyLog(spriteData);
+	var drwId = null;
+	var name = null;
 
 	i++;
 
-	// read & store sprite image source
-	i = parseDrawingCore(lines, i, spriteData.drw);
+	if (getType(lines[i]) === "DRW") { //load existing drawing
+		drwId = getId(lines[i]);
+		i++;
+	}
+	else {
+		// store sprite source
+		drwId = "SPR_" + id;
+		i = parseDrawingCore( lines, i, drwId );
+	}
 
-	// update animation info
-	spriteData.animation.frameCount = renderer.GetFrameCount(spriteData.drw);
-	spriteData.animation.isAnimated = spriteData.animation.frameCount > 1;
-
-	// read other properties
-	while (i < lines.length && lines[i].length > 0) { // look for empty line
+	//other properties
+	var colorIndex = 2; //default palette color index is 2
+	var dialogId = null;
+	var startingInventory = {};
+	while (i < lines.length && lines[i].length > 0) { //look for empty line
 		if (getType(lines[i]) === "COL") {
 			/* COLOR OFFSET INDEX */
-			spriteData.col = parseInt(getId(lines[i]));
+			colorIndex = parseInt( getId(lines[i]) );
 		}
 		else if (getType(lines[i]) === "POS") {
 			/* STARTING POSITION */
@@ -6171,62 +5502,109 @@ function parseSprite(lines, i) {
 			};
 		}
 		else if(getType(lines[i]) === "DLG") {
-			spriteData.dlg = getId(lines[i]);
+			dialogId = getId(lines[i]);
 		}
 		else if (getType(lines[i]) === "NAME") {
 			/* NAME */
-			spriteData.name = lines[i].split(/\\s(.+)/)[1];
-			names.sprite.set(spriteData.name, id);
+			name = lines[i].split(/\\s(.+)/)[1];
+			names.sprite.set( name, id );
 		}
 		else if (getType(lines[i]) === "ITM") {
 			/* ITEM STARTING INVENTORY */
 			var itemId = getId(lines[i]);
-			var itemCount = parseFloat(getArg(lines[i], 2));
-			spriteData.inventory[itemId] = itemCount;
+			var itemCount = parseFloat( getArg(lines[i], 2) );
+			startingInventory[itemId] = itemCount;
 		}
-
 		i++;
 	}
 
-	// store sprite data
-	sprite[id] = spriteData;
-
+	//sprite data
+	sprite[id] = {
+		id : id,
+		drw : drwId, //drawing id
+		col : colorIndex,
+		dlg : dialogId,
+		room : null, //default location is "offstage"
+		x : -1,
+		y : -1,
+		walkingPath : [], //tile by tile movement path (isn't saved)
+		animation : {
+			isAnimated : (renderer.GetFrameCount(drwId) > 1),
+			frameIndex : 0,
+			frameCount : renderer.GetFrameCount(drwId)
+		},
+		inventory : startingInventory,
+		name : name
+	};
 	return i;
 }
 
 function parseItem(lines, i) {
 	var id = getId(lines[i]);
-	var itemData = createDrawingData("ITM", id);
+	var drwId = null;
+	var name = null;
 
 	i++;
 
-	// read & store item image source
-	i = parseDrawingCore(lines, i, itemData.drw);
+	if (getType(lines[i]) === "DRW") { //load existing drawing
+		drwId = getId(lines[i]);
+		i++;
+	}
+	else {
+		// store item source
+		drwId = "ITM_" + id; // these prefixes are maybe a terrible way to differentiate drawing tyepes :/
+		i = parseDrawingCore( lines, i, drwId );
+	}
 
-	// update animation info
-	itemData.animation.frameCount = renderer.GetFrameCount(itemData.drw);
-	itemData.animation.isAnimated = itemData.animation.frameCount > 1;
-
-	// read other properties
-	while (i < lines.length && lines[i].length > 0) { // look for empty line
+	//other properties
+	var colorIndex = 2; //default palette color index is 2
+	var dialogId = null;
+	while (i < lines.length && lines[i].length > 0) { //look for empty line
 		if (getType(lines[i]) === "COL") {
 			/* COLOR OFFSET INDEX */
-			itemData.col = parseInt(getArg(lines[i], 1));
+			colorIndex = parseInt( getArg( lines[i], 1 ) );
 		}
-		else if (getType(lines[i]) === "DLG") {
-			itemData.dlg = getId(lines[i]);
+		// else if (getType(lines[i]) === "POS") {
+		// 	/* STARTING POSITION */
+		// 	var posArgs = lines[i].split(" ");
+		// 	var roomId = posArgs[1];
+		// 	var coordArgs = posArgs[2].split(",");
+		// 	spriteStartLocations[id] = {
+		// 		room : roomId,
+		// 		x : parseInt(coordArgs[0]),
+		// 		y : parseInt(coordArgs[1])
+		// 	};
+		// }
+		else if(getType(lines[i]) === "DLG") {
+			dialogId = getId(lines[i]);
 		}
 		else if (getType(lines[i]) === "NAME") {
 			/* NAME */
-			itemData.name = lines[i].split(/\\s(.+)/)[1];
-			names.item.set(itemData.name, id);
+			name = lines[i].split(/\\s(.+)/)[1];
+			names.item.set( name, id );
 		}
-
 		i++;
 	}
 
-	// store item data
-	item[id] = itemData;
+	//item data
+	item[id] = {
+		id : id,
+		drw : drwId, //drawing id
+		col : colorIndex,
+		dlg : dialogId,
+		// room : null, //default location is "offstage"
+		// x : -1,
+		// y : -1,
+		animation : {
+			isAnimated : (renderer.GetFrameCount(drwId) > 1),
+			frameIndex : 0,
+			frameCount : renderer.GetFrameCount(drwId)
+		},
+		name : name
+	};
+
+	// console.log("ITM " + id);
+	// console.log(item[id]);
 
 	return i;
 }
@@ -6269,87 +5647,43 @@ function parseDrawingCore(lines, i, drwId) {
 	return i;
 }
 
-// creates a drawing data structure with default property values for the type
-function createDrawingData(type, id) {
-	// the avatar's drawing id still uses the sprite prefix (for back compat)
-	var drwId = (type === "AVA" ? "SPR" : type) + "_" + id;
+// TODO : vNext
+// var ScriptType = {
+// 	Script : 0,
+// 	Dialogue : 1, // TODO : move everything to this spelling?
+// 	Ending : 2,
+// };
 
-	var drawingData = {
-		type : type,
-		id : id,
-		name : null,
-		drw : drwId,
-		col : (type === "TIL") ? 1 : 2,
-		animation : {
-			isAnimated : false,
-			frameIndex : 0,
-			frameCount : 1,
-		},
-	};
+function parseScript(lines, i, objectStore) {
+	// TODO : vNext
+	// if (scriptType === undefined || scriptType === null) {
+	// 	scriptType = ScriptType.Script;
+	// }
 
-	// add type specific properties
-	if (type === "TIL") {
-		// default null value indicates it can vary from room to room (original version)
-		drawingData.isWall = null;
-	}
-
-	if (type === "AVA" || type === "SPR") {
-		// default sprite location is "offstage"
-		drawingData.room = null;
-		drawingData.x = -1;
-		drawingData.y = -1;
-		drawingData.inventory = {};
-	}
-
-	if (type === "AVA" || type === "SPR" || type === "ITM") {
-		drawingData.dlg = null;
-	}
-
-	return drawingData;
-}
-
-function parseScript(lines, i, backCompatPrefix, compatibilityFlags) {
 	var id = getId(lines[i]);
-	id = backCompatPrefix + id;
 	i++;
 
 	var results = scriptUtils.ReadDialogScript(lines,i);
 
-	dialog[id] = { src: results.script, name: null, id: id, };
+	// TODO : vNext
+	// script[id] = {
+	// 	source: results.script,
+	// 	type: scriptType,
+	// };
 
-	if (compatibilityFlags.convertImplicitSpriteDialogIds) {
-		// explicitly hook up dialog that used to be implicitly
-		// connected by sharing sprite and dialog IDs in old versions
-		if (sprite[id]) {
-			if (sprite[id].dlg === undefined || sprite[id].dlg === null) {
-				sprite[id].dlg = id;
-			}
-		}
-	}
+	objectStore[id] = results.script;
 
 	i = results.index;
 
 	return i;
 }
 
-function parseDialog(lines, i, compatibilityFlags) {
-	// hacky but I need to store this so I can set the name below
-	var id = getId(lines[i]);
-
-	i = parseScript(lines, i, "", compatibilityFlags);
-
-	if (lines[i].length > 0 && getType(lines[i]) === "NAME") {
-		dialog[id].name = lines[i].split(/\\s(.+)/)[1]; // TODO : hacky to keep copying this regex around...
-		names.dialog.set(dialog[id].name, id);
-		i++;
-	}
-
-	return i;
+function parseDialog(lines, i) {
+	return parseScript(lines, i, dialog);
 }
 
-// keeping this around to parse old files where endings were separate from dialogs
-function parseEnding(lines, i, compatibilityFlags) {
-	return parseScript(lines, i, "end_", compatibilityFlags);
+function parseEnding(lines, i) {
+	return parseScript(lines, i, ending);
 }
 
 function parseVariable(lines, i) {
@@ -6426,7 +5760,7 @@ function drawRoom(room,context,frameIndex) { // context & frameIndex are optiona
 
 	// if (room.id != debugLastRoomDrawn) {
 	// 	debugLastRoomDrawn = room.id;
-	// 	bitsyLog("DRAW ROOM " + debugLastRoomDrawn);
+	// 	console.log("DRAW ROOM " + debugLastRoomDrawn);
 	// }
 
 	var paletteId = "default";
@@ -6450,13 +5784,13 @@ function drawRoom(room,context,frameIndex) { // context & frameIndex are optiona
 		for (j in room.tilemap[i]) {
 			var id = room.tilemap[i][j];
 			if (id != "0") {
-				//bitsyLog(id);
+				//console.log(id);
 				if (tile[id] == null) { // hack-around to avoid corrupting files (not a solution though!)
 					id = "0";
 					room.tilemap[i][j] = id;
 				}
 				else {
-					// bitsyLog(id);
+					// console.log(id);
 					drawTile( getTileImage(tile[id],paletteId,frameIndex), j, i, context );
 				}
 			}
@@ -6526,22 +5860,13 @@ var dialogRenderer = dialogModule.CreateRenderer();
 var dialogBuffer = dialogModule.CreateBuffer();
 var fontManager = new FontManager();
 
-// TODO : is this scriptResult thing being used anywhere???
 function onExitDialog(scriptResult, dialogCallback) {
-	bitsyLog("EXIT DIALOG!");
-
 	isDialogMode = false;
-
-	if (isNarrating) {
-		isNarrating = false;
-	}
-
+	if (isNarrating) isNarrating = false;
 	if (isDialogPreview) {
 		isDialogPreview = false;
-
-		if (onDialogPreviewEnd != null) {
+		if (onDialogPreviewEnd != null)
 			onDialogPreviewEnd();
-		}
 	}
 
 	if (dialogCallback != undefined && dialogCallback != null) {
@@ -6557,70 +5882,48 @@ TODO
 - what about a special script block separate from DLG?
 */
 function startNarrating(dialogStr,end) {
-	bitsyLog("NARRATE " + dialogStr);
+	console.log("NARRATE " + dialogStr);
 
-	if(end === undefined) {
-		end = false;
-	}
+	if(end === undefined) end = false;
 
 	isNarrating = true;
 	isEnding = end;
-
 	startDialog(dialogStr);
 }
 
-function startEndingDialog(ending) {
-	isNarrating = true;
-	isEnding = true;
-
-	startDialog(
-		dialog[ending.id].src,
-		ending.id,
-		function() {
-			var isLocked = ending.property && ending.property.locked === true;
-			if (isLocked) {
-				isEnding = false;
-			}
-		},
-		ending);
-}
-
-function startItemDialog(itemId, dialogCallback) {
+function startItemDialog(itemId) {
 	var dialogId = item[itemId].dlg;
-	// bitsyLog("START ITEM DIALOG " + dialogId);
-	if (dialog[dialogId]) {
-		var dialogStr = dialog[dialogId].src;
-		startDialog(dialogStr, dialogId, dialogCallback);
-	}
-	else {
-		dialogCallback();
+	// console.log("START ITEM DIALOG " + dialogId);
+	if(dialog[dialogId]){
+		var dialogStr = dialog[dialogId];
+		startDialog(dialogStr,dialogId);
 	}
 }
 
 function startSpriteDialog(spriteId) {
 	var spr = sprite[spriteId];
-	var dialogId = spr.dlg;
-	// bitsyLog("START SPRITE DIALOG " + dialogId);
-	if (dialog[dialogId]){
-		var dialogStr = dialog[dialogId].src;
+	var dialogId = spr.dlg ? spr.dlg : spriteId;
+	// console.log("START SPRITE DIALOG " + dialogId);
+	if(dialog[dialogId]){
+		var dialogStr = dialog[dialogId];
 		startDialog(dialogStr,dialogId);
 	}
 }
 
-function startDialog(dialogStr, scriptId, dialogCallback, objectContext) {
-	// bitsyLog("START DIALOG ");
-	if (dialogStr.length <= 0) {
-		// bitsyLog("ON EXIT DIALOG -- startDialog 1");
-		onExitDialog(null, dialogCallback);
+function startDialog(dialogStr,scriptId,dialogCallback) {
+	// console.log("START DIALOG ");
+	if(dialogStr.length <= 0) {
+		// console.log("ON EXIT DIALOG -- startDialog 1");
+		onExitDialog(dialogCallback);
 		return;
 	}
 
 	isDialogMode = true;
 
 	dialogRenderer.Reset();
-	dialogRenderer.SetCentered(isNarrating /*centered*/);
+	dialogRenderer.SetCentered( isNarrating /*centered*/ );
 	dialogBuffer.Reset();
-	scriptInterpreter.SetDialogBuffer(dialogBuffer);
+	scriptInterpreter.SetDialogBuffer( dialogBuffer );
 
 	var onScriptEnd = function(scriptResult) {
 		dialogBuffer.OnDialogEnd(function() {
@@ -6628,21 +5931,21 @@ function startDialog(dialogStr, scriptId, dialogCallback, objectContext) {
 		});
 	};
 
-	if (scriptId === undefined) { // TODO : what's this for again?
-		scriptInterpreter.Interpret(dialogStr, onScriptEnd);
+	if(scriptId === undefined) {
+		scriptInterpreter.Interpret( dialogStr, onScriptEnd );
 	}
 	else {
-		if (!scriptInterpreter.HasScript(scriptId)) {
-			scriptInterpreter.Compile(scriptId, dialogStr);
+		if( !scriptInterpreter.HasScript(scriptId) ) {
+			scriptInterpreter.Compile( scriptId, dialogStr );
 		}
-		// scriptInterpreter.DebugVisualizeScript(scriptId);
-		scriptInterpreter.Run(scriptId, onScriptEnd, objectContext);
+		scriptInterpreter.DebugVisualizeScriptTree(scriptId);
+		scriptInterpreter.Run( scriptId, onScriptEnd );
 	}
 
 }
 
 var isDialogPreview = false;
-function startPreviewDialog(script, dialogCallback) {
+function startPreviewDialog(script, onScriptEnd) {
 	isNarrating = true;
 
 	isDialogMode = true;
@@ -6650,20 +5953,13 @@ function startPreviewDialog(script, dialogCallback) {
 	isDialogPreview = true;
 
 	dialogRenderer.Reset();
-	dialogRenderer.SetCentered(true);
+	dialogRenderer.SetCentered( true );
 	dialogBuffer.Reset();
-	scriptInterpreter.SetDialogBuffer(dialogBuffer);
+	scriptInterpreter.SetDialogBuffer( dialogBuffer );
 
-	// TODO : do I really need a seperate callback for this debug mode??
-	onDialogPreviewEnd = dialogCallback;
+	onDialogPreviewEnd = onScriptEnd;
 
-	var onScriptEndCallback = function(scriptResult) {
-		dialogBuffer.OnDialogEnd(function() {
-			onExitDialog(scriptResult, null);
-		});
-	};
-
-	scriptInterpreter.Eval(script, onScriptEndCallback);
+	scriptInterpreter.Eval( script, null );
 }
 
 /* NEW SCRIPT STUFF */
@@ -6672,15 +5968,11 @@ var scriptInterpreter = scriptModule.CreateInterpreter();
 var scriptUtils = scriptModule.CreateUtils(); // TODO: move to editor.js?
 // scriptInterpreter.SetDialogBuffer( dialogBuffer );
 
-/* EVENTS */
-bitsyOnUpdate(update);
-bitsyOnQuit(stopGame);
-bitsyOnLoad(load_game);
 <\/script>
 
 <!-- store default font in separate script tag for back compat-->
 <!-- Borksy modification: uses better encoded default font. -->
-<script type="text/bitsyFontData" id="ascii_small">
+<script type="bitsyFontData" id="ascii_small">
 FONT ascii_small
 SIZE 6 8
 CHAR 0

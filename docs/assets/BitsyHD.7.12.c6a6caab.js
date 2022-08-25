@@ -1,4 +1,4 @@
-var t=`<!DOCTYPE HTML>
+const t=`<!DOCTYPE HTML>
 <html>
 
 <!-- HEADER -->
