@@ -17313,334 +17313,334 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 bitsy = bitsy || /*#__PURE__*/_interopDefaultLegacy(bitsy);
 
-var Buttons;\r
-(function (Buttons) {\r
-    // XBOX360 wired controller configuration\r
-    Buttons[Buttons["A"] = 0] = "A";\r
-    Buttons[Buttons["X"] = 2] = "X";\r
-    Buttons[Buttons["B"] = 1] = "B";\r
-    Buttons[Buttons["Y"] = 3] = "Y";\r
-    Buttons[Buttons["LB"] = 4] = "LB";\r
-    Buttons[Buttons["RB"] = 5] = "RB";\r
-    Buttons[Buttons["LT"] = 6] = "LT";\r
-    Buttons[Buttons["RT"] = 7] = "RT";\r
-    Buttons[Buttons["BACK"] = 8] = "BACK";\r
-    Buttons[Buttons["START"] = 9] = "START";\r
-    Buttons[Buttons["LHAT"] = 10] = "LHAT";\r
-    Buttons[Buttons["RHAT"] = 11] = "RHAT";\r
-    Buttons[Buttons["DPAD_UP"] = 12] = "DPAD_UP";\r
-    Buttons[Buttons["DPAD_DOWN"] = 13] = "DPAD_DOWN";\r
-    Buttons[Buttons["DPAD_LEFT"] = 14] = "DPAD_LEFT";\r
-    Buttons[Buttons["DPAD_RIGHT"] = 15] = "DPAD_RIGHT";\r
-})(Buttons || (Buttons = {}));\r
-var Axes;\r
-(function (Axes) {\r
-    Axes[Axes["LSTICK_H"] = 0] = "LSTICK_H";\r
-    Axes[Axes["LSTICK_V"] = 1] = "LSTICK_V";\r
-    Axes[Axes["RSTICK_H"] = 2] = "RSTICK_H";\r
-    Axes[Axes["RSTICK_V"] = 3] = "RSTICK_V";\r
-})(Axes || (Axes = {}));\r
-var nullGamepad = {\r
-    original: {\r
-        axes: [],\r
-        buttons: [],\r
-        connected: false,\r
-    },\r
-    disabled: true,\r
-    down: {},\r
-    justDown: {},\r
-    justUp: {},\r
-    axesPrev: {},\r
-};\r
-var Gamepads = /** @class */ (function () {\r
-    /**\r
-    * initialize gamepads\r
-    */\r
-    function Gamepads() {\r
-        var _this = this;\r
-        // settings\r
-        /** if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead */\r
-        this.deadZone = 0.25;\r
-        /** if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1 instead */\r
-        this.snapZone = 0.25;\r
-        /** axis values between \`deadZone\` and \`snapZone\` will be run through this function\r
-        *\r
-        * defaults to normalizing between the two thresholds */\r
-        this.interpolate = function (value) {\r
-            var v = Math.max(0, Math.min(1, (value - _this.deadZone) / (1.0 - _this.snapZone - _this.deadZone)));\r
-            return v;\r
-        };\r
-        // internal vars\r
-        this.players = {};\r
-        this.available = false;\r
-        this.pollEveryFrame = false;\r
-        this.connected = false;\r
-        /**\r
-        * update gamepads (clears arrays, polls connections, etc.)\r
-        */\r
-        this.pollconnections = function () {\r
-            _this.connected = false;\r
-            // assume existing players' gamepads aren't enabled until they're found\r
-            Object.values(_this.players).forEach(function (player) {\r
-                player.disabled = true;\r
-            });\r
-            var gps = navigator.getGamepads();\r
-            for (var i = 0; i < gps.length; ++i) {\r
-                var gp = gps[i];\r
-                if (gp) {\r
-                    if (gp.connected) {\r
-                        if (_this.players[gp.index] == null) {\r
-                            // new player\r
-                            _this.players[gp.index] = {\r
-                                disabled: false,\r
-                                original: gp,\r
-                                down: {},\r
-                                justDown: {},\r
-                                justUp: {},\r
-                                axesPrev: {},\r
-                            };\r
-                        }\r
-                        else {\r
-                            // returning player, just assign the gamepad\r
-                            _this.players[gp.index].original = gp;\r
-                        }\r
-                        _this.connected = true;\r
-                        _this.players[gp.index].disabled = false;\r
-                    }\r
-                    else {\r
-                        delete _this.players[gp.index];\r
-                    }\r
-                }\r
-            }\r
-        };\r
-        /**\r
-        * update gamepads (clears arrays, polls connections, etc.)\r
-        */\r
-        this.update = function () {\r
-            // store the previous axis values\r
-            // has to be done before pollConnections since that will get the new axis values\r
-            Object.keys(_this.players).forEach(function (i) {\r
-                var _a;\r
-                var p = _this.getPlayer(i);\r
-                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.axes) {\r
-                    p.axesPrev = p.original.axes.slice();\r
-                }\r
-            });\r
-            // poll connections and update gamepad states every frame because chrome's a lazy bum\r
-            if (_this.pollEveryFrame) {\r
-                _this.pollconnections();\r
-            }\r
-            Object.keys(_this.players).forEach(function (i) {\r
-                var _a;\r
-                var p = _this.getPlayer(i);\r
-                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.buttons) {\r
-                    for (var j = 0; j < p.original.buttons.length; ++j) {\r
-                        if (p.original.buttons[j].pressed) {\r
-                            p.justDown[j] = !(p.down[j] === true);\r
-                            p.down[j] = true;\r
-                            p.justUp[j] = false;\r
-                        }\r
-                        else {\r
-                            p.justUp[j] = p.down[j] === true;\r
-                            p.down[j] = false;\r
-                            p.justDown[j] = false;\r
-                        }\r
-                    }\r
-                }\r
-            });\r
-        };\r
-        /**\r
-        * @returns \`player\`'s gamepad\r
-        *\r
-        * if one doesn't exist, returns an object with gamepad properties reflecting a null state\r
-        */\r
-        this.getPlayer = function (player) {\r
-            var _a, _b, _c;\r
-            if (((_b = (_a = _this.players[player]) === null || _a === void 0 ? void 0 : _a.original) === null || _b === void 0 ? void 0 : _b.connected) && !((_c = _this.players[player]) === null || _c === void 0 ? void 0 : _c.disabled)) {\r
-                return _this.players[player];\r
-            }\r
-            return nullGamepad;\r
-        };\r
-        /**\r
-        * @returns an array representing \`length\` axes for \`player\` at \`offset\`\r
-        *\r
-        * if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead\r
-        * if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1/-1 instead\r
-        * otherwise, returns the axis value normalized between \`deadZone\` and \`(1-snapZone)\`\r
-        * @param {Number} offset axis index\r
-        * @param {Number} length number of axes to return\r
-        * @param {Number} player player index (\`undefined\` for "sum of all")\r
-        * @param {boolean} prev if \`true\` uses axis values from previous update\r
-        */\r
-        this.getAxes = function (offset, length, player, prev) {\r
-            if (offset === void 0) { offset = 0; }\r
-            if (length === void 0) { length = 2; }\r
-            if (prev === void 0) { prev = false; }\r
-            var axes = [];\r
-            for (var i = 0; i < length; ++i) {\r
-                axes[i] = 0;\r
-            }\r
-            if (player === undefined) {\r
-                Object.keys(_this.players).forEach(function (i) {\r
-                    var a = _this.getAxes(offset, length, i, prev);\r
-                    for (var j = 0; j < a.length; ++j) {\r
-                        axes[j] += a[j];\r
-                    }\r
-                });\r
-            }\r
-            else {\r
-                var p = _this.getPlayer(player);\r
-                if (p === null || p === void 0 ? void 0 : p.original) {\r
-                    var axesSource = prev ? p.axesPrev : p.original.axes;\r
-                    var a = Object.values(axesSource).slice(offset, offset + length);\r
-                    for (var i = 0; i < a.length; ++i) {\r
-                        if (Math.abs(a[i]) < _this.deadZone) {\r
-                            axes[i] += 0;\r
-                        }\r
-                        else if (Math.abs(1.0 - a[i]) < _this.snapZone) {\r
-                            axes[i] += 1;\r
-                        }\r
-                        else if (Math.abs(-1.0 - a[i]) < _this.snapZone) {\r
-                            axes[i] -= 1;\r
-                        }\r
-                        else {\r
-                            axes[i] += Math.sign(a[i]) * _this.interpolate(Math.abs(a[i]));\r
-                        }\r
-                    }\r
-                }\r
-            }\r
-            return axes;\r
-        };\r
-        /**\r
-       * @returns equivalent to \`getAxes(axis, 1, player, prev)[0]\`\r
-       */\r
-        this.getAxis = function (axis, player, prev) { return _this.getAxes(axis, 1, player, prev)[0]; };\r
-        /**\r
-        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\`\r
-        * @param {Number} axis axis index\r
-        * @param {Number} threshold threshold (-1 to 1)\r
-        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        * @param {boolean} prev if \`true\` uses axis values from previous update\r
-        */\r
-        this.axisPast = function (axis, threshold, direction, player, prev) {\r
-            if (!threshold) {\r
-                throw new Error('must specify a non-zero threshold');\r
-            }\r
-            if (!direction) {\r
-                direction = threshold > 0 ? 1 : -1;\r
-            }\r
-            var a = _this.getAxis(axis, player, prev);\r
-            return direction < 0 ? a < threshold : a > threshold;\r
-        };\r
-        /**\r
-        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\` and WAS NOT in previous update\r
-        * @param {Number} axis axis index\r
-        * @param {Number} threshold threshold (-1 to 1)\r
-        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.axisJustPast = function (axis, threshold, direction, player) { return _this.axisPast(axis, threshold, direction, player, false)\r
-            && !_this.axisPast(axis, threshold, direction, player, true); };\r
-        /**\r
-        * @returns \`[x,y]\` representing the dpad for \`player\`\r
-        * @param {Number} player player index (\`undefined\` for "sum of all")\r
-        */\r
-        this.getDpad = function (player) {\r
-            var x = 0;\r
-            var y = 0;\r
-            if (player === undefined) {\r
-                Object.keys(_this.players).forEach(function (i) {\r
-                    var _a = _this.getDpad(i), ix = _a[0], iy = _a[1];\r
-                    x += ix;\r
-                    y += iy;\r
-                });\r
-            }\r
-            else {\r
-                if (_this.isDown(Buttons.DPAD_RIGHT, player)) {\r
-                    x += 1;\r
-                }\r
-                if (_this.isDown(Buttons.DPAD_LEFT, player)) {\r
-                    x -= 1;\r
-                }\r
-                if (_this.isDown(Buttons.DPAD_UP, player)) {\r
-                    y += 1;\r
-                }\r
-                if (_this.isDown(Buttons.DPAD_DOWN, player)) {\r
-                    y -= 1;\r
-                }\r
-            }\r
-            return [x, y];\r
-        };\r
-        /**\r
-        * @returns \`true\` if \`player\`'s \`btn\` is currently down\r
-        * @param {Number} btn button index\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.isDown = function (btn, player) {\r
-            if (btn === undefined) {\r
-                throw new Error('must specify a button');\r
-            }\r
-            if (player === undefined) {\r
-                return Object.keys(_this.players).some(function (i) { return _this.isDown(btn, i); });\r
-            }\r
-            return _this.getPlayer(player).down[btn];\r
-        };\r
-        /**\r
-        * @returns equivalent to \`!isDown(btn, player)\`\r
-        * @param {Number} btn button index\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.isUp = function (btn, player) { return !_this.isDown(btn, player); };\r
-        /**\r
-        * @returns \`true\` if \`player\`'s \`btn\` is currently down and WAS NOT in previous update\r
-        * @param {Number} btn button index\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.isJustDown = function (btn, player) {\r
-            if (btn === undefined) {\r
-                throw new Error('must specify a button');\r
-            }\r
-            if (player === undefined) {\r
-                return Object.keys(_this.players).some(function (i) { return _this.isJustDown(btn, i); });\r
-            }\r
-            return _this.getPlayer(player).justDown[btn];\r
-        };\r
-        /**\r
-        * @returns \`true\` if \`player\`'s \`btn\` is currently NOT down and WAS down in previous update\r
-        * @param {Number} btn button index\r
-        * @param {Number} player player index (\`undefined\` for "any")\r
-        */\r
-        this.isJustUp = function (btn, player) {\r
-            if (btn === undefined) {\r
-                throw new Error('must specify a button');\r
-            }\r
-            if (player === undefined) {\r
-                return Object.keys(_this.players).some(function (i) { return _this.isJustUp(btn, i); });\r
-            }\r
-            return _this.getPlayer(player).justUp[btn];\r
-        };\r
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore\r
-        // @ts-ignore\r
-        if (navigator.getGamepads) {\r
-            this.available = true;\r
-        }\r
-        else if (navigator.webkitGetGamepads) {\r
-            navigator.getGamepads = navigator.webkitGetGamepads;\r
-            this.available = true;\r
-        }\r
-        if (this.available) {\r
-            if (navigator.userAgent.includes('Firefox')) {\r
-                // listen to connection events for firefox\r
-                window.addEventListener('gamepadconnected', this.pollconnections.bind(this));\r
-                window.addEventListener('gamepaddisconnected', this.pollconnections.bind(this));\r
-            }\r
-            else {\r
-                this.pollEveryFrame = true;\r
-            }\r
-        }\r
-    }\r
-    return Gamepads;\r
+var Buttons;
+(function (Buttons) {
+    // XBOX360 wired controller configuration
+    Buttons[Buttons["A"] = 0] = "A";
+    Buttons[Buttons["X"] = 2] = "X";
+    Buttons[Buttons["B"] = 1] = "B";
+    Buttons[Buttons["Y"] = 3] = "Y";
+    Buttons[Buttons["LB"] = 4] = "LB";
+    Buttons[Buttons["RB"] = 5] = "RB";
+    Buttons[Buttons["LT"] = 6] = "LT";
+    Buttons[Buttons["RT"] = 7] = "RT";
+    Buttons[Buttons["BACK"] = 8] = "BACK";
+    Buttons[Buttons["START"] = 9] = "START";
+    Buttons[Buttons["LHAT"] = 10] = "LHAT";
+    Buttons[Buttons["RHAT"] = 11] = "RHAT";
+    Buttons[Buttons["DPAD_UP"] = 12] = "DPAD_UP";
+    Buttons[Buttons["DPAD_DOWN"] = 13] = "DPAD_DOWN";
+    Buttons[Buttons["DPAD_LEFT"] = 14] = "DPAD_LEFT";
+    Buttons[Buttons["DPAD_RIGHT"] = 15] = "DPAD_RIGHT";
+})(Buttons || (Buttons = {}));
+var Axes;
+(function (Axes) {
+    Axes[Axes["LSTICK_H"] = 0] = "LSTICK_H";
+    Axes[Axes["LSTICK_V"] = 1] = "LSTICK_V";
+    Axes[Axes["RSTICK_H"] = 2] = "RSTICK_H";
+    Axes[Axes["RSTICK_V"] = 3] = "RSTICK_V";
+})(Axes || (Axes = {}));
+var nullGamepad = {
+    original: {
+        axes: [],
+        buttons: [],
+        connected: false,
+    },
+    disabled: true,
+    down: {},
+    justDown: {},
+    justUp: {},
+    axesPrev: {},
+};
+var Gamepads = /** @class */ (function () {
+    /**
+    * initialize gamepads
+    */
+    function Gamepads() {
+        var _this = this;
+        // settings
+        /** if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead */
+        this.deadZone = 0.25;
+        /** if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1 instead */
+        this.snapZone = 0.25;
+        /** axis values between \`deadZone\` and \`snapZone\` will be run through this function
+        *
+        * defaults to normalizing between the two thresholds */
+        this.interpolate = function (value) {
+            var v = Math.max(0, Math.min(1, (value - _this.deadZone) / (1.0 - _this.snapZone - _this.deadZone)));
+            return v;
+        };
+        // internal vars
+        this.players = {};
+        this.available = false;
+        this.pollEveryFrame = false;
+        this.connected = false;
+        /**
+        * update gamepads (clears arrays, polls connections, etc.)
+        */
+        this.pollconnections = function () {
+            _this.connected = false;
+            // assume existing players' gamepads aren't enabled until they're found
+            Object.values(_this.players).forEach(function (player) {
+                player.disabled = true;
+            });
+            var gps = navigator.getGamepads();
+            for (var i = 0; i < gps.length; ++i) {
+                var gp = gps[i];
+                if (gp) {
+                    if (gp.connected) {
+                        if (_this.players[gp.index] == null) {
+                            // new player
+                            _this.players[gp.index] = {
+                                disabled: false,
+                                original: gp,
+                                down: {},
+                                justDown: {},
+                                justUp: {},
+                                axesPrev: {},
+                            };
+                        }
+                        else {
+                            // returning player, just assign the gamepad
+                            _this.players[gp.index].original = gp;
+                        }
+                        _this.connected = true;
+                        _this.players[gp.index].disabled = false;
+                    }
+                    else {
+                        delete _this.players[gp.index];
+                    }
+                }
+            }
+        };
+        /**
+        * update gamepads (clears arrays, polls connections, etc.)
+        */
+        this.update = function () {
+            // store the previous axis values
+            // has to be done before pollConnections since that will get the new axis values
+            Object.keys(_this.players).forEach(function (i) {
+                var _a;
+                var p = _this.getPlayer(i);
+                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.axes) {
+                    p.axesPrev = p.original.axes.slice();
+                }
+            });
+            // poll connections and update gamepad states every frame because chrome's a lazy bum
+            if (_this.pollEveryFrame) {
+                _this.pollconnections();
+            }
+            Object.keys(_this.players).forEach(function (i) {
+                var _a;
+                var p = _this.getPlayer(i);
+                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.buttons) {
+                    for (var j = 0; j < p.original.buttons.length; ++j) {
+                        if (p.original.buttons[j].pressed) {
+                            p.justDown[j] = !(p.down[j] === true);
+                            p.down[j] = true;
+                            p.justUp[j] = false;
+                        }
+                        else {
+                            p.justUp[j] = p.down[j] === true;
+                            p.down[j] = false;
+                            p.justDown[j] = false;
+                        }
+                    }
+                }
+            });
+        };
+        /**
+        * @returns \`player\`'s gamepad
+        *
+        * if one doesn't exist, returns an object with gamepad properties reflecting a null state
+        */
+        this.getPlayer = function (player) {
+            var _a, _b, _c;
+            if (((_b = (_a = _this.players[player]) === null || _a === void 0 ? void 0 : _a.original) === null || _b === void 0 ? void 0 : _b.connected) && !((_c = _this.players[player]) === null || _c === void 0 ? void 0 : _c.disabled)) {
+                return _this.players[player];
+            }
+            return nullGamepad;
+        };
+        /**
+        * @returns an array representing \`length\` axes for \`player\` at \`offset\`
+        *
+        * if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead
+        * if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1/-1 instead
+        * otherwise, returns the axis value normalized between \`deadZone\` and \`(1-snapZone)\`
+        * @param {Number} offset axis index
+        * @param {Number} length number of axes to return
+        * @param {Number} player player index (\`undefined\` for "sum of all")
+        * @param {boolean} prev if \`true\` uses axis values from previous update
+        */
+        this.getAxes = function (offset, length, player, prev) {
+            if (offset === void 0) { offset = 0; }
+            if (length === void 0) { length = 2; }
+            if (prev === void 0) { prev = false; }
+            var axes = [];
+            for (var i = 0; i < length; ++i) {
+                axes[i] = 0;
+            }
+            if (player === undefined) {
+                Object.keys(_this.players).forEach(function (i) {
+                    var a = _this.getAxes(offset, length, i, prev);
+                    for (var j = 0; j < a.length; ++j) {
+                        axes[j] += a[j];
+                    }
+                });
+            }
+            else {
+                var p = _this.getPlayer(player);
+                if (p === null || p === void 0 ? void 0 : p.original) {
+                    var axesSource = prev ? p.axesPrev : p.original.axes;
+                    var a = Object.values(axesSource).slice(offset, offset + length);
+                    for (var i = 0; i < a.length; ++i) {
+                        if (Math.abs(a[i]) < _this.deadZone) {
+                            axes[i] += 0;
+                        }
+                        else if (Math.abs(1.0 - a[i]) < _this.snapZone) {
+                            axes[i] += 1;
+                        }
+                        else if (Math.abs(-1.0 - a[i]) < _this.snapZone) {
+                            axes[i] -= 1;
+                        }
+                        else {
+                            axes[i] += Math.sign(a[i]) * _this.interpolate(Math.abs(a[i]));
+                        }
+                    }
+                }
+            }
+            return axes;
+        };
+        /**
+       * @returns equivalent to \`getAxes(axis, 1, player, prev)[0]\`
+       */
+        this.getAxis = function (axis, player, prev) { return _this.getAxes(axis, 1, player, prev)[0]; };
+        /**
+        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\`
+        * @param {Number} axis axis index
+        * @param {Number} threshold threshold (-1 to 1)
+        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))
+        * @param {Number} player player index (\`undefined\` for "any")
+        * @param {boolean} prev if \`true\` uses axis values from previous update
+        */
+        this.axisPast = function (axis, threshold, direction, player, prev) {
+            if (!threshold) {
+                throw new Error('must specify a non-zero threshold');
+            }
+            if (!direction) {
+                direction = threshold > 0 ? 1 : -1;
+            }
+            var a = _this.getAxis(axis, player, prev);
+            return direction < 0 ? a < threshold : a > threshold;
+        };
+        /**
+        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\` and WAS NOT in previous update
+        * @param {Number} axis axis index
+        * @param {Number} threshold threshold (-1 to 1)
+        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.axisJustPast = function (axis, threshold, direction, player) { return _this.axisPast(axis, threshold, direction, player, false)
+            && !_this.axisPast(axis, threshold, direction, player, true); };
+        /**
+        * @returns \`[x,y]\` representing the dpad for \`player\`
+        * @param {Number} player player index (\`undefined\` for "sum of all")
+        */
+        this.getDpad = function (player) {
+            var x = 0;
+            var y = 0;
+            if (player === undefined) {
+                Object.keys(_this.players).forEach(function (i) {
+                    var _a = _this.getDpad(i), ix = _a[0], iy = _a[1];
+                    x += ix;
+                    y += iy;
+                });
+            }
+            else {
+                if (_this.isDown(Buttons.DPAD_RIGHT, player)) {
+                    x += 1;
+                }
+                if (_this.isDown(Buttons.DPAD_LEFT, player)) {
+                    x -= 1;
+                }
+                if (_this.isDown(Buttons.DPAD_UP, player)) {
+                    y += 1;
+                }
+                if (_this.isDown(Buttons.DPAD_DOWN, player)) {
+                    y -= 1;
+                }
+            }
+            return [x, y];
+        };
+        /**
+        * @returns \`true\` if \`player\`'s \`btn\` is currently down
+        * @param {Number} btn button index
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.isDown = function (btn, player) {
+            if (btn === undefined) {
+                throw new Error('must specify a button');
+            }
+            if (player === undefined) {
+                return Object.keys(_this.players).some(function (i) { return _this.isDown(btn, i); });
+            }
+            return _this.getPlayer(player).down[btn];
+        };
+        /**
+        * @returns equivalent to \`!isDown(btn, player)\`
+        * @param {Number} btn button index
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.isUp = function (btn, player) { return !_this.isDown(btn, player); };
+        /**
+        * @returns \`true\` if \`player\`'s \`btn\` is currently down and WAS NOT in previous update
+        * @param {Number} btn button index
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.isJustDown = function (btn, player) {
+            if (btn === undefined) {
+                throw new Error('must specify a button');
+            }
+            if (player === undefined) {
+                return Object.keys(_this.players).some(function (i) { return _this.isJustDown(btn, i); });
+            }
+            return _this.getPlayer(player).justDown[btn];
+        };
+        /**
+        * @returns \`true\` if \`player\`'s \`btn\` is currently NOT down and WAS down in previous update
+        * @param {Number} btn button index
+        * @param {Number} player player index (\`undefined\` for "any")
+        */
+        this.isJustUp = function (btn, player) {
+            if (btn === undefined) {
+                throw new Error('must specify a button');
+            }
+            if (player === undefined) {
+                return Object.keys(_this.players).some(function (i) { return _this.isJustUp(btn, i); });
+            }
+            return _this.getPlayer(player).justUp[btn];
+        };
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        if (navigator.getGamepads) {
+            this.available = true;
+        }
+        else if (navigator.webkitGetGamepads) {
+            navigator.getGamepads = navigator.webkitGetGamepads;
+            this.available = true;
+        }
+        if (this.available) {
+            if (navigator.userAgent.includes('Firefox')) {
+                // listen to connection events for firefox
+                window.addEventListener('gamepadconnected', this.pollconnections.bind(this));
+                window.addEventListener('gamepaddisconnected', this.pollconnections.bind(this));
+            }
+            else {
+                this.pollEveryFrame = true;
+            }
+        }
+    }
+    return Gamepads;
 }());
 
 /**
@@ -29605,7 +29605,12 @@ Expecting `+F.join(", ")+", got '"+(this.terminals_[k]||k)+"'":G="Parse error on
         }
         return undefined
     }
-    `.trim()},blockValue:function(c){var i=this.aliasable("container.hooks.blockHelperMissing"),g=[this.contextName(0)];this.setupHelperArgs(c,0,g);var m=this.popStack();g.splice(1,0,m),this.push(this.source.functionCall(i,"call",g))},ambiguousBlockValue:function(){var c=this.aliasable("container.hooks.blockHelperMissing"),i=[this.contextName(0)];this.setupHelperArgs("",0,i,!0),this.flushInline();var g=this.topStack();i.splice(1,0,g),this.pushSource(["if (!",this.lastHelper,") { ",g," = ",this.source.functionCall(c,"call",i),"}"])},appendContent:function(c){this.pendingContent?c=this.pendingContent+c:this.pendingLocation=this.source.currentLocation,this.pendingContent=c},append:function(){if(this.isInline())this.replaceStack(function(i){return[" != null ? ",i,' : ""']}),this.pushSource(this.appendToBuffer(this.popStack()));else{var c=this.popStack();this.pushSource(["if (",c," != null) { ",this.appendToBuffer(c,void 0,!0)," }"]),this.environment.isSimple&&this.pushSource(["else { ",this.appendToBuffer("''",void 0,!0)," }"])}},appendEscaped:function(){this.pushSource(this.appendToBuffer([this.aliasable("container.escapeExpression"),"(",this.popStack(),")"]))},getContext:function(c){this.lastContext=c},pushContext:function(){this.pushStackLiteral(this.contextName(this.lastContext))},lookupOnContext:function(c,i,g,m){var w=0;!m&&this.options.compat&&!this.lastContext?this.push(this.depthedLookup(c[w++])):this.pushContext(),this.resolvePath("context",c,w,i,g)},lookupBlockParam:function(c,i){this.useBlockParams=!0,this.push(["blockParams[",c[0],"][",c[1],"]"]),this.resolvePath("context",i,1)},lookupData:function(c,i,g){c?this.pushStackLiteral("container.data(data, "+c+")"):this.pushStackLiteral("data"),this.resolvePath("data",i,0,!0,g)},resolvePath:function(c,i,g,m,w){var b=this;if(this.options.strict||this.options.assumeObjects){this.push(h(this.options.strict&&w,this,i,c));return}for(var k=i.length;g<k;g++)this.replaceStack(function(y){var v=b.nameLookup(y,i[g],c);return m?[" && ",v]:[" != null ? ",v," : ",y]})},resolvePossibleLambda:function(){this.push([this.aliasable("container.lambda"),"(",this.popStack(),", ",this.contextName(0),")"])},pushStringParam:function(c,i){this.pushContext(),this.pushString(i),i!=="SubExpression"&&(typeof c=="string"?this.pushString(c):this.pushStackLiteral(c))},emptyHash:function(c){this.trackIds&&this.push("{}"),this.stringParams&&(this.push("{}"),this.push("{}")),this.pushStackLiteral(c?"undefined":"{}")},pushHash:function(){this.hash&&this.hashes.push(this.hash),this.hash={values:{},types:[],contexts:[],ids:[]}},popHash:function(){var c=this.hash;this.hash=this.hashes.pop(),this.trackIds&&this.push(this.objectLiteral(c.ids)),this.stringParams&&(this.push(this.objectLiteral(c.contexts)),this.push(this.objectLiteral(c.types))),this.push(this.objectLiteral(c.values))},pushString:function(c){this.pushStackLiteral(this.quotedString(c))},pushLiteral:function(c){this.pushStackLiteral(c)},pushProgram:function(c){c!=null?this.pushStackLiteral(this.programExpression(c)):this.pushStackLiteral(null)},registerDecorator:function(c,i){var g=this.nameLookup("decorators",i,"decorator"),m=this.setupHelperArgs(i,c);this.decorators.push(["fn = ",this.decorators.functionCall(g,"",["fn","props","container",m])," || fn;"])},invokeHelper:function(c,i,g){var m=this.popStack(),w=this.setupHelper(c,i),b=[];g&&b.push(w.name),b.push(m),this.options.strict||b.push(this.aliasable("container.hooks.helperMissing"));var k=["(",this.itemsSeparatedBy(b,"||"),")"],y=this.source.functionCall(k,"call",w.callParams);this.push(y)},itemsSeparatedBy:function(c,i){var g=[];g.push(c[0]);for(var m=1;m<c.length;m++)g.push(i,c[m]);return g},invokeKnownHelper:function(c,i){var g=this.setupHelper(c,i);this.push(this.source.functionCall(g.name,"call",g.callParams))},invokeAmbiguous:function(c,i){this.useRegister("helper");var g=this.popStack();this.emptyHash();var m=this.setupHelper(0,c,i),w=this.lastHelper=this.nameLookup("helpers",c,"helper"),b=["(","(helper = ",w," || ",g,")"];this.options.strict||(b[0]="(helper = ",b.push(" != null ? helper : ",this.aliasable("container.hooks.helperMissing"))),this.push(["(",b,m.paramsInit?["),(",m.paramsInit]:[],"),","(typeof helper === ",this.aliasable('"function"')," ? ",this.source.functionCall("helper","call",m.callParams)," : helper))"])},invokePartial:function(c,i,g){var m=[],w=this.setupParams(i,1,m);c&&(i=this.popStack(),delete w.name),g&&(w.indent=JSON.stringify(g)),w.helpers="helpers",w.partials="partials",w.decorators="container.decorators",c?m.unshift(i):m.unshift(this.nameLookup("partials",i,"partial")),this.options.compat&&(w.depths="depths"),w=this.objectLiteral(w),m.push(w),this.push(this.source.functionCall("container.invokePartial","",m))},assignToHash:function(c){var i=this.popStack(),g=void 0,m=void 0,w=void 0;this.trackIds&&(w=this.popStack()),this.stringParams&&(m=this.popStack(),g=this.popStack());var b=this.hash;g&&(b.contexts[c]=g),m&&(b.types[c]=m),w&&(b.ids[c]=w),b.values[c]=i},pushId:function(c,i,g){c==="BlockParam"?this.pushStackLiteral("blockParams["+i[0]+"].path["+i[1]+"]"+(g?" + "+JSON.stringify("."+g):"")):c==="PathExpression"?this.pushString(i):c==="SubExpression"?this.pushStackLiteral("true"):this.pushStackLiteral("null")},compiler:a,compileChildren:function(c,i){for(var g=c.children,m=void 0,w=void 0,b=0,k=g.length;b<k;b++){m=g[b],w=new this.compiler;var y=this.matchExistingProgram(m);if(y==null){this.context.programs.push("");var v=this.context.programs.length;m.index=v,m.name="program"+v,this.context.programs[v]=w.compile(m,i,this.context,!this.precompile),this.context.decorators[v]=w.decorators,this.context.environments[v]=m,this.useDepths=this.useDepths||w.useDepths,this.useBlockParams=this.useBlockParams||w.useBlockParams,m.useDepths=this.useDepths,m.useBlockParams=this.useBlockParams}else m.index=y.index,m.name="program"+y.index,this.useDepths=this.useDepths||y.useDepths,this.useBlockParams=this.useBlockParams||y.useBlockParams}},matchExistingProgram:function(c){for(var i=0,g=this.context.environments.length;i<g;i++){var m=this.context.environments[i];if(m&&m.equals(c))return m}},programExpression:function(c){var i=this.environment.children[c],g=[i.index,"data",i.blockParams];return(this.useBlockParams||this.useDepths)&&g.push("blockParams"),this.useDepths&&g.push("depths"),"container.program("+g.join(", ")+")"},useRegister:function(c){this.registers[c]||(this.registers[c]=!0,this.registers.list.push(c))},push:function(c){return c instanceof s||(c=this.source.wrap(c)),this.inlineStack.push(c),c},pushStackLiteral:function(c){this.push(new s(c))},pushSource:function(c){this.pendingContent&&(this.source.push(this.appendToBuffer(this.source.quotedString(this.pendingContent),this.pendingLocation)),this.pendingContent=void 0),c&&this.source.push(c)},replaceStack:function(c){var i=["("],g=void 0,m=void 0,w=void 0;if(!this.isInline())throw new p.default("replaceStack on non-inline");var b=this.popStack(!0);if(b instanceof s)g=[b.value],i=["(",g],w=!0;else{m=!0;var k=this.incrStack();i=["((",this.push(k)," = ",b,")"],g=this.topStack()}var y=c.call(this,g);w||this.popStack(),m&&this.stackSlot--,this.push(i.concat(y,")"))},incrStack:function(){return this.stackSlot++,this.stackSlot>this.stackVars.length&&this.stackVars.push("stack"+this.stackSlot),this.topStackName()},topStackName:function(){return"stack"+this.stackSlot},flushInline:function(){var c=this.inlineStack;this.inlineStack=[];for(var i=0,g=c.length;i<g;i++){var m=c[i];if(m instanceof s)this.compileStack.push(m);else{var w=this.incrStack();this.pushSource([w," = ",m,";"]),this.compileStack.push(w)}}},isInline:function(){return this.inlineStack.length},popStack:function(c){var i=this.isInline(),g=(i?this.inlineStack:this.compileStack).pop();if(!c&&g instanceof s)return g.value;if(!i){if(!this.stackSlot)throw new p.default("Invalid stack pop");this.stackSlot--}return g},topStack:function(){var c=this.isInline()?this.inlineStack:this.compileStack,i=c[c.length-1];return i instanceof s?i.value:i},contextName:function(c){return this.useDepths&&c?"depths["+c+"]":"depth"+c},quotedString:function(c){return this.source.quotedString(c)},objectLiteral:function(c){return this.source.objectLiteral(c)},aliasable:function(c){var i=this.aliases[c];return i?(i.referenceCount++,i):(i=this.aliases[c]=this.source.wrap(c),i.aliasable=!0,i.referenceCount=1,i)},setupHelper:function(c,i,g){var m=[],w=this.setupHelperArgs(i,c,m,g),b=this.nameLookup("helpers",i,"helper"),k=this.aliasable(this.contextName(0)+" != null ? "+this.contextName(0)+" : (container.nullContext || {})");return{params:m,paramsInit:w,name:b,callParams:[k].concat(m)}},setupParams:function(c,i,g){var m={},w=[],b=[],k=[],y=!g,v=void 0;y&&(g=[]),m.name=this.quotedString(c),m.hash=this.popStack(),this.trackIds&&(m.hashIds=this.popStack()),this.stringParams&&(m.hashTypes=this.popStack(),m.hashContexts=this.popStack());var S=this.popStack(),x=this.popStack();(x||S)&&(m.fn=x||"container.noop",m.inverse=S||"container.noop");for(var j=i;j--;)v=this.popStack(),g[j]=v,this.trackIds&&(k[j]=this.popStack()),this.stringParams&&(b[j]=this.popStack(),w[j]=this.popStack());return y&&(m.args=this.source.generateArray(g)),this.trackIds&&(m.ids=this.source.generateArray(k)),this.stringParams&&(m.types=this.source.generateArray(b),m.contexts=this.source.generateArray(w)),this.options.data&&(m.data="data"),this.useBlockParams&&(m.blockParams="blockParams"),m},setupHelperArgs:function(c,i,g,m){var w=this.setupParams(c,i,g);return w.loc=JSON.stringify(this.source.currentLocation),w=this.objectLiteral(w),m?(this.useRegister("options"),g.push("options"),["options=",w]):g?(g.push(w),""):w}},function(){for(var e="break else new var case finally return void catch for switch while continue function this with default if throw delete in try do instanceof typeof abstract enum int short boolean export interface static byte extends long super char final native synchronized class float package throws const goto private transient debugger implements protected volatile double import public let yield await null true false".split(" "),c=a.RESERVED_WORDS={},i=0,g=e.length;i<g;i++)c[e[i]]=!0}(),a.isValidJavaScriptVariableName=function(e){return!a.RESERVED_WORDS[e]&&/^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(e)};function h(e,c,i,g){var m=c.popStack(),w=0,b=i.length;for(e&&b--;w<b;w++)m=c.nameLookup(m,i[w],g);return e?[c.aliasable("container.strict"),"(",m,", ",c.quotedString(i[w]),", ",JSON.stringify(c.source.currentLocation)," )"]:m}n.default=a,t.exports=n.default})(Ht,Ht.exports);(function(t,n){n.__esModule=!0;function r(b){return b&&b.__esModule?b:{default:b}}var d=Tt.exports,f=r(d),p=dt.exports,u=r(p),l=nt,o=et,s=Ht.exports,a=r(s),h=ft.exports,e=r(h),c=pt.exports,i=r(c),g=f.default.create;function m(){var b=g();return b.compile=function(k,y){return o.compile(k,y,b)},b.precompile=function(k,y){return o.precompile(k,y,b)},b.AST=u.default,b.Compiler=o.Compiler,b.JavaScriptCompiler=a.default,b.Parser=l.parser,b.parse=l.parse,b.parseWithoutProcessing=l.parseWithoutProcessing,b}var w=m();w.create=m,i.default(w),w.Visitor=e.default,w.default=w,n.default=w,t.exports=n.default})(jt,jt.exports);const yn=`<h1><a href="https://github.com/Ayolland/borksy/compare/v5.22.0...v5.23.0">5.23.0</a> (2022-07-23)</h1>
+    `.trim()},blockValue:function(c){var i=this.aliasable("container.hooks.blockHelperMissing"),g=[this.contextName(0)];this.setupHelperArgs(c,0,g);var m=this.popStack();g.splice(1,0,m),this.push(this.source.functionCall(i,"call",g))},ambiguousBlockValue:function(){var c=this.aliasable("container.hooks.blockHelperMissing"),i=[this.contextName(0)];this.setupHelperArgs("",0,i,!0),this.flushInline();var g=this.topStack();i.splice(1,0,g),this.pushSource(["if (!",this.lastHelper,") { ",g," = ",this.source.functionCall(c,"call",i),"}"])},appendContent:function(c){this.pendingContent?c=this.pendingContent+c:this.pendingLocation=this.source.currentLocation,this.pendingContent=c},append:function(){if(this.isInline())this.replaceStack(function(i){return[" != null ? ",i,' : ""']}),this.pushSource(this.appendToBuffer(this.popStack()));else{var c=this.popStack();this.pushSource(["if (",c," != null) { ",this.appendToBuffer(c,void 0,!0)," }"]),this.environment.isSimple&&this.pushSource(["else { ",this.appendToBuffer("''",void 0,!0)," }"])}},appendEscaped:function(){this.pushSource(this.appendToBuffer([this.aliasable("container.escapeExpression"),"(",this.popStack(),")"]))},getContext:function(c){this.lastContext=c},pushContext:function(){this.pushStackLiteral(this.contextName(this.lastContext))},lookupOnContext:function(c,i,g,m){var w=0;!m&&this.options.compat&&!this.lastContext?this.push(this.depthedLookup(c[w++])):this.pushContext(),this.resolvePath("context",c,w,i,g)},lookupBlockParam:function(c,i){this.useBlockParams=!0,this.push(["blockParams[",c[0],"][",c[1],"]"]),this.resolvePath("context",i,1)},lookupData:function(c,i,g){c?this.pushStackLiteral("container.data(data, "+c+")"):this.pushStackLiteral("data"),this.resolvePath("data",i,0,!0,g)},resolvePath:function(c,i,g,m,w){var b=this;if(this.options.strict||this.options.assumeObjects){this.push(h(this.options.strict&&w,this,i,c));return}for(var k=i.length;g<k;g++)this.replaceStack(function(y){var v=b.nameLookup(y,i[g],c);return m?[" && ",v]:[" != null ? ",v," : ",y]})},resolvePossibleLambda:function(){this.push([this.aliasable("container.lambda"),"(",this.popStack(),", ",this.contextName(0),")"])},pushStringParam:function(c,i){this.pushContext(),this.pushString(i),i!=="SubExpression"&&(typeof c=="string"?this.pushString(c):this.pushStackLiteral(c))},emptyHash:function(c){this.trackIds&&this.push("{}"),this.stringParams&&(this.push("{}"),this.push("{}")),this.pushStackLiteral(c?"undefined":"{}")},pushHash:function(){this.hash&&this.hashes.push(this.hash),this.hash={values:{},types:[],contexts:[],ids:[]}},popHash:function(){var c=this.hash;this.hash=this.hashes.pop(),this.trackIds&&this.push(this.objectLiteral(c.ids)),this.stringParams&&(this.push(this.objectLiteral(c.contexts)),this.push(this.objectLiteral(c.types))),this.push(this.objectLiteral(c.values))},pushString:function(c){this.pushStackLiteral(this.quotedString(c))},pushLiteral:function(c){this.pushStackLiteral(c)},pushProgram:function(c){c!=null?this.pushStackLiteral(this.programExpression(c)):this.pushStackLiteral(null)},registerDecorator:function(c,i){var g=this.nameLookup("decorators",i,"decorator"),m=this.setupHelperArgs(i,c);this.decorators.push(["fn = ",this.decorators.functionCall(g,"",["fn","props","container",m])," || fn;"])},invokeHelper:function(c,i,g){var m=this.popStack(),w=this.setupHelper(c,i),b=[];g&&b.push(w.name),b.push(m),this.options.strict||b.push(this.aliasable("container.hooks.helperMissing"));var k=["(",this.itemsSeparatedBy(b,"||"),")"],y=this.source.functionCall(k,"call",w.callParams);this.push(y)},itemsSeparatedBy:function(c,i){var g=[];g.push(c[0]);for(var m=1;m<c.length;m++)g.push(i,c[m]);return g},invokeKnownHelper:function(c,i){var g=this.setupHelper(c,i);this.push(this.source.functionCall(g.name,"call",g.callParams))},invokeAmbiguous:function(c,i){this.useRegister("helper");var g=this.popStack();this.emptyHash();var m=this.setupHelper(0,c,i),w=this.lastHelper=this.nameLookup("helpers",c,"helper"),b=["(","(helper = ",w," || ",g,")"];this.options.strict||(b[0]="(helper = ",b.push(" != null ? helper : ",this.aliasable("container.hooks.helperMissing"))),this.push(["(",b,m.paramsInit?["),(",m.paramsInit]:[],"),","(typeof helper === ",this.aliasable('"function"')," ? ",this.source.functionCall("helper","call",m.callParams)," : helper))"])},invokePartial:function(c,i,g){var m=[],w=this.setupParams(i,1,m);c&&(i=this.popStack(),delete w.name),g&&(w.indent=JSON.stringify(g)),w.helpers="helpers",w.partials="partials",w.decorators="container.decorators",c?m.unshift(i):m.unshift(this.nameLookup("partials",i,"partial")),this.options.compat&&(w.depths="depths"),w=this.objectLiteral(w),m.push(w),this.push(this.source.functionCall("container.invokePartial","",m))},assignToHash:function(c){var i=this.popStack(),g=void 0,m=void 0,w=void 0;this.trackIds&&(w=this.popStack()),this.stringParams&&(m=this.popStack(),g=this.popStack());var b=this.hash;g&&(b.contexts[c]=g),m&&(b.types[c]=m),w&&(b.ids[c]=w),b.values[c]=i},pushId:function(c,i,g){c==="BlockParam"?this.pushStackLiteral("blockParams["+i[0]+"].path["+i[1]+"]"+(g?" + "+JSON.stringify("."+g):"")):c==="PathExpression"?this.pushString(i):c==="SubExpression"?this.pushStackLiteral("true"):this.pushStackLiteral("null")},compiler:a,compileChildren:function(c,i){for(var g=c.children,m=void 0,w=void 0,b=0,k=g.length;b<k;b++){m=g[b],w=new this.compiler;var y=this.matchExistingProgram(m);if(y==null){this.context.programs.push("");var v=this.context.programs.length;m.index=v,m.name="program"+v,this.context.programs[v]=w.compile(m,i,this.context,!this.precompile),this.context.decorators[v]=w.decorators,this.context.environments[v]=m,this.useDepths=this.useDepths||w.useDepths,this.useBlockParams=this.useBlockParams||w.useBlockParams,m.useDepths=this.useDepths,m.useBlockParams=this.useBlockParams}else m.index=y.index,m.name="program"+y.index,this.useDepths=this.useDepths||y.useDepths,this.useBlockParams=this.useBlockParams||y.useBlockParams}},matchExistingProgram:function(c){for(var i=0,g=this.context.environments.length;i<g;i++){var m=this.context.environments[i];if(m&&m.equals(c))return m}},programExpression:function(c){var i=this.environment.children[c],g=[i.index,"data",i.blockParams];return(this.useBlockParams||this.useDepths)&&g.push("blockParams"),this.useDepths&&g.push("depths"),"container.program("+g.join(", ")+")"},useRegister:function(c){this.registers[c]||(this.registers[c]=!0,this.registers.list.push(c))},push:function(c){return c instanceof s||(c=this.source.wrap(c)),this.inlineStack.push(c),c},pushStackLiteral:function(c){this.push(new s(c))},pushSource:function(c){this.pendingContent&&(this.source.push(this.appendToBuffer(this.source.quotedString(this.pendingContent),this.pendingLocation)),this.pendingContent=void 0),c&&this.source.push(c)},replaceStack:function(c){var i=["("],g=void 0,m=void 0,w=void 0;if(!this.isInline())throw new p.default("replaceStack on non-inline");var b=this.popStack(!0);if(b instanceof s)g=[b.value],i=["(",g],w=!0;else{m=!0;var k=this.incrStack();i=["((",this.push(k)," = ",b,")"],g=this.topStack()}var y=c.call(this,g);w||this.popStack(),m&&this.stackSlot--,this.push(i.concat(y,")"))},incrStack:function(){return this.stackSlot++,this.stackSlot>this.stackVars.length&&this.stackVars.push("stack"+this.stackSlot),this.topStackName()},topStackName:function(){return"stack"+this.stackSlot},flushInline:function(){var c=this.inlineStack;this.inlineStack=[];for(var i=0,g=c.length;i<g;i++){var m=c[i];if(m instanceof s)this.compileStack.push(m);else{var w=this.incrStack();this.pushSource([w," = ",m,";"]),this.compileStack.push(w)}}},isInline:function(){return this.inlineStack.length},popStack:function(c){var i=this.isInline(),g=(i?this.inlineStack:this.compileStack).pop();if(!c&&g instanceof s)return g.value;if(!i){if(!this.stackSlot)throw new p.default("Invalid stack pop");this.stackSlot--}return g},topStack:function(){var c=this.isInline()?this.inlineStack:this.compileStack,i=c[c.length-1];return i instanceof s?i.value:i},contextName:function(c){return this.useDepths&&c?"depths["+c+"]":"depth"+c},quotedString:function(c){return this.source.quotedString(c)},objectLiteral:function(c){return this.source.objectLiteral(c)},aliasable:function(c){var i=this.aliases[c];return i?(i.referenceCount++,i):(i=this.aliases[c]=this.source.wrap(c),i.aliasable=!0,i.referenceCount=1,i)},setupHelper:function(c,i,g){var m=[],w=this.setupHelperArgs(i,c,m,g),b=this.nameLookup("helpers",i,"helper"),k=this.aliasable(this.contextName(0)+" != null ? "+this.contextName(0)+" : (container.nullContext || {})");return{params:m,paramsInit:w,name:b,callParams:[k].concat(m)}},setupParams:function(c,i,g){var m={},w=[],b=[],k=[],y=!g,v=void 0;y&&(g=[]),m.name=this.quotedString(c),m.hash=this.popStack(),this.trackIds&&(m.hashIds=this.popStack()),this.stringParams&&(m.hashTypes=this.popStack(),m.hashContexts=this.popStack());var S=this.popStack(),x=this.popStack();(x||S)&&(m.fn=x||"container.noop",m.inverse=S||"container.noop");for(var j=i;j--;)v=this.popStack(),g[j]=v,this.trackIds&&(k[j]=this.popStack()),this.stringParams&&(b[j]=this.popStack(),w[j]=this.popStack());return y&&(m.args=this.source.generateArray(g)),this.trackIds&&(m.ids=this.source.generateArray(k)),this.stringParams&&(m.types=this.source.generateArray(b),m.contexts=this.source.generateArray(w)),this.options.data&&(m.data="data"),this.useBlockParams&&(m.blockParams="blockParams"),m},setupHelperArgs:function(c,i,g,m){var w=this.setupParams(c,i,g);return w.loc=JSON.stringify(this.source.currentLocation),w=this.objectLiteral(w),m?(this.useRegister("options"),g.push("options"),["options=",w]):g?(g.push(w),""):w}},function(){for(var e="break else new var case finally return void catch for switch while continue function this with default if throw delete in try do instanceof typeof abstract enum int short boolean export interface static byte extends long super char final native synchronized class float package throws const goto private transient debugger implements protected volatile double import public let yield await null true false".split(" "),c=a.RESERVED_WORDS={},i=0,g=e.length;i<g;i++)c[e[i]]=!0}(),a.isValidJavaScriptVariableName=function(e){return!a.RESERVED_WORDS[e]&&/^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(e)};function h(e,c,i,g){var m=c.popStack(),w=0,b=i.length;for(e&&b--;w<b;w++)m=c.nameLookup(m,i[w],g);return e?[c.aliasable("container.strict"),"(",m,", ",c.quotedString(i[w]),", ",JSON.stringify(c.source.currentLocation)," )"]:m}n.default=a,t.exports=n.default})(Ht,Ht.exports);(function(t,n){n.__esModule=!0;function r(b){return b&&b.__esModule?b:{default:b}}var d=Tt.exports,f=r(d),p=dt.exports,u=r(p),l=nt,o=et,s=Ht.exports,a=r(s),h=ft.exports,e=r(h),c=pt.exports,i=r(c),g=f.default.create;function m(){var b=g();return b.compile=function(k,y){return o.compile(k,y,b)},b.precompile=function(k,y){return o.precompile(k,y,b)},b.AST=u.default,b.Compiler=o.Compiler,b.JavaScriptCompiler=a.default,b.Parser=l.parser,b.parse=l.parse,b.parseWithoutProcessing=l.parseWithoutProcessing,b}var w=m();w.create=m,i.default(w),w.Visitor=e.default,w.default=w,n.default=w,t.exports=n.default})(jt,jt.exports);const yn=`<h1><a href="https://github.com/Ayolland/borksy/compare/v5.23.0...v5.24.0">5.24.0</a> (2022-08-25)</h1>
+<h3>Features</h3>
+<ul>
+<li>update hacks (<a href="https://github.com/Ayolland/borksy/commit/b55c6611f7864fc8b674fd424459d4280c84b422">b55c661</a>)</li>
+</ul>
+<h1><a href="https://github.com/Ayolland/borksy/compare/v5.22.0...v5.23.0">5.23.0</a> (2022-07-23)</h1>
 <h3>Bug Fixes</h3>
 <ul>
 <li>sort HD templates to bottom (<a href="https://github.com/Ayolland/borksy/commit/0cc341428861b4af525d39612ef334e4fb331961">0cc3414</a>)</li>
@@ -30029,7 +30034,7 @@ Expecting `+F.join(", ")+", got '"+(this.terminals_[k]||k)+"'":G="Parse error on
 <ul>
 <li>Initial version</li>
 </ul>
-`,da="borksy",fa="5.23.0",ha="Borksy Game Hacker: A tool for extending Bitsy games",ga={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},ma={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},ya="AYolland",ba="MIT",va={url:"https://github.com/Ayolland/borksy/issues"},wa="https://ayolland.itch.io/borksy",ka={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},xa={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},Sa={"@bitsy/hecks":"^21.0.2",eslint:"^8.22.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.5.0","eslint-plugin-import":"^2.26.0","eslint-plugin-prettier":"^4.2.1","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^28.1.3","jest-dev-server":"^6.1.1","jest-environment-jsdom":"^29.0.0","jest-image-snapshot":"^5.1.0",prettier:"^2.7.1",puppeteer:"^16.2.0","rollup-plugin-visualizer":"^5.8.0",sass:"^1.54.5",vite:"^3.0.9","vite-plugin-markdown":"^2.1.0","vite-plugin-string":"^1.1.2"},ja={private:!0,name:da,version:fa,description:ha,scripts:ga,repository:ma,author:ya,license:ba,bugs:va,homepage:wa,jest:ka,release:xa,devDependencies:Sa},K=Object.fromEntries(Object.entries(Object.assign({"../about/about.md":Vn,"../about/ayos-special-tips.md":$n,"../about/how-to-use-borksy.md":Kn,"../about/other-tools.md":Qn,"../about/troubleshooting-faqs.md":ee})).map(([t,n])=>[t.match(/.*\/(.*?)\.md/)[1],n.html])),On=Object.fromEntries(Object.entries(Object.assign({"../defaults/body.txt":re,"../defaults/fontdata.txt":ie,"../defaults/gamedata.txt":ae,"../defaults/gamedataHD.txt":oe,"../defaults/style.txt":se})).map(([t,n])=>[t.match(/.*\/(.*?)\.txt/)[1],n])),Ta=Object.values(Object.assign({"../hacks/avatar-by-room.txt":ce,"../hacks/backdrops.txt":le,"../hacks/basic-sfx.txt":ue,"../hacks/bitsymuse.txt":pe,"../hacks/canvas-replacement.txt":de,"../hacks/character-portraits-animated.txt":fe,"../hacks/character-portraits.txt":he,"../hacks/close-on-ending.txt":ge,"../hacks/corrupt.txt":me,"../hacks/custom-exit-effects.txt":ye,"../hacks/custom-keyhandlers.txt":be,"../hacks/custom-text-effect.txt":ve,"../hacks/dialog-audio-vocal-synth.txt":we,"../hacks/dialog-audio.txt":ke,"../hacks/dialog-box-transition.txt":xe,"../hacks/dialog-choices.txt":Se,"../hacks/dialog-jump.txt":je,"../hacks/dialog-pause.txt":Te,"../hacks/dialog-prompt.txt":_e,"../hacks/direction-in-dialog.txt":Ie,"../hacks/directional-avatar.txt":Fe,"../hacks/dynamic-background.txt":Ae,"../hacks/edit-dialog-from-dialog.txt":Ee,"../hacks/edit-image-from-dialog.txt":Oe,"../hacks/edit-player-from-dialog.txt":Ne,"../hacks/edit-room-from-dialog.txt":De,"../hacks/end-from-dialog.txt":Be,"../hacks/exit-from-dialog.txt":Ce,"../hacks/external-game-data.txt":Re,"../hacks/favicon-from-sprite.txt":qe,"../hacks/follower.txt":Le,"../hacks/gamepad-input.txt":Pe,"../hacks/gravity.txt":Me,"../hacks/itsy-bitsy.txt":He,"../hacks/javascript-dialog.txt":Ge,"../hacks/logic-operators-extended.txt":Ue,"../hacks/long-dialog.txt":Ve,"../hacks/multi-sprite-avatar.txt":ze,"../hacks/noclip.txt":We,"../hacks/online.txt":$e,"../hacks/opaque-tiles.txt":Ye,"../hacks/paragraph-break.txt":Xe,"../hacks/permanent-items.txt":Ke,"../hacks/push-sprites.txt":Je,"../hacks/replace-drawing.txt":Ze,"../hacks/save.txt":Qe,"../hacks/smooth-moves.txt":tr,"../hacks/solid-items.txt":nr,"../hacks/sprite-effects.txt":er,"../hacks/stopwatch.txt":rr,"../hacks/text-to-speech.txt":ir,"../hacks/tracery-processing.txt":ar,"../hacks/transitions.txt":or,"../hacks/transparent-background.txt":sr,"../hacks/transparent-dialog.txt":cr,"../hacks/transparent-sprites.txt":lr,"../hacks/twine-bitsy-comms.txt":ur,"../hacks/unique-items.txt":pr})),V=Object.entries(Object.assign({"../template/Bitsy.5.5.hbs":()=>A(()=>import("./Bitsy.5.5.84a78101.js"),[],import.meta.url),"../template/Bitsy.6.0.hbs":()=>A(()=>import("./Bitsy.6.0.3c0f81a1.js"),[],import.meta.url),"../template/Bitsy.6.3.hbs":()=>A(()=>import("./Bitsy.6.3.1cd6b573.js"),[],import.meta.url),"../template/Bitsy.6.4.hbs":()=>A(()=>import("./Bitsy.6.4.4e6f8b27.js"),[],import.meta.url),"../template/Bitsy.6.5.hbs":()=>A(()=>import("./Bitsy.6.5.41263501.js"),[],import.meta.url),"../template/Bitsy.7.0.hbs":()=>A(()=>import("./Bitsy.7.0.ae3ef77e.js"),[],import.meta.url),"../template/Bitsy.7.10.hbs":()=>A(()=>import("./Bitsy.7.10.0abc49dc.js"),[],import.meta.url),"../template/Bitsy.7.11.hbs":()=>A(()=>import("./Bitsy.7.11.d71d5f9c.js"),[],import.meta.url),"../template/Bitsy.7.12.hbs":()=>A(()=>import("./Bitsy.7.12.95a1e310.js"),[],import.meta.url),"../template/Bitsy.7.2.hbs":()=>A(()=>import("./Bitsy.7.2.59b21288.js"),[],import.meta.url),"../template/Bitsy.7.8.hbs":()=>A(()=>import("./Bitsy.7.8.18767bae.js"),[],import.meta.url),"../template/Bitsy.8.1.hbs":()=>A(()=>import("./Bitsy.8.1.85afcbd3.js"),[],import.meta.url),"../template/BitsyHD.5.1.hbs":()=>A(()=>import("./BitsyHD.5.1.83851570.js"),[],import.meta.url),"../template/BitsyHD.7.11.hbs":()=>A(()=>import("./BitsyHD.7.11.bdef66d3.js"),[],import.meta.url),"../template/BitsyHD.7.12.hbs":()=>A(()=>import("./BitsyHD.7.12.c6a6caab.js"),[],import.meta.url),"../template/BitsyHD.8.1.hbs":()=>A(()=>import("./BitsyHD.8.1.d8b48719.js"),[],import.meta.url)})).sort(([t],[n])=>t.replace("HD","_").localeCompare(n.replace("HD","_"),"en",{sensitivity:"base",numeric:!0})).map(([t,n],r,d)=>{const[f]=t.match(/(?:\d\.)+\d+(?=\.hbs)/),p=t.includes("HD");return{data:n,bitsyVersion:f,isHd:p,description:p?`Bitsy HD (Bitsy ${f})`:`Bitsy ${f}`,id:`Bitsy${p?"HD":""}${f.replace(/\./g,"")}`,isDefault:r===d.length-1}}),Jt=Ta.map(t=>{const[n]=t.match(/^(\/\*\*[\S\s]*?\*\/)$/gm),r=n.split(`
+`,da="borksy",fa="5.24.0",ha="Borksy Game Hacker: A tool for extending Bitsy games",ga={postversion:"npm run build",start:"vite",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},ma={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},ya="AYolland",ba="MIT",va={url:"https://github.com/Ayolland/borksy/issues"},wa="https://ayolland.itch.io/borksy",ka={testEnvironment:"jsdom",setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},xa={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},Sa={"@bitsy/hecks":"^21.0.2",eslint:"^8.22.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.5.0","eslint-plugin-import":"^2.26.0","eslint-plugin-prettier":"^4.2.1","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^28.1.3","jest-dev-server":"^6.1.1","jest-environment-jsdom":"^29.0.0","jest-image-snapshot":"^5.1.0",prettier:"^2.7.1",puppeteer:"^16.2.0","rollup-plugin-visualizer":"^5.8.0",sass:"^1.54.5",vite:"^3.0.9","vite-plugin-markdown":"^2.1.0","vite-plugin-string":"^1.1.2"},ja={private:!0,name:da,version:fa,description:ha,scripts:ga,repository:ma,author:ya,license:ba,bugs:va,homepage:wa,jest:ka,release:xa,devDependencies:Sa},K=Object.fromEntries(Object.entries(Object.assign({"../about/about.md":Vn,"../about/ayos-special-tips.md":$n,"../about/how-to-use-borksy.md":Kn,"../about/other-tools.md":Qn,"../about/troubleshooting-faqs.md":ee})).map(([t,n])=>[t.match(/.*\/(.*?)\.md/)[1],n.html])),On=Object.fromEntries(Object.entries(Object.assign({"../defaults/body.txt":re,"../defaults/fontdata.txt":ie,"../defaults/gamedata.txt":ae,"../defaults/gamedataHD.txt":oe,"../defaults/style.txt":se})).map(([t,n])=>[t.match(/.*\/(.*?)\.txt/)[1],n])),Ta=Object.values(Object.assign({"../hacks/avatar-by-room.txt":ce,"../hacks/backdrops.txt":le,"../hacks/basic-sfx.txt":ue,"../hacks/bitsymuse.txt":pe,"../hacks/canvas-replacement.txt":de,"../hacks/character-portraits-animated.txt":fe,"../hacks/character-portraits.txt":he,"../hacks/close-on-ending.txt":ge,"../hacks/corrupt.txt":me,"../hacks/custom-exit-effects.txt":ye,"../hacks/custom-keyhandlers.txt":be,"../hacks/custom-text-effect.txt":ve,"../hacks/dialog-audio-vocal-synth.txt":we,"../hacks/dialog-audio.txt":ke,"../hacks/dialog-box-transition.txt":xe,"../hacks/dialog-choices.txt":Se,"../hacks/dialog-jump.txt":je,"../hacks/dialog-pause.txt":Te,"../hacks/dialog-prompt.txt":_e,"../hacks/direction-in-dialog.txt":Ie,"../hacks/directional-avatar.txt":Fe,"../hacks/dynamic-background.txt":Ae,"../hacks/edit-dialog-from-dialog.txt":Ee,"../hacks/edit-image-from-dialog.txt":Oe,"../hacks/edit-player-from-dialog.txt":Ne,"../hacks/edit-room-from-dialog.txt":De,"../hacks/end-from-dialog.txt":Be,"../hacks/exit-from-dialog.txt":Ce,"../hacks/external-game-data.txt":Re,"../hacks/favicon-from-sprite.txt":qe,"../hacks/follower.txt":Le,"../hacks/gamepad-input.txt":Pe,"../hacks/gravity.txt":Me,"../hacks/itsy-bitsy.txt":He,"../hacks/javascript-dialog.txt":Ge,"../hacks/logic-operators-extended.txt":Ue,"../hacks/long-dialog.txt":Ve,"../hacks/multi-sprite-avatar.txt":ze,"../hacks/noclip.txt":We,"../hacks/online.txt":$e,"../hacks/opaque-tiles.txt":Ye,"../hacks/paragraph-break.txt":Xe,"../hacks/permanent-items.txt":Ke,"../hacks/push-sprites.txt":Je,"../hacks/replace-drawing.txt":Ze,"../hacks/save.txt":Qe,"../hacks/smooth-moves.txt":tr,"../hacks/solid-items.txt":nr,"../hacks/sprite-effects.txt":er,"../hacks/stopwatch.txt":rr,"../hacks/text-to-speech.txt":ir,"../hacks/tracery-processing.txt":ar,"../hacks/transitions.txt":or,"../hacks/transparent-background.txt":sr,"../hacks/transparent-dialog.txt":cr,"../hacks/transparent-sprites.txt":lr,"../hacks/twine-bitsy-comms.txt":ur,"../hacks/unique-items.txt":pr})),V=Object.entries(Object.assign({"../template/Bitsy.5.5.hbs":()=>A(()=>import("./Bitsy.5.5.84a78101.js"),[],import.meta.url),"../template/Bitsy.6.0.hbs":()=>A(()=>import("./Bitsy.6.0.3c0f81a1.js"),[],import.meta.url),"../template/Bitsy.6.3.hbs":()=>A(()=>import("./Bitsy.6.3.1cd6b573.js"),[],import.meta.url),"../template/Bitsy.6.4.hbs":()=>A(()=>import("./Bitsy.6.4.4e6f8b27.js"),[],import.meta.url),"../template/Bitsy.6.5.hbs":()=>A(()=>import("./Bitsy.6.5.41263501.js"),[],import.meta.url),"../template/Bitsy.7.0.hbs":()=>A(()=>import("./Bitsy.7.0.ae3ef77e.js"),[],import.meta.url),"../template/Bitsy.7.10.hbs":()=>A(()=>import("./Bitsy.7.10.0abc49dc.js"),[],import.meta.url),"../template/Bitsy.7.11.hbs":()=>A(()=>import("./Bitsy.7.11.d71d5f9c.js"),[],import.meta.url),"../template/Bitsy.7.12.hbs":()=>A(()=>import("./Bitsy.7.12.95a1e310.js"),[],import.meta.url),"../template/Bitsy.7.2.hbs":()=>A(()=>import("./Bitsy.7.2.59b21288.js"),[],import.meta.url),"../template/Bitsy.7.8.hbs":()=>A(()=>import("./Bitsy.7.8.18767bae.js"),[],import.meta.url),"../template/Bitsy.8.1.hbs":()=>A(()=>import("./Bitsy.8.1.85afcbd3.js"),[],import.meta.url),"../template/BitsyHD.5.1.hbs":()=>A(()=>import("./BitsyHD.5.1.83851570.js"),[],import.meta.url),"../template/BitsyHD.7.11.hbs":()=>A(()=>import("./BitsyHD.7.11.bdef66d3.js"),[],import.meta.url),"../template/BitsyHD.7.12.hbs":()=>A(()=>import("./BitsyHD.7.12.c6a6caab.js"),[],import.meta.url),"../template/BitsyHD.8.1.hbs":()=>A(()=>import("./BitsyHD.8.1.d8b48719.js"),[],import.meta.url)})).sort(([t],[n])=>t.replace("HD","_").localeCompare(n.replace("HD","_"),"en",{sensitivity:"base",numeric:!0})).map(([t,n],r,d)=>{const[f]=t.match(/(?:\d\.)+\d+(?=\.hbs)/),p=t.includes("HD");return{data:n,bitsyVersion:f,isHd:p,description:p?`Bitsy HD (Bitsy ${f})`:`Bitsy ${f}`,id:`Bitsy${p?"HD":""}${f.replace(/\./g,"")}`,isDefault:r===d.length-1}}),Jt=Ta.map(t=>{const[n]=t.match(/^(\/\*\*[\S\s]*?\*\/)$/gm),r=n.split(`
 `).slice(1,-1),d=r[0],f=r.find(s=>s.startsWith("@file")).split("@file ")[1],p=r.find(s=>s.startsWith("@author")).split("@author ")[1],u=r.find(s=>s.startsWith("@summary")).split("@summary ")[1],l=r.slice(r.findIndex(s=>s.startsWith("@description"))+1).join(`
 `).replace(/Copy-paste .* after the bitsy source\.?/g,"Include hack").replace(/hackOptions below/g,"hackOptions above"),[,o]=t.match(/var hackOptions.*= {\n+([^]+?)\n+};$/m)||[];return{metadata:{emoji:d,id:f.replace(/\s/g,"-"),name:f,author:p,summary:u,description:l},options:o,data:t}});function _a(){const t=document.querySelector("select#template");t.innerHTML="";for(let n=V.length-1;n>=0;n--){const{id:r,description:d}=V[n],f=n===V.length-1;t.innerHTML+=`<option value="${r}" ${f?"data-default-option":""}>${d}${f?" (latest)":""}</option>`}}function Ia(t,n){console.log(n),bn.exports.saveAs(new Blob([n],{type:"text/html;charset=utf-8"}),t),console.log(`File '${t}' downloaded`)}function Nn(t,n=10){const r=t.toString(),d=r.length>n?"...":"";return r.substring(0,n)+d}function Fa(t){return t.toLowerCase().replace(/-(.)/g,(n,r)=>r.toUpperCase())}function Aa(t){return t.replace(/[^\w\s]/gi,"")}function Ea(t,n){const r=new RegExp(n,"g");t.value=t.value.replace(r,"")}function W(t,n){t.dataset.cleanRegex&&Ea(t,t.dataset.cleanRegex);let r;t.type==="checkbox"?r=t.checked:n===void 0?r=t.value:(r=n,t.value=n);const{name:d}=t;localStorage.setItem(d,r),console.log(`Key: '${d}' saved to localStorage: ${Nn(r)}`)}function Ut(t){const{name:n}=t,r=localStorage.getItem(n);if(r===null){console.log(` Attempted to get key: ${n} from localStorage, but nothing was found.`);return}if(t.type==="checkbox"){const d=r==="true";t.checked=d}else t.value=r;console.log(` Got key: ${n} from localStorage: ${Nn(r)}`)}function Zt(t){const{value:n}=t.currentTarget,r=V.find(d=>d.id===n);if(!r){document.querySelector("#template").value=V.find(d=>d.isDefault).id,Zt(t);return}r.isHd?document.querySelector("#mascot").classList.add("borksyHD"):document.querySelector("#mascot").classList.remove("borksyHD"),r.bitsyVersion===Vt.bitsyVersion?(document.querySelector("#legacy-version-warning").style.display="none",document.querySelector('[data-header="Bitsy Version"] > summary').textContent="Bitsy Version"):(document.querySelector("#legacy-version-warning").style.display=null,document.querySelector('[data-header="Bitsy Version"] > summary').textContent="\u2757 Bitsy Version \u2757"),r.data()}function H(t){const{name:n}=t;let r;switch(n){case"template":r=Oa;break}t.addEventListener("change",()=>{W(t),r==null||r(t)})}function Oa(t){const n=t.value.split(".")[0]==="BitsyHD",r=localStorage.getItem("gamedata")==null,d=On.gamedataHD;if(n&&r&&d!==void 0){const p=document.querySelector("#gamedata");p.value=d,W(p)}}function Dn(t){const n=document.querySelector(`[data-associated-hack="${t.dataset.hack}"]`);n&&Bn(n,t)}function Bn(t,n){n.checked===!0?t.classList.add("included"):t.classList.remove("included")}function Na(t){W(t),Dn(t)}function Da(t){t.addEventListener("change",()=>{Na(t)})}function Ba(){return Array.from(document.querySelectorAll("[data-borksy-replace-single]")).reduce((t,n)=>(t[n.dataset.borksyReplaceSingle]=n.value,t),{})}function Ca(){return Jt.reduce((t,n)=>{const r=document.querySelector(`#${n.metadata.id}`);if(!(r.checked||r.value==="true"))return t;let f=n.data;if(n.options){const p=document.querySelector(`#${n.metadata.id}-options`).value;f=f.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m,`$1 {
 ${p}
