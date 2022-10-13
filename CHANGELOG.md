@@ -1,3 +1,10 @@
+# [5.26.0](https://github.com/Ayolland/borksy/compare/v5.25.0...v5.26.0) (2022-10-13)
+
+
+### Features
+
+* update latest bitsy version to 8.4 ([7bb0e20](https://github.com/Ayolland/borksy/commit/7bb0e2054420ddfbb604d37f3f34794a856ea2b5))
+
 # [5.25.0](https://github.com/Ayolland/borksy/compare/v5.24.0...v5.25.0) (2022-08-25)
 
 

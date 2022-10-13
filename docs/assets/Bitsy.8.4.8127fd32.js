@@ -5,7 +5,7 @@ const t=`<!DOCTYPE HTML>
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy HD ~> Bitsy 8.1 -->
+<!-- Bitsy 8.4 -->
 <head>
 
 <meta charset="UTF-8">
@@ -626,11 +626,11 @@ function bitsyLog(message, category) {
 }
 
 /* GLOBALS */
-var tilesize = 16;
+var tilesize = 8;
 var mapsize = 16;
 var width = mapsize * tilesize;
 var height = mapsize * tilesize;
-var scale = 2;
+var scale = 4;
 var textScale = 2;
 
 /* SYSTEM */
@@ -1329,6 +1329,17 @@ var bitsy = mainProcess.system;
 
 <!-- engine -->
 <script>
+/* BITSY VERSION */
+// is this the right place for this to live?
+var version = {
+	major: 8, // major changes
+	minor: 4, // smaller changes
+	devBuildPhase: "RELEASE",
+};
+function getEngineVersion() {
+	return version.major + "." + version.minor;
+}
+
 /* TEXT CONSTANTS */
 var titleDialogId = "title";
 
@@ -1596,7 +1607,7 @@ function parseWorld(file) {
 			//skip blank lines & comments
 			i++;
 		}
-		else if (getType(curLine) == "PAL") {
+		else if (getType(curLine) === "PAL") {
 			i = parsePalette(parseState, world);
 		}
 		else if (getType(curLine) === "ROOM" || getType(curLine) === "SET") { // SET for back compat
@@ -2952,6 +2963,18 @@ function SoundPlayer() {
 		}
 	};
 
+	this.isTunePlaying = function() {
+		return curTune != null;
+	};
+
+	this.getCurTuneId = function() {
+		if (curTune) {
+			return curTune.id;
+		}
+
+		return null;
+	};
+
 	this.stopTune = function() {
 		curTune = null;
 	};
@@ -3319,7 +3342,7 @@ function Font(fontData) {
 					}
 
 					curCharLineCount++;
-					if (curCharLineCount >= height) {
+					if (curCharLineCount >= chardata[curCharCode].height) {
 						isReadingChar = false;
 					}
 				}
@@ -3342,6 +3365,7 @@ function Font(fontData) {
 }
 
 } // FontManager
+
 <\/script>
 
 <script>
@@ -4367,6 +4391,7 @@ function endFunc(environment,parameters,onReturn) {
 	isEnding = true;
 	isNarrating = true;
 	dialogRenderer.SetCentered(true);
+	dialogRenderer.DrawTextbox();
 	onReturn(null);
 }
 
@@ -6330,9 +6355,9 @@ var DialogRenderer = function() {
 	var textboxInfo = {
 		width : 104,
 		height : 8+4+2+5, //8 for text, 4 for top-bottom padding, 2 for line padding, 5 for arrow
-		top : 12 * 2,
-		left : 12 * 2,
-		bottom : 12 * 2, //for drawing it from the bottom
+		top : 12,
+		left : 12,
+		bottom : 12, //for drawing it from the bottom
 		padding_vert : 2,
 		padding_horz : 4,
 		arrow_height : 5,
@@ -7607,16 +7632,6 @@ function getTitle() {
 }
 function setTitle(titleSrc) {
 	dialog[titleDialogId] = { src:titleSrc, name:null };
-}
-
-/* VERSION */
-var version = {
-	major: 8, // major changes
-	minor: 1, // smaller changes
-	devBuildPhase: "RELEASE",
-};
-function getEngineVersion() {
-	return version.major + "." + version.minor;
 }
 
 /* FLAGS */
@@ -9308,7 +9323,9 @@ function startEndingDialog(ending) {
 		endingDialogStr = end[ending.id].src;
 	}
 
+	var tmpTuneId = null;
 	if (isEnding && soundPlayer) {
+		tmpTuneId = soundPlayer.getCurTuneId();
 		soundPlayer.stopTune();
 	}
 
@@ -9319,6 +9336,12 @@ function startEndingDialog(ending) {
 			var isLocked = ending.property && ending.property.locked === true;
 			if (isLocked) {
 				isEnding = false;
+
+				// if the ending was cancelled, restart the music
+				// todo : should it resume from where it started? (right now it starts over)
+				if (tmpTuneId && soundPlayer && !soundPlayer.isTunePlaying()) {
+					soundPlayer.playTune(tune[tmpTuneId]);
+				}
 			}
 		},
 		ending);
@@ -9502,6 +9525,24 @@ CHAR 34
 000000
 000000
 000000
+CHAR 8220
+011011
+011011
+010010
+000000
+000000
+000000
+000000
+000000
+CHAR 8221
+011011
+011011
+010010
+000000
+000000
+000000
+000000
+000000
 CHAR 35
 000000
 001010
@@ -9539,6 +9580,24 @@ CHAR 38
 001101
 000000
 CHAR 39
+001100
+001100
+001000
+000000
+000000
+000000
+000000
+000000
+CHAR 8216
+001100
+001100
+001000
+000000
+000000
+000000
+000000
+000000
+CHAR 8217
 001100
 001100
 001000
