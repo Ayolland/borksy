@@ -5,7 +5,7 @@
   "description": "Borksy Game Hacker: A tool for extending Bitsy games",
   "scripts": {
     "postversion": "npm run build",
-    "start": "vite",
+    "start": "vite --port 80",
     "build": "vite build",
     "serve": "vite preview",
     "test": "jest --runInBand",
