@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "@bitsy/hecks": "^21.2.0",
-    "eslint": "^8.26.0",
+    "eslint": "^8.27.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
@@ -67,7 +67,7 @@
     "puppeteer": "^19.2.2",
     "rollup-plugin-visualizer": "^5.8.3",
     "sass": "^1.55.0",
-    "vite": "^3.2.2",
+    "vite": "^3.2.3",
     "vite-plugin-markdown": "^2.1.0",
     "vite-plugin-string": "^1.1.2"
   }
