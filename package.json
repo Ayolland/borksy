@@ -64,7 +64,7 @@
     "jest-environment-jsdom": "^29.3.1",
     "jest-image-snapshot": "^6.1.0",
     "prettier": "^2.8.1",
-    "puppeteer": "^19.4.1",
+    "puppeteer": "^19.5.0",
     "rollup-plugin-visualizer": "^5.9.0",
     "sass": "^1.57.1",
     "vite": "^3.2.5",
