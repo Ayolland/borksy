@@ -67,8 +67,8 @@
     "puppeteer": "^19.5.2",
     "rollup-plugin-visualizer": "^5.9.0",
     "sass": "^1.57.1",
-    "vite": "^3.2.5",
-    "vite-plugin-markdown": "^2.1.0",
+    "vite": "^4.0.0",
+    "vite-plugin-markdown": "^2.2.0-0",
     "vite-plugin-string": "^1.2.1"
   }
 }
