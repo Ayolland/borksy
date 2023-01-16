@@ -14,7 +14,7 @@ const n=`<!DOCTYPE HTML>
 
 <script type="bitsyGameData" id="exportedGameData">
 {{{GAMEDATA}}}
-<\/script>
+</script>
 
 <style>
 {{{CSS}}}
@@ -26,7 +26,7 @@ function startExportedGame() {
   attachCanvas( document.getElementById("game") );
   load_game( document.getElementById("exportedGameData").text.slice(1) );
 }
-<\/script>
+</script>
 
 <script>
 //hex-to-rgb method borrowed from stack overflow
@@ -205,7 +205,7 @@ function rgbToHsl(r, g, b){
 
     return [h, s, l];
 }
-<\/script>
+</script>
 
 <script>
 /*
@@ -457,7 +457,7 @@ function Font(fontData) {
 }
 
 } // FontManager
-<\/script>
+</script>
 
 <script>
 function Script() {
@@ -1954,7 +1954,7 @@ var Parser = function(env) {
 }
 
 } // Script()
-<\/script>
+</script>
 
 <script>
 function Dialog() {
@@ -2795,7 +2795,7 @@ var ShakyEffect = function() {
 TextEffects["shk"] = new ShakyEffect();
 
 } // Dialog()
-<\/script>
+</script>
 
 <script>
 /*
@@ -2980,7 +2980,7 @@ this.AttachContext = function(ctx) {
 }
 
 } // Renderer()
-<\/script>
+</script>
 
 <script>
 var xhr; // TODO : remove
@@ -5108,7 +5108,7 @@ var scriptModule = new Script();
 var scriptInterpreter = scriptModule.CreateInterpreter();
 var scriptUtils = scriptModule.CreateUtils(); // TODO: move to editor.js?
 // scriptInterpreter.SetDialogBuffer( dialogBuffer );
-<\/script>
+</script>
 
 <!-- store default font in separate script tag for back compat-->
 <!-- Borksy modification: uses better encoded default font. -->
@@ -7275,16 +7275,16 @@ CHAR 9835
 011011
 011000
 000000
-<\/script>
+</script>
 
 <!-- BORKSY HACKS -->
 <script type="text/javascript" id="borksyHacks">
 {{{HACKS}}}
-<\/script>
+</script>
 
 <script type="text/javascript" id="borksyAdditionalJS">
 {{{ADDITIONALJS}}}
-<\/script>
+</script>
 
 </head>
 

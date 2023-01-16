@@ -5,7 +5,7 @@ const t=`<!DOCTYPE HTML>
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy 6.0 -->
+<!-- Bitsy HD ~> Bitsy 5.1 -->
 <head>
 
 <meta charset="UTF-8">
@@ -14,7 +14,7 @@ const t=`<!DOCTYPE HTML>
 
 <script type="bitsyGameData" id="exportedGameData">
 {{{GAMEDATA}}}
-<\/script>
+</script>
 
 <style>
 {{{CSS}}}
@@ -26,7 +26,7 @@ function startExportedGame() {
 	attachCanvas( document.getElementById("game") );
 	load_game( document.getElementById("exportedGameData").text.slice(1) );
 }
-<\/script>
+</script>
 
 <script>
 //hex-to-rgb method borrowed from stack overflow
@@ -205,463 +205,7 @@ function rgbToHsl(r, g, b){
 
     return [h, s, l];
 }
-<\/script>
-
-<script>
-var TransitionManager = function() {
-	var transitionStart = null;
-	var transitionEnd = null;
-	var effectImage = null;
-
-	var isTransitioning = false;
-	var transitionTime = 0; // milliseconds
-	var frameRate = 8; // cap the FPS
-	var prevStep = -1; // used to avoid running post-process effect constantly
-
-	this.BeginTransition = function(startRoom,startX,startY,endRoom,endX,endY,effectName) {
-		// console.log("--- START ROOM TRANSITION ---");
-
-		curEffect = effectName;
-
-		var tmpRoom = player().room;
-		var tmpX = player().x;
-		var tmpY = player().y;
-
-		if (transitionEffects[curEffect].showPlayerStart) {
-			player().room = startRoom;
-			player().x = startX;
-			player().y = startY;
-		}
-		else {
-			player().room = "_transition_none"; // kind of hacky!!
-		}
-
-		drawRoom(room[startRoom]);
-		var startPalette = getPal( room[startRoom].pal );
-		var startImage = new PostProcessImage( ctx.getImageData(0,0,canvas.width,canvas.height) ); // TODO : don't use global ctx?
-		transitionStart = new TransitionInfo(startImage, startPalette, startX, startY);
-
-		if (transitionEffects[curEffect].showPlayerEnd) {
-			player().room = endRoom;
-			player().x = endX;
-			player().y = endY;
-		}
-		else {
-			player().room = "_transition_none";
-		}
-
-		drawRoom(room[endRoom]);
-		var endPalette = getPal( room[endRoom].pal );
-		var endImage = new PostProcessImage( ctx.getImageData(0,0,canvas.width,canvas.height) );
-		transitionEnd = new TransitionInfo(endImage, endPalette, endX, endY);
-
-		effectImage = new PostProcessImage( ctx.createImageData(canvas.width,canvas.height) );
-
-		isTransitioning = true;
-		transitionTime = 0;
-		prevStep = -1;
-
-		player().room = tmpRoom;
-		player().x = tmpX;
-		player().y = tmpY;
-	}
-
-	this.UpdateTransition = function(dt) {
-		if (!isTransitioning) {
-			return;
-		}
-
-		transitionTime += dt;
-
-		var transitionDelta = transitionTime / transitionEffects[curEffect].duration;
-		var maxStep = Math.floor(frameRate * (transitionEffects[curEffect].duration / 1000));
-		var step = Math.floor(transitionDelta * maxStep);
-
-		if (step != prevStep) {
-			// console.log("step! " + step + " " + transitionDelta);
-			for (var y = 0; y < effectImage.Height; y++) {
-				for (var x = 0; x < effectImage.Width; x++) {
-					var color = transitionEffects[curEffect].pixelEffectFunc(transitionStart,transitionEnd,x,y,(step / maxStep));
-					effectImage.SetPixel(x,y,color);
-				}
-			}
-		}
-		prevStep = step;
-
-		ctx.putImageData(effectImage.GetData(), 0, 0);
-
-		if (transitionTime >= transitionEffects[curEffect].duration) {
-			isTransitioning = false;
-			transitionTime = 0;
-			transitionStart = null;
-			transitionEnd = null;
-			effectImage = null;
-			prevStep = -1;
-		}
-	}
-
-	this.IsTransitionActive = function() {
-		return isTransitioning;
-	}
-
-	var transitionEffects = {};
-	var curEffect = "none";
-	this.RegisterTransitionEffect = function(name, effect) {
-		transitionEffects[name] = effect;
-	}
-
-	this.RegisterTransitionEffect("none", {
-		showPlayerStart : false,
-		showPlayerEnd : false,
-		pixelEffectFunc : function() {},
-	});
-
-	this.RegisterTransitionEffect("fade_w", { // TODO : have it linger on full white briefly?
-		showPlayerStart : false,
-		showPlayerEnd : true,
-		duration : 750,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
-			var pixelColorA = delta < 0.5 ? start.Image.GetPixel(pixelX,pixelY) : {r:255,g:255,b:255,a:255};
-			var pixelColorB = delta < 0.5 ? {r:255,g:255,b:255,a:255} : end.Image.GetPixel(pixelX,pixelY);
-
-			delta = delta < 0.5 ? (delta / 0.5) : ((delta - 0.5) / 0.5); // hacky
-
-			return PostProcessUtilities.LerpColor(pixelColorA, pixelColorB, delta);
-		}
-	});
-
-	this.RegisterTransitionEffect("fade_b", {
-		showPlayerStart : false,
-		showPlayerEnd : true,
-		duration : 750,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
-			var pixelColorA = delta < 0.5 ? start.Image.GetPixel(pixelX,pixelY) : {r:0,g:0,b:0,a:255};
-			var pixelColorB = delta < 0.5 ? {r:0,g:0,b:0,a:255} : end.Image.GetPixel(pixelX,pixelY);
-
-			delta = delta < 0.5 ? (delta / 0.5) : ((delta - 0.5) / 0.5); // hacky
-
-			return PostProcessUtilities.LerpColor(pixelColorA, pixelColorB, delta);
-		}
-	});
-
-	this.RegisterTransitionEffect("wave", {
-		showPlayerStart : true,
-		showPlayerEnd : true,
-		duration : 1500,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
-			var waveDelta = delta < 0.5 ? delta / 0.5 : 1 - ((delta - 0.5) / 0.5);
-
-			var offset = (pixelY + (waveDelta * waveDelta * 0.2 * start.Image.Height));
-			var freq = 4;
-			var size = 2 + (14 * waveDelta);
-			pixelX += Math.floor(Math.sin(offset / freq) * size);
-
-			if (pixelX < 0) {
-				pixelX += start.Image.Width;
-			}
-			else if (pixelX >= start.Image.Width) {
-				pixelX -= start.Image.Width;
-			}
-
-			var curImage = delta < 0.5 ? start.Image : end.Image;
-			return curImage.GetPixel(pixelX,pixelY);
-		}
-	});
-
-	this.RegisterTransitionEffect("tunnel", {
-		showPlayerStart : true,
-		showPlayerEnd : true,
-		duration : 1500,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
-			if (delta <= 0.4) {
-				var tunnelDelta = 1 - (delta / 0.4);
-
-				var xDist = start.PlayerCenter.x - pixelX;
-				var yDist = start.PlayerCenter.y - pixelY;
-				var dist = Math.sqrt((xDist * xDist) + (yDist * yDist));
-
-				if (dist > start.Image.Width * tunnelDelta) {
-					return {r:0,g:0,b:0,a:255};
-				}
-				else {
-					return start.Image.GetPixel(pixelX,pixelY);
-				}
-			}
-			else if (delta <= 0.6)
-			{
-				return {r:0,g:0,b:0,a:255};
-			}
-			else {
-				var tunnelDelta = (delta - 0.6) / 0.4;
-
-				var xDist = end.PlayerCenter.x - pixelX;
-				var yDist = end.PlayerCenter.y - pixelY;
-				var dist = Math.sqrt((xDist * xDist) + (yDist * yDist));
-
-				if (dist > end.Image.Width * tunnelDelta) {
-					return {r:0,g:0,b:0,a:255};
-				}
-				else {
-					return end.Image.GetPixel(pixelX,pixelY);
-				}
-			}
-		}
-	});
-
-	this.RegisterTransitionEffect("slide_u", {
-		showPlayerStart : false,
-		showPlayerEnd : true,
-		duration : 1000,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
-			var pixelOffset = -1 * Math.floor(start.Image.Height * delta);
-			var slidePixelY = pixelY + pixelOffset;
-
-			var colorDelta = clampLerp(delta, 0.4);
-
-			if (slidePixelY >= 0) {
-				var colorA = start.Image.GetPixel(pixelX,slidePixelY);
-				var colorB = PostProcessUtilities.GetCorrespondingColorFromPal(colorA,start.Palette,end.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
-			}
-			else {
-				slidePixelY += start.Image.Height;
-				var colorB = end.Image.GetPixel(pixelX,slidePixelY);
-				var colorA = PostProcessUtilities.GetCorrespondingColorFromPal(colorB,end.Palette,start.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
-			}
-		}
-	});
-
-	this.RegisterTransitionEffect("slide_d", {
-		showPlayerStart : false,
-		showPlayerEnd : true,
-		duration : 1000,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
-			var pixelOffset = Math.floor(start.Image.Height * delta);
-			var slidePixelY = pixelY + pixelOffset;
-
-			var colorDelta = clampLerp(delta, 0.4);
-
-			if (slidePixelY < start.Image.Height) {
-				var colorA = start.Image.GetPixel(pixelX,slidePixelY);
-				var colorB = PostProcessUtilities.GetCorrespondingColorFromPal(colorA,start.Palette,end.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
-			}
-			else {
-				slidePixelY -= start.Image.Height;
-				var colorB = end.Image.GetPixel(pixelX,slidePixelY);
-				var colorA = PostProcessUtilities.GetCorrespondingColorFromPal(colorB,end.Palette,start.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
-			}
-		}
-	});
-
-	this.RegisterTransitionEffect("slide_l", {
-		showPlayerStart : false,
-		showPlayerEnd : true,
-		duration : 1000,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
-			var pixelOffset = -1 * Math.floor(start.Image.Width * delta);
-			var slidePixelX = pixelX + pixelOffset;
-
-			var colorDelta = clampLerp(delta, 0.4);
-
-			if (slidePixelX >= 0) {
-				var colorA = start.Image.GetPixel(slidePixelX,pixelY);
-				var colorB = PostProcessUtilities.GetCorrespondingColorFromPal(colorA,start.Palette,end.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
-			}
-			else {
-				slidePixelX += start.Image.Width;
-				var colorB = end.Image.GetPixel(slidePixelX,pixelY);
-				var colorA = PostProcessUtilities.GetCorrespondingColorFromPal(colorB,end.Palette,start.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
-			}
-		}
-	});
-
-	this.RegisterTransitionEffect("slide_r", {
-		showPlayerStart : false,
-		showPlayerEnd : true,
-		duration : 1000,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
-			var pixelOffset = Math.floor(start.Image.Width * delta);
-			var slidePixelX = pixelX + pixelOffset;
-
-			var colorDelta = clampLerp(delta, 0.4);
-
-			if (slidePixelX < start.Image.Width) {
-				var colorA = start.Image.GetPixel(slidePixelX,pixelY);
-				var colorB = PostProcessUtilities.GetCorrespondingColorFromPal(colorA,start.Palette,end.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
-			}
-			else {
-				slidePixelX -= start.Image.Width;
-				var colorB = end.Image.GetPixel(slidePixelX,pixelY);
-				var colorA = PostProcessUtilities.GetCorrespondingColorFromPal(colorB,end.Palette,start.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
-			}
-		}
-	});
-
-	function clampLerp(deltaIn, clampDuration) {
-		var clampOffset = (1.0 - clampDuration) / 2;
-		var deltaOut = Math.min(clampDuration, Math.max(0.0, deltaIn - clampOffset)) / clampDuration;
-		return deltaOut;
-	}
-
-	// TODO : WIP
-	// this.RegisterTransitionEffect("fuzz", {
-	// 	showPlayerStart : true,
-	// 	showPlayerEnd : true,
-	// 	duration : 1500,
-	// 	pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
-	// 		var curImage = delta <= 0.5 ? start : end;
-	// 		var sampleSize = delta <= 0.5 ? (2 + Math.floor(14 * (delta/0.5))) : (16 - Math.floor(14 * ((delta-0.5)/0.5)));
-
-	// 		var palIndex = 0;
-
-	// 		var sampleX = Math.floor(pixelX / sampleSize) * sampleSize;
-	// 		var sampleY = Math.floor(pixelY / sampleSize) * sampleSize;
-
-	// 		var frameState = transitionEffects["fuzz"].frameState;
-
-	// 		if (frameState.time != delta) {
-	// 			frameState.time = delta;
-	// 			frameState.preCalcSampleValues = {};
-	// 		}
-
-	// 		if (frameState.preCalcSampleValues[[sampleX,sampleY]]) {
-	// 			palIndex = frameState.preCalcSampleValues[[sampleX,sampleY]];
-	// 		}
-	// 		else {
-	// 			var paletteCount = {};
-	// 			var foregroundValue = 1.0;
-	// 			var backgroundValue = 0.4;
-	// 			for (var y = sampleY; y < sampleY + sampleSize; y++) {
-	// 				for (var x = sampleX; x < sampleX + sampleSize; x++) {
-	// 					var color = curImage.Image.GetPixel(x,y)
-	// 					var palIndex = PostProcessUtilities.GetColorPalIndex(color,curImage.Palette);
-	// 					if (palIndex != -1) {
-	// 						if (paletteCount[palIndex]) {
-	// 							paletteCount[palIndex] += (palIndex != 0) ? foregroundValue : backgroundValue;
-	// 						}
-	// 						else {
-	// 							paletteCount[palIndex] = (palIndex != 0) ? foregroundValue : backgroundValue;
-	// 						}
-	// 					}
-	// 				}
-	// 			}
-
-	// 			var maxCount = 0;
-	// 			for (var i in paletteCount) {
-	// 				if (paletteCount[i] > maxCount) {
-	// 					palIndex = i;
-	// 					maxCount = paletteCount[i];
-	// 				}
-	// 			}
-
-	// 			frameState.preCalcSampleValues[[sampleX,sampleY]] = palIndex;
-	// 		}
-
-	// 		return PostProcessUtilities.GetPalColor(curImage.Palette,palIndex);
-	// 	},
-	// 	frameState : { // ok this is hacky but it's for performance ok
-	// 		time : -1,
-	// 		preCalcSampleValues : {}
-	// 	}
-	// });
-}; // TransitionManager()
-
-
-// TODO : extract the scale variable so it can be changed?
-var PostProcessUtilities = {
-	SamplePixelColor : function(image,x,y) {
-		var pixelIndex = (y * scale * image.width * 4) + (x * scale * 4);
-		var r = image.data[pixelIndex + 0];
-		var g = image.data[pixelIndex + 1];
-		var b = image.data[pixelIndex + 2];
-		var a = image.data[pixelIndex + 3];
-		return { r:r, g:g, b:b, a:a };
-	},
-	SetPixelColor : function(image,x,y,colorRgba) {
-		for (var yDelta = 0; yDelta <= scale; yDelta++) {
-			for (var xDelta = 0; xDelta <= scale; xDelta++) {
-				var pixelIndex = (((y * scale) + yDelta) * image.width * 4) + (((x * scale) + xDelta) * 4);
-				image.data[pixelIndex + 0] = colorRgba.r;
-				image.data[pixelIndex + 1] = colorRgba.g;
-				image.data[pixelIndex + 2] = colorRgba.b;
-				image.data[pixelIndex + 3] = colorRgba.a;
-			}
-		}
-	},
-	LerpColor : function(colorA,colorB,t) {
-		// TODO: move to color_util.js?
-		return {
-			r : colorA.r + ((colorB.r - colorA.r) * t),
-			g : colorA.g + ((colorB.g - colorA.g) * t),
-			b : colorA.b + ((colorB.b - colorA.b) * t),
-			a : colorA.a + ((colorB.a - colorA.a) * t),
-		};
-	},
-	GetColorPalIndex : function(colorIn,curPal) {
-		var colorIndex = -1;
-
-		for (var i = 0; i < curPal.length; i++) {
-			if (colorIn.r == curPal[i][0] && colorIn.g == curPal[i][1] && colorIn.b == curPal[i][2]) {
-				colorIndex = i;
-			}
-		}
-
-		return colorIndex;
-	},
-	GetPalColor : function(palette,index) {
-		return { r: palette[index][0], g: palette[index][1], b: palette[index][2], a: 255 }
-	},
-	GetCorrespondingColorFromPal : function(colorIn,curPal,otherPal) { // this is kind of hacky!
-		var colorIndex = PostProcessUtilities.GetColorPalIndex(colorIn,curPal);
-
-		if (colorIndex >= 0 && colorIndex <= otherPal.length) {
-			return PostProcessUtilities.GetPalColor(otherPal,colorIndex);
-		}
-		else {
-			return colorIn;
-		}
-	},
-};
-
-var PostProcessImage = function(imageData) {
-	this.Width = imageData.width / scale;
-	this.Height = imageData.height / scale;
-
-	this.GetPixel = function(x,y) {
-		return PostProcessUtilities.SamplePixelColor(imageData,x,y);
-	};
-
-	this.SetPixel = function(x,y,colorRgba) {
-		PostProcessUtilities.SetPixelColor(imageData,x,y,colorRgba);
-	};
-
-	this.GetData = function() {
-		return imageData;
-	};
-};
-
-var TransitionInfo = function(image, palette, playerX, playerY) {
-	this.Image = image;
-	this.Palette = palette;
-	this.PlayerTilePos = { x: playerX, y: playerY };
-	this.PlayerCenter = { x: Math.floor((playerX * tilesize) + (tilesize / 2)), y: Math.floor((playerY * tilesize) + (tilesize / 2)) };
-};
-<\/script>
+</script>
 
 <script>
 /*
@@ -752,15 +296,15 @@ function Font(fontData) {
 	var name = "unknown";
 	var width = 6; // default size so if you have NO font or an invalid font it displays boxes
 	var height = 8;
-	var chardata = {};
-	var invalidCharData = {};
+	var fontdata = {};
+	var invalidCharData = [];
 
 	this.getName = function() {
 		return name;
 	}
 
 	this.getData = function() {
-		return chardata;
+		return fontdata;
 	}
 
 	this.getWidth = function() {
@@ -773,27 +317,19 @@ function Font(fontData) {
 
 	this.hasChar = function(char) {
 		var codepoint = char.charCodeAt(0);
-		return chardata[codepoint] != null;
+		return fontdata[codepoint] != null;
 	}
 
 	this.getChar = function(char) {
 
 		var codepoint = char.charCodeAt(0);
 
-		if (chardata[codepoint] != null) {
-			return chardata[codepoint];
+		if (fontdata[codepoint] != null) {
+			return fontdata[codepoint];
 		}
 		else {
 			return invalidCharData;
 		}
-	}
-
-	this.allCharCodes = function() {
-		var codeList = [];
-		for (var code in chardata) {
-			codeList.push(code);
-		}
-		return codeList;
 	}
 
 	function parseFont(fontData) {
@@ -803,17 +339,11 @@ function Font(fontData) {
 		var lines = fontData.split("\\n");
 
 		var isReadingChar = false;
-		var isReadingCharProperties = false;
 		var curCharLineCount = 0;
 		var curCharCode = 0;
 
 		for (var i = 0; i < lines.length; i++) {
 			var line = lines[i];
-
-			if (line[0] === "#") {
-				continue; // skip comment lines
-			}
-
 			if (!isReadingChar) {
 				// READING NON CHARACTER DATA LINE
 				var args = line.split(" ");
@@ -826,84 +356,34 @@ function Font(fontData) {
 				}
 				else if (args[0] == "CHAR") {
 					isReadingChar = true;
-					isReadingCharProperties = true;
-
 					curCharLineCount = 0;
 					curCharCode = parseInt(args[1]);
-					chardata[curCharCode] = { 
-						width: width,
-						height: height,
-						offset: {
-							x: 0,
-							y: 0
-						},
-						spacing: width,
-						data: []
-					};
+					fontdata[curCharCode] = [];
 				}
 			}
 			else {
-				// CHAR PROPERTIES
-				if (isReadingCharProperties) {
-					var args = line.split(" ");
-					if (args[0].indexOf("CHAR_") == 0) { // Sub-properties start with "CHAR_"
-						if (args[0] == "CHAR_SIZE") {
-							// Custom character size - overrides the default character size for the font
-							chardata[curCharCode].width = parseInt(args[1]);
-							chardata[curCharCode].height = parseInt(args[2]);
-							chardata[curCharCode].spacing = parseInt(args[1]); // HACK : assumes CHAR_SIZE is always declared first
-						}
-						else if (args[0] == "CHAR_OFFSET") {
-							// Character offset - shift the origin of the character on the X or Y axis
-							chardata[curCharCode].offset.x = parseInt(args[1]);
-							chardata[curCharCode].offset.y = parseInt(args[2]);
-						}
-						else if (args[0] == "CHAR_SPACING") {
-							// Character spacing:
-							// specify total horizontal space taken up by the character
-							// lets chars take up more or less space on a line than its bitmap does
-							chardata[curCharCode].spacing = parseInt(args[1]);
-						}
-					}
-					else {
-						isReadingCharProperties = false;
-					}
+				// READING CHARACTER DATA LINE
+				for (var j = 0; j < width; j++)
+				{
+					fontdata[curCharCode].push( parseInt(line[j]) );
 				}
 
-				// CHAR DATA
-				if (!isReadingCharProperties) {
-					// READING CHARACTER DATA LINE
-					for (var j = 0; j < chardata[curCharCode].width; j++)
-					{
-						chardata[curCharCode].data.push( parseInt(line[j]) );
-					}
-
-					curCharLineCount++;
-					if (curCharLineCount >= height) {
-						isReadingChar = false;
-					}
+				curCharLineCount++;
+				if (curCharLineCount >= height) {
+					isReadingChar = false;
 				}
 			}
 		}
 
 		// init invalid character box
-		invalidCharData = { 
-			width: width,
-			height: height,
-			offset: {
-				x: 0,
-				y: 0
-			},
-			spacing: width, // TODO : name?
-			data: []
-		};
+		invalidCharData = [];
 		for (var y = 0; y < height; y++) {
 			for (var x = 0; x < width; x++) {
 				if (x < width-1 && y < height-1) {
-					invalidCharData.data.push(1);
+					invalidCharData.push(1);
 				}
 				else {
-					invalidCharData.data.push(0);
+					invalidCharData.push(0);
 				}
 			}
 		}
@@ -913,7 +393,7 @@ function Font(fontData) {
 }
 
 } // FontManager
-<\/script>
+</script>
 
 <script>
 function Script() {
@@ -940,9 +420,8 @@ var Interpreter = function() {
 	}
 	this.Run = function(scriptName, exitHandler) { // Runs pre-compiled script
 		// console.log("RUN");
-		// console.log(env.GetScript( scriptName ));
 		env.GetScript( scriptName )
-			.Eval( env, function(result) { OnScriptReturn(result, exitHandler); } );
+			.Eval( env, function() { if(exitHandler!=null) exitHandler(); } );
 
 		// console.log("SERIALIZE!!!!");
 		// console.log( env.GetScript( scriptName ).Serialize() );
@@ -950,7 +429,7 @@ var Interpreter = function() {
 	this.Interpret = function(scriptStr, exitHandler) { // Compiles and runs code immediately
 		// console.log("INTERPRET");
 		var script = parser.Parse( scriptStr );
-		script.Eval( env, function(result) { OnScriptReturn(result, exitHandler); } );
+		script.Eval( env, function() { if(exitHandler!=null) exitHandler(); } );
 	}
 	this.HasScript = function(name) { return env.HasScript(name); };
 
@@ -959,23 +438,17 @@ var Interpreter = function() {
 		parser = new Parser( env );
 	}
 
+	// TODO : move to utils?
+	// for reading in dialog from the larger file format
+	this.ReadDialogScript = function(lines, i) {
+		return parser.ReadDialogScript(lines,i);
+	}
+
 	this.Parse = function(scriptStr) { // parses a script but doesn't save it
 		return parser.Parse( scriptStr );
 	}
-	this.Eval = function(scriptTree, exitHandler) { // runs a script stored externally
-		scriptTree.Eval( env, function(result) { OnScriptReturn(result, exitHandler); } );
-	}
-
-	function OnScriptReturn(result, exitHandler) {
-		if (isReturnObject(result)) {
-			result = result.result; // pull out the contained result
-		}
-
-		// console.log("RESULT " + result);
-
-		if (exitHandler != null) {
-			exitHandler(result);
-		}
+	this.Eval = function(scripTree, exitHandler) { // runs a script stored externally
+		scripTree.Eval( env, function() { if(exitHandler!=null) exitHandler(); } );
 	}
 
 	this.CreateExpression = function(expStr) {
@@ -1001,16 +474,6 @@ var Interpreter = function() {
 	}
 	this.GetVariable = function(name) {
 		return env.GetVariable(name);
-	}
-
-	this.DebugVisualizeScriptTree = function(scriptName) {
-		var printVisitor = {
-			Visit : function(node,depth) {
-				console.log("-".repeat(depth) + "- " + node.ToString());
-			},
-		};
-
-		env.GetScript( scriptName ).VisitAll( printVisitor );
 	}
 }
 
@@ -1064,52 +527,6 @@ var Utils = function() {
 		block.AddChild( ifNode );
 		return block;
 	}
-
-	this.ReadDialogScript = function(lines, i) {
-		var scriptStr = "";
-		if (lines[i] === Sym.DialogOpen) {
-			scriptStr += lines[i] + "\\n";
-			i++;
-			while(lines[i] != Sym.DialogClose) {
-				scriptStr += lines[i] + "\\n";
-				i++;
-			}
-			scriptStr += lines[i];
-			i++;
-		}
-		else {
-			scriptStr += lines[i];
-		}
-		return { script:scriptStr, index:i };
-	}
-
-	// TODO this.ReadCodeScript (reads through code open and close symbols), and this.ReadScript
-
-	this.EnsureDialogBlockFormat = function(dialogStr) {
-		// TODO -- what if it's already enclosed in dialog symbols??
-		if(dialogStr.indexOf('\\n') > -1) {
-			dialogStr = Sym.DialogOpen + "\\n" + dialogStr + "\\n" + Sym.DialogClose;
-		}
-		return dialogStr;
-	}
-
-	this.RemoveDialogBlockFormat = function(source) {
-		var sourceLines = source.split("\\n");
-		var dialogStr = "";
-		if(sourceLines[0] === Sym.DialogOpen) {
-			// multi line
-			var i = 1;
-			while (i < sourceLines.length && sourceLines[i] != Sym.DialogClose) {
-				dialogStr += sourceLines[i] + (sourceLines[i+1] != Sym.DialogClose ? '\\n' : '');
-				i++;
-			}
-		}
-		else {
-			// single line
-			dialogStr = source;
-		}
-		return dialogStr;
-	}
 }
 
 
@@ -1118,25 +535,6 @@ function deprecatedFunc(environment,parameters,onReturn) {
 	console.log("BITSY SCRIPT WARNING: Tried to use deprecated function");
 	onReturn(null);
 }
-
-// TODO : vNext
-// function returnFunc(environment,parameters,onReturn) {
-// 	var ret = { isReturn: true, result: null };
-// 	if (parameters.length > 0 && parameters[0] != undefined && parameters[0] != null) {
-// 		ret.result = parameters[0];
-// 	}
-// 	onReturn(ret);
-// }
-
-// TODO : vNext
-// // TODO : this is kind of hacky
-// // - needs to work with names too
-// function changeAvatarFunc(environment,parameters,onReturn) {
-// 	if( parameters[0] != undefined && parameters[0] != null ) {
-// 		sprite["A"].drw = "SPR_" + parameters[0];
-// 	}
-// 	onReturn(null);
-// }
 
 function printFunc(environment,parameters,onReturn) {
 	// console.log("PRINT FUNC");
@@ -1190,16 +588,6 @@ function printItemFunc(environment,parameters,onReturn) {
 	if(names.item.has(itemId)) itemId = names.item.get(itemId); // id is actually a name
 	var drawingId = item[itemId].drw;
 	printDrawingFunc(environment, [drawingId], onReturn);
-}
-
-function printFontFunc(environment, parameters, onReturn) {
-	var allCharacters = "";
-	var font = fontManager.Get( fontName );
-	var codeList = font.allCharCodes();
-	for (var i = 0; i < codeList.length; i++) {
-		allCharacters += String.fromCharCode(codeList[i]) + " ";
-	}
-	printFunc(environment, [allCharacters], onReturn);
 }
 
 function itemFunc(environment,parameters,onReturn) {
@@ -1341,7 +729,7 @@ var Environment = function() {
 
 	var functionMap = new Map();
 	functionMap.set("print", printFunc);
-	functionMap.set("say", printFunc);
+	functionMap.set("say", deprecatedFunc);
 	functionMap.set("br", linebreakFunc);
 	functionMap.set("item", itemFunc);
 	functionMap.set("rbw", rainbowFunc);
@@ -1353,11 +741,6 @@ var Environment = function() {
 	functionMap.set("printSprite", printSpriteFunc);
 	functionMap.set("printTile", printTileFunc);
 	functionMap.set("printItem", printItemFunc);
-	functionMap.set("debugOnlyPrintFont", printFontFunc); // DEBUG ONLY
-
-	// TODO : vNext
-	// functionMap.set("changeAvatar", changeAvatarFunc);
-	// functionMap.set("return", returnFunc);
 
 	this.HasFunction = function(name) { return functionMap.has(name); };
 	this.EvalFunction = function(name,parameters,onReturn) {
@@ -1435,22 +818,12 @@ var TreeRelationship = function() {
 		node.parent = this;
 	};
 
-	this.VisitAll = function(visitor, depth) {
-		if (depth == undefined || depth == null) {
-			depth = 0;
-		}
-
-		visitor.Visit( this, depth );
+	this.VisitAll = function(visitor) {
+		visitor.Visit( this );
 		for( var i = 0; i < this.children.length; i++ ) {
-			this.children[i].VisitAll( visitor, depth + 1 );
+			this.children[i].VisitAll( visitor );
 		}
 	};
-}
-
-function isReturnObject(val) {
-	return typeof val === "object" && val != null
-				&& val.isReturn != undefined && val.isReturn != null
-				&& val.isReturn;
 }
 
 var BlockMode = {
@@ -1467,40 +840,27 @@ var BlockNode = function(mode, doIndentFirstLine) {
 	this.Eval = function(environment,onReturn) {
 		// console.log("EVAL BLOCK " + this.children.length);
 
-		if( this.onEnter != null ) {
-			this.onEnter();
-		}
+		if( this.onEnter != null ) this.onEnter();
 
 		var lastVal = null;
 		var i = 0;
-
 		function evalChildren(children,done) {
-			if (i < children.length) {
+			if(i < children.length) {
 				// console.log(">> CHILD " + i);
 				children[i].Eval( environment, function(val) {
 					// console.log("<< CHILD " + i);
-
-					if (isReturnObject(val)) { // early return
-						lastVal = val;
-						done();
-					}
-					else {
-						lastVal = val;
-						i++;
-						evalChildren(children,done);
-					}
+					lastVal = val;
+					i++;
+					evalChildren(children,done);
 				} );
 			}
 			else {
 				done();
 			}
 		};
-
 		var self = this;
 		evalChildren( this.children, function() {
-			if( self.onExit != null ) {
-				self.onExit();
-			}
+			if( self.onExit != null ) self.onExit();
 			onReturn(lastVal);
 		} );
 	}
@@ -1510,9 +870,9 @@ var BlockNode = function(mode, doIndentFirstLine) {
 	this.Serialize = function(depth) {
 		if(depth === undefined) depth = 0;
 
-		// console.log("SERIALIZE BLOCK!!!");
-		// console.log(depth);
-		// console.log(doIndentFirstLine);
+		console.log("SERIALIZE BLOCK!!!");
+		console.log(depth);
+		console.log(doIndentFirstLine);
 
 		var str = "";
 		var lastNode = null;
@@ -1534,10 +894,6 @@ var BlockNode = function(mode, doIndentFirstLine) {
 		if (this.mode === BlockMode.Code) str += "}";
 		return str;
 	}
-
-	this.ToString = function() {
-		return this.type + " " + this.mode;
-	};
 }
 
 function isBlockWithNoNewline(node) {
@@ -1627,10 +983,6 @@ var FuncNode = function(name,arguments) {
 			return str;
 		}
 	}
-
-	this.ToString = function() {
-		return this.type + " " + this.name;
-	};
 }
 
 var LiteralNode = function(value) {
@@ -1655,10 +1007,6 @@ var LiteralNode = function(value) {
 
 		return str;
 	}
-
-	this.ToString = function() {
-		return this.type + " " + this.value;
-	};
 }
 
 var VarNode = function(name) {
@@ -1679,10 +1027,6 @@ var VarNode = function(name) {
 		var str = "" + this.name;
 		return str;
 	}
-
-	this.ToString = function() {
-		return this.type + " " + this.name;
-	};
 }
 
 var ExpNode = function(operator, left, right) {
@@ -1718,20 +1062,12 @@ var ExpNode = function(operator, left, right) {
 		}
 	}
 
-	this.VisitAll = function(visitor, depth) {
-		if (depth == undefined || depth == null) {
-			depth = 0;
-		}
-
-		visitor.Visit( this, depth );
+	this.VisitAll = function(visitor) {
+		visitor.Visit( this );
 		if(this.left != null)
-			this.left.VisitAll( visitor, depth + 1 );
+			this.left.VisitAll( visitor );
 		if(this.right != null)
-			this.right.VisitAll( visitor, depth + 1 );
-	};
-
-	this.ToString = function() {
-		return this.type + " " + this.operator;
+			this.right.VisitAll( visitor );
 	};
 }
 
@@ -1748,19 +1084,11 @@ var SequenceBase = function() {
 		return str;
 	}
 
-	this.VisitAll = function(visitor, depth) {
-		if (depth == undefined || depth == null) {
-			depth = 0;
-		}
-
-		visitor.Visit( this, depth );
+	this.VisitAll = function(visitor) {
+		visitor.Visit( this );
 		for( var i = 0; i < this.options.length; i++ ) {
-			this.options[i].VisitAll( visitor, depth + 1 );
+			this.options[i].VisitAll( visitor );
 		}
-	};
-
-	this.ToString = function() {
-		return this.type;
 	};
 }
 
@@ -1886,22 +1214,14 @@ var IfNode = function(conditions, results, isSingleLine) {
 		return isSingleLine;
 	}
 
-	this.VisitAll = function(visitor, depth) {
-		if (depth == undefined || depth == null) {
-			depth = 0;
-		}
-
-		visitor.Visit( this, depth );
+	this.VisitAll = function(visitor) {
+		visitor.Visit( this );
 		for( var i = 0; i < this.conditions.length; i++ ) {
-			this.conditions[i].VisitAll( visitor, depth + 1 );
+			this.conditions[i].VisitAll( visitor );
 		}
 		for( var i = 0; i < this.results.length; i++ ) {
-			this.results[i].VisitAll( visitor, depth + 1 );
+			this.results[i].VisitAll( visitor );
 		}
-	};
-
-	this.ToString = function() {
-		return this.type + " " + this.mode;
 	};
 }
 
@@ -1916,10 +1236,6 @@ var ElseNode = function() {
 	this.Serialize = function() {
 		return "else";
 	}
-
-	this.ToString = function() {
-		return this.type + " " + this.mode;
-	};
 }
 
 var Sym = {
@@ -1963,6 +1279,24 @@ var Parser = function(env) {
 		// console.log( state.rootNode );
 		return state.rootNode;
 	};
+
+	this.ReadDialogScript = function(lines, i) {
+		var scriptStr = "";
+		if (lines[i] === Sym.DialogOpen) {
+			scriptStr += lines[i] + "\\n";
+			i++;
+			while(lines[i] != Sym.DialogClose) {
+				scriptStr += lines[i] + "\\n";
+				i++;
+			}
+			scriptStr += lines[i];
+			i++;
+		}
+		else {
+			scriptStr += lines[i];
+		}
+		return { script:scriptStr, index:i };
+	}
 
 	var ParserState = function( rootNode, str ) {
 		this.rootNode = rootNode;
@@ -2026,8 +1360,7 @@ var Parser = function(env) {
 
 			return sourceStr.slice( startIndex + open.length, i - close.length );
 		}
-		this.Print = function() { console.log(sourceStr); };
-		this.Source = function() { return sourceStr; };
+		this.Print = function() {console.log(sourceStr);};
 	};
 
 	function ParseDialog(state) {
@@ -2287,16 +1620,14 @@ var Parser = function(env) {
 	}
 
 	function ParseFunction(state, funcName) {
-		console.log("~~~ PARSE FUNCTION " + funcName);
-
 		var args = [];
 
 		var curSymbol = "";
 		function OnSymbolEnd() {
 			curSymbol = curSymbol.trim();
-			// console.log("PARAMTER " + curSymbol);
+			console.log("PARAMTER " + curSymbol);
 			args.push( StringToValue(curSymbol) );
-			// console.log(args);
+			console.log(args);
 			curSymbol = "";
 		}
 
@@ -2336,7 +1667,7 @@ var Parser = function(env) {
 	function IsValidVariableName(str) {
 		var reg = /^[a-zA-Z_$][a-zA-Z_$0-9]*$/;
 		var isValid = reg.test(str);
-		// console.log("VALID variable??? " + isValid);
+		console.log("VALID variable??? " + isValid);
 		return isValid;
 	}
 
@@ -2350,14 +1681,14 @@ var Parser = function(env) {
 		}
 		else if(valStr[0] === Sym.String) {
 			// STRING!!
-			// console.log("STRING");
+			console.log("STRING");
 			var str = "";
 			var i = 1;
 			while (i < valStr.length && valStr[i] != Sym.String) {
 				str += valStr[i];
 				i++;
 			}
-			// console.log(str);
+			console.log(str);
 			return new LiteralNode( str );
 		}
 		else if(valStr === "true") {
@@ -2387,10 +1718,9 @@ var Parser = function(env) {
 	var setSymbol = "=";
 	var ifSymbol = "?";
 	var elseSymbol = ":";
-	var operatorSymbols = ["==", ">", "<", ">=", "<=", "-", "+", "/", "*"]; // operators need to be in reverse order of precedence
+	// var operatorSymbols = ["==", ">", "<", ">=", "<=", "*", "/", "+", "-"];
+	var operatorSymbols = ["-", "+", "/", "*", "<=", ">=", "<", ">", "=="]; // operators need to be in reverse order
 	function CreateExpression(expStr) {
-		console.log("CREATE EXPRESSION --- " + expStr);
-
 		expStr = expStr.trim();
 
 		function IsInsideString(index) {
@@ -2418,7 +1748,7 @@ var Parser = function(env) {
 			}
 			return false;
 		}
-
+	
 		var operator = null;
 
 		// set is special because other operator can look like it, and it has to go first in the order of operations
@@ -2486,33 +1816,8 @@ var Parser = function(env) {
 	}
 	this.CreateExpression = CreateExpression;
 
-	function IsWhitespace(str) {
-		return ( str === " " || str === "\\t" || str === "\\n" );
-	}
-
-	function IsExpression(str) {
-		var tempState = new ParserState(null, str); // hacky
-		var nonWhitespaceCount = 0;
-
-		while (!tempState.Done()) {
-			if( IsWhitespace(tempState.Char()) ) {
-				tempState.Step(); // consume whitespace
-			}
-			else if( tempState.MatchAhead(Sym.CodeOpen) ) {
-				tempState.ConsumeBlock( Sym.CodeOpen, Sym.CodeClose );
-			}
-			else {
-				nonWhitespaceCount++;
-				tempState.Step();
-			}
-		}
-
-		var isExpression = nonWhitespaceCount > 0;
-		return isExpression;
-	}
-
 	function ParseExpression(state) {
-		var line = state.Source(); // state.Peak( [Sym.Linebreak] ); // TODO : remove the linebreak thing
+		var line = state.Peak( [Sym.Linebreak] );
 		// console.log("EXPRESSION " + line);
 		var exp = CreateExpression( line );
 		// console.log(exp);
@@ -2522,45 +1827,36 @@ var Parser = function(env) {
 	}
 
 	function ParseCode(state) {
-		console.log("PARSE CODE --- " + state.Source());
+		// TODO : how do I do this parsing??? one expression per block? or per line?
+		while ( !state.Done() ) {
 
-		// skip leading whitespace
-		while (IsWhitespace(state.Char())) {
-			state.Step();
-		}
-
-		if( state.Char() === Sym.List && (state.Peak([]).indexOf("?") > -1) ) { // TODO : symbols? matchahead?
-			// console.log("PEAK IF " + state.Peak( ["?"] ));
-			state = ParseIf( state );
-		}
-		else if( environment.HasFunction( state.Peak( [" "] ) ) ) { // TODO --- what about newlines???
-			var funcName = state.Peak( [" "] );
-			state.Step( funcName.length );
-			state = ParseFunction( state, funcName );
-		}
-		else if( IsSequence( state.Peak( [" ", Sym.Linebreak] ) ) ) {
-			var sequenceType = state.Peak( [" ", Sym.Linebreak] );
-			state.Step( sequenceType.length );
-			state = ParseSequence( state, sequenceType );
-		}
-		else if (IsExpression(state.Source())) {
-			state = ParseExpression(state);
-		}
-		else {
-			// multi-line code block
-			while (!state.Done()) {
-				if( state.MatchAhead(Sym.CodeOpen) ) {
-					state = ParseCodeBlock( state );
-				}
-				else {
-					state.Step();
-				}
+			if( state.Char() === " " || state.Char() === "\\t" || state.Char() === "\\n" ) { // TODO: symbols? IsWhitespace func?
+				state.Step(); // consume whitespace
 			}
-		}
-
-		// just go to the end now
-		while (!state.Done()) {
-			state.Step();
+			else if( state.MatchAhead(Sym.CodeOpen) ) {
+				state = ParseCodeBlock( state );
+			}
+			// NOTE: nested dialog blocks disabled for now
+			// else if( state.MatchAhead(Sym.DialogOpen) ) {
+			// 	state = ParseDialogBlock( state ); // These can be nested (should they though???)
+			// }
+			else if( state.Char() === Sym.List && (state.Peak([]).indexOf("?") > -1) ) { // TODO : symbols? matchahead?
+				// console.log("PEAK IF " + state.Peak( ["?"] ));
+				state = ParseIf( state );
+			}
+			else if( environment.HasFunction( state.Peak( [" "] ) ) ) { // TODO --- what about newlines???
+				var funcName = state.Peak( [" "] );
+				state.Step( funcName.length );
+				state = ParseFunction( state, funcName );
+			}
+			else if( IsSequence( state.Peak( [" ", Sym.Linebreak] ) ) ) {
+				var sequenceType = state.Peak( [" ", Sym.Linebreak] );
+				state.Step( sequenceType.length );
+				state = ParseSequence( state, sequenceType );
+			}
+			else {
+				state = ParseExpression( state );
+			}
 		}
 
 		return state;
@@ -2583,7 +1879,7 @@ var Parser = function(env) {
 }
 
 } // Script()
-<\/script>
+</script>
 
 <script>
 function Dialog() {
@@ -2601,12 +1897,12 @@ var DialogRenderer = function() {
 	// TODO : refactor this eventually? remove everything from struct.. avoid the defaults?
 	var textboxInfo = {
 		img : null,
-		width : 104,
-		height : 8+4+2+5, //8 for text, 4 for top-bottom padding, 2 for line padding, 5 for arrow
+		width : 232,
+		height : (8+4+2) +5, //8 for text, 4 for top-bottom padding, 2 for line padding, 5 for arrow,
 		top : 12,
 		left : 12,
 		bottom : 12, //for drawing it from the bottom
-		font_scale : 0.5, // we draw font at half-size compared to everything else
+		font_scale : 1, // we draw font at half-size compared to everything else
 		padding_vert : 2,
 		padding_horz : 4,
 		arrow_height : 5,
@@ -2682,10 +1978,6 @@ var DialogRenderer = function() {
 		// console.log("draw arrow!");
 		var top = (textboxInfo.height-5) * scale;
 		var left = (textboxInfo.width-(5+4)) * scale;
-		if (textDirection === TextDirection.RightToLeft) { // RTL hack
-			left = 4 * scale;
-		}
-
 		for (var y = 0; y < 3; y++) {
 			for (var x = 0; x < 5; x++) {
 				var i = (y * 5) + x;
@@ -2707,10 +1999,7 @@ var DialogRenderer = function() {
 
 	var text_scale = 2; //using a different scaling factor for text feels like cheating... but it looks better
 	this.DrawChar = function(char, row, col, leftPos) {
-		char.offset = {
-			x: char.base_offset.x,
-			y: char.base_offset.y
-		}; // compute render offset *every* frame
+		char.offset = {x:0, y:0};
 
 		char.SetPosition(row,col);
 		char.ApplyEffects(effectTime);
@@ -2756,7 +2045,7 @@ var DialogRenderer = function() {
 
 			}
 		}
-		
+
 		// call printHandler for character
 		char.OnPrint();
 	};
@@ -2805,8 +2094,6 @@ var DialogBuffer = function() {
 	var isDialogReadyToContinue = false;
 	var activeTextEffects = [];
 	var font = null;
-	var arabicHandler = new ArabicHandler();
-	var onDialogEndCallbacks = [];
 
 	this.SetFont = function(f) {
 		font = f;
@@ -2827,24 +2114,14 @@ var DialogBuffer = function() {
 			// console.log(charCount);
 
 			var leftPos = 0;
-			if (textDirection === TextDirection.RightToLeft) {
-				leftPos = 24 * 8; // hack -- I think this is correct?
-			}
 
 			for(var j = 0; j < charCount; j++) {
 				var char = row[j];
 				if(char) {
-					if (textDirection === TextDirection.RightToLeft) {
-						leftPos -= char.spacing;
-					}
-					// console.log(j + " " + leftPos);
-
 					// handler( char, i /*rowIndex*/, j /*colIndex*/ );
 					handler(char, i /*rowIndex*/, j /*colIndex*/, leftPos)
 
-					if (textDirection === TextDirection.LeftToRight) {
-						leftPos += char.spacing;
-					}
+					leftPos += char.width;
 				}
 			}
 		}
@@ -2858,8 +2135,6 @@ var DialogBuffer = function() {
 		isDialogReadyToContinue = false;
 
 		activeTextEffects = [];
-
-		onDialogEndCallbacks = [];
 
 		isActive = false;
 	};
@@ -2934,11 +2209,8 @@ var DialogBuffer = function() {
 	}
 
 	this.EndDialog = function() {
+		console.log("END!!!!");
 		isActive = false; // no more text to show... this should be a sign to stop rendering dialog
-
-		for (var i = 0; i < onDialogEndCallbacks.length; i++) {
-			onDialogEndCallbacks[i]();
-		}
 	}
 
 	this.Continue = function() {
@@ -2957,15 +2229,6 @@ var DialogBuffer = function() {
 
 	var isActive = false;
 	this.IsActive = function() { return isActive; };
-
-	this.OnDialogEnd = function(callback) {
-		if (!isActive) {
-			callback();
-		}
-		else {
-			onDialogEndCallbacks.push(callback);
-		}
-	}
 
 	this.CanContinue = function() { return isDialogReadyToContinue; };
 
@@ -3009,29 +2272,20 @@ var DialogBuffer = function() {
 		this.bitmap = [];
 		this.width = 0;
 		this.height = 0;
-		this.base_offset = { // hacky name
- 			x: 0,
-			y: 0
-		};
-		this.spacing = 0;
 	}
 
 	function DialogFontChar(font, char, effectList) {
 		Object.assign(this, new DialogChar(effectList));
 
-		var charData = font.getChar(char);
-		this.bitmap = charData.data;
-		this.width = charData.width;
-		this.height = charData.height;
-		this.base_offset.x = charData.offset.x;
-		this.base_offset.y = charData.offset.y;
-		this.spacing = charData.spacing;
+		this.bitmap = font.getChar(char);
+		this.width = font.getWidth();
+		this.height = font.getHeight();
 	}
 
 	function DialogDrawingChar(drawingId, effectList) {
 		Object.assign(this, new DialogChar(effectList));
 
-		var imageData = renderer.GetImageSource(drawingId)[0];
+		var imageData = imageStore.source[drawingId][0];
 		var imageDataFlat = [];
 		for (var i = 0; i < imageData.length; i++) {
 			// console.log(imageData[i]);
@@ -3041,7 +2295,6 @@ var DialogBuffer = function() {
 		this.bitmap = imageDataFlat;
 		this.width = 8;
 		this.height = 8;
-		this.spacing = 8;
 	}
 
 	function AddWordToCharArray(charArray,word,effectList) {
@@ -3054,7 +2307,7 @@ var DialogBuffer = function() {
 	function GetCharArrayWidth(charArray) {
 		var width = 0;
 		for(var i = 0; i < charArray.length; i++) {
-			width += charArray[i].spacing;
+			width += charArray[i].width;
 		}
 		return width;
 	}
@@ -3062,8 +2315,7 @@ var DialogBuffer = function() {
 	function GetStringWidth(str) {
 		var width = 0;
 		for (var i = 0; i < str.length; i++) {
-			var charData = font.getChar(str[i]);
-			width += charData.spacing;
+			width += font.getWidth();
 		}
 		return width;
 	}
@@ -3083,7 +2335,7 @@ var DialogBuffer = function() {
 		var rowLength = GetCharArrayWidth(curRowArr);
 
 		// TODO : clean up copy-pasted code here :/
-		if (rowLength + drawingChar.spacing  <= pixelsPerRow || rowLength <= 0)
+		if (rowLength + drawingChar.width  <= pixelsPerRow || rowLength <= 0)
 		{
 			//stay on same row
 			curRowArr.push( drawingChar );
@@ -3128,9 +2380,6 @@ var DialogBuffer = function() {
 
 		for (var i = 0; i < words.length; i++) {
 			var word = words[i];
-			if (arabicHandler.ContainsArabicCharacters(word)) {
-				word = arabicHandler.ShapeArabicCharacters(word);
-			}
 
 			var wordWithPrecedingSpace = ((i == 0) ? "" : " ") + word;
 			var wordLength = GetStringWidth( wordWithPrecedingSpace );
@@ -3169,7 +2418,7 @@ var DialogBuffer = function() {
 		if( lastPage.length == 0 )
 			buffer.splice( buffer.length-1, 1 );
 
-		//finish up 
+		//finish up
 		lastPage = buffer[ buffer.length-1 ];
 		lastRow = lastPage[ lastPage.length-1 ];
 		if( lastRow.length > 0 ) {
@@ -3218,165 +2467,6 @@ var DialogBuffer = function() {
 
 	// this.SetCharsPerRow = function(num){ charsPerRow = num; }; // hacky
 };
-
-/* ARABIC */
-var ArabicHandler = function() {
-
-	var arabicCharStart = 0x0621;
-	var arabicCharEnd = 0x064E;
-
-	var CharacterForm = {
-		Isolated : 0,
-		Final : 1,
-		Initial : 2,
-		Middle : 3
-	};
-
-	// map glyphs to their character forms
-	var glyphForms = {
-		/*		 Isolated, Final, Initial, Middle Forms	*/
-		0x0621: [0xFE80,0xFE80,0xFE80,0xFE80], /*  HAMZA  */ 
-		0x0622: [0xFE81,0xFE82,0xFE81,0xFE82], /*  ALEF WITH MADDA ABOVE  */ 
-		0x0623: [0xFE83,0xFE84,0xFE83,0xFE84], /*  ALEF WITH HAMZA ABOVE  */ 
-		0x0624: [0xFE85,0xFE86,0xFE85,0xFE86], /*  WAW WITH HAMZA ABOVE  */ 
-		0x0625: [0xFE87,0xFE88,0xFE87,0xFE88], /*  ALEF WITH HAMZA BELOW  */ 
-		0x0626: [0xFE89,0xFE8A,0xFE8B,0xFE8C], /*  YEH WITH HAMZA ABOVE  */ 
-		0x0627: [0xFE8D,0xFE8E,0xFE8D,0xFE8E], /*  ALEF  */ 
-		0x0628: [0xFE8F,0xFE90,0xFE91,0xFE92], /*  BEH  */ 
-		0x0629: [0xFE93,0xFE94,0xFE93,0xFE94], /*  TEH MARBUTA  */ 
-		0x062A: [0xFE95,0xFE96,0xFE97,0xFE98], /*  TEH  */ 
-		0x062B: [0xFE99,0xFE9A,0xFE9B,0xFE9C], /*  THEH  */ 
-		0x062C: [0xFE9D,0xFE9E,0xFE9F,0xFEA0], /*  JEEM  */ 
-		0x062D: [0xFEA1,0xFEA2,0xFEA3,0xFEA4], /*  HAH  */ 
-		0x062E: [0xFEA5,0xFEA6,0xFEA7,0xFEA8], /*  KHAH  */ 
-		0x062F: [0xFEA9,0xFEAA,0xFEA9,0xFEAA], /*  DAL  */ 
-		0x0630: [0xFEAB,0xFEAC,0xFEAB,0xFEAC], /*  THAL */ 
-		0x0631: [0xFEAD,0xFEAE,0xFEAD,0xFEAE], /*  RAA  */ 
-		0x0632: [0xFEAF,0xFEB0,0xFEAF,0xFEB0], /*  ZAIN  */ 
-		0x0633: [0xFEB1,0xFEB2,0xFEB3,0xFEB4], /*  SEEN  */ 
-		0x0634: [0xFEB5,0xFEB6,0xFEB7,0xFEB8], /*  SHEEN  */ 
-		0x0635: [0xFEB9,0xFEBA,0xFEBB,0xFEBC], /*  SAD  */ 
-		0x0636: [0xFEBD,0xFEBE,0xFEBF,0xFEC0], /*  DAD  */ 
-		0x0637: [0xFEC1,0xFEC2,0xFEC3,0xFEC4], /*  TAH  */ 
-		0x0638: [0xFEC5,0xFEC6,0xFEC7,0xFEC8], /*  ZAH  */ 
-		0x0639: [0xFEC9,0xFECA,0xFECB,0xFECC], /*  AIN  */ 
-		0x063A: [0xFECD,0xFECE,0xFECF,0xFED0], /*  GHAIN  */ 
-		0x063B: [0x0000,0x0000,0x0000,0x0000], /*  space */
-		0x063C: [0x0000,0x0000,0x0000,0x0000], /*  space */
-		0x063D: [0x0000,0x0000,0x0000,0x0000], /*  space */
-		0x063E: [0x0000,0x0000,0x0000,0x0000], /*  space */
-		0x063F: [0x0000,0x0000,0x0000,0x0000], /*  space */
-		0x0640: [0x0640,0x0640,0x0640,0x0640], /*  TATWEEL  */ 
-		0x0641: [0xFED1,0xFED2,0xFED3,0xFED4], /*  FAA  */ 
-		0x0642: [0xFED5,0xFED6,0xFED7,0xFED8], /*  QAF  */ 
-		0x0643: [0xFED9,0xFEDA,0xFEDB,0xFEDC], /*  KAF  */ 
-		0x0644: [0xFEDD,0xFEDE,0xFEDF,0xFEE0], /*  LAM  */ 
-		0x0645: [0xFEE1,0xFEE2,0xFEE3,0xFEE4], /*  MEEM  */ 
-		0x0646: [0xFEE5,0xFEE6,0xFEE7,0xFEE8], /*  NOON  */ 
-		0x0647: [0xFEE9,0xFEEA,0xFEEB,0xFEEC], /*  HEH  */ 
-		0x0648: [0xFEED,0xFEEE,0xFEED,0xFEEE], /*  WAW  */ 
-		0x0649: [0xFEEF,0xFEF0,0xFBE8,0xFBE9], /*  ALEF MAKSURA  */ 
-		0x064A: [0xFEF1,0xFEF2,0xFEF3,0xFEF4], /*  YEH  */ 
-		0x064B: [0xFEF5,0xFEF6,0xFEF5,0xFEF6], /*  LAM ALEF MADD*/
-		0x064C: [0xFEF7,0xFEF8,0xFEF7,0xFEF8], /*  LAM ALEF HAMZA ABOVE*/
-		0x064D: [0xFEF9,0xFEFa,0xFEF9,0xFEFa], /*  LAM ALEF HAMZA BELOW*/
-		0x064E: [0xFEFb,0xFEFc,0xFEFb,0xFEFc], /*  LAM ALEF */
-	};
-
-	var disconnectedCharacters = [0x0621,0x0622,0x0623,0x0624,0x0625,0x0627,0x062f,0x0630,0x0631,0x0632,0x0648,0x0649,0x064b,0x064c,0x064d,0x064e];
-
-	function IsArabicCharacter(char) {
-		var code = char.charCodeAt(0);
-		return (code >= arabicCharStart && code <= arabicCharEnd);
-	}
-
-	function ContainsArabicCharacters(word) {
-		for (var i = 0; i < word.length; i++) {
-			if (IsArabicCharacter(word[i])) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	function IsDisconnectedCharacter(char) {
-		var code = char.charCodeAt(0);
-		return disconnectedCharacters.indexOf(code) != -1;
-	}
-
-	function ShapeArabicCharacters(word) {
-		var shapedWord = "";
-
-		for (var i = 0; i < word.length; i++) {
-			if (!IsArabicCharacter(word[i])) {
-				shapedWord += word[i];
-				continue;
-			}
-
-			var connectedToPreviousChar = i-1 >= 0 && IsArabicCharacter(word[i-1]) && !IsDisconnectedCharacter(word[i-1]);
-
-			var connectedToNextChar = i+1 < word.length && IsArabicCharacter(word[i+1]) && !IsDisconnectedCharacter(word[i]);
-
-			var form;
-			if (!connectedToPreviousChar && !connectedToNextChar) {
-				form = CharacterForm.Isolated;
-			}
-			else if (connectedToPreviousChar && !connectedToNextChar) {
-				form = CharacterForm.Final;
-			}
-			else if (!connectedToPreviousChar && connectedToNextChar) {
-				form = CharacterForm.Initial;
-			}
-			else if (connectedToPreviousChar && connectedToNextChar) {
-				form = CharacterForm.Middle;
-			}
-
-			var code = word[i].charCodeAt(0);
-
-			// handle lam alef special case
-			if (code == 0x0644 && connectedToNextChar) {
-				var nextCode = word[i+1].charCodeAt(0);
-				var specialCode = null;
-				if (nextCode == 0x0622) {
-					// alef madd
-					specialCode = glyphForms[0x064b][form];
-				}
-				else if (nextCode == 0x0623) {
-					// hamza above
-					specialCode = glyphForms[0x064c][form];
-				}
-				else if (nextCode == 0x0625) {
-					// hamza below
-					specialCode = glyphForms[0x064d][form];
-				}
-				else if (nextCode == 0x0627) {
-					// alef
-					specialCode = glyphForms[0x064e][form];
-				}
-
-				if (specialCode != null) {
-					shapedWord += String.fromCharCode(specialCode);
-					i++; // skip a step
-					continue;
-				}
-			}
-
-			// hacky?
-			if (form === CharacterForm.Isolated) {
-				shapedWord += word[i];
-				continue;
-			}
-
-			var shapedCode = glyphForms[code][form];
-			shapedWord += String.fromCharCode(shapedCode);
-		}
-
-		return shapedWord;
-	}
-
-	this.ContainsArabicCharacters = ContainsArabicCharacters;
-	this.ShapeArabicCharacters = ShapeArabicCharacters;
-}
 
 /* NEW TEXT EFFECTS */
 var TextEffects = new Map();
@@ -3439,197 +2529,13 @@ var ShakyEffect = function() {
 TextEffects["shk"] = new ShakyEffect();
 
 } // Dialog()
-<\/script>
+
+</script>
 
 <script>
-/*
-TODO
-- reset renderer function
-- react to changes in: drawings, palettes
-- possible future plan: limit size of cache (remove old images)
-- change image store path from (pal > col > draw) to (draw > pal > col)
-- get rid of old getSpriteImage (etc) methods
-- get editor working again [in progress]
-- move debug timer class into core (seems useful)
-*/
-
-function Renderer(tilesize, scale) {
-
-console.log("!!!!! NEW RENDERER");
-
-var imageStore = { // TODO : rename to imageCache
-	source: {},
-	render: {}
-};
-
-var palettes = null; // TODO : need null checks?
-var context = null;
-
-function setPalettes(paletteObj) {
-	palettes = paletteObj;
-
-	// TODO : should this really clear out the render cache?
-	imageStore.render = {};
-}
-
-function getPaletteColor(paletteId, colorIndex) {
-	var palette = palettes[paletteId];
-
-	if (colorIndex > palette.colors.length) { // do I need this failure case? (seems un-reliable)
-		colorIndex = 0;
-	}
-
-	var color = palette.colors[colorIndex];
-
-	return {
-		r : color[0],
-		g : color[1],
-		b : color[2]
-	};
-}
-
-var debugRenderCount = 0;
-
-// TODO : change image store path from (pal > col > draw) to (draw > pal > col)
-function renderImage(drawing, paletteId) {
-	// debugRenderCount++;
-	// console.log("RENDER COUNT " + debugRenderCount);
-
-	var col = drawing.col;
-	var colStr = "" + col;
-	var pal = paletteId;
-	var drwId = drawing.drw;
-	var imgSrc = imageStore.source[ drawing.drw ];
-
-	// initialize render cache entry
-	if (imageStore.render[drwId] === undefined || imageStore.render[drwId] === null) {
-		imageStore.render[drwId] = {};
-	}
-
-	if (imageStore.render[drwId][pal] === undefined || imageStore.render[drwId][pal] === null) {
-		imageStore.render[drwId][pal] = {};
-	}
-
-	// create array of ImageData frames
-	imageStore.render[drwId][pal][colStr] = [];
-
-	for (var i = 0; i < imgSrc.length; i++) {
-		var frameSrc = imgSrc[i];
-		var frameData = imageDataFromImageSource( frameSrc, pal, col );
-		imageStore.render[drwId][pal][colStr].push(frameData);
-	}
-}
-
-function imageDataFromImageSource(imageSource, pal, col) {
-	//console.log(imageSource);
-
-	var img = context.createImageData(tilesize*scale,tilesize*scale);
-
-	var backgroundColor = getPaletteColor(pal,0);
-	var foregroundColor = getPaletteColor(pal,col);
-
-	for (var y = 0; y < tilesize; y++) {
-		for (var x = 0; x < tilesize; x++) {
-			var px = imageSource[y][x];
-			for (var sy = 0; sy < scale; sy++) {
-				for (var sx = 0; sx < scale; sx++) {
-					var pxl = (((y * scale) + sy) * tilesize * scale * 4) + (((x*scale) + sx) * 4);
-					if ( px === 1 ) {
-						img.data[pxl + 0] = foregroundColor.r;
-						img.data[pxl + 1] = foregroundColor.g;
-						img.data[pxl + 2] = foregroundColor.b;
-						img.data[pxl + 3] = 255;
-					}
-					else { //ch === 0
-						img.data[pxl + 0] = backgroundColor.r;
-						img.data[pxl + 1] = backgroundColor.g;
-						img.data[pxl + 2] = backgroundColor.b;
-						img.data[pxl + 3] = 255;
-					}
-				}
-			}
-		}
-	}
-
-	return img;
-}
-
-// TODO : move into core
-function undefinedOrNull(x) {
-	return x === undefined || x === null;
-}
-
-function isImageRendered(drawing, paletteId) {
-	var col = drawing.col;
-	var colStr = "" + col;
-	var pal = paletteId;
-	var drwId = drawing.drw;
-
-	if (undefinedOrNull(imageStore.render[drwId]) ||
-		undefinedOrNull(imageStore.render[drwId][pal]) ||
-		undefinedOrNull(imageStore.render[drwId][pal][colStr])) {
-			return false;
-	}
-	else {
-		return true;
-	}
-}
-
-function getImageSet(drawing, paletteId) {
-	return imageStore.render[drawing.drw][paletteId][drawing.col];
-}
-
-function getImageFrame(drawing, paletteId, frameOverride) {
-	var frameIndex = 0;
-	if (drawing.animation.isAnimated) {
-		if (frameOverride != undefined && frameOverride != null) {
-			frameIndex = frameOverride;
-		}
-		else {
-			frameIndex = drawing.animation.frameIndex;
-		}
-	}
-
-	return getImageSet(drawing, paletteId)[frameIndex];
-}
-
-function getOrRenderImage(drawing, paletteId, frameOverride) {
-	if (!isImageRendered(drawing, paletteId)) {
-		renderImage(drawing, paletteId);
-	}
-
-	return getImageFrame(drawing, paletteId, frameOverride);
-}
-
-/* PUBLIC INTERFACE */
-this.GetImage = getOrRenderImage;
-
-this.SetPalettes = setPalettes;
-
-this.SetImageSource = function(drawingId, imageSourceData) {
-	imageStore.source[drawingId] = imageSourceData;
-	imageStore.render[drawingId] = {}; // reset render cache for this image
-}
-
-this.GetImageSource = function(drawingId) {
-	return imageStore.source[drawingId];
-}
-
-this.GetFrameCount = function(drawingId) {
-	return imageStore.source[drawingId].length;
-}
-
-this.AttachContext = function(ctx) {
-	context = ctx;
-}
-
-} // Renderer()
-<\/script>
-
-<script>
-var xhr; // TODO : remove
+var xhr;
 var canvas;
-var context; // TODO : remove if safe?
+var context;
 var ctx;
 
 var title = "";
@@ -3647,11 +2553,6 @@ var playerId = "A";
 
 var defaultFontName = "ascii_small";
 var fontName = defaultFontName;
-var TextDirection = {
-	LeftToRight : "LTR",
-	RightToLeft : "RTL"
-};
-var textDirection = TextDirection.LeftToRight;
 
 var names = {
 	room : new Map(),
@@ -3664,36 +2565,38 @@ var names = {
 function updateNamesFromCurData() {
 	names.room = new Map();
 	for(id in room) {
-		if(room[id].name != undefined && room[id].name != null) {
+		if(room[id].name != undefined && room[id].name != null)
 			names.room.set( room[id].name, id );
-		}
 	}
 	names.tile = new Map();
 	for(id in tile) {
-		if(tile[id].name != undefined && tile[id].name != null) {
+		if(tile[id].name != undefined && tile[id].name != null)
 			names.tile.set( tile[id].name, id );
-		}
 	}
 	names.sprite = new Map();
 	for(id in sprite) {
-		if(sprite[id].name != undefined && sprite[id].name != null) {
+		if(sprite[id].name != undefined && sprite[id].name != null)
 			names.sprite.set( sprite[id].name, id );
-		}
 	}
 	names.item = new Map();
 	for(id in item) {
-		if(item[id].name != undefined && item[id].name != null) {
+		if(item[id].name != undefined && item[id].name != null)
 			names.item.set( item[id].name, id );
-		}
 	}
 }
+
+//stores all image data for tiles, sprites, drawings
+var imageStore = {
+	source: {},
+	render: {}
+};
 
 var spriteStartLocations = {};
 
 /* VERSION */
 var version = {
-	major: 6, // major changes
-	minor: 0 // smaller changes
+	major: 5, // for file format / engine changes
+	minor: 1 // for editor changes and bugfixes
 };
 function getEngineVersion() {
 	return version.major + "." + version.minor;
@@ -3707,11 +2610,6 @@ function resetFlags() {
 	};
 }
 resetFlags(); //init flags on load script
-
-// SUPER hacky location... :/
-var editorDevFlags = {
-	// NONE right now!
-};
 
 function clearGameData() {
 	title = "";
@@ -3730,7 +2628,11 @@ function clearGameData() {
 	isEnding = false; //todo - correct place for this?
 	variable = {};
 
-	// TODO RENDERER : clear data?
+	//stores all image data for tiles, sprites, drawings
+	imageStore = {
+		source: {},
+		render: {}
+	};
 
 	spriteStartLocations = {};
 
@@ -3742,13 +2644,12 @@ function clearGameData() {
 	};
 
 	fontName = defaultFontName; // TODO : reset font manager too?
-	textDirection = TextDirection.LeftToRight;
 }
 
-var width = 128;
-var height = 128;
-var scale = 4; //this is stupid but necessary
-var tilesize = 8;
+var width = 256;
+var height = 256;
+var scale = 2; //this is stupid but necessary
+var tilesize = 16;
 var mapsize = 16;
 
 var curRoom = "0";
@@ -3786,8 +2687,6 @@ var onVariableChanged = null;
 
 var isPlayerEmbeddedInEditor = false;
 
-var renderer = new Renderer(tilesize, scale);
-
 function getGameNameFromURL() {
 	var game = window.location.hash.substring(1);
 	// console.log("game name --- " + game);
@@ -3800,17 +2699,16 @@ function attachCanvas(c) {
 	canvas.height = width * scale;
 	ctx = canvas.getContext("2d");
 	dialogRenderer.AttachContext(ctx);
-	renderer.AttachContext(ctx);
 }
 
 var curGameData = null;
-function load_game(game_data, startWithTitle) {
-	curGameData = game_data; //remember the current game (used to reset the game)
+function load_game(bitsy_x2_data, startWithTitle) {
+	curGameData = bitsy_x2_data; //remember the current game (used to reset the game)
 
 	dialogBuffer.Reset();
 	scriptInterpreter.ResetEnvironment(); // ensures variables are reset -- is this the best way?
 
-	parseWorld(game_data);
+	parseWorld(bitsy_x2_data);
 
 	if (!isPlayerEmbeddedInEditor) {
 		// hack to ensure default font is available
@@ -3822,6 +2720,7 @@ function load_game(game_data, startWithTitle) {
 	dialogRenderer.SetFont(font);
 
 	setInitialVariables();
+	renderImages();
 
 	// setInterval(updateLoadingScreen, 300); // hack test
 
@@ -3852,21 +2751,21 @@ function onready(startWithTitle) {
 		canvas.addEventListener('touchend', input.ontouchend);
 	}
 	else {
-		//borksy modification, fixing touch controls on itch.io mobile embeds
+    	//borksy modification, fixing touch controls on itch.io mobile embeds
+	
+    	let existingTouchTrigger = document.querySelector('#touchTrigger');
+    	if (existingTouchTrigger === null){
+    		var touchTrigger = document.createElement("div");
+    		touchTrigger.setAttribute("id","touchTrigger");
+    		touchTrigger.setAttribute(
+    		  "style","position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden;"
+    		);
+    		document.body.appendChild(touchTrigger);
 
-	  	let existingTouchTrigger = document.querySelector('#touchTrigger');
-	  	if (existingTouchTrigger === null){
-	  	  var touchTrigger = document.createElement("div");
-	  	  touchTrigger.setAttribute("id","touchTrigger");
-	  	  touchTrigger.setAttribute(
-	  	    "style","position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden;"
-	  	  );
-	  	  document.body.appendChild(touchTrigger);
-
-	  	  touchTrigger.addEventListener('touchstart', input.ontouchstart);
-	  	  touchTrigger.addEventListener('touchmove', input.ontouchmove);
-	  	  touchTrigger.addEventListener('touchend', input.ontouchend);
-	  	}
+    		touchTrigger.addEventListener('touchstart', input.ontouchstart);
+    		touchTrigger.addEventListener('touchmove', input.ontouchmove);
+    		touchTrigger.addEventListener('touchend', input.ontouchend);
+    	}
 	}
 
 	window.onblur = input.onblur;
@@ -4028,15 +2927,16 @@ function stopGame() {
 		canvas.removeEventListener('touchend', input.ontouchend);
 	}
 	else {
-		//borksy modifications
-
+	
+	    //borksy modifications
+	
     	let existingTouchTrigger = document.querySelector('#touchTrigger');
     	if (existingTouchTrigger !== null){
-    		existingTouchTrigger.removeEventListener('touchstart', input.ontouchstart);
-    		existingTouchTrigger.removeEventListener('touchmove', input.ontouchmove);
-    		existingTouchTrigger.removeEventListener('touchend', input.ontouchend);
+    	 	existingTouchTrigger.removeEventListener('touchstart', input.ontouchstart);
+    	 	existingTouchTrigger.removeEventListener('touchmove', input.ontouchmove);
+    	 	existingTouchTrigger.removeEventListener('touchend', input.ontouchend);
 
-    	  existingTouchTrigger.parentElement.removeChild(existingTouchTrigger);
+    	 	existingTouchTrigger.parentElement.removeChild(existingTouchTrigger);
     	}
 	}
 
@@ -4104,16 +3004,16 @@ var loading_interval = null;
 
 function loadingAnimation() {
 	//create image
-	var loadingAnimImg = ctx.createImageData(8*scale, 8*scale);
+	var loadingAnimImg = ctx.createImageData(tilesize*scale, tilesize*scale);
 	//draw image
-	for (var y = 0; y < 8; y++) {
-		for (var x = 0; x < 8; x++) {
-			var i = (y * 8) + x;
+	for (var y = 0; y < tilesize; y++) {
+		for (var x = 0; x < tilesize; x++) {
+			var i = (y * tilesize) + x;
 			if (loading_anim_data[loading_anim_frame][i] == 1) {
 				//scaling nonsense
 				for (var sy = 0; sy < scale; sy++) {
 					for (var sx = 0; sx < scale; sx++) {
-						var pxl = 4 * ( (((y*scale)+sy) * (8*scale)) + ((x*scale)+sx) );
+						var pxl = 4 * ( (((y*scale)+sy) * (tilesize*scale)) + ((x*scale)+sx) );
 						loadingAnimImg.data[pxl+0] = 255;
 						loadingAnimImg.data[pxl+1] = 255;
 						loadingAnimImg.data[pxl+2] = 255;
@@ -4124,7 +3024,7 @@ function loadingAnimation() {
 		}
 	}
 	//put image on canvas
-	ctx.putImageData(loadingAnimImg,scale*(width/2 - 4),scale*(height/2 - 4));
+	ctx.putImageData(loadingAnimImg,scale*(width/4 - 4),scale*(height/4 - 4));
 	//update frame
 	loading_anim_frame++;
 	if (loading_anim_frame >= 5) loading_anim_frame = 0;
@@ -4136,52 +3036,44 @@ function updateLoadingScreen() {
 	ctx.fillRect(0,0,canvas.width,canvas.height);
 
 	loadingAnimation();
-	drawSprite( getSpriteImage(sprite["a"],"0",0), 8, 8, ctx );
+	drawSprite( getSpriteImage(sprite["a"],"0",0), tilesize, tilesize, ctx );
 }
 
 function update() {
 	var curTime = Date.now();
 	deltaTime = curTime - prevTime;
 
-	if (!transition.IsTransitionActive()) {
-		updateInput();
-	}
+	updateInput();
 
-	if (transition.IsTransitionActive()) {
-		// transition animation takes over everything!
-		transition.UpdateTransition(deltaTime);
+	if (!isNarrating && !isEnding) {
+		updateAnimation();
+		drawRoom( room[curRoom] ); // draw world if game has begun
 	}
 	else {
-		if (!isNarrating && !isEnding) {
-			updateAnimation();
-			drawRoom( room[curRoom] ); // draw world if game has begun
-		}
-		else {
-			//make sure to still clear screen
-			ctx.fillStyle = "rgb(" + getPal(curPal())[0][0] + "," + getPal(curPal())[0][1] + "," + getPal(curPal())[0][2] + ")";
-			ctx.fillRect(0,0,canvas.width,canvas.height);
-		}
+		//make sure to still clear screen
+		ctx.fillStyle = "rgb(" + getPal(curPal())[0][0] + "," + getPal(curPal())[0][1] + "," + getPal(curPal())[0][2] + ")";
+		ctx.fillRect(0,0,canvas.width,canvas.height);
+	}
 
-		// if (isDialogMode) { // dialog mode
-		if(dialogBuffer.IsActive()) {
-			dialogRenderer.Draw( dialogBuffer, deltaTime );
-			dialogBuffer.Update( deltaTime );
-		}
-		else if (!isEnding) {
-			moveSprites(); // TODO : I probably need to remove this..
-		}
+	// if (isDialogMode) { // dialog mode
+	if(dialogBuffer.IsActive()) {
+		dialogRenderer.Draw( dialogBuffer, deltaTime );
+		dialogBuffer.Update( deltaTime );
+	}
+	else if (!isEnding) {
+		moveSprites();
+	}
 
-		// keep moving avatar if player holds down button
-		if( !dialogBuffer.IsActive() && !isEnding )
-		{
-			if( curPlayerDirection != Direction.None ) {
-				playerHoldToMoveTimer -= deltaTime;
+	// keep moving avatar if player holds down button
+	if( !dialogBuffer.IsActive() && !isEnding )
+	{
+		if( curPlayerDirection != Direction.None ) {
+			playerHoldToMoveTimer -= deltaTime;
 
-				if( playerHoldToMoveTimer <= 0 )
-				{
-					movePlayer( curPlayerDirection );
-					playerHoldToMoveTimer = 150;
-				}
+			if( playerHoldToMoveTimer <= 0 )
+			{
+				movePlayer( curPlayerDirection );
+				playerHoldToMoveTimer = 150;
 			}
 		}
 	}
@@ -4189,15 +3081,13 @@ function update() {
 	prevTime = curTime;
 
 	//for gif recording
-	if (didPlayerMoveThisFrame && onPlayerMoved != null) {
-		onPlayerMoved();
-	}
+	if (didPlayerMoveThisFrame && onPlayerMoved != null) onPlayerMoved();
 	didPlayerMoveThisFrame = false;
-
+	// if (didDialogUpdateThisFrame && onDialogUpdate != null) onDialogUpdate();
+	// didDialogUpdateThisFrame = false;
 	/* hacky replacement */
-	if (onDialogUpdate != null) {
+	if (onDialogUpdate != null)
 		dialogRenderer.SetPageFinishHandler( onDialogUpdate );
-	}
 
 	input.resetKeyPressed();
 	input.resetTapReleased();
@@ -4212,6 +3102,8 @@ function updateInput() {
 				if(!hasMoreDialog) {
 					// ignore currently held keys UNTIL they are released (stops player from insta-moving)
 					input.ignoreHeldKeys();
+
+					onExitDialog();
 				}
 			}
 			else {
@@ -4468,8 +3360,6 @@ var InputManager = function() {
 	}
 
 	this.ontouchstart = function(event) {
-		event.preventDefault();
-
 		if( event.changedTouches.length > 0 ) {
 			touchState.isDown = true;
 
@@ -4481,8 +3371,6 @@ var InputManager = function() {
 	}
 
 	this.ontouchmove = function(event) {
-		event.preventDefault();
-
 		if( touchState.isDown && event.changedTouches.length > 0 ) {
 			touchState.curX = event.changedTouches[0].clientX;
 			touchState.curY = event.changedTouches[0].clientY;
@@ -4511,8 +3399,6 @@ var InputManager = function() {
 	}
 
 	this.ontouchend = function(event) {
-		event.preventDefault();
-
 		touchState.isDown = false;
 
 		if( touchState.swipeDirection == Direction.None ) {
@@ -4585,11 +3471,9 @@ function movePlayer(direction) {
 		player().y += 1;
 		didPlayerMoveThisFrame = true;
 	}
-	
+
 	var ext = getExit( player().room, player().x, player().y );
 	var end = getEnding( player().room, player().x, player().y );
-	// TODO : vNext
-	// var eff = getEffect( player().room, player().x, player().y );
 	var itmIndex = getItemIndex( player().room, player().x, player().y );
 
 	// do items first, because you can pick up an item AND go through a door
@@ -4617,46 +3501,14 @@ function movePlayer(direction) {
 		startNarrating( ending[end.id], true /*isEnding*/ );
 	}
 	else if (ext) {
-		movePlayerThroughExit(ext);
-	}
-	// TODO : vNext
-	// else if (eff) {
-	// 	startDialog( script[eff.id].source, eff.id );
-	// }
-	else if (spr) {
-		startSpriteDialog( spr /*spriteId*/ );
-	}
-}
-
-var transition = new TransitionManager();
-
-function movePlayerThroughExit(ext) {
-	var GoToDest = function() {
-		if (ext.transition_effect != null) {
-			transition.BeginTransition(player().room, player().x, player().y, ext.dest.room, ext.dest.x, ext.dest.y, ext.transition_effect);
-			transition.UpdateTransition(0);
-		}
-
 		player().room = ext.dest.room;
 		player().x = ext.dest.x;
 		player().y = ext.dest.y;
 		curRoom = ext.dest.room;
-	};
-
-	// TODO : vNext
-	// if(ext.script_id != null && script[ext.script_id]){
-	// 	var scriptSourceStr = script[ext.script_id].source;
-	// 	startDialog(scriptSourceStr, ext.script_id, function(isExitUnlocked) {
-	// 		if (isExitUnlocked == true) {
-	// 			GoToDest();
-	// 		}
-	// 	});
-	// }
-	// else {
-	// 	GoToDest();
-	// }
-
-	GoToDest();
+	}
+	else if (spr) {
+		startSpriteDialog( spr /*spriteId*/ );
+	}
 }
 
 function getItemIndex( roomId, x, y ) {
@@ -4749,17 +3601,6 @@ function getEnding(roomId,x,y) {
 	return null;
 }
 
-// TODO : vNext
-// function getEffect(roomId,x,y) {
-// 	for (i in room[roomId].effects) {
-// 		var e = room[roomId].effects[i];
-// 		if (x == e.x && y == e.y) {
-// 			return e;
-// 		}
-// 	}
-// 	return null;
-// }
-
 function getTile(x,y) {
 	// console.log(x + " " + y);
 	var t = getRoom().tilemap[y][x];
@@ -4784,11 +3625,6 @@ function isSpriteOffstage(id) {
 }
 
 function parseWorld(file) {
-	// console.log("~~~ PARSE WORLD ~~~");
-	// console.log(file);
-
-	// var parseTimer = new Timer();
-
 	resetFlags();
 
 	var versionNumber = 0;
@@ -4836,18 +3672,11 @@ function parseWorld(file) {
 		else if (getType(curLine) === "END") {
 			i = parseEnding(lines, i);
 		}
-		// TODO: vNext
-		// else if (getType(curLine) === "PRG") {
-		// 	i = parseScript(lines, i);
-		// }
 		else if (getType(curLine) === "VAR") {
 			i = parseVariable(lines, i);
 		}
 		else if (getType(curLine) === "DEFAULT_FONT") {
 			i = parseFontName(lines, i);
-		}
-		else if (getType(curLine) === "TEXT_DIRECTION") {
-			i = parseTextDirection(lines, i);
 		}
 		else if (getType(curLine) === "FONT") {
 			i = parseFontData(lines, i);
@@ -4864,11 +3693,7 @@ function parseWorld(file) {
 		curRoom = player().room;
 	}
 
-	renderer.SetPalettes(palette);
-
 	// console.log(names);
-
-	// console.log("~~~~~ PARSE TIME " + parseTimer.Milliseconds());
 
 	return versionNumber;
 }
@@ -4895,10 +3720,6 @@ function serializeWorld(skipFonts) {
 		worldStr += "DEFAULT_FONT " + fontName + "\\n";
 		worldStr += "\\n"
 	}
-	if (textDirection != TextDirection.LeftToRight) {
-		worldStr += "TEXT_DIRECTION " + textDirection + "\\n";
-		worldStr += "\\n"
-	}
 	/* PALETTE */
 	for (id in palette) {
 		worldStr += "PAL " + id + "\\n";
@@ -4920,7 +3741,7 @@ function serializeWorld(skipFonts) {
 			// old non-comma separated format
 			for (i in room[id].tilemap) {
 				for (j in room[id].tilemap[i]) {
-					worldStr += room[id].tilemap[i][j];	
+					worldStr += room[id].tilemap[i][j];
 				}
 				worldStr += "\\n";
 			}
@@ -4964,13 +3785,6 @@ function serializeWorld(skipFonts) {
 				var e = room[id].exits[j];
 				if ( isExitValid(e) ) {
 					worldStr += "EXT " + e.x + "," + e.y + " " + e.dest.room + " " + e.dest.x + "," + e.dest.y;
-					if (e.transition_effect != undefined && e.transition_effect != null) {
-						worldStr += " FX " + e.transition_effect;
-					}
-					// TODO : vNext
-					// if (e.script_id != undefined && e.script_id != null) {
-					// 	worldStr += " PRG " + e.script_id;
-					// }
 					worldStr += "\\n";
 				}
 			}
@@ -4984,15 +3798,6 @@ function serializeWorld(skipFonts) {
 				worldStr += "\\n";
 			}
 		}
-		// TODO : vNext
-		// if (room[id].effects.length > 0) {
-		// 	/* EFFECTS */
-		// 	for (j in room[id].effects) {
-		// 		var e = room[id].effects[j];
-		// 		worldStr += "EFF " + e.id + " " + e.x + "," + e.y;
-		// 		worldStr += "\\n";
-		// 	}
-		// }
 		if (room[id].pal != null) {
 			/* PALETTE */
 			worldStr += "PAL " + room[id].pal + "\\n";
@@ -5072,21 +3877,6 @@ function serializeWorld(skipFonts) {
 		worldStr += ending[id] + "\\n";
 		worldStr += "\\n";
 	}
-	// TODO : vNext
-	// /* SCRIPTS */
-	// for (id in script) {
-	// 	if (script[id].type == ScriptType.Dialogue) {
-	// 		worldStr += "DLG " + id + "\\n";
-	// 	}
-	// 	else if (script[id].type == ScriptType.Ending) {
-	// 		worldStr += "END " + id + "\\n";
-	// 	}
-	// 	else {
-	// 		worldStr += "PRG " + id + "\\n";
-	// 	}
-	// 	worldStr += script[id].source + "\\n";
-	// 	worldStr += "\\n";
-	// }
 	/* VARIABLES */
 	for (id in variable) {
 		worldStr += "VAR " + id + "\\n";
@@ -5103,17 +3893,16 @@ function serializeWorld(skipFonts) {
 }
 
 function serializeDrawing(drwId) {
-	var imageSource = renderer.GetImageSource(drwId);
 	var drwStr = "";
-	for (f in imageSource) {
-		for (y in imageSource[f]) {
+	for (f in imageStore.source[drwId]) {
+		for (y in imageStore.source[drwId][f]) {
 			var rowStr = "";
-			for (x in imageSource[f][y]) {
-				rowStr += imageSource[f][y][x];
+			for (x in imageStore.source[drwId][f][y]) {
+				rowStr += imageStore.source[drwId][f][y][x];
 			}
 			drwStr += rowStr + "\\n";
 		}
-		if (f < (imageSource.length-1)) drwStr += ">\\n";
+		if (f < (imageStore.source[drwId].length-1)) drwStr += ">\\n";
 	}
 	return drwStr;
 }
@@ -5168,7 +3957,6 @@ function parseRoom(lines, i) {
 		walls : [],
 		exits : [],
 		endings : [],
-		// effects : [], // TODO vNext
 		items : [],
 		pal : null,
 		name : null
@@ -5217,7 +4005,7 @@ function parseRoom(lines, i) {
 				};
 			}
 			else if ( flags.ROOM_FORMAT == 0 ) { // TODO: right now this shortcut only works w/ the old comma separate format
-				/* PLACE MULTIPLE SPRITES*/ 
+				/* PLACE MULTIPLE SPRITES*/
 				//Does find and replace in the tilemap (may be hacky, but its convenient)
 				var sprList = sprId.split(",");
 				for (row in room[id].tilemap) {
@@ -5264,29 +4052,8 @@ function parseRoom(lines, i) {
 					room : destName,
 					x : parseInt(destCoords[0]),
 					y : parseInt(destCoords[1])
-				},
-				transition_effect : null,
-				// TODO : vNext
-				// script_id : null,
+				}
 			};
-
-			// optional arguments
-			var exitArgIndex = 4;
-			while (exitArgIndex < exitArgs.length) {
-				if (exitArgs[exitArgIndex] == "FX") {
-					ext.transition_effect = exitArgs[exitArgIndex+1];
-					exitArgIndex += 2;
-				}
-				// TODO : vNext
-				// else if (exitArgs[exitArgIndex] == "PRG") {
-				// 	ext.script_id = exitArgs[exitArgIndex+1];
-				// 	exitArgIndex += 2;
-				// }
-				else {
-					exitArgIndex += 1;
-				}
-			}
-
 			room[id].exits.push(ext);
 		}
 		else if (getType(lines[i]) === "END") {
@@ -5300,18 +4067,6 @@ function parseRoom(lines, i) {
 			};
 			room[id].endings.push(end);
 		}
-		// TODO : vNext
-		// else if (getType(lines[i]) === "EFF") {
-		// 	/* ADD EFFECT */
-		// 	var effectId = getId( lines[i] );
-		// 	var effectCoords = getCoord( lines[i], 2 );
-		// 	var effect = {
-		// 		id : effectId,
-		// 		x : parseInt( effectCoords[0] ),
-		// 		y : parseInt( effectCoords[1] ),
-		// 	};
-		// 	room[id].effects.push(effect);
-		// }
 		else if (getType(lines[i]) === "PAL") {
 			/* CHOOSE PALETTE (that's not default) */
 			room[id].pal = getId(lines[i]);
@@ -5346,7 +4101,6 @@ function parsePalette(lines,i) { //todo this has to go first right now :(
 		i++;
 	}
 	palette[id] = {
-		id : id,
 		name : name,
 		colors : colors
 	};
@@ -5396,13 +4150,12 @@ function parseTile(lines, i) {
 
 	//tile data
 	tile[id] = {
-		id : id,
 		drw : drwId, //drawing id
 		col : colorIndex,
 		animation : {
-			isAnimated : (renderer.GetFrameCount(drwId) > 1),
+			isAnimated : (imageStore.source[drwId].length > 1),
 			frameIndex : 0,
-			frameCount : renderer.GetFrameCount(drwId)
+			frameCount : imageStore.source[drwId].length
 		},
 		name : name,
 		isWall : isWall
@@ -5467,7 +4220,6 @@ function parseSprite(lines, i) {
 
 	//sprite data
 	sprite[id] = {
-		id : id,
 		drw : drwId, //drawing id
 		col : colorIndex,
 		dlg : dialogId,
@@ -5476,9 +4228,9 @@ function parseSprite(lines, i) {
 		y : -1,
 		walkingPath : [], //tile by tile movement path (isn't saved)
 		animation : {
-			isAnimated : (renderer.GetFrameCount(drwId) > 1),
+			isAnimated : (imageStore.source[drwId].length > 1),
 			frameIndex : 0,
-			frameCount : renderer.GetFrameCount(drwId)
+			frameCount : imageStore.source[drwId].length
 		},
 		inventory : startingInventory,
 		name : name
@@ -5535,7 +4287,6 @@ function parseItem(lines, i) {
 
 	//item data
 	item[id] = {
-		id : id,
 		drw : drwId, //drawing id
 		col : colorIndex,
 		dlg : dialogId,
@@ -5543,9 +4294,9 @@ function parseItem(lines, i) {
 		// x : -1,
 		// y : -1,
 		animation : {
-			isAnimated : (renderer.GetFrameCount(drwId) > 1),
+			isAnimated : (imageStore.source[drwId].length > 1),
 			frameIndex : 0,
-			frameCount : renderer.GetFrameCount(drwId)
+			frameCount : imageStore.source[drwId].length
 		},
 		name : name
 	};
@@ -5563,8 +4314,8 @@ function parseDrawing(lines, i) {
 }
 
 function parseDrawingCore(lines, i, drwId) {
-	var frameList = []; //init list of frames
-	frameList.push( [] ); //init first frame
+	imageStore.source[drwId] = []; //init list of frames
+	imageStore.source[drwId].push( [] ); //init first frame
 	var frameIndex = 0;
 	var y = 0;
 	while ( y < tilesize ) {
@@ -5573,14 +4324,14 @@ function parseDrawingCore(lines, i, drwId) {
 		for (x = 0; x < tilesize; x++) {
 			row.push( parseInt( l.charAt(x) ) );
 		}
-		frameList[frameIndex].push( row );
+		imageStore.source[drwId][frameIndex].push( row );
 		y++;
 
 		if (y === tilesize) {
 			i = i + y;
 			if ( lines[i] != undefined && lines[i].charAt(0) === ">" ) {
 				// start next frame!
-				frameList.push( [] );
+				imageStore.source[drwId].push( [] );
 				frameIndex++;
 				//start the count over again for the next frame
 				i++;
@@ -5589,48 +4340,126 @@ function parseDrawingCore(lines, i, drwId) {
 		}
 	}
 
-	renderer.SetImageSource(drwId, frameList);
-
+	//console.log(imageStore.source[drwId]);
 	return i;
 }
 
-// TODO : vNext
-// var ScriptType = {
-// 	Script : 0,
-// 	Dialogue : 1, // TODO : move everything to this spelling?
-// 	Ending : 2,
-// };
+function renderImages() {
+	// console.log(" -- RENDER IMAGES -- ");
 
-function parseScript(lines, i, objectStore) {
-	// TODO : vNext
-	// if (scriptType === undefined || scriptType === null) {
-	// 	scriptType = ScriptType.Script;
-	// }
+	//init image store
+	for (pal in palette) {
+		imageStore.render[pal] = {
+			"1" : {}, //images with primary color index 1 (usually tiles)
+			"2" : {}  //images with primary color index 2 (usually sprites)
+		};
+	}
 
+	//render images required by sprites
+	for (s in sprite) {
+		var spr = sprite[s];
+		renderImageForAllPalettes( spr );
+	}
+	//render images required by tiles
+	for (t in tile) {
+		var til = tile[t];
+		renderImageForAllPalettes( til );
+	}
+	//render images required by tiles
+	for (i in item) {
+		var itm = item[i];
+		renderImageForAllPalettes( itm );
+	}
+}
+
+function renderImageForAllPalettes(drawing) {
+	// console.log("RENDER IMAGE");
+	for (pal in palette) {
+		// console.log(pal);
+
+		var col = drawing.col;
+		var colStr = "" + col;
+
+		// slightly hacky initialization of image store for palettes with more than 3 colors ~~~ SECRET FEATURE DO NOT USE :P ~~~
+		if(imageStore.render[pal][colStr] === undefined || imageStore.render[pal][colStr] === null) {
+			// console.log("UNDEFINED " + colStr);
+			imageStore.render[pal][colStr] = {};
+		}
+
+		// console.log(drawing);
+		// console.log(drawing.drw);
+		// console.log(imageStore);
+
+		var imgSrc = imageStore.source[ drawing.drw ];
+
+		if ( imgSrc.length <= 1 ) {
+			// non-animated drawing
+			var frameSrc = imgSrc[0];
+			// console.log(drawing);
+			// console.log(imageStore);
+			imageStore.render[pal][colStr][drawing.drw] = imageDataFromImageSource( frameSrc, pal, col );
+		}
+		else {
+			// animated drawing
+			var frameCount = 0;
+			for (f in imgSrc) {
+				var frameSrc = imgSrc[f];
+				var frameId = drawing.drw + "_" + frameCount;
+				imageStore.render[pal][colStr][frameId] = imageDataFromImageSource( frameSrc, pal, col );
+				frameCount++;
+			}
+		}
+	}
+}
+
+function imageDataFromImageSource(imageSource, pal, col) {
+	//console.log(imageSource);
+
+	var img = ctx.createImageData(tilesize*scale,tilesize*scale);
+	for (var y = 0; y < tilesize; y++) {
+		for (var x = 0; x < tilesize; x++) {
+			var px = imageSource[y][x];
+			for (var sy = 0; sy < scale; sy++) {
+				for (var sx = 0; sx < scale; sx++) {
+					var pxl = (((y * scale) + sy) * tilesize * scale * 4) + (((x*scale) + sx) * 4);
+					if ( px === 1 && getPal(pal).length > col ) {
+						img.data[pxl + 0] = getPal(pal)[col][0]; //ugly
+						img.data[pxl + 1] = getPal(pal)[col][1];
+						img.data[pxl + 2] = getPal(pal)[col][2];
+						img.data[pxl + 3] = 255;
+					}
+					else { //ch === 0
+						img.data[pxl + 0] = getPal(pal)[0][0];
+						img.data[pxl + 1] = getPal(pal)[0][1];
+						img.data[pxl + 2] = getPal(pal)[0][2];
+						img.data[pxl + 3] = 255;
+					}
+				}
+			}
+		}
+	}
+	return img;
+}
+
+function parseDialog(lines, i) {
 	var id = getId(lines[i]);
 	i++;
 
-	var results = scriptUtils.ReadDialogScript(lines,i);
-
-	// TODO : vNext
-	// script[id] = {
-	// 	source: results.script,
-	// 	type: scriptType,
-	// };
-
-	objectStore[id] = results.script;
-
+	// TODO : use this for titles & endings too
+	var results = scriptInterpreter.ReadDialogScript(lines,i);
+	dialog[id] = results.script;
 	i = results.index;
 
 	return i;
 }
 
-function parseDialog(lines, i) {
-	return parseScript(lines, i, dialog);
-}
-
 function parseEnding(lines, i) {
-	return parseScript(lines, i, ending);
+	var id = getId(lines[i]);
+	i++;
+	var text = lines[i];
+	i++;
+	ending[id] = text;
+	return i;
 }
 
 function parseVariable(lines, i) {
@@ -5644,12 +4473,6 @@ function parseVariable(lines, i) {
 
 function parseFontName(lines, i) {
 	fontName = getArg(lines[i], 1);
-	i++;
-	return i;
-}
-
-function parseTextDirection(lines, i) {
-	textDirection = getArg(lines[i], 1);
 	i++;
 	return i;
 }
@@ -5697,20 +4520,13 @@ function drawItem(img,x,y,context) {
 	drawTile(img,x,y,context); //TODO these methods are dumb and repetitive
 }
 
-// var debugLastRoomDrawn = "0";
-
 function drawRoom(room,context,frameIndex) { // context & frameIndex are optional
 	if (!context) { //optional pass in context; otherwise, use default (ok this is REAL hacky isn't it)
 		context = ctx;
 	}
 
-	// if (room.id != debugLastRoomDrawn) {
-	// 	debugLastRoomDrawn = room.id;
-	// 	console.log("DRAW ROOM " + debugLastRoomDrawn);
-	// }
-
 	//clear screen
-	context.fillStyle = "rgb(" + getPal(room.pal)[0][0] + "," + getPal(room.pal)[0][1] + "," + getPal(room.pal)[0][2] + ")";
+	context.fillStyle = "rgb(" + getPal(curPal())[0][0] + "," + getPal(curPal())[0][1] + "," + getPal(curPal())[0][2] + ")";
 	context.fillRect(0,0,canvas.width,canvas.height);
 
 	//draw tiles
@@ -5746,17 +4562,64 @@ function drawRoom(room,context,frameIndex) { // context & frameIndex are optiona
 	}
 }
 
-// TODO : remove these get*Image methods
 function getTileImage(t,palId,frameIndex) {
-	return renderer.GetImage(t,palId,frameIndex);
+	if( frameIndex === undefined ) frameIndex = null; // no default parameter support on iOS
+
+	var drwId = t.drw;
+
+	if (!palId) palId = curPal(); // TODO : will this break on iOS?
+
+	if ( t.animation.isAnimated ) {
+		if (frameIndex != null) { // use optional provided frame index
+			// console.log("GET TILE " + frameIndex);
+			drwId += "_" + frameIndex;
+		}
+		else { // or the one bundled with the tile
+			drwId += "_" + t.animation.frameIndex;
+		}
+	}
+	return imageStore.render[ palId ][ t.col ][ drwId ];
 }
 
 function getSpriteImage(s,palId,frameIndex) {
-	return renderer.GetImage(s,palId,frameIndex);
+	if( frameIndex === undefined ) frameIndex = null; // no default parameter support on iOS
+
+	var drwId = s.drw;
+
+	if (!palId) palId = curPal();
+
+	if ( s.animation.isAnimated ) {
+		if (frameIndex != null) {
+			drwId += "_" + frameIndex;
+		}
+		else {
+			drwId += "_" + s.animation.frameIndex;
+		}
+	}
+
+	return imageStore.render[ palId ][ s.col ][ drwId ];
 }
 
-function getItemImage(itm,palId,frameIndex) {
-	return renderer.GetImage(itm,palId,frameIndex);
+function getItemImage(itm,palId,frameIndex) { //aren't these all the same????
+	if( frameIndex === undefined ) frameIndex = null; // no default parameter support on iOS
+
+	var drwId = itm.drw;
+	// console.log(drwId);
+
+	if (!palId) palId = curPal();
+
+	if ( itm.animation.isAnimated ) {
+		if (frameIndex != null) {
+			drwId += "_" + frameIndex;
+		}
+		else {
+			drwId += "_" + itm.animation.frameIndex;
+		}
+	}
+
+	// console.log(imageStore.render[ palId ][ itm.col ]);
+	// console.log(imageStore.render[ palId ][ itm.col ][ drwId ]);
+	return imageStore.render[ palId ][ itm.col ][ drwId ];
 }
 
 function curPal() {
@@ -5778,7 +4641,7 @@ function getRoomPal(roomId) {
 			return "0";
 		}
 	}
-	return "0";	
+	return "0";
 }
 
 var isDialogMode = false;
@@ -5789,17 +4652,16 @@ var dialogRenderer = dialogModule.CreateRenderer();
 var dialogBuffer = dialogModule.CreateBuffer();
 var fontManager = new FontManager();
 
-function onExitDialog(scriptResult, dialogCallback) {
+function onExitDialog() {
+	// var breakShit = null;
+	// breakShit();
+	console.log("EXIT DIALOG");
 	isDialogMode = false;
 	if (isNarrating) isNarrating = false;
 	if (isDialogPreview) {
 		isDialogPreview = false;
 		if (onDialogPreviewEnd != null)
 			onDialogPreviewEnd();
-	}
-
-	if (dialogCallback != undefined && dialogCallback != null) {
-		dialogCallback(scriptResult);
 	}
 }
 
@@ -5839,11 +4701,13 @@ function startSpriteDialog(spriteId) {
 	}
 }
 
-function startDialog(dialogStr,scriptId,dialogCallback) {
-	// console.log("START DIALOG ");
+function startDialog(dialogStr,scriptId) {
+	console.log("START DIALOG ");
+	console.log(dialogStr);
+
 	if(dialogStr.length <= 0) {
-		// console.log("ON EXIT DIALOG -- startDialog 1");
-		onExitDialog(dialogCallback);
+		console.log("ON EXIT DIALOG -- startDialog 1");
+		onExitDialog();
 		return;
 	}
 
@@ -5854,20 +4718,19 @@ function startDialog(dialogStr,scriptId,dialogCallback) {
 	dialogBuffer.Reset();
 	scriptInterpreter.SetDialogBuffer( dialogBuffer );
 
-	var onScriptEnd = function(scriptResult) {
-		dialogBuffer.OnDialogEnd(function() {
-			onExitDialog(scriptResult, dialogCallback);
-		});
+	var onScriptEnd = function() {
+		if(!dialogBuffer.IsActive()){
+			console.log("ON EXIT DIALOG -- startDialog 2");
+			onExitDialog();
+		}
 	};
 
 	if(scriptId === undefined) {
 		scriptInterpreter.Interpret( dialogStr, onScriptEnd );
 	}
 	else {
-		if( !scriptInterpreter.HasScript(scriptId) ) {
+		if( !scriptInterpreter.HasScript(scriptId) )
 			scriptInterpreter.Compile( scriptId, dialogStr );
-		}
-		scriptInterpreter.DebugVisualizeScriptTree(scriptId);
 		scriptInterpreter.Run( scriptId, onScriptEnd );
 	}
 
@@ -5896,7 +4759,8 @@ var scriptModule = new Script();
 var scriptInterpreter = scriptModule.CreateInterpreter();
 var scriptUtils = scriptModule.CreateUtils(); // TODO: move to editor.js?
 // scriptInterpreter.SetDialogBuffer( dialogBuffer );
-<\/script>
+
+</script>
 
 <!-- store default font in separate script tag for back compat-->
 <!-- Borksy modification: uses better encoded default font. -->
@@ -8063,16 +6927,16 @@ CHAR 9835
 011011
 011000
 000000
-<\/script>
+</script>
 
 <!-- BORKSY HACKS -->
 <script type="text/javascript" id="borksyHacks">
 {{{HACKS}}}
-<\/script>
+</script>
 
 <script type="text/javascript" id="borksyAdditionalJS">
 {{{ADDITIONALJS}}}
-<\/script>
+</script>
 
 </head>
 

@@ -5,7 +5,7 @@ const t=`<!DOCTYPE HTML>
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy 8.4 -->
+<!-- Bitsy HD ~> Bitsy 8.4 -->
 <head>
 
 <meta charset="UTF-8">
@@ -14,7 +14,7 @@ const t=`<!DOCTYPE HTML>
 
 <script type="text/bitsyGameData" id="exportedGameData">
 {{{GAMEDATA}}}
-<\/script>
+</script>
 
 <style>
 {{{CSS}}}
@@ -29,7 +29,7 @@ function startExportedGame() {
 	loadGame(gameCanvas, gameData, defaultFontData);
 	initSystem();
 }
-<\/script>
+</script>
 
 <!-- system -->
 <script>
@@ -322,7 +322,7 @@ function InputSystem() {
 		window.onblur = null;
 	}
 }
-<\/script>
+</script>
 
 <script>
 // init global audio context
@@ -424,7 +424,7 @@ function SoundSystem() {
 }
 
 var sound = new SoundSystem();
-<\/script>
+</script>
 
 <script>
 function GraphicsSystem() {
@@ -575,7 +575,7 @@ function GraphicsSystem() {
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 	};
 }
-<\/script>
+</script>
 
 <script>
 /* LOGGING */
@@ -1325,7 +1325,7 @@ function BitsySystem(name) {
 
 var mainProcess = addProcess();
 var bitsy = mainProcess.system;
-<\/script>
+</script>
 
 <!-- engine -->
 <script>
@@ -2550,7 +2550,7 @@ function getNameArg(line) {
 	var name = line.split(/\\s(.+)/)[1];
 	return name;
 }
-<\/script>
+</script>
 
 <script>
 /* PITCH HELPER FUNCTIONS */
@@ -3123,7 +3123,7 @@ function SoundPlayer() {
 		};
 	};
 }
-<\/script>
+</script>
 
 <script>
 /*
@@ -3366,7 +3366,7 @@ function Font(fontData) {
 
 } // FontManager
 
-<\/script>
+</script>
 
 <script>
 var TransitionManager = function() {
@@ -3834,7 +3834,7 @@ var TransitionInfo = function(image, palette, playerX, playerY) {
 		y: Math.floor((playerY * bitsy.TILE_SIZE) + (bitsy.TILE_SIZE / 2))
 	};
 };
-<\/script>
+</script>
 
 <script>
 function Script() {
@@ -6337,7 +6337,7 @@ var Parser = function(env) {
 }
 
 } // Script()
-<\/script>
+</script>
 
 <script>
 function Dialog() {
@@ -7403,7 +7403,7 @@ var DebugHighlightEffect = function() {
 TextEffects["_debug_highlight"] = new DebugHighlightEffect();
 
 } // Dialog()
-<\/script>
+</script>
 
 <script>
 function TileRenderer() {
@@ -7557,7 +7557,7 @@ this.ClearCache = function(forceReset) {
 this.deleteDrawing = deleteRenders;
 
 } // Renderer()
-<\/script>
+</script>
 
 <script>
 /* WORLD DATA */
@@ -9483,7 +9483,7 @@ if (engineFeatureFlags.isSoundEnabled) {
 
 /* EVENTS */
 bitsy.loop(update);
-<\/script>
+</script>
 
 <!-- store default font in separate script tag for back compat-->
 <script type="text/bitsyFontData" id="ascii_small">
@@ -11685,16 +11685,16 @@ CHAR 9835
 011011
 011000
 000000
-<\/script>
+</script>
 
 <!-- BORKSY HACKS -->
 <script type="text/javascript" id="borksyHacks">
 {{{HACKS}}}
-<\/script>
+</script>
 
 <script type="text/javascript" id="borksyAdditionalJS">
 {{{ADDITIONALJS}}}
-<\/script>
+</script>
 
 </head>
 

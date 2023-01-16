@@ -1,3 +1,10 @@
+# [5.29.0](https://github.com/Ayolland/borksy/compare/v5.28.0...v5.29.0) (2023-01-16)
+
+
+### Features
+
+* **deps-dev:** bump vite from 3.2.5 to 4.0.0 ([#178](https://github.com/Ayolland/borksy/issues/178)) ([61b8759](https://github.com/Ayolland/borksy/commit/61b87597ceaa9cd15084f4af25de156ea17ec8ea))
+
 # [5.28.0](https://github.com/Ayolland/borksy/compare/v5.27.0...v5.28.0) (2022-11-17)
 
 
