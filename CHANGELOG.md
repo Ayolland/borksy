@@ -1,3 +1,10 @@
+# [5.31.0](https://github.com/Ayolland/borksy/compare/v5.30.0...v5.31.0) (2023-01-21)
+
+
+### Features
+
+* update hacks ([b9b358a](https://github.com/Ayolland/borksy/commit/b9b358a6727d7fe65ca5ed2357f81ff49d6cd80d))
+
 # [5.30.0](https://github.com/Ayolland/borksy/compare/v5.29.0...v5.30.0) (2023-01-21)
 
 
