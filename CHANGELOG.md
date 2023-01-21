@@ -1,3 +1,10 @@
+# [5.30.0](https://github.com/Ayolland/borksy/compare/v5.29.0...v5.30.0) (2023-01-21)
+
+
+### Features
+
+* replace discord link with forum link ([299d024](https://github.com/Ayolland/borksy/commit/299d024fe7a8832d1dbe53db5fe9a5cff0fbb172))
+
 # [5.29.0](https://github.com/Ayolland/borksy/compare/v5.28.0...v5.29.0) (2023-01-16)
 
 
