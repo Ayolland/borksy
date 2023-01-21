@@ -28,10 +28,10 @@
 
 - > I need further help getting my game to work.
 
-  The [Bitsy discord](discordapp.com/invite/9rAjhtr) is a great place to get help with Bitsy or Borksy.
+  The [Bitsy forum](https://ledoux.itch.io/bitsy/community) is a great place to get help with Bitsy or Borksy.
 
 - > Can I use Borksy for \<X commercial project\>?
 
   Borksy is free to use, and you maintain ownership of projects you use it for.
-  
+
   However, the creators of Borksy are against web3. If you're using Borksy for the purpose of minting NFTs we want you to know you're both a bad person and a loser.
