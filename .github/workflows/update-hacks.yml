@@ -41,7 +41,7 @@ jobs:
           branches: main
       - id: package-version
         if: steps.semantic.outputs.new_release_published == 'true'
-        uses: martinbeentjes/npm-get-version-action@v1.2.3
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
       - uses: josephbmanley/butler-publish-itchio-action@v1.0.3
         if: steps.semantic.outputs.new_release_published == 'true'
         env:
