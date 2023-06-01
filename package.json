@@ -23,7 +23,6 @@
   },
   "homepage": "https://ayolland.itch.io/borksy",
   "jest": {
-    "testEnvironment": "jsdom",
     "setupFilesAfterEnv": [
       "<rootDir>/src/test/setupTests.js"
     ],
