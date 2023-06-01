@@ -31,7 +31,7 @@ describe('Borksy', () => {
 
 	beforeAll(async () => {
 		browser = await puppeteer.launch({
-			headless: true,
+			headless: 'new',
 		});
 		page = await browser.newPage();
 		await page.evaluateOnNewDocument(() => {

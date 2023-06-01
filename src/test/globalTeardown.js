@@ -1,5 +1,5 @@
 const { teardown } = require('jest-dev-server');
 
 module.exports = async () => {
-	await teardown();
+	await teardown(global.servers);
 };
