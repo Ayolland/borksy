@@ -32,8 +32,14 @@
 		"no-continue": "off"
 	},
 	"overrides": [{
-		"files": ["**/*.test.js", "**/*/test/**/*.js"],
+		"files": [
+			"**/*.test.js",
+			"**/*/test/**/*.js",
+			"globalSetup.js",
+			"globalTeardown.js",
+		],
 		"env": {
+			"node": true,
 			"jest": true,
 			"es6": true
 		},
