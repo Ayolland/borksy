@@ -64,7 +64,7 @@
     "jest-image-snapshot": "^6.1.0",
     "prettier": "^2.8.8",
     "puppeteer": "^20.5.0",
-    "rollup-plugin-visualizer": "^5.9.0",
+    "rollup-plugin-visualizer": "^5.9.2",
     "sass": "^1.62.1",
     "vite": "^4.3.9",
     "vite-plugin-markdown": "^2.2.0-2",
