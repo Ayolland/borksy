@@ -5,7 +5,7 @@ const t=`<!DOCTYPE HTML>
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy 8.4 -->
+<!-- Bitsy HD ~> Bitsy 8.6 -->
 <head>
 
 <meta charset="UTF-8">
@@ -14,7 +14,7 @@ const t=`<!DOCTYPE HTML>
 
 <script type="text/bitsyGameData" id="exportedGameData">
 {{{GAMEDATA}}}
-</script>
+<\/script>
 
 <style>
 {{{CSS}}}
@@ -29,7 +29,7 @@ function startExportedGame() {
 	loadGame(gameCanvas, gameData, defaultFontData);
 	initSystem();
 }
-</script>
+<\/script>
 
 <!-- system -->
 <script>
@@ -322,7 +322,7 @@ function InputSystem() {
 		window.onblur = null;
 	}
 }
-</script>
+<\/script>
 
 <script>
 // init global audio context
@@ -424,7 +424,7 @@ function SoundSystem() {
 }
 
 var sound = new SoundSystem();
-</script>
+<\/script>
 
 <script>
 function GraphicsSystem() {
@@ -575,7 +575,7 @@ function GraphicsSystem() {
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 	};
 }
-</script>
+<\/script>
 
 <script>
 /* LOGGING */
@@ -626,11 +626,11 @@ function bitsyLog(message, category) {
 }
 
 /* GLOBALS */
-var tilesize = 8;
+var tilesize = 16;
 var mapsize = 16;
 var width = mapsize * tilesize;
 var height = mapsize * tilesize;
-var scale = 4;
+var scale = 2;
 var textScale = 2;
 
 /* SYSTEM */
@@ -1325,7 +1325,7 @@ function BitsySystem(name) {
 
 var mainProcess = addProcess();
 var bitsy = mainProcess.system;
-</script>
+<\/script>
 
 <!-- engine -->
 <script>
@@ -1333,7 +1333,7 @@ var bitsy = mainProcess.system;
 // is this the right place for this to live?
 var version = {
 	major: 8, // major changes
-	minor: 4, // smaller changes
+	minor: 6, // smaller changes
 	devBuildPhase: "RELEASE",
 };
 function getEngineVersion() {
@@ -1750,6 +1750,28 @@ function createRoomData(id) {
 	};
 }
 
+function createExitData(x, y, destRoom, destX, destY, transition, dlg) {
+	return {
+		x: x,
+		y: x,
+		dest: {
+			room: destRoom,
+			x: destX,
+			y: destY
+		},
+		transition_effect: transition,
+		dlg: dlg,
+	};
+}
+
+function createEndingData(id, x, y) {
+	return {
+		id: id,
+		x: x,
+		y: y
+	};
+}
+
 function parseRoom(parseState, world) {
 	var i = parseState.index;
 	var lines = parseState.lines;
@@ -1841,17 +1863,14 @@ function parseRoom(parseState, world) {
 			var exitCoords = exitArgs[1].split(",");
 			var destName = exitArgs[2];
 			var destCoords = exitArgs[3].split(",");
-			var ext = {
-				x : parseInt(exitCoords[0]),
-				y : parseInt(exitCoords[1]),
-				dest : {
-					room : destName,
-					x : parseInt(destCoords[0]),
-					y : parseInt(destCoords[1])
-				},
-				transition_effect : null,
-				dlg: null,
-			};
+			var ext = createExitData(
+				/* x 			*/ parseInt(exitCoords[0]),
+				/* y 			*/ parseInt(exitCoords[1]),
+				/* destRoom 	*/ destName,
+				/* destX 		*/ parseInt(destCoords[0]),
+				/* destY 		*/ parseInt(destCoords[1]),
+				/* transition 	*/ null,
+				/* dlg 			*/ null);
 
 			// optional arguments
 			var exitArgIndex = 4;
@@ -1876,11 +1895,10 @@ function parseRoom(parseState, world) {
 			var endId = getId(lines[i]);
 
 			var endCoords = getCoord(lines[i], 2);
-			var end = {
-				id : endId,
-				x : parseInt(endCoords[0]),
-				y : parseInt(endCoords[1])
-			};
+			var end = createEndingData(
+				/* id */ endId,
+				/* x */ parseInt(endCoords[0]),
+				/* y */ parseInt(endCoords[1]));
 
 			roomData.endings.push(end);
 		}
@@ -2550,7 +2568,7 @@ function getNameArg(line) {
 	var name = line.split(/\\s(.+)/)[1];
 	return name;
 }
-</script>
+<\/script>
 
 <script>
 /* PITCH HELPER FUNCTIONS */
@@ -3123,7 +3141,7 @@ function SoundPlayer() {
 		};
 	};
 }
-</script>
+<\/script>
 
 <script>
 /*
@@ -3366,7 +3384,7 @@ function Font(fontData) {
 
 } // FontManager
 
-</script>
+<\/script>
 
 <script>
 var TransitionManager = function() {
@@ -3834,7 +3852,7 @@ var TransitionInfo = function(image, palette, playerX, playerY) {
 		y: Math.floor((playerY * bitsy.TILE_SIZE) + (bitsy.TILE_SIZE / 2))
 	};
 };
-</script>
+<\/script>
 
 <script>
 function Script() {
@@ -6337,7 +6355,7 @@ var Parser = function(env) {
 }
 
 } // Script()
-</script>
+<\/script>
 
 <script>
 function Dialog() {
@@ -6355,9 +6373,9 @@ var DialogRenderer = function() {
 	var textboxInfo = {
 		width : 104,
 		height : 8+4+2+5, //8 for text, 4 for top-bottom padding, 2 for line padding, 5 for arrow
-		top : 12,
-		left : 12,
-		bottom : 12, //for drawing it from the bottom
+		top : 12*2,
+		left : 12*2,
+		bottom : 12*2, //for drawing it from the bottom
 		padding_vert : 2,
 		padding_horz : 4,
 		arrow_height : 5,
@@ -7015,7 +7033,7 @@ var DialogBuffer = function() {
 
 	// TODO : convert this into something that takes DialogChar arrays
 	this.AddText = function(textStr) {
-		bitsy.log("ADD TEXT " + textStr);
+		bitsy.log("ADD TEXT >>" + textStr + "<<");
 
 		//process dialog so it's easier to display
 		var words = textStr.split(" ");
@@ -7123,12 +7141,17 @@ var DialogBuffer = function() {
 		var curRowArr = buffer[curPageIndex][curRowIndex];
 
 		// need to actually create a whole new page if following another pagebreak character
-		if (this.CurChar() && this.CurChar().isPageBreak) {
+		if (afterManualPagebreak) {
+			this.FlipPage(); // hacky
+
+			buffer[curPageIndex][curRowIndex] = curRowArr;
 			buffer.push([]);
 			curPageIndex++;
 			buffer[curPageIndex].push([]);
 			curRowIndex = 0;
 			curRowArr = buffer[curPageIndex][curRowIndex];
+
+			afterManualPagebreak = false;
 		}
 
 		var pagebreakChar = new DialogPageBreakChar();
@@ -7136,7 +7159,7 @@ var DialogBuffer = function() {
 
 		curRowArr.push(pagebreakChar);
 
-		isActive = true;		
+		isActive = true;
 	}
 
 	this.hasTextEffect = function(name) {
@@ -7403,7 +7426,7 @@ var DebugHighlightEffect = function() {
 TextEffects["_debug_highlight"] = new DebugHighlightEffect();
 
 } // Dialog()
-</script>
+<\/script>
 
 <script>
 function TileRenderer() {
@@ -7557,7 +7580,7 @@ this.ClearCache = function(forceReset) {
 this.deleteDrawing = deleteRenders;
 
 } // Renderer()
-</script>
+<\/script>
 
 <script>
 /* WORLD DATA */
@@ -7624,6 +7647,8 @@ function resetGameState() {
 	state.ava = playerId; // avatar appearance override
 	state.pal = "0"; // current palette id
 	state.tune = "0"; // current tune id ("0" === off)
+	state.exits = []; // exits in current room
+	state.endings = []; // endings in current room
 }
 
 // title helper functions
@@ -8336,13 +8361,31 @@ function initRoom(roomId) {
 	}
 
 	// init exit properties
+	state.exits = [];
 	for (var i = 0; i < room[roomId].exits.length; i++) {
-		room[roomId].exits[i].property = { locked:false };
+		var exit = createExitData(
+			/* x 			*/ room[roomId].exits[i].x,
+			/* y 			*/ room[roomId].exits[i].y,
+			/* destRoom 	*/ room[roomId].exits[i].dest.room,
+			/* destX 		*/ room[roomId].exits[i].dest.x,
+			/* destY 		*/ room[roomId].exits[i].dest.y,
+			/* transition 	*/ room[roomId].exits[i].transition_effect,
+			/* dlg 			*/ room[roomId].exits[i].dlg);
+		exit.property = { locked: false };
+
+		state.exits.push(exit);
 	}
 
 	// init ending properties
+	state.endings = [];
 	for (var i = 0; i < room[roomId].endings.length; i++) {
-		room[roomId].endings[i].property = { locked:false };
+		var end = createEndingData(
+			/* id */ room[roomId].endings[i].id,
+			/* x  */ room[roomId].endings[i].x,
+			/* y  */ room[roomId].endings[i].y);
+		end.property = { locked: false };
+
+		state.endings.push(end);
 	}
 
 	if (soundPlayer) {
@@ -8437,9 +8480,10 @@ function getItem(roomId,x,y) {
 	return null;
 }
 
-function getExit(roomId,x,y) {
-	for (i in room[roomId].exits) {
-		var e = room[roomId].exits[i];
+// todo : roomId isn't useful in these functions anymore! safe to remove?
+function getExit(roomId, x, y) {
+	for (i in state.exits) {
+		var e = state.exits[i];
 		if (x == e.x && y == e.y) {
 			return e;
 		}
@@ -8447,9 +8491,9 @@ function getExit(roomId,x,y) {
 	return null;
 }
 
-function getEnding(roomId,x,y) {
-	for (i in room[roomId].endings) {
-		var e = room[roomId].endings[i];
+function getEnding(roomId, x, y) {
+	for (i in state.endings) {
+		var e = state.endings[i];
 		if (x == e.x && y == e.y) {
 			return e;
 		}
@@ -9483,7 +9527,7 @@ if (engineFeatureFlags.isSoundEnabled) {
 
 /* EVENTS */
 bitsy.loop(update);
-</script>
+<\/script>
 
 <!-- store default font in separate script tag for back compat-->
 <script type="text/bitsyFontData" id="ascii_small">
@@ -11685,16 +11729,16 @@ CHAR 9835
 011011
 011000
 000000
-</script>
+<\/script>
 
 <!-- BORKSY HACKS -->
 <script type="text/javascript" id="borksyHacks">
 {{{HACKS}}}
-</script>
+<\/script>
 
 <script type="text/javascript" id="borksyAdditionalJS">
 {{{ADDITIONALJS}}}
-</script>
+<\/script>
 
 </head>
 

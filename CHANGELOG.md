@@ -1,3 +1,18 @@
+# [5.32.0](https://github.com/Ayolland/borksy/compare/v5.31.0...v5.32.0) (2023-07-07)
+
+
+### Bug Fixes
+
+* bitsy HD 8.4 textbox info ([0192572](https://github.com/Ayolland/borksy/commit/0192572c79d423bb68a8ee9c49e19df4a77249f2))
+
+
+### Features
+
+* add bitsy 8.6 template ([4f84cfe](https://github.com/Ayolland/borksy/commit/4f84cfecdb1dc8a23274ba1fc68eec422e79dff0))
+* add bitsy HD 8.6 template ([c2bb4bc](https://github.com/Ayolland/borksy/commit/c2bb4bc097fbf9f5396f64e5defadd535983b944))
+* update bitsy hacks ([ccaaa58](https://github.com/Ayolland/borksy/commit/ccaaa58394e7119d6bc39e77f1ab4008082d3380))
+* update default gamedata to 8.6 ([b034df2](https://github.com/Ayolland/borksy/commit/b034df213969f63eaccc4a62fa7c87867c60ebee))
+
 # [5.31.0](https://github.com/Ayolland/borksy/compare/v5.30.0...v5.31.0) (2023-01-21)
 
 

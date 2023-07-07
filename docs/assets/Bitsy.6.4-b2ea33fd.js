@@ -5,7 +5,7 @@ const t=`<!DOCTYPE HTML>
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy 6.3 -->
+<!-- Bitsy 6.4 -->
 <head>
 
 <meta charset="UTF-8">
@@ -14,7 +14,7 @@ const t=`<!DOCTYPE HTML>
 
 <script type="text/bitsyGameData" id="exportedGameData">
 {{{GAMEDATA}}}
-</script>
+<\/script>
 
 <style>
 {{{CSS}}}
@@ -26,7 +26,7 @@ function startExportedGame() {
 	attachCanvas( document.getElementById("game") );
 	load_game( document.getElementById("exportedGameData").text.slice(1) );
 }
-</script>
+<\/script>
 
 <script>
 //hex-to-rgb method borrowed from stack overflow
@@ -205,7 +205,7 @@ function rgbToHsl(r, g, b){
 
     return [h, s, l];
 }
-</script>
+<\/script>
 
 <script>
 var TransitionManager = function() {
@@ -661,7 +661,7 @@ var TransitionInfo = function(image, palette, playerX, playerY) {
 	this.PlayerTilePos = { x: playerX, y: playerY };
 	this.PlayerCenter = { x: Math.floor((playerX * tilesize) + (tilesize / 2)), y: Math.floor((playerY * tilesize) + (tilesize / 2)) };
 };
-</script>
+<\/script>
 
 <script>
 /*
@@ -880,7 +880,7 @@ function Font(fontData) {
 }
 
 } // FontManager
-</script>
+<\/script>
 
 <script>
 function Script() {
@@ -2550,7 +2550,7 @@ var Parser = function(env) {
 }
 
 } // Script()
-</script>
+<\/script>
 
 <script>
 function Dialog() {
@@ -3406,7 +3406,7 @@ var ShakyEffect = function() {
 TextEffects["shk"] = new ShakyEffect();
 
 } // Dialog()
-</script>
+<\/script>
 
 <script>
 /*
@@ -3602,7 +3602,7 @@ this.AttachContext = function(ctx) {
 }
 
 } // Renderer()
-</script>
+<\/script>
 
 <script>
 var xhr; // TODO : remove
@@ -3674,7 +3674,7 @@ var spriteStartLocations = {};
 /* VERSION */
 var version = {
 	major: 6, // major changes
-	minor: 3 // smaller changes
+	minor: 4 // smaller changes
 };
 function getEngineVersion() {
 	return version.major + "." + version.minor;
@@ -4025,7 +4025,7 @@ function stopGame() {
     		existingTouchTrigger.removeEventListener('touchmove', input.ontouchmove);
     		existingTouchTrigger.removeEventListener('touchend', input.ontouchend);
 
-    	  existingTouchTrigger.parentElement.removeChild(existingTouchTrigger);
+    		existingTouchTrigger.parentElement.removeChild(existingTouchTrigger);
     	}
 	}
 
@@ -5964,7 +5964,7 @@ var scriptModule = new Script();
 var scriptInterpreter = scriptModule.CreateInterpreter();
 var scriptUtils = scriptModule.CreateUtils(); // TODO: move to editor.js?
 // scriptInterpreter.SetDialogBuffer( dialogBuffer );
-</script>
+<\/script>
 
 <!-- Borksy modification: uses better encoded default font. -->
 <script type="bitsyFontData" id="ascii_small">
@@ -8130,16 +8130,16 @@ CHAR 9835
 011011
 011000
 000000
-</script>
+<\/script>
 
 <!-- BORKSY HACKS -->
 <script type="text/javascript" id="borksyHacks">
 {{{HACKS}}}
-</script>
+<\/script>
 
 <script type="text/javascript" id="borksyAdditionalJS">
 {{{ADDITIONALJS}}}
-</script>
+<\/script>
 
 </head>
 

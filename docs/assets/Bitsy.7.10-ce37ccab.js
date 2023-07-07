@@ -5,7 +5,7 @@ const t=`<!DOCTYPE HTML>
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy 7.8 -->
+<!-- Bitsy 7.10 -->
 <head>
 
 <meta charset="UTF-8">
@@ -14,7 +14,7 @@ const t=`<!DOCTYPE HTML>
 
 <script type="text/bitsyGameData" id="exportedGameData">
 {{{GAMEDATA}}}
-</script>
+<\/script>
 
 <style>
 {{{CSS}}}
@@ -23,17 +23,23 @@ const t=`<!DOCTYPE HTML>
 <!-- SCRIPTS -->
 <script>
 function startExportedGame() {
-	attachCanvas(document.getElementById("game"));
-	loadGame(document.getElementById("exportedGameData").text.slice(1));
+	var gameCanvas = document.getElementById("game");
+	var gameData = document.getElementById("exportedGameData").text.slice(1);
+	var defaultFontData = document.getElementById(defaultFontName).text.slice(1)
+	attachCanvas(gameCanvas);
+	loadGame(gameData, defaultFontData);
 }
-</script>
+<\/script>
 
 <script>
 /* logging */
 var DebugLogCategory = {
+	system: false,
 	bitsy : false,
 	editor : false,
 };
+
+var isLoggingVerbose = false;
 
 /* input */
 var key = {
@@ -59,8 +65,9 @@ var InputManager = function() {
 
 	var pressed;
 	var ignored;
-	var newKeyPress;
 	var touchState;
+
+	var isRestartComboPressed = false;
 
 	var SwipeDir = {
 		None : -1,
@@ -71,9 +78,10 @@ var InputManager = function() {
 	};
 
 	function resetAll() {
+		isRestartComboPressed = false;
+
 		pressed = {};
 		ignored = {};
-		newKeyPress = false;
 
 		touchState = {
 			isDown : false,
@@ -86,6 +94,7 @@ var InputManager = function() {
 			tapReleased : false
 		};
 	}
+
 	resetAll();
 
 	function stopWindowScrolling(e) {
@@ -93,13 +102,8 @@ var InputManager = function() {
 			e.preventDefault();
 	}
 
-	function tryRestartGame(e) {
-		/* RESTART GAME */
-		if ( e.keyCode === key.r && ( e.getModifierState("Control") || e.getModifierState("Meta") ) ) {
-			if ( confirm("Restart the game?") ) {
-				reset_cur_game();
-			}
-		}
+	function isRestartCombo(e) {
+		return (e.keyCode === key.r && (e.getModifierState("Control")|| e.getModifierState("Meta")));
 	}
 
 	function eventIsModifier(event) {
@@ -114,17 +118,17 @@ var InputManager = function() {
 		for (var key in pressed) {
 			if (pressed[key]) { // only ignore keys that are actually held
 				ignored[key] = true;
-				// bitsyLog("IGNORE -- " + key);
+				// bitsyLog("IGNORE -- " + key, "system");
 			}
 		}
 	}
 
 	this.onkeydown = function(event) {
-		// bitsyLog("KEYDOWN -- " + event.keyCode);
+		// bitsyLog("KEYDOWN -- " + event.keyCode, "system");
 
 		stopWindowScrolling(event);
 
-		tryRestartGame(event);
+		isRestartComboPressed = isRestartCombo(event);
 
 		// Special keys being held down can interfere with keyup events and lock movement
 		// so just don't collect input when they're held
@@ -142,16 +146,12 @@ var InputManager = function() {
 			return;
 		}
 
-		if (!self.isKeyDown(event.keyCode)) {
-			newKeyPress = true;
-		}
-
 		pressed[event.keyCode] = true;
 		ignored[event.keyCode] = false;
 	}
 
 	this.onkeyup = function(event) {
-		// bitsyLog("KEYUP -- " + event.keyCode);
+		// bitsyLog("KEYUP -- " + event.keyCode, "system");
 		pressed[event.keyCode] = false;
 		ignored[event.keyCode] = false;
 	}
@@ -216,12 +216,23 @@ var InputManager = function() {
 		return pressed[keyCode] != null && pressed[keyCode] == true && (ignored[keyCode] == null || ignored[keyCode] == false);
 	}
 
-	this.anyKeyPressed = function() {
-		return newKeyPress;
+	this.anyKeyDown = function() {
+		var anyKey = false;
+
+		for (var key in pressed) {
+			if (pressed[key] && (ignored[key] == null || ignored[key] == false) &&
+				!(key === key.up || key === key.down || key === key.left || key === key.right) &&
+				!(key === key.w || key === key.s || key === key.a || key === key.d)) {
+				// detected that a key other than the d-pad keys are down!
+				anyKey = true;
+			}
+		}
+
+		return anyKey;
 	}
 
-	this.resetKeyPressed = function() {
-		newKeyPress = false;
+	this.isRestartComboPressed = function() {
+		return isRestartComboPressed;
 	}
 
 	this.swipeLeft = function() {
@@ -249,9 +260,11 @@ var InputManager = function() {
 	}
 
 	this.onblur = function() {
-		// bitsyLog("~~~ BLUR ~~");
+		// bitsyLog("~~~ BLUR ~~", "system");
 		resetAll();
 	}
+
+	this.resetAll = resetAll;
 }
 
 var input = new InputManager();
@@ -262,7 +275,16 @@ var onQuitFunction = null;
 var onUpdateFunction = null;
 var updateInterval = null;
 
-function loadGame(gameData) {
+function initSystem() {
+	// temp hack for the editor? unless??
+	drawingBuffers[screenBufferId] = createDrawingBuffer(128, 128, scale);
+	drawingBuffers[textboxBufferId] = createDrawingBuffer(0, 0, textScale);
+}
+
+function loadGame(gameData, defaultFontData) {
+	drawingBuffers[screenBufferId] = createDrawingBuffer(128, 128, scale);
+	drawingBuffers[textboxBufferId] = createDrawingBuffer(0, 0, textScale);
+
 	document.addEventListener('keydown', input.onkeydown);
 	document.addEventListener('keyup', input.onkeyup);
 
@@ -297,7 +319,8 @@ function loadGame(gameData) {
 	window.onblur = input.onblur;
 
 	if (onLoadFunction) {
-		onLoadFunction(gameData);
+		// todo : is this the right place to supply default font data?
+		onLoadFunction(gameData, defaultFontData);
 	}
 
 	updateInterval = setInterval(
@@ -306,10 +329,45 @@ function loadGame(gameData) {
 				onUpdateFunction();
 			}
 
-			input.resetKeyPressed();
+			renderGame();
+
 			input.resetTapReleased();
+
+			if (bitsyGetButton(5)) {
+				if (confirm("Restart the game?")) {
+					input.resetAll();
+					reset_cur_game();
+				}
+
+				return;
+			}
 		},
 		16);
+}
+
+function renderGame() {
+	// bitsyLog("render game mode=" + curGraphicsMode, "system");
+
+	bitsyLog(systemPalette.length, "system");
+
+	var startIndex = curGraphicsMode === 0 ? screenBufferId : (drawingBuffers.length - 1);
+
+	for (var i = startIndex; i >= 0; i--) {
+		var buffer = drawingBuffers[i];
+		if (buffer && buffer.canvas === null) {
+			bitsyLog("render buffer " + i, "system");
+			renderDrawingBuffer(i, buffer);
+		}
+	}
+
+	// show screen buffer
+	var screenBuffer = drawingBuffers[screenBufferId];
+	ctx.drawImage(
+		screenBuffer.canvas,
+		0,
+		0,
+		screenBuffer.width * screenBuffer.scale,
+		screenBuffer.height * screenBuffer.scale);
 }
 
 function quitGame() {
@@ -344,19 +402,206 @@ function quitGame() {
 	clearInterval(updateInterval);
 }
 
+/* graphics */
+var canvas;
+var ctx;
+
+var textScale = 2; // todo : move tile scale into here too?
+
+var curGraphicsMode = 0;
+var systemPalette = [[0, 0, 0]];
+var curBufferId = -1; // note: -1 is invalid
+var drawingBuffers = [];
+
+var screenBufferId = 0;
+var textboxBufferId = 1;
+var tileStartBufferId = 2;
+var nextBufferId = tileStartBufferId;
+
+var DrawingInstruction = {
+	Pixel : 0,
+	Tile : 1,
+	Clear : 2,
+	Textbox : 3,
+};
+
+function attachCanvas(c) {
+	canvas = c;
+	canvas.width = width * scale;
+	canvas.height = width * scale;
+	ctx = canvas.getContext("2d");
+}
+
+function createDrawingBuffer(width, height, scale) {
+	var buffer = {
+		width : width,
+		height : height,
+		scale : scale, // logical-pixel to display-pixel scale
+		instructions : [], // drawing instructions
+		canvas : null,
+	}
+
+	return buffer;
+}
+
+function renderPixelInstruction(bufferId, buffer, paletteIndex, x, y) {
+	if (bufferId === screenBufferId && curGraphicsMode != 0) {
+		return;
+	}
+
+	if (!systemPalette[paletteIndex]) {
+		// bitsyLog("invalid index " + paletteIndex + " @ " + x + "," + y, "system");
+		return;
+	}
+
+	var color = systemPalette[paletteIndex];
+
+	if (buffer.imageData) {
+		for (var sy = 0; sy < buffer.scale; sy++) {
+			for (var sx = 0; sx < buffer.scale; sx++) {
+				var pixelIndex = (((y * buffer.scale) + sy) * buffer.width * buffer.scale * 4) + (((x * buffer.scale) + sx) * 4);
+
+				buffer.imageData.data[pixelIndex + 0] = color[0];
+				buffer.imageData.data[pixelIndex + 1] = color[1];
+				buffer.imageData.data[pixelIndex + 2] = color[2];
+				buffer.imageData.data[pixelIndex + 3] = 255;
+			}
+		}
+	}
+	else {
+		var bufferContext = buffer.canvas.getContext("2d");
+		bufferContext.fillStyle = "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
+		bufferContext.fillRect(x * buffer.scale, y * buffer.scale, buffer.scale, buffer.scale);
+	}
+}
+
+function renderTileInstruction(bufferId, buffer, tileId, x, y) {
+	if (bufferId != screenBufferId || curGraphicsMode != 1) {
+		return;
+	}
+
+	if (!drawingBuffers[tileId]) {
+		return;
+	}
+
+	var tileBuffer = drawingBuffers[tileId];
+
+	var bufferContext = buffer.canvas.getContext("2d");
+	bufferContext.drawImage(
+		tileBuffer.canvas,
+		x * tilesize * buffer.scale,
+		y * tilesize * buffer.scale,
+		tilesize * buffer.scale,
+		tilesize * buffer.scale);
+}
+
+function renderClearInstruction(bufferId, buffer, paletteIndex) {
+	var color = systemPalette[paletteIndex];
+	var bufferContext = buffer.canvas.getContext("2d");
+	bufferContext.fillStyle = "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
+	bufferContext.fillRect(0, 0, buffer.canvas.width, buffer.canvas.height);
+}
+
+function renderTextboxInstruction(bufferId, buffer, x, y) {
+	if (bufferId != screenBufferId || curGraphicsMode != 1) {
+		return;
+	}
+
+	if (!drawingBuffers[textboxBufferId]) {
+		return;
+	}
+
+	var textboxBuffer = drawingBuffers[textboxBufferId];
+
+	var bufferContext = buffer.canvas.getContext("2d");
+	bufferContext.drawImage(
+		textboxBuffer.canvas,
+		x * buffer.scale,
+		y * buffer.scale,
+		textboxBuffer.canvas.width,
+		textboxBuffer.canvas.height);
+}
+
+function renderDrawingBuffer(bufferId, buffer) {
+	// bitsyLog("render buffer " + bufferId, "system");
+
+	// if (bufferId === 0) {
+	// 	bitsyLog("instructions " + buffer.instructions.length, "system");
+	// }
+
+	buffer.canvas = document.createElement("canvas");
+	buffer.canvas.width = buffer.width * buffer.scale;
+	buffer.canvas.height = buffer.height * buffer.scale;
+
+	for (var i = 0; i < buffer.instructions.length; i++) {
+		var instruction = buffer.instructions[i];
+		switch (instruction.type) {
+			case DrawingInstruction.Pixel:
+				renderPixelInstruction(bufferId, buffer, instruction.id, instruction.x, instruction.y);
+				break;
+			case DrawingInstruction.Tile:
+				renderTileInstruction(bufferId, buffer, instruction.id, instruction.x, instruction.y);
+				break;
+			case DrawingInstruction.Clear:
+				renderClearInstruction(bufferId, buffer, instruction.id);
+				break;
+			case DrawingInstruction.Textbox:
+				renderTextboxInstruction(bufferId, buffer, instruction.x, instruction.y);
+				break;
+		}
+	}
+
+	if (buffer.imageData) {
+		var bufferContext = buffer.canvas.getContext("2d");
+		bufferContext.putImageData(buffer.imageData, 0, 0);
+	}
+}
+
+function invalidateDrawingBuffer(buffer) {
+	buffer.canvas = null;
+}
+
+function hackForEditor_GetImageFromTileId(tileId) {
+	if (tileId === undefined || !drawingBuffers[tileId]) {
+		bitsyLog("editor hack::invalid tile id!", "system");
+		return null;
+	}
+
+	// force render the buffer if it hasn't been
+	if (drawingBuffers[tileId].canvas === null) {
+		renderDrawingBuffer(tileId, drawingBuffers[tileId]);
+	}
+
+	return drawingBuffers[tileId].canvas;
+}
+
 /* ==== */
 function bitsyLog(message, category) {
 	if (!category) {
 		category = "bitsy";
 	}
 
+	var summary = category + "::" + message;
+
 	if (DebugLogCategory[category] === true) {
-		console.log(category + "::" + message);
+		if (isLoggingVerbose) {
+			console.group(summary);
+
+			console.dir(message);
+
+			console.group("stack")
+			console.trace();
+			console.groupEnd();
+
+			console.groupEnd();
+		}
+		else {
+			console.log(summary);
+		}
 	}
 }
 
-// todo : should 0 be used for any instead of null/undefined?
-function bitsyButton(buttonCode) {
+function bitsyGetButton(buttonCode) {
 	switch (buttonCode) {
 		case 0: // UP
 			return (input.isKeyDown(key.up) || input.isKeyDown(key.w) || input.swipeUp());
@@ -366,14 +611,125 @@ function bitsyButton(buttonCode) {
 			return (input.isKeyDown(key.left) || input.isKeyDown(key.a) || input.swipeLeft());
 		case 3: // RIGHT
 			return ((input.isKeyDown(key.right) || input.isKeyDown(key.d) || input.swipeRight()));
+		case 4: // OK (equivalent to "any key" on the keyboard or "tap" on touch screen)
+			return (input.anyKeyDown() || input.isTapReleased());
+		case 5: // MENU / RESTART (restart the game: "ctrl+r" on keyboard, no touch control yet)
+			return input.isRestartComboPressed();
 	}
 
-	// if no code is supplied, check any key
-	return input.isKeyDown(key.up) || input.isKeyDown(key.w) ||
-		input.isKeyDown(key.down) || input.isKeyDown(key.s) ||
-		input.isKeyDown(key.left) || input.isKeyDown(key.a) ||
-		input.isKeyDown(key.right) || input.isKeyDown(key.d) ||
-		input.isTapReleased();
+	return false;
+}
+
+// two modes (0 == pixel mode, 1 == tile mode)
+function bitsySetGraphicsMode(mode) {
+	curGraphicsMode = mode;
+
+	var screenBuffer = drawingBuffers[screenBufferId];
+	if (curGraphicsMode === 0) {
+		screenBuffer.imageData = ctx.createImageData(screenBuffer.width * screenBuffer.scale, screenBuffer.height * screenBuffer.scale);
+	}
+	else {
+		screenBuffer.imageData = undefined;
+	}
+}
+
+function bitsySetColor(paletteIndex, r, g, b) {
+	systemPalette[paletteIndex] = [r, g, b];
+
+	// invalidate all drawing buffers
+	for (var i = 0; i < drawingBuffers.length; i++) {
+		if (drawingBuffers[i]) {
+			invalidateDrawingBuffer(drawingBuffers[i]);
+		}
+	}
+}
+
+function bitsyResetColors() {
+	systemPalette = [[0, 0, 0]];
+
+	// invalidate all drawing buffers
+	for (var i = 0; i < drawingBuffers.length; i++) {
+		if (drawingBuffers[i]) {
+			invalidateDrawingBuffer(drawingBuffers[i]);
+		}
+	}
+}
+
+function bitsyDrawBegin(bufferId) {
+	curBufferId = bufferId;
+	var buffer = drawingBuffers[curBufferId];
+	invalidateDrawingBuffer(buffer);
+}
+
+function bitsyDrawEnd() {
+	curBufferId = -1;
+}
+
+function bitsyDrawPixel(paletteIndex, x, y) {
+	if (curBufferId === screenBufferId && curGraphicsMode != 0) {
+		return;
+	}
+
+	// avoid trying to render out-of-bounds colors
+	if (paletteIndex >= systemPalette.length) {
+		bitsyLog("invalid color! " + paletteIndex, "system");
+		paletteIndex = systemPalette.length - 1;
+	}
+
+	var buffer = drawingBuffers[curBufferId];
+	buffer.instructions.push({ type: DrawingInstruction.Pixel, id: paletteIndex, x: x, y: y, });
+}
+
+function bitsyDrawTile(tileId, x, y) {
+	if (curBufferId != screenBufferId || curGraphicsMode != 1) {
+		return;
+	}
+
+	var buffer = drawingBuffers[curBufferId];
+	buffer.instructions.push({ type: DrawingInstruction.Tile, id: tileId, x: x, y: y, });
+}
+
+function bitsyDrawTextbox(x, y) {
+	if (curBufferId != screenBufferId || curGraphicsMode != 1) {
+		return;
+	}
+
+	var buffer = drawingBuffers[curBufferId];
+	buffer.instructions.push({ type: DrawingInstruction.Textbox, x: x, y: y, });
+}
+
+function bitsyClear(paletteIndex) {
+	// avoid trying to render out-of-bounds colors
+	if (paletteIndex >= systemPalette.length) {
+		paletteIndex = systemPalette.length - 1;
+	}
+
+	drawingBuffers[curBufferId].instructions = []; // reset instructions
+	drawingBuffers[curBufferId].instructions.push({ type: DrawingInstruction.Clear, id: paletteIndex, });
+}
+
+// allocates a tile buffer and returns the ID
+function bitsyAddTile() {
+	var tileBufferId = nextBufferId;
+	nextBufferId++;
+
+	drawingBuffers[tileBufferId] = createDrawingBuffer(tilesize, tilesize, scale);
+
+	return tileBufferId;
+}
+
+// clears all tile buffers
+function bitsyResetTiles() {
+	bitsyLog("RESET TILES", "system");
+	// bitsyLog(drawingBuffers, "system");
+	// bitsyLog(tileStartBufferId, "system");
+	// bitsyLog(drawingBuffers.slice(tileStartBufferId), "system");
+	drawingBuffers = drawingBuffers.slice(0, tileStartBufferId);
+}
+
+// note: width and height are in text scale pixels
+function bitsySetTextboxSize(w, h) {
+	drawingBuffers[textboxBufferId] = createDrawingBuffer(w, h, textScale);
 }
 
 function bitsyOnLoad(fn) {
@@ -387,200 +743,20 @@ function bitsyOnQuit(fn) {
 function bitsyOnUpdate(fn) {
 	onUpdateFunction = fn;
 }
-</script>
-
-<script>
-//hex-to-rgb method borrowed from stack overflow
-function hexToRgb(hex) {
-	// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-	var shorthandRegex = /^#?([a-f\\d])([a-f\\d])([a-f\\d])$/i;
-	hex = hex.replace(shorthandRegex, function(m, r, g, b) {
-		return r + r + g + g + b + b;
-	});
-
-	var result = /^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i.exec(hex);
-	return result ? {
-		r: parseInt(result[1], 16),
-		g: parseInt(result[2], 16),
-		b: parseInt(result[3], 16)
-	} : null;
-}
-function componentToHex(c) {
-    var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
-}
-function rgbToHex(r, g, b) {
-    return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
-}
-
-function hslToHex(h,s,l) {
-    var rgbArr = hslToRgb(h,s,l);
-    return rgbToHex( Math.floor(rgbArr[0]), Math.floor(rgbArr[1]), Math.floor(rgbArr[2]) );
-}
-
-function hexToHsl(hex) {
-    var rgb = hexToRgb(hex);
-    return rgbToHsl(rgb.r, rgb.g, rgb.b);
-}
-
-// really just a vector distance
-function colorDistance(a1,b1,c1,a2,b2,c2) {
-    return Math.sqrt( Math.pow(a1 - a2, 2) + Math.pow(b1 - b2, 2) + Math.pow(c1 - c2, 2) );
-}
-
-function hexColorDistance(hex1,hex2) {
-    var color1 = hexToRgb(hex1);
-    var color2 = hexToRgb(hex2);
-    return rgbColorDistance(color1.r, color1.g, color1.b, color2.r, color2.g, color2.b);
-}
-
-
-// source : http://axonflux.com/handy-rgb-to-hsl-and-rgb-to-hsv-color-model-c
-/* accepts parameters
- * h  Object = {h:x, s:y, v:z}
- * OR 
- * h, s, v
-*/
-function HSVtoRGB(h, s, v) {
-    var r, g, b, i, f, p, q, t;
-    if (arguments.length === 1) {
-        s = h.s, v = h.v, h = h.h;
-    }
-    i = Math.floor(h * 6);
-    f = h * 6 - i;
-    p = v * (1 - s);
-    q = v * (1 - f * s);
-    t = v * (1 - (1 - f) * s);
-    switch (i % 6) {
-        case 0: r = v, g = t, b = p; break;
-        case 1: r = q, g = v, b = p; break;
-        case 2: r = p, g = v, b = t; break;
-        case 3: r = p, g = q, b = v; break;
-        case 4: r = t, g = p, b = v; break;
-        case 5: r = v, g = p, b = q; break;
-    }
-    return {
-        r: Math.round(r * 255),
-        g: Math.round(g * 255),
-        b: Math.round(b * 255)
-    };
-}
-
-/* accepts parameters
- * r  Object = {r:x, g:y, b:z}
- * OR 
- * r, g, b
-*/
-function RGBtoHSV(r, g, b) {
-    if (arguments.length === 1) {
-        g = r.g, b = r.b, r = r.r;
-    }
-    var max = Math.max(r, g, b), min = Math.min(r, g, b),
-        d = max - min,
-        h,
-        s = (max === 0 ? 0 : d / max),
-        v = max / 255;
-
-    switch (max) {
-        case min: h = 0; break;
-        case r: h = (g - b) + d * (g < b ? 6: 0); h /= 6 * d; break;
-        case g: h = (b - r) + d * 2; h /= 6 * d; break;
-        case b: h = (r - g) + d * 4; h /= 6 * d; break;
-    }
-
-    return {
-        h: h,
-        s: s,
-        v: v
-    };
-}
-
-// source : https://gist.github.com/mjackson/5311256
-/**
- * Converts an HSL color value to RGB. Conversion formula
- * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
- * Assumes h, s, and l are contained in the set [0, 1] and
- * returns r, g, and b in the set [0, 255].
- *
- * @param   Number  h       The hue
- * @param   Number  s       The saturation
- * @param   Number  l       The lightness
- * @return  Array           The RGB representation
- */
-function hslToRgb(h, s, l) {
-  var r, g, b;
-
-  if (s == 0) {
-    r = g = b = l; // achromatic
-  } else {
-    function hue2rgb(p, q, t) {
-      if (t < 0) t += 1;
-      if (t > 1) t -= 1;
-      if (t < 1/6) return p + (q - p) * 6 * t;
-      if (t < 1/2) return q;
-      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-      return p;
-    }
-
-    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    var p = 2 * l - q;
-
-    r = hue2rgb(p, q, h + 1/3);
-    g = hue2rgb(p, q, h);
-    b = hue2rgb(p, q, h - 1/3);
-  }
-
-  return [ Math.floor(r * 255), Math.floor(g * 255), Math.floor(b * 255) ];
-}
-
-/**
- * From: http://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
- *
- * Converts an RGB color value to HSL. Conversion formula
- * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
- * Assumes r, g, and b are contained in the set [0, 255] and
- * returns h, s, and l in the set [0, 1].
- *
- * @param   {number}  r       The red color value
- * @param   {number}  g       The green color value
- * @param   {number}  b       The blue color value
- * @return  {Array}           The HSL representation
- */
-function rgbToHsl(r, g, b){
-    r /= 255, g /= 255, b /= 255;
-    var max = Math.max(r, g, b), min = Math.min(r, g, b);
-    var h, s, l = (max + min) / 2;
-
-    if(max == min){
-        h = s = 0; // achromatic
-    }else{
-        var d = max - min;
-        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-        switch(max){
-            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-            case g: h = (b - r) / d + 2; break;
-            case b: h = (r - g) / d + 4; break;
-        }
-        h /= 6;
-    }
-
-    return [h, s, l];
-}
-</script>
+<\/script>
 
 <script>
 var TransitionManager = function() {
 	var transitionStart = null;
 	var transitionEnd = null;
-	var effectImage = null;
 
 	var isTransitioning = false;
 	var transitionTime = 0; // milliseconds
-	var frameRate = 8; // cap the FPS
-	var prevStep = -1; // used to avoid running post-process effect constantly
+	var minStepTime = 125; // cap the frame rate
+	var curStep = 0;
 
-	this.BeginTransition = function(startRoom,startX,startY,endRoom,endX,endY,effectName) {
-		// bitsyLog("--- START ROOM TRANSITION ---");
+	this.BeginTransition = function(startRoom, startX, startY, endRoom, endX, endY, effectName) {
+		bitsyLog("--- START ROOM TRANSITION ---");
 
 		curEffect = effectName;
 
@@ -597,9 +773,9 @@ var TransitionManager = function() {
 			player().room = "_transition_none"; // kind of hacky!!
 		}
 
-		drawRoom(room[startRoom]);
-		var startPalette = getPal( room[startRoom].pal );
-		var startImage = new PostProcessImage( ctx.getImageData(0,0,canvas.width,canvas.height) ); // TODO : don't use global ctx?
+		var startRoomPixels = createRoomPixelBuffer(room[startRoom]);
+		var startPalette = getPal(room[startRoom].pal);
+		var startImage = new PostProcessImage(startRoomPixels);
 		transitionStart = new TransitionInfo(startImage, startPalette, startX, startY);
 
 		if (transitionEffects[curEffect].showPlayerEnd) {
@@ -611,16 +787,14 @@ var TransitionManager = function() {
 			player().room = "_transition_none";
 		}
 
-		drawRoom(room[endRoom]);
-		var endPalette = getPal( room[endRoom].pal );
-		var endImage = new PostProcessImage( ctx.getImageData(0,0,canvas.width,canvas.height) );
+		var endRoomPixels = createRoomPixelBuffer(room[endRoom]);
+		var endPalette = getPal(room[endRoom].pal);
+		var endImage = new PostProcessImage(endRoomPixels);
 		transitionEnd = new TransitionInfo(endImage, endPalette, endX, endY);
-
-		effectImage = new PostProcessImage( ctx.createImageData(canvas.width,canvas.height) );
 
 		isTransitioning = true;
 		transitionTime = 0;
-		prevStep = -1;
+		curStep = 0;
 
 		player().room = tmpRoom;
 		player().x = tmpX;
@@ -632,32 +806,42 @@ var TransitionManager = function() {
 			return;
 		}
 
+		// todo : shouldn't need to set this every frame!
+		bitsySetGraphicsMode(0);
+
 		transitionTime += dt;
 
-		var transitionDelta = transitionTime / transitionEffects[curEffect].duration;
-		var maxStep = Math.floor(frameRate * (transitionEffects[curEffect].duration / 1000));
-		var step = Math.floor(transitionDelta * maxStep);
+		var maxStep = transitionEffects[curEffect].stepCount;
 
-		if (step != prevStep) {
-			// bitsyLog("step! " + step + " " + transitionDelta);
-			for (var y = 0; y < effectImage.Height; y++) {
-				for (var x = 0; x < effectImage.Width; x++) {
-					var color = transitionEffects[curEffect].pixelEffectFunc(transitionStart,transitionEnd,x,y,(step / maxStep));
-					effectImage.SetPixel(x,y,color);
+		if (transitionTime >= minStepTime) {
+			curStep++;
+
+			var step = curStep;
+			bitsyLog("transition step " + step);
+
+			if (transitionEffects[curEffect].paletteEffectFunc) {
+				var colors = transitionEffects[curEffect].paletteEffectFunc(transitionStart, transitionEnd, (step / maxStep));
+				updatePaletteWithTileColors(colors);
+			}
+
+			bitsyDrawBegin(0);
+			for (var y = 0; y < 128; y++) {
+				for (var x = 0; x < 128; x++) {
+					var color = transitionEffects[curEffect].pixelEffectFunc(transitionStart, transitionEnd, x, y, (step / maxStep));
+					bitsyDrawPixel(color, x, y);
 				}
 			}
+			bitsyDrawEnd();
+
+			transitionTime = 0;
 		}
-		prevStep = step;
 
-		ctx.putImageData(effectImage.GetData(), 0, 0);
-
-		if (transitionTime >= transitionEffects[curEffect].duration) {
+		if (curStep >= (maxStep - 1)) {
 			isTransitioning = false;
 			transitionTime = 0;
 			transitionStart = null;
 			transitionEnd = null;
-			effectImage = null;
-			prevStep = -1;
+			curStep = 0;
 
 			if (transitionCompleteCallback != null) {
 				transitionCompleteCallback();
@@ -687,42 +871,73 @@ var TransitionManager = function() {
 	this.RegisterTransitionEffect("none", {
 		showPlayerStart : false,
 		showPlayerEnd : false,
+		paletteEffectFunc : function() {},
 		pixelEffectFunc : function() {},
 	});
 
 	this.RegisterTransitionEffect("fade_w", { // TODO : have it linger on full white briefly?
 		showPlayerStart : false,
 		showPlayerEnd : true,
-		duration : 750,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
-			var pixelColorA = delta < 0.5 ? start.Image.GetPixel(pixelX,pixelY) : {r:255,g:255,b:255,a:255};
-			var pixelColorB = delta < 0.5 ? {r:255,g:255,b:255,a:255} : end.Image.GetPixel(pixelX,pixelY);
+		stepCount : 6,
+		pixelEffectFunc : function(start, end, pixelX, pixelY, delta) {
+			return delta < 0.5 ? start.Image.GetPixel(pixelX, pixelY) : end.Image.GetPixel(pixelX, pixelY);
+		},
+		paletteEffectFunc : function(start, end, delta) {
+			var colors = [];
 
-			delta = delta < 0.5 ? (delta / 0.5) : ((delta - 0.5) / 0.5); // hacky
+			if (delta < 0.5) {
+				delta = delta / 0.5;
 
-			return PostProcessUtilities.LerpColor(pixelColorA, pixelColorB, delta);
-		}
+				for (var i = 0; i < start.Palette.length; i++) {
+					colors.push(lerpColor(start.Palette[i], [255, 255, 255], delta));
+				}
+			}
+			else {
+				delta = ((delta - 0.5) / 0.5);
+
+				for (var i = 0; i < end.Palette.length; i++) {
+					colors.push(lerpColor([255, 255, 255], end.Palette[i], delta));
+				}
+			}
+
+			return colors;
+		},
 	});
 
 	this.RegisterTransitionEffect("fade_b", {
 		showPlayerStart : false,
 		showPlayerEnd : true,
-		duration : 750,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
-			var pixelColorA = delta < 0.5 ? start.Image.GetPixel(pixelX,pixelY) : {r:0,g:0,b:0,a:255};
-			var pixelColorB = delta < 0.5 ? {r:0,g:0,b:0,a:255} : end.Image.GetPixel(pixelX,pixelY);
+		stepCount : 6,
+		pixelEffectFunc : function(start, end, pixelX, pixelY, delta) {
+			return delta < 0.5 ? start.Image.GetPixel(pixelX, pixelY) : end.Image.GetPixel(pixelX, pixelY);
+		},
+		paletteEffectFunc : function(start, end, delta) {
+			var colors = [];
 
-			delta = delta < 0.5 ? (delta / 0.5) : ((delta - 0.5) / 0.5); // hacky
+			if (delta < 0.5) {
+				delta = delta / 0.5;
 
-			return PostProcessUtilities.LerpColor(pixelColorA, pixelColorB, delta);
-		}
+				for (var i = 0; i < start.Palette.length; i++) {
+					colors.push(lerpColor(start.Palette[i], [0, 0, 0], delta));
+				}
+			}
+			else {
+				delta = ((delta - 0.5) / 0.5);
+
+				for (var i = 0; i < end.Palette.length; i++) {
+					colors.push(lerpColor([0, 0, 0], end.Palette[i], delta));
+				}
+			}
+
+			return colors;
+		},
 	});
 
 	this.RegisterTransitionEffect("wave", {
 		showPlayerStart : true,
 		showPlayerEnd : true,
-		duration : 1500,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+		stepCount : 12,
+		pixelEffectFunc : function(start, end, pixelX, pixelY, delta) {
 			var waveDelta = delta < 0.5 ? delta / 0.5 : 1 - ((delta - 0.5) / 0.5);
 
 			var offset = (pixelY + (waveDelta * waveDelta * 0.2 * start.Image.Height));
@@ -738,15 +953,18 @@ var TransitionManager = function() {
 			}
 
 			var curImage = delta < 0.5 ? start.Image : end.Image;
-			return curImage.GetPixel(pixelX,pixelY);
-		}
+			return curImage.GetPixel(pixelX, pixelY);
+		},
+		paletteEffectFunc : function(start, end, delta) {
+			return delta < 0.5 ? start.Palette : end.Palette;
+		},
 	});
 
 	this.RegisterTransitionEffect("tunnel", {
 		showPlayerStart : true,
 		showPlayerEnd : true,
-		duration : 1500,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+		stepCount : 12,
+		pixelEffectFunc : function(start, end, pixelX, pixelY, delta) {
 			if (delta <= 0.4) {
 				var tunnelDelta = 1 - (delta / 0.4);
 
@@ -755,15 +973,14 @@ var TransitionManager = function() {
 				var dist = Math.sqrt((xDist * xDist) + (yDist * yDist));
 
 				if (dist > start.Image.Width * tunnelDelta) {
-					return {r:0,g:0,b:0,a:255};
+					return 0;
 				}
 				else {
-					return start.Image.GetPixel(pixelX,pixelY);
+					return start.Image.GetPixel(pixelX, pixelY);
 				}
 			}
-			else if (delta <= 0.6)
-			{
-				return {r:0,g:0,b:0,a:255};
+			else if (delta <= 0.6) {
+				return 0;
 			}
 			else {
 				var tunnelDelta = (delta - 0.6) / 0.4;
@@ -773,255 +990,204 @@ var TransitionManager = function() {
 				var dist = Math.sqrt((xDist * xDist) + (yDist * yDist));
 
 				if (dist > end.Image.Width * tunnelDelta) {
-					return {r:0,g:0,b:0,a:255};
+					return 0;
 				}
 				else {
-					return end.Image.GetPixel(pixelX,pixelY);
+					return end.Image.GetPixel(pixelX, pixelY);
 				}
 			}
-		}
+		},
+		paletteEffectFunc : function(start, end, delta) {
+			return delta < 0.5 ? start.Palette : end.Palette;
+		},
 	});
+
+	function lerpPalettes(start, end, delta) {
+		var colors = [];
+
+		var maxLength = (start.Palette.length > end.Palette.length) ?
+			start.Palette.length : end.Palette.length;
+
+		for (var i = 0; i < maxLength; i++) {
+			if (i < start.Palette.length && i < end.Palette.length) {
+				colors.push(lerpColor(start.Palette[i], end.Palette[i], delta));
+			}
+			else if (i < start.Palette.length) {
+				colors.push(lerpColor(
+					start.Palette[i],
+					end.Palette[end.Palette.length - 1],
+					delta));
+			}
+			else if (i < end.Palette.length) {
+				colors.push(lerpColor(
+					start.Palette[start.Palette.length - 1],
+					end.Palette[i],
+					delta));
+			}
+		}
+
+		return colors;
+	}
 
 	this.RegisterTransitionEffect("slide_u", {
 		showPlayerStart : false,
 		showPlayerEnd : true,
-		duration : 1000,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+		stepCount : 8,
+		pixelEffectFunc : function(start, end, pixelX, pixelY, delta) {
 			var pixelOffset = -1 * Math.floor(start.Image.Height * delta);
 			var slidePixelY = pixelY + pixelOffset;
 
-			var colorDelta = clampLerp(delta, 0.4);
-
 			if (slidePixelY >= 0) {
-				var colorA = start.Image.GetPixel(pixelX,slidePixelY);
-				var colorB = PostProcessUtilities.GetCorrespondingColorFromPal(colorA,start.Palette,end.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
+				return start.Image.GetPixel(pixelX, slidePixelY);
 			}
 			else {
 				slidePixelY += start.Image.Height;
-				var colorB = end.Image.GetPixel(pixelX,slidePixelY);
-				var colorA = PostProcessUtilities.GetCorrespondingColorFromPal(colorB,end.Palette,start.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
+				return end.Image.GetPixel(pixelX, slidePixelY);
 			}
-		}
+		},
+		paletteEffectFunc : lerpPalettes,
 	});
 
 	this.RegisterTransitionEffect("slide_d", {
 		showPlayerStart : false,
 		showPlayerEnd : true,
-		duration : 1000,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+		stepCount : 8,
+		pixelEffectFunc : function(start, end, pixelX, pixelY, delta) {
 			var pixelOffset = Math.floor(start.Image.Height * delta);
 			var slidePixelY = pixelY + pixelOffset;
 
-			var colorDelta = clampLerp(delta, 0.4);
-
 			if (slidePixelY < start.Image.Height) {
-				var colorA = start.Image.GetPixel(pixelX,slidePixelY);
-				var colorB = PostProcessUtilities.GetCorrespondingColorFromPal(colorA,start.Palette,end.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
+				return start.Image.GetPixel(pixelX, slidePixelY);
 			}
 			else {
 				slidePixelY -= start.Image.Height;
-				var colorB = end.Image.GetPixel(pixelX,slidePixelY);
-				var colorA = PostProcessUtilities.GetCorrespondingColorFromPal(colorB,end.Palette,start.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
+				return end.Image.GetPixel(pixelX, slidePixelY);
 			}
-		}
+		},
+		paletteEffectFunc : lerpPalettes,
 	});
 
 	this.RegisterTransitionEffect("slide_l", {
 		showPlayerStart : false,
 		showPlayerEnd : true,
-		duration : 1000,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+		stepCount : 8,
+		pixelEffectFunc : function(start, end, pixelX, pixelY, delta) {
 			var pixelOffset = -1 * Math.floor(start.Image.Width * delta);
 			var slidePixelX = pixelX + pixelOffset;
 
-			var colorDelta = clampLerp(delta, 0.4);
-
 			if (slidePixelX >= 0) {
-				var colorA = start.Image.GetPixel(slidePixelX,pixelY);
-				var colorB = PostProcessUtilities.GetCorrespondingColorFromPal(colorA,start.Palette,end.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
+				return start.Image.GetPixel(slidePixelX, pixelY);
 			}
 			else {
 				slidePixelX += start.Image.Width;
-				var colorB = end.Image.GetPixel(slidePixelX,pixelY);
-				var colorA = PostProcessUtilities.GetCorrespondingColorFromPal(colorB,end.Palette,start.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
+				return end.Image.GetPixel(slidePixelX, pixelY);
 			}
-		}
+		},
+		paletteEffectFunc : lerpPalettes,
 	});
 
 	this.RegisterTransitionEffect("slide_r", {
 		showPlayerStart : false,
 		showPlayerEnd : true,
-		duration : 1000,
-		pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
+		stepCount : 8,
+		pixelEffectFunc : function(start, end, pixelX, pixelY, delta) {
 			var pixelOffset = Math.floor(start.Image.Width * delta);
 			var slidePixelX = pixelX + pixelOffset;
 
-			var colorDelta = clampLerp(delta, 0.4);
-
 			if (slidePixelX < start.Image.Width) {
-				var colorA = start.Image.GetPixel(slidePixelX,pixelY);
-				var colorB = PostProcessUtilities.GetCorrespondingColorFromPal(colorA,start.Palette,end.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
+				return start.Image.GetPixel(slidePixelX, pixelY);
 			}
 			else {
 				slidePixelX -= start.Image.Width;
-				var colorB = end.Image.GetPixel(slidePixelX,pixelY);
-				var colorA = PostProcessUtilities.GetCorrespondingColorFromPal(colorB,end.Palette,start.Palette);
-				var colorLerped = PostProcessUtilities.LerpColor(colorA, colorB, colorDelta);
-				return colorLerped;
+				return end.Image.GetPixel(slidePixelX, pixelY);
 			}
-		}
+		},
+		paletteEffectFunc : lerpPalettes,
 	});
 
-	function clampLerp(deltaIn, clampDuration) {
-		var clampOffset = (1.0 - clampDuration) / 2;
-		var deltaOut = Math.min(clampDuration, Math.max(0.0, deltaIn - clampOffset)) / clampDuration;
-		return deltaOut;
+	// todo : move to Renderer()?
+	function createRoomPixelBuffer(room) {
+		var pixelBuffer = [];
+
+		for (var i = 0; i < 128 * 128; i++) {
+			pixelBuffer.push(tileColorStartIndex);
+		}
+
+		var drawTileInPixelBuffer = function(sourceData, frameIndex, colorIndex, tx, ty, pixelBuffer) {
+			var frameData = sourceData[frameIndex];
+
+			for (var y = 0; y < tilesize; y++) {
+				for (var x = 0; x < tilesize; x++) {
+					var color = tileColorStartIndex + (frameData[y][x] === 1 ? colorIndex : 0);
+					pixelBuffer[(((ty * tilesize) + y) * 128) + ((tx * tilesize) + x)] = color;
+				}
+			}
+		}
+
+		//draw tiles
+		for (i in room.tilemap) {
+			for (j in room.tilemap[i]) {
+				var id = room.tilemap[i][j];
+				var x = parseInt(j);
+				var y = parseInt(i);
+
+				if (id != "0" && tile[id] != null) {
+					drawTileInPixelBuffer(
+						renderer.GetDrawingSource(tile[id].drw),
+						tile[id].animation.frameIndex,
+						tile[id].col,
+						x,
+						y,
+						pixelBuffer);
+				}
+			}
+		}
+
+		//draw items
+		for (var i = 0; i < room.items.length; i++) {
+			var itm = room.items[i];
+			drawTileInPixelBuffer(
+				renderer.GetDrawingSource(item[itm.id].drw),
+				item[itm.id].animation.frameIndex,
+				item[itm.id].col,
+				itm.x,
+				itm.y,
+				pixelBuffer);
+		}
+
+		//draw sprites
+		for (id in sprite) {
+			var spr = sprite[id];
+			if (spr.room === room.id) {
+				drawTileInPixelBuffer(
+					renderer.GetDrawingSource(spr.drw),
+					spr.animation.frameIndex,
+					spr.col,
+					spr.x,
+					spr.y,
+					pixelBuffer);
+			}
+		}
+
+		return pixelBuffer;
 	}
 
-	// TODO : WIP
-	// this.RegisterTransitionEffect("fuzz", {
-	// 	showPlayerStart : true,
-	// 	showPlayerEnd : true,
-	// 	duration : 1500,
-	// 	pixelEffectFunc : function(start,end,pixelX,pixelY,delta) {
-	// 		var curImage = delta <= 0.5 ? start : end;
-	// 		var sampleSize = delta <= 0.5 ? (2 + Math.floor(14 * (delta/0.5))) : (16 - Math.floor(14 * ((delta-0.5)/0.5)));
-
-	// 		var palIndex = 0;
-
-	// 		var sampleX = Math.floor(pixelX / sampleSize) * sampleSize;
-	// 		var sampleY = Math.floor(pixelY / sampleSize) * sampleSize;
-
-	// 		var frameState = transitionEffects["fuzz"].frameState;
-
-	// 		if (frameState.time != delta) {
-	// 			frameState.time = delta;
-	// 			frameState.preCalcSampleValues = {};
-	// 		}
-
-	// 		if (frameState.preCalcSampleValues[[sampleX,sampleY]]) {
-	// 			palIndex = frameState.preCalcSampleValues[[sampleX,sampleY]];
-	// 		}
-	// 		else {
-	// 			var paletteCount = {};
-	// 			var foregroundValue = 1.0;
-	// 			var backgroundValue = 0.4;
-	// 			for (var y = sampleY; y < sampleY + sampleSize; y++) {
-	// 				for (var x = sampleX; x < sampleX + sampleSize; x++) {
-	// 					var color = curImage.Image.GetPixel(x,y)
-	// 					var palIndex = PostProcessUtilities.GetColorPalIndex(color,curImage.Palette);
-	// 					if (palIndex != -1) {
-	// 						if (paletteCount[palIndex]) {
-	// 							paletteCount[palIndex] += (palIndex != 0) ? foregroundValue : backgroundValue;
-	// 						}
-	// 						else {
-	// 							paletteCount[palIndex] = (palIndex != 0) ? foregroundValue : backgroundValue;
-	// 						}
-	// 					}
-	// 				}
-	// 			}
-
-	// 			var maxCount = 0;
-	// 			for (var i in paletteCount) {
-	// 				if (paletteCount[i] > maxCount) {
-	// 					palIndex = i;
-	// 					maxCount = paletteCount[i];
-	// 				}
-	// 			}
-
-	// 			frameState.preCalcSampleValues[[sampleX,sampleY]] = palIndex;
-	// 		}
-
-	// 		return PostProcessUtilities.GetPalColor(curImage.Palette,palIndex);
-	// 	},
-	// 	frameState : { // ok this is hacky but it's for performance ok
-	// 		time : -1,
-	// 		preCalcSampleValues : {}
-	// 	}
-	// });
+	function lerpColor(colorA, colorB, t) {
+		return [
+			colorA[0] + ((colorB[0] - colorA[0]) * t),
+			colorA[1] + ((colorB[1] - colorA[1]) * t),
+			colorA[2] + ((colorB[2] - colorA[2]) * t),
+		];
+	};
 }; // TransitionManager()
 
-
-// TODO : extract the scale variable so it can be changed?
-var PostProcessUtilities = {
-	SamplePixelColor : function(image,x,y) {
-		var pixelIndex = (y * scale * image.width * 4) + (x * scale * 4);
-		var r = image.data[pixelIndex + 0];
-		var g = image.data[pixelIndex + 1];
-		var b = image.data[pixelIndex + 2];
-		var a = image.data[pixelIndex + 3];
-		return { r:r, g:g, b:b, a:a };
-	},
-	SetPixelColor : function(image,x,y,colorRgba) {
-		for (var yDelta = 0; yDelta < scale; yDelta++) {
-			for (var xDelta = 0; xDelta < scale; xDelta++) {
-				var pixelIndex = (((y * scale) + yDelta) * image.width * 4) + (((x * scale) + xDelta) * 4);
-				image.data[pixelIndex + 0] = colorRgba.r;
-				image.data[pixelIndex + 1] = colorRgba.g;
-				image.data[pixelIndex + 2] = colorRgba.b;
-				image.data[pixelIndex + 3] = colorRgba.a;
-			}
-		}
-	},
-	LerpColor : function(colorA,colorB,t) {
-		// TODO: move to color_util.js?
-		return {
-			r : colorA.r + ((colorB.r - colorA.r) * t),
-			g : colorA.g + ((colorB.g - colorA.g) * t),
-			b : colorA.b + ((colorB.b - colorA.b) * t),
-			a : colorA.a + ((colorB.a - colorA.a) * t),
-		};
-	},
-	GetColorPalIndex : function(colorIn,curPal) {
-		var colorIndex = -1;
-
-		for (var i = 0; i < curPal.length; i++) {
-			if (colorIn.r == curPal[i][0] && colorIn.g == curPal[i][1] && colorIn.b == curPal[i][2]) {
-				colorIndex = i;
-			}
-		}
-
-		return colorIndex;
-	},
-	GetPalColor : function(palette,index) {
-		return { r: palette[index][0], g: palette[index][1], b: palette[index][2], a: 255 }
-	},
-	GetCorrespondingColorFromPal : function(colorIn,curPal,otherPal) { // this is kind of hacky!
-		var colorIndex = PostProcessUtilities.GetColorPalIndex(colorIn,curPal);
-
-		if (colorIndex >= 0 && colorIndex <= otherPal.length) {
-			return PostProcessUtilities.GetPalColor(otherPal,colorIndex);
-		}
-		else {
-			return colorIn;
-		}
-	},
-};
-
+// todo : is this wrapper still useful?
 var PostProcessImage = function(imageData) {
-	this.Width = imageData.width / scale;
-	this.Height = imageData.height / scale;
+	this.Width = 128;
+	this.Height = 128;
 
-	this.GetPixel = function(x,y) {
-		return PostProcessUtilities.SamplePixelColor(imageData,x,y);
-	};
-
-	this.SetPixel = function(x,y,colorRgba) {
-		PostProcessUtilities.SetPixelColor(imageData,x,y,colorRgba);
+	this.GetPixel = function(x, y) {
+		return imageData[(y * 128) + x];
 	};
 
 	this.GetData = function() {
@@ -1035,7 +1201,7 @@ var TransitionInfo = function(image, palette, playerX, playerY) {
 	this.PlayerTilePos = { x: playerX, y: playerY };
 	this.PlayerCenter = { x: Math.floor((playerX * tilesize) + (tilesize / 2)), y: Math.floor((playerY * tilesize) + (tilesize / 2)) };
 };
-</script>
+<\/script>
 
 <script>
 /*
@@ -1257,7 +1423,7 @@ function Font(fontData) {
 }
 
 } // FontManager
-</script>
+<\/script>
 
 <script>
 function Script() {
@@ -1660,28 +1826,28 @@ function printDrawingFunc(environment, parameters, onReturn) {
 
 function printSpriteFunc(environment,parameters,onReturn) {
 	var spriteId = parameters[0];
-	if(names.sprite.has(spriteId)) spriteId = names.sprite.get(spriteId); // id is actually a name
+	if(names.sprite[spriteId] != undefined) spriteId = names.sprite[spriteId]; // id is actually a name
 	var drawingId = sprite[spriteId].drw;
 	printDrawingFunc(environment, [drawingId], onReturn);
 }
 
 function printTileFunc(environment,parameters,onReturn) {
 	var tileId = parameters[0];
-	if(names.tile.has(tileId)) tileId = names.tile.get(tileId); // id is actually a name
+	if(names.tile[tileId] != undefined) tileId = names.tile[tileId]; // id is actually a name
 	var drawingId = tile[tileId].drw;
 	printDrawingFunc(environment, [drawingId], onReturn);
 }
 
 function printItemFunc(environment,parameters,onReturn) {
 	var itemId = parameters[0];
-	if(names.item.has(itemId)) itemId = names.item.get(itemId); // id is actually a name
+	if(names.item[itemId] != undefined) itemId = names.item[itemId]; // id is actually a name
 	var drawingId = item[itemId].drw;
 	printDrawingFunc(environment, [drawingId], onReturn);
 }
 
 function printFontFunc(environment, parameters, onReturn) {
 	var allCharacters = "";
-	var font = fontManager.Get( fontName );
+	var font = fontManager.Get(fontName);
 	var codeList = font.allCharCodes();
 	for (var i = 0; i < codeList.length; i++) {
 		allCharacters += String.fromCharCode(codeList[i]) + " ";
@@ -1692,9 +1858,9 @@ function printFontFunc(environment, parameters, onReturn) {
 function itemFunc(environment,parameters,onReturn) {
 	var itemId = parameters[0];
 
-	if (names.item.has(itemId)) {
+	if (names.item[itemId] != undefined) {
 		// id is actually a name
-		itemId = names.item.get(itemId);
+		itemId = names.item[itemId];
 	}
 
 	var curItemCount = player().inventory[itemId] ? player().inventory[itemId] : 0;
@@ -1783,9 +1949,9 @@ function endFunc(environment,parameters,onReturn) {
 function exitFunc(environment,parameters,onReturn) {
 	var destRoom = parameters[0];
 
-	if (names.room.has(destRoom)) {
+	if (names.room[destRoom] != undefined) {
 		// it's a name, not an id! (note: these could cause trouble if people names things weird)
-		destRoom = names.room.get(destRoom);
+		destRoom = names.room[destRoom];
 	}
 
 	var destX = parseInt(parameters[1]);
@@ -1911,50 +2077,50 @@ var Environment = function() {
 	this.SetDialogBuffer = function(buffer) { dialogBuffer = buffer; };
 	this.GetDialogBuffer = function() { return dialogBuffer; };
 
-	var functionMap = new Map();
-	functionMap.set("print", printFunc);
-	functionMap.set("say", printFunc);
-	functionMap.set("br", linebreakFunc);
-	functionMap.set("item", itemFunc);
-	functionMap.set("rbw", rainbowFunc);
-	functionMap.set("clr1", color1Func);
-	functionMap.set("clr2", color2Func);
-	functionMap.set("clr3", color3Func);
-	functionMap.set("wvy", wavyFunc);
-	functionMap.set("shk", shakyFunc);
-	functionMap.set("printSprite", printSpriteFunc);
-	functionMap.set("printTile", printTileFunc);
-	functionMap.set("printItem", printItemFunc);
-	functionMap.set("debugOnlyPrintFont", printFontFunc); // DEBUG ONLY
-	functionMap.set("end", endFunc);
-	functionMap.set("exit", exitFunc);
-	functionMap.set("pg", pagebreakFunc);
-	functionMap.set("property", propertyFunc);
+	var functionMap = {};
+	functionMap["print"] = printFunc;
+	functionMap["say"] = printFunc;
+	functionMap["br"] = linebreakFunc;
+	functionMap["item"] = itemFunc;
+	functionMap["rbw"] = rainbowFunc;
+	functionMap["clr1"] = color1Func;
+	functionMap["clr2"] = color2Func;
+	functionMap["clr3"] = color3Func;
+	functionMap["wvy"] = wavyFunc;
+	functionMap["shk"] = shakyFunc;
+	functionMap["printSprite"] = printSpriteFunc;
+	functionMap["printTile"] = printTileFunc;
+	functionMap["printItem"] = printItemFunc;
+	functionMap["debugOnlyPrintFont"] = printFontFunc; // DEBUG ONLY
+	functionMap["end"] = endFunc;
+	functionMap["exit"] = exitFunc;
+	functionMap["pg"] = pagebreakFunc;
+	functionMap["property"] = propertyFunc;
 
-	this.HasFunction = function(name) { return functionMap.has(name); };
+	this.HasFunction = function(name) { return functionMap[name] != undefined; };
 	this.EvalFunction = function(name,parameters,onReturn,env) {
 		if (env == undefined || env == null) {
 			env = this;
 		}
 
-		functionMap.get(name)(env, parameters, onReturn);
+		functionMap[name](env, parameters, onReturn);
 	}
 
-	var variableMap = new Map();
+	var variableMap = {};
 
-	this.HasVariable = function(name) { return variableMap.has(name); };
-	this.GetVariable = function(name) { return variableMap.get(name); };
+	this.HasVariable = function(name) { return variableMap[name] != undefined; };
+	this.GetVariable = function(name) { return variableMap[name]; };
 	this.SetVariable = function(name,value,useHandler) {
 		// bitsyLog("SET VARIABLE " + name + " = " + value);
 		if(useHandler === undefined) useHandler = true;
-		variableMap.set(name, value);
+		variableMap[name] = value;
 		if(onVariableChangeHandler != null && useHandler){
 			onVariableChangeHandler(name);
 		}
 	};
 	this.DeleteVariable = function(name,useHandler) {
 		if(useHandler === undefined) useHandler = true;
-		if(variableMap.has(name)) {
+		if(variableMap[name] != undefined) {
 			variableMap.delete(name);
 			if(onVariableChangeHandler != null && useHandler) {
 				onVariableChangeHandler(name);
@@ -1962,34 +2128,40 @@ var Environment = function() {
 		}
 	};
 
-	var operatorMap = new Map();
-	operatorMap.set("=", setExp);
-	operatorMap.set("==", equalExp);
-	operatorMap.set(">", greaterExp);
-	operatorMap.set("<", lessExp);
-	operatorMap.set(">=", greaterEqExp);
-	operatorMap.set("<=", lessEqExp);
-	operatorMap.set("*", multExp);
-	operatorMap.set("/", divExp);
-	operatorMap.set("+", addExp);
-	operatorMap.set("-", subExp);
+	var operatorMap = {};
+	operatorMap["="] = setExp;
+	operatorMap["=="] = equalExp;
+	operatorMap[">"] = greaterExp;
+	operatorMap["<"] = lessExp;
+	operatorMap[">="] = greaterEqExp;
+	operatorMap["<="] = lessEqExp;
+	operatorMap["*"] = multExp;
+	operatorMap["/"] = divExp;
+	operatorMap["+"] = addExp;
+	operatorMap["-"] = subExp;
 
-	this.HasOperator = function(sym) { return operatorMap.get(sym); };
+	this.HasOperator = function(sym) { return operatorMap[sym] != undefined; };
 	this.EvalOperator = function(sym,left,right,onReturn) {
-		operatorMap.get( sym )( this, left, right, onReturn );
+		operatorMap[ sym ]( this, left, right, onReturn );
 	}
 
-	var scriptMap = new Map();
-	this.HasScript = function(name) { return scriptMap.has(name); };
-	this.GetScript = function(name) { return scriptMap.get(name); };
-	this.SetScript = function(name,script) { scriptMap.set(name, script); };
+	var scriptMap = {};
+	this.HasScript = function(name) { return scriptMap[name] != undefined; };
+	this.GetScript = function(name) { return scriptMap[name]; };
+	this.SetScript = function(name,script) { scriptMap[name] = script; };
 
 	var onVariableChangeHandler = null;
 	this.SetOnVariableChangeHandler = function(onVariableChange) {
 		onVariableChangeHandler = onVariableChange;
 	}
 	this.GetVariableNames = function() {
-		return Array.from( variableMap.keys() );
+		var variableNames = [];
+
+		for (var key in variableMap) {
+			variableNames.push(key);
+		}
+
+		return variableNames;
 	}
 }
 
@@ -3553,7 +3725,7 @@ var Parser = function(env) {
 }
 
 } // Script()
-</script>
+<\/script>
 
 <script>
 function Dialog() {
@@ -3570,7 +3742,6 @@ var DialogRenderer = function() {
 
 	// TODO : refactor this eventually? remove everything from struct.. avoid the defaults?
 	var textboxInfo = {
-		img : null,
 		width : 104,
 		height : 8+4+2+5, //8 for text, 4 for top-bottom padding, 2 for line padding, 5 for arrow
 		top : 12,
@@ -3586,7 +3757,11 @@ var DialogRenderer = function() {
 	this.SetFont = function(f) {
 		font = f;
 		textboxInfo.height = (textboxInfo.padding_vert * 3) + (relativeFontHeight() * 2) + textboxInfo.arrow_height;
-		textboxInfo.img = context.createImageData(textboxInfo.width*scale, textboxInfo.height*scale);
+
+		// todo : clean up all the scale stuff
+		var textboxScaleW = textboxInfo.width / textboxInfo.font_scale;
+		var textboxScaleH = textboxInfo.height / textboxInfo.font_scale;
+		bitsySetTextboxSize(textboxScaleW, textboxScaleH);
 	}
 
 	function textScale() {
@@ -3601,26 +3776,10 @@ var DialogRenderer = function() {
 		return Math.ceil( font.getHeight() * textboxInfo.font_scale );
 	}
 
-	var context = null;
-	this.AttachContext = function(c) {
-		context = c;
-	};
-
 	this.ClearTextbox = function() {
-		if(context == null) return;
-
-		//create new image none exists
-		if(textboxInfo.img == null)
-			textboxInfo.img = context.createImageData(textboxInfo.width*scale, textboxInfo.height*scale);
-
-		// fill text box with black
-		for (var i=0;i<textboxInfo.img.data.length;i+=4)
-		{
-			textboxInfo.img.data[i+0]=0;
-			textboxInfo.img.data[i+1]=0;
-			textboxInfo.img.data[i+2]=0;
-			textboxInfo.img.data[i+3]=255;
-		}
+		bitsyDrawBegin(1);
+		bitsyClear(textBackgroundIndex);
+		bitsyDrawEnd();
 	};
 
 	var isCentered = false;
@@ -3629,18 +3788,22 @@ var DialogRenderer = function() {
 	};
 
 	this.DrawTextbox = function() {
-		if(context == null) return;
+		bitsyDrawBegin(0);
+
 		if (isCentered) {
-			context.putImageData(textboxInfo.img, textboxInfo.left*scale, ((height/2)-(textboxInfo.height/2))*scale);
+			// todo : will the height calculations always work?
+			bitsyDrawTextbox(textboxInfo.left, ((height / 2) - (textboxInfo.height / 2)));
 		}
-		else if (player().y < mapsize/2) {
-			//bottom
-			context.putImageData(textboxInfo.img, textboxInfo.left*scale, (height-textboxInfo.bottom-textboxInfo.height)*scale);
+		else if (player().y < (mapsize / 2)) {
+			// bottom
+			bitsyDrawTextbox(textboxInfo.left, (height - textboxInfo.bottom - textboxInfo.height));
 		}
 		else {
-			//top
-			context.putImageData(textboxInfo.img, textboxInfo.left*scale, textboxInfo.top*scale);
+			// top
+			bitsyDrawTextbox(textboxInfo.left, textboxInfo.top);
 		}
+
+		bitsyDrawEnd();
 	};
 
 	var arrowdata = [
@@ -3648,12 +3811,15 @@ var DialogRenderer = function() {
 		0,1,1,1,0,
 		0,0,1,0,0
 	];
+
 	this.DrawNextArrow = function() {
 		// bitsyLog("draw arrow!");
-		var top = (textboxInfo.height-5) * scale;
-		var left = (textboxInfo.width-(5+4)) * scale;
+		bitsyDrawBegin(1);
+
+		var top = (textboxInfo.height - 5) * text_scale;
+		var left = (textboxInfo.width - (5 + 4)) * text_scale;
 		if (textDirection === TextDirection.RightToLeft) { // RTL hack
-			left = 4 * scale;
+			left = 4 * text_scale;
 		}
 
 		for (var y = 0; y < 3; y++) {
@@ -3661,22 +3827,22 @@ var DialogRenderer = function() {
 				var i = (y * 5) + x;
 				if (arrowdata[i] == 1) {
 					//scaling nonsense
-					for (var sy = 0; sy < scale; sy++) {
-						for (var sx = 0; sx < scale; sx++) {
-							var pxl = 4 * ( ((top+(y*scale)+sy) * (textboxInfo.width*scale)) + (left+(x*scale)+sx) );
-							textboxInfo.img.data[pxl+0] = 255;
-							textboxInfo.img.data[pxl+1] = 255;
-							textboxInfo.img.data[pxl+2] = 255;
-							textboxInfo.img.data[pxl+3] = 255;
+					for (var sy = 0; sy < text_scale; sy++) {
+						for (var sx = 0; sx < text_scale; sx++) {
+							bitsyDrawPixel(textArrowIndex, left + (x * text_scale) + sx, top + (y * text_scale) + sy);
 						}
 					}
 				}
 			}
 		}
+
+		bitsyDrawEnd();
 	};
 
 	var text_scale = 2; //using a different scaling factor for text feels like cheating... but it looks better
 	this.DrawChar = function(char, row, col, leftPos) {
+		bitsyDrawBegin(1);
+
 		char.offset = {
 			x: char.base_offset.x,
 			y: char.base_offset.y
@@ -3687,46 +3853,21 @@ var DialogRenderer = function() {
 
 		var charData = char.bitmap;
 
-		var top = (4 * scale) + (row * 2 * scale) + (row * font.getHeight() * text_scale) + Math.floor( char.offset.y );
-		var left = (4 * scale) + (leftPos * text_scale) + Math.floor( char.offset.x );
-
-		var debug_r = Math.random() * 255;
+		var top = (4 * text_scale) + (row * 2 * text_scale) + (row * font.getHeight()) + Math.floor(char.offset.y);
+		var left = (4 * text_scale) + leftPos + Math.floor(char.offset.x);
 
 		for (var y = 0; y < char.height; y++) {
 			for (var x = 0; x < char.width; x++) {
-
 				var i = (y * char.width) + x;
-				if ( charData[i] == 1 ) {
-
-					//scaling nonsense
-					for (var sy = 0; sy < text_scale; sy++) {
-						for (var sx = 0; sx < text_scale; sx++) {
-							var pxl = 4 * ( ((top+(y*text_scale)+sy) * (textboxInfo.width*scale)) + (left+(x*text_scale)+sx) );
-							textboxInfo.img.data[pxl+0] = char.color.r;
-							textboxInfo.img.data[pxl+1] = char.color.g;
-							textboxInfo.img.data[pxl+2] = char.color.b;
-							textboxInfo.img.data[pxl+3] = char.color.a;
-						}
-					}
+				if (charData[i] == 1) {
+					// todo : other colors
+					bitsyDrawPixel(char.color, left + x, top + y);
 				}
-				// else {
-				// 	// DEBUG
-
-				// 	//scaling nonsense
-				// 	for (var sy = 0; sy < text_scale; sy++) {
-				// 		for (var sx = 0; sx < text_scale; sx++) {
-				// 			var pxl = 4 * ( ((top+(y*text_scale)+sy) * (textboxInfo.width*scale)) + (left+(x*text_scale)+sx) );
-				// 			textboxInfo.img.data[pxl+0] = debug_r;
-				// 			textboxInfo.img.data[pxl+1] = 0;
-				// 			textboxInfo.img.data[pxl+2] = 0;
-				// 			textboxInfo.img.data[pxl+3] = 255;
-				// 		}
-				// 	}
-				// }
-
 			}
 		}
-		
+
+		bitsyDrawEnd();
+
 		// call printHandler for character
 		char.OnPrint();
 	};
@@ -3963,7 +4104,7 @@ var DialogBuffer = function() {
 	function DialogChar(effectList) {
 		this.effectList = effectList.slice(); // clone effect list (since it can change between chars)
 
-		this.color = { r:255, g:255, b:255, a:255 };
+		this.color = textColorIndex; // white
 		this.offset = { x:0, y:0 }; // in pixels (screen pixels?)
 
 		this.col = 0;
@@ -4022,14 +4163,14 @@ var DialogBuffer = function() {
 	function DialogDrawingChar(drawingId, effectList) {
 		Object.assign(this, new DialogChar(effectList));
 
-		var imageData = renderer.GetImageSource(drawingId)[0];
-		var imageDataFlat = [];
-		for (var i = 0; i < imageData.length; i++) {
-			// bitsyLog(imageData[i]);
-			imageDataFlat = imageDataFlat.concat(imageData[i]);
+		// get the first frame of the drawing and flatten it
+		var drawingData = renderer.GetDrawingSource(drawingId)[0];
+		var drawingDataFlat = [];
+		for (var i = 0; i < drawingData.length; i++) {
+			drawingDataFlat = drawingDataFlat.concat(drawingData[i]);
 		}
 
-		this.bitmap = imageDataFlat;
+		this.bitmap = drawingDataFlat;
 		this.width = 8;
 		this.height = 8;
 		this.spacing = 8;
@@ -4461,34 +4602,18 @@ var ArabicHandler = function() {
 }
 
 /* NEW TEXT EFFECTS */
-var TextEffects = new Map();
+var TextEffects = {};
 
-var RainbowEffect = function() { // TODO - should it be an object or just a method?
-	this.DoEffect = function(char,time) {
-		// bitsyLog("RAINBOW!!!");
-		// bitsyLog(char);
-		// bitsyLog(char.color);
-		// bitsyLog(char.col);
-
-		var h = Math.abs( Math.sin( (time / 600) - (char.col / 8) ) );
-		var rgb = hslToRgb( h, 1, 0.5 );
-		char.color.r = rgb[0];
-		char.color.g = rgb[1];
-		char.color.b = rgb[2];
-		char.color.a = 255;
+var RainbowEffect = function() {
+	this.DoEffect = function(char, time) {
+		char.color = rainbowColorStartIndex + Math.floor(((time / 100) - char.col * 0.5) % rainbowColorCount);
 	}
 };
 TextEffects["rbw"] = new RainbowEffect();
 
 var ColorEffect = function(index) {
 	this.DoEffect = function(char) {
-		var pal = getPal( curPal() );
-		var color = pal[ parseInt( index ) ];
-		// bitsyLog(color);
-		char.color.r = color[0];
-		char.color.g = color[1];
-		char.color.b = color[2];
-		char.color.a = 255;
+		char.color = tileColorStartIndex + index;
 	}
 };
 TextEffects["clr1"] = new ColorEffect(0);
@@ -4497,164 +4622,102 @@ TextEffects["clr3"] = new ColorEffect(2);
 
 var WavyEffect = function() {
 	this.DoEffect = function(char,time) {
-		char.offset.y += Math.sin( (time / 250) - (char.col / 2) ) * 4;
+		char.offset.y += Math.sin((time / 250) - (char.col / 2)) * 2;
 	}
 };
 TextEffects["wvy"] = new WavyEffect();
 
 var ShakyEffect = function() {
-	function disturb(func,time,offset,mult1,mult2) {
-		return func( (time * mult1) - (offset * mult2) );
+	function disturb(func, time, offset, mult1, mult2) {
+		return func((time * mult1) - (offset * mult2));
 	}
 
 	this.DoEffect = function(char,time) {
-		char.offset.y += 3
-						* disturb(Math.sin,time,char.col,0.1,0.5)
-						* disturb(Math.cos,time,char.col,0.3,0.2)
-						* disturb(Math.sin,time,char.row,2.0,1.0);
-		char.offset.x += 3
-						* disturb(Math.cos,time,char.row,0.1,1.0)
-						* disturb(Math.sin,time,char.col,3.0,0.7)
-						* disturb(Math.cos,time,char.col,0.2,0.3);
+		char.offset.y += 1.5
+						* disturb(Math.sin, time, char.col, 0.1, 0.5)
+						* disturb(Math.cos, time, char.col, 0.3, 0.2)
+						* disturb(Math.sin, time, char.row, 2.0, 1.0);
+		char.offset.x += 1.5
+						* disturb(Math.cos, time, char.row, 0.1, 1.0)
+						* disturb(Math.sin, time, char.col, 3.0, 0.7)
+						* disturb(Math.cos, time, char.col, 0.2, 0.3);
 	}
 };
 TextEffects["shk"] = new ShakyEffect();
 
 var DebugHighlightEffect = function() {
 	this.DoEffect = function(char) {
-		char.color.r = 255;
-		char.color.g = 255;
-		char.color.b = 0;
-		char.color.a = 255;
+		char.color = tileColorStartIndex;
 	}
 }
 TextEffects["_debug_highlight"] = new DebugHighlightEffect();
 
 } // Dialog()
-</script>
+<\/script>
 
 <script>
-/*
-TODO
-- reset renderer function
-- react to changes in: drawings, palettes
-- possible future plan: limit size of cache (remove old images)
-- change image store path from (pal > col > draw) to (draw > pal > col)
-- get rid of old getSpriteImage (etc) methods
-- get editor working again [in progress]
-- move debug timer class into core (seems useful)
-*/
+function TileRenderer(tilesize) {
+// todo : do I need to pass in tilesize? or can I use the global value?
 
-function Renderer(tilesize, scale) {
+bitsyLog("!!!!! NEW TILE RENDERER");
 
-bitsyLog("!!!!! NEW RENDERER");
-
-var imageStore = { // TODO : rename to imageCache
+var drawingCache = {
 	source: {},
-	render: {}
+	render: {},
 };
 
-var palettes = null; // TODO : need null checks?
-var context = null;
+// var debugRenderCount = 0;
 
-function setPalettes(paletteObj) {
-	palettes = paletteObj;
-
-	// TODO : should this really clear out the render cache?
-	imageStore.render = {};
+function createRenderCacheId(drawingId, colorIndex) {
+	return drawingId + "_" + colorIndex;
 }
 
-function getPaletteColor(paletteId, colorIndex) {
-	if (palettes[paletteId] === undefined) {
-		paletteId = "default";
-	}
-
-	var palette = palettes[paletteId];
-
-	if (colorIndex > palette.colors.length) { // do I need this failure case? (seems un-reliable)
-		colorIndex = 0;
-	}
-
-	var color = palette.colors[colorIndex];
-
-	return {
-		r : color[0],
-		g : color[1],
-		b : color[2]
-	};
-}
-
-var debugRenderCount = 0;
-
-// TODO : change image store path from (pal > col > draw) to (draw > pal > col)
-function renderImage(drawing, paletteId) {
+function renderDrawing(drawing) {
 	// debugRenderCount++;
 	// bitsyLog("RENDER COUNT " + debugRenderCount);
 
 	var col = drawing.col;
-	var colStr = "" + col;
-	var pal = paletteId;
 	var drwId = drawing.drw;
-	var imgSrc = imageStore.source[ drawing.drw ];
+	var drawingFrames = drawingCache.source[drwId];
 
 	// initialize render cache entry
-	if (imageStore.render[drwId] === undefined || imageStore.render[drwId] === null) {
-		imageStore.render[drwId] = {};
+	var cacheId = createRenderCacheId(drwId, col);
+	if (drawingCache.render[cacheId] === undefined) {
+		// initialize array of frames for drawing
+		drawingCache.render[cacheId] = [];
 	}
 
-	if (imageStore.render[drwId][pal] === undefined || imageStore.render[drwId][pal] === null) {
-		imageStore.render[drwId][pal] = {};
-	}
-
-	// create array of ImageData frames
-	imageStore.render[drwId][pal][colStr] = [];
-
-	for (var i = 0; i < imgSrc.length; i++) {
-		var frameSrc = imgSrc[i];
-		var frameData = imageDataFromImageSource( frameSrc, pal, col );
-		imageStore.render[drwId][pal][colStr].push(frameData);
+	for (var i = 0; i < drawingFrames.length; i++) {
+		var frameData = drawingFrames[i];
+		var frameTileId = renderTileFromDrawingData(frameData, col);
+		drawingCache.render[cacheId].push(frameTileId);
 	}
 }
 
-function imageDataFromImageSource(imageSource, pal, col) {
-	//bitsyLog(imageSource);
+function renderTileFromDrawingData(drawingData, col) {
+	var tileId = bitsyAddTile();
 
-	var img = context.createImageData(tilesize*scale,tilesize*scale);
+	var backgroundColor = tileColorStartIndex + 0;
+	var foregroundColor = tileColorStartIndex + col;
 
-	var backgroundColor = getPaletteColor(pal,0);
-	var foregroundColor = getPaletteColor(pal,col);
+	bitsyDrawBegin(tileId);
 
 	for (var y = 0; y < tilesize; y++) {
 		for (var x = 0; x < tilesize; x++) {
-			var px = imageSource[y][x];
-			for (var sy = 0; sy < scale; sy++) {
-				for (var sx = 0; sx < scale; sx++) {
-					var pxl = (((y * scale) + sy) * tilesize * scale * 4) + (((x*scale) + sx) * 4);
-					if ( px === 1 ) {
-						img.data[pxl + 0] = foregroundColor.r;
-						img.data[pxl + 1] = foregroundColor.g;
-						img.data[pxl + 2] = foregroundColor.b;
-						img.data[pxl + 3] = 255;
-					}
-					else { //ch === 0
-						img.data[pxl + 0] = backgroundColor.r;
-						img.data[pxl + 1] = backgroundColor.g;
-						img.data[pxl + 2] = backgroundColor.b;
-						img.data[pxl + 3] = 255;
-					}
-				}
+			var px = drawingData[y][x];
+
+			if (px === 1) {
+				bitsyDrawPixel(foregroundColor, x, y);
+			}
+			else {
+				bitsyDrawPixel(backgroundColor, x, y);
 			}
 		}
 	}
 
-	// convert to canvas: chrome has poor performance when working directly with image data
-	var imageCanvas = document.createElement("canvas");
-	imageCanvas.width = img.width;
-	imageCanvas.height = img.height;
-	var imageContext = imageCanvas.getContext("2d");
-	imageContext.putImageData(img,0,0);
+	bitsyDrawEnd();
 
-	return imageCanvas;
+	return tileId;
 }
 
 // TODO : move into core
@@ -4662,29 +4725,20 @@ function undefinedOrNull(x) {
 	return x === undefined || x === null;
 }
 
-function isImageRendered(drawing, paletteId) {
-	var col = drawing.col;
-	var colStr = "" + col;
-	var pal = paletteId;
-	var drwId = drawing.drw;
-
-	if (undefinedOrNull(imageStore.render[drwId]) ||
-		undefinedOrNull(imageStore.render[drwId][pal]) ||
-		undefinedOrNull(imageStore.render[drwId][pal][colStr])) {
-			return false;
-	}
-	else {
-		return true;
-	}
+function isDrawingRendered(drawing) {
+	var cacheId = createRenderCacheId(drawing.drw, drawing.col);
+	return drawingCache.render[cacheId] != undefined;
 }
 
-function getImageSet(drawing, paletteId) {
-	return imageStore.render[drawing.drw][paletteId][drawing.col];
+function getRenderedDrawingFrames(drawing) {
+	var cacheId = createRenderCacheId(drawing.drw, drawing.col);
+	return drawingCache.render[cacheId];
 }
 
-function getImageFrame(drawing, paletteId, frameOverride) {
+function getDrawingFrameTileId(drawing, frameOverride) {
 	var frameIndex = 0;
-	if (drawing.animation.isAnimated) {
+
+	if (drawing != null && drawing.animation.isAnimated) {
 		if (frameOverride != undefined && frameOverride != null) {
 			frameIndex = frameOverride;
 		}
@@ -4693,52 +4747,45 @@ function getImageFrame(drawing, paletteId, frameOverride) {
 		}
 	}
 
-	return getImageSet(drawing, paletteId)[frameIndex];
+	return getRenderedDrawingFrames(drawing)[frameIndex];
 }
 
-function getOrRenderImage(drawing, paletteId, frameOverride) {
-	if (!isImageRendered(drawing, paletteId)) {
-		renderImage(drawing, paletteId);
+function getOrRenderDrawingFrame(drawing, frameOverride) {
+	// bitsyLog("frame render: " + drawing.type + " " + drawing.id + " f:" + frameOverride);
+
+	if (!isDrawingRendered(drawing)) {
+		// bitsyLog("frame render: doesn't exist");
+		renderDrawing(drawing);
 	}
 
-	return getImageFrame(drawing, paletteId, frameOverride);
+	return getDrawingFrameTileId(drawing, frameOverride);
 }
 
 /* PUBLIC INTERFACE */
-this.GetImage = getOrRenderImage;
+this.GetDrawingFrame = getOrRenderDrawingFrame;
 
-this.SetPalettes = setPalettes;
-
-this.SetImageSource = function(drawingId, imageSourceData) {
-	imageStore.source[drawingId] = imageSourceData;
-	imageStore.render[drawingId] = {}; // reset render cache for this image
+this.SetDrawingSource = function(drawingId, drawingData) {
+	drawingCache.source[drawingId] = drawingData;
+	// TODO : reset render cache for this image
 }
 
-this.GetImageSource = function(drawingId) {
-	return imageStore.source[drawingId];
+this.GetDrawingSource = function(drawingId) {
+	return drawingCache.source[drawingId];
 }
 
 this.GetFrameCount = function(drawingId) {
-	return imageStore.source[drawingId].length;
-}
-
-this.AttachContext = function(ctx) {
-	context = ctx;
+	return drawingCache.source[drawingId].length;
 }
 
 this.ClearCache = function() {
-	imageStore.render = {};
+	bitsyResetTiles();
+	drawingCache.render = {};
 }
 
 } // Renderer()
-</script>
+<\/script>
 
 <script>
-var xhr; // TODO : remove
-var canvas;
-var context; // TODO : remove if safe?
-var ctx;
-
 var room = {};
 var tile = {};
 var sprite = {};
@@ -4769,22 +4816,26 @@ var TextDirection = {
 };
 var textDirection = TextDirection.LeftToRight;
 
+/* NAME-TO-ID MAPS */
 var names = {
-	room : new Map(),
-	tile : new Map(), // Note: Not currently enabled in the UI
-	sprite : new Map(),
-	item : new Map(),
-	dialog : new Map(),
+	room : {},
+	tile : {},
+	sprite : {},
+	item : {},
+	dialog : {},
 };
+
 function updateNamesFromCurData() {
 
 	function createNameMap(objectStore) {
-		var map = new Map();
+		var map = {};
+
 		for (id in objectStore) {
 			if (objectStore[id].name != undefined && objectStore[id].name != null) {
-				map.set(objectStore[id].name, id);
+				map[objectStore[id].name] = id;
 			}
 		}
+
 		return map;
 	}
 
@@ -4800,7 +4851,7 @@ var spriteStartLocations = {};
 /* VERSION */
 var version = {
 	major: 7, // major changes
-	minor: 8, // smaller changes
+	minor: 10, // smaller changes
 	devBuildPhase: "RELEASE",
 };
 function getEngineVersion() {
@@ -4840,14 +4891,7 @@ function clearGameData() {
 
 	spriteStartLocations = {};
 
-	// hacky to have this multiple times...
-	names = {
-		room : new Map(),
-		tile : new Map(),
-		sprite : new Map(),
-		item : new Map(),
-		dialog : new Map(),
-	};
+	updateNamesFromCurData();
 
 	fontName = defaultFontName; // TODO : reset font manager too?
 	textDirection = TextDirection.LeftToRight;
@@ -4872,35 +4916,25 @@ var onInitRoom = null;
 
 var isPlayerEmbeddedInEditor = false;
 
-var renderer = new Renderer(tilesize, scale);
-
-function getGameNameFromURL() {
-	var game = window.location.hash.substring(1);
-	// bitsyLog("game name --- " + game);
-	return game;
-}
-
-function attachCanvas(c) {
-	canvas = c;
-	canvas.width = width * scale;
-	canvas.height = width * scale;
-	ctx = canvas.getContext("2d");
-	dialogRenderer.AttachContext(ctx);
-	renderer.AttachContext(ctx);
-}
+var renderer = new TileRenderer(tilesize);
 
 var curGameData = null;
-function load_game(game_data, startWithTitle) {
-	curGameData = game_data; //remember the current game (used to reset the game)
+var curDefaultFontData = null;
+
+function load_game(gameData, defaultFontData, startWithTitle) {
+	curGameData = gameData; //remember the current game (used to reset the game)
 
 	dialogBuffer.Reset();
 	scriptInterpreter.ResetEnvironment(); // ensures variables are reset -- is this the best way?
 
-	parseWorld(game_data);
+	parseWorld(gameData);
 
-	if (!isPlayerEmbeddedInEditor) {
+	if (!isPlayerEmbeddedInEditor && defaultFontData) {
+		curDefaultFontData = defaultFontData; // store for resetting game
+
+		// todo : consider replacing this with a more general system for requesting resources from the system?
 		// hack to ensure default font is available
-		fontManager.AddResource(defaultFontName + fontManager.GetExtension(), document.getElementById(defaultFontName).text.slice(1));
+		fontManager.AddResource(defaultFontName + fontManager.GetExtension(), defaultFontData);
 	}
 
 	var font = fontManager.Get( fontName );
@@ -4919,7 +4953,7 @@ function reset_cur_game() {
 
 	stopGame();
 	clearGameData();
-	load_game(curGameData);
+	load_game(curGameData, curDefaultFontData);
 
 	if (isPlayerEmbeddedInEditor && onGameReset != null) {
 		onGameReset();
@@ -4972,99 +5006,6 @@ function stopGame() {
 	bitsyLog("stop GAME!");
 }
 
-/* loading animation */
-var loading_anim_data = [
-	[
-		0,1,1,1,1,1,1,0,
-		0,0,1,1,1,1,0,0,
-		0,0,1,1,1,1,0,0,
-		0,0,0,1,1,0,0,0,
-		0,0,0,1,1,0,0,0,
-		0,0,1,0,0,1,0,0,
-		0,0,1,0,0,1,0,0,
-		0,1,1,1,1,1,1,0,
-	],
-	[
-		0,1,1,1,1,1,1,0,
-		0,0,1,0,0,1,0,0,
-		0,0,1,1,1,1,0,0,
-		0,0,0,1,1,0,0,0,
-		0,0,0,1,1,0,0,0,
-		0,0,1,0,0,1,0,0,
-		0,0,1,1,1,1,0,0,
-		0,1,1,1,1,1,1,0,
-	],
-	[
-		0,1,1,1,1,1,1,0,
-		0,0,1,0,0,1,0,0,
-		0,0,1,0,0,1,0,0,
-		0,0,0,1,1,0,0,0,
-		0,0,0,1,1,0,0,0,
-		0,0,1,1,1,1,0,0,
-		0,0,1,1,1,1,0,0,
-		0,1,1,1,1,1,1,0,
-	],
-	[
-		0,1,1,1,1,1,1,0,
-		0,0,1,0,0,1,0,0,
-		0,0,1,0,0,1,0,0,
-		0,0,0,1,1,0,0,0,
-		0,0,0,1,1,0,0,0,
-		0,0,1,1,1,1,0,0,
-		0,0,1,1,1,1,0,0,
-		0,1,1,1,1,1,1,0,
-	],
-	[
-		0,0,0,0,0,0,0,0,
-		1,0,0,0,0,0,0,1,
-		1,1,1,0,0,1,1,1,
-		1,1,1,1,1,0,0,1,
-		1,1,1,1,1,0,0,1,
-		1,1,1,0,0,1,1,1,
-		1,0,0,0,0,0,0,1,
-		0,0,0,0,0,0,0,0,
-	]
-];
-var loading_anim_frame = 0;
-var loading_anim_speed = 500;
-
-function loadingAnimation() {
-	//create image
-	var loadingAnimImg = ctx.createImageData(8*scale, 8*scale);
-	//draw image
-	for (var y = 0; y < 8; y++) {
-		for (var x = 0; x < 8; x++) {
-			var i = (y * 8) + x;
-			if (loading_anim_data[loading_anim_frame][i] == 1) {
-				//scaling nonsense
-				for (var sy = 0; sy < scale; sy++) {
-					for (var sx = 0; sx < scale; sx++) {
-						var pxl = 4 * ( (((y*scale)+sy) * (8*scale)) + ((x*scale)+sx) );
-						loadingAnimImg.data[pxl+0] = 255;
-						loadingAnimImg.data[pxl+1] = 255;
-						loadingAnimImg.data[pxl+2] = 255;
-						loadingAnimImg.data[pxl+3] = 255;
-					}
-				}
-			}
-		}
-	}
-	//put image on canvas
-	ctx.putImageData(loadingAnimImg,scale*(width/2 - 4),scale*(height/2 - 4));
-	//update frame
-	loading_anim_frame++;
-	if (loading_anim_frame >= 5) loading_anim_frame = 0;
-}
-
-function updateLoadingScreen() {
-	// TODO : in progress
-	ctx.fillStyle = "rgb(0,0,0)";
-	ctx.fillRect(0,0,canvas.width,canvas.height);
-
-	loadingAnimation();
-	drawSprite( getSpriteImage(sprite["a"],"0",0), 8, 8, ctx );
-}
-
 function update() {
 	var curTime = Date.now();
 	deltaTime = curTime - prevTime;
@@ -5083,14 +5024,14 @@ function update() {
 		transition.UpdateTransition(deltaTime);
 	}
 	else {
+		bitsySetGraphicsMode(1);
+
 		if (!isNarrating && !isEnding) {
 			updateAnimation();
-			drawRoom( room[curRoom] ); // draw world if game has begun
+			drawRoom(room[curRoom]); // draw world if game has begun
 		}
 		else {
-			//make sure to still clear screen
-			ctx.fillStyle = "rgb(" + getPal(curPal())[0][0] + "," + getPal(curPal())[0][1] + "," + getPal(curPal())[0][2] + ")";
-			ctx.fillRect(0,0,canvas.width,canvas.height);
+			clearRoom();
 		}
 
 		// if (isDialogMode) { // dialog mode
@@ -5120,9 +5061,13 @@ function update() {
 var isAnyButtonHeld = false;
 var isIgnoringInput = false;
 
+function isAnyButtonDown() {
+	return bitsyGetButton(0) || bitsyGetButton(1) || bitsyGetButton(2) || bitsyGetButton(3) || bitsyGetButton(4);
+}
+
 function updateInput() {
 	if (dialogBuffer.IsActive()) {
-		if (!isAnyButtonHeld && bitsyButton()) {
+		if (!isAnyButtonHeld && isAnyButtonDown()) {
 			/* CONTINUE DIALOG */
 			if (dialogBuffer.CanContinue()) {
 				var hasMoreDialog = dialogBuffer.Continue();
@@ -5138,7 +5083,7 @@ function updateInput() {
 		}
 	}
 	else if (isEnding) {
-		if (!isAnyButtonHeld && bitsyButton()) {
+		if (!isAnyButtonHeld && isAnyButtonDown()) {
 			/* RESTART GAME */
 			reset_cur_game();
 		}
@@ -5147,16 +5092,16 @@ function updateInput() {
 		/* WALK */
 		var prevPlayerDirection = curPlayerDirection;
 
-		if (bitsyButton(0)) {
+		if (bitsyGetButton(0)) {
 			curPlayerDirection = Direction.Up;
 		}
-		else if (bitsyButton(1)) {
+		else if (bitsyGetButton(1)) {
 			curPlayerDirection = Direction.Down;
 		}
-		else if (bitsyButton(2)) {
+		else if (bitsyGetButton(2)) {
 			curPlayerDirection = Direction.Left;
 		}
-		else if (bitsyButton(3)) {
+		else if (bitsyGetButton(3)) {
 			curPlayerDirection = Direction.Right;
 		}
 		else {
@@ -5169,11 +5114,11 @@ function updateInput() {
 		}
 	}
 
-	if (!bitsyButton()) {
+	if (!isAnyButtonDown()) {
 		isIgnoringInput = false;
 	}
 
-	isAnyButtonHeld = bitsyButton();
+	isAnyButtonHeld = isAnyButtonDown();
 }
 
 var animationCounter = 0;
@@ -5260,7 +5205,9 @@ var curPlayerDirection = Direction.None;
 var playerHoldToMoveTimer = 0;
 
 function movePlayer(direction) {
-	if (player().room == null || !Object.keys(room).includes(player().room)) {
+	var roomIds = Object.keys(room);
+
+	if (player().room == null || roomIds.indexOf(player().room) < 0) {
 		return; // player room is missing or invalid.. can't move them!
 	}
 
@@ -5323,16 +5270,34 @@ var transition = new TransitionManager();
 function movePlayerThroughExit(ext) {
 	var GoToDest = function() {
 		if (ext.transition_effect != null) {
-			transition.BeginTransition(player().room, player().x, player().y, ext.dest.room, ext.dest.x, ext.dest.y, ext.transition_effect);
+			transition.BeginTransition(
+				player().room,
+				player().x,
+				player().y,
+				ext.dest.room,
+				ext.dest.x,
+				ext.dest.y,
+				ext.transition_effect);
+
 			transition.UpdateTransition(0);
+
+			transition.OnTransitionComplete(function() {
+				player().room = ext.dest.room;
+				player().x = ext.dest.x;
+				player().y = ext.dest.y;
+				curRoom = ext.dest.room;
+
+				initRoom(curRoom);
+			});
 		}
+		else {
+			player().room = ext.dest.room;
+			player().x = ext.dest.x;
+			player().y = ext.dest.y;
+			curRoom = ext.dest.room;
 
-		player().room = ext.dest.room;
-		player().x = ext.dest.x;
-		player().y = ext.dest.y;
-		curRoom = ext.dest.room;
-
-		initRoom(curRoom);
+			initRoom(curRoom);
+		}
 	};
 
 	if (ext.dlg != undefined && ext.dlg != null) {
@@ -5355,7 +5320,66 @@ function movePlayerThroughExit(ext) {
 	}
 }
 
+/* PALETTE INDICES */
+var textBackgroundIndex = 0;
+var textArrowIndex = 1;
+var textColorIndex = 2;
+
+// precalculated rainbow colors
+var rainbowColorStartIndex = 3;
+var rainbowColorCount = 10;
+var rainbowColors = [
+	[255,0,0],
+	[255,217,0],
+	[78,255,0],
+	[0,255,125],
+	[0,192,255],
+	[0,18,255],
+	[136,0,255],
+	[255,0,242],
+	[255,0,138],
+	[255,0,61],
+];
+
+// todo : where should this be stored?
+var tileColorStartIndex = 16;
+
+function updatePaletteWithTileColors(tileColors) {
+	// clear existing colors
+	bitsyResetColors();
+
+	// textbox colors
+	bitsySetColor(textBackgroundIndex, 0, 0, 0); // black
+	bitsySetColor(textArrowIndex, 255, 255, 255); // white
+	bitsySetColor(textColorIndex, 255, 255, 255); // white
+
+	// todo : move this to game init?
+	// rainbow colors
+	for (var i = 0; i < rainbowColorCount; i++) {
+		var color = rainbowColors[i];
+		bitsySetColor(rainbowColorStartIndex + i, color[0], color[1], color[2]);
+	}
+
+	// tile colors
+	for (var i = 0; i < tileColors.length; i++) {
+		var color = tileColors[i];
+		bitsySetColor(tileColorStartIndex + i, color[0], color[1], color[2]);
+	}
+}
+
+function updatePalette(palId) {
+	var pal = palette[palId];
+	bitsyLog(pal.colors.length, "editor");
+	updatePaletteWithTileColors(pal.colors);
+}
+
 function initRoom(roomId) {
+	bitsyLog("init room " + roomId);
+
+	updatePalette(curPal());
+
+	renderer.ClearCache();
+
 	// init exit properties
 	for (var i = 0; i < room[roomId].exits.length; i++) {
 		room[roomId].exits[i].property = { locked:false };
@@ -5579,7 +5603,8 @@ function parseWorld(file) {
 	placeSprites();
 
 	var roomIds = Object.keys(room);
-	if (player() != undefined && player().room != null && roomIds.includes(player().room)) {
+
+	if (player() != undefined && player().room != null && roomIds.indexOf(player().room) != -1) {
 		// player has valid room
 		curRoom = player().room;
 	}
@@ -5595,8 +5620,6 @@ function parseWorld(file) {
 	if (curRoom != null) {
 		initRoom(curRoom);
 	}
-
-	renderer.SetPalettes(palette);
 
 	scriptCompatibility(compatibilityFlags);
 
@@ -5847,17 +5870,17 @@ function serializeWorld(skipFonts) {
 }
 
 function serializeDrawing(drwId) {
-	var imageSource = renderer.GetImageSource(drwId);
+	var drawingData = renderer.GetDrawingSource(drwId);
 	var drwStr = "";
-	for (f in imageSource) {
-		for (y in imageSource[f]) {
+	for (f in drawingData) {
+		for (y in drawingData[f]) {
 			var rowStr = "";
-			for (x in imageSource[f][y]) {
-				rowStr += imageSource[f][y][x];
+			for (x in drawingData[f][y]) {
+				rowStr += drawingData[f][y][x];
 			}
 			drwStr += rowStr + "\\n";
 		}
-		if (f < (imageSource.length-1)) drwStr += ">\\n";
+		if (f < (drawingData.length-1)) drwStr += ">\\n";
 	}
 	return drwStr;
 }
@@ -6059,7 +6082,7 @@ function parseRoom(lines, i, compatibilityFlags) {
 		else if (getType(lines[i]) === "NAME") {
 			var name = lines[i].split(/\\s(.+)/)[1];
 			room[id].name = name;
-			names.room.set(name, id);
+			names.room[name] = id;
 		}
 
 		i++;
@@ -6116,7 +6139,7 @@ function parseTile(lines, i) {
 		else if (getType(lines[i]) === "NAME") {
 			/* NAME */
 			tileData.name = lines[i].split(/\\s(.+)/)[1];
-			names.tile.set(tileData.name, id);
+			names.tile[tileData.name] = id;
 		}
 		else if (getType(lines[i]) === "WAL") {
 			var wallArg = getArg(lines[i], 1);
@@ -6176,7 +6199,7 @@ function parseSprite(lines, i) {
 		else if (getType(lines[i]) === "NAME") {
 			/* NAME */
 			spriteData.name = lines[i].split(/\\s(.+)/)[1];
-			names.sprite.set(spriteData.name, id);
+			names.sprite[spriteData.name] = id;
 		}
 		else if (getType(lines[i]) === "ITM") {
 			/* ITEM STARTING INVENTORY */
@@ -6219,7 +6242,7 @@ function parseItem(lines, i) {
 		else if (getType(lines[i]) === "NAME") {
 			/* NAME */
 			itemData.name = lines[i].split(/\\s(.+)/)[1];
-			names.item.set(itemData.name, id);
+			names.item[itemData.name] = id;
 		}
 
 		i++;
@@ -6264,7 +6287,7 @@ function parseDrawingCore(lines, i, drwId) {
 		}
 	}
 
-	renderer.SetImageSource(drwId, frameList);
+	renderer.SetDrawingSource(drwId, frameList);
 
 	return i;
 }
@@ -6340,7 +6363,7 @@ function parseDialog(lines, i, compatibilityFlags) {
 
 	if (lines[i].length > 0 && getType(lines[i]) === "NAME") {
 		dialog[id].name = lines[i].split(/\\s(.+)/)[1]; // TODO : hacky to keep copying this regex around...
-		names.dialog.set(dialog[id].name, id);
+		names.dialog[dialog[id].name] = id;
 		i++;
 	}
 
@@ -6401,54 +6424,62 @@ function parseFlag(lines, i) {
 	return i;
 }
 
-function drawTile(img,x,y,context) {
-	if (!context) { //optional pass in context; otherwise, use default
-		context = ctx;
-	}
-	// NOTE: images are now canvases, instead of raw image data (for chrome performance reasons)
-	context.drawImage(img,x*tilesize*scale,y*tilesize*scale,tilesize*scale,tilesize*scale);
+function drawTile(tileId, x, y) {
+	bitsyDrawBegin(0);
+	bitsyDrawTile(tileId, x, y);
+	bitsyDrawEnd();
 }
 
-function drawSprite(img,x,y,context) { //this may differ later (or not haha)
-	drawTile(img,x,y,context);
+function drawSprite(tileId, x, y) {
+	drawTile(tileId, x, y);
 }
 
-function drawItem(img,x,y,context) {
-	drawTile(img,x,y,context); //TODO these methods are dumb and repetitive
+function drawItem(tileId, x, y) {
+	drawTile(tileId, x, y);
 }
 
 // var debugLastRoomDrawn = "0";
 
-function drawRoom(room,context,frameIndex) { // context & frameIndex are optional
-	if (!context) { //optional pass in context; otherwise, use default (ok this is REAL hacky isn't it)
-		context = ctx;
+function clearRoom() {
+	var paletteId = "default";
+
+	if (room === undefined) {
+		// protect against invalid rooms
+		return;
 	}
 
+	if (room.pal != null && palette[paletteId] != undefined) {
+		paletteId = room.pal;
+	}
+
+	bitsyDrawBegin(0);
+	bitsyClear(tileColorStartIndex);
+	bitsyDrawEnd();
+}
+
+function drawRoom(room, frameIndex) { // frameIndex is optional
 	// if (room.id != debugLastRoomDrawn) {
 	// 	debugLastRoomDrawn = room.id;
 	// 	bitsyLog("DRAW ROOM " + debugLastRoomDrawn);
 	// }
 
-	var paletteId = "default";
-
 	if (room === undefined) {
 		// protect against invalid rooms
-		context.fillStyle = "rgb(" + getPal(paletteId)[0][0] + "," + getPal(paletteId)[0][1] + "," + getPal(paletteId)[0][2] + ")";
-		context.fillRect(0,0,canvas.width,canvas.height);
 		return;
 	}
 
-	//clear screen
-	if (room.pal != null && palette[paletteId] != undefined) {
-		paletteId = room.pal;
-	}
-	context.fillStyle = "rgb(" + getPal(paletteId)[0][0] + "," + getPal(paletteId)[0][1] + "," + getPal(paletteId)[0][2] + ")";
-	context.fillRect(0,0,canvas.width,canvas.height);
+	// clear the screen buffer
+	bitsyDrawBegin(0);
+	bitsyClear(tileColorStartIndex);
+	bitsyDrawEnd();
 
 	//draw tiles
 	for (i in room.tilemap) {
 		for (j in room.tilemap[i]) {
 			var id = room.tilemap[i][j];
+			var x = parseInt(j);
+			var y = parseInt(i);
+
 			if (id != "0") {
 				//bitsyLog(id);
 				if (tile[id] == null) { // hack-around to avoid corrupting files (not a solution though!)
@@ -6457,7 +6488,7 @@ function drawRoom(room,context,frameIndex) { // context & frameIndex are optiona
 				}
 				else {
 					// bitsyLog(id);
-					drawTile( getTileImage(tile[id],paletteId,frameIndex), j, i, context );
+					drawTile(getTileFrame(tile[id], frameIndex), x, y);
 				}
 			}
 		}
@@ -6466,29 +6497,29 @@ function drawRoom(room,context,frameIndex) { // context & frameIndex are optiona
 	//draw items
 	for (var i = 0; i < room.items.length; i++) {
 		var itm = room.items[i];
-		drawItem( getItemImage(item[itm.id],paletteId,frameIndex), itm.x, itm.y, context );
+		drawItem(getItemFrame(item[itm.id], frameIndex), itm.x, itm.y);
 	}
 
 	//draw sprites
 	for (id in sprite) {
 		var spr = sprite[id];
 		if (spr.room === room.id) {
-			drawSprite( getSpriteImage(spr,paletteId,frameIndex), spr.x, spr.y, context );
+			drawSprite(getSpriteFrame(spr, frameIndex), spr.x, spr.y);
 		}
 	}
 }
 
 // TODO : remove these get*Image methods
-function getTileImage(t,palId,frameIndex) {
-	return renderer.GetImage(t,palId,frameIndex);
+function getTileFrame(t, frameIndex) {
+	return renderer.GetDrawingFrame(t, frameIndex);
 }
 
-function getSpriteImage(s,palId,frameIndex) {
-	return renderer.GetImage(s,palId,frameIndex);
+function getSpriteFrame(s, frameIndex) {
+	return renderer.GetDrawingFrame(s, frameIndex);
 }
 
-function getItemImage(itm,palId,frameIndex) {
-	return renderer.GetImage(itm,palId,frameIndex);
+function getItemFrame(itm, frameIndex) {
+	return renderer.GetDrawingFrame(itm, frameIndex);
 }
 
 function curPal() {
@@ -6676,7 +6707,7 @@ var scriptUtils = scriptModule.CreateUtils(); // TODO: move to editor.js?
 bitsyOnUpdate(update);
 bitsyOnQuit(stopGame);
 bitsyOnLoad(load_game);
-</script>
+<\/script>
 
 <!-- store default font in separate script tag for back compat-->
 <!-- Borksy modification: uses better encoded default font. -->
@@ -8843,16 +8874,16 @@ CHAR 9835
 011011
 011000
 000000
-</script>
+<\/script>
 
 <!-- BORKSY HACKS -->
 <script type="text/javascript" id="borksyHacks">
 {{{HACKS}}}
-</script>
+<\/script>
 
 <script type="text/javascript" id="borksyAdditionalJS">
 {{{ADDITIONALJS}}}
-</script>
+<\/script>
 
 </head>
 

@@ -5,7 +5,7 @@ const t=`<!DOCTYPE HTML>
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy 7.11 -->
+<!-- Bitsy HD ~> Bitsy 7.11 -->
 <head>
 
 <meta charset="UTF-8">
@@ -14,7 +14,7 @@ const t=`<!DOCTYPE HTML>
 
 <script type="text/bitsyGameData" id="exportedGameData">
 {{{GAMEDATA}}}
-</script>
+<\/script>
 
 <style>
 {{{CSS}}}
@@ -29,7 +29,7 @@ function startExportedGame() {
 	attachCanvas(gameCanvas);
 	loadGame(gameData, defaultFontData);
 }
-</script>
+<\/script>
 
 <script>
 /* logging */
@@ -277,12 +277,12 @@ var updateInterval = null;
 
 function initSystem() {
 	// temp hack for the editor? unless??
-	drawingBuffers[screenBufferId] = createDrawingBuffer(128, 128, scale);
+	drawingBuffers[screenBufferId] = createDrawingBuffer(256, 256, scale);
 	drawingBuffers[textboxBufferId] = createDrawingBuffer(0, 0, textScale);
 }
 
 function loadGame(gameData, defaultFontData) {
-	drawingBuffers[screenBufferId] = createDrawingBuffer(128, 128, scale);
+	drawingBuffers[screenBufferId] = createDrawingBuffer(256, 256, scale);
 	drawingBuffers[textboxBufferId] = createDrawingBuffer(0, 0, textScale);
 
 	document.addEventListener('keydown', input.onkeydown);
@@ -796,7 +796,7 @@ function bitsyOnQuit(fn) {
 function bitsyOnUpdate(fn) {
 	onUpdateFunction = fn;
 }
-</script>
+<\/script>
 
 <script>
 var TransitionManager = function() {
@@ -878,8 +878,8 @@ var TransitionManager = function() {
 			}
 
 			bitsyDrawBegin(0);
-			for (var y = 0; y < 128; y++) {
-				for (var x = 0; x < 128; x++) {
+			for (var y = 0; y < 256; y++) {
+				for (var x = 0; x < 256; x++) {
 					var color = transitionEffects[curEffect].pixelEffectFunc(transitionStart, transitionEnd, x, y, (step / maxStep));
 					bitsyDrawPixel(color, x, y);
 				}
@@ -1162,7 +1162,7 @@ var TransitionManager = function() {
 	function createRoomPixelBuffer(room) {
 		var pixelBuffer = [];
 
-		for (var i = 0; i < 128 * 128; i++) {
+		for (var i = 0; i < 256 * 256; i++) {
 			pixelBuffer.push(tileColorStartIndex);
 		}
 
@@ -1172,7 +1172,7 @@ var TransitionManager = function() {
 			for (var y = 0; y < tilesize; y++) {
 				for (var x = 0; x < tilesize; x++) {
 					var color = tileColorStartIndex + (frameData[y][x] === 1 ? colorIndex : 0);
-					pixelBuffer[(((ty * tilesize) + y) * 128) + ((tx * tilesize) + x)] = color;
+					pixelBuffer[(((ty * tilesize) + y) * 256) + ((tx * tilesize) + x)] = color;
 				}
 			}
 		}
@@ -1236,11 +1236,11 @@ var TransitionManager = function() {
 
 // todo : is this wrapper still useful?
 var PostProcessImage = function(imageData) {
-	this.Width = 128;
-	this.Height = 128;
+	this.Width = 256;
+	this.Height = 256;
 
 	this.GetPixel = function(x, y) {
-		return imageData[(y * 128) + x];
+		return imageData[(y * 256) + x];
 	};
 
 	this.GetData = function() {
@@ -1254,7 +1254,7 @@ var TransitionInfo = function(image, palette, playerX, playerY) {
 	this.PlayerTilePos = { x: playerX, y: playerY };
 	this.PlayerCenter = { x: Math.floor((playerX * tilesize) + (tilesize / 2)), y: Math.floor((playerY * tilesize) + (tilesize / 2)) };
 };
-</script>
+<\/script>
 
 <script>
 /*
@@ -1476,7 +1476,7 @@ function Font(fontData) {
 }
 
 } // FontManager
-</script>
+<\/script>
 
 <script>
 function Script() {
@@ -3786,7 +3786,7 @@ var Parser = function(env) {
 }
 
 } // Script()
-</script>
+<\/script>
 
 <script>
 function Dialog() {
@@ -3805,9 +3805,9 @@ var DialogRenderer = function() {
 	var textboxInfo = {
 		width : 104,
 		height : 8+4+2+5, //8 for text, 4 for top-bottom padding, 2 for line padding, 5 for arrow
-		top : 12,
-		left : 12,
-		bottom : 12, //for drawing it from the bottom
+		top : 12*2,
+		left : 12*2,
+		bottom : 12*2, //for drawing it from the bottom
 		font_scale : 0.5, // we draw font at half-size compared to everything else
 		padding_vert : 2,
 		padding_horz : 4,
@@ -4714,7 +4714,7 @@ var DebugHighlightEffect = function() {
 TextEffects["_debug_highlight"] = new DebugHighlightEffect();
 
 } // Dialog()
-</script>
+<\/script>
 
 <script>
 function TileRenderer(tilesize) {
@@ -4844,7 +4844,7 @@ this.ClearCache = function() {
 }
 
 } // Renderer()
-</script>
+<\/script>
 
 <script>
 var room = {};
@@ -4958,10 +4958,10 @@ function clearGameData() {
 	textDirection = TextDirection.LeftToRight;
 }
 
-var width = 128;
-var height = 128;
-var scale = 4; //this is stupid but necessary
-var tilesize = 8;
+var width = 256;
+var height = 256;
+var scale = 2; //this is stupid but necessary
+var tilesize = 16;
 var mapsize = 16;
 
 var curRoom = "0";
@@ -6768,7 +6768,7 @@ var scriptUtils = scriptModule.CreateUtils(); // TODO: move to editor.js?
 bitsyOnUpdate(update);
 bitsyOnQuit(stopGame);
 bitsyOnLoad(load_game);
-</script>
+<\/script>
 
 <!-- store default font in separate script tag for back compat-->
 <!-- Borksy modification: uses better encoded default font. -->
@@ -8935,16 +8935,16 @@ CHAR 9835
 011011
 011000
 000000
-</script>
+<\/script>
 
 <!-- BORKSY HACKS -->
 <script type="text/javascript" id="borksyHacks">
 {{{HACKS}}}
-</script>
+<\/script>
 
 <script type="text/javascript" id="borksyAdditionalJS">
 {{{ADDITIONALJS}}}
-</script>
+<\/script>
 
 </head>
 

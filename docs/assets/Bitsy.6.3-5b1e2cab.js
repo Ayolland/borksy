@@ -5,16 +5,16 @@ const t=`<!DOCTYPE HTML>
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy 6.0 -->
+<!-- Bitsy 6.3 -->
 <head>
 
 <meta charset="UTF-8">
 
 <title>{{TITLE}}</title>
 
-<script type="bitsyGameData" id="exportedGameData">
+<script type="text/bitsyGameData" id="exportedGameData">
 {{{GAMEDATA}}}
-</script>
+<\/script>
 
 <style>
 {{{CSS}}}
@@ -26,7 +26,7 @@ function startExportedGame() {
 	attachCanvas( document.getElementById("game") );
 	load_game( document.getElementById("exportedGameData").text.slice(1) );
 }
-</script>
+<\/script>
 
 <script>
 //hex-to-rgb method borrowed from stack overflow
@@ -205,7 +205,7 @@ function rgbToHsl(r, g, b){
 
     return [h, s, l];
 }
-</script>
+<\/script>
 
 <script>
 var TransitionManager = function() {
@@ -661,19 +661,15 @@ var TransitionInfo = function(image, palette, playerX, playerY) {
 	this.PlayerTilePos = { x: playerX, y: playerY };
 	this.PlayerCenter = { x: Math.floor((playerX * tilesize) + (tilesize / 2)), y: Math.floor((playerY * tilesize) + (tilesize / 2)) };
 };
-</script>
+<\/script>
 
 <script>
 /*
 TODO:
-- untangle local & external resource use in font manager (still more to do here)
+- can I simplify this more now that I've removed the external resources stuff?
 */
 
-function FontManager(useExternalResources) {
-
-if (useExternalResources === undefined || useExternalResources === null) {
-	useExternalResources = false;
-}
+function FontManager(packagedFontNames) {
 
 var self = this;
 
@@ -682,59 +678,30 @@ this.GetExtension = function() {
 	return fontExtension;
 }
 
-// place to store font data that is part of the local game data
-var localResources = {};
+// place to store font data
+var fontResources = {};
 
-// place to store font data fetched from a server (only used in editor)
-var externalResources = null;
-if (useExternalResources) {
-	externalResources = new ResourceLoader();// NOTE : this class doesn't exist in exported game
-}
+// load fonts from the editor
+if (packagedFontNames != undefined && packagedFontNames != null && packagedFontNames.length > 0
+		&& Resources != undefined && Resources != null) {
 
-this.LoadResources = function(filenames, onLoadAll) {
-	if (!useExternalResources)
-		return;
-
-	// TODO : is this being called too many times?
-	var onLoad = function() {
-		var count = externalResources.getResourceLoadedCount();
-
-		if (count >= filenames.length && onLoadAll != null) {
-			onLoadAll();
-		}
-	}
-
-	for (var i = 0; i < filenames.length; i++) {
-		externalResources.load("bitsyfont", filenames[i], onLoad);
+	for (var i = 0; i < packagedFontNames.length; i++) {
+		var filename = packagedFontNames[i];
+		fontResources[filename] = Resources[filename];
 	}
 }
 
 // manually add resource
 this.AddResource = function(filename, fontdata) {
-	if (useExternalResources) {
-		externalResources.set(filename, fontdata);
-	}
-	else {
-		localResources[filename] = fontdata;
-	}
+	fontResources[filename] = fontdata;
 }
 
 this.ContainsResource = function(filename) {
-	if (useExternalResources) {
-		return externalResources.contains(filename);
-	}
-	else {
-		return localResources[filename] != null;
-	}
+	return fontResources[filename] != null;
 }
 
 function GetData(fontName) {
-	if (useExternalResources) {
-		return externalResources.get(fontName + fontExtension);
-	}
-	else {
-		return localResources[fontName + fontExtension];
-	}
+	return fontResources[fontName + fontExtension];
 }
 this.GetData = GetData;
 
@@ -913,7 +880,7 @@ function Font(fontData) {
 }
 
 } // FontManager
-</script>
+<\/script>
 
 <script>
 function Script() {
@@ -2387,7 +2354,7 @@ var Parser = function(env) {
 	var setSymbol = "=";
 	var ifSymbol = "?";
 	var elseSymbol = ":";
-	var operatorSymbols = ["==", ">", "<", ">=", "<=", "-", "+", "/", "*"]; // operators need to be in reverse order of precedence
+	var operatorSymbols = ["==", ">=", "<=", ">", "<", "-", "+", "/", "*"]; // operators need to be in reverse order of precedence
 	function CreateExpression(expStr) {
 		console.log("CREATE EXPRESSION --- " + expStr);
 
@@ -2583,7 +2550,7 @@ var Parser = function(env) {
 }
 
 } // Script()
-</script>
+<\/script>
 
 <script>
 function Dialog() {
@@ -3439,7 +3406,7 @@ var ShakyEffect = function() {
 TextEffects["shk"] = new ShakyEffect();
 
 } // Dialog()
-</script>
+<\/script>
 
 <script>
 /*
@@ -3473,6 +3440,10 @@ function setPalettes(paletteObj) {
 }
 
 function getPaletteColor(paletteId, colorIndex) {
+	if (palettes[paletteId] === undefined) {
+		paletteId = "default";
+	}
+
 	var palette = palettes[paletteId];
 
 	if (colorIndex > palette.colors.length) { // do I need this failure case? (seems un-reliable)
@@ -3551,7 +3522,14 @@ function imageDataFromImageSource(imageSource, pal, col) {
 		}
 	}
 
-	return img;
+	// convert to canvas: chrome has poor performance when working directly with image data
+	var imageCanvas = document.createElement("canvas");
+	imageCanvas.width = img.width;
+	imageCanvas.height = img.height;
+	var imageContext = imageCanvas.getContext("2d");
+	imageContext.putImageData(img,0,0);
+
+	return imageCanvas;
 }
 
 // TODO : move into core
@@ -3624,7 +3602,7 @@ this.AttachContext = function(ctx) {
 }
 
 } // Renderer()
-</script>
+<\/script>
 
 <script>
 var xhr; // TODO : remove
@@ -3638,9 +3616,12 @@ var tile = {};
 var sprite = {};
 var item = {};
 var dialog = {};
-var palette = {
-	"0" : [[0,0,0],[255,0,0],[255,255,255]] //start off with a default palette (can be overriden)
-};
+var palette = { //start off with a default palette
+		"default" : {
+			name : "default",
+			colors : [[0,0,0],[255,255,255],[255,255,255]]
+		}
+	};
 var ending = {};
 var variable = {}; // these are starting variable values -- they don't update (or I don't think they will)
 var playerId = "A";
@@ -3693,7 +3674,7 @@ var spriteStartLocations = {};
 /* VERSION */
 var version = {
 	major: 6, // major changes
-	minor: 0 // smaller changes
+	minor: 3 // smaller changes
 };
 function getEngineVersion() {
 	return version.major + "." + version.minor;
@@ -3720,10 +3701,10 @@ function clearGameData() {
 	sprite = {};
 	item = {};
 	dialog = {};
-	palette = { //start off with a default palette (can be overriden)
-		"0" : {
-			name : null,
-			colors : [[0,0,0],[255,0,0],[255,255,255]]
+	palette = { //start off with a default palette
+		"default" : {
+			name : "default",
+			colors : [[0,0,0],[255,255,255],[255,255,255]]
 		}
 	};
 	ending = {};
@@ -3783,6 +3764,7 @@ var onDialogUpdate = null;
 //inventory update UI handles
 var onInventoryChanged = null;
 var onVariableChanged = null;
+var onGameReset = null;
 
 var isPlayerEmbeddedInEditor = false;
 
@@ -3829,10 +3811,17 @@ function load_game(game_data, startWithTitle) {
 }
 
 function reset_cur_game() {
-	if (curGameData == null) return; //can't reset if we don't have the game data
+	if (curGameData == null) {
+		return; //can't reset if we don't have the game data
+	}
+
 	stopGame();
 	clearGameData();
 	load_game(curGameData);
+
+	if (isPlayerEmbeddedInEditor && onGameReset != null) {
+		onGameReset();
+	}
 }
 
 var update_interval = null;
@@ -3871,11 +3860,11 @@ function onready(startWithTitle) {
 
 	window.onblur = input.onblur;
 
-	update_interval = setInterval(update,-1);
+	update_interval = setInterval(update,16);
 
-	console.log("TITLE ??? " + startWithTitle);
-	if(startWithTitle) // used by editor
+	if(startWithTitle) { // used by editor 
 		startNarrating(title);
+	}
 }
 
 function setInitialVariables() {
@@ -4143,6 +4132,11 @@ function update() {
 	var curTime = Date.now();
 	deltaTime = curTime - prevTime;
 
+	if (curRoom == null) {
+		// in the special case where there is no valid room, end the game
+		startNarrating( "", true /*isEnding*/ );
+	}
+
 	if (!transition.IsTransitionActive()) {
 		updateInput();
 	}
@@ -4289,6 +4283,29 @@ function updateAnimation() {
 	}
 }
 
+function resetAllAnimations() {
+	for (id in sprite) {
+		var spr = sprite[id];
+		if (spr.animation.isAnimated) {
+			spr.animation.frameIndex = 0;
+		}
+	}
+
+	for (id in tile) {
+		var til = tile[id];
+		if (til.animation.isAnimated) {
+			til.animation.frameIndex = 0;
+		}
+	}
+
+	for (id in item) {
+		var itm = item[id];
+		if (itm.animation.isAnimated) {
+			itm.animation.frameIndex = 0;
+		}
+	}
+}
+
 var moveCounter = 0;
 var moveTime = 200;
 function moveSprites() {
@@ -4326,16 +4343,20 @@ function moveSprites() {
 				else if(itmIndex > -1) {
 					var itm = room[ spr.room ].items[ itmIndex ];
 					room[ spr.room ].items.splice( itmIndex, 1 );
-					if( spr.inventory[ itm.id ] )
+					if( spr.inventory[ itm.id ] ) {
 						spr.inventory[ itm.id ] += 1;
-					else
+					}
+					else {
 						spr.inventory[ itm.id ] = 1;
+					}
 
-					if(onInventoryChanged != null)
+					if (onInventoryChanged != null) {
 						onInventoryChanged( itm.id );
+					}
 
-					if(id === playerId)
+					if (id === playerId) {
 						startItemDialog( itm.id  /*itemId*/ );
+					}
 
 					// stop moving : is this a good idea?
 					spr.walkingPath = [];
@@ -4567,6 +4588,10 @@ var InputManager = function() {
 var input = null;
 
 function movePlayer(direction) {
+	if (player().room == null || !Object.keys(room).includes(player().room)) {
+		return; // player room is missing or invalid.. can't move them!
+	}
+
 	var spr = null;
 
 	if ( curPlayerDirection == Direction.Left && !(spr = getSpriteLeft()) && !isWallLeft()) {
@@ -4600,13 +4625,16 @@ function movePlayer(direction) {
 		var itm = room[ player().room ].items[ itmIndex ];
 		// console.log(itm);
 		room[ player().room ].items.splice( itmIndex, 1 );
-		if( player().inventory[ itm.id ] )
+		if( player().inventory[ itm.id ] ) {
 			player().inventory[ itm.id ] += 1;
-		else
+		}
+		else {
 			player().inventory[ itm.id ] = 1;
+		}
 
-		if(onInventoryChanged != null)
+		if(onInventoryChanged != null) {
 			onInventoryChanged( itm.id );
+		}
 
 		startItemDialog( itm.id  /*itemId*/ );
 
@@ -4772,6 +4800,10 @@ function player() {
 
 // Sort of a hack for legacy palette code (when it was just an array)
 function getPal(id) {
+	if (palette[id] === undefined) {
+		id = "default";
+	}
+
 	return palette[ id ].colors;
 }
 
@@ -4788,6 +4820,8 @@ function parseWorld(file) {
 	// console.log(file);
 
 	// var parseTimer = new Timer();
+
+	spriteStartLocations = {};
 
 	resetFlags();
 
@@ -4859,10 +4893,24 @@ function parseWorld(file) {
 			i++;
 		}
 	}
+
 	placeSprites();
-	if (player().room != null) {
+
+	var roomIds = Object.keys(room);
+	if (player() != undefined && player().room != null && roomIds.includes(player().room)) {
+		// player has valid room
 		curRoom = player().room;
 	}
+	else if (roomIds.length > 0) {
+		// player not in any room! what the heck
+		curRoom = roomIds[0];
+	}
+	else {
+		// uh oh there are no rooms I guess???
+		curRoom = null;
+	}
+
+	console.log("START ROOM " + curRoom);
 
 	renderer.SetPalettes(palette);
 
@@ -4901,17 +4949,19 @@ function serializeWorld(skipFonts) {
 	}
 	/* PALETTE */
 	for (id in palette) {
-		worldStr += "PAL " + id + "\\n";
-		if( palette[id].name != null )
-			worldStr += "NAME " + palette[id].name + "\\n";
-		for (i in getPal(id)) {
-			for (j in getPal(id)[i]) {
-				worldStr += getPal(id)[i][j];
-				if (j < 2) worldStr += ",";
+		if (id != "default") {
+			worldStr += "PAL " + id + "\\n";
+			if( palette[id].name != null )
+				worldStr += "NAME " + palette[id].name + "\\n";
+			for (i in getPal(id)) {
+				for (j in getPal(id)[i]) {
+					worldStr += getPal(id)[i][j];
+					if (j < 2) worldStr += ",";
+				}
+				worldStr += "\\n";
 			}
 			worldStr += "\\n";
 		}
-		worldStr += "\\n";
 	}
 	/* ROOM */
 	for (id in room) {
@@ -4993,7 +5043,7 @@ function serializeWorld(skipFonts) {
 		// 		worldStr += "\\n";
 		// 	}
 		// }
-		if (room[id].pal != null) {
+		if (room[id].pal != null && room[id].pal != "default") {
 			/* PALETTE */
 			worldStr += "PAL " + room[id].pal + "\\n";
 		}
@@ -5686,7 +5736,8 @@ function drawTile(img,x,y,context) {
 	if (!context) { //optional pass in context; otherwise, use default
 		context = ctx;
 	}
-	context.putImageData(img,x*tilesize*scale,y*tilesize*scale);
+	// NOTE: images are now canvases, instead of raw image data (for chrome performance reasons)
+	context.drawImage(img,x*tilesize*scale,y*tilesize*scale,tilesize*scale,tilesize*scale);
 }
 
 function drawSprite(img,x,y,context) { //this may differ later (or not haha)
@@ -5709,8 +5760,20 @@ function drawRoom(room,context,frameIndex) { // context & frameIndex are optiona
 	// 	console.log("DRAW ROOM " + debugLastRoomDrawn);
 	// }
 
+	var paletteId = "default";
+
+	if (room === undefined) {
+		// protect against invalid rooms
+		context.fillStyle = "rgb(" + getPal(paletteId)[0][0] + "," + getPal(paletteId)[0][1] + "," + getPal(paletteId)[0][2] + ")";
+		context.fillRect(0,0,canvas.width,canvas.height);
+		return;
+	}
+
 	//clear screen
-	context.fillStyle = "rgb(" + getPal(room.pal)[0][0] + "," + getPal(room.pal)[0][1] + "," + getPal(room.pal)[0][2] + ")";
+	if (room.pal != null && palette[paletteId] != undefined) {
+		paletteId = room.pal;
+	}
+	context.fillStyle = "rgb(" + getPal(paletteId)[0][0] + "," + getPal(paletteId)[0][1] + "," + getPal(paletteId)[0][2] + ")";
 	context.fillRect(0,0,canvas.width,canvas.height);
 
 	//draw tiles
@@ -5725,7 +5788,7 @@ function drawRoom(room,context,frameIndex) { // context & frameIndex are optiona
 				}
 				else {
 					// console.log(id);
-					drawTile( getTileImage(tile[id],getRoomPal(room.id),frameIndex), j, i, context );
+					drawTile( getTileImage(tile[id],paletteId,frameIndex), j, i, context );
 				}
 			}
 		}
@@ -5734,14 +5797,14 @@ function drawRoom(room,context,frameIndex) { // context & frameIndex are optiona
 	//draw items
 	for (var i = 0; i < room.items.length; i++) {
 		var itm = room.items[i];
-		drawItem( getItemImage(item[itm.id],getRoomPal(room.id),frameIndex), itm.x, itm.y, context );
+		drawItem( getItemImage(item[itm.id],paletteId,frameIndex), itm.x, itm.y, context );
 	}
 
 	//draw sprites
 	for (id in sprite) {
 		var spr = sprite[id];
 		if (spr.room === room.id) {
-			drawSprite( getSpriteImage(spr,getRoomPal(room.id),frameIndex), spr.x, spr.y, context );
+			drawSprite( getSpriteImage(spr,paletteId,frameIndex), spr.x, spr.y, context );
 		}
 	}
 }
@@ -5764,7 +5827,12 @@ function curPal() {
 }
 
 function getRoomPal(roomId) {
-	if (room[roomId].pal != null) {
+	var defaultId = "default";
+
+	if (roomId == null) {
+		return defaultId;
+	}
+	else if (room[roomId].pal != null) {
 		//a specific palette was chosen
 		return room[roomId].pal;
 	}
@@ -5775,10 +5843,10 @@ function getRoomPal(roomId) {
 		}
 		else {
 			//use the default palette
-			return "0";
+			return defaultId;
 		}
 	}
-	return "0";	
+	return defaultId;
 }
 
 var isDialogMode = false;
@@ -5896,9 +5964,8 @@ var scriptModule = new Script();
 var scriptInterpreter = scriptModule.CreateInterpreter();
 var scriptUtils = scriptModule.CreateUtils(); // TODO: move to editor.js?
 // scriptInterpreter.SetDialogBuffer( dialogBuffer );
-</script>
+<\/script>
 
-<!-- store default font in separate script tag for back compat-->
 <!-- Borksy modification: uses better encoded default font. -->
 <script type="bitsyFontData" id="ascii_small">
 FONT ascii_small
@@ -8063,16 +8130,16 @@ CHAR 9835
 011011
 011000
 000000
-</script>
+<\/script>
 
 <!-- BORKSY HACKS -->
 <script type="text/javascript" id="borksyHacks">
 {{{HACKS}}}
-</script>
+<\/script>
 
 <script type="text/javascript" id="borksyAdditionalJS">
 {{{ADDITIONALJS}}}
-</script>
+<\/script>
 
 </head>
 
