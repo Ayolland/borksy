@@ -22,7 +22,6 @@ Bitsy templates are stored in [`./src/template/`](./src/template). To add a new 
    - `<title>` -> `{{TITLE}}`
    - `<script type="text/bitsyGameData" id="exportedGameData">` -> `{{{GAMEDATA}}}`
    - `<style>` -> `{{{CSS}}}`
-   - `<!-- store default font in separate script tag for back compat-->` -> modified Borksy font data
    - below font data -> borksy hacks + additional js
    - `<!-- GAME CANVAS -->` -> `{{{MARKUP}}}`
    - HD
