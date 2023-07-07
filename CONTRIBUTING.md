@@ -29,7 +29,7 @@ Bitsy templates are stored in [`./src/template/`](./src/template). To add a new 
      - `textboxInfo.top`/`left`/`bottom` -> `*2`
      - `var scale = 4;` -> `var scale = 2;`
      - `var tilesize = 8;` -> `var tilesize = 16;`
-5. Place game file in template folder with name `Bitsy.<version>.txt`
+5. Place game file in template folder with name `Bitsy.<version>.hbs`
 
 ## Release
 
