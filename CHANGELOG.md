@@ -1,3 +1,17 @@
+# [6.0.0](https://github.com/Ayolland/borksy/compare/v5.32.0...v6.0.0) (2023-07-27)
+
+
+### Features
+
+* add bitsy 8.7 template ([333c9bc](https://github.com/Ayolland/borksy/commit/333c9bca960db36f2d79fa91714f1de5fe8f6d70))
+* add bitsy HD 8.7 template ([673b1be](https://github.com/Ayolland/borksy/commit/673b1be1849aa0203660755f980071d10675b969))
+* remove bitsy 8.6 templates ([5e483cb](https://github.com/Ayolland/borksy/commit/5e483cb434d27ba7cf38018cdd2f513a4f353bcd))
+
+
+### BREAKING CHANGES
+
+* removed bitsy 8.6 templates since it has a major bug fixed in 8.7, which is otherwise the same
+
 # [5.32.0](https://github.com/Ayolland/borksy/compare/v5.31.0...v5.32.0) (2023-07-07)
 
 

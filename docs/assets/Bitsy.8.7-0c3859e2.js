@@ -5,7 +5,7 @@ const t=`<!DOCTYPE HTML>
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy 8.6 -->
+<!-- Bitsy 8.7 -->
 <head>
 
 <meta charset="UTF-8">
@@ -1333,7 +1333,7 @@ var bitsy = mainProcess.system;
 // is this the right place for this to live?
 var version = {
 	major: 8, // major changes
-	minor: 6, // smaller changes
+	minor: 7, // smaller changes
 	devBuildPhase: "RELEASE",
 };
 function getEngineVersion() {
@@ -1753,7 +1753,7 @@ function createRoomData(id) {
 function createExitData(x, y, destRoom, destX, destY, transition, dlg) {
 	return {
 		x: x,
-		y: x,
+		y: y,
 		dest: {
 			room: destRoom,
 			x: destX,
