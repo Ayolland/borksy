@@ -1,3 +1,10 @@
+# [6.1.0](https://github.com/Ayolland/borksy/compare/v6.0.0...v6.1.0) (2023-07-27)
+
+
+### Features
+
+* update hacks ([33eaee1](https://github.com/Ayolland/borksy/commit/33eaee170a8ef617a61601db9c11133d5dbe998c))
+
 # [6.0.0](https://github.com/Ayolland/borksy/compare/v5.32.0...v6.0.0) (2023-07-27)
 
 
