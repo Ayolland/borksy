@@ -2745,8 +2745,8 @@ body {
 @summary change the avatar in certain rooms
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -2914,8 +2914,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -2977,10 +2977,11 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /*
 Helper for getting image by name or id
@@ -3076,8 +3077,8 @@ exports.hackOptions = hackOptions;
 @summary makes the game have a backdrop
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -3249,8 +3250,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -3314,8 +3315,8 @@ var after = kitsy.after;
 @summary makes all sprites have transparent backgrounds (deprecated)
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -3360,8 +3361,8 @@ before('renderer.SetDrawings', function () {
 @summary makes the game have a transparent background
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -3463,8 +3464,8 @@ exports.hackOptions = hackOptions;
 @summary "walk" and "talk" sound effect support
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -3627,8 +3628,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -3690,10 +3691,11 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /**
  * @param {number} value number to clamp
@@ -3789,8 +3791,8 @@ exports.hackOptions = hackOptions;
 @summary A variety of Bitsy sound and music handlers
 @license MIT
 @author David Mowatt
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -3987,8 +3989,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -4008,6 +4010,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -4045,17 +4058,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -4148,10 +4150,11 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /**
  * Helper for getting room by name or id
@@ -4185,6 +4188,7 @@ function createAudio(id, options) {
 	document.body.appendChild(el);
 	return el;
 }
+
 
 
 
@@ -4302,8 +4306,8 @@ exports.hackOptions = hackOptions;
 @summary WebGLazy bitsy integration (this one's mostly just for me)
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -4497,8 +4501,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -4585,8 +4589,8 @@ exports.hackOptions = hackOptions;
 @summary high quality anime gifs
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -5548,8 +5552,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -5569,6 +5573,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -5606,17 +5621,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -5661,8 +5665,8 @@ function addDialogTag(tag, fn) {
 @summary high quality anime jpegs (or pngs i guess)
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -5896,8 +5900,8 @@ exports.hackOptions = hackOptions;
 @summary high quality anime jpegs (or pngs i guess)
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -6088,8 +6092,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -6109,6 +6113,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -6146,17 +6161,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -6256,8 +6260,8 @@ exports.state = state;
 @summary Prevents from playing past an ending
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -6411,8 +6415,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -6500,8 +6504,8 @@ after('onExitDialog', function () {
 @summary corrupts gamedata at runtime
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -6552,10 +6556,11 @@ var hackOptions = {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /*
 Helper for getting image by name or id
@@ -6579,8 +6584,8 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 @description
 Adds API for updating sprite, tile, and item data at runtime.
@@ -6787,8 +6792,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -7002,8 +7007,8 @@ exports.hackOptions = hackOptions;
 @summary make custom exit transition effects
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -7193,8 +7198,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -7586,8 +7591,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary make {custom}text effects{custom}
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -7931,8 +7936,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -8046,8 +8051,8 @@ exports.hackOptions = hackOptions;
 @summary animal crossing-style audio powered by the pink trombone vocal synth
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -8922,8 +8927,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -8943,6 +8948,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -8980,17 +8996,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -9035,8 +9040,8 @@ function addDialogTag(tag, fn) {
 @summary animal crossing-style audio
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -9092,10 +9097,11 @@ before('dialogBuffer.DoNextChar', function () {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /**
  * @param {number} value number to clamp
@@ -9432,8 +9438,8 @@ exports.hackOptions = hackOptions;
 @summary animal crossing-style audio
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -9614,8 +9620,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -9694,8 +9700,8 @@ exports.hackOptions = hackOptions;
 @summary adds an easing transition animation to display the dialog box text
 @license MIT
 @author Delacannon
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -9858,8 +9864,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -9921,6 +9927,7 @@ var after = kitsy.after;
 
 
 
+
 function lerp(from, to, by) {
 	return from + (to - from) * by;
 }
@@ -9959,8 +9966,8 @@ exports.hackOptions = hackOptions;
 @summary dialog choices
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -10191,8 +10198,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -10212,6 +10219,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -10249,17 +10267,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -10361,8 +10368,8 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -10392,6 +10399,7 @@ NOTE: This uses parentheses "()" instead of curly braces "{}" around function
       code at the end of the editor's \`bitsy.js\` file. Untested.
 */
 
+
 // Adds the actual dialogue tag. No deferred version is required.
 addDialogTag('p', function (environment, parameters, onReturn) {
 	environment.GetDialogBuffer().AddParagraphBreak();
@@ -10405,8 +10413,8 @@ addDialogTag('p', function (environment, parameters, onReturn) {
 @summary put more words onscreen
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -10695,8 +10703,8 @@ exports.hackOptions = hackOptions;
 @summary jump from one dialog entry to another
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -10861,8 +10869,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -10882,6 +10890,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -10919,17 +10938,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -11020,6 +11028,7 @@ function addDualDialogTag(tag, fn) {
 
 
 
+
 // jump function
 function jump(targetDialog) {
 	if (!targetDialog) {
@@ -11048,8 +11057,8 @@ addDualDialogTag('jump', function (environment, parameters) {
 @summary add pauses in between printing text
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -11200,8 +11209,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -11221,6 +11230,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -11258,17 +11278,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -11321,8 +11330,8 @@ addDialogTag('pause', function (environment, parameters, onReturn) {
 @summary prompt the user for text input in dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -11510,8 +11519,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -11531,6 +11540,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -11568,17 +11588,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -11630,8 +11639,8 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -11661,12 +11670,14 @@ NOTE: This uses parentheses "()" instead of curly braces "{}" around function
       code at the end of the editor's \`bitsy.js\` file. Untested.
 */
 
+
 // Adds the actual dialogue tag. No deferred version is required.
 addDialogTag('p', function (environment, parameters, onReturn) {
 	environment.GetDialogBuffer().AddParagraphBreak();
 	onReturn(null);
 });
 // End of (p) paragraph break mod
+
 
 
 
@@ -11792,8 +11803,8 @@ exports.hackOptions = hackOptions;
 @summary provides a variable with player direction
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -11950,8 +11961,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -12032,8 +12043,8 @@ before('startDialog', function () {
 @summary flips the player's sprite based on directional movement
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -12065,10 +12076,11 @@ var hackOptions = {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /*
 Helper for getting image by name or id
@@ -12092,8 +12104,8 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 @description
 Adds API for updating sprite, tile, and item data at runtime.
@@ -12284,8 +12296,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -12445,8 +12457,8 @@ exports.hackOptions = hackOptions;
 @summary HTML background matching bitsy background
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -12607,8 +12619,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -12670,10 +12682,11 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /**
  * Helper for getting room by name or id
@@ -12730,8 +12743,8 @@ exports.hackOptions = hackOptions;
 @summary edit dialog from dialog (yes really)
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -12891,8 +12904,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -12912,6 +12925,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -12949,17 +12973,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -13014,10 +13027,11 @@ function addDeferredDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /*
 Helper for getting image by name or id
@@ -13085,8 +13099,8 @@ addDeferredDialogTag('dialog', editDialog);
 @summary edit sprites, items, and tiles from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -13144,10 +13158,11 @@ NOTE: This uses parentheses "()" instead of curly braces "{}" around function
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /*
 Helper for getting image by name or id
@@ -13171,8 +13186,8 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 @description
 Adds API for updating sprite, tile, and item data at runtime.
@@ -13355,8 +13370,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -13376,6 +13391,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -13413,17 +13439,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -13609,8 +13624,8 @@ addDualDialogTag('imagePal', editPalette);
 @summary change which sprite is controlled by the player
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -13774,8 +13789,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -13795,6 +13810,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -13832,17 +13858,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -13935,10 +13950,11 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /*
 Helper for getting image by name or id
@@ -13987,8 +14003,8 @@ addDualDialogTag('player', function (environment, parameters) {
 @summary modify the content of a room from dialog
 @license MIT
 @author Dana Holdampf
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -14269,8 +14285,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -14290,6 +14306,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -14327,17 +14354,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -14430,10 +14446,11 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /**
  * Helper for parsing parameters that may be relative to another value
@@ -14464,6 +14481,7 @@ function getRelativeNumber(value, relativeTo) {
 function clamp(value, min, max) {
 	return Math.max(min, Math.min(max, value));
 }
+
 
 
 
@@ -15061,8 +15079,8 @@ function copyBoxAt(mapId, targetId, x1, y1, x2, y2, copyRoomId, pasteXPos, paste
 @summary trigger an ending from dialog, including narration text (deprecated)
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -15247,8 +15265,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -15268,6 +15286,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -15305,17 +15334,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -15406,6 +15424,7 @@ function addDualDialogTag(tag, fn) {
 
 
 
+
 addDualDialogTag('end', function (environment, parameters) {
 	// cleanup current dialog
 	bitsy.dialogBuffer.EndDialog();
@@ -15429,8 +15448,8 @@ addDualDialogTag('end', function (environment, parameters) {
 @summary exit to another room from dialog, including conditionals
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -15615,8 +15634,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -15636,6 +15655,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -15673,17 +15703,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -15776,10 +15795,11 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /**
  * Helper for getting room by name or id
@@ -15856,8 +15876,8 @@ function getExitParams(parameters) {
 @summary separate Bitsy game data from your (modded) HTML for easier development
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -16030,8 +16050,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -16088,6 +16108,7 @@ kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 kitsy.after;
+
 
 
 
@@ -16175,8 +16196,8 @@ function dos2unix(text) {
 @summary generate a browser favicon (tab icon) from a Bitsy sprite, including animation!
 @license WTFPL (do WTF you want)
 @author @mildmojo
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -16337,8 +16358,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -16400,10 +16421,11 @@ var after = kitsy.after;
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /*
 Helper for getting image by name or id
@@ -16422,6 +16444,7 @@ function getImage(name, map) {
 		  });
 	return map[id];
 }
+
 
 
 
@@ -16536,8 +16559,8 @@ exports.hackOptions = hackOptions;
 @summary make sprites follow the player
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -16721,8 +16744,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -16742,6 +16765,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -16779,17 +16813,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -16882,10 +16905,11 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /*
 Helper for getting image by name or id
@@ -17137,8 +17161,8 @@ exports.hackOptions = hackOptions;
 @summary HTML5 gamepad support
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -17153,334 +17177,334 @@ Copy-paste this script into a script tag after the bitsy source
 (function (bitsy) {
 'use strict';
 
-var Buttons;
-(function (Buttons) {
-    // XBOX360 wired controller configuration
-    Buttons[Buttons["A"] = 0] = "A";
-    Buttons[Buttons["X"] = 2] = "X";
-    Buttons[Buttons["B"] = 1] = "B";
-    Buttons[Buttons["Y"] = 3] = "Y";
-    Buttons[Buttons["LB"] = 4] = "LB";
-    Buttons[Buttons["RB"] = 5] = "RB";
-    Buttons[Buttons["LT"] = 6] = "LT";
-    Buttons[Buttons["RT"] = 7] = "RT";
-    Buttons[Buttons["BACK"] = 8] = "BACK";
-    Buttons[Buttons["START"] = 9] = "START";
-    Buttons[Buttons["LHAT"] = 10] = "LHAT";
-    Buttons[Buttons["RHAT"] = 11] = "RHAT";
-    Buttons[Buttons["DPAD_UP"] = 12] = "DPAD_UP";
-    Buttons[Buttons["DPAD_DOWN"] = 13] = "DPAD_DOWN";
-    Buttons[Buttons["DPAD_LEFT"] = 14] = "DPAD_LEFT";
-    Buttons[Buttons["DPAD_RIGHT"] = 15] = "DPAD_RIGHT";
-})(Buttons || (Buttons = {}));
-var Axes;
-(function (Axes) {
-    Axes[Axes["LSTICK_H"] = 0] = "LSTICK_H";
-    Axes[Axes["LSTICK_V"] = 1] = "LSTICK_V";
-    Axes[Axes["RSTICK_H"] = 2] = "RSTICK_H";
-    Axes[Axes["RSTICK_V"] = 3] = "RSTICK_V";
-})(Axes || (Axes = {}));
-var nullGamepad = {
-    original: {
-        axes: [],
-        buttons: [],
-        connected: false,
-    },
-    disabled: true,
-    down: {},
-    justDown: {},
-    justUp: {},
-    axesPrev: {},
-};
-var Gamepads = /** @class */ (function () {
-    /**
-    * initialize gamepads
-    */
-    function Gamepads() {
-        var _this = this;
-        // settings
-        /** if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead */
-        this.deadZone = 0.25;
-        /** if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1 instead */
-        this.snapZone = 0.25;
-        /** axis values between \`deadZone\` and \`snapZone\` will be run through this function
-        *
-        * defaults to normalizing between the two thresholds */
-        this.interpolate = function (value) {
-            var v = Math.max(0, Math.min(1, (value - _this.deadZone) / (1.0 - _this.snapZone - _this.deadZone)));
-            return v;
-        };
-        // internal vars
-        this.players = {};
-        this.available = false;
-        this.pollEveryFrame = false;
-        this.connected = false;
-        /**
-        * update gamepads (clears arrays, polls connections, etc.)
-        */
-        this.pollconnections = function () {
-            _this.connected = false;
-            // assume existing players' gamepads aren't enabled until they're found
-            Object.values(_this.players).forEach(function (player) {
-                player.disabled = true;
-            });
-            var gps = navigator.getGamepads();
-            for (var i = 0; i < gps.length; ++i) {
-                var gp = gps[i];
-                if (gp) {
-                    if (gp.connected) {
-                        if (_this.players[gp.index] == null) {
-                            // new player
-                            _this.players[gp.index] = {
-                                disabled: false,
-                                original: gp,
-                                down: {},
-                                justDown: {},
-                                justUp: {},
-                                axesPrev: {},
-                            };
-                        }
-                        else {
-                            // returning player, just assign the gamepad
-                            _this.players[gp.index].original = gp;
-                        }
-                        _this.connected = true;
-                        _this.players[gp.index].disabled = false;
-                    }
-                    else {
-                        delete _this.players[gp.index];
-                    }
-                }
-            }
-        };
-        /**
-        * update gamepads (clears arrays, polls connections, etc.)
-        */
-        this.update = function () {
-            // store the previous axis values
-            // has to be done before pollConnections since that will get the new axis values
-            Object.keys(_this.players).forEach(function (i) {
-                var _a;
-                var p = _this.getPlayer(i);
-                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.axes) {
-                    p.axesPrev = p.original.axes.slice();
-                }
-            });
-            // poll connections and update gamepad states every frame because chrome's a lazy bum
-            if (_this.pollEveryFrame) {
-                _this.pollconnections();
-            }
-            Object.keys(_this.players).forEach(function (i) {
-                var _a;
-                var p = _this.getPlayer(i);
-                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.buttons) {
-                    for (var j = 0; j < p.original.buttons.length; ++j) {
-                        if (p.original.buttons[j].pressed) {
-                            p.justDown[j] = !(p.down[j] === true);
-                            p.down[j] = true;
-                            p.justUp[j] = false;
-                        }
-                        else {
-                            p.justUp[j] = p.down[j] === true;
-                            p.down[j] = false;
-                            p.justDown[j] = false;
-                        }
-                    }
-                }
-            });
-        };
-        /**
-        * @returns \`player\`'s gamepad
-        *
-        * if one doesn't exist, returns an object with gamepad properties reflecting a null state
-        */
-        this.getPlayer = function (player) {
-            var _a, _b, _c;
-            if (((_b = (_a = _this.players[player]) === null || _a === void 0 ? void 0 : _a.original) === null || _b === void 0 ? void 0 : _b.connected) && !((_c = _this.players[player]) === null || _c === void 0 ? void 0 : _c.disabled)) {
-                return _this.players[player];
-            }
-            return nullGamepad;
-        };
-        /**
-        * @returns an array representing \`length\` axes for \`player\` at \`offset\`
-        *
-        * if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead
-        * if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1/-1 instead
-        * otherwise, returns the axis value normalized between \`deadZone\` and \`(1-snapZone)\`
-        * @param {Number} offset axis index
-        * @param {Number} length number of axes to return
-        * @param {Number} player player index (\`undefined\` for "sum of all")
-        * @param {boolean} prev if \`true\` uses axis values from previous update
-        */
-        this.getAxes = function (offset, length, player, prev) {
-            if (offset === void 0) { offset = 0; }
-            if (length === void 0) { length = 2; }
-            if (prev === void 0) { prev = false; }
-            var axes = [];
-            for (var i = 0; i < length; ++i) {
-                axes[i] = 0;
-            }
-            if (player === undefined) {
-                Object.keys(_this.players).forEach(function (i) {
-                    var a = _this.getAxes(offset, length, i, prev);
-                    for (var j = 0; j < a.length; ++j) {
-                        axes[j] += a[j];
-                    }
-                });
-            }
-            else {
-                var p = _this.getPlayer(player);
-                if (p === null || p === void 0 ? void 0 : p.original) {
-                    var axesSource = prev ? p.axesPrev : p.original.axes;
-                    var a = Object.values(axesSource).slice(offset, offset + length);
-                    for (var i = 0; i < a.length; ++i) {
-                        if (Math.abs(a[i]) < _this.deadZone) {
-                            axes[i] += 0;
-                        }
-                        else if (Math.abs(1.0 - a[i]) < _this.snapZone) {
-                            axes[i] += 1;
-                        }
-                        else if (Math.abs(-1.0 - a[i]) < _this.snapZone) {
-                            axes[i] -= 1;
-                        }
-                        else {
-                            axes[i] += Math.sign(a[i]) * _this.interpolate(Math.abs(a[i]));
-                        }
-                    }
-                }
-            }
-            return axes;
-        };
-        /**
-       * @returns equivalent to \`getAxes(axis, 1, player, prev)[0]\`
-       */
-        this.getAxis = function (axis, player, prev) { return _this.getAxes(axis, 1, player, prev)[0]; };
-        /**
-        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\`
-        * @param {Number} axis axis index
-        * @param {Number} threshold threshold (-1 to 1)
-        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))
-        * @param {Number} player player index (\`undefined\` for "any")
-        * @param {boolean} prev if \`true\` uses axis values from previous update
-        */
-        this.axisPast = function (axis, threshold, direction, player, prev) {
-            if (!threshold) {
-                throw new Error('must specify a non-zero threshold');
-            }
-            if (!direction) {
-                direction = threshold > 0 ? 1 : -1;
-            }
-            var a = _this.getAxis(axis, player, prev);
-            return direction < 0 ? a < threshold : a > threshold;
-        };
-        /**
-        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\` and WAS NOT in previous update
-        * @param {Number} axis axis index
-        * @param {Number} threshold threshold (-1 to 1)
-        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.axisJustPast = function (axis, threshold, direction, player) { return _this.axisPast(axis, threshold, direction, player, false)
-            && !_this.axisPast(axis, threshold, direction, player, true); };
-        /**
-        * @returns \`[x,y]\` representing the dpad for \`player\`
-        * @param {Number} player player index (\`undefined\` for "sum of all")
-        */
-        this.getDpad = function (player) {
-            var x = 0;
-            var y = 0;
-            if (player === undefined) {
-                Object.keys(_this.players).forEach(function (i) {
-                    var _a = _this.getDpad(i), ix = _a[0], iy = _a[1];
-                    x += ix;
-                    y += iy;
-                });
-            }
-            else {
-                if (_this.isDown(Buttons.DPAD_RIGHT, player)) {
-                    x += 1;
-                }
-                if (_this.isDown(Buttons.DPAD_LEFT, player)) {
-                    x -= 1;
-                }
-                if (_this.isDown(Buttons.DPAD_UP, player)) {
-                    y += 1;
-                }
-                if (_this.isDown(Buttons.DPAD_DOWN, player)) {
-                    y -= 1;
-                }
-            }
-            return [x, y];
-        };
-        /**
-        * @returns \`true\` if \`player\`'s \`btn\` is currently down
-        * @param {Number} btn button index
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.isDown = function (btn, player) {
-            if (btn === undefined) {
-                throw new Error('must specify a button');
-            }
-            if (player === undefined) {
-                return Object.keys(_this.players).some(function (i) { return _this.isDown(btn, i); });
-            }
-            return _this.getPlayer(player).down[btn];
-        };
-        /**
-        * @returns equivalent to \`!isDown(btn, player)\`
-        * @param {Number} btn button index
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.isUp = function (btn, player) { return !_this.isDown(btn, player); };
-        /**
-        * @returns \`true\` if \`player\`'s \`btn\` is currently down and WAS NOT in previous update
-        * @param {Number} btn button index
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.isJustDown = function (btn, player) {
-            if (btn === undefined) {
-                throw new Error('must specify a button');
-            }
-            if (player === undefined) {
-                return Object.keys(_this.players).some(function (i) { return _this.isJustDown(btn, i); });
-            }
-            return _this.getPlayer(player).justDown[btn];
-        };
-        /**
-        * @returns \`true\` if \`player\`'s \`btn\` is currently NOT down and WAS down in previous update
-        * @param {Number} btn button index
-        * @param {Number} player player index (\`undefined\` for "any")
-        */
-        this.isJustUp = function (btn, player) {
-            if (btn === undefined) {
-                throw new Error('must specify a button');
-            }
-            if (player === undefined) {
-                return Object.keys(_this.players).some(function (i) { return _this.isJustUp(btn, i); });
-            }
-            return _this.getPlayer(player).justUp[btn];
-        };
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-        // @ts-ignore
-        if (navigator.getGamepads) {
-            this.available = true;
-        }
-        else if (navigator.webkitGetGamepads) {
-            navigator.getGamepads = navigator.webkitGetGamepads;
-            this.available = true;
-        }
-        if (this.available) {
-            if (navigator.userAgent.includes('Firefox')) {
-                // listen to connection events for firefox
-                window.addEventListener('gamepadconnected', this.pollconnections.bind(this));
-                window.addEventListener('gamepaddisconnected', this.pollconnections.bind(this));
-            }
-            else {
-                this.pollEveryFrame = true;
-            }
-        }
-    }
-    return Gamepads;
+var Buttons;\r
+(function (Buttons) {\r
+    // XBOX360 wired controller configuration\r
+    Buttons[Buttons["A"] = 0] = "A";\r
+    Buttons[Buttons["X"] = 2] = "X";\r
+    Buttons[Buttons["B"] = 1] = "B";\r
+    Buttons[Buttons["Y"] = 3] = "Y";\r
+    Buttons[Buttons["LB"] = 4] = "LB";\r
+    Buttons[Buttons["RB"] = 5] = "RB";\r
+    Buttons[Buttons["LT"] = 6] = "LT";\r
+    Buttons[Buttons["RT"] = 7] = "RT";\r
+    Buttons[Buttons["BACK"] = 8] = "BACK";\r
+    Buttons[Buttons["START"] = 9] = "START";\r
+    Buttons[Buttons["LHAT"] = 10] = "LHAT";\r
+    Buttons[Buttons["RHAT"] = 11] = "RHAT";\r
+    Buttons[Buttons["DPAD_UP"] = 12] = "DPAD_UP";\r
+    Buttons[Buttons["DPAD_DOWN"] = 13] = "DPAD_DOWN";\r
+    Buttons[Buttons["DPAD_LEFT"] = 14] = "DPAD_LEFT";\r
+    Buttons[Buttons["DPAD_RIGHT"] = 15] = "DPAD_RIGHT";\r
+})(Buttons || (Buttons = {}));\r
+var Axes;\r
+(function (Axes) {\r
+    Axes[Axes["LSTICK_H"] = 0] = "LSTICK_H";\r
+    Axes[Axes["LSTICK_V"] = 1] = "LSTICK_V";\r
+    Axes[Axes["RSTICK_H"] = 2] = "RSTICK_H";\r
+    Axes[Axes["RSTICK_V"] = 3] = "RSTICK_V";\r
+})(Axes || (Axes = {}));\r
+var nullGamepad = {\r
+    original: {\r
+        axes: [],\r
+        buttons: [],\r
+        connected: false,\r
+    },\r
+    disabled: true,\r
+    down: {},\r
+    justDown: {},\r
+    justUp: {},\r
+    axesPrev: {},\r
+};\r
+var Gamepads = /** @class */ (function () {\r
+    /**\r
+    * initialize gamepads\r
+    */\r
+    function Gamepads() {\r
+        var _this = this;\r
+        // settings\r
+        /** if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead */\r
+        this.deadZone = 0.25;\r
+        /** if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1 instead */\r
+        this.snapZone = 0.25;\r
+        /** axis values between \`deadZone\` and \`snapZone\` will be run through this function\r
+        *\r
+        * defaults to normalizing between the two thresholds */\r
+        this.interpolate = function (value) {\r
+            var v = Math.max(0, Math.min(1, (value - _this.deadZone) / (1.0 - _this.snapZone - _this.deadZone)));\r
+            return v;\r
+        };\r
+        // internal vars\r
+        this.players = {};\r
+        this.available = false;\r
+        this.pollEveryFrame = false;\r
+        this.connected = false;\r
+        /**\r
+        * update gamepads (clears arrays, polls connections, etc.)\r
+        */\r
+        this.pollconnections = function () {\r
+            _this.connected = false;\r
+            // assume existing players' gamepads aren't enabled until they're found\r
+            Object.values(_this.players).forEach(function (player) {\r
+                player.disabled = true;\r
+            });\r
+            var gps = navigator.getGamepads();\r
+            for (var i = 0; i < gps.length; ++i) {\r
+                var gp = gps[i];\r
+                if (gp) {\r
+                    if (gp.connected) {\r
+                        if (_this.players[gp.index] == null) {\r
+                            // new player\r
+                            _this.players[gp.index] = {\r
+                                disabled: false,\r
+                                original: gp,\r
+                                down: {},\r
+                                justDown: {},\r
+                                justUp: {},\r
+                                axesPrev: {},\r
+                            };\r
+                        }\r
+                        else {\r
+                            // returning player, just assign the gamepad\r
+                            _this.players[gp.index].original = gp;\r
+                        }\r
+                        _this.connected = true;\r
+                        _this.players[gp.index].disabled = false;\r
+                    }\r
+                    else {\r
+                        delete _this.players[gp.index];\r
+                    }\r
+                }\r
+            }\r
+        };\r
+        /**\r
+        * update gamepads (clears arrays, polls connections, etc.)\r
+        */\r
+        this.update = function () {\r
+            // store the previous axis values\r
+            // has to be done before pollConnections since that will get the new axis values\r
+            Object.keys(_this.players).forEach(function (i) {\r
+                var _a;\r
+                var p = _this.getPlayer(i);\r
+                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.axes) {\r
+                    p.axesPrev = p.original.axes.slice();\r
+                }\r
+            });\r
+            // poll connections and update gamepad states every frame because chrome's a lazy bum\r
+            if (_this.pollEveryFrame) {\r
+                _this.pollconnections();\r
+            }\r
+            Object.keys(_this.players).forEach(function (i) {\r
+                var _a;\r
+                var p = _this.getPlayer(i);\r
+                if ((_a = p === null || p === void 0 ? void 0 : p.original) === null || _a === void 0 ? void 0 : _a.buttons) {\r
+                    for (var j = 0; j < p.original.buttons.length; ++j) {\r
+                        if (p.original.buttons[j].pressed) {\r
+                            p.justDown[j] = !(p.down[j] === true);\r
+                            p.down[j] = true;\r
+                            p.justUp[j] = false;\r
+                        }\r
+                        else {\r
+                            p.justUp[j] = p.down[j] === true;\r
+                            p.down[j] = false;\r
+                            p.justDown[j] = false;\r
+                        }\r
+                    }\r
+                }\r
+            });\r
+        };\r
+        /**\r
+        * @returns \`player\`'s gamepad\r
+        *\r
+        * if one doesn't exist, returns an object with gamepad properties reflecting a null state\r
+        */\r
+        this.getPlayer = function (player) {\r
+            var _a, _b, _c;\r
+            if (((_b = (_a = _this.players[player]) === null || _a === void 0 ? void 0 : _a.original) === null || _b === void 0 ? void 0 : _b.connected) && !((_c = _this.players[player]) === null || _c === void 0 ? void 0 : _c.disabled)) {\r
+                return _this.players[player];\r
+            }\r
+            return nullGamepad;\r
+        };\r
+        /**\r
+        * @returns an array representing \`length\` axes for \`player\` at \`offset\`\r
+        *\r
+        * if \`abs(an axis value)\` is < \`deadZone\`, returns 0 instead\r
+        * if \`abs(1-an axis value)\` is < \`snapZone\`, returns 1/-1 instead\r
+        * otherwise, returns the axis value normalized between \`deadZone\` and \`(1-snapZone)\`\r
+        * @param {Number} offset axis index\r
+        * @param {Number} length number of axes to return\r
+        * @param {Number} player player index (\`undefined\` for "sum of all")\r
+        * @param {boolean} prev if \`true\` uses axis values from previous update\r
+        */\r
+        this.getAxes = function (offset, length, player, prev) {\r
+            if (offset === void 0) { offset = 0; }\r
+            if (length === void 0) { length = 2; }\r
+            if (prev === void 0) { prev = false; }\r
+            var axes = [];\r
+            for (var i = 0; i < length; ++i) {\r
+                axes[i] = 0;\r
+            }\r
+            if (player === undefined) {\r
+                Object.keys(_this.players).forEach(function (i) {\r
+                    var a = _this.getAxes(offset, length, i, prev);\r
+                    for (var j = 0; j < a.length; ++j) {\r
+                        axes[j] += a[j];\r
+                    }\r
+                });\r
+            }\r
+            else {\r
+                var p = _this.getPlayer(player);\r
+                if (p === null || p === void 0 ? void 0 : p.original) {\r
+                    var axesSource = prev ? p.axesPrev : p.original.axes;\r
+                    var a = Object.values(axesSource).slice(offset, offset + length);\r
+                    for (var i = 0; i < a.length; ++i) {\r
+                        if (Math.abs(a[i]) < _this.deadZone) {\r
+                            axes[i] += 0;\r
+                        }\r
+                        else if (Math.abs(1.0 - a[i]) < _this.snapZone) {\r
+                            axes[i] += 1;\r
+                        }\r
+                        else if (Math.abs(-1.0 - a[i]) < _this.snapZone) {\r
+                            axes[i] -= 1;\r
+                        }\r
+                        else {\r
+                            axes[i] += Math.sign(a[i]) * _this.interpolate(Math.abs(a[i]));\r
+                        }\r
+                    }\r
+                }\r
+            }\r
+            return axes;\r
+        };\r
+        /**\r
+       * @returns equivalent to \`getAxes(axis, 1, player, prev)[0]\`\r
+       */\r
+        this.getAxis = function (axis, player, prev) { return _this.getAxes(axis, 1, player, prev)[0]; };\r
+        /**\r
+        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\`\r
+        * @param {Number} axis axis index\r
+        * @param {Number} threshold threshold (-1 to 1)\r
+        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        * @param {boolean} prev if \`true\` uses axis values from previous update\r
+        */\r
+        this.axisPast = function (axis, threshold, direction, player, prev) {\r
+            if (!threshold) {\r
+                throw new Error('must specify a non-zero threshold');\r
+            }\r
+            if (!direction) {\r
+                direction = threshold > 0 ? 1 : -1;\r
+            }\r
+            var a = _this.getAxis(axis, player, prev);\r
+            return direction < 0 ? a < threshold : a > threshold;\r
+        };\r
+        /**\r
+        * @returns \`true\` if \`axis\` is past \`threshold\` in \`direction\` and WAS NOT in previous update\r
+        * @param {Number} axis axis index\r
+        * @param {Number} threshold threshold (-1 to 1)\r
+        * @param {Number} direction direction (-1|1) (if \`undefined\`, assumes the sign of \`theshold\` is the direction (e.g. if \`theshold\` is -0.5, it will check if the axis is < -0.5))\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.axisJustPast = function (axis, threshold, direction, player) { return _this.axisPast(axis, threshold, direction, player, false)\r
+            && !_this.axisPast(axis, threshold, direction, player, true); };\r
+        /**\r
+        * @returns \`[x,y]\` representing the dpad for \`player\`\r
+        * @param {Number} player player index (\`undefined\` for "sum of all")\r
+        */\r
+        this.getDpad = function (player) {\r
+            var x = 0;\r
+            var y = 0;\r
+            if (player === undefined) {\r
+                Object.keys(_this.players).forEach(function (i) {\r
+                    var _a = _this.getDpad(i), ix = _a[0], iy = _a[1];\r
+                    x += ix;\r
+                    y += iy;\r
+                });\r
+            }\r
+            else {\r
+                if (_this.isDown(Buttons.DPAD_RIGHT, player)) {\r
+                    x += 1;\r
+                }\r
+                if (_this.isDown(Buttons.DPAD_LEFT, player)) {\r
+                    x -= 1;\r
+                }\r
+                if (_this.isDown(Buttons.DPAD_UP, player)) {\r
+                    y += 1;\r
+                }\r
+                if (_this.isDown(Buttons.DPAD_DOWN, player)) {\r
+                    y -= 1;\r
+                }\r
+            }\r
+            return [x, y];\r
+        };\r
+        /**\r
+        * @returns \`true\` if \`player\`'s \`btn\` is currently down\r
+        * @param {Number} btn button index\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.isDown = function (btn, player) {\r
+            if (btn === undefined) {\r
+                throw new Error('must specify a button');\r
+            }\r
+            if (player === undefined) {\r
+                return Object.keys(_this.players).some(function (i) { return _this.isDown(btn, i); });\r
+            }\r
+            return _this.getPlayer(player).down[btn];\r
+        };\r
+        /**\r
+        * @returns equivalent to \`!isDown(btn, player)\`\r
+        * @param {Number} btn button index\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.isUp = function (btn, player) { return !_this.isDown(btn, player); };\r
+        /**\r
+        * @returns \`true\` if \`player\`'s \`btn\` is currently down and WAS NOT in previous update\r
+        * @param {Number} btn button index\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.isJustDown = function (btn, player) {\r
+            if (btn === undefined) {\r
+                throw new Error('must specify a button');\r
+            }\r
+            if (player === undefined) {\r
+                return Object.keys(_this.players).some(function (i) { return _this.isJustDown(btn, i); });\r
+            }\r
+            return _this.getPlayer(player).justDown[btn];\r
+        };\r
+        /**\r
+        * @returns \`true\` if \`player\`'s \`btn\` is currently NOT down and WAS down in previous update\r
+        * @param {Number} btn button index\r
+        * @param {Number} player player index (\`undefined\` for "any")\r
+        */\r
+        this.isJustUp = function (btn, player) {\r
+            if (btn === undefined) {\r
+                throw new Error('must specify a button');\r
+            }\r
+            if (player === undefined) {\r
+                return Object.keys(_this.players).some(function (i) { return _this.isJustUp(btn, i); });\r
+            }\r
+            return _this.getPlayer(player).justUp[btn];\r
+        };\r
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore\r
+        // @ts-ignore\r
+        if (navigator.getGamepads) {\r
+            this.available = true;\r
+        }\r
+        else if (navigator.webkitGetGamepads) {\r
+            navigator.getGamepads = navigator.webkitGetGamepads;\r
+            this.available = true;\r
+        }\r
+        if (this.available) {\r
+            if (navigator.userAgent.includes('Firefox')) {\r
+                // listen to connection events for firefox\r
+                window.addEventListener('gamepadconnected', this.pollconnections.bind(this));\r
+                window.addEventListener('gamepaddisconnected', this.pollconnections.bind(this));\r
+            }\r
+            else {\r
+                this.pollEveryFrame = true;\r
+            }\r
+        }\r
+    }\r
+    return Gamepads;\r
 }());
 
 /**
@@ -17618,8 +17642,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -17726,8 +17750,8 @@ after('bitsy._update', function () {
 @summary Pseudo-platforming/gravity/physics
 @license MIT
 @author Cole Sea
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -17840,10 +17864,11 @@ var hackOptions = {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /*
 Helper for getting image by name or id
@@ -17867,8 +17892,8 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 @description
 Adds API for updating sprite, tile, and item data at runtime.
@@ -18059,8 +18084,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -18080,6 +18105,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -18117,17 +18153,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -18645,8 +18670,8 @@ exports.hackOptions = hackOptions;
 @summary for when bitsy's not small enough
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -18808,8 +18833,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -18909,8 +18934,8 @@ exports.hackOptions = hackOptions;
 @summary execute arbitrary javascript from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -19097,8 +19122,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -19118,6 +19143,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -19155,17 +19191,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -19256,6 +19281,7 @@ function addDualDialogTag(tag, fn) {
 
 
 
+
 // eslint-disable-next-line no-eval
 var indirectEval = eval;
 
@@ -19271,8 +19297,8 @@ addDualDialogTag('js', executeJs);
 @file logic-operators-extended
 @summary adds conditional logic operators
 @author @mildmojo
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -19432,8 +19458,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -19493,6 +19519,7 @@ kitsy.after;
 
 
 
+
 var operators = ['!==', '&&', '||', '%'];
 
 function expression(operator) {
@@ -19532,8 +19559,8 @@ inject(
 @summary put more words onscreen
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -19708,8 +19735,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -19729,6 +19756,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -19766,17 +19804,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -19878,8 +19905,8 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -19908,6 +19935,7 @@ NOTE: This uses parentheses "()" instead of curly braces "{}" around function
       For full editor integration, you'd *probably* also need to paste this
       code at the end of the editor's \`bitsy.js\` file. Untested.
 */
+
 
 // Adds the actual dialogue tag. No deferred version is required.
 addDialogTag('p', function (environment, parameters, onReturn) {
@@ -19977,8 +20005,8 @@ exports.hackOptions = hackOptions;
 @summary make the player big
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -20170,8 +20198,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -20191,6 +20219,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -20228,17 +20267,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -20331,10 +20359,11 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /*
 Helper for getting image by name or id
@@ -20876,8 +20905,8 @@ hackOptions.ondown = {
 @summary multiplayer bitsy
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 @description
 Provides the groundwork for running a small online multiplayer bitsy game.
@@ -21050,8 +21079,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -21071,6 +21100,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -21108,17 +21148,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -21211,10 +21240,11 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /*
 Helper for getting image by name or id
@@ -21240,8 +21270,8 @@ function getImage(name, map) {
 @summary edit dialog from dialog (yes really)
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -21307,8 +21337,8 @@ addDeferredDialogTag('dialog', editDialog);
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 @description
 Adds API for updating sprite, tile, and item data at runtime.
@@ -21366,8 +21396,8 @@ function setSpriteData(id, frame, newData) {
 @summary edit sprites, items, and tiles from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -21513,8 +21543,8 @@ addDualDialogTag('imagePal', editPalette);
 @summary execute arbitrary javascript from dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -21563,6 +21593,7 @@ NOTE: This uses parentheses "()" instead of curly braces "{}" around function
       For full editor integration, you'd *probably* also need to paste this
       code at the end of the editor's \`bitsy.js\` file. Untested.
 */
+
 
 // eslint-disable-next-line no-eval
 var indirectEval = eval;
@@ -21736,8 +21767,8 @@ exports.updateSprite = updateSprite;
 @summary tiles which hide the player
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -21897,8 +21928,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -22004,8 +22035,8 @@ exports.hackOptions = hackOptions;
 @summary Adds paragraph breaks to the dialogue parser
 @license WTFPL (do WTF you want)
 @author Sean S. LeBlanc, David Mowatt
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -22172,8 +22203,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -22193,6 +22224,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -22230,17 +22272,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -22288,6 +22319,7 @@ inject(/(this\\.AddLinebreak = )/, 'this.AddParagraphBreak = function() { buffer
 
 
 
+
 // Adds the actual dialogue tag. No deferred version is required.
 addDialogTag('p', function (environment, parameters, onReturn) {
 	environment.GetDialogBuffer().AddParagraphBreak();
@@ -22302,8 +22334,8 @@ addDialogTag('p', function (environment, parameters, onReturn) {
 @summary prevent some items from being picked up
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -22460,8 +22492,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -22576,40 +22608,7 @@ inject(/(var redrawAll = ).*;/, '$1true;');
 exports.hackOptions = hackOptions;
 
 })(this.hacks.permanent_items = this.hacks.permanent_items || {}, window);
-`,er=`/**
-➡
-@file push sprites
-@summary sokoban-style sprite pushing
-@license MIT
-@author jan0sc
-@version 21.3.0
-@requires Bitsy 8.4
-
-
-@description
-Hack to make sprites pushable.
-
-HOW TO USE:
-1. Copy-paste into a script tag after the bitsy source
-2. Edit hackOptions below to specify the push logic, exit handling, target states and whether to flip drawings
-
-PUSH LOGIC:
-functions to determine:
-	1. the sprites that the player can push
-	2. the sprites that a pushed sprite can push
-	3. the items that stop a sprite from moving
-	4. the tiles that stop a sprite from moving
-
-EXIT HANDLING:
-function to determine whether a sprite will be allowed to transit an exit
-
-TARGET STATES:
-object specifying which dialogs to trigger and under what conditions
-
-SPRITE FLIPPING:
-allow or disallow drawing flips when a sprite is pushed
-
-*/
+`,er=`/* eslint-disable no-restricted-syntax */
 this.hacks = this.hacks || {};
 (function (exports, bitsy) {
 'use strict';
@@ -22772,10 +22771,11 @@ var hackOptions = {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /*
 Helper for getting image by name or id
@@ -22799,8 +22799,8 @@ function getImage(name, map) {
 @file edit image at runtime
 @summary API for updating image data at runtime.
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 @description
 Adds API for updating sprite, tile, and item data at runtime.
@@ -22991,8 +22991,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -23105,6 +23105,40 @@ function transformSpriteData(spriteData, v, h, rot) {
 	return s;
 }
 
+/**
+➡
+@file push sprites
+@summary sokoban-style sprite pushing
+@license MIT
+@author jan0sc
+@version 21.5.0
+@requires Bitsy 8.7
+
+
+@description
+Hack to make sprites pushable.
+
+HOW TO USE:
+1. Copy-paste into a script tag after the bitsy source
+2. Edit hackOptions below to specify the push logic, exit handling, target states and whether to flip drawings
+
+PUSH LOGIC:
+functions to determine:
+	1. the sprites that the player can push
+	2. the sprites that a pushed sprite can push
+	3. the items that stop a sprite from moving
+	4. the tiles that stop a sprite from moving
+
+EXIT HANDLING:
+function to determine whether a sprite will be allowed to transit an exit
+
+TARGET STATES:
+object specifying which dialogs to trigger and under what conditions
+
+SPRITE FLIPPING:
+allow or disallow drawing flips when a sprite is pushed
+
+*/
 
 
 
@@ -23418,8 +23452,8 @@ exports.hackOptions = hackOptions;
 @summary add name-tags to replace drawings when the game is loading
 @license MIT
 @author Elkie Nova
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -23587,8 +23621,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -23689,8 +23723,8 @@ after('renderer.SetDrawings', function () {
 @summary save/load your game
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -23876,8 +23910,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -23897,6 +23931,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -23934,17 +23979,6 @@ var inject$1 = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -24037,10 +24071,11 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /*
 Helper used to replace code in a script tag based on a search regex
@@ -24560,8 +24595,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary treat some items like sprites that can be placed multiple times
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -24719,8 +24754,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -25379,8 +25414,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 @summary time player actions
 @license MIT
 @author Lenny Magner
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -25575,8 +25610,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -25596,6 +25631,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -25633,17 +25679,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -25736,10 +25771,11 @@ function addDualDialogTag(tag, fn) {
 @file utils
 @summary miscellaneous bitsy utilities
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
+
 
 /**
  * Helper for printing dialog inside of a dialog function.
@@ -25757,6 +25793,7 @@ function printDialog(environment, text, onReturn) {
 		onReturn(null);
 	});
 }
+
 
 
 
@@ -25850,8 +25887,8 @@ exports.hackOptions = hackOptions;
 @summary text-to-speech for bitsy dialog
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -26034,8 +26071,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -26055,6 +26092,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -26092,17 +26140,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -26190,6 +26227,7 @@ function addDualDialogTag(tag, fn) {
 	});
 	addDeferredDialogTag(tag, fn);
 }
+
 
 
 
@@ -26329,8 +26367,8 @@ exports.hackOptions = hackOptions;
 @summary process all dialog text with a tracery grammar
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -27357,8 +27395,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -27440,8 +27478,8 @@ exports.hackOptions = hackOptions;
 @summary customizable WebGL transitions
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -27655,8 +27693,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -27720,8 +27758,8 @@ var after = kitsy.after;
 @summary WebGLazy bitsy integration (this one's mostly just for me)
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -27851,8 +27889,8 @@ exports.hackOptions = hackOptions;
 @summary makes the game have a transparent background
 @license MIT
 @author Cephalopodunk & Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -28014,8 +28052,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -28079,8 +28117,8 @@ var after = kitsy.after;
 @summary makes all sprites have transparent backgrounds (deprecated)
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -28142,8 +28180,8 @@ exports.hackOptions = hackOptions;
 @summary makes the dialog box have a transparent background
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -28290,8 +28328,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -28362,8 +28400,8 @@ after('dialogRenderer.ClearTextbox', function () {
 @summary makes all sprites have transparent backgrounds (deprecated)
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -28528,8 +28566,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -28611,8 +28649,8 @@ exports.hackOptions = hackOptions;
 @summary interprocess communication for twine and bitsy
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -28841,8 +28879,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -28862,6 +28900,17 @@ var kitsy = (window.kitsy = window.kitsy || {
     /** Apples all queued \`before\`/\`after\` calls. */
     applyHooks,
 });
+
+// Rewrite custom functions' parentheses to curly braces for Bitsy's
+// interpreter. Unescape escaped parentheticals, too.
+function convertDialogTags(input, tag) {
+	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
+		if (match.substr(0, 1) === '\\\\') {
+			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
+		}
+		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
+	});
+}
 
 var hooked = kitsy.hooked;
 if (!hooked) {
@@ -28899,17 +28948,6 @@ var inject = kitsy.inject;
 var before = kitsy.before;
 /** @see kitsy.after */
 var after = kitsy.after;
-
-// Rewrite custom functions' parentheses to curly braces for Bitsy's
-// interpreter. Unescape escaped parentheticals, too.
-function convertDialogTags(input, tag) {
-	return input.replace(new RegExp('\\\\\\\\?\\\\((' + tag + '(\\\\s+(".*?"|.+?))?)\\\\\\\\?\\\\)', 'g'), function (match, group) {
-		if (match.substr(0, 1) === '\\\\') {
-			return '(' + group + ')'; // Rewrite \\(tag "..."|...\\) to (tag "..."|...)
-		}
-		return '{' + group + '}'; // Rewrite (tag "..."|...) to {tag "..."|...}
-	});
-}
 
 function addDialogFunction(tag, fn) {
 	kitsy.dialogFunctions = kitsy.dialogFunctions || {};
@@ -29072,8 +29110,8 @@ exports.hackOptions = hackOptions;
 @summary items which, when picked up, remove all other instances of that item from the game
 @license MIT
 @author Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 
 @description
@@ -29231,8 +29269,8 @@ function applyHook(root, functionName) {
 @summary Monkey-patching toolkit to make it easier and cleaner to run code before and after functions or to inject new code into script tags
 @license WTFPL (do WTF you want)
 @author Original by mildmojo; modified by Sean S. LeBlanc
-@version 21.3.0
-@requires Bitsy 8.4
+@version 21.5.0
+@requires Bitsy 8.7
 
 */
 var kitsy = (window.kitsy = window.kitsy || {
@@ -29308,7 +29346,7 @@ after('onInventoryChanged', function (id) {
 exports.hackOptions = hackOptions;
 
 })(this.hacks.unique_items = this.hacks.unique_items || {}, window);
-`,yr="@bitsy/hecks",br="a collection of re-usable scripts for bitsy game maker",vr=["bitsy","hacks"],wr="index.mjs",kr="21.4.0",xr="8.6",Sr={build:"rollup -c --bundleConfigAsCjs",test:"jest --runInBand",lint:"eslint ./src/**/*.js",postversion:"npm run build"},Tr="Sean S. LeBlanc <sean.s.leblanc@gmail.com>",jr="MIT (individual hacks have their own license specified)",Ir={type:"git",url:"git://github.com/seleb/bitsy-hacks.git"},Fr={"@seansleblanc/pink-trombone":"^1.0.1","input-gamepads.js":"^3.0.4",kitsy:"^1.1.0",omggif:"^1.0.10",rollup:"^3.2.2","rollup-plugin-commonjs":"^10.1.0","rollup-plugin-node-resolve":"^5.2.0","tracery-grammar":"^2.7.4",webglazy:"^3.1.2"},Ar={"@babel/plugin-transform-runtime":"^7.15.0","@babel/preset-env":"^7.15.0","@babel/runtime":"^7.15.3",doctrine:"^3.0.0",eslint:"^8.2.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.3.0","eslint-plugin-import":"^2.24.2","eslint-plugin-prettier":"^4.0.0",jest:"^29.3.1","jest-environment-jsdom":"^29.0.1","jest-image-snapshot":"^6.0.0","lodash.kebabcase":"^4.1.1",prettier:"^2.4.1",puppeteer:"^20.5.0"},_r={setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"]},Er={branches:["+([0-9])?(.{+([0-9]),x}).x","main"],plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["dist/*.js","README.md","CHANGELOG.md","package.json","package-lock.json"]}]]},zt={name:yr,description:br,keywords:vr,main:wr,version:kr,bitsyVersion:xr,scripts:Sr,author:Tr,license:jr,repository:Ir,dependencies:Fr,devDependencies:Ar,jest:_r,release:Er};var B=typeof globalThis<"u"?globalThis:typeof window<"u"?window:typeof global<"u"?global:typeof self<"u"?self:{},vn={exports:{}};(function(t,n){(function(r,d){d()})(B,function(){function r(s,i){return typeof i>"u"?i={autoBom:!1}:typeof i!="object"&&(console.warn("Deprecated: Expected third argument to be a object"),i={autoBom:!i}),i.autoBom&&/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(s.type)?new Blob(["\uFEFF",s],{type:s.type}):s}function d(s,i,h){var e=new XMLHttpRequest;e.open("GET",s),e.responseType="blob",e.onload=function(){o(e.response,i,h)},e.onerror=function(){console.error("could not download file")},e.send()}function f(s){var i=new XMLHttpRequest;i.open("HEAD",s,!1);try{i.send()}catch{}return 200<=i.status&&299>=i.status}function p(s){try{s.dispatchEvent(new MouseEvent("click"))}catch{var i=document.createEvent("MouseEvents");i.initMouseEvent("click",!0,!0,window,0,0,0,80,20,!1,!1,!1,!1,0,null),s.dispatchEvent(i)}}var u=typeof window=="object"&&window.window===window?window:typeof self=="object"&&self.self===self?self:typeof B=="object"&&B.global===B?B:void 0,l=u.navigator&&/Macintosh/.test(navigator.userAgent)&&/AppleWebKit/.test(navigator.userAgent)&&!/Safari/.test(navigator.userAgent),o=u.saveAs||(typeof window!="object"||window!==u?function(){}:"download"in HTMLAnchorElement.prototype&&!l?function(s,i,h){var e=u.URL||u.webkitURL,c=document.createElement("a");i=i||s.name||"download",c.download=i,c.rel="noopener",typeof s=="string"?(c.href=s,c.origin===location.origin?p(c):f(c.href)?d(s,i,h):p(c,c.target="_blank")):(c.href=e.createObjectURL(s),setTimeout(function(){e.revokeObjectURL(c.href)},4e4),setTimeout(function(){p(c)},0))}:"msSaveOrOpenBlob"in navigator?function(s,i,h){if(i=i||s.name||"download",typeof s!="string")navigator.msSaveOrOpenBlob(r(s,h),i);else if(f(s))d(s,i,h);else{var e=document.createElement("a");e.href=s,e.target="_blank",setTimeout(function(){p(e)})}}:function(s,i,h,e){if(e=e||open("","_blank"),e&&(e.document.title=e.document.body.innerText="downloading..."),typeof s=="string")return d(s,i,h);var c=s.type==="application/octet-stream",a=/constructor/i.test(u.HTMLElement)||u.safari,g=/CriOS\/[\d]+/.test(navigator.userAgent);if((g||c&&a||l)&&typeof FileReader<"u"){var m=new FileReader;m.onloadend=function(){var k=m.result;k=g?k:k.replace(/^data:[^;]*;/,"data:attachment/file;"),e?e.location.href=k:location=k,e=null},m.readAsDataURL(s)}else{var w=u.URL||u.webkitURL,b=w.createObjectURL(s);e?e.location=b:location.href=b,e=null,setTimeout(function(){w.revokeObjectURL(b)},4e4)}});u.saveAs=o.saveAs=o,t.exports=o})})(vn);var Nr=vn.exports,wt={exports:{}},kt={exports:{}},E={},I={};I.__esModule=!0;I.extend=wn;I.indexOf=Rr;I.escapeExpression=qr;I.isEmpty=Mr;I.createFrame=Pr;I.blockParams=Lr;I.appendContextPath=Hr;var Or={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","`":"&#x60;","=":"&#x3D;"},Br=/[&<>"'`=]/g,Cr=/[&<>"'`=]/;function Dr(t){return Or[t]}function wn(t){for(var n=1;n<arguments.length;n++)for(var r in arguments[n])Object.prototype.hasOwnProperty.call(arguments[n],r)&&(t[r]=arguments[n][r]);return t}var Wt=Object.prototype.toString;I.toString=Wt;var xt=function(n){return typeof n=="function"};xt(/x/)&&(I.isFunction=xt=function(t){return typeof t=="function"&&Wt.call(t)==="[object Function]"});I.isFunction=xt;var kn=Array.isArray||function(t){return t&&typeof t=="object"?Wt.call(t)==="[object Array]":!1};I.isArray=kn;function Rr(t,n){for(var r=0,d=t.length;r<d;r++)if(t[r]===n)return r;return-1}function qr(t){if(typeof t!="string"){if(t&&t.toHTML)return t.toHTML();if(t==null)return"";if(!t)return t+"";t=""+t}return Cr.test(t)?t.replace(Br,Dr):t}function Mr(t){return!t&&t!==0?!0:!!(kn(t)&&t.length===0)}function Pr(t){var n=wn({},t);return n._parent=t,n}function Lr(t,n){return t.path=n,t}function Hr(t,n){return(t?t+".":"")+n}var St={exports:{}};(function(t,n){n.__esModule=!0;var r=["description","fileName","lineNumber","endLineNumber","message","name","number","stack"];function d(f,p){var u=p&&p.loc,l=void 0,o=void 0,s=void 0,i=void 0;u&&(l=u.start.line,o=u.end.line,s=u.start.column,i=u.end.column,f+=" - "+l+":"+s);for(var h=Error.prototype.constructor.call(this,f),e=0;e<r.length;e++)this[r[e]]=h[r[e]];Error.captureStackTrace&&Error.captureStackTrace(this,d);try{u&&(this.lineNumber=l,this.endLineNumber=o,Object.defineProperty?(Object.defineProperty(this,"column",{value:s,enumerable:!0}),Object.defineProperty(this,"endColumn",{value:i,enumerable:!0})):(this.column=s,this.endColumn=i))}catch{}}d.prototype=new Error,n.default=d,t.exports=n.default})(St,St.exports);var O=St.exports,tt={},Tt={exports:{}};(function(t,n){n.__esModule=!0;var r=I;n.default=function(d){d.registerHelper("blockHelperMissing",function(f,p){var u=p.inverse,l=p.fn;if(f===!0)return l(this);if(f===!1||f==null)return u(this);if(r.isArray(f))return f.length>0?(p.ids&&(p.ids=[p.name]),d.helpers.each(f,p)):u(this);if(p.data&&p.ids){var o=r.createFrame(p.data);o.contextPath=r.appendContextPath(p.data.contextPath,p.name),p={data:o}}return l(f,p)})},t.exports=n.default})(Tt,Tt.exports);var Gr=Tt.exports,jt={exports:{}};(function(t,n){n.__esModule=!0;function r(u){return u&&u.__esModule?u:{default:u}}var d=I,f=O,p=r(f);n.default=function(u){u.registerHelper("each",function(l,o){if(!o)throw new p.default("Must pass iterator to #each");var s=o.fn,i=o.inverse,h=0,e="",c=void 0,a=void 0;o.data&&o.ids&&(a=d.appendContextPath(o.data.contextPath,o.ids[0])+"."),d.isFunction(l)&&(l=l.call(this)),o.data&&(c=d.createFrame(o.data));function g(y,v,S){c&&(c.key=y,c.index=v,c.first=v===0,c.last=!!S,a&&(c.contextPath=a+y)),e=e+s(l[y],{data:c,blockParams:d.blockParams([l[y],y],[a+y,null])})}if(l&&typeof l=="object")if(d.isArray(l))for(var m=l.length;h<m;h++)h in l&&g(h,h,h===l.length-1);else if(B.Symbol&&l[B.Symbol.iterator]){for(var w=[],b=l[B.Symbol.iterator](),k=b.next();!k.done;k=b.next())w.push(k.value);l=w;for(var m=l.length;h<m;h++)g(h,h,h===l.length-1)}else(function(){var y=void 0;Object.keys(l).forEach(function(v){y!==void 0&&g(y,h-1),y=v,h++}),y!==void 0&&g(y,h-1,!0)})();return h===0&&(e=i(this)),e})},t.exports=n.default})(jt,jt.exports);var Vr=jt.exports,It={exports:{}};(function(t,n){n.__esModule=!0;function r(p){return p&&p.__esModule?p:{default:p}}var d=O,f=r(d);n.default=function(p){p.registerHelper("helperMissing",function(){if(arguments.length!==1)throw new f.default('Missing helper: "'+arguments[arguments.length-1].name+'"')})},t.exports=n.default})(It,It.exports);var Ur=It.exports,Ft={exports:{}};(function(t,n){n.__esModule=!0;function r(u){return u&&u.__esModule?u:{default:u}}var d=I,f=O,p=r(f);n.default=function(u){u.registerHelper("if",function(l,o){if(arguments.length!=2)throw new p.default("#if requires exactly one argument");return d.isFunction(l)&&(l=l.call(this)),!o.hash.includeZero&&!l||d.isEmpty(l)?o.inverse(this):o.fn(this)}),u.registerHelper("unless",function(l,o){if(arguments.length!=2)throw new p.default("#unless requires exactly one argument");return u.helpers.if.call(this,l,{fn:o.inverse,inverse:o.fn,hash:o.hash})})},t.exports=n.default})(Ft,Ft.exports);var zr=Ft.exports,At={exports:{}};(function(t,n){n.__esModule=!0,n.default=function(r){r.registerHelper("log",function(){for(var d=[void 0],f=arguments[arguments.length-1],p=0;p<arguments.length-1;p++)d.push(arguments[p]);var u=1;f.hash.level!=null?u=f.hash.level:f.data&&f.data.level!=null&&(u=f.data.level),d[0]=u,r.log.apply(r,d)})},t.exports=n.default})(At,At.exports);var Wr=At.exports,_t={exports:{}};(function(t,n){n.__esModule=!0,n.default=function(r){r.registerHelper("lookup",function(d,f,p){return d&&p.lookupProperty(d,f)})},t.exports=n.default})(_t,_t.exports);var $r=_t.exports,Et={exports:{}};(function(t,n){n.__esModule=!0;function r(u){return u&&u.__esModule?u:{default:u}}var d=I,f=O,p=r(f);n.default=function(u){u.registerHelper("with",function(l,o){if(arguments.length!=2)throw new p.default("#with requires exactly one argument");d.isFunction(l)&&(l=l.call(this));var s=o.fn;if(d.isEmpty(l))return o.inverse(this);var i=o.data;return o.data&&o.ids&&(i=d.createFrame(o.data),i.contextPath=d.appendContextPath(o.data.contextPath,o.ids[0])),s(l,{data:i,blockParams:d.blockParams([l],[i&&i.contextPath])})})},t.exports=n.default})(Et,Et.exports);var Yr=Et.exports;tt.__esModule=!0;tt.registerDefaultHelpers=li;tt.moveHelperToHooks=ui;function L(t){return t&&t.__esModule?t:{default:t}}var Xr=Gr,Kr=L(Xr),Jr=Vr,Zr=L(Jr),Qr=Ur,ti=L(Qr),ni=zr,ei=L(ni),ri=Wr,ii=L(ri),ai=$r,oi=L(ai),si=Yr,ci=L(si);function li(t){Kr.default(t),Zr.default(t),ti.default(t),ei.default(t),ii.default(t),oi.default(t),ci.default(t)}function ui(t,n,r){t.helpers[n]&&(t.hooks[n]=t.helpers[n],r||delete t.helpers[n])}var $t={},Nt={exports:{}};(function(t,n){n.__esModule=!0;var r=I;n.default=function(d){d.registerDecorator("inline",function(f,p,u,l){var o=f;return p.partials||(p.partials={},o=function(s,i){var h=u.partials;u.partials=r.extend({},h,p.partials);var e=f(s,i);return u.partials=h,e}),p.partials[l.args[0]]=l.fn,o})},t.exports=n.default})(Nt,Nt.exports);var pi=Nt.exports;$t.__esModule=!0;$t.registerDefaultDecorators=gi;function di(t){return t&&t.__esModule?t:{default:t}}var fi=pi,hi=di(fi);function gi(t){hi.default(t)}var Ot={exports:{}};(function(t,n){n.__esModule=!0;var r=I,d={methodMap:["debug","info","warn","error"],level:"info",lookupLevel:function(p){if(typeof p=="string"){var u=r.indexOf(d.methodMap,p.toLowerCase());u>=0?p=u:p=parseInt(p,10)}return p},log:function(p){if(p=d.lookupLevel(p),typeof console<"u"&&d.lookupLevel(d.level)<=p){var u=d.methodMap[p];console[u]||(u="log");for(var l=arguments.length,o=Array(l>1?l-1:0),s=1;s<l;s++)o[s-1]=arguments[s];console[u].apply(console,o)}}};n.default=d,t.exports=n.default})(Ot,Ot.exports);var xn=Ot.exports,z={},Yt={};Yt.__esModule=!0;Yt.createNewLookupObject=yi;var mi=I;function yi(){for(var t=arguments.length,n=Array(t),r=0;r<t;r++)n[r]=arguments[r];return mi.extend.apply(void 0,[Object.create(null)].concat(n))}z.__esModule=!0;z.createProtoAccessControl=ki;z.resultIsAllowed=xi;z.resetLoggedProperties=Ti;function bi(t){if(t&&t.__esModule)return t;var n={};if(t!=null)for(var r in t)Object.prototype.hasOwnProperty.call(t,r)&&(n[r]=t[r]);return n.default=t,n}var nn=Yt,vi=xn,wi=bi(vi),ct=Object.create(null);function ki(t){var n=Object.create(null);n.constructor=!1,n.__defineGetter__=!1,n.__defineSetter__=!1,n.__lookupGetter__=!1;var r=Object.create(null);return r.__proto__=!1,{properties:{whitelist:nn.createNewLookupObject(r,t.allowedProtoProperties),defaultValue:t.allowProtoPropertiesByDefault},methods:{whitelist:nn.createNewLookupObject(n,t.allowedProtoMethods),defaultValue:t.allowProtoMethodsByDefault}}}function xi(t,n,r){return en(typeof t=="function"?n.methods:n.properties,r)}function en(t,n){return t.whitelist[n]!==void 0?t.whitelist[n]===!0:t.defaultValue!==void 0?t.defaultValue:(Si(n),!1)}function Si(t){ct[t]!==!0&&(ct[t]=!0,wi.log("error",'Handlebars: Access has been denied to resolve the property "'+t+`" because it is not an "own property" of its parent.
+`,yr="@bitsy/hecks",br="a collection of re-usable scripts for bitsy game maker",vr=["bitsy","hacks"],wr="index.mjs",kr="21.5.0",xr="8.7",Sr={build:"rollup -c --bundleConfigAsCjs",test:"jest --runInBand",lint:"eslint ./src/**/*.js",postversion:"npm run build"},Tr="Sean S. LeBlanc <sean.s.leblanc@gmail.com>",jr="MIT (individual hacks have their own license specified)",Ir={type:"git",url:"git://github.com/seleb/bitsy-hacks.git"},Fr={"@seansleblanc/pink-trombone":"^1.0.1","input-gamepads.js":"^3.0.4",kitsy:"^1.1.0",omggif:"^1.0.10",rollup:"^3.2.2","rollup-plugin-commonjs":"^10.1.0","rollup-plugin-node-resolve":"^5.2.0","tracery-grammar":"^2.7.4",webglazy:"^3.1.2"},Ar={"@babel/plugin-transform-runtime":"^7.15.0","@babel/preset-env":"^7.15.0","@babel/runtime":"^7.15.3",doctrine:"^3.0.0",eslint:"^8.2.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.3.0","eslint-plugin-import":"^2.24.2","eslint-plugin-prettier":"^4.0.0",jest:"^29.3.1","jest-environment-jsdom":"^29.0.1","jest-image-snapshot":"^6.0.0","lodash.kebabcase":"^4.1.1",prettier:"^2.4.1",puppeteer:"^20.5.0"},_r={setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"]},Er={branches:["+([0-9])?(.{+([0-9]),x}).x","main"],plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["dist/*.js","README.md","CHANGELOG.md","package.json","package-lock.json"]}]]},zt={name:yr,description:br,keywords:vr,main:wr,version:kr,bitsyVersion:xr,scripts:Sr,author:Tr,license:jr,repository:Ir,dependencies:Fr,devDependencies:Ar,jest:_r,release:Er};var B=typeof globalThis<"u"?globalThis:typeof window<"u"?window:typeof global<"u"?global:typeof self<"u"?self:{},vn={exports:{}};(function(t,n){(function(r,d){d()})(B,function(){function r(s,i){return typeof i>"u"?i={autoBom:!1}:typeof i!="object"&&(console.warn("Deprecated: Expected third argument to be a object"),i={autoBom:!i}),i.autoBom&&/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(s.type)?new Blob(["\uFEFF",s],{type:s.type}):s}function d(s,i,h){var e=new XMLHttpRequest;e.open("GET",s),e.responseType="blob",e.onload=function(){o(e.response,i,h)},e.onerror=function(){console.error("could not download file")},e.send()}function f(s){var i=new XMLHttpRequest;i.open("HEAD",s,!1);try{i.send()}catch{}return 200<=i.status&&299>=i.status}function p(s){try{s.dispatchEvent(new MouseEvent("click"))}catch{var i=document.createEvent("MouseEvents");i.initMouseEvent("click",!0,!0,window,0,0,0,80,20,!1,!1,!1,!1,0,null),s.dispatchEvent(i)}}var u=typeof window=="object"&&window.window===window?window:typeof self=="object"&&self.self===self?self:typeof B=="object"&&B.global===B?B:void 0,l=u.navigator&&/Macintosh/.test(navigator.userAgent)&&/AppleWebKit/.test(navigator.userAgent)&&!/Safari/.test(navigator.userAgent),o=u.saveAs||(typeof window!="object"||window!==u?function(){}:"download"in HTMLAnchorElement.prototype&&!l?function(s,i,h){var e=u.URL||u.webkitURL,c=document.createElement("a");i=i||s.name||"download",c.download=i,c.rel="noopener",typeof s=="string"?(c.href=s,c.origin===location.origin?p(c):f(c.href)?d(s,i,h):p(c,c.target="_blank")):(c.href=e.createObjectURL(s),setTimeout(function(){e.revokeObjectURL(c.href)},4e4),setTimeout(function(){p(c)},0))}:"msSaveOrOpenBlob"in navigator?function(s,i,h){if(i=i||s.name||"download",typeof s!="string")navigator.msSaveOrOpenBlob(r(s,h),i);else if(f(s))d(s,i,h);else{var e=document.createElement("a");e.href=s,e.target="_blank",setTimeout(function(){p(e)})}}:function(s,i,h,e){if(e=e||open("","_blank"),e&&(e.document.title=e.document.body.innerText="downloading..."),typeof s=="string")return d(s,i,h);var c=s.type==="application/octet-stream",a=/constructor/i.test(u.HTMLElement)||u.safari,g=/CriOS\/[\d]+/.test(navigator.userAgent);if((g||c&&a||l)&&typeof FileReader<"u"){var m=new FileReader;m.onloadend=function(){var k=m.result;k=g?k:k.replace(/^data:[^;]*;/,"data:attachment/file;"),e?e.location.href=k:location=k,e=null},m.readAsDataURL(s)}else{var w=u.URL||u.webkitURL,b=w.createObjectURL(s);e?e.location=b:location.href=b,e=null,setTimeout(function(){w.revokeObjectURL(b)},4e4)}});u.saveAs=o.saveAs=o,t.exports=o})})(vn);var Nr=vn.exports,wt={exports:{}},kt={exports:{}},E={},I={};I.__esModule=!0;I.extend=wn;I.indexOf=Rr;I.escapeExpression=qr;I.isEmpty=Mr;I.createFrame=Pr;I.blockParams=Lr;I.appendContextPath=Hr;var Or={"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#x27;","`":"&#x60;","=":"&#x3D;"},Br=/[&<>"'`=]/g,Cr=/[&<>"'`=]/;function Dr(t){return Or[t]}function wn(t){for(var n=1;n<arguments.length;n++)for(var r in arguments[n])Object.prototype.hasOwnProperty.call(arguments[n],r)&&(t[r]=arguments[n][r]);return t}var Wt=Object.prototype.toString;I.toString=Wt;var xt=function(n){return typeof n=="function"};xt(/x/)&&(I.isFunction=xt=function(t){return typeof t=="function"&&Wt.call(t)==="[object Function]"});I.isFunction=xt;var kn=Array.isArray||function(t){return t&&typeof t=="object"?Wt.call(t)==="[object Array]":!1};I.isArray=kn;function Rr(t,n){for(var r=0,d=t.length;r<d;r++)if(t[r]===n)return r;return-1}function qr(t){if(typeof t!="string"){if(t&&t.toHTML)return t.toHTML();if(t==null)return"";if(!t)return t+"";t=""+t}return Cr.test(t)?t.replace(Br,Dr):t}function Mr(t){return!t&&t!==0?!0:!!(kn(t)&&t.length===0)}function Pr(t){var n=wn({},t);return n._parent=t,n}function Lr(t,n){return t.path=n,t}function Hr(t,n){return(t?t+".":"")+n}var St={exports:{}};(function(t,n){n.__esModule=!0;var r=["description","fileName","lineNumber","endLineNumber","message","name","number","stack"];function d(f,p){var u=p&&p.loc,l=void 0,o=void 0,s=void 0,i=void 0;u&&(l=u.start.line,o=u.end.line,s=u.start.column,i=u.end.column,f+=" - "+l+":"+s);for(var h=Error.prototype.constructor.call(this,f),e=0;e<r.length;e++)this[r[e]]=h[r[e]];Error.captureStackTrace&&Error.captureStackTrace(this,d);try{u&&(this.lineNumber=l,this.endLineNumber=o,Object.defineProperty?(Object.defineProperty(this,"column",{value:s,enumerable:!0}),Object.defineProperty(this,"endColumn",{value:i,enumerable:!0})):(this.column=s,this.endColumn=i))}catch{}}d.prototype=new Error,n.default=d,t.exports=n.default})(St,St.exports);var O=St.exports,tt={},Tt={exports:{}};(function(t,n){n.__esModule=!0;var r=I;n.default=function(d){d.registerHelper("blockHelperMissing",function(f,p){var u=p.inverse,l=p.fn;if(f===!0)return l(this);if(f===!1||f==null)return u(this);if(r.isArray(f))return f.length>0?(p.ids&&(p.ids=[p.name]),d.helpers.each(f,p)):u(this);if(p.data&&p.ids){var o=r.createFrame(p.data);o.contextPath=r.appendContextPath(p.data.contextPath,p.name),p={data:o}}return l(f,p)})},t.exports=n.default})(Tt,Tt.exports);var Gr=Tt.exports,jt={exports:{}};(function(t,n){n.__esModule=!0;function r(u){return u&&u.__esModule?u:{default:u}}var d=I,f=O,p=r(f);n.default=function(u){u.registerHelper("each",function(l,o){if(!o)throw new p.default("Must pass iterator to #each");var s=o.fn,i=o.inverse,h=0,e="",c=void 0,a=void 0;o.data&&o.ids&&(a=d.appendContextPath(o.data.contextPath,o.ids[0])+"."),d.isFunction(l)&&(l=l.call(this)),o.data&&(c=d.createFrame(o.data));function g(y,v,S){c&&(c.key=y,c.index=v,c.first=v===0,c.last=!!S,a&&(c.contextPath=a+y)),e=e+s(l[y],{data:c,blockParams:d.blockParams([l[y],y],[a+y,null])})}if(l&&typeof l=="object")if(d.isArray(l))for(var m=l.length;h<m;h++)h in l&&g(h,h,h===l.length-1);else if(B.Symbol&&l[B.Symbol.iterator]){for(var w=[],b=l[B.Symbol.iterator](),k=b.next();!k.done;k=b.next())w.push(k.value);l=w;for(var m=l.length;h<m;h++)g(h,h,h===l.length-1)}else(function(){var y=void 0;Object.keys(l).forEach(function(v){y!==void 0&&g(y,h-1),y=v,h++}),y!==void 0&&g(y,h-1,!0)})();return h===0&&(e=i(this)),e})},t.exports=n.default})(jt,jt.exports);var Vr=jt.exports,It={exports:{}};(function(t,n){n.__esModule=!0;function r(p){return p&&p.__esModule?p:{default:p}}var d=O,f=r(d);n.default=function(p){p.registerHelper("helperMissing",function(){if(arguments.length!==1)throw new f.default('Missing helper: "'+arguments[arguments.length-1].name+'"')})},t.exports=n.default})(It,It.exports);var Ur=It.exports,Ft={exports:{}};(function(t,n){n.__esModule=!0;function r(u){return u&&u.__esModule?u:{default:u}}var d=I,f=O,p=r(f);n.default=function(u){u.registerHelper("if",function(l,o){if(arguments.length!=2)throw new p.default("#if requires exactly one argument");return d.isFunction(l)&&(l=l.call(this)),!o.hash.includeZero&&!l||d.isEmpty(l)?o.inverse(this):o.fn(this)}),u.registerHelper("unless",function(l,o){if(arguments.length!=2)throw new p.default("#unless requires exactly one argument");return u.helpers.if.call(this,l,{fn:o.inverse,inverse:o.fn,hash:o.hash})})},t.exports=n.default})(Ft,Ft.exports);var zr=Ft.exports,At={exports:{}};(function(t,n){n.__esModule=!0,n.default=function(r){r.registerHelper("log",function(){for(var d=[void 0],f=arguments[arguments.length-1],p=0;p<arguments.length-1;p++)d.push(arguments[p]);var u=1;f.hash.level!=null?u=f.hash.level:f.data&&f.data.level!=null&&(u=f.data.level),d[0]=u,r.log.apply(r,d)})},t.exports=n.default})(At,At.exports);var Wr=At.exports,_t={exports:{}};(function(t,n){n.__esModule=!0,n.default=function(r){r.registerHelper("lookup",function(d,f,p){return d&&p.lookupProperty(d,f)})},t.exports=n.default})(_t,_t.exports);var $r=_t.exports,Et={exports:{}};(function(t,n){n.__esModule=!0;function r(u){return u&&u.__esModule?u:{default:u}}var d=I,f=O,p=r(f);n.default=function(u){u.registerHelper("with",function(l,o){if(arguments.length!=2)throw new p.default("#with requires exactly one argument");d.isFunction(l)&&(l=l.call(this));var s=o.fn;if(d.isEmpty(l))return o.inverse(this);var i=o.data;return o.data&&o.ids&&(i=d.createFrame(o.data),i.contextPath=d.appendContextPath(o.data.contextPath,o.ids[0])),s(l,{data:i,blockParams:d.blockParams([l],[i&&i.contextPath])})})},t.exports=n.default})(Et,Et.exports);var Yr=Et.exports;tt.__esModule=!0;tt.registerDefaultHelpers=li;tt.moveHelperToHooks=ui;function L(t){return t&&t.__esModule?t:{default:t}}var Xr=Gr,Kr=L(Xr),Jr=Vr,Zr=L(Jr),Qr=Ur,ti=L(Qr),ni=zr,ei=L(ni),ri=Wr,ii=L(ri),ai=$r,oi=L(ai),si=Yr,ci=L(si);function li(t){Kr.default(t),Zr.default(t),ti.default(t),ei.default(t),ii.default(t),oi.default(t),ci.default(t)}function ui(t,n,r){t.helpers[n]&&(t.hooks[n]=t.helpers[n],r||delete t.helpers[n])}var $t={},Nt={exports:{}};(function(t,n){n.__esModule=!0;var r=I;n.default=function(d){d.registerDecorator("inline",function(f,p,u,l){var o=f;return p.partials||(p.partials={},o=function(s,i){var h=u.partials;u.partials=r.extend({},h,p.partials);var e=f(s,i);return u.partials=h,e}),p.partials[l.args[0]]=l.fn,o})},t.exports=n.default})(Nt,Nt.exports);var pi=Nt.exports;$t.__esModule=!0;$t.registerDefaultDecorators=gi;function di(t){return t&&t.__esModule?t:{default:t}}var fi=pi,hi=di(fi);function gi(t){hi.default(t)}var Ot={exports:{}};(function(t,n){n.__esModule=!0;var r=I,d={methodMap:["debug","info","warn","error"],level:"info",lookupLevel:function(p){if(typeof p=="string"){var u=r.indexOf(d.methodMap,p.toLowerCase());u>=0?p=u:p=parseInt(p,10)}return p},log:function(p){if(p=d.lookupLevel(p),typeof console<"u"&&d.lookupLevel(d.level)<=p){var u=d.methodMap[p];console[u]||(u="log");for(var l=arguments.length,o=Array(l>1?l-1:0),s=1;s<l;s++)o[s-1]=arguments[s];console[u].apply(console,o)}}};n.default=d,t.exports=n.default})(Ot,Ot.exports);var xn=Ot.exports,z={},Yt={};Yt.__esModule=!0;Yt.createNewLookupObject=yi;var mi=I;function yi(){for(var t=arguments.length,n=Array(t),r=0;r<t;r++)n[r]=arguments[r];return mi.extend.apply(void 0,[Object.create(null)].concat(n))}z.__esModule=!0;z.createProtoAccessControl=ki;z.resultIsAllowed=xi;z.resetLoggedProperties=Ti;function bi(t){if(t&&t.__esModule)return t;var n={};if(t!=null)for(var r in t)Object.prototype.hasOwnProperty.call(t,r)&&(n[r]=t[r]);return n.default=t,n}var nn=Yt,vi=xn,wi=bi(vi),ct=Object.create(null);function ki(t){var n=Object.create(null);n.constructor=!1,n.__defineGetter__=!1,n.__defineSetter__=!1,n.__lookupGetter__=!1;var r=Object.create(null);return r.__proto__=!1,{properties:{whitelist:nn.createNewLookupObject(r,t.allowedProtoProperties),defaultValue:t.allowProtoPropertiesByDefault},methods:{whitelist:nn.createNewLookupObject(n,t.allowedProtoMethods),defaultValue:t.allowProtoMethodsByDefault}}}function xi(t,n,r){return en(typeof t=="function"?n.methods:n.properties,r)}function en(t,n){return t.whitelist[n]!==void 0?t.whitelist[n]===!0:t.defaultValue!==void 0?t.defaultValue:(Si(n),!1)}function Si(t){ct[t]!==!0&&(ct[t]=!0,wi.log("error",'Handlebars: Access has been denied to resolve the property "'+t+`" because it is not an "own property" of its parent.
 You can add a runtime option to disable the check or this warning:
 See https://handlebarsjs.com/api-reference/runtime-options.html#options-to-control-prototype-access for details`))}function Ti(){Object.keys(ct).forEach(function(t){delete ct[t]})}E.__esModule=!0;E.HandlebarsEnvironment=Bt;function Sn(t){return t&&t.__esModule?t:{default:t}}var P=I,ji=O,ut=Sn(ji),Ii=tt,Fi=$t,Ai=xn,lt=Sn(Ai),_i=z,Ei="4.7.7";E.VERSION=Ei;var Ni=8;E.COMPILER_REVISION=Ni;var Oi=7;E.LAST_COMPATIBLE_COMPILER_REVISION=Oi;var Bi={1:"<= 1.0.rc.2",2:"== 1.0.0-rc.3",3:"== 1.0.0-rc.4",4:"== 1.x.x",5:"== 2.0.0-alpha.x",6:">= 2.0.0-beta.1",7:">= 4.0.0 <4.3.0",8:">= 4.3.0"};E.REVISION_CHANGES=Bi;var pt="[object Object]";function Bt(t,n,r){this.helpers=t||{},this.partials=n||{},this.decorators=r||{},Ii.registerDefaultHelpers(this),Fi.registerDefaultDecorators(this)}Bt.prototype={constructor:Bt,logger:lt.default,log:lt.default.log,registerHelper:function(n,r){if(P.toString.call(n)===pt){if(r)throw new ut.default("Arg not supported with multiple helpers");P.extend(this.helpers,n)}else this.helpers[n]=r},unregisterHelper:function(n){delete this.helpers[n]},registerPartial:function(n,r){if(P.toString.call(n)===pt)P.extend(this.partials,n);else{if(typeof r>"u")throw new ut.default('Attempting to register a partial called "'+n+'" as undefined');this.partials[n]=r}},unregisterPartial:function(n){delete this.partials[n]},registerDecorator:function(n,r){if(P.toString.call(n)===pt){if(r)throw new ut.default("Arg not supported with multiple decorators");P.extend(this.decorators,n)}else this.decorators[n]=r},unregisterDecorator:function(n){delete this.decorators[n]},resetLoggedPropertyAccesses:function(){_i.resetLoggedProperties()}};var Ci=lt.default.log;E.log=Ci;E.createFrame=P.createFrame;E.logger=lt.default;var Ct={exports:{}};(function(t,n){n.__esModule=!0;function r(d){this.string=d}r.prototype.toString=r.prototype.toHTML=function(){return""+this.string},n.default=r,t.exports=n.default})(Ct,Ct.exports);var Di=Ct.exports,M={},Xt={};Xt.__esModule=!0;Xt.wrapHelper=Ri;function Ri(t,n){if(typeof t!="function")return t;var r=function(){var f=arguments[arguments.length-1];return arguments[arguments.length-1]=n(f),t.apply(this,arguments)};return r}M.__esModule=!0;M.checkRevision=Gi;M.template=Vi;M.wrapProgram=ot;M.resolvePartial=Ui;M.invokePartial=zi;M.noop=Tn;function qi(t){return t&&t.__esModule?t:{default:t}}function Mi(t){if(t&&t.__esModule)return t;var n={};if(t!=null)for(var r in t)Object.prototype.hasOwnProperty.call(t,r)&&(n[r]=t[r]);return n.default=t,n}var Pi=I,C=Mi(Pi),Li=O,D=qi(Li),R=E,rn=tt,Hi=Xt,an=z;function Gi(t){var n=t&&t[0]||1,r=R.COMPILER_REVISION;if(!(n>=R.LAST_COMPATIBLE_COMPILER_REVISION&&n<=R.COMPILER_REVISION))if(n<R.LAST_COMPATIBLE_COMPILER_REVISION){var d=R.REVISION_CHANGES[r],f=R.REVISION_CHANGES[n];throw new D.default("Template was precompiled with an older version of Handlebars than the current runtime. Please update your precompiler to a newer version ("+d+") or downgrade your runtime to an older version ("+f+").")}else throw new D.default("Template was precompiled with a newer version of Handlebars than the current runtime. Please update your runtime to a newer version ("+t[1]+").")}function Vi(t,n){if(!n)throw new D.default("No environment passed to template");if(!t||!t.main)throw new D.default("Unknown template object: "+typeof t);t.main.decorator=t.main_d,n.VM.checkRevision(t.compiler);var r=t.compiler&&t.compiler[0]===7;function d(u,l,o){o.hash&&(l=C.extend({},l,o.hash),o.ids&&(o.ids[0]=!0)),u=n.VM.resolvePartial.call(this,u,l,o);var s=C.extend({},o,{hooks:this.hooks,protoAccessControl:this.protoAccessControl}),i=n.VM.invokePartial.call(this,u,l,s);if(i==null&&n.compile&&(o.partials[o.name]=n.compile(u,t.compilerOptions,n),i=o.partials[o.name](l,s)),i!=null){if(o.indent){for(var h=i.split(`
 `),e=0,c=h.length;e<c&&!(!h[e]&&e+1===c);e++)h[e]=o.indent+h[e];i=h.join(`
@@ -29816,7 +29854,7 @@ Expecting `+A.join(", ")+", got '"+(this.terminals_[k]||k)+"'":G="Parse error on
 <ul>
 <li>Initial version</li>
 </ul>
-`,Ba="borksy",Ca="6.0.0",Da="Borksy Game Hacker: A tool for extending Bitsy games",Ra={postversion:"npm run build",start:"vite --port 80",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},qa={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},Ma="AYolland",Pa="MIT",La={url:"https://github.com/Ayolland/borksy/issues"},Ha="https://ayolland.itch.io/borksy",Ga={setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},Va={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},Ua={"@bitsy/hecks":"^21.4.0",eslint:"^8.44.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.8.0","eslint-plugin-import":"^2.27.5","eslint-plugin-prettier":"^4.2.1","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^29.6.1","jest-dev-server":"^9.0.0","jest-environment-jsdom":"^29.6.1","jest-image-snapshot":"^6.1.0",prettier:"^2.8.8",puppeteer:"^20.8.0","rollup-plugin-visualizer":"^5.9.2",sass:"^1.63.6",vite:"^4.4.1","vite-plugin-markdown":"^2.2.0-2","vite-plugin-string":"^1.2.1"},za={private:!0,name:Ba,version:Ca,description:Da,scripts:Ra,repository:qa,author:Ma,license:Pa,bugs:La,homepage:Ha,jest:Ga,release:Va,devDependencies:Ua},K=Object.fromEntries(Object.entries(Object.assign({"../about/about.md":Xn,"../about/ayos-special-tips.md":Zn,"../about/how-to-use-borksy.md":ne,"../about/other-tools.md":ie,"../about/troubleshooting-faqs.md":se})).map(([t,n])=>[t.match(/.*\/(.*?)\.md/)[1],n.html])),Rn=Object.fromEntries(Object.entries(Object.assign({"../defaults/body.txt":ce,"../defaults/fontdata.txt":le,"../defaults/gamedata.txt":ue,"../defaults/gamedataHD.txt":pe,"../defaults/style.txt":de})).map(([t,n])=>[t.match(/.*\/(.*?)\.txt/)[1],n])),Wa=Object.values(Object.assign({"../hacks/avatar-by-room.txt":fe,"../hacks/backdrops.txt":he,"../hacks/basic-sfx.txt":ge,"../hacks/bitsymuse.txt":me,"../hacks/canvas-replacement.txt":ye,"../hacks/character-portraits-animated.txt":be,"../hacks/character-portraits.txt":ve,"../hacks/close-on-ending.txt":we,"../hacks/corrupt.txt":ke,"../hacks/custom-exit-effects.txt":xe,"../hacks/custom-keyhandlers.txt":Se,"../hacks/custom-text-effect.txt":Te,"../hacks/dialog-audio-vocal-synth.txt":je,"../hacks/dialog-audio.txt":Ie,"../hacks/dialog-box-transition.txt":Fe,"../hacks/dialog-choices.txt":Ae,"../hacks/dialog-jump.txt":_e,"../hacks/dialog-pause.txt":Ee,"../hacks/dialog-prompt.txt":Ne,"../hacks/direction-in-dialog.txt":Oe,"../hacks/directional-avatar.txt":Be,"../hacks/dynamic-background.txt":Ce,"../hacks/edit-dialog-from-dialog.txt":De,"../hacks/edit-image-from-dialog.txt":Re,"../hacks/edit-player-from-dialog.txt":qe,"../hacks/edit-room-from-dialog.txt":Me,"../hacks/end-from-dialog.txt":Pe,"../hacks/exit-from-dialog.txt":Le,"../hacks/external-game-data.txt":He,"../hacks/favicon-from-sprite.txt":Ge,"../hacks/follower.txt":Ve,"../hacks/gamepad-input.txt":Ue,"../hacks/gravity.txt":ze,"../hacks/itsy-bitsy.txt":We,"../hacks/javascript-dialog.txt":$e,"../hacks/logic-operators-extended.txt":Ye,"../hacks/long-dialog.txt":Xe,"../hacks/multi-sprite-avatar.txt":Ke,"../hacks/noclip.txt":Je,"../hacks/online.txt":Ze,"../hacks/opaque-tiles.txt":Qe,"../hacks/paragraph-break.txt":tr,"../hacks/permanent-items.txt":nr,"../hacks/push-sprites.txt":er,"../hacks/replace-drawing.txt":rr,"../hacks/save.txt":ir,"../hacks/smooth-moves.txt":ar,"../hacks/solid-items.txt":or,"../hacks/sprite-effects.txt":sr,"../hacks/stopwatch.txt":cr,"../hacks/text-to-speech.txt":lr,"../hacks/tracery-processing.txt":ur,"../hacks/transitions.txt":pr,"../hacks/transparent-background.txt":dr,"../hacks/transparent-dialog.txt":fr,"../hacks/transparent-sprites.txt":hr,"../hacks/twine-bitsy-comms.txt":gr,"../hacks/unique-items.txt":mr})),U=Object.entries(Object.assign({"../template/Bitsy.5.5.hbs":()=>_(()=>import("./Bitsy.5.5-14398546.js"),[],import.meta.url),"../template/Bitsy.6.0.hbs":()=>_(()=>import("./Bitsy.6.0-ce4ec85a.js"),[],import.meta.url),"../template/Bitsy.6.3.hbs":()=>_(()=>import("./Bitsy.6.3-5b1e2cab.js"),[],import.meta.url),"../template/Bitsy.6.4.hbs":()=>_(()=>import("./Bitsy.6.4-b2ea33fd.js"),[],import.meta.url),"../template/Bitsy.6.5.hbs":()=>_(()=>import("./Bitsy.6.5-cbd4ed29.js"),[],import.meta.url),"../template/Bitsy.7.0.hbs":()=>_(()=>import("./Bitsy.7.0-54f7077d.js"),[],import.meta.url),"../template/Bitsy.7.10.hbs":()=>_(()=>import("./Bitsy.7.10-ce37ccab.js"),[],import.meta.url),"../template/Bitsy.7.11.hbs":()=>_(()=>import("./Bitsy.7.11-bccf5b95.js"),[],import.meta.url),"../template/Bitsy.7.12.hbs":()=>_(()=>import("./Bitsy.7.12-c9542ef8.js"),[],import.meta.url),"../template/Bitsy.7.2.hbs":()=>_(()=>import("./Bitsy.7.2-4afd8869.js"),[],import.meta.url),"../template/Bitsy.7.8.hbs":()=>_(()=>import("./Bitsy.7.8-ca3200f0.js"),[],import.meta.url),"../template/Bitsy.8.4.hbs":()=>_(()=>import("./Bitsy.8.4-4d8be678.js"),[],import.meta.url),"../template/Bitsy.8.7.hbs":()=>_(()=>import("./Bitsy.8.7-0c3859e2.js"),[],import.meta.url),"../template/BitsyHD.5.1.hbs":()=>_(()=>import("./BitsyHD.5.1-2219c8f3.js"),[],import.meta.url),"../template/BitsyHD.7.11.hbs":()=>_(()=>import("./BitsyHD.7.11-dc3dcdc8.js"),[],import.meta.url),"../template/BitsyHD.7.12.hbs":()=>_(()=>import("./BitsyHD.7.12-542e6165.js"),[],import.meta.url),"../template/BitsyHD.8.4.hbs":()=>_(()=>import("./BitsyHD.8.4-8ecf5cc2.js"),[],import.meta.url),"../template/BitsyHD.8.7.hbs":()=>_(()=>import("./BitsyHD.8.7-75d76efb.js"),[],import.meta.url)})).sort(([t],[n])=>t.replace("HD","_").localeCompare(n.replace("HD","_"),"en",{sensitivity:"base",numeric:!0})).map(([t,n],r,d)=>{const[f]=t.match(/(?:\d\.)+\d+(?=\.hbs)/),p=t.includes("HD");return{data:n,bitsyVersion:f,isHd:p,description:p?`Bitsy HD (Bitsy ${f})`:`Bitsy ${f}`,id:`Bitsy${p?"HD":""}${f.replace(/\./g,"")}`,isDefault:r===d.length-1}}),Zt=Wa.map(t=>{const[n]=t.match(/^(\/\*\*[\S\s]*?\*\/)$/gm),r=n.split(`
+`,Ba="borksy",Ca="6.0.0",Da="Borksy Game Hacker: A tool for extending Bitsy games",Ra={postversion:"npm run build",start:"vite --port 80",build:"vite build",serve:"vite preview",test:"jest --runInBand",lint:'eslint "src/**/*.js"',"update-hacks":"node ./update-hacks.js"},qa={type:"git",url:"git+https://github.com/Ayolland/borksy.git"},Ma="AYolland",Pa="MIT",La={url:"https://github.com/Ayolland/borksy/issues"},Ha="https://ayolland.itch.io/borksy",Ga={setupFilesAfterEnv:["<rootDir>/src/test/setupTests.js"],globalSetup:"<rootDir>/src/test/globalSetup.js",globalTeardown:"<rootDir>/src/test/globalTeardown.js"},Va={plugins:["@semantic-release/commit-analyzer","@semantic-release/release-notes-generator","@semantic-release/changelog","@semantic-release/npm","@semantic-release/github",["@semantic-release/git",{assets:["docs/**/*","CHANGELOG.md","package.json","package-lock.json"]}]]},Ua={"@bitsy/hecks":"^21.5.0",eslint:"^8.44.0","eslint-config-airbnb-base":"^15.0.0","eslint-config-prettier":"^8.8.0","eslint-plugin-import":"^2.27.5","eslint-plugin-prettier":"^4.2.1","file-saver":"^2.0.5",handlebars:"^4.7.7",jest:"^29.6.1","jest-dev-server":"^9.0.0","jest-environment-jsdom":"^29.6.1","jest-image-snapshot":"^6.1.0",prettier:"^2.8.8",puppeteer:"^20.8.0","rollup-plugin-visualizer":"^5.9.2",sass:"^1.63.6",vite:"^4.4.1","vite-plugin-markdown":"^2.2.0-2","vite-plugin-string":"^1.2.1"},za={private:!0,name:Ba,version:Ca,description:Da,scripts:Ra,repository:qa,author:Ma,license:Pa,bugs:La,homepage:Ha,jest:Ga,release:Va,devDependencies:Ua},K=Object.fromEntries(Object.entries(Object.assign({"../about/about.md":Xn,"../about/ayos-special-tips.md":Zn,"../about/how-to-use-borksy.md":ne,"../about/other-tools.md":ie,"../about/troubleshooting-faqs.md":se})).map(([t,n])=>[t.match(/.*\/(.*?)\.md/)[1],n.html])),Rn=Object.fromEntries(Object.entries(Object.assign({"../defaults/body.txt":ce,"../defaults/fontdata.txt":le,"../defaults/gamedata.txt":ue,"../defaults/gamedataHD.txt":pe,"../defaults/style.txt":de})).map(([t,n])=>[t.match(/.*\/(.*?)\.txt/)[1],n])),Wa=Object.values(Object.assign({"../hacks/avatar-by-room.txt":fe,"../hacks/backdrops.txt":he,"../hacks/basic-sfx.txt":ge,"../hacks/bitsymuse.txt":me,"../hacks/canvas-replacement.txt":ye,"../hacks/character-portraits-animated.txt":be,"../hacks/character-portraits.txt":ve,"../hacks/close-on-ending.txt":we,"../hacks/corrupt.txt":ke,"../hacks/custom-exit-effects.txt":xe,"../hacks/custom-keyhandlers.txt":Se,"../hacks/custom-text-effect.txt":Te,"../hacks/dialog-audio-vocal-synth.txt":je,"../hacks/dialog-audio.txt":Ie,"../hacks/dialog-box-transition.txt":Fe,"../hacks/dialog-choices.txt":Ae,"../hacks/dialog-jump.txt":_e,"../hacks/dialog-pause.txt":Ee,"../hacks/dialog-prompt.txt":Ne,"../hacks/direction-in-dialog.txt":Oe,"../hacks/directional-avatar.txt":Be,"../hacks/dynamic-background.txt":Ce,"../hacks/edit-dialog-from-dialog.txt":De,"../hacks/edit-image-from-dialog.txt":Re,"../hacks/edit-player-from-dialog.txt":qe,"../hacks/edit-room-from-dialog.txt":Me,"../hacks/end-from-dialog.txt":Pe,"../hacks/exit-from-dialog.txt":Le,"../hacks/external-game-data.txt":He,"../hacks/favicon-from-sprite.txt":Ge,"../hacks/follower.txt":Ve,"../hacks/gamepad-input.txt":Ue,"../hacks/gravity.txt":ze,"../hacks/itsy-bitsy.txt":We,"../hacks/javascript-dialog.txt":$e,"../hacks/logic-operators-extended.txt":Ye,"../hacks/long-dialog.txt":Xe,"../hacks/multi-sprite-avatar.txt":Ke,"../hacks/noclip.txt":Je,"../hacks/online.txt":Ze,"../hacks/opaque-tiles.txt":Qe,"../hacks/paragraph-break.txt":tr,"../hacks/permanent-items.txt":nr,"../hacks/push-sprites.txt":er,"../hacks/replace-drawing.txt":rr,"../hacks/save.txt":ir,"../hacks/smooth-moves.txt":ar,"../hacks/solid-items.txt":or,"../hacks/sprite-effects.txt":sr,"../hacks/stopwatch.txt":cr,"../hacks/text-to-speech.txt":lr,"../hacks/tracery-processing.txt":ur,"../hacks/transitions.txt":pr,"../hacks/transparent-background.txt":dr,"../hacks/transparent-dialog.txt":fr,"../hacks/transparent-sprites.txt":hr,"../hacks/twine-bitsy-comms.txt":gr,"../hacks/unique-items.txt":mr})),U=Object.entries(Object.assign({"../template/Bitsy.5.5.hbs":()=>_(()=>import("./Bitsy.5.5-14398546.js"),[],import.meta.url),"../template/Bitsy.6.0.hbs":()=>_(()=>import("./Bitsy.6.0-ce4ec85a.js"),[],import.meta.url),"../template/Bitsy.6.3.hbs":()=>_(()=>import("./Bitsy.6.3-5b1e2cab.js"),[],import.meta.url),"../template/Bitsy.6.4.hbs":()=>_(()=>import("./Bitsy.6.4-b2ea33fd.js"),[],import.meta.url),"../template/Bitsy.6.5.hbs":()=>_(()=>import("./Bitsy.6.5-cbd4ed29.js"),[],import.meta.url),"../template/Bitsy.7.0.hbs":()=>_(()=>import("./Bitsy.7.0-54f7077d.js"),[],import.meta.url),"../template/Bitsy.7.10.hbs":()=>_(()=>import("./Bitsy.7.10-ce37ccab.js"),[],import.meta.url),"../template/Bitsy.7.11.hbs":()=>_(()=>import("./Bitsy.7.11-bccf5b95.js"),[],import.meta.url),"../template/Bitsy.7.12.hbs":()=>_(()=>import("./Bitsy.7.12-c9542ef8.js"),[],import.meta.url),"../template/Bitsy.7.2.hbs":()=>_(()=>import("./Bitsy.7.2-4afd8869.js"),[],import.meta.url),"../template/Bitsy.7.8.hbs":()=>_(()=>import("./Bitsy.7.8-ca3200f0.js"),[],import.meta.url),"../template/Bitsy.8.4.hbs":()=>_(()=>import("./Bitsy.8.4-4d8be678.js"),[],import.meta.url),"../template/Bitsy.8.7.hbs":()=>_(()=>import("./Bitsy.8.7-0c3859e2.js"),[],import.meta.url),"../template/BitsyHD.5.1.hbs":()=>_(()=>import("./BitsyHD.5.1-2219c8f3.js"),[],import.meta.url),"../template/BitsyHD.7.11.hbs":()=>_(()=>import("./BitsyHD.7.11-dc3dcdc8.js"),[],import.meta.url),"../template/BitsyHD.7.12.hbs":()=>_(()=>import("./BitsyHD.7.12-542e6165.js"),[],import.meta.url),"../template/BitsyHD.8.4.hbs":()=>_(()=>import("./BitsyHD.8.4-8ecf5cc2.js"),[],import.meta.url),"../template/BitsyHD.8.7.hbs":()=>_(()=>import("./BitsyHD.8.7-75d76efb.js"),[],import.meta.url)})).sort(([t],[n])=>t.replace("HD","_").localeCompare(n.replace("HD","_"),"en",{sensitivity:"base",numeric:!0})).map(([t,n],r,d)=>{const[f]=t.match(/(?:\d\.)+\d+(?=\.hbs)/),p=t.includes("HD");return{data:n,bitsyVersion:f,isHd:p,description:p?`Bitsy HD (Bitsy ${f})`:`Bitsy ${f}`,id:`Bitsy${p?"HD":""}${f.replace(/\./g,"")}`,isDefault:r===d.length-1}}),Zt=Wa.map(t=>{const[n]=t.match(/^(\/\*\*[\S\s]*?\*\/)$/gm),r=n.split(`
 `).slice(1,-1),d=r[0],f=r.find(s=>s.startsWith("@file")).split("@file ")[1],p=r.find(s=>s.startsWith("@author")).split("@author ")[1],u=r.find(s=>s.startsWith("@summary")).split("@summary ")[1],l=r.slice(r.findIndex(s=>s.startsWith("@description"))+1).join(`
 `).replace(/Copy-paste .* after the bitsy source\.?/g,"Include hack").replace(/hackOptions below/g,"hackOptions above"),[,o]=t.match(/var hackOptions.*= {\n+([^]+?)\n+};$/m)||[];return{metadata:{emoji:d,id:f.replace(/\s/g,"-"),name:f,author:p,summary:u,description:l},options:o,data:t}});function $a(){const t=document.querySelector("select#template");t.innerHTML="";for(let n=U.length-1;n>=0;n--){const{id:r,description:d}=U[n],f=n===U.length-1;t.innerHTML+=`<option value="${r}" ${f?"data-default-option":""}>${d}${f?" (latest)":""}</option>`}}function Ya(t,n){console.log(n),Nr.saveAs(new Blob([n],{type:"text/html;charset=utf-8"}),t),console.log(`File '${t}' downloaded`)}function qn(t,n=10){const r=t.toString(),d=r.length>n?"...":"";return r.substring(0,n)+d}function Xa(t){return t.toLowerCase().replace(/-(.)/g,(n,r)=>r.toUpperCase())}function Ka(t){return t.replace(/[^\w\s]/gi,"")}function Ja(t,n){const r=new RegExp(n,"g");t.value=t.value.replace(r,"")}function W(t,n){t.dataset.cleanRegex&&Ja(t,t.dataset.cleanRegex);let r;t.type==="checkbox"?r=t.checked:n===void 0?r=t.value:(r=n,t.value=n);const{name:d}=t;localStorage.setItem(d,r),console.log(`Key: '${d}' saved to localStorage: ${qn(r)}`)}function Ut(t){const{name:n}=t,r=localStorage.getItem(n);if(r===null){console.log(` Attempted to get key: ${n} from localStorage, but nothing was found.`);return}if(t.type==="checkbox"){const d=r==="true";t.checked=d}else t.value=r;console.log(` Got key: ${n} from localStorage: ${qn(r)}`)}function Qt(t){const{value:n}=t.currentTarget,r=U.find(d=>d.id===n);if(!r){document.querySelector("#template").value=U.find(d=>d.isDefault).id,Qt(t);return}r.isHd?document.querySelector("#mascot").classList.add("borksyHD"):document.querySelector("#mascot").classList.remove("borksyHD"),r.bitsyVersion===zt.bitsyVersion?(document.querySelector("#legacy-version-warning").style.display="none",document.querySelector('[data-header="Bitsy Version"] > summary').textContent="Bitsy Version"):(document.querySelector("#legacy-version-warning").style.display=null,document.querySelector('[data-header="Bitsy Version"] > summary').textContent="❗ Bitsy Version ❗"),r.data()}function H(t){const{name:n}=t;let r;switch(n){case"template":r=Za;break}t.addEventListener("change",()=>{W(t),r==null||r(t)})}function Za(t){const n=t.value.split(".")[0]==="BitsyHD",r=localStorage.getItem("gamedata")==null,d=Rn.gamedataHD;if(n&&r&&d!==void 0){const p=document.querySelector("#gamedata");p.value=d,W(p)}}function Mn(t){const n=document.querySelector(`[data-associated-hack="${t.dataset.hack}"]`);n&&Pn(n,t)}function Pn(t,n){n.checked===!0?t.classList.add("included"):t.classList.remove("included")}function Qa(t){W(t),Mn(t)}function to(t){t.addEventListener("change",()=>{Qa(t)})}function no(){return Array.from(document.querySelectorAll("[data-borksy-replace-single]")).reduce((t,n)=>(t[n.dataset.borksyReplaceSingle]=n.value,t),{})}function eo(){return Zt.reduce((t,n)=>{const r=document.querySelector(`#${n.metadata.id}`);if(!(r.checked||r.value==="true"))return t;let f=n.data;if(n.options){const p=document.querySelector(`#${n.metadata.id}-options`).value;f=f.replace(/(var hackOptions.*= ){[^]*?^}(;$)/m,`$1 {
 ${p}
