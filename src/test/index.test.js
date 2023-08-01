@@ -1,6 +1,6 @@
 const path = require('path');
-const puppeteer = require('puppeteer');
 const fs = require('fs');
+const puppeteer = require('puppeteer');
 
 // tests are sequential, which makes subsequent failures after the first confusing;
 // this causes individual checks to skip after the first failure
