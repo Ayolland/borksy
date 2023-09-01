@@ -65,7 +65,7 @@
     "prettier": "^2.8.8",
     "puppeteer": "^20.8.0",
     "rollup-plugin-visualizer": "^5.9.2",
-    "sass": "^1.63.6",
+    "sass": "^1.66.1",
     "vite": "^4.4.1",
     "vite-plugin-markdown": "^2.2.0-2",
     "vite-plugin-string": "^1.2.1"
