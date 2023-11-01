@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "@bitsy/hecks": "^21.5.0",
-    "eslint": "^8.46.0",
+    "eslint": "^8.52.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.28.1",
