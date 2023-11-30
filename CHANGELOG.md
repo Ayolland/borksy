@@ -1,3 +1,11 @@
+# [6.2.0](https://github.com/Ayolland/borksy/compare/v6.1.0...v6.2.0) (2023-11-30)
+
+
+### Features
+
+* replace `window.confirm` with html `dialog` ([76eeaeb](https://github.com/Ayolland/borksy/commit/76eeaebcc70b89c8988bc701687263ed2df5e228))
+* replace party mode `window.alert`s with a pseudo-element ([f54e24c](https://github.com/Ayolland/borksy/commit/f54e24c052af0c86c5c7a5f3fa5c34508d6e5ceb))
+
 # [6.1.0](https://github.com/Ayolland/borksy/compare/v6.0.0...v6.1.0) (2023-07-27)
 
 
