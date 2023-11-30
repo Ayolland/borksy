@@ -255,10 +255,8 @@ function togglePartyMode() {
 	const { body } = document;
 	if (body.classList.contains('party')) {
 		body.classList.remove('party');
-		window.alert('😾 Party Mode Deactivated. Everyone out. 😾');
 	} else {
 		body.classList.add('party');
-		window.alert('✨🌈 Party Mode Activated! 🌈✨');
 	}
 }
 

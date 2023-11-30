@@ -47,6 +47,13 @@ body {
 
 		#wrapper {
 			backdrop-filter: contrast(0.5) blur(0.25rem);
+
+			&::before {
+				display: block;
+				content: '✨🌈 Party Mode Activated! 🌈✨';
+				text-align: center;
+				width: 100%;
+			}
 		}
 	}
 }
