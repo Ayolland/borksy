@@ -1,3 +1,5 @@
+@import url("../../node_modules/dialog-polyfill/dialog-polyfill.css");
+
 :root {
 	color-scheme: light;
 	color: #000;
@@ -335,6 +337,22 @@ footer {
 	p {
 		font-size: 0.75em;
 	}
+}
+
+dialog {
+	opacity: 0;
+	transition: opacity 0.1s ease-out;
+	background-color: inherit;
+	color: inherit;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+}
+
+dialog[open] {
+	opacity: 1;
 }
 
 @keyframes partyMode {

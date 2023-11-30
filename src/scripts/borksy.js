@@ -1,4 +1,5 @@
 import pkgHacks from '@bitsy/hecks/package.json';
+import dialogPolyfill from 'dialog-polyfill';
 import { saveAs } from 'file-saver';
 import { compile } from 'handlebars';
 import { html as htmlChangelog } from '../../CHANGELOG.md';
@@ -398,20 +399,23 @@ function loadDefaults(checkSaveData = true) {
 	console.log(`Defaults loaded. Forced? ${!checkSaveData}`);
 }
 
-function restoreDefaults() {
-	let confirm;
-	try {
-		confirm = window.confirm('Are you sure you want to erase all data and restore defaults?');
-	} catch {
-		confirm = true;
-	}
-	if (!confirm) return;
+const elDialog = document.querySelector('#restore-defaults');
+dialogPolyfill.registerDialog(elDialog);
+if (!elDialog) throw new Error('Could not find modal');
+elDialog.querySelector('button[value="yes"]').addEventListener('click', () => {
 	Array.from(document.querySelectorAll('[data-save]')).forEach(i => {
 		localStorage.removeItem(i.name);
 	});
 	console.log('Cookies removed');
 	loadDefaults(false);
 	document.querySelector('#mascot').classList.remove('borksyHD');
+	elDialog.close();
+});
+elDialog.querySelector('button[value="cancel"]').addEventListener('click', () => {
+	elDialog.close();
+});
+function restoreDefaults() {
+	elDialog.showModal();
 }
 
 function onFontImageLoaded() {
