@@ -50,7 +50,7 @@
     ]
   },
   "devDependencies": {
-    "@bitsy/hecks": "^21.5.0",
+    "@bitsy/hecks": "^22.0.0",
     "dialog-polyfill": "^0.5.6",
     "eslint": "^8.52.0",
     "eslint-config-airbnb-base": "^15.0.0",
