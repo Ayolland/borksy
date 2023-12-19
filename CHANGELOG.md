@@ -1,3 +1,10 @@
+# [6.3.0](https://github.com/Ayolland/borksy/compare/v6.2.0...v6.3.0) (2023-12-19)
+
+
+### Features
+
+* add templates for Bitsy 8.8 ([#271](https://github.com/Ayolland/borksy/issues/271)) ([64bfb6e](https://github.com/Ayolland/borksy/commit/64bfb6e50560354fbc0a89fc983be802c6595037))
+
 # [6.2.0](https://github.com/Ayolland/borksy/compare/v6.1.0...v6.2.0) (2023-11-30)
 
 
