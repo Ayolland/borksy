@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const puppeteer = require('puppeteer');
+const { setTimeout } = require('node:timers/promises');
 
 // tests are sequential, which makes subsequent failures after the first confusing;
 // this causes individual checks to skip after the first failure
@@ -150,7 +151,7 @@ requestAnimationFrame(() => {
 		}
 
 		await page.click('#download-button'); // start download
-		await page.waitForTimeout(2000); // wait for download to finish
+		await setTimeout(2000); // wait for download to finish
 		expect(fs.existsSync(download)).toBe(true);
 	});
 
@@ -159,32 +160,32 @@ requestAnimationFrame(() => {
 			waitUntil: 'networkidle2',
 		});
 		await page.keyboard.down('ArrowRight'); // complete title dialog
-		await page.waitForTimeout(100);
+		await setTimeout(100);
 		await page.keyboard.up('ArrowRight'); // complete title dialog
-		await page.waitForTimeout(100);
+		await setTimeout(100);
 		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 		await page.keyboard.down('ArrowRight'); // end title dialog
-		await page.waitForTimeout(100);
+		await setTimeout(100);
 		await page.keyboard.up('ArrowRight'); // end title dialog
-		await page.waitForTimeout(100);
+		await setTimeout(100);
 		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 	});
 
 	sit('should produce a game with hacks applied', async () => {
 		// walk on top of wall to demonstrate transparent sprites
 		await page.keyboard.down('ArrowLeft');
-		await page.waitForTimeout(100);
+		await setTimeout(100);
 		await page.keyboard.up('ArrowLeft');
-		await page.waitForTimeout(100);
+		await setTimeout(100);
 		await page.keyboard.down('ArrowLeft');
-		await page.waitForTimeout(100);
+		await setTimeout(100);
 		await page.keyboard.up('ArrowLeft');
-		await page.waitForTimeout(100);
+		await setTimeout(100);
 		await page.keyboard.down('ArrowLeft');
-		await page.waitForTimeout(100);
+		await setTimeout(100);
 		await page.keyboard.up('ArrowLeft');
-		await page.waitForTimeout(100);
-		await page.waitForTimeout(2000); // wait long enough for second animation frame
+		await setTimeout(100);
+		await setTimeout(2000); // wait long enough for second animation frame
 		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 	});
 
@@ -194,7 +195,7 @@ requestAnimationFrame(() => {
 			window.sprite.a.x = 1;
 			window.drawRoom(window.room[window.state.room], { redrawAll: true });
 		});
-		await page.waitForTimeout(100);
+		await setTimeout(100);
 		expect(await page.screenshot()).toMatchImageSnapshot({ dumpDiffToConsole: process.env.CI });
 	});
 });
