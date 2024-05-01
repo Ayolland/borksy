@@ -5,9 +5,9 @@ import { compile } from 'handlebars';
 import { html as htmlChangelog } from '../../CHANGELOG.md';
 import pkg from '../../package.json';
 
-const html = Object.fromEntries(Object.entries(import.meta.globEager('../about/*.md')).map(([key, value]) => [key.match(/.*\/(.*?)\.md/)[1], value.html]));
-const defaults = Object.fromEntries(Object.entries(import.meta.globEager('../defaults/*.txt', { as: 'raw' })).map(([key, value]) => [key.match(/.*\/(.*?)\.txt/)[1], value]));
-const hacksRaw = Object.values(import.meta.globEager('../hacks/*.txt', { as: 'raw' }));
+const html = Object.fromEntries(Object.entries(import.meta.glob('../about/*.md', { eager: true })).map(([key, value]) => [key.match(/.*\/(.*?)\.md/)[1], value.html]));
+const defaults = Object.fromEntries(Object.entries(import.meta.glob('../defaults/*.txt', { eager: true, as: 'raw' })).map(([key, value]) => [key.match(/.*\/(.*?)\.txt/)[1], value]));
+const hacksRaw = Object.values(import.meta.glob('../hacks/*.txt', { eager: true, as: 'raw' }));
 const templates = Object.entries(import.meta.glob('../template/*.hbs'))
 	.sort(([a], [b]) => a.replace('HD', '_').localeCompare(b.replace('HD', '_'), 'en', { sensitivity: 'base', numeric: true }))
 	.map(([file, data], idx, arr) => {
