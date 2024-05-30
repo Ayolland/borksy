@@ -6,8 +6,10 @@ import { html as htmlChangelog } from '../../CHANGELOG.md';
 import pkg from '../../package.json';
 
 const html = Object.fromEntries(Object.entries(import.meta.glob('../about/*.md', { eager: true })).map(([key, value]) => [key.match(/.*\/(.*?)\.md/)[1], value.html]));
-const defaults = Object.fromEntries(Object.entries(import.meta.glob('../defaults/*.txt', { eager: true, as: 'raw' })).map(([key, value]) => [key.match(/.*\/(.*?)\.txt/)[1], value]));
-const hacksRaw = Object.values(import.meta.glob('../hacks/*.txt', { eager: true, as: 'raw' }));
+const defaults = Object.fromEntries(
+	Object.entries(import.meta.glob('../defaults/*.txt', { eager: true, query: '?raw', import: 'default' })).map(([key, value]) => [key.match(/.*\/(.*?)\.txt/)[1], value])
+);
+const hacksRaw = Object.values(import.meta.glob('../hacks/*.txt', { eager: true, query: '?raw', import: 'default' }));
 const templates = Object.entries(import.meta.glob('../template/*.hbs'))
 	.sort(([a], [b]) => a.replace('HD', '_').localeCompare(b.replace('HD', '_'), 'en', { sensitivity: 'base', numeric: true }))
 	.map(([file, data], idx, arr) => {
