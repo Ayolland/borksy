@@ -1,3 +1,10 @@
+## [6.4.1](https://github.com/Ayolland/borksy/compare/v6.4.0...v6.4.1) (2024-05-30)
+
+
+### Bug Fixes
+
+* release ([d6eeacb](https://github.com/Ayolland/borksy/commit/d6eeacb775028463274586e64e519d9630382f93))
+
 # [6.4.0](https://github.com/Ayolland/borksy/compare/v6.3.0...v6.4.0) (2024-05-30)
 
 
