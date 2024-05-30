@@ -1,3 +1,12 @@
+# [6.4.0](https://github.com/Ayolland/borksy/compare/v6.3.0...v6.4.0) (2024-05-30)
+
+
+### Features
+
+* add HD template for Bitsy 8.12 ([0fadc53](https://github.com/Ayolland/borksy/commit/0fadc53da01cecfa57e7a33bfdb8036f1d2f983f))
+* add template for Bitsy 8.12 ([f3c9b88](https://github.com/Ayolland/borksy/commit/f3c9b88f4d61961e59b29a09e3158ef05ab60c06))
+* update hacks for Bitsy 8.12 ([83b454c](https://github.com/Ayolland/borksy/commit/83b454ce6c8afbef5a230d0c6c3065422f2e9543))
+
 # [6.3.0](https://github.com/Ayolland/borksy/compare/v6.2.0...v6.3.0) (2023-12-19)
 
 
