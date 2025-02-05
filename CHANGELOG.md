@@ -1,3 +1,10 @@
+# [6.5.0](https://github.com/Ayolland/borksy/compare/v6.4.1...v6.5.0) (2025-02-05)
+
+
+### Features
+
+* update hacks/templates for Bitsy 8.13 ([#353](https://github.com/Ayolland/borksy/issues/353)) ([40f6e12](https://github.com/Ayolland/borksy/commit/40f6e122015cdd91a610596e5f9d6d2f9c02e1c0))
+
 ## [6.4.1](https://github.com/Ayolland/borksy/compare/v6.4.0...v6.4.1) (2024-05-30)
 
 

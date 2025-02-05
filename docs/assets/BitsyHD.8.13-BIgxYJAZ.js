@@ -5,7 +5,7 @@ const t=`<!DOCTYPE HTML>
 
 <!-- Borksy {{BORKSY-VERSION}} -->
 <!-- bitsy-hacks {{HACKS-VERSION}} -->
-<!-- Bitsy 8.12 -->
+<!-- Bitsy 8.13 -->
 <head>
 
 <meta charset="UTF-8">
@@ -1342,7 +1342,7 @@ var bitsy = mainProcess.system;
 // is this the right place for this to live?
 var version = {
 	major: 8, // major changes
-	minor: 12, // smaller changes
+	minor: 13, // smaller changes
 	devBuildPhase: "RELEASE",
 };
 function getEngineVersion() {
