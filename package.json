@@ -52,7 +52,7 @@
   "devDependencies": {
     "@bitsy/hecks": "^23.0.0",
     "dialog-polyfill": "^0.5.6",
-    "eslint": "^8.57.0",
+    "eslint": "^9.30.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-import": "^2.31.0",
