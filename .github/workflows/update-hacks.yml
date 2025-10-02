@@ -9,9 +9,9 @@ jobs:
       - uses: actions/checkout@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 18
+          node-version: 22
       - run: npm ci
       - run: npm i @bitsy/hecks@latest
       - run: npm run update-hacks
@@ -19,7 +19,7 @@ jobs:
       - run: npm test
       - uses: stefanzweifel/git-auto-commit-action@v6
         with:
-          commit_message: 'feat: update hacks'
+          commit_message: "feat: update hacks"
   release:
     needs: update-hacks
     runs-on: ubuntu-latest
@@ -29,7 +29,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           persist-credentials: false
           ref: main
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 18
       - run: npm ci
