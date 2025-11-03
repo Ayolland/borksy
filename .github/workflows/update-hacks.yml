@@ -46,7 +46,7 @@ jobs:
       - id: package-version
         if: steps.semantic.outputs.new_release_published == 'true'
         uses: martinbeentjes/npm-get-version-action@v1.3.1
-      - uses: josephbmanley/butler-publish-itchio-action@v1.0.3
+      - uses: yeslayla/butler-publish-itchio-action@b5f0b072e8b12b731c69f12b5430f594700e0947
         if: steps.semantic.outputs.new_release_published == 'true'
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
