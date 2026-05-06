@@ -3,6 +3,7 @@
   "name": "borksy",
   "version": "6.5.0",
   "description": "Borksy Game Hacker: A tool for extending Bitsy games",
+  "type": "module",
   "scripts": {
     "postversion": "npm run build",
     "start": "vite --port 80",

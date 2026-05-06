@@ -1,5 +1,5 @@
-import visualizer from 'rollup-plugin-visualizer';
-import mdPlugin, { Mode } from 'vite-plugin-markdown';
+import { visualizer } from 'rollup-plugin-visualizer';
+import { Mode, plugin as mdPlugin } from 'vite-plugin-markdown';
 import strPlugin from 'vite-plugin-string';
 
 /** @type {() => import('vite').UserConfig} */
