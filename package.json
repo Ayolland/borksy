@@ -60,7 +60,7 @@
     "eslint-plugin-prettier": "^5.5.7",
     "file-saver": "^2.0.5",
     "handlebars": "^4.7.10",
-    "jest": "^30.4.2",
+    "jest": "^30.5.2",
     "jest-dev-server": "^11.0.0",
     "jest-environment-jsdom": "^30.5.2",
     "jest-image-snapshot": "^6.5.2",
